@@ -493,7 +493,35 @@
         <control type="group">
             <bottom>180</bottom>
             <right>80</right>
-            <include>View_Media_Poster</include>
+            <control type="group">
+                <visible>!Container(538).IsUpdating</visible>
+                <animation type="Hidden" reversible="false">
+                    <effect type="fade" start="100" end="0" time="200" delay="600" />
+                </animation>
+                <control type="group">
+                    <visible>!String.IsEmpty(Container(538).ListItem.Art(poster))</visible>
+                    <include content="View_Media_Poster">
+                        <param name="image">$INFO[Container(538).ListItem.Art(poster)]</param>
+                    </include>
+                </control>
+                <control type="group">
+                    <visible>String.IsEmpty(Container(538).ListItem.Art(poster))</visible>
+                    <include content="View_Media_Poster">
+                        <param name="image">$INFO[Container(528).ListItem.Art(poster)]</param>
+                    </include>
+                </control>
+            </control>
+            <control type="group">
+                <animation type="Conditional" reversible="false" condition="Container(538).IsUpdating">
+                    <effect type="fade" start="0" end="100" time="200" delay="600" />
+                </animation>
+                <animation type="Conditional" reversible="false" condition="!Container(538).IsUpdating">
+                    <effect type="fade" start="100" end="0" time="0" delay="0" />
+                </animation>
+                <include content="View_Media_Poster">
+                    <param name="image">noop</param>
+                </include>
+            </control>
             <visible>Control.IsVisible(528)</visible>
         </control>
     </include>
