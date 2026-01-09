@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <!-- Expressions -->
+    <expression name="View_Mode_Rows_Expression">[$EXP[Exp_View_500] | $EXP[Exp_View_501] | $EXP[Exp_View_502] | $EXP[Exp_View_503] | $EXP[Exp_View_504] | $EXP[Exp_View_505]]</expression>
+
+    <expression name="View_Mode_Wall_Expression">[$EXP[Exp_View_510] | $EXP[Exp_View_511] | $EXP[Exp_View_512] | $EXP[Exp_View_513] | $EXP[Exp_View_514]]</expression>
+
+    <expression name="View_Mode_List_Expression">[$EXP[View_Mode_List_Full_Expression] | $EXP[View_Mode_List_Flix_Expression]]</expression>
+    <expression name="View_Mode_List_Full_Expression">[$EXP[Exp_View_550] | $EXP[Exp_View_551] | $EXP[Exp_View_552]]</expression>
+    <expression name="View_Mode_List_Flix_Expression">[$EXP[Exp_View_553]]</expression>
+
+    <expression name="View_Mode_Comb_Expression">[$EXP[View_Mode_Comb_Flix_Expression] | $EXP[View_Mode_Comb_Full_Expression]]</expression>
+    <expression name="View_Mode_Comb_Flix_Expression">[$EXP[Exp_View_520] | $EXP[Exp_View_521] | $EXP[Exp_View_522] | $EXP[Exp_View_523] | $EXP[Exp_View_524]]</expression>
+    <expression name="View_Mode_Comb_Full_Expression">[$EXP[Exp_View_525]]</expression>
+
+    <expression name="View_Row_Info_Details_Expression">[$EXP[View_Mode_Rows_Expression] | $EXP[View_Mode_List_Flix_Expression] | $EXP[View_Mode_Comb_Flix_Expression]]</expression>
+
+    <expression name="View_Scrollbar_Horizontal_Expression">[$EXP[View_Mode_Rows_Expression] | $EXP[View_Mode_Comb_Flix_Expression]]</expression>
+    <expression name="View_Scrollbar_Vertical_Flix_Expression">[$EXP[View_Mode_List_Flix_Expression]]</expression>
+    <expression name="View_Scrollbar_Vertical_Full_Expression">[$EXP[View_Mode_List_Full_Expression] | $EXP[View_Mode_Comb_Full_Expression]]</expression>
+    <expression name="View_Scrollbar_Vertical_Wall_Expression">[$EXP[View_Mode_Wall_Expression]]</expression>
+
+    <include name="View_Row_Line">
+        <control type="group">
+            <visible>!Integer.IsEqual(Container.NumItems,0)</visible>
+            <control type="group">
+                <visible>$EXP[View_Row_Info_Details_Expression]</visible>
+                <visible>!$EXP[View_Mode_Comb_Flix_Expression]</visible>
+                <include content="Info_Viewline">
+                    <param name="use_spinner">true</param>
+                    <param name="run_spinner">[Container.IsUpdating]</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>!$EXP[View_Row_Info_Details_Expression]</visible>
+                <visible>!$EXP[View_Mode_Comb_Flix_Expression]</visible>
+                <include content="Info_Viewline">
+                    <param name="use_spinner">true</param>
+                    <param name="run_spinner">[Container.IsUpdating]</param>
+                    <param name="top">260</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible allowhiddenfocus="true">$EXP[View_Mode_Comb_Flix_Expression]</visible>
+                <include>View_Combined_Row_Horz_Selector</include>
+            </control>
+        </control>
+    </include>
+
+    <include name="View_Row_Info">
+        <control type="group">
+            <visible>!Integer.IsEqual(Container.NumItems,0)</visible>
+            <include>Info_Panel_Dimensions</include>
+            <include content="Info_Panel">
+                <param name="visible">String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer))</param>
+                <param name="visible_line">$EXP[View_Row_Info_Details_Expression]</param>
+                <param name="visible_plot">$EXP[View_Row_Info_Details_Expression]</param>
+                <param name="visible_meta">$EXP[View_Row_Info_Details_Expression]</param>
+            </include>
+            <include>View_Combined_Info_Panel</include>
+        </control>
+    </include>
+
+    <include name="View_MediaWindows_ID">
+        <views>500,501,502,503,504,505,510,511,512,513,514,520,521,522,523,524,525,550,551,552,553</views>
+    </include>
+
+    <include name="View_Row_Items">
+        <definition>
+            <control type="group">
+
+                <!-- Row Views -->
+                <include condition="$EXP[Exp_View_500_Include]">View_500_Square_Row</include>
+                <include condition="$EXP[Exp_View_501_Include]">View_501_Landscape_Row</include>
+                <include condition="$EXP[Exp_View_502_Include]">View_502_Poster_Row</include>
+                <include condition="$EXP[Exp_View_503_Include]">View_503_Circle_Row</include>
+                <include condition="$EXP[Exp_View_504_Include]">View_504_Board_Row</include>
+                <include condition="$EXP[Exp_View_505_Include]">View_505_Card_Row</include>
+
+                <!-- Wall Views -->
+                <include condition="$EXP[Exp_View_510_Include]">View_510_Square_Wall</include>
+                <include condition="$EXP[Exp_View_511_Include]">View_511_Landscape_Wall</include>
+                <include condition="$EXP[Exp_View_512_Include]">View_512_Poster_Wall</include>
+                <include condition="$EXP[Exp_View_513_Include]">View_513_Circle_Wall</include>
+                <include condition="$EXP[Exp_View_514_Include]">View_514_Board_Wall</include>
+
+                <!-- Combined Views -->
+                <include condition="$EXP[Exp_View_520_Include]">View_520_Square_Combined_Row</include>
+                <include condition="$EXP[Exp_View_521_Include]">View_521_Landscape_Combined_Row</include>
+                <include condition="$EXP[Exp_View_522_Include]">View_522_Poster_Combined_Row</include>
+                <include condition="$EXP[Exp_View_523_Include]">View_523_Circle_Combined_Row</include>
+                <include condition="$EXP[Exp_View_524_Include]">View_524_Board_Combined_Row</include>
+                <include condition="$EXP[Exp_View_525_Include]">View_525_List_Combined</include>
+
+                <!-- List Views -->
+                <include condition="$EXP[Exp_View_550_Include]">View_550_Basic_List</include>
+                <include condition="$EXP[Exp_View_551_Include]">View_551_Media_List</include>
+                <include condition="$EXP[Exp_View_552_Include]">View_552_Expanded_List</include>
+                <include condition="$EXP[Exp_View_553_Include]">View_553_Flixart_List</include>
+
+            </control>
+        </definition>
+    </include>
+
+    <include name="View_Furniture_Footer_ViewLine">
+        <param name="textcolor">main_fg_30</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <include content="Info_Viewline">
+                    <param name="label">$PARAM[label]</param>
+                    <param name="align">$PARAM[align]</param>
+                    <param name="haspath">$PARAM[haspath]</param>
+                    <param name="use_highlight">$PARAM[use_highlight]</param>
+                    <param name="top">0</param>
+                    <param name="left">0</param>
+                    <param name="right">0</param>
+                    <param name="textcolor">$PARAM[textcolor]</param>
+                    <param name="subtextcolor">$PARAM[textcolor]</param>
+                    <param name="sublabel">$PARAM[sublabel]</param>
+                    <param name="use_subtext">$PARAM[use_subtext]</param>
+                    <param name="sub_visible">$PARAM[sub_visible]</param>
+                    <param name="label_fallback">$PARAM[label_fallback]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <variable name="View_ContentID">
+        <value condition="Control.IsVisible(500)">500</value>
+        <value condition="Control.IsVisible(501)">501</value>
+        <value condition="Control.IsVisible(502)">502</value>
+        <value condition="Control.IsVisible(503)">503</value>
+        <value condition="Control.IsVisible(504)">504</value>
+        <value condition="Control.IsVisible(505)">505</value>
+        <value condition="Control.IsVisible(500)">500</value>
+        <value condition="Control.IsVisible(511)">511</value>
+        <value condition="Control.IsVisible(512)">512</value>
+        <value condition="Control.IsVisible(513)">513</value>
+        <value condition="Control.IsVisible(514)">514</value>
+        <value condition="Control.IsVisible(520)">530</value>
+        <value condition="Control.IsVisible(521)">531</value>
+        <value condition="Control.IsVisible(522)">532</value>
+        <value condition="Control.IsVisible(523)">533</value>
+        <value condition="Control.IsVisible(524)">534</value>
+        <value condition="Control.IsVisible(525)">535</value>
+        <value condition="Control.IsVisible(550)">550</value>
+        <value condition="Control.IsVisible(551)">551</value>
+        <value condition="Control.IsVisible(552)">552</value>
+        <value condition="Control.IsVisible(553)">553</value>
+        <value>500</value>
+    </variable>
+
+    <include name="View_Scrollbar_Strip">
+
+        <!-- Dummy for bouncing focus back to view on back -->
+        <include content="Object_Hidden_Button">
+            <param name="id">62</param>
+            <onfocus>SetFocus($VAR[View_ContentID])</onfocus>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">63</param>
+            <onfocus>SetFocus(500)</onfocus>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">67</param>
+            <onfocus>SetFocus(500)</onfocus>
+            <onfocus>ActivateWindow(1171)</onfocus>
+        </include>
+
+        <!-- Horizontal Scrollbar -->
+        <include content="Object_Hidden_Button">
+            <param name="id">610</param>
+            <onup>62</onup>
+            <ondown>500</ondown>
+            <ondown>ActivateWindow(1171)</ondown>
+            <onback>62</onback>
+            <onleft>SetFocus($VAR[Action_View_ContainerID])</onleft>
+            <onleft>Action(PrevLetter)</onleft>
+            <onleft>SetFocus(610)</onleft>
+            <onright>SetFocus($VAR[Action_View_ContainerID])</onright>
+            <onright>Action(NextLetter)</onright>
+            <onright>SetFocus(610)</onright>
+            <onfocus condition="!$EXP[Exp_IsAlphabetStrip]">SetFocus(60)</onfocus>
+        </include>
+        <control type="group">
+            <centerbottom>90</centerbottom>
+            <height>scrollbar_w</height>
+            <left>view_pad</left>
+            <width>640</width>
+            <visible allowhiddenfocus="true">Control.HasFocus(60) | Control.HasFocus(610)</visible>
+            <control type="scrollbar" id="60">
+                <orientation>horizontal</orientation>
+                <texturesliderbackground />
+                <include>Texture_Scrollbar_SliderBar_H</include>
+                <include>Texture_Scrollbar_H</include>
+                <onup>62</onup>
+                <ondown>500</ondown>
+                <ondown>ActivateWindow(1171)</ondown>
+                <onback>62</onback>
+                <left>130</left>
+            </control>
+        </control>
+
+        <!-- Vertical Scrollbar -->
+        <include content="Object_Hidden_Button">
+            <param name="id">611</param>
+            <onleft>62</onleft>
+            <onback>62</onback>
+            <onright>500</onright>
+            <onright>ActivateWindow(1171)</onright>
+            <onup>SetFocus($VAR[Action_View_ContainerID])</onup>
+            <onup>Action(PrevLetter)</onup>
+            <onup>SetFocus(611)</onup>
+            <ondown>SetFocus($VAR[Action_View_ContainerID])</ondown>
+            <ondown>Action(NextLetter)</ondown>
+            <ondown>SetFocus(611)</ondown>
+            <onfocus condition="!$EXP[Exp_IsAlphabetStrip] + $EXP[View_Scrollbar_Vertical_Full_Expression]">SetFocus(64)</onfocus>
+            <onfocus condition="!$EXP[Exp_IsAlphabetStrip] + $EXP[View_Scrollbar_Vertical_Flix_Expression]">SetFocus(65)</onfocus>
+            <onfocus condition="!$EXP[Exp_IsAlphabetStrip] + $EXP[View_Scrollbar_Vertical_Wall_Expression]">SetFocus(66)</onfocus>
+        </include>
+        <control type="group">
+            <centerright>40</centerright>
+            <width>scrollbar_w</width>
+            <visible allowhiddenfocus="true">$EXP[View_Scrollbar_Vertical_Full_Expression] + [Control.HasFocus(64) | Control.HasFocus(611)]</visible>
+            <bottom>180</bottom>
+            <height>612</height>
+            <control type="image">
+                <width>1</width>
+                <centerleft>50%</centerleft>
+                <texture colordiffuse="main_fg_12">common/white.png</texture>
+            </control>
+            <control type="scrollbar" id="64">
+                <orientation>vertical</orientation>
+                <texturesliderbackground />
+                <include>Texture_Scrollbar_SliderBar_V</include>
+                <include>Texture_Scrollbar_V</include>
+                <onleft>62</onleft>
+                <onright>500</onright>
+                <onright>ActivateWindow(1171)</onright>
+                <onback>62</onback>
+                <showonepage>true</showonepage>
+            </control>
+        </control>
+        <control type="group">
+            <centerright>40</centerright>
+            <width>scrollbar_w</width>
+            <visible allowhiddenfocus="true">$EXP[View_Scrollbar_Vertical_Flix_Expression] + [Control.HasFocus(65) | Control.HasFocus(611)]</visible>
+            <bottom>180</bottom>
+            <height>350</height>
+            <control type="image">
+                <width>1</width>
+                <centerleft>50%</centerleft>
+                <texture colordiffuse="main_fg_12">common/white.png</texture>
+            </control>
+            <control type="scrollbar" id="65">
+                <orientation>vertical</orientation>
+                <texturesliderbackground />
+                <include>Texture_Scrollbar_SliderBar_V</include>
+                <include>Texture_Scrollbar_V</include>
+                <onleft>62</onleft>
+                <onright>500</onright>
+                <onright>ActivateWindow(1171)</onright>
+                <onback>62</onback>
+                <showonepage>true</showonepage>
+            </control>
+        </control>
+        <control type="group">
+            <centerright>40</centerright>
+            <width>scrollbar_w</width>
+            <visible allowhiddenfocus="true">$EXP[View_Scrollbar_Vertical_Wall_Expression] + [Control.HasFocus(66) | Control.HasFocus(611)]</visible>
+            <bottom>40</bottom>
+            <height>710</height>
+            <control type="image">
+                <width>1</width>
+                <centerleft>50%</centerleft>
+                <texture colordiffuse="main_fg_12">common/white.png</texture>
+            </control>
+            <control type="scrollbar" id="66">
+                <orientation>vertical</orientation>
+                <texturesliderbackground />
+                <include>Texture_Scrollbar_SliderBar_V</include>
+                <include>Texture_Scrollbar_V</include>
+                <onleft>62</onleft>
+                <onright>500</onright>
+                <onright>ActivateWindow(1171)</onright>
+                <onback>62</onback>
+                <showonepage>true</showonepage>
+            </control>
+        </control>
+    </include>
+
+    <include name="View_Main">
+        <definition>
+
+            <include content="Object_Hidden_Button">
+                <param name="id">612</param>
+                <onfocus>SetFocus(500)</onfocus>
+                <onfocus>RunScript(script.skinvariables,set_listitem_to_menunode=homewidgets||1101widgets||1102widgets||1103widgets||1104widgets||homesubmenu||1101submenu||1102submenu||1103submenu||1104submenu||powermenu||powertray,skin=$VAR[Path_SkinVariables_SkinFolder],use_listitem=False,target=$VAR[Action_CurrentMediaWindow],path=$INFO[Container.FolderPath],label=$VAR[Label_Section_Main])</onfocus>
+            </include>
+
+            <include>Background</include>
+
+            <control type="group">
+                <include>Animation_Group_Bumper</include>
+                <control type="group">
+                    <include>Animation_View_WindowChange</include>
+                    <include>View_Scrollbar_Strip</include>
+                    <include>View_Row_Items</include>
+                    <include>View_Row_Line</include>
+                    <control type="group">
+                        <visible>!$EXP[View_Mode_Wall_Expression]</visible>
+                        <include>Furniture_Footer_Left</include>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!$EXP[Exp_InfoDialogs]</visible>
+                    <include>View_Row_Info</include>
+                </control>
+            </control>
+
+            <control type="group">
+                <include>Furniture_Reposition</include>
+                <visible>!$EXP[Exp_InfoDialogs]</visible>
+                <include>Furniture_Footer_Right</include>
+            </control>
+        </definition>
+    </include>
+</includes>

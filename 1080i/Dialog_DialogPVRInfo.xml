@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="DialogPVRInfo">
+        <definition>
+            <include content="Object_Hidden_Button">
+                <param name="id">7000</param>
+                <onfocus condition="Control.IsVisible(61)">SetFocus(61)</onfocus>
+                <onfocus condition="!Control.IsVisible(61)">SetFocus(9000)</onfocus>
+            </include>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Dimension_DialogFullMenu</include>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogFullMenu</param>
+                    <param name="topline">false</param>
+                    <param name="subline">false</param>
+                </include>
+
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+
+                    <!-- Left -->
+                    <control type="group">
+                        <!-- <include>Size_LeftGroup_Large</include>
+                        <include>DialogPlot_Artwork</include> -->
+                        <!-- <param name="square_icon">$INFO[ListItem.Icon]</param>
+                        <param name="landscape_icon">$VAR[Image_PVREpgLandscapeArt]</param> -->
+                    </control>
+
+                    <control type="group">
+                        <!-- <include>Size_RightGroup_Large</include>
+                        <include>Size_Group_AddonSettings_Middle</include>
+                        <include>Part_Panel_Middle</include> -->
+                        <include>Size_LeftGroup_Main</include>
+                        <control type="group">
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="label">$VAR[Label_Title]</param>
+                            </include>
+                            <include>Part_CloseButton</include>
+                            <include>Part_Line</include>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <control type="grouplist">
+                                <include>Size_Group_PlotText</include>
+                                <orientation>vertical</orientation>
+                                <itemgap>20</itemgap>
+                                <pagecontrol>61</pagecontrol>
+                                <control type="label">
+                                    <font>font_midi_bold</font>
+                                    <height>40</height>
+                                    <textcolor>main_fg_90</textcolor>
+                                    <label>$LOCALIZE[20037]</label>
+                                </control>
+                                <control type="group">
+                                    <top>10</top>
+                                    <height>210</height>
+                                    <control type="grouplist">
+                                        <orientation>horizontal</orientation>
+                                        <itemgap>40</itemgap>
+                                        <bottom>-10</bottom>
+                                        <include content="Part_Box_Outline">
+                                            <left>0</left>
+                                            <height>220</height>
+                                            <width>391</width>
+                                            <control type="image">
+                                                <aspectratio scalediffuse="false">keep</aspectratio>
+                                                <texture background="true" diffuse="diffuse/landscape_w391_h220.png">$INFO[ListItem.Icon]</texture>
+                                            </control>
+                                        </include>
+                                        <control type="grouplist">
+                                            <itemgap>20</itemgap>
+                                            <orientation>vertical</orientation>
+                                            <include content="Part_AddonDetails">
+                                                <param name="icon">special://skin/extras/icons/list-ul.png</param>
+                                                <param name="label">$INFO[ListItem.ChannelName]$INFO[ListItem.ChannelNumberLabel, (Ch.,)]</param>
+                                            </include>
+                                            <include content="Part_AddonDetails">
+                                                <param name="icon">special://skin/extras/icons/calendar.png</param>
+                                                <param name="label">$INFO[ListItem.StartDate]</param>
+                                            </include>
+                                            <include content="Part_AddonDetails">
+                                                <param name="icon">special://skin/extras/icons/clock.png</param>
+                                                <param name="label">$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</param>
+                                            </include>
+                                            <include content="Part_AddonDetails">
+                                                <param name="icon">special://skin/extras/icons/tags.png</param>
+                                                <param name="label">$INFO[ListItem.Genre]</param>
+                                            </include>
+                                        </control>
+                                    </control>
+                                </control>
+                                <control type="label">
+                                    <top>40</top>
+                                    <font>font_midi_bold</font>
+                                    <height>40</height>
+                                    <textcolor>main_fg_90</textcolor>
+                                    <label>$LOCALIZE[31028]</label>
+                                    <visible>!String.IsEmpty(ListItem.Plot)</visible>
+                                </control>
+                                <control type="textbox">
+                                    <font>font_midi_plot</font>
+                                    <height>auto</height>
+                                    <label fallback="19055">$INFO[ListItem.Plot]</label>
+                                    <autoscroll>false</autoscroll>
+                                    <visible>!String.IsEmpty(ListItem.Plot)</visible>
+                                </control>
+                            </control>
+                            <include content="Part_Scrollbar_Max">
+                                <param name="id">61</param>
+                                <param name="inset">false</param>
+                                <onright>9000</onright>
+                            </include>
+                        </control>
+                    </control>
+                    <!-- Right -->
+                    <include content="Part_Button_Grouplist">
+                        <param name="onleft">61</param>
+                        <param name="items">DialogPVRInfo_Items</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogPVRInfo_Items">
+        <definition>
+            <include content="Button_Dialog" description="Switch">
+                <param name="groupid">9205</param>
+                <param name="id">05</param>
+                <param name="icon">special://skin/extras/icons/play2.png</param>
+                <label>$LOCALIZE[19165]</label>
+                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(5) + Control.IsVisible(5)</param>
+            </include>
+
+            <include content="Button_Dialog" description="Play Programme">
+                <param name="groupid">9220</param>
+                <param name="id">10</param>
+                <param name="icon">special://skin/extras/icons/play3.png</param>
+                <label>$LOCALIZE[208]</label>
+                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(10) + Control.IsVisible(10)</param>
+            </include>
+
+            <include content="Button_Dialog" description="Play Recording">
+                <param name="groupid">9221</param>
+                <param name="id">08</param>
+                <param name="icon">special://skin/extras/icons/play3.png</param>
+                <label>$LOCALIZE[208]</label>
+                <param name="visible">[Window.IsActive(PVRGuideInfo) | Window.IsActive(PVRRecordingInfo)] + Control.IsEnabled(8) + Control.IsVisible(8)</param>
+            </include>
+
+            <include content="Button_Dialog" description="Record">
+                <param name="groupid">9222</param>
+                <param name="id">06</param>
+                <param name="icon">special://skin/extras/icons/record-vinyl.png</param>
+                <label>$LOCALIZE[264]</label>
+                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(6) + Control.IsVisible(6)</param>
+            </include>
+
+            <include content="Button_Dialog" description="Add Timer">
+                <param name="groupid">9223</param>
+                <param name="id">09</param>
+                <param name="icon">special://skin/extras/icons/clock.png</param>
+                <label>$LOCALIZE[19061]</label>
+                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(9) + Control.IsVisible(9)</param>
+            </include>
+
+            <include content="Button_Dialog" description="Set Reminder">
+                <param name="groupid">9224</param>
+                <param name="id">11</param>
+                <param name="icon">special://skin/extras/icons/clock.png</param>
+                <label>$LOCALIZE[826]</label>
+                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(11) + Control.IsVisible(11)</param>
+            </include>
+
+            <include content="Button_Dialog" description="Similar">
+                <param name="groupid">9225</param>
+                <param name="id">04</param>
+                <param name="icon">special://skin/extras/icons/binoculars.png</param>
+                <label>$LOCALIZE[31041]</label>
+                <param name="visible">[Window.IsActive(PVRGuideInfo) | Window.IsActive(PVRRecordingInfo)] + Control.IsEnabled(4) + Control.IsVisible(4)</param>
+            </include>
+
+            <include content="Button_Dialog">
+                <param name="groupid">9226</param>
+                <param name="id">4082</param>
+                <param name="icon">special://skin/extras/icons/globe.png</param>
+                <label>Wiki</label>
+                <onclick>Close</onclick>
+                <onclick>runscript(script.wikipedia,wikipedia=$VAR[Path_Wikipedia_Title],tmdb_type=$VAR[Path_Wikipedia_Type])</onclick>
+            </include>
+
+        </definition>
+    </include>
+
+</includes>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <variable name="DialogContextMenu_HeaderLabel">
+        <value condition="!String.ISEmpty(Window(Home).Property(TMDbHelper.ListItem.base_label)) + !$EXP[Exp_InfoDialogs]">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_label)]</value>
+        <value>$LOCALIZE[10106]</value>
+    </variable>
+
+    <expression name="DialogContextMenu_HasArtwork">[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_poster)) + !$EXP[Exp_InfoDialogs]]</expression>
+
+    <variable name="DialogContextMenu_OnUp">
+        <value condition="Control.IsVisible(1020)">SetFocus(1020)</value>
+        <value condition="Control.IsVisible(1019)">SetFocus(1019)</value>
+        <value condition="Control.IsVisible(1018)">SetFocus(1018)</value>
+        <value condition="Control.IsVisible(1017)">SetFocus(1017)</value>
+        <value condition="Control.IsVisible(1016)">SetFocus(1016)</value>
+        <value condition="Control.IsVisible(1015)">SetFocus(1015)</value>
+        <value condition="Control.IsVisible(1014)">SetFocus(1014)</value>
+        <value condition="Control.IsVisible(1013)">SetFocus(1013)</value>
+        <value condition="Control.IsVisible(1012)">SetFocus(1012)</value>
+        <value condition="Control.IsVisible(1011)">SetFocus(1011)</value>
+        <value condition="Control.IsVisible(1010)">SetFocus(1010)</value>
+        <value condition="Control.IsVisible(1009)">SetFocus(1009)</value>
+        <value condition="Control.IsVisible(1008)">SetFocus(1008)</value>
+        <value condition="Control.IsVisible(1007)">SetFocus(1007)</value>
+        <value condition="Control.IsVisible(1006)">SetFocus(1006)</value>
+        <value condition="Control.IsVisible(1005)">SetFocus(1005)</value>
+        <value condition="Control.IsVisible(1004)">SetFocus(1004)</value>
+        <value condition="Control.IsVisible(1003)">SetFocus(1003)</value>
+        <value condition="Control.IsVisible(1002)">SetFocus(1002)</value>
+        <value>SetFocus(1001)</value>
+    </variable>
+
+	<include name="DialogContextMenu">
+        <param name="has_artwork">$EXP[DialogContextMenu_HasArtwork]</param>
+        <param name="has_template">true</param>
+        <param name="has_menu">true</param>
+        <param name="include_tray">DialogContextMenu_Items</param>
+        <param name="hidden_icon">true</param>
+        <param name="scrollbar_id">61</param>
+        <param name="visible">true</param>
+        <definition>
+            <include content="Part_Dim_Overlay">
+                <param name="visible">$PARAM[visible]</param>
+            </include>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <include content="Part_Dialog_Backing" condition="$PARAM[has_artwork]">
+                    <param name="dialog_size">Dimension_DialogFlipMenu</param>
+                </include>
+                <include content="Part_Dialog_Backing" condition="!$PARAM[has_artwork]">
+                    <param name="dialog_size">Dimension_DialogMiniMenu</param>
+                </include>
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+
+                    <!-- Left -->
+                    <control type="group">
+                        <include condition="$PARAM[has_artwork]">Size_LeftGroup_Large</include>
+                        <include content="DialogPlot_Artwork" condition="$PARAM[has_artwork]">
+                            <param name="poster_icon">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_poster)]</param>
+                            <param name="hidden_icon">$PARAM[hidden_icon]</param>
+                        </include>
+                    </control>
+
+                    <!--Right -->
+                    <control type="group">
+                        <include condition="$PARAM[has_artwork]">Part_Panel</include>
+                        <include condition="$PARAM[has_artwork]">Size_RightGroup_Large</include>
+
+
+                        <control type="group">
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="label">$VAR[DialogContextMenu_HeaderLabel]</param>
+                            </include>
+                            <include>Part_Line</include>
+                            <include>Part_CloseButton</include>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+
+                            <!-- Plot Buttons -->
+                            <include content="Object_Control" condition="$PARAM[has_menu]">
+                                <param name="control">group</param>
+                                <control type="fixedlist" id="6000">
+                                    <centertop>70</centertop>
+                                    <left>40</left>
+                                    <onup>$VAR[DialogContextMenu_OnUp]</onup>
+                                    <ondown>1001</ondown>
+                                    <include content="ButtonMenu_Tray_Layout">
+                                        <param name="id">6000</param>
+                                    </include>
+                                    <content>
+                                        <include>$PARAM[include_tray]</include>
+                                    </content>
+                                </control>
+                            </include>
+                            <control type="group">
+                                <include content="Object_Top" condition="$PARAM[has_menu]">
+                                    <param name="top">120</param>
+                                </include>
+                                <include content="Object_Bottom" condition="$PARAM[has_menu]">
+                                    <param name="bottom">40</param>
+                                </include>
+                                <control type="group">
+                                    <top>-120</top>
+                                    <height>40</height>
+                                    <include content="Part_ItemPage">
+                                        <param name="id">996</param>
+                                    </include>
+                                </control>
+                                <control type="grouplist" id="996">
+                                    <pagecontrol>$PARAM[scrollbar_id]</pagecontrol>
+                                    <onright>$PARAM[scrollbar_id]</onright>
+                                    <onup>6000</onup>
+                                    <ondown>SetFocus(1001)</ondown>
+                                    <ondown>SetFocus(6000)</ondown>
+                                    <include>Size_Grouplist_Pad</include>
+                                </control>
+                                <include content="Part_Scrollbar">
+                                    <param name="id">$PARAM[scrollbar_id]</param>
+                                    <onleft>996</onleft>
+                                    <top>20</top>
+                                </include>
+                                <include condition="$PARAM[has_menu]">Part_Line</include>
+                            </control>
+                        </control>
+                    </control>
+
+                </control>
+            </control>
+            <include content="Settings_Button" condition="$PARAM[has_template]">
+                <param name="id">1000</param>
+                <param name="control">button</param>
+                <param name="dialog">true</param>
+                <width>dialog_main_button_w</width>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Variables -->
+    <variable name="DialogContextMenu_Wiki_Title">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_tvshowtitle))">$ESCINFO[Window(Home).Property(TMDbHelper.ListItem.base_tvshowtitle)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_title))">$ESCINFO[Window(Home).Property(TMDbHelper.ListItem.base_title)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_label))">$ESCINFO[Window(Home).Property(TMDbHelper.ListItem.base_label)]</value>
+    </variable>
+
+    <variable name="DialogContextMenu_Wiki_Type">
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),tvshow) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),season) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),episode)"> tv series</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),movie)"> film</value>
+    </variable>
+
+
+    <!-- Items -->
+    <include name="DialogContextMenu_Items">
+        <item>
+            <label>$LOCALIZE[207]</label>
+            <icon>special://skin/extras/icons/quote.png</icon>
+            <onclick>Close</onclick>
+            <onclick>ActivateWindow(1113)</onclick>
+            <visible>[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_plot))]</visible>
+        </item>
+        <item>
+            <label>Wiki</label>
+            <icon>special://skin/extras/icons/globe.png</icon>
+            <visible>[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_title))]</visible>
+            <onclick>Dialog.Close(contextmenu,true)</onclick>
+            <onclick>runscript(script.wikipedia,wikipedia=$VAR[DialogContextMenu_Wiki_Title]$VAR[DialogContextMenu_Wiki_Type])</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[31041]</label>
+            <icon>special://skin/extras/icons/fire2.png</icon>
+            <visible>[String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),tvshow) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),season) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),episode) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),movie)]</visible>
+            <onclick>Dialog.Close(contextmenu,true)</onclick>
+            <onclick>RunScript(plugin.video.themoviedb.helper,related_lists,query=$VAR[Path_ContextParams_Query],tmdb_type=$VAR[Path_ContextParams_TMDbType])</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[31393]</label>
+            <icon>special://skin/extras/icons/video.png</icon>
+            <visible>[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer))]</visible>
+            <onclick>Dialog.Close(contextmenu,true)</onclick>
+            <onclick>SetProperty(PlayTrailerItems,$VAR[Path_VideoInfo_Trailers],Home)</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-playtrailer.json,use_rules)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[15019]</label>
+            <icon>special://skin/extras/icons/circle-plus.png</icon>
+            <visible>ListItem.IsFolder</visible>
+            <onclick>Dialog.Close(contextmenu,true)</onclick>
+            <onclick>RunScript(script.skinvariables,set_listitem_to_menunode=homewidgets||1101widgets||1102widgets||1103widgets||1104widgets||homesubmenu||1101submenu||1102submenu||1103submenu||1104submenu||powermenu||powertray,skin=$VAR[Path_SkinVariables_SkinFolder])</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[33061]</label>
+            <icon>special://skin/extras/icons/bars.png</icon>
+            <onclick>Dialog.Close(contextmenu,true)</onclick>
+            <onclick condition="$EXP[Exp_View_IsMedia]">ActivateWindow(1171)</onclick>
+            <onclick condition="!$EXP[Exp_View_IsMedia]">ActivateWindow(1170)</onclick>
+        </item>
+        <!-- <item>
+            <label>$LOCALIZE[15067]</label>
+            <icon>special://skin/extras/icons/circle-xmark.png</icon>
+            <onclick>PreviousMenu</onclick>
+        </item> -->
+    </include>
+</includes>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="DialogAddonInfo">
+        <definition>
+            <include content="Object_Hidden_Button">
+                <param name="id">7000</param>
+                <onfocus condition="Control.IsVisible(61)">SetFocus(61)</onfocus>
+                <onfocus condition="!Control.IsVisible(61)">SetFocus(9000)</onfocus>
+            </include>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Dimension_DialogFullMenu</include>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogFullMenu</param>
+                    <param name="topline">false</param>
+                    <param name="subline">false</param>
+                </include>
+
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+
+                    <!-- Left -->
+                    <!-- <control type="group">
+                        <include>Size_LeftGroup_Large</include>
+                        <include>DialogPlot_Artwork</include>
+                    </control> -->
+
+                    <control type="group">
+                        <!-- <include>Size_RightGroup_Large</include> -->
+                        <!-- <include>Size_Group_AddonSettings_Middle</include> -->
+                        <!-- <include>Part_Panel_Middle</include> -->
+                        <include>Size_LeftGroup_Main</include>
+                        <control type="group">
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="label">$INFO[ListItem.Label]</param>
+                            </include>
+                            <include>Part_CloseButton</include>
+                            <include>Part_Line</include>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <control type="grouplist">
+                                <include>Size_Group_PlotText</include>
+                                <orientation>vertical</orientation>
+                                <itemgap>20</itemgap>
+                                <pagecontrol>61</pagecontrol>
+                                <control type="label">
+                                    <font>font_midi_bold</font>
+                                    <height>40</height>
+                                    <textcolor>main_fg_90</textcolor>
+                                    <label>$LOCALIZE[20037]</label>
+                                </control>
+                                <control type="group">
+                                    <top>10</top>
+                                    <height>210</height>
+                                    <include content="Part_Box_Outline">
+                                        <left>0</left>
+                                        <height>220</height>
+                                        <width>220</width>
+                                        <control type="image">
+                                            <aspectratio scalediffuse="false">keep</aspectratio>
+                                            <texture background="true" diffuse="diffuse/square_w217_h217.png">$INFO[ListItem.Icon]</texture>
+                                        </control>
+                                    </include>
+                                    <control type="grouplist">
+                                        <left>260</left>
+                                        <bottom>-10</bottom>
+                                        <itemgap>20</itemgap>
+                                        <orientation>vertical</orientation>
+                                        <include content="Part_AddonDetails">
+                                            <param name="icon">special://skin/extras/icons/id-card.png</param>
+                                            <param name="label">$INFO[ListItem.AddonCreator]</param>
+                                        </include>
+                                        <include content="Part_AddonDetails">
+                                            <param name="icon">special://skin/extras/icons/tag.png</param>
+                                            <param name="label">$INFO[ListItem.AddonType]</param>
+                                        </include>
+                                        <include content="Part_AddonDetails">
+                                            <param name="icon">special://skin/extras/icons/code-branch.png</param>
+                                            <param name="label">$INFO[ListItem.AddonVersion,v,]</param>
+                                        </include>
+                                        <include content="Part_AddonDetails">
+                                            <param name="icon">special://skin/extras/icons/clock-rotate-left.png</param>
+                                            <param name="label">$VAR[Label_AddonInfo_LastUpdated]</param>
+                                        </include>
+                                    </control>
+                                </control>
+                                <control type="label">
+                                    <top>40</top>
+                                    <font>font_midi_bold</font>
+                                    <height>40</height>
+                                    <textcolor>main_fg_90</textcolor>
+                                    <label>$LOCALIZE[21821]</label>
+                                    <visible>!String.IsEmpty(ListItem.AddonDescription)</visible>
+                                </control>
+                                <control type="textbox">
+                                    <font>font_midi_plot</font>
+                                    <height>auto</height>
+                                    <label fallback="19055">$INFO[ListItem.AddonDescription]</label>
+                                    <autoscroll>false</autoscroll>
+                                    <visible>!String.IsEmpty(ListItem.AddonDescription)</visible>
+                                </control>
+                                <control type="label">
+                                    <top>40</top>
+                                    <font>font_midi_bold</font>
+                                    <height>40</height>
+                                    <textcolor>main_fg_90</textcolor>
+                                    <label>$LOCALIZE[29916]</label>
+                                    <visible>!String.IsEmpty(ListItem.AddonNews)</visible>
+                                </control>
+                                <control type="textbox">
+                                    <font>font_midi_plot</font>
+                                    <height>auto</height>
+                                    <label fallback="19055">$INFO[ListItem.AddonNews]</label>
+                                    <autoscroll>false</autoscroll>
+                                    <visible>!String.IsEmpty(ListItem.AddonNews)</visible>
+                                </control>
+                            </control>
+                            <include content="Part_Scrollbar_Max">
+                                <param name="id">61</param>
+                                <param name="inset">false</param>
+                                <onright>9000</onright>
+                            </include>
+                        </control>
+                    </control>
+                    <!-- Right -->
+                    <include content="Part_Button_Grouplist">
+                        <param name="onleft">61</param>
+                        <param name="items">DialogAddonInfo_Items</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogAddonInfo_Items">
+        <definition>
+            <include content="Button_Dialog" description="Enable">
+                <param name="id">9107</param>
+                <param name="groupid">9307</param>
+                <param name="icon">$VAR[Image_AddonInfo_Enable]</param>
+                <visible>Control.IsEnabled(7)</visible>
+                <label>$VAR[Label_AddonInfo_Enable]</label>
+                <onclick>SendClick(7)</onclick>
+            </include>
+            <include content="Button_Dialog" description="Auto-Update">
+                <param name="id">13</param>
+                <param name="groupid">9313</param>
+                <param name="control">radiobutton</param>
+                <param name="label">$LOCALIZE[21340]</param>
+                <param name="istext">true</param>
+                <visible>Control.IsEnabled(13)</visible>
+            </include>
+            <include content="Button_Dialog" description="Update">
+                <param name="id">08</param>
+                <param name="groupid">9308</param>
+                <param name="icon">special://skin/extras/icons/update.png</param>
+                <visible>Control.IsEnabled(8)</visible>
+                <label>$LOCALIZE[24138]</label>
+            </include>
+            <include content="Button_Dialog" description="Versions">
+                <param name="id">14</param>
+                <param name="groupid">9314</param>
+                <param name="icon">special://skin/extras/icons/network.png</param>
+                <label>$LOCALIZE[24069]</label>
+                <visible>Control.IsEnabled(14)</visible>
+            </include>
+            <include content="Button_Dialog" description="Dependencies">
+                <param name="id">10</param>
+                <param name="groupid">9310</param>
+                <param name="icon">special://skin/extras/icons/dependencies.png</param>
+                <label>$LOCALIZE[39024]</label>
+                <visible>Control.IsEnabled(10)</visible>
+            </include>
+            <include content="Button_Dialog" description="Install">
+                <param name="id">06</param>
+                <param name="groupid">9306</param>
+                <param name="icon">$VAR[Image_AddonInfo_Install]</param>
+                <visible>Control.IsEnabled(6)</visible>
+            </include>
+            <include content="Button_Dialog" description="Settings">
+                <param name="id">09</param>
+                <param name="groupid">9309</param>
+                <param name="icon">special://skin/extras/icons/settings.png</param>
+                <visible>Control.IsEnabled(9)</visible>
+                <label>$LOCALIZE[5]</label>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">12</param>
+                <param name="groupid">9312</param>
+                <param name="icon">special://skin/extras/icons/play3.png</param>
+                <visible>Control.IsEnabled(12)</visible>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">99</param>
+                <param name="groupid">9399</param>
+                <label>$LOCALIZE[15067]</label>
+                <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+                <onclick>PreviousMenu</onclick>
+            </include>
+
+        </definition>
+    </include>
+
+</includes>

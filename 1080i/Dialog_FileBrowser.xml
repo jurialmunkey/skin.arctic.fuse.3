@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="FileBrowser">
+        <include content="Object_Hidden_Button">
+            <param name="id">413</param>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">414</param>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">415</param>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">416</param>
+        </include>
+
+        <include>Part_Dim_Overlay</include>
+
+        <control type="group">
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Conditional_Backing">
+                <param name="visible">$EXP[FileBrowser_Conditional_Buttons_Expression]</param>
+                <param name="items">FileBrowser_Items</param>
+            </include>
+            <control type="group">
+                <include>Dimension_DialogWideMenu</include>
+                <include content="Size_SlideOver_Conditional_Buttons">
+                    <param name="condition">$EXP[FileBrowser_Conditional_Buttons_Expression]</param>
+                </include>
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="id">411</param>
+                        </include>
+                        <include content="Part_HeadText">
+                            <param name="id">9901</param>
+                            <param name="visible">String.IsEmpty(Control.GetLabel(411))</param>
+                            <param name="label">$LOCALIZE[424]</param>
+                        </include>
+                        <include content="Part_ItemLine">
+                            <param name="visible">Control.IsVisible(450)</param>
+                            <param name="haspath">true</param>
+                            <param name="id">412</param>
+                        </include>
+                        <include content="Part_ItemPage">
+                            <param name="id">451</param>
+                        </include>
+                        <include>Part_CloseButton</include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <include content="List_Dialog">
+                            <param name="id">450</param>
+                            <param name="detailed">True</param>
+                            <param name="item_height">80</param>
+                            <param name="textcolor">dialog_fg</param>
+                            <pagecontrol>61</pagecontrol>
+                            <onright>61</onright>
+                            <include>Size_Grouplist_Pad</include>
+                        </include>
+
+                        <include content="List_IconBrowser">
+                            <param name="id">451</param>
+                            <param name="item_h">280</param>
+                            <param name="itemlayout_h">320</param>
+                            <param name="item_w">240</param>
+                            <param name="itemlayout_w">280</param>
+                            <param name="detailed">true</param>
+                            <param name="textcolor">dialog_fg</param>
+                            <onright>62</onright>
+                            <pagecontrol>62</pagecontrol>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <include content="Part_Scrollbar">
+                            <param name="id">61</param>
+                            <visible>Control.IsVisible(450)</visible>
+                            <onleft>450</onleft>
+                            <onright>9000</onright>
+                            <bottom>100</bottom>
+                        </include>
+                        <include content="Part_Scrollbar">
+                            <param name="id">62</param>
+                            <visible>Control.IsVisible(451)</visible>
+                            <onleft>451</onleft>
+                            <onright>9000</onright>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <expression name="FileBrowser_Conditional_Buttons_Expression">[True]</expression>
+    <!-- <expression name="FileBrowser_Conditional_Buttons_Expression">[[Control.IsEnabled(413) + Control.IsVisible(413)] | [Control.IsEnabled(415) + Control.IsVisible(415)]]</expression> -->
+
+    <include name="FileBrowser_Items">
+        <include content="Button_Dialog">
+            <param name="id">9001</param>
+            <param name="groupid">9101</param>
+            <label>$LOCALIZE[31032]</label>
+            <param name="icon">special://skin/extras/icons/circle-check.png</param>
+            <visible>Control.IsEnabled(413) + Control.IsVisible(413) + Control.IsVisible(450)</visible>
+            <onclick>SendClick(413)</onclick>
+        </include>
+        <include content="Button_Dialog">
+            <param name="id">9003</param>
+            <param name="groupid">9103</param>
+            <label>$LOCALIZE[119]</label>
+            <param name="icon">special://skin/extras/icons/circle-plus.png</param>
+            <visible>Control.IsEnabled(415) + Control.IsVisible(415)</visible>
+            <onclick>SendClick(415)</onclick>
+        </include>
+        <include content="Button_Dialog">
+            <param name="id">9002</param>
+            <param name="groupid">9102</param>
+            <label>$LOCALIZE[15067]</label>
+            <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+            <visible>Control.IsEnabled(414) + Control.IsVisible(414)</visible>
+            <onclick>SendClick(414)</onclick>
+        </include>
+
+    </include>
+
+
+</includes>

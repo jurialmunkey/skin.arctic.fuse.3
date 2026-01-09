@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="window" id="1106">
+    <include content="Hub_Onload">
+        <param name="window_id">1106</param>
+    </include>
+    <onload condition="String.IsEmpty(Skin.String(HomeSwitcher.1106.UpNextMode))">Skin.SetString(HomeSwitcher.1106.UpNextMode,library_nextaired)</onload>
+    <controls>
+        <include>Background</include>
+
+        <include content="Object_Hidden_Button">
+            <param name="id">302</param>
+            <onfocus>$VAR[Hub_Action_Reset]</onfocus>
+            <onfocus>SetFocus(300)</onfocus>
+        </include>
+
+        <include content="Object_Hidden_Button">
+            <param name="id">303</param>
+            <onfocus>$VAR[Hub_Action_Reset]</onfocus>
+            <onfocus>SetFocus(300)</onfocus>
+            <onfocus>ActivateWindow(1170)</onfocus>
+        </include>
+
+        <include content="Home_Control">
+            <param name="window">1106</param>
+            <param name="overlay">false</param>
+            <onup>ActivateWindow(1181)</onup>
+            <oninfo>ActivateWindow(1181)</oninfo>
+            <ondown>$VAR[Hub_Action_Down]</ondown>
+            <onback>ReplaceWindow(Home)</onback>
+            <onclick condition="Skin.String(HomeSwitcher.1106.UpNextMode,library_nextaired)">Skin.SetString(HomeSwitcher.1106.UpNextMode,trakt_calendar)</onclick>
+            <onclick condition="Skin.String(HomeSwitcher.1106.UpNextMode,trakt_calendar)">Skin.SetString(HomeSwitcher.1106.UpNextMode,library_nextaired)</onclick>
+        </include>
+
+        <control type="group">
+            <include>Animation_Group_Bumper</include>
+
+            <include>NextAired_Info</include>
+
+            <!-- Widgets Groups -->
+            <control type="group" id="500">
+                <include content="NextAired_Content">
+                    <param name="info">$INFO[Skin.String(HomeSwitcher.1106.UpNextMode)]</param>
+                </include>
+            </control>
+
+            <control type="group">
+                <include>Furniture_Reposition</include>
+                <visible>!$EXP[Exp_InfoDialogs]</visible>
+                <include>Furniture_Footer_Right</include>
+            </control>
+
+            <include>Home_Switcher</include>
+        </control>
+
+
+    </controls>
+</window>

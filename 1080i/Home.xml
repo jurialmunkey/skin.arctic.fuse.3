@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+
+    <onload>Skin.SetString(TMDbHelper.Corner.Radius,20)</onload>
+    <include>Action_ButtonMenu_Onload</include>
+
+    <include content="Hub_Onload">
+        <param name="window_id">Home</param>
+    </include>
+
+    <onload condition="!Skin.HasSetting(Home.FirstRun)">Skin.SetBool(Hub.Home.DisableSubmenu)</onload>
+    <onload condition="!Skin.HasSetting(Home.FirstRun)">Skin.SetString(Shortcuts.RebuildDateTime,FirstRun)</onload>
+    <onload condition="!Skin.HasSetting(Home.FirstRun)">Skin.SetBool(Home.FirstRun)</onload>
+    <onload condition="!Skin.HasSetting(Home.FirstRun)">AlarmClock(reloadskin,ReloadSkin(),00:00,silent)</onload>
+
+    <onload>$VAR[Action_RatingsMonitor]</onload>
+
+    <controls>
+        <include content="Hub_Window">
+            <param name="window">home</param>
+        </include>
+
+        <include content="Hub_Widget_Splash" condition="Skin.HasSetting(Startup.WaitForLoad)">
+            <param name="condition">System.HasAlarm(SplashTimeOut) + [[[Integer.IsEqual(Container(501).NumItems,0) | [Integer.IsEqual(Container(501).NumItems,1) + String.IsEqual(Container(501).ListItemAbsolute(0).Label,$LOCALIZE[31046])]] + Container(501).IsUpdating] | [[Integer.IsEqual(Container(301).NumItems,0) | [Integer.IsEqual(Container(301).NumItems,1) + String.IsEqual(Container(301).ListItemAbsolute(0).Label,$LOCALIZE[31046])]] + Container(301).IsUpdating]]</param>
+        </include>
+    </controls>
+</window>

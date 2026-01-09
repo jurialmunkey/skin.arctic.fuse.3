@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="List_Dialog">
+        <param name="item_height">80</param>
+        <param name="itemlayout_include">List_Layout_Dialog_SimpleCheckmark</param>
+        <param name="control">list</param>
+        <param name="misc">ListItem.IsSelected</param>
+        <param name="icon">$INFO[ListItem.Icon]</param>
+        <definition>
+            <include content="List_Core">
+                <param name="orientation">vertical</param>
+                <param name="control">$PARAM[control]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocus">$PARAM[altfocus]</param>
+                <param name="item_h">$PARAM[item_height]</param>
+                <param name="itemlayout_h">$PARAM[item_height]</param>
+                <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
+                <param name="detailed">$PARAM[detailed]</param>
+                <param name="offset_x">0</param>
+                <param name="offset_y">0</param>
+                <param name="misc">$PARAM[misc]</param>
+                <param name="icon">$PARAM[icon]</param>
+                <nested />
+            </include>
+        </definition>
+    </include>
+
+    <include name="List_Layout_Dialog_SimpleCheckmark">
+        <param name="selected">false</param>
+        <definition>
+            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <include content="Part_List_Checkmark" condition="!$PARAM[selected]">
+                    <param name="selected">$PARAM[misc]</param>
+                </include>
+                <include content="Part_List_Checkmark" condition="$PARAM[selected]">
+                    <param name="selected">$PARAM[misc]</param>
+                    <param name="colordiffuse_off">$VAR[ColorSelected]</param>
+                    <param name="colordiffuse_on">$VAR[ColorSelected]</param>
+                </include>
+                <control type="label">
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <disabledcolor>dialog_fg_30</disabledcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <left>40</left>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="List_Layout_Dialog_Labels">
+        <param name="label">$INFO[ListItem.Label]</param>
+        <param name="label2">$INFO[ListItem.Label2]</param>
+        <param name="label2_visible">!String.IsEmpty(ListItem.Label2)</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[item_h]</left>
+                <height>60</height>
+                <centertop>50%</centertop>
+                <control type="label">
+                    <left>-10</left>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <disabledcolor>dialog_fg_30</disabledcolor>
+                    <label>$PARAM[label]</label>
+                    <visible>![$PARAM[label2_visible]]</visible>
+                </control>
+                <control type="label">
+                    <left>-10</left>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <disabledcolor>dialog_fg_30</disabledcolor>
+                    <font>font_main_bold</font>
+                    <label>$PARAM[label]</label>
+                    <visible>$PARAM[label2_visible]</visible>
+                    <height>30</height>
+                    <top>0</top>
+                </control>
+                <control type="label">
+                    <left>-10</left>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <disabledcolor>dialog_fg_30</disabledcolor>
+                    <font>font_tiny</font>
+                    <label>$PARAM[label2]</label>
+                    <visible>$PARAM[label2_visible]</visible>
+                    <height>30</height>
+                    <bottom>0</bottom>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="List_Layout_Dialog_DetailedCheckmark">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <definition>
+            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <include content="Part_List_Checkmark" condition="![$PARAM[selected]] + [$PARAM[detailed]]">
+                    <param name="selected">$PARAM[misc]</param>
+                </include>
+                <include content="Part_List_Checkmark" condition="[$PARAM[selected]] + [$PARAM[detailed]]">
+                    <param name="selected">$PARAM[misc]</param>
+                    <param name="colordiffuse_off">$VAR[ColorSelected]</param>
+                    <param name="colordiffuse_on">$VAR[ColorSelected]</param>
+                </include>
+                <control type="group">
+                    <include content="Object_Left" condition="$PARAM[detailed]">
+                        <param name="left">40</param>
+                    </include>
+                    <include content="Part_List_Icon" condition="![$PARAM[selected]]">
+                        <param name="item_h">$PARAM[item_h]</param>
+                    </include>
+                    <include content="Part_List_Icon" condition="$PARAM[selected]">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="colordiffuse">$VAR[ColorSelected]</param>
+                    </include>
+                    <include content="List_Layout_Dialog_Labels">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="List_Layout_Dialog_VideoVersions">
+        <param name="selected">false</param>
+        <definition>
+            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <control type="group">
+                    <include content="Part_List_Icon" condition="!$PARAM[selected]">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="icon">$VAR[Image_Poster]</param>
+                        <param name="is_defaulticon">[False]</param>
+                    </include>
+                    <include content="Part_List_Icon" condition="$PARAM[selected]">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        <param name="icon">$VAR[Image_Poster]</param>
+                        <param name="is_defaulticon">[False]</param>
+                    </include>
+                    <control type="group">
+                        <include content="List_Layout_Dialog_Labels">
+                            <param name="item_h">$PARAM[item_h]</param>
+                            <param name="selected">$PARAM[selected]</param>
+                            <param name="label2">[UPPERCASE]$VAR[Label_VideoQuality]$INFO[ListItem.VideoCodec, • ,]$INFO[ListItem.VideoAspect, • ,:1]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,][/UPPERCASE]</param>
+                            <param name="label2_visible">true</param>
+                        </include>
+                        <animation effect="slide" start="0" end="0,-20" condition="true">Conditional</animation>
+                    </control>
+                    <control type="group">
+                        <left>$PARAM[item_h]</left>
+                        <height>60</height>
+                        <centertop>50%</centertop>
+                        <animation effect="slide" start="0" end="0,20" condition="true">Conditional</animation>
+                        <control type="label">
+                            <left>-10</left>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>dialog_fg_70</textcolor>
+                            <selectedcolor>dialog_fg_70</selectedcolor>
+                            <disabledcolor>dialog_fg_30</disabledcolor>
+                            <font>font_tiny</font>
+                            <label>$VAR[Label_AudioLanguages,,  ]$VAR[Label_SubtitleLanguages]</label>
+                            <height>30</height>
+                            <bottom>0</bottom>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+</includes>

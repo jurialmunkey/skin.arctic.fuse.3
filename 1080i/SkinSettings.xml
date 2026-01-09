@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <include content="Action_SettingsCategories_Onload">
+        <param name="defaultcontrol">10000</param>
+    </include>
+
+    <!-- Set Some Profile Settings -->
+    <onload condition="String.IsEmpty(Skin.String(Skin.SettingsLevel))">Skin.SetString(Skin.SettingsLevel,$NUMBER[1])</onload>
+
+    <onunload>$VAR[Action_RatingsMonitor]</onunload>
+
+    <controls>
+
+
+        <include>Background</include>
+
+        <include content="Settings_Dialog">
+            <include content="Settings_Main_Group">
+                <include content="Settings_Left_Group">
+                    <include content="Settings_Left_Content">
+                        <include content="Settings_Category_List">
+                            <param name="id">10000</param>
+                            <onright>10001</onright>
+                            <pagecontrol>61</pagecontrol>
+                            <right>40</right>
+                            <content>
+                                <item id="0" description="Shortcuts">
+                                    <label>$LOCALIZE[111]</label>
+                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31103], $LOCALIZE[31177], $LOCALIZE[31487] $LOCALIZE[31150][/LOWERCASE].</label2>
+                                </item>
+                                <item id="1" description="Appearance">
+                                    <label>$LOCALIZE[480]</label>
+                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[14078], $LOCALIZE[33068], $LOCALIZE[31487] $LOCALIZE[31486][/LOWERCASE].</label2>
+                                </item>
+                                <item id="2" description="Interface">
+                                    <label>$LOCALIZE[14206]</label>
+                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[19033] $LOCALIZE[736], $LOCALIZE[31208], $LOCALIZE[31487] $LOCALIZE[31239][/LOWERCASE].</label2>
+                                </item>
+                                <item id="3" description="Details">
+                                    <label>$LOCALIZE[33029]</label>
+                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[19033] $LOCALIZE[20459], $LOCALIZE[126], $LOCALIZE[31202], $LOCALIZE[31487] $LOCALIZE[31235][/LOWERCASE].</label2>
+                                </item>
+                                <item id="4" description="Layout">
+                                    <label>$LOCALIZE[31158]</label>
+                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31044], $LOCALIZE[31487] $LOCALIZE[31103][/LOWERCASE].</label2>
+                                </item>
+                                <item id="5" description="Behaviour">
+                                    <label>$LOCALIZE[31186]</label>
+                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31174], $LOCALIZE[31185], $LOCALIZE[478], $LOCALIZE[31297], $LOCALIZE[31487] $LOCALIZE[31482][/LOWERCASE].</label2>
+                                </item>
+                                <item id="6" description="Other">
+                                    <label>$LOCALIZE[29921]</label>
+                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[14125], $LOCALIZE[12999], $LOCALIZE[31487] $LOCALIZE[13200][/LOWERCASE].</label2>
+                                </item>
+                                <item id="7" description="Dependencies">
+                                    <label>$LOCALIZE[39024]</label>
+                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[39024] $LOCALIZE[31487] $LOCALIZE[14260][/LOWERCASE].</label2>
+                                </item>
+                                <item id="8" description="Thanks">
+                                    <label>$VAR[Label_SkinSettings_Level]</label>
+                                    <label2>$LOCALIZE[31550]</label2>
+                                    <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),1)">Skin.SetString(Skin.SettingsLevel,$NUMBER[2])</onclick>
+                                    <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),2)">Skin.SetString(Skin.SettingsLevel,$NUMBER[3])</onclick>
+                                    <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),3)">Skin.SetString(Skin.SettingsLevel,$NUMBER[1])</onclick>
+                                </item>
+                            </content>
+                        </include>
+                        <control type="group">
+                            <height>80</height>
+                            <width>80</width>
+                            <right>50</right>
+                            <bottom>80</bottom>
+                            <control type="image">
+                                <texture colordiffuse="main_fg_70">$VAR[Image_SkinSettings_Level]</texture>
+                                <bordersize>10</bordersize>
+                                <visible>!Container(10000).HasFocus(8)</visible>
+                            </control>
+                            <control type="image">
+                                <texture colordiffuse="$VAR[ColorSelected]">$VAR[Image_SkinSettings_Level]</texture>
+                                <bordersize>10</bordersize>
+                                <visible>Container(10000).HasFocus(8)</visible>
+                            </control>
+                        </control>
+                    </include>
+                </include>
+                <include content="Settings_Right_Group">
+
+                    <control type="scrollbar" id="60">
+                        <centerright>0</centerright>
+                        <bottom>20</bottom>
+                        <top>20</top>
+                        <width>scrollbar_w</width>
+                        <orientation>vertical</orientation>
+                        <texturesliderbackground />
+                        <texturesliderbar colordiffuse="main_logo" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+                        <include>Texture_Scrollbar_V</include>
+                        <showonepage>false</showonepage>
+                        <onleft>10001</onleft>
+                    </control>
+
+                    <include content="Settings_Right_Grouplist">
+                        <param name="id">10001</param>
+                        <onleft>10000</onleft>
+                        <include content="SkinSettings_Items_Menus">
+                            <param name="baseid">0</param>
+                        </include>
+                        <include content="SkinSettings_Items_Appearance">
+                            <param name="baseid">1</param>
+                        </include>
+                        <include content="SkinSettings_Items_Interface">
+                            <param name="baseid">2</param>
+                        </include>
+                        <include content="SkinSettings_Items_Details">
+                            <param name="baseid">3</param>
+                        </include>
+                        <include content="SkinSettings_Items_Viewtypes">
+                            <param name="baseid">4</param>
+                        </include>
+                        <include content="SkinSettings_Items_Behaviour">
+                            <param name="baseid">5</param>
+                        </include>
+                        <include content="SkinSettings_Items_Other">
+                            <param name="baseid">6</param>
+                        </include>
+                        <include content="SkinSettings_Items_Dependecies">
+                            <param name="baseid">7</param>
+                        </include>
+                        <include content="SkinSettings_Items_Thanks">
+                            <param name="baseid">8</param>
+                        </include>
+                    </include>
+                </include>
+                <include>Settings_InfoText</include>
+
+            </include>
+
+        </include>
+
+    </controls>
+
+</window>

@@ -1,0 +1,36 @@
+<include content="Widget_Row">
+    <param name="id">{widget_id}</param>
+    <param name="groupid">{widget_group_id}</param>
+    <param name="label">{widget_label}</param>
+    <param name="usewidgetlabel">{widget_usewidgetlabel}</param>
+    <param name="include">{widget_include}</param>
+    <param name="grouplistid">{grouplist_id}</param>
+    <param name="refocus">{grouplist_refocus}</param>
+    <param name="detailed">{widget_detailed}</param>
+    <param name="visible">[{widget_category_visible}] + [{widget_visible}]</param>
+    <param name="altvisible">{widget_altvisible}</param>
+    <param name="busy_isupdating">{widget_busy_isupdating}</param>
+    <param name="widgetfade_include">{widget_widgetfade_include}</param>
+    <param name="widgetfade_disable">{widget_widgetfade_disable}</param>
+    <param name="widgetconstants_affix">{widgetconstants_affix}</param>
+
+    <onfocus>ClearProperty(HomeSwitcher.IsVisible,Home)</onfocus>
+    <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
+
+    <description>{description}</description>
+
+    <include content="Widget_NoResults">
+        <param name="id">{widget_id}</param>
+    </include>
+
+    <content sortby="{widget_sortby}" sortorder="{widget_sortorder}" target="{widget_target}" limit="{widget_limit}" browse="$VAR[Defs_BrowseLimitedLists]">{widget_path}</content>
+
+    <include content="Defs_AutoScroll" condition="{widget_isautoscroll}">
+        <param name="condition">[!Control.HasFocus({widget_id}) | System.IdleTime(3)]</param>
+    </include>
+
+    {widget_custom_onclick}
+    {widget_custom_onfocus}
+    {widget_custom_content}
+
+</include>

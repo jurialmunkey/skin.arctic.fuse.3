@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog">
+    <defaultcontrol always="true">9902</defaultcontrol>
+    <onload>SetProperty(TMDbHelper.ContextMenu,True)</onload>
+    <controls>
+
+        <include>Part_Dim_Overlay</include>
+
+        <control type="group">
+            <include>Dimension_DialogFullMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogFullMenu</param>
+                <param name="topline">false</param>
+                <param name="subline">false</param>
+            </include>
+
+            <!-- Content -->
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+
+                <!-- Left -->
+                <control type="group">
+                    <width>380</width>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="id">9999</param>
+                            <param name="label">Wikipedia</param>
+                            <param name="right">constant_dialog_pad</param>
+                        </include>
+                        <include content="Part_ItemPage">
+                            <param name="id">9902</param>
+                            <param name="items_label">$LOCALIZE[31150]</param>
+                        </include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <include content="List_DialogSelect">
+                            <param name="id">9902</param>
+                            <param name="textcolor">dialog_fg</param>
+                            <param name="control">list</param>
+                            <param name="itemlayout_include">Layout_DialogSimple</param>
+                            <param name="detailed">true</param>
+                            <onright>61</onright>
+                            <include>Size_Grouplist_Pad</include>
+                        </include>
+                    </control>
+                </control>
+
+                <control type="group">
+                    <left>380</left>
+                    <include>Part_Panel</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="id">9901</param>
+                        </include>
+                        <include>Part_CloseButton</include>
+                        <control type="image">
+                            <centerbottom>0</centerbottom>
+                            <height>1</height>
+                            <left>40</left>
+                            <right>40</right>
+                            <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <control type="group">
+                            <bottom>120</bottom>
+                            <include content="Part_PlotText">
+                                <param name="id">9903</param>
+                            </include>
+                            <include content="Part_Scrollbar_Max">
+                                <param name="id">61</param>
+                                <param name="inset">false</param>
+                                <onleft>9902</onleft>
+                                <onright condition="!String.IsEmpty(Window.Property(Image))">9061</onright>
+                            </include>
+                        </control>
+                        <control type="group">
+                            <height>120</height>
+                            <bottom>0</bottom>
+                            <include content="Part_InfoText">
+                                <param name="label">$INFO[Control.GetLabel(9904)]</param>
+                                <param name="include_hintlabel">false</param>
+                                <param name="centerbottom">50%</param>
+                            </include>
+                            <control type="image" id="9905">
+                                <width>200</width>
+                                <right>40</right>
+                                <bottom>40</bottom>
+                                <height>40</height>
+                                <aspectratio align="right">keep</aspectratio>
+                            </control>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </control>
+
+
+
+        <include content="Object_Hidden_Button">
+            <param name="id">9904</param>
+            <param name="control">textbox</param>
+        </include>
+
+        <include content="Object_Hidden_Button">
+            <param name="id">9061</param>
+            <onleft>61</onleft>
+            <onup>61</onup>
+            <ondown>61</ondown>
+            <onback>61</onback>
+            <onclick>SetFocus(61)</onclick>
+        </include>
+
+    </controls>
+</window>

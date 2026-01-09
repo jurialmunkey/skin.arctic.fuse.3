@@ -1,0 +1,2261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="Layout_BasicMeta">
+        <control type="group">
+            <centertop>50%</centertop>
+            <height>50</height>
+            <control type="label">
+                <top>0</top>
+                <height>20</height>
+                <font>font_main_bold</font>
+                <label>$INFO[ListItem.Label]</label>
+                <textcolor>dialog_fg_90</textcolor>
+            </control>
+            <control type="label">
+                <bottom>0</bottom>
+                <height>20</height>
+                <font>font_mini</font>
+                <textcolor>dialog_fg_70</textcolor>
+                <label>$INFO[ListItem.Label2]</label>
+                <haspath>true</haspath>
+            </control>
+        </control>
+        <control type="group">
+            <left>-40</left>
+            <right>-40</right>
+            <include>Part_Line</include>
+        </control>
+    </include>
+
+    <include name="Layout_MenuList">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <param name="textcolor">dialog_fg</param>
+        <param name="misc">0</param>
+        <definition>
+
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+            </include>
+
+            <control type="group">
+                <left>$PARAM[misc]</left>
+                <control type="group">
+                    <control type="label">
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textoffsetx>40</textoffsetx>
+                        <textcolor>$PARAM[textcolor]_70</textcolor>
+                        <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>$PARAM[detailed]</visible>
+                    </control>
+                    <control type="label">
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <align>right</align>
+                        <textoffsetx>40</textoffsetx>
+                        <textcolor>$PARAM[textcolor]_70</textcolor>
+                        <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                        <visible>$PARAM[detailed]</visible>
+                    </control>
+
+
+                    <control type="label">
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textoffsetx>40</textoffsetx>
+                        <textcolor>$PARAM[textcolor]_70</textcolor>
+                        <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!$PARAM[detailed]</visible>
+                        <left>40</left>
+                    </control>
+                </control>
+
+                <control type="group">
+                    <centerleft>40</centerleft>
+                    <centertop>50%</centertop>
+                    <width>40</width>
+                    <height>40</height>
+                    <visible>![$PARAM[detailed]]</visible>
+                    <control type="image">
+                        <bordersize>icon_home_bordersize</bordersize>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <visible>String.IsEmpty(ListItem.Icon) | String.StartsWith(ListItem.Icon,special://skin/extras/icons)</visible>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>$PARAM[textcolor]_70</colordiffuse>
+                        <texture background="true" diffuse="diffuse/circle/circle_120.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                    <control type="image">
+                        <bordersize>icon_main_bordersize</bordersize>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <visible>String.StartsWith(ListItem.Icon,Default)</visible>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>$PARAM[textcolor]_70</colordiffuse>
+                        <texture background="true" diffuse="diffuse/circle/circle_120.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                    <control type="image">
+                        <bordersize>icon_item_bordersize</bordersize>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <visible>![String.IsEmpty(ListItem.Icon) | String.StartsWith(ListItem.Icon,special://skin/extras/icons) | String.StartsWith(ListItem.Icon,Default)]</visible>
+                        <texture background="true" diffuse="diffuse/circle/circle_120.png" fallback="fallback/kodi-logo.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                </control>
+            </control>
+
+        </definition>
+    </include>
+
+    <include name="Layout_OptionTray">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <param name="color">main_fg</param>
+        <param name="centertop">50%</param>
+        <param name="include_hintlabel">false</param>
+        <definition>
+            <control type="group">
+                <right>20</right>
+                <control type="group">
+                    <width>40</width>
+                    <height>40</height>
+                    <centertop>$PARAM[centertop]</centertop>
+                    <centerleft>50%</centerleft>
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">image</param>
+                        <bordersize>-20</bordersize>
+                        <include>Texture_Circle_Highlight_H</include>
+                    </include>
+                    <control type="image">
+                        <include content="Object_Top" condition="$PARAM[selected] + $PARAM[include_hintlabel]">
+                            <param name="top">-10</param>
+                        </include>
+                        <height>40</height>
+                        <bordersize>icon_home_bordersize</bordersize>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>$PARAM[color_nf]</colordiffuse>
+                        <texture diffuse="diffuse/circle/circle_120.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                    <include content="Object_Control" condition="$PARAM[selected] + $PARAM[include_hintlabel]">
+                        <param name="control">label</param>
+                        <textcolor>$VAR[ColorSelected]</textcolor>
+                        <font>font_hint</font>
+                        <align>center</align>
+                        <aligny>top</aligny>
+                        <height>10</height>
+                        <centerbottom>11</centerbottom>
+                        <left>-8</left>
+                        <right>-8</right>
+                        <label>$INFO[ListItem.Label]</label>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_IconMenu">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <param name="color">main_fg</param>
+        <param name="centertop">50%</param>
+        <definition>
+            <control type="group">
+                <right>20</right>
+                <control type="group">
+                    <width>40</width>
+                    <height>40</height>
+                    <centertop>$PARAM[centertop]</centertop>
+                    <centerleft>50%</centerleft>
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">image</param>
+                        <bordersize>-20</bordersize>
+                        <include>Texture_Circle_Highlight_H</include>
+                    </include>
+                    <control type="image">
+                        <height>40</height>
+                        <bordersize>icon_home_bordersize</bordersize>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>$PARAM[color_nf]</colordiffuse>
+                        <texture diffuse="diffuse/circle/circle_120.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_GameFilter">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+            </include>
+            <control type="group">
+                <left>0</left>
+                <width>$PARAM[item_h]</width>
+                <control type="group">
+                    <left>40</left>
+                    <top>20</top>
+                    <bottom>20</bottom>
+                    <width>100</width>
+                    <control type="image">
+                        <aspectratio>scale</aspectratio>
+                        <texture border="4">$INFO[ListItem.Icon]</texture>
+                        <bordertexture colordiffuse="black">common/white.png</bordertexture>
+                        <bordersize>4</bordersize>
+                    </control>
+                    <control type="gamewindow">
+                        <videofilter>$INFO[ListItem.Property(game.videofilter)]</videofilter>
+                        <stretchmode>$INFO[ListItem.Property(game.stretchmode)]</stretchmode>
+                        <rotation>$INFO[ListItem.Property(game.videorotation)]</rotation>
+                        <visible>String.IsEmpty(ListItem.Art(screenshot))</visible>
+                    </control>
+                    <control type="image">
+                        <aspectratio>scale</aspectratio>
+                        <texture border="4">$INFO[ListItem.Art(screenshot)]</texture>
+                        <bordertexture colordiffuse="black">common/white.png</bordertexture>
+                        <bordersize>4</bordersize>
+                    </control>
+                </control>
+            </control>
+            <control type="group">
+                <left>140</left>
+                <control type="label">
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textoffsetx>40</textoffsetx>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>String.IsEmpty(ListItem.Label2)</visible>
+                </control>
+
+                <control type="label">
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textoffsetx>40</textoffsetx>
+                    <font>font_main_bold</font>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>!String.IsEmpty(ListItem.Label2)</visible>
+                    <top>20</top>
+                    <height>30</height>
+                </control>
+                <control type="label">
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textoffsetx>40</textoffsetx>
+                    <font>font_tiny</font>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                    <visible>!String.IsEmpty(ListItem.Label2)</visible>
+                    <bottom>20</bottom>
+                    <height>30</height>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_PVRGuide_Ruler">
+        <control type="group">
+            <left>30</left>
+            <bottom>5</bottom>
+            <top>-10</top>
+            <control type="image">
+                <width>1</width>
+                <texture colordiffuse="main_fg_30">common/white.png</texture>
+                <bottom>15</bottom>
+                <top>15</top>
+            </control>
+            <control type="label">
+                <bottom>5</bottom>
+                <left>10</left>
+                <align>left</align>
+                <aligny>center</aligny>
+                <font>font_tiny</font>
+                <label>$INFO[ListItem.Label]</label>
+                <textcolor>main_fg_70</textcolor>
+                <shadowcolor>main_bg_12</shadowcolor>
+            </control>
+        </control>
+    </include>
+
+    <include name="Layout_PVRGuide_Ruler_Horizontal">
+        <control type="group">
+            <control type="image">
+                <top>6</top>
+                <height>1</height>
+                <right>0</right>
+                <texture colordiffuse="main_fg_30">common/white.png</texture>
+            </control>
+            <control type="label">
+                <top>15</top>
+                <aligny>top</aligny>
+                <font>font_tiny</font>
+                <label>$INFO[ListItem.Label]</label>
+                <textcolor>main_fg_70</textcolor>
+                <shadowcolor>main_bg_12</shadowcolor>
+            </control>
+        </control>
+    </include>
+
+    <include name="Layout_PVRGuide_Channels">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
+        <param name="bottom">0</param>
+        <param name="right">20</param>
+        <definition>
+            <control type="group">
+                <right>$PARAM[right]</right>
+                <left>20</left>
+                <bottom>$PARAM[bottom]</bottom>
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include>Texture_Menu_Highlight_H</include>
+                </include>
+                <control type="group">
+                    <height>80</height>
+                    <centertop>50%</centertop>
+                    <left>-20</left>
+                    <right>40</right>
+                    <control type="group">
+                        <include content="Object_InfoCircle" condition="!$PARAM[selected]">
+                            <param name="name">$INFO[ListItem.ChannelNumberLabel,$LOCALIZE[19029] ,]</param>
+                            <param name="role">$INFO[ListItem.ChannelName]</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <control type="label">
+                                <font>font_mini</font>
+                                <label>$INFO[ListItem.Label]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <textcolor>main_fg_70</textcolor>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
+                            <include content="Object_InfoCircle_Image">
+                                <param name="colordiffuse">main_bg_90</param>
+                                <param name="icon">common/white.png</param>
+                            </include>
+                            <include content="Object_InfoCircle_Image">
+                                <param name="colordiffuse">white</param>
+                                <param name="icon">$VAR[Image_Poster]</param>
+                                <param name="aspectratio">keep</param>
+                                <param name="bordersize">5</param>
+                            </include>
+                        </include>
+                        <include content="Object_InfoCircle" condition="$PARAM[selected]">
+                            <param name="name">$INFO[ListItem.ChannelNumberLabel,$LOCALIZE[19029] ,]</param>
+                            <param name="role">$INFO[ListItem.ChannelName]</param>
+                            <param name="textcolor_top">$VAR[ColorSelected]</param>
+                            <param name="textcolor_sub">$VAR[ColorSelected]</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <control type="label">
+                                <font>font_mini</font>
+                                <label>$INFO[ListItem.Label]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <include>Color_SelectedText</include>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
+                            <include content="Object_InfoCircle_Image">
+                                <param name="colordiffuse">main_bg_90</param>
+                                <param name="icon">common/white.png</param>
+                            </include>
+                            <include content="Object_InfoCircle_Image">
+                                <param name="colordiffuse">white</param>
+                                <param name="icon">$VAR[Image_Poster]</param>
+                                <param name="aspectratio">keep</param>
+                                <param name="bordersize">5</param>
+                            </include>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_PVRChannel">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="channelwidth">480</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[channelwidth]</width>
+                <include content="Layout_PVRGuide_Channels">
+                    <param name="detailed">$PARAM[detailed]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <control type="image">
+                    <right>50</right>
+                    <centertop>50%</centertop>
+                    <aspectratio align="right">keep</aspectratio>
+                    <height>32</height>
+                    <texture>$VAR[Image_PVRGuide_Indicator]</texture>
+                </control>
+            </control>
+            <control type="group">
+                <left>$PARAM[channelwidth]</left>
+                <control type="group">
+                    <left>20</left>
+                    <right>20</right>
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">image</param>
+                        <include content="Texture_Menu_Highlight_H">
+                            <param name="border">40,0,40,0</param>
+                        </include>
+                        <include content="Dimension_Padding"><param name="pad">1</param></include>
+                    </include>
+                    <control type="group">
+                        <width>50%</width>
+                        <include content="Object_Control">
+                            <param name="control">progress</param>
+
+                            <include content="Dimension_Padding" condition="$PARAM[selected]">
+                                <param name="pad">1</param>
+                            </include>
+                            <include content="Dimension_Padding"><param name="pad">3</param></include>
+
+                            <texturebg colordiffuse="00ffffff">pvr/progressline-back3.png</texturebg>
+                            <lefttexture border="40,0,0,0" colordiffuse="$VAR[ColorPVRProgress]">pvr/progressline-left3.png</lefttexture>
+                            <midtexture border="0" colordiffuse="$VAR[ColorPVRProgress]">pvr/progressline-mid3.png</midtexture>
+                            <righttexture border="0,0,40,0" colordiffuse="$VAR[ColorPVRProgress]">pvr/progressline-right3.png</righttexture>
+                            <info>ListItem.Progress</info>
+                            <visible>Integer.IsGreater(ListItem.Progress,1)</visible>
+                        </include>
+                        <include content="Layout_PVRChannel_Programs">
+                            <param name="detailed">$PARAM[detailed]</param>
+                            <param name="selected">$PARAM[selected]</param>
+                        </include>
+                    </control>
+                    <control type="group">
+                        <right>0</right>
+                        <width>50%</width>
+                        <include content="Layout_PVRChannel_Programs">
+                            <param name="detailed">$PARAM[detailed]</param>
+                            <param name="selected">$PARAM[selected]</param>
+                            <param name="affix">Next</param>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_PVRChannel_Programs">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="affix" />
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
+        <definition>
+
+            <include content="Object_Control" condition="!$PARAM[selected]">
+                <param name="control">image</param>
+                <texture colordiffuse="main_fg_30" border="40">pvr/progressline-programs.png</texture>
+            </include>
+
+            <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_detailed_labels]">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <label>$INFO[ListItem.$PARAM[affix]Title]</label>
+                <textcolor>main_fg_90</textcolor>
+                <selectedcolor>main_fg_90</selectedcolor>
+                <left>40</left>
+                <right>40</right>
+            </include>
+
+            <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <label>$INFO[ListItem.$PARAM[affix]Genre]</label>
+                <textcolor>main_fg_70</textcolor>
+                <selectedcolor>main_fg_70</selectedcolor>
+                <left>40</left>
+                <right>40</right>
+            </include>
+
+            <control type="label">
+                <font>font_mini</font>
+                <label>$INFO[ListItem.$PARAM[affix]Title]</label>
+                <align>left</align>
+                <left>40</left>
+                <right>40</right>
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <textcolor>main_fg_70</textcolor>
+                <visible>![$PARAM[include_detailed_labels]]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_PVRGuide_Programs">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
+        <param name="border">40,0,40,0</param>
+        <param name="border_genre">40,0,40,0</param>
+        <param name="left">0</param>
+        <param name="left_text">40</param>
+        <param name="left_text_slide">70</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <param name="id">1</param>
+                <include content="Texture_Menu_Highlight_H">
+                    <param name="border">$PARAM[border]</param>
+                </include>
+                <visible>$PARAM[visible]</visible>
+                <left>$PARAM[left]</left>
+            </include>
+
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <param name="id">1</param>
+                <bordersize>3</bordersize>
+                <left>$PARAM[left]</left>
+                <texture colordiffuse="cd808080" border="$PARAM[border_genre]" fallback="pvr/genre/0.png">$VAR[PVR_GenreType,pvr/genre/,.png]</texture>
+            </include>
+
+            <include content="Object_Control" condition="!$PARAM[selected]">
+                <param name="control">image</param>
+                <param name="id">1</param>
+                <bordersize>3</bordersize>
+                <left>$PARAM[left]</left>
+                <texture colordiffuse="55808080" border="$PARAM[border_genre]" fallback="pvr/genre/0.png">$VAR[PVR_GenreType,pvr/genre/,.png]</texture>
+            </include>
+
+            <include content="Object_Control" condition="!$PARAM[selected]">
+                <param name="control">image</param>
+                <param name="id">1</param>
+                <texture colordiffuse="main_fg_30" border="40">pvr/progressline-programs.png</texture>
+                <left>$PARAM[left]</left>
+            </include>
+
+            <!-- No Indicator Text -->
+            <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_detailed_labels]">
+                <param name="id">1</param>
+                <include condition="$PARAM[selected] + false">Color_SelectedText</include>
+                <label>$VAR[Label_PVRPrograms]</label>
+                <textcolor>main_fg_90</textcolor>
+                <selectedcolor>main_fg_90</selectedcolor>
+                <left>$PARAM[left_text]</left>
+                <right>40</right>
+                <visible>![ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
+            </include>
+            <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
+                <param name="id">1</param>
+                <include condition="$PARAM[selected] + false">Color_SelectedText</include>
+                <label>$INFO[ListItem.Genre]</label>
+                <textcolor>main_fg_70</textcolor>
+                <selectedcolor>main_fg_70</selectedcolor>
+                <left>$PARAM[left_text]</left>
+                <right>40</right>
+                <visible>![ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
+            </include>
+            <control type="label" id="1">
+                <font>font_mini</font>
+                <label>$INFO[ListItem.Label]</label>
+                <align>left</align>
+                <left>$PARAM[left_text]</left>
+                <right>40</right>
+                <include condition="$PARAM[selected] + false">Color_SelectedText</include>
+                <textcolor>main_fg_70</textcolor>
+                <visible>![$PARAM[include_detailed_labels]]</visible>
+                <visible>![ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
+            </control>
+
+            <!-- Indicator Text -->
+            <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_detailed_labels]">
+                <param name="id">1</param>
+                <include condition="$PARAM[selected] + false">Color_SelectedText</include>
+                <label>$VAR[Label_PVRPrograms]</label>
+                <textcolor>main_fg_90</textcolor>
+                <selectedcolor>main_fg_90</selectedcolor>
+                <left>$PARAM[left_text_slide]</left>
+                <right>40</right>
+                <visible>[ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
+            </include>
+            <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
+                <param name="id">1</param>
+                <include condition="$PARAM[selected] + false">Color_SelectedText</include>
+                <label>$INFO[ListItem.Genre]</label>
+                <textcolor>main_fg_70</textcolor>
+                <selectedcolor>main_fg_70</selectedcolor>
+                <left>$PARAM[left_text_slide]</left>
+                <right>40</right>
+                <visible>[ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
+            </include>
+            <control type="label" id="1">
+                <font>font_mini</font>
+                <label>$INFO[ListItem.Label]</label>
+                <align>left</align>
+                <left>$PARAM[left_text_slide]</left>
+                <right>40</right>
+                <include condition="$PARAM[selected] + false">Color_SelectedText</include>
+                <textcolor>main_fg_70</textcolor>
+                <visible>![$PARAM[include_detailed_labels]]</visible>
+                <visible>[ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
+            </control>
+
+            <control type="group">
+                <left>$PARAM[left_text]</left>
+                <control type="image">
+                    <centerleft>0</centerleft>
+                    <centertop>40</centertop>
+                    <aspectratio align="center" aligny="center">keep</aspectratio>
+                    <width>24</width>
+                    <height>24</height>
+                    <include content="Object_ColorDiffuse" condition="$PARAM[selected] + false">
+                        <param name="colordiffuse">$VAR[ColorSelected]</param>
+                    </include>
+                    <colordiffuse>main_fg_70</colordiffuse>
+                    <texture>$VAR[Image_PVRGuide_Indicator]</texture>
+                </control>
+            </control>
+
+        </definition>
+    </include>
+
+    <include name="Layout_Shortcuts">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="altfocus">false</param>
+        <param name="textcolor">dialog_fg_90</param>
+        <param name="misc">0</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+                <animation effect="fade" start="100" end="30" condition="$PARAM[altfocus]">Conditional</animation>
+            </include>
+            <include content="Object_Control" condition="![$PARAM[selected]]">
+                <param name="control">image</param>
+                <texture border="40" colordiffuse="$VAR[Color_DialogBorder]">common/menu.png</texture>
+                <animation effect="fade" start="100" end="0" condition="![$PARAM[altfocus]]">Conditional</animation>
+            </include>
+            <control type="group">
+
+                <right>$PARAM[misc]</right>
+                <height>$PARAM[item_h]</height>
+
+                <animation effect="fadediffuse" start="ffffffff" end="FFBF0000" condition="String.IsEqual(ListItem.Property(disabled),True)">Conditional</animation>
+                <animation effect="fadediffuse" start="ffffffff" end="ff333333" condition="!String.IsEqual(ListItem.Property(disabled),True) + $PARAM[selected] + !Skin.HasSetting(RevertSelectedText)">Conditional</animation>
+                <animation effect="fadediffuse" start="ffffffff" end="$PARAM[textcolor]" condition="!String.IsEqual(ListItem.Property(disabled),True) + ![$PARAM[selected]]">Conditional</animation>
+
+                <control type="group">
+                    <centerleft>60</centerleft>
+                    <centertop>50%</centertop>
+                    <width>64</width>
+                    <height>64</height>
+                    <control type="image">
+                        <bordersize>icon_home_bordersize</bordersize>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <visible>String.IsEmpty(ListItem.Icon) | String.StartsWith(ListItem.Icon,special://skin/extras/icons)</visible>
+                        <texture background="true" diffuse="diffuse/circle/circle_120.png" fallback="special://skin/extras/icons/shapes.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                    <control type="image">
+                        <bordersize>icon_main_bordersize</bordersize>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <visible>String.StartsWith(ListItem.Icon,Default)</visible>
+                        <texture background="true" diffuse="diffuse/circle/circle_120.png" fallback="special://skin/extras/icons/shapes.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                    <control type="image">
+                        <bordersize>icon_item_bordersize</bordersize>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <visible>![String.IsEmpty(ListItem.Icon) | String.StartsWith(ListItem.Icon,special://skin/extras/icons) | String.StartsWith(ListItem.Icon,Default)]</visible>
+                        <texture background="true" diffuse="diffuse/circle/circle_120.png" fallback="fallback/kodi-logo.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>120</left>
+                    <right>0</right>
+                    <visible>![$PARAM[detailed]]</visible>
+                    <control type="textbox">
+                        <textcolor>white</textcolor>
+                        <selectedcolor>white</selectedcolor>
+                        <right>120</right>
+                        <font>font_main</font>
+                        <aligny>center</aligny>
+                        <top>8</top>
+                        <bottom>12</bottom>
+                        <autoscroll>false</autoscroll>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEmpty(ListItem.Property(path))</visible>
+                    </control>
+                    <control type="group">
+                        <height>60</height>
+                        <centertop>50%</centertop>
+                        <right>120</right>
+                        <visible>![String.IsEmpty(ListItem.Property(path))]</visible>
+                        <control type="label">
+                            <height>30</height>
+                            <textcolor>white</textcolor>
+                            <selectedcolor>white</selectedcolor>
+                            <font>font_main_bold</font>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                        <control type="label">
+                            <height>30</height>
+                            <font>font_tiny</font>
+                            <bottom>0</bottom>
+                            <textcolor>white</textcolor>
+                            <selectedcolor>white</selectedcolor>
+                            <label>$VAR[Label_Shortcut_LabelTwo]</label>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>120</left>
+                    <right>200</right>
+                    <visible>$PARAM[detailed]</visible>
+                    <control type="textbox">
+                        <textcolor>white</textcolor>
+                        <selectedcolor>white</selectedcolor>
+                        <right>80</right>
+                        <font>font_main</font>
+                        <aligny>center</aligny>
+                        <top>8</top>
+                        <bottom>12</bottom>
+                        <autoscroll>false</autoscroll>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEmpty(ListItem.Property(path))</visible>
+                    </control>
+                    <control type="group">
+                        <height>60</height>
+                        <centertop>50%</centertop>
+                        <right>80</right>
+                        <visible>![String.IsEmpty(ListItem.Property(path))]</visible>
+                        <control type="label">
+                            <height>30</height>
+                            <textcolor>white</textcolor>
+                            <selectedcolor>white</selectedcolor>
+                            <font>font_main_bold</font>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                        <control type="label">
+                            <height>30</height>
+                            <font>font_tiny</font>
+                            <bottom>0</bottom>
+                            <textcolor>white</textcolor>
+                            <selectedcolor>white</selectedcolor>
+                            <label>$VAR[Label_Shortcut_LabelTwo]</label>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>$PARAM[detailed]</visible>
+
+                    <right>20</right>
+
+                    <!-- Order -->
+                    <control type="group">
+                        <right>0</right>
+                        <width>$PARAM[item_h]</width>
+                        <centertop>50%</centertop>
+                        <height>80</height>
+                        <control type="image">
+                            <height>40</height>
+                            <top>4</top>
+                            <bordersize>-8</bordersize>
+                            <aspectratio scalediffuse="false">keep</aspectratio>
+                            <texture background="true">special://skin/extras/icons/arrow-down-wide-short.png</texture>
+                            <visible>String.IsEmpty(ListItem.Property(widget_sortorder))</visible>
+                        </control>
+                        <control type="image">
+                            <height>40</height>
+                            <top>4</top>
+                            <bordersize>-8</bordersize>
+                            <aspectratio scalediffuse="false">keep</aspectratio>
+                            <texture background="true">special://skin/extras/icons/arrow-up-wide-short.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(widget_sortorder))</visible>
+                        </control>
+                        <control type="label">
+                            <height>40</height>
+                            <font>font_tiny</font>
+                            <bottom>4</bottom>
+                            <textcolor>white</textcolor>
+                            <selectedcolor>white</selectedcolor>
+                            <label fallback="Default">$INFO[ListItem.Property(widget_sortby),[CAPITALIZE],[/CAPITALIZE]]</label>
+                            <align>center</align>
+                        </control>
+                    </control>
+
+                    <!-- Style -->
+                    <control type="group">
+                        <right>140</right>
+                        <width>$PARAM[item_h]</width>
+                        <centertop>50%</centertop>
+                        <height>80</height>
+                        <control type="image">
+                            <height>40</height>
+                            <top>4</top>
+                            <bordersize>-8</bordersize>
+                            <aspectratio scalediffuse="false">keep</aspectratio>
+                            <texture background="true" fallback="special://skin/extras/icons/shapes.png">$VAR[Image_Widget_Style]</texture>
+                        </control>
+                        <control type="label">
+                            <left>-20</left>
+                            <right>-20</right>
+                            <height>40</height>
+                            <font>font_tiny</font>
+                            <bottom>4</bottom>
+                            <textcolor>white</textcolor>
+                            <selectedcolor>white</selectedcolor>
+                            <label>$VAR[Label_Widget_Style]</label>
+                            <align>center</align>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_DialogBasic">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="misc">0</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+            </include>
+            <control type="group">
+                <left>40</left>
+                <right>$PARAM[misc]</right>
+                <include content="Object_Control">
+                    <param name="control">label</param>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <right>40</right>
+                    <textcolor>main_fg_70</textcolor>
+                    <selectedcolor>main_fg_70</selectedcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </include>
+                <include content="Object_Control">
+                    <param name="control">label</param>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <right>40</right>
+                    <align>right</align>
+                    <textcolor>main_fg_70</textcolor>
+                    <selectedcolor>main_fg_70</selectedcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_MediaList">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="variation">false</param>
+        <param name="misc">0</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[misc]</left>
+                <right>$PARAM[misc]</right>
+
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include>Texture_Menu_Highlight_H</include>
+                    <right>20</right>
+                    <height>80</height>
+                    <!-- <centertop>50%</centertop> -->
+                </include>
+
+
+                <control type="group">
+                    <height>80</height>
+                    <!-- <centertop>50%</centertop> -->
+                    <left>-20</left>
+                    <include content="Object_Right" condition="$PARAM[variation] + ![$PARAM[indicator]]">
+                        <param name="right">0</param>
+                    </include>
+                    <right>60</right>
+                    <control type="group">
+                        <visible>![$EXP[Exp_IsGenre] | $EXP[Exp_IsStudio] | $EXP[Exp_IsCountry]]</visible>
+                        <include content="Object_InfoCircle" condition="!$PARAM[selected]">
+                            <param name="icon">$VAR[Image_MediaList_Icon]</param>
+                            <param name="role">$VAR[Label_MediaList_Title]</param>
+                            <param name="name">$VAR[Label_VideoInfo_DetailsItem]</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <param name="colorbacking">main_fg_12</param>
+                            <param name="colordiffuse">main_fg_90</param>
+                            <include content="Object_Right" condition="$PARAM[variation]">
+                                <param name="right">60</param>
+                            </include>
+                            <include content="Object_InfoCircle_Image">
+                                <param name="colordiffuse">white</param>
+                                <param name="icon">$VAR[Image_MediaList_Thumb]</param>
+                            </include>
+                            <control type="label">
+                                <font>font_mini</font>
+                                <label>$INFO[ListItem.Label]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <textcolor>main_fg_70</textcolor>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
+                            <control type="label">
+                                <right>120</right>
+                                <font>font_mini</font>
+                                <include content="Object_Label" condition="$PARAM[include_detailed_labels]">
+                                    <param name="label">$VAR[Label_MediaList_Year_DetailedLabels]</param>
+                                </include>
+                                <label>$VAR[Label_MediaList_Year]</label>
+                                <align>right</align>
+                                <visible>![$PARAM[detailed]]</visible>
+                                <visible>![$PARAM[variation]]</visible>
+                                <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,musicvideo)</visible>
+                            </control>
+                            <control type="label">
+                                <left>80</left>
+                                <right>0</right>
+                                <font>font_mini</font>
+                                <visible>![$PARAM[variation]]</visible>
+                                <label>$VAR[Label_MediaList_Rating,            ,]</label>
+                                <align>right</align>
+                                <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,musicvideo)</visible>
+                            </control>
+                        </include>
+                        <include content="Object_InfoCircle" condition="$PARAM[selected]">
+                            <param name="icon">$VAR[Image_MediaList_Icon]</param>
+                            <param name="textcolor_top">$VAR[ColorSelected]</param>
+                            <param name="textcolor_sub">$VAR[ColorSelected]</param>
+                            <param name="role">$VAR[Label_MediaList_Title]</param>
+                            <param name="name">$VAR[Label_VideoInfo_DetailsItem]</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <include content="Object_Right" condition="$PARAM[variation]">
+                                <param name="right">60</param>
+                            </include>
+                            <include content="Object_InfoCircle_Image">
+                                <param name="colordiffuse">white</param>
+                                <param name="icon">$VAR[Image_MediaList_Thumb]</param>
+                            </include>
+                            <control type="label">
+                                <font>font_mini</font>
+                                <label>$INFO[ListItem.Label]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <include>Color_SelectedText</include>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
+                            <control type="label">
+                                <include>Color_SelectedText</include>
+                                <right>120</right>
+                                <include content="Object_Label" condition="$PARAM[include_detailed_labels]">
+                                    <param name="label">$VAR[Label_MediaList_Year_DetailedLabels]</param>
+                                </include>
+                                <label>$VAR[Label_MediaList_Year]</label>
+                                <align>right</align>
+                                <font>font_mini</font>
+                                <visible>![$PARAM[detailed]]</visible>
+                                <visible>![$PARAM[variation]]</visible>
+                                <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,musicvideo)</visible>
+                            </control>
+                            <control type="label">
+                                <include>Color_SelectedText</include>
+                                <left>80</left>
+                                <right>0</right>
+                                <label>$VAR[Label_MediaList_Rating,            ,]</label>
+                                <align>right</align>
+                                <font>font_mini</font>
+                                <visible>![$PARAM[variation]]</visible>
+                                <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,musicvideo)</visible>
+                            </control>
+                        </include>
+                        <include condition="$PARAM[indicator]" content="Object_Indicator_List">
+                            <param name="affix">$PARAM[affix]</param>
+                            <param name="listitem">$PARAM[listitem]</param>
+                            <param name="selected">$PARAM[selected]</param>
+                            <centertop>50%</centertop>
+                            <centerright>80</centerright>
+                            <visible>![$PARAM[variation]]</visible>
+                            <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,musicvideo)</visible>
+                        </include>
+                        <include condition="$PARAM[indicator]" content="Object_Indicator_List">
+                            <param name="affix">$PARAM[affix]</param>
+                            <param name="listitem">$PARAM[listitem]</param>
+                            <param name="selected">$PARAM[selected]</param>
+                            <centertop>50%</centertop>
+                            <centerright>15</centerright>
+                            <visible>![String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,musicvideo)] | $PARAM[variation]</visible>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <visible>$EXP[Exp_IsGenre] | $EXP[Exp_IsStudio] | $EXP[Exp_IsCountry]</visible>
+                        <include content="Object_InfoCircle" condition="!$PARAM[selected]">
+                            <param name="icon">$VAR[Image_ResourceIcon]</param>
+                            <param name="bordersize">11</param>
+                            <param name="diffuse">-</param>
+                            <param name="fallback">folder.png</param>
+                            <param name="role">$VAR[Label_MediaList_Title]</param>
+                            <param name="name">$VAR[Label_VideoInfo_DetailsItem]</param>
+                            <param name="colorbacking">main_fg_12</param>
+                            <param name="colordiffuse">main_fg_90</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <right>60</right>
+                            <control type="label">
+                                <font>font_mini_bold</font>
+                                <label>$INFO[ListItem.Label]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <textcolor>main_fg_90</textcolor>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
+                        </include>
+                        <include content="Object_InfoCircle" condition="$PARAM[selected]">
+                            <param name="icon">$VAR[Image_ResourceIcon]</param>
+                            <param name="bordersize">11</param>
+                            <param name="diffuse">-</param>
+                            <param name="fallback">folder.png</param>
+                            <param name="role">$VAR[Label_MediaList_Title]</param>
+                            <param name="name">$VAR[Label_VideoInfo_DetailsItem]</param>
+                            <param name="textcolor_top">$VAR[ColorSelected]</param>
+                            <param name="textcolor_sub">$VAR[ColorSelected]</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <right>60</right>
+                            <control type="label">
+                                <font>font_mini_bold</font>
+                                <label>$INFO[ListItem.Label]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <include>Color_SelectedText</include>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
+                        </include>
+                        <include condition="$PARAM[indicator]" content="Object_Indicator_List">
+                            <param name="affix">$PARAM[affix]</param>
+                            <param name="listitem">$PARAM[listitem]</param>
+                            <param name="selected">$PARAM[selected]</param>
+                            <centertop>50%</centertop>
+                            <centerright>15</centerright>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_MediaList_Detailed">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="variation">false</param>
+        <param name="icon">$VAR[Image_Landscape]</param>
+        <param name="textcolor">main_fg</param>
+        <param name="listitem">ListItem</param>
+        <param name="progress">Progress</param>
+        <param name="affix" />
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
+        <param name="diffuse">diffuse/landscape_w391_h220.png</param>
+        <definition>
+            <control type="group">
+                <height>$PARAM[item_h]</height>
+
+                <control type="group">
+                    <left>40</left>
+                    <right>60</right>
+
+                    <bottom>25</bottom>
+
+                    <control type="image">
+                        <include>Texture_Menu_Highlight_H</include>
+                        <visible>$PARAM[selected]</visible>
+                    </control>
+                    <control type="group">
+                        <width>$PARAM[misc]</width>
+                        <top>20</top>
+                        <bottom>20</bottom>
+                        <left>20</left>
+                        <include content="Object_ItemBack">
+                            <param name="selected">$PARAM[selected]</param>
+                            <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                        </include>
+                        <include content="Object_Layout_Image_Rectangle">
+                            <param name="diffuse">$PARAM[diffuse]</param>
+                            <param name="icon">$PARAM[icon]</param>
+                            <param name="listitem">$PARAM[listitem]</param>
+                            <param name="selected">$PARAM[selected]</param>
+                            <param name="aspectratio">scale</param>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <top>-5</top>
+                        <bottom>25</bottom>
+                        <left>$PARAM[misc]</left>
+                        <control type="group">
+                            <top>$PARAM[variation]</top>
+                            <bottom>$PARAM[variation]</bottom>
+                            <control type="group">
+                                <left>60</left>
+                                <right>40</right>
+                                <top>10</top>
+                                <height>80</height>
+
+                                <control type="label">
+                                    <label>$INFO[ListItem.Label]</label>
+                                    <font>font_main_bold</font>
+                                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                                    <textcolor>main_fg_90</textcolor>
+                                    <right>320</right>
+                                </control>
+
+                                <control type="group">
+                                    <visible>![$EXP[Exp_IsGenre] | $EXP[Exp_IsStudio] | $EXP[Exp_IsCountry]]</visible>
+
+                                    <control type="group">
+                                        <visible>String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)</visible>
+                                        <control type="label">
+                                            <right>150</right>
+                                            <font>font_mini</font>
+                                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                                            <textcolor>main_fg_70</textcolor>
+                                            <label>$VAR[Label_MediaList_Details_LeftLabel]</label>
+                                            <align>right</align>
+                                        </control>
+                                        <include content="Object_Indicator_List">
+                                            <param name="affix">$PARAM[affix]</param>
+                                            <param name="listitem">$PARAM[listitem]</param>
+                                            <param name="selected">$PARAM[selected]</param>
+                                            <centertop>50%</centertop>
+                                            <centerright>120</centerright>
+                                        </include>
+                                        <control type="label">
+                                            <right>0</right>
+                                            <width>90</width>
+                                            <font>font_mini</font>
+                                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                                            <textcolor>main_fg_70</textcolor>
+                                            <label fallback="— ——">$VAR[Label_MediaList_Details_RightLabel]</label>
+                                            <align>left</align>
+                                        </control>
+                                    </control>
+
+                                    <control type="group">
+                                        <visible>![String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)]</visible>
+                                        <control type="label">
+                                            <right>60</right>
+                                            <font>font_mini</font>
+                                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                                            <textcolor>main_fg_70</textcolor>
+                                            <label>$INFO[ListItem.Premiered]</label>
+                                            <align>right</align>
+                                        </control>
+                                        <include content="Object_Indicator_List">
+                                            <param name="affix">$PARAM[affix]</param>
+                                            <param name="listitem">$PARAM[listitem]</param>
+                                            <param name="selected">$PARAM[selected]</param>
+                                            <centertop>50%</centertop>
+                                            <centerright>15</centerright>
+                                        </include>
+                                    </control>
+                                </control>
+                            </control>
+
+
+                            <control type="textbox">
+                                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                                <label fallback="19055">$VAR[Label_Landscape_Plot]</label>
+                                <font>font_mini_plot</font>
+                                <textcolor>main_fg_70</textcolor>
+                                <top>80</top>
+                                <bottom>0</bottom>
+                                <right>40</right>
+                                <left>60</left>
+                                <autoscroll delay="6000" time="3000" repeat="10000">!Skin.HasSetting(Textboxes.DisableAutoscroll) + $PARAM[selected]</autoscroll>
+                            </control>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_DialogSimple">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="misc">0</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+            </include>
+            <control type="label">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <left>30</left>
+                <right>30</right>
+                <textcolor>main_fg_70</textcolor>
+                <selectedcolor>main_fg_70</selectedcolor>
+                <label>$INFO[ListItem.Label]</label>
+                <include content="Object_Align" condition="$PARAM[detailed]">
+                    <param name="align">left</param>
+                </include>
+                <align>center</align>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_DialogSubtitles">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+            </include>
+            <control type="group">
+                <control type="group">
+                    <width>140</width>
+                    <height>120</height>
+                    <centertop>50%</centertop>
+                    <control type="image">
+                        <centerleft>50%</centerleft>
+                        <top>20</top>
+                        <height>60</height>
+                        <texture>$INFO[ListItem.Thumb,flags/color/language/,.png]</texture>
+                        <aspectratio>keep</aspectratio>
+                    </control>
+                    <control type="label">
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <align>center</align>
+                        <textoffsetx>20</textoffsetx>
+                        <bottom>20</bottom>
+                        <height>20</height>
+                        <font>font_tiny</font>
+                        <textcolor>dialog_fg_70</textcolor>
+                        <selectedcolor>dialog_fg_70</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </control>
+
+                <include content="Object_Control">
+                    <param name="control">textbox</param>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <left>160</left>
+                    <aligny>center</aligny>
+                    <height>100</height>
+                    <centertop>50%</centertop>
+                    <font>font_mini</font>
+                    <right>240</right>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                </include>
+
+                <control type="group">
+                    <height>120</height>
+                    <centertop>50%</centertop>
+                    <control type="group">
+                        <right>-5</right>
+                        <centerbottom>40</centerbottom>
+                        <height>48</height>
+                        <include content="Object_StarRating">
+                            <param name="selected">$PARAM[selected]</param>
+                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,5)">Conditional</animation>
+                            <right>30</right>
+                        </include>
+                        <include content="Object_StarRating">
+                            <param name="selected">$PARAM[selected]</param>
+                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,4)">Conditional</animation>
+                            <right>60</right>
+                        </include>
+                        <include content="Object_StarRating">
+                            <param name="selected">$PARAM[selected]</param>
+                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,3)">Conditional</animation>
+                            <right>90</right>
+                        </include>
+                        <include content="Object_StarRating">
+                            <param name="selected">$PARAM[selected]</param>
+                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,2)">Conditional</animation>
+                            <right>120</right>
+                        </include>
+                        <include content="Object_StarRating">
+                            <param name="selected">$PARAM[selected]</param>
+                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,1)">Conditional</animation>
+                            <right>150</right>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <right>95</right>
+                        <centertop>40</centertop>
+                        <width>85</width>
+                        <height>28</height>
+                        <animation effect="fade" start="100" end="20" condition="!ListItem.property(sync)">Conditional</animation>
+                        <control type="image">
+                            <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                                <param name="colordiffuse">$VAR[ColorSelected]</param>
+                            </include>
+                            <colordiffuse>dialog_fg_70</colordiffuse>
+                            <texture border="10">flags/blank.png</texture>
+                        </control>
+                        <control type="label">
+                            <include content="Object_TextColor" condition="$PARAM[selected]">
+                                <param name="textcolor">$VAR[ColorHighlight]</param>
+                            </include>
+                            <textcolor>dialog_bg_100</textcolor>
+                            <label>[B]SYNC[/B]</label>
+                            <font>font_tiny_bold</font>
+                            <align>center</align>
+                        </control>
+                    </control>
+
+                    <control type="image">
+                        <right>40</right>
+                        <centertop>40</centertop>
+                        <width>50</width>
+                        <height>30</height>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>dialog_fg_70</colordiffuse>
+                        <texture>flags/cc.png</texture>
+                        <aspectratio>keep</aspectratio>
+                        <animation effect="fade" start="100" end="20" condition="!ListItem.property(hearing_imp)">Conditional</animation>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_DialogSelect">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="variation">false</param>
+        <param name="misc">ListItem.IsSelected</param>
+        <param name="icon">$INFO[ListItem.Icon]</param>
+        <param name="textcolor">dialog_fg</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+            </include>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <control type="group">
+                    <visible>!$PARAM[variation]</visible>
+                    <include condition="!$PARAM[selected]" content="Object_IsSelected_Checkmark">
+                        <param name="selected">$PARAM[misc]</param>
+                        <param name="color_off">$PARAM[textcolor]_30</param>
+                        <param name="color_on">$PARAM[textcolor]_70</param>
+                    </include>
+                    <include condition="$PARAM[selected]" content="Object_IsSelected_Checkmark_Focus">
+                        <param name="selected">$PARAM[misc]</param>
+                    </include>
+                </control>
+                <control type="group">
+                    <centerright>20</centerright>
+                    <centertop>50%</centertop>
+                    <width>56</width>
+                    <height>56</height>
+                    <control type="group">
+                        <visible>$PARAM[variation]</visible>
+                        <control type="image">
+                            <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                                <param name="colordiffuse">$VAR[ColorSelected]</param>
+                            </include>
+                            <colordiffuse>$PARAM[textcolor]_70</colordiffuse>
+                            <centerright>20</centerright>
+                            <centertop>50%</centertop>
+                            <texture>$PARAM[icon]</texture>
+                            <width>32</width>
+                            <height>32</height>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <include content="Object_Control" condition="!$PARAM[detailed]">
+                        <param name="control">label</param>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>$PARAM[textcolor]_70</textcolor>
+                        <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                        <disabledcolor>$PARAM[textcolor]_30</disabledcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <right>60</right>
+                        <visible>!$PARAM[variation]</visible>
+                    </include>
+                    <include content="Object_ListItem_Iconic" condition="$PARAM[detailed] + !$PARAM[selected]">
+                        <param name="color">$PARAM[textcolor]_90</param>
+                        <param name="item_h">$PARAM[item_h]</param>
+                    </include>
+                    <include content="Object_ListItem_Iconic" condition="$PARAM[detailed] + $PARAM[selected]">
+                        <param name="color">$VAR[ColorSelected]</param>
+                        <param name="item_h">$PARAM[item_h]</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_ChannelManager">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="misc">false</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[selected] | $PARAM[misc]</visible>
+                <include content="Object_Control">
+                    <param name="control">image</param>
+                    <include>Texture_Menu_Highlight_H</include>
+                    <animation effect="fade" start="100" end="50" condition="$PARAM[misc] + ![$PARAM[selected]]">Conditional</animation>
+                </include>
+                <include content="_Layout_ChannelManager">
+                    <param name="detailed">$PARAM[detailed]</param>
+                    <param name="selected">true</param>
+                    <param name="misc">$PARAM[misc]</param>
+                    <param name="item_h">$PARAM[item_h]</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>![$PARAM[selected] | $PARAM[misc]]</visible>
+                <include content="_Layout_ChannelManager">
+                    <param name="detailed">$PARAM[detailed]</param>
+                    <param name="selected">false</param>
+                    <param name="misc">$PARAM[misc]</param>
+                    <param name="item_h">$PARAM[item_h]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="_Layout_ChannelManager">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="misc">false</param>
+        <definition>
+            <control type="group">
+                <left>-20</left>
+                <include content="Object_InfoCircle" condition="$PARAM[detailed]">
+                    <param name="include_labels">false</param>
+                    <include content="Object_InfoCircle_Image">
+                        <param name="colordiffuse">dialog_bg_90</param>
+                        <param name="icon">common/white.png</param>
+                    </include>
+                    <include content="Object_InfoCircle_Image">
+                        <param name="colordiffuse">white</param>
+                        <param name="icon">$INFO[ListItem.Property(Icon)]</param>
+                        <param name="aspectratio">keep</param>
+                        <param name="bordersize">5</param>
+                    </include>
+                </include>
+                <include content="Object_InfoCircle" condition="!$PARAM[detailed]">
+                    <param name="include_labels">false</param>
+                    <include content="Object_InfoCircle_Image">
+                        <param name="colordiffuse">dialog_bg_90</param>
+                        <param name="icon">common/white.png</param>
+                    </include>
+                    <include content="Object_InfoCircle_Image">
+                        <param name="colordiffuse">white</param>
+                        <param name="icon">$INFO[ListItem.Icon]</param>
+                        <param name="aspectratio">keep</param>
+                        <param name="bordersize">5</param>
+                    </include>
+                </include>
+            </control>
+            <control type="group">
+                <left>$PARAM[item_h]</left>
+                <right>40</right>
+                <control type="group">
+                    <left>10</left>
+                    <include content="Object_Control" condition="!$PARAM[detailed]">
+                        <param name="control">label</param>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>dialog_fg_70</textcolor>
+                        <selectedcolor>dialog_fg_70</selectedcolor>
+                        <font>font_main_bold</font>
+                        <label>$INFO[ListItem.Label]</label>
+                    </include>
+                    <include content="Object_Control" condition="$PARAM[detailed]">
+                        <param name="control">group</param>
+                        <height>60</height>
+                        <centertop>50%</centertop>
+                        <control type="label">
+                            <height>40</height>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>dialog_fg_70</textcolor>
+                            <selectedcolor>dialog_fg_70</selectedcolor>
+                            <font>font_main_bold</font>
+                            <label>$INFO[ListItem.Property(Name)]$INFO[ListItem.Property(Number), (,)]</label>
+                        </control>
+                        <control type="label">
+                            <bottom>5</bottom>
+                            <font>font_hint_bold</font>
+                            <height>20</height>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>dialog_fg_30</textcolor>
+                            <selectedcolor>dialog_fg_30</selectedcolor>
+                            <label>$LOCALIZE[19210]: $INFO[ListItem.Property(ClientName)] </label>
+                        </control>
+                        <control type="image">
+                            <right>-20</right>
+                            <width>64</width>
+                            <height>64</height>
+                            <centertop>50%</centertop>
+                            <include condition="$PARAM[selected]" content="Object_ColorDiffuse">
+                                <param name="colordiffuse">$VAR[ColorSelected]</param>
+                            </include>
+                            <colordiffuse>dialog_fg_30</colordiffuse>
+                            <texture>special://skin/extras/icons/locked.png</texture>
+                            <aspectratio>keep</aspectratio>
+                            <visible>ListItem.Property(ParentalLocked)</visible>
+                        </control>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_IconBrowser">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include content="Dimension_Padding"><param name="pad">-1</param></include>
+                    <include>Texture_Box_Highlight_V</include>
+                </include>
+                <include condition="!$PARAM[selected]">Part_Box</include>
+                <control type="group">
+                    <include content="Object_Bottom" condition="$PARAM[detailed]">
+                        <param name="bottom">40</param>
+                    </include>
+                    <control type="image">
+                        <texture background="true">$INFO[ListItem.Icon]</texture>
+                        <aspectratio scalediffuse="false" aligny="center">keep</aspectratio>
+                        <visible>![String.StartsWith(ListItem.Icon,Default) | String.StartsWith(ListItem.Icon,special://skin/extras/icons/) | String.StartsWith(ListItem.Icon,image://special%3a%2f%2fskin%2fextras%2ficons%2f)]</visible>
+                    </control>
+                    <control type="image">
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>dialog_fg_70</colordiffuse>
+                        <texture background="true">$INFO[ListItem.Icon]</texture>
+                        <aspectratio scalediffuse="false" aligny="center">keep</aspectratio>
+                        <visible>[String.StartsWith(ListItem.Icon,Default) | String.StartsWith(ListItem.Icon,special://skin/extras/icons/) | String.StartsWith(ListItem.Icon,image://special%3a%2f%2fskin%2fextras%2ficons%2f)]</visible>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>$PARAM[detailed]</visible>
+                    <control type="label">
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>dialog_fg_90</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <left>20</left>
+                        <right>20</right>
+                        <bottom>10</bottom>
+                        <align>center</align>
+                        <height>20</height>
+                        <font>font_tiny</font>
+                        <aligny>center</aligny>
+                    </control>
+                </control>
+                <include content="Object_SelectBox" condition="$PARAM[selected]">
+                    <param name="indicator">false</param>
+                    <param name="focusbounce">true</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Iconic_Pad"><right>40</right></include>
+    <include name="Layout_Iconic">
+        <param name="selected">false</param>
+        <param name="misc">false</param>
+        <param name="textcolor">dialog_fg</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected] + !$PARAM[detailed] + !$PARAM[misc]">
+                <param name="control">button</param>
+                <visible allowhiddenfocus="true">false</visible>
+                <animation effect="fade" start="0" end="0" time="500" reversible="false">Focus</animation>
+                <onfocus condition="String.IsEmpty(Container($PARAM[id]).ListItem.Property(folderpath))">Container.Update($INFO[Container($PARAM[id]).ListItem.FolderPath],replace)</onfocus>
+                <onfocus condition="!String.IsEmpty(Container($PARAM[id]).ListItem.Property(folderpath))">Container.Update($INFO[Container($PARAM[id]).ListItem.Property(folderpath)],replace)</onfocus>
+            </include>
+            <control type="group">
+                <height>$PARAM[item_h]</height>
+
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include>Texture_Menu_Highlight_H</include>
+                </include>
+                <control type="group">
+                    <include condition="$PARAM[detailed]">Layout_Iconic_Pad</include>
+                    <control type="group">
+                        <left>20</left>
+                        <width>$PARAM[item_h]</width>
+                        <control type="image">
+                            <texture background="true" fallback="DefaultFolder.png" diffuse="diffuse/circle/provider_circle.png">$INFO[ListItem.Icon]</texture>
+                            <aspectratio>keep</aspectratio>
+                            <bordersize>20</bordersize>
+                            <visible>![String.IsEmpty(ListItem.Icon) | String.StartsWith(ListItem.Icon,Default)]</visible>
+                        </control>
+                        <control type="group">
+                            <visible>[String.IsEmpty(ListItem.Icon) | String.StartsWith(ListItem.Icon,Default)]</visible>
+                            <include content="Object_Control" condition="$PARAM[selected]">
+                                <param name="control">image</param>
+                                <colordiffuse>$VAR[ColorSelected]</colordiffuse>
+                                <texture background="true" fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+                                <aspectratio>keep</aspectratio>
+                                <bordersize>0</bordersize>
+                            </include>
+                            <include content="Object_Control" condition="!$PARAM[selected]">
+                                <param name="control">image</param>
+                                <texture background="true" colordiffuse="$PARAM[textcolor]_70" fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+                                <aspectratio>keep</aspectratio>
+                                <bordersize>0</bordersize>
+                            </include>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <left>$PARAM[item_h]</left>
+                        <control type="label">
+                            <include condition="$PARAM[detailed]">Layout_Iconic_Pad</include>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>$PARAM[textcolor]_70</textcolor>
+                            <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                            <textoffsetx>0</textoffsetx>
+                            <left>20</left>
+                            <right>40</right>
+                            <align>left</align>
+                            <font>font_main</font>
+                        </control>
+                        <control type="label">
+                            <include condition="$PARAM[detailed]">Layout_Iconic_Pad</include>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>$PARAM[textcolor]_70</textcolor>
+                            <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                            <textoffsetx>0</textoffsetx>
+                            <left>100</left>
+                            <right>40</right>
+                            <align>right</align>
+                            <font>font_main</font>
+                        </control>
+                    </control>
+                </control>
+                <include content="Object_Control" condition="$PARAM[detailed] + !$PARAM[misc]">
+                    <param name="control">group</param>
+                    <right>40</right>
+                    <width>24</width>
+                    <include condition="!$PARAM[selected]" content="Object_IsSelected_Checkmark">
+                        <param name="color_off">$PARAM[textcolor]_30</param>
+                        <param name="color_on">$PARAM[textcolor]_70</param>
+                    </include>
+                    <include condition="$PARAM[selected]" content="Object_IsSelected_Checkmark">
+                        <param name="color_off">$VAR[ColorSelected]</param>
+                        <param name="color_on">$VAR[ColorSelected]</param>
+                    </include>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Card">
+        <param name="selected">false</param>
+        <param name="diffuse">diffuse/card_w731_h310.png</param>
+        <param name="textcolor">main_fg</param>
+        <param name="listitem">ListItem</param>
+        <param name="affix" />
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <control type="group">
+                    <include content="Object_ItemBack">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                    </include>
+
+                    <include content="Object_Layout_Image_Rectangle">
+                        <param name="diffuse">$PARAM[diffuse]</param>
+                        <param name="icon">$VAR[Image_Card_Fanart]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="aspectratio">scale</param>
+                        <param name="selected">$PARAM[selected]</param>
+                    </include>
+
+                    <include content="Object_ClearLogo_WithShadow">
+                        <param name="diffuse">$PARAM[diffuse]</param>
+                    </include>
+                </control>
+
+                <control type="group">
+                    <include content="Object_ContentBanner" condition="$PARAM[indicator]">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include condition="!$PARAM[selected]" content="Object_Indicator">
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Object_SelectBox" condition="$PARAM[selected]">
+                        <param name="indicator">true</param>
+                        <param name="focusbounce">false</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Banner">
+        <param name="selected">false</param>
+        <param name="diffuse">diffuse/banner_w1640_h310.png</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <control type="group">
+                    <include content="Object_ItemBack">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                    </include>
+                    <include content="Object_Layout_Image_Rectangle">
+                        <param name="diffuse">$PARAM[diffuse]</param>
+                        <param name="icon">$VAR[Image_Banner$PARAM[affix]]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="aspectratio">scale</param>
+                        <param name="selected">$PARAM[selected]</param>
+                    </include>
+                    <control type="image">
+                        <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Image_Clearlogo$PARAM[affix]]</texture>
+                        <aspectratio scalediffuse="false" align="left">keep</aspectratio>
+                        <bordersize>20</bordersize>
+                        <visible>String.IsEmpty($PARAM[listitem].Art(banner)) + String.IsEmpty($PARAM[listitem].Art(tvshow.banner)) + String.IsEmpty($PARAM[listitem].Art(season.banner))</visible>
+                    </control>
+                    <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                </control>
+                <control type="group">
+                    <include condition="!$PARAM[selected]" content="Object_Indicator">
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Object_SelectBox" condition="$PARAM[selected]">
+                        <param name="indicator">true</param>
+                        <param name="focusbounce">false</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Gallery">
+        <param name="selected">false</param>
+        <param name="diffuse">diffuse/landscape_w1140_h680.png</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <control type="group">
+                    <control type="image">
+                        <include>Texture_Shadow_40</include>
+                        <texture colordiffuse="black" border="20">common/box.png</texture>
+                    </control>
+                    <control type="image">
+                        <include content="Dimension_Padding">
+                            <param name="pad">40</param>
+                        </include>
+                        <aspectratio scalediffuse="false">keep</aspectratio>
+                        <texture background="true" diffuse="diffuse/landscape_w1140_h680.png">$INFO[ListItem.Icon]</texture>
+                    </control>
+                </control>
+                <control type="group">
+                    <include content="Object_SelectBox" condition="$PARAM[selected]">
+                        <param name="indicator">false</param>
+                        <param name="focusbounce">false</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Poster">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="indicator">true</param>
+        <param name="diffuse">diffuse/poster_w217_h310.png</param>
+        <param name="icon">$VAR[Image_Poster]</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+
+                <control type="group">
+                    <include content="Object_ItemBack">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                    </include>
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">image</param>
+                        <include>Texture_Box_Highlight_V</include>
+                    </include>
+                    <control type="textbox">
+                        <textcolor>main_fg_70</textcolor>
+                        <label>$INFO[$PARAM[listitem].$PARAM[listitem_label]]</label>
+                        <include content="Dimension_Padding">
+                            <param name="pad">20</param>
+                        </include>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_mini_bold</font>
+                        <visible>String.IsEmpty(ListItem.Icon)</visible>
+                        <visible>String.IsEmpty(ListItem.Art(poster))</visible>
+                        <visible>String.IsEmpty(ListItem.Art(tvshow.poster))</visible>
+                    </control>
+                    <include content="Object_Layout_Image_Icon">
+                        <param name="diffuse">$PARAM[diffuse]</param>
+                        <param name="icon">$PARAM[icon]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="aspectratio">scale</param>
+                        <param name="selected">$PARAM[selected]</param>
+                    </include>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[listitem].DBType,actor) | String.IsEqual($PARAM[listitem].DBType,video) | $PARAM[detailed]</visible>
+                    <include content="Layout_Labels">
+                        <param name="top">-85</param>
+                        <param name="left">20</param>
+                        <param name="right">20</param>
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="textcolor">panel_fg</param>
+                        <param name="fade">true</param>
+                        <param name="include_detailed_labels">true</param>
+                        <param name="use_label2">$PARAM[use_label2]</param>
+                    </include>
+                </control>
+                <control type="group">
+                    <include content="Object_ContentBanner" condition="$PARAM[indicator]">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include condition="!$PARAM[selected] + $PARAM[indicator]" content="Object_Indicator">
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Object_SelectBox" condition="$PARAM[selected]">
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="indicator">$PARAM[indicator]</param>
+                        <param name="focusbounce">true</param>
+                    </include>
+                </control>
+
+            </control>
+
+        </definition>
+    </include>
+
+    <include name="Layout_Reviews">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <param name="icon">$VAR[Image_Reviews]</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <control type="group">
+                    <top>-11</top>
+                    <height>80</height>
+                    <width>400</width>
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">image</param>
+                        <include>Texture_Menu_Highlight_H</include>
+                        <left>-20</left>
+                        <right>-20</right>
+                    </include>
+                    <control type="group">
+                        <left>-40</left>
+                        <include content="Object_InfoCircle" condition="$PARAM[selected]">
+                            <param name="icon">$PARAM[icon]</param>
+                            <param name="role">$INFO[ListItem.Label]</param>
+                            <param name="name">$INFO[ListItem.Rating,, - ]$INFO[ListItem.Premiered]$INFO[ListItem.Property(sublabel)]</param>
+                            <param name="textcolor_top">$VAR[ColorSelected]</param>
+                            <param name="textcolor_sub">$VAR[ColorSelected]</param>
+                        </include>
+                        <include content="Object_InfoCircle" condition="!$PARAM[selected]">
+                            <param name="icon">$PARAM[icon]</param>
+                            <param name="role">$INFO[ListItem.Label]</param>
+                            <param name="name">$INFO[ListItem.Rating,, - ]$INFO[ListItem.Premiered]$INFO[ListItem.Property(sublabel)]</param>
+                        </include>
+                    </control>
+                </control>
+                <control type="textbox">
+                    <font>font_mini_plot</font>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$INFO[ListItem.Plot]$INFO[ListItem.Property(plotlabel)]</label>
+                    <aligny>top</aligny>
+                    <top>90</top>
+                    <bottom>-5</bottom>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Button">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <param name="font">font_main</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <control type="group">
+                    <right>20</right>
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">group</param>
+                        <centertop>50%</centertop>
+                        <height>256</height>
+                        <left>-60</left>
+                        <right>-60</right>
+                        <control type="image">
+                            <include>Texture_MainMenu_Highlight_H</include>
+                        </control>
+                    </include>
+                    <control type="label">
+                        <centertop>48%</centertop>
+                        <height>20</height>
+                        <aligny>center</aligny>
+                        <textoffsetx>20</textoffsetx>
+                        <align>left</align>
+                        <font>$PARAM[font]</font>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>main_fg_70</textcolor>
+                        <selectedcolor>main_fg_70</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+
+                    <control type="image">
+                        <centerright>40</centerright>
+                        <centertop>50%</centertop>
+                        <width>40</width>
+                        <height>40</height>
+                        <aspectratio>keep</aspectratio>
+                        <bordersize>4</bordersize>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>main_fg_70</colordiffuse>
+                        <texture fallback="folder.png">$VAR[Image_ResourceIcon]</texture>
+                        <visible>![$PARAM[detailed]]</visible>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Square">
+        <param name="diffuse">diffuse/square_w217_h217.png</param>
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <param name="variation">false</param>
+        <param name="icon">$VAR[Image_Square]</param>
+        <param name="listitem">ListItem</param>
+        <param name="progress">Progress</param>
+        <param name="textcolor">main_fg</param>
+        <param name="misc">-20</param>
+        <param name="affix" />
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <control type="group">
+                    <height>$PARAM[item_h]</height>
+                    <include content="Object_ItemBack">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                    </include>
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">image</param>
+                        <include>Texture_Box_Highlight_V</include>
+                    </include>
+
+                    <include content="Object_Layout_Image_Icon">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="diffuse">$PARAM[diffuse]</param>
+                        <param name="icon">$PARAM[icon]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="icon_diffuse">$PARAM[diffuse]</param>
+                    </include>
+
+                    <include content="Object_ProgressLine">
+                        <param name="progress">$PARAM[listitem].$PARAM[progress]</param>
+                    </include>
+                    <include content="Object_Indicator" condition="!$PARAM[selected] + ![$PARAM[detailed]]">
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Object_SelectBox" condition="$PARAM[selected]">
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="indicator">![$PARAM[detailed]]</param>
+                        <param name="focusbounce">true</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                </control>
+                <include content="Layout_Labels" condition="![$PARAM[variation]]">
+                    <param name="top">10</param>
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="affix">$PARAM[affix]</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                    <param name="textcolor">$PARAM[textcolor]</param>
+                    <param name="use_label2">$PARAM[use_label2]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Circle">
+        <param name="diffuse">circle_200</param>
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <param name="variation">false</param>
+        <param name="icon">$VAR[Image_Circle]</param>
+        <param name="listitem">ListItem</param>
+        <param name="progress">Progress</param>
+        <param name="textcolor">main_fg</param>
+        <param name="misc">-20</param>
+        <param name="affix" />
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <control type="group">
+                    <centerleft>50%</centerleft>
+                    <width>$PARAM[item_h]</width>
+                    <height>$PARAM[item_h]</height>
+                    <control type="image">
+                        <include content="Dimension_Padding"><param name="pad">-40</param></include>
+                        <bordersize>40</bordersize>
+                        <bordertexture colordiffuse="shadow_hard">shadows/$PARAM[diffuse]-shadow-40.png</bordertexture>
+                        <texture colordiffuse="main_fg_12">diffuse/circle/$PARAM[diffuse].png</texture>
+                    </control>
+                    <include>Object_Circle_200_Outline</include>
+
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">image</param>
+                        <bordersize>-6</bordersize>
+                        <include>Texture_Circle_Highlight_V</include>
+                    </include>
+
+                    <include content="Object_Layout_Image_Icon">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="diffuse">diffuse/circle/$PARAM[diffuse].png</param>
+                        <param name="include_discart">true</param>
+                        <param name="icon">$PARAM[icon]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="aspectratio">scale</param>
+                    </include>
+
+                    <control type="group">
+                        <centerbottom>15%</centerbottom>
+                        <centerright>15%</centerright>
+                        <height>64</height>
+                        <width>64</width>
+                        <include content="Object_Indicator">
+                            <right>0</right>
+                            <centerbottom>50%</centerbottom>
+                            <param name="affix">$PARAM[affix]</param>
+                            <param name="listitem">$PARAM[listitem]</param>
+                            <param name="selected">$PARAM[selected]</param>
+                            <param name="shadow">false</param>
+                        </include>
+                    </control>
+                </control>
+
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Labels">
+        <param name="fade">false</param>
+        <param name="selected">false</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
+        <param name="use_label">false</param>
+        <param name="use_label2">false</param>
+        <param name="aligny">top</param>
+        <param name="textbox_offset_y">7</param>
+        <definition>
+            <control type="image">
+                <texture border="20" colordiffuse="e7ffffff">common/poster_fade.png</texture>
+                <visible>$PARAM[fade]</visible>
+                <height>$PARAM[item_h]</height>
+            </control>
+
+            <control type="group">
+                <top>$PARAM[item_h]</top>
+                <control type="group">
+                    <top>$PARAM[top]</top>
+                    <left>$PARAM[left]</left>
+                    <right>$PARAM[right]</right>
+                    <height>80</height>
+
+                    <include content="Object_Control" condition="![$PARAM[include_detailed_labels]] + ![$PARAM[use_label]]">
+                        <param name="control">textbox</param>
+                        <top>$PARAM[textbox_offset_y]</top>
+                        <bottom>$PARAM[textbox_offset_y]</bottom>
+                        <aligny>$PARAM[aligny]</aligny>
+                        <font>font_mini</font>
+                        <include content="Object_Label" condition="$PARAM[use_label2]">
+                            <param name="label">$INFO[$PARAM[listitem].Label]$INFO[$PARAM[listitem].Label2, - ,]</param>
+                        </include>
+                        <label>$INFO[$PARAM[listitem].Label]</label>
+                        <align>left</align>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>main_fg_70</textcolor>
+                    </include>
+                    <include content="Object_Control" condition="![$PARAM[include_detailed_labels]] + $PARAM[use_label]">
+                        <param name="control">label</param>
+                        <top>$PARAM[textbox_offset_y]</top>
+                        <bottom>$PARAM[textbox_offset_y]</bottom>
+                        <aligny>$PARAM[aligny]</aligny>
+                        <font>font_mini</font>
+                        <include content="Object_Label" condition="$PARAM[use_label2]">
+                            <param name="label">$INFO[$PARAM[listitem].Label]$INFO[$PARAM[listitem].Label2, - ,]</param>
+                        </include>
+                        <label>$INFO[$PARAM[listitem].Label]</label>
+                        <align>left</align>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>main_fg_70</textcolor>
+                    </include>
+
+                    <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_detailed_labels]">
+                        <label>$INFO[$PARAM[listitem].Label]</label>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>$PARAM[textcolor]_90</textcolor>
+                        <align>left</align>
+                        <selectedcolor>$PARAM[textcolor]_90</selectedcolor>
+                    </include>
+
+                    <control type="group">
+                        <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
+                            <label>$VAR[Label_Landscape_Lower$PARAM[affix]]</label>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>$PARAM[textcolor]_70</textcolor>
+                            <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                            <align>left</align>
+                        </include>
+                        <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
+                            <label>$INFO[$PARAM[listitem].StartTime]$INFO[$PARAM[listitem].EndTime, - ,]</label>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>$PARAM[textcolor]_70</textcolor>
+                            <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                            <align>right</align>
+                            <visible>!String.IsEmpty($PARAM[listitem].ChannelNumberLabel)</visible>
+                            <visible>ListItem.InProgress</visible>
+                        </include>
+                        <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
+                            <label>$INFO[$PARAM[listitem].Date]</label>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>$PARAM[textcolor]_70</textcolor>
+                            <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
+                            <align>right</align>
+                            <visible>!String.IsEmpty($PARAM[listitem].ChannelNumberLabel)</visible>
+                            <visible>!ListItem.InProgress</visible>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Landscape">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="icon">$VAR[Image_Landscape]</param>
+        <param name="textcolor">main_fg</param>
+        <param name="diffuse">diffuse/landscape_w410_h231.png</param>
+        <param name="listitem">ListItem</param>
+        <param name="progress">Progress</param>
+        <param name="affix" />
+        <definition>
+            <control type="group">
+
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+
+                <include content="Object_ItemBack">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                </include>
+
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include>Texture_Box_Highlight_V</include>
+                </include>
+
+                <include content="Object_Layout_Image_Rectangle" condition="![$PARAM[detailed]]">
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="aspectratio">keep</param>
+                </include>
+
+                <include content="Object_Layout_Image_Rectangle" condition="$PARAM[detailed]">
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="aspectratio">scale</param>
+                </include>
+
+                <include content="Object_ClearLogo_WithShadow">
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="icon">$INFO[$PARAM[listitem].Art(clearlogo)]</param>
+                    <visible>[String.IsEqual($PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[listitem].DBType,tvshow)] + String.IsEmpty($PARAM[listitem].Art(landscape)) + String.IsEmpty($PARAM[listitem].Art(tvshow.landscape))</visible>
+                </include>
+
+                <include content="Object_ProgressLine">
+                    <param name="progress">$PARAM[listitem].$PARAM[progress]</param>
+                </include>
+
+                <include content="Object_Indicator" condition="!$PARAM[selected]">
+                    <param name="affix">$PARAM[affix]</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                </include>
+
+                <include content="Object_ContentBanner" condition="$PARAM[indicator]">
+                    <param name="listitem">$PARAM[listitem]</param>
+                </include>
+
+                <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
+                    <param name="listitem">$PARAM[listitem]</param>
+                </include>
+
+                <include content="Layout_Labels" condition="![$PARAM[detailed]]">
+                    <param name="top">10</param>
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="affix">$PARAM[affix]</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                    <param name="textcolor">$PARAM[textcolor]</param>
+                    <param name="use_label2">$PARAM[use_label2]</param>
+                </include>
+
+                <include content="Object_SelectBox" condition="$PARAM[selected]">
+                    <param name="affix">$PARAM[affix]</param>
+                    <param name="indicator">true</param>
+                    <param name="focusbounce">true</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+</includes>

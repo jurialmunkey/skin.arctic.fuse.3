@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="DialogConfirm">
+
+        <include content="Object_Hidden_Button">
+            <param name="id">10</param>
+            <onfocus>SetFocus(9010)</onfocus>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">11</param>
+            <onfocus>SetFocus(9011)</onfocus>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="id">12</param>
+            <onfocus>SetFocus(9012)</onfocus>
+        </include>
+
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Dimension_DialogConfirm</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogConfirm</param>
+                <param name="topline">false</param>
+            </include>
+
+            <!-- Content -->
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+
+                <!-- Left -->
+                <control type="group">
+                    <include>Size_LeftGroup_Main</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include>Part_HeadText</include>
+                        <include>Part_Line</include>
+                        <include>Part_CloseButton</include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <control type="textbox" id="9">
+                            <font>font_main_plot</font>
+                            <textcolor>dialog_fg_70</textcolor>
+                            <include>Size_Dialog_Pad</include>
+                        </control>
+                    </control>
+                </control>
+
+                <!-- Right -->
+                <control type="group">
+                    <include>Size_Group_Panel_Right</include>
+                    <control type="group">
+                        <include>Size_Grouplist_Pad</include>
+                        <control type="group">
+                            <height>80</height>
+                            <control type="image">
+                                <visible>Control.IsVisible(20)</visible>
+                                <texture colordiffuse="$VAR[Color_DialogBorder]" border="40">common/menu.png</texture>
+                            </control>
+                            <control type="progress" id="20">
+                                <description>Progressbar</description>
+                                <info>System.Progressbar</info>
+                                <texturebg colordiffuse="00ffffff" border="40,0,40,0">common/menu.png</texturebg>
+                                <midtexture colordiffuse="$VAR[ColorHighlight]" border="40,40,40,40">common/menu.png</midtexture>
+                            </control>
+                        </control>
+                    </control>
+                </control>
+                <include content="Part_Button_Grouplist">
+                    <param name="onleft">61</param>
+                    <param name="items">DialogConfirm_Items</param>
+                </include>
+
+            </control>
+        </control>
+    </include>
+
+    <!-- Items -->
+    <include name="DialogConfirm_Items">
+        <definition>
+            <include content="Button_Dialog">
+                <param name="id">9011</param>
+                <param name="groupid">9311</param>
+                <param name="icon">$VAR[Image_DialogConfirm_11]</param>
+                <label>$INFO[Control.GetLabel(11)]</label>
+                <onclick>SendClick(11)</onclick>
+                <visible>Control.IsVisible(11) + Control.IsEnabled(11)</visible>
+                <include content="Animation_ConditionalFade">
+                    <param name="condition">Control.IsVisible(20)</param>
+                </include>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">9010</param>
+                <param name="groupid">9310</param>
+                <param name="icon">$VAR[Image_DialogConfirm_10]</param>
+                <label>$INFO[Control.GetLabel(10)]</label>
+                <onclick>SendClick(10)</onclick>
+                <visible>Control.IsVisible(10) + Control.IsEnabled(10)</visible>
+                <include content="Animation_ConditionalFade">
+                    <param name="condition">Control.IsVisible(20)</param>
+                </include>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">9012</param>
+                <param name="groupid">9312</param>
+                <param name="icon">$VAR[Image_DialogConfirm_12]</param>
+                <label>$INFO[Control.GetLabel(12)]</label>
+                <onclick>SendClick(12)</onclick>
+                <visible>Control.IsVisible(12) + Control.IsEnabled(12)</visible>
+                <include content="Animation_ConditionalFade">
+                    <param name="condition">Control.IsVisible(20)</param>
+                </include>
+            </include>
+        </definition>
+    </include>
+
+</includes>

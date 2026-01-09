@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="Furniture_Header_Left">
+        <control type="group">
+            <left>0</left>
+            <width>720</width>
+            <include content="Info_Viewline_Divider">
+                <param name="align">left</param>
+            </include>
+            <control type="label">
+                <label>$PARAM[label]</label>
+                <align>left</align>
+                <aligny>center</aligny>
+                <textcolor>$PARAM[textcolor]</textcolor>
+                <font>font_midi_bold</font>
+                <height>80</height>
+            </control>
+        </control>
+    </include>
+    <include name="Furniture_Header_Right">
+        <control type="group">
+            <right>0</right>
+            <width>720</width>
+            <visible>$PARAM[visible_right]</visible>
+            <include content="Info_Viewline_Divider">
+                <param name="align">right</param>
+            </include>
+            <control type="label">
+                <label>$INFO[System.Time]$INFO[Weather.Temperature, • ,]</label>
+                <align>right</align>
+                <aligny>center</aligny>
+                <textcolor>$PARAM[textcolor]</textcolor>
+                <font>font_midi_bold</font>
+                <height>80</height>
+            </control>
+        </control>
+    </include>
+
+    <include name="Furniture_Header">
+        <param name="label">$VAR[Label_Header_Main]</param>
+        <param name="include_left">true</param>
+        <param name="include_right">true</param>
+        <param name="textcolor">main_fg_90</param>
+        <param name="top">40</param>
+        <definition>
+            <control type="group">
+                <top>$PARAM[top]</top>
+                <height>80</height>
+                <left>view_pad</left>
+                <right>view_pad</right>
+                <include content="Furniture_Header_Left" condition="$PARAM[include_left]">
+                    <param name="label">$PARAM[label]</param>
+                    <param name="textcolor">$PARAM[textcolor]</param>
+                </include>
+                <include content="Furniture_Header_Right" condition="$PARAM[include_right]">
+                    <param name="textcolor">$PARAM[textcolor]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Furniture_Footer_Right">
+        <param name="visible">true</param>
+        <definition>
+            <control type="group">
+                <include>Dimension_Bottombar</include>
+                <control type="group">
+                    <visible>$PARAM[visible]</visible>
+                    <include>Furniture_HideOnNotification</include>
+                    <control type="group">
+                        <height>80</height>
+                        <centertop>50%</centertop>
+                        <control type="group">
+                            <height>80</height>
+                            <top>-5</top>
+                            <include>Furniture_Studio</include>
+                            <include condition="!Skin.HasSetting(Footer.DisableNowPlaying)">Furniture_Player</include>
+                            <include condition="Skin.HasSetting(Footer.EnableCodecs)">Furniture_Codecs</include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+    <include name="Furniture_SlidesOver">
+        <animation effect="slide" start="0" end="-80" tween="back" easing="out" time="400" reversible="false" condition="[Window.IsVisible(DialogBusy.xml) | Window.IsVisible(DialogVolumeBar.xml)]">Conditional</animation>
+        <animation effect="slide" start="-80" end="0" tween="back" easing="out" time="400" reversible="false" condition="![Window.IsVisible(DialogBusy.xml) | Window.IsVisible(DialogVolumeBar.xml)]">Conditional</animation>
+    </include>
+    <include name="Furniture_HideOnNotification">
+        <animation effect="fade" start="100" end="0" time="150" reversible="false" condition="[Window.IsVisible(DialogExtendedProgressBar.xml) | Window.IsVisible(DialogNotification.xml)]">Conditional</animation>
+        <animation effect="fade" start="0" end="100" time="300" reversible="false" condition="![Window.IsVisible(DialogExtendedProgressBar.xml) | Window.IsVisible(DialogNotification.xml)]">Conditional</animation>
+    </include>
+    <include name="Furniture_Player">
+        <control type="group">
+            <width>720</width>
+            <right>-20</right>
+            <visible>Player.HasMedia</visible>
+            <control type="group">
+                <right>0</right>
+                <visible>!Window.IsActive(DialogVolumeBar.xml)</visible>
+                <include content="Animation_SlideIn_Dialog">
+                    <param name="windowopen_condition">false</param>
+                    <param name="posy">48</param>
+                </include>
+                <include content="Info_FooterItemIcon">
+                    <param name="icon">$VAR[Image_NowPlaying_PlayPause]</param>
+                    <param name="flipped">true</param>
+                    <param name="right">15</param>
+                    <param name="visible">true</param>
+                    <param name="size">50</param>
+                </include>
+                <control type="group">
+                    <centerright>40</centerright>
+                    <centertop>50%</centertop>
+                    <width>100</width>
+                    <height>100</height>
+                    <control type="image">
+                        <bordersize>-4</bordersize>
+                        <texture colordiffuse="$VAR[ColorHighlight]">$INFO[Player.Progress,progress/circle/p,.png]</texture>
+                        <aspectratio align="center" aligny="center">keep</aspectratio>
+                    </control>
+                </control>
+            </control>
+            <include content="Furniture_Busy_FloatingText">
+                <param name="mainlabel">$VAR[Label_NowPlayingTitle]</param>
+                <param name="minilabel">$VAR[Label_NowPlayingSubLabel]</param>
+            </include>
+        </control>
+    </include>
+    <include name="Furniture_Studio">
+        <control type="grouplist">
+            <align>right</align>
+            <orientation>horizontal</orientation>
+            <itemgap>20</itemgap>
+            <include>Furniture_SlidesOver</include>
+            <visible>!Player.HasMedia | Skin.HasSetting(Footer.DisableNowPlaying)</visible>
+            <visible>String.IsEmpty(ListItem.VideoCodec) | !Skin.HasSetting(Footer.EnableCodecs)</visible>
+            <control type="image">
+                <width>300</width>
+                <height>80</height>
+                <aspectratio align="right">keep</aspectratio>
+                <texture background="true">$VAR[Image_CombinedStudio]</texture>
+                <centertop>50%</centertop>
+            </control>
+        </control>
+    </include>
+    <include name="Furniture_Codecs">
+        <param name="colordiffuse">white</param>
+        <param name="infolabel_videoresolution">ListItem.VideoResolution</param>
+        <param name="infolabel_videoaspect">ListItem.VideoAspect</param>
+        <param name="infolabel_videocodec">ListItem.VideoCodec</param>
+        <param name="infolabel_audiocodec">ListItem.AudioCodec</param>
+        <param name="infolabel_audiochannels">ListItem.AudioChannels</param>
+        <param name="align">right</param>
+        <param name="itemgap">20</param>
+        <definition>
+            <control type="grouplist">
+                <visible>!String.IsEmpty($PARAM[infolabel_videoresolution])</visible>
+                <orientation>horizontal</orientation>
+                <align>$PARAM[align]</align>
+                <itemgap>$PARAM[itemgap]</itemgap>
+                <control type="image">
+                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_videoresolution],flags/color/resolution/,.png]</texture>
+                    <aspectratio>keep</aspectratio>
+                    <height>48</height>
+                    <width>66</width>
+                    <centertop>50%</centertop>
+                    <visible>!String.IsEmpty($PARAM[infolabel_videoresolution])</visible>
+                </control>
+                <control type="image">
+                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_videoaspect],flags/color/aspectratio/,.png]</texture>
+                    <aspectratio>keep</aspectratio>
+                    <height>48</height>
+                    <width>71</width>
+                    <centertop>50%</centertop>
+                    <visible>!String.IsEmpty($PARAM[infolabel_videoaspect])</visible>
+                </control>
+                <control type="image">
+                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_videocodec],flags/color/source/,.png]</texture>
+                    <aspectratio>keep</aspectratio>
+                    <height>48</height>
+                    <width>71</width>
+                    <centertop>50%</centertop>
+                    <visible>!String.IsEmpty($PARAM[infolabel_videocodec])</visible>
+                </control>
+                <control type="image">
+                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_audiocodec],flags/color/audio/,.png]</texture>
+                    <aspectratio>keep</aspectratio>
+                    <height>48</height>
+                    <width>71</width>
+                    <centertop>50%</centertop>
+                    <visible>!String.IsEmpty($PARAM[infolabel_audiocodec])</visible>
+                </control>
+                <control type="image">
+                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_audiochannels],flags/color/channels/,.png]</texture>
+                    <aspectratio>keep</aspectratio>
+                    <height>48</height>
+                    <width>71</width>
+                    <centertop>50%</centertop>
+                    <visible>!String.IsEmpty($PARAM[infolabel_audiochannels])</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Furniture_Footer_Left">
+        <param name="enabled">true</param>
+        <definition>
+            <include content="Furniture_Footer_Left_Content" condition="$PARAM[enabled]">
+                <param name="container">$PARAM[container]</param>
+            </include>
+        </definition>
+    </include>
+    <include name="Furniture_Footer_Left_Content">
+        <control type="group">
+            <include>Dimension_Bottombar</include>
+            <include content="View_Furniture_Footer_ViewLine" condition="Window.IsMedia + !Window.IsVisible(addonbrowser) + !Window.IsVisible(eventlog) + !Window.IsVisible(MyMusicPlaylistEditor.xml)">
+                <param name="visible">true</param>
+                <param name="use_subtext">true</param>
+                <param name="label">$INFO[Container.NumItems,, $LOCALIZE[31022]]</param>
+                <param name="sublabel">$LOCALIZE[31135]$INFO[Container.CurrentPage, , $LOCALIZE[20163] ]$INFO[Container.NumPages]</param>
+                <param name="sub_visible">Control.HasFocus(60) | Control.HasFocus(610)</param>
+            </include>
+            <include content="View_Furniture_Footer_ViewLine" condition="$EXP[Exp_PlainBackgroundWindows]">
+                <param name="visible">true</param>
+                <param name="label">$VAR[Label_ProfileName]</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Furniture_Footer">
+        <include>Furniture_Footer_Left</include>
+        <include>Furniture_Footer_Right</include>
+    </include>
+
+    <include name="Furniture_MainLabel">
+        <param name="id" />
+        <param name="textcolor">main_fg_90</param>
+        <param name="width">auto</param>
+        <param name="visible">true</param>
+        <param name="align">left</param>
+        <definition>
+            <control type="label" id="$PARAM[id]">
+                <label>$PARAM[label]</label>
+                <font>font_midi_bold</font>
+                <textcolor>$PARAM[textcolor]</textcolor>
+                <width max="$PARAM[max]">$PARAM[width]</width>
+                <height>40</height>
+                <centertop>50%</centertop>
+                <visible>$PARAM[visible]</visible>
+                <align>$PARAM[align]</align>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Furniture_Busy_Spinner">
+        <control type="image">
+            <bordersize>-4</bordersize>
+            <include content="Defs_BusySpinner_Image">
+                <param name="spinspinner">$PARAM[spinspinner]</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Furniture_Busy_Icon">
+        <param name="hasspinner">false</param>
+        <param name="hasprogress">false</param>
+        <param name="hasicon">true</param>
+        <param name="icon">special://skin/extras/icons/kodi.png</param>
+        <param name="spinspinner">false</param>
+        <param name="spinnervisible">true</param>
+        <param name="flipspinner">true</param>
+        <param name="flipped">false</param>
+        <param name="visible">true</param>
+        <definition>
+            <control type="group">
+                <description>Busy animation</description>
+                <width>50</width>
+                <height>50</height>
+                <centertop>50%</centertop>
+
+                <visible>$PARAM[visible]</visible>
+
+                <include content="Object_Left" condition="![$PARAM[flipped]]">
+                    <param name="left">15</param>
+                </include>
+                <include content="Object_Right" condition="$PARAM[flipped]">
+                    <param name="right">15</param>
+                </include>
+
+                <control type="group">
+                    <include content="Info_FooterItemIcon" condition="$PARAM[hasicon]">
+                        <param name="icon">$PARAM[icon]</param>
+                        <param name="centered">true</param>
+                        <param name="size">50</param>
+                    </include>
+                    <control type="group">
+                        <centerleft>50%</centerleft>
+                        <centertop>50%</centertop>
+                        <width>100</width>
+                        <height>100</height>
+                        <visible>$PARAM[spinnervisible]</visible>
+                        <include content="Furniture_Busy_Spinner" condition="$PARAM[hasspinner]">
+                            <param name="spinspinner">$PARAM[spinspinner]</param>
+                        </include>
+                        <include content="Object_Control" condition="$PARAM[hasprogress]">
+                            <param name="control">group</param>
+                            <description>Busy animation</description>
+                            <animation effect="rotate" condition="$PARAM[spinspinner]" start="0" end="-360" loop="true" time="2000" center="auto">Conditional</animation>
+                            <description>Busy animation</description>
+                            <control type="image">
+                                <bordersize>-4</bordersize>
+                                <texture colordiffuse="$VAR[ColorHighlight]" flipx="$PARAM[flipspinner]" flipy="$PARAM[flipspinner]">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
+                                <aspectratio align="center" aligny="center">keep</aspectratio>
+                            </control>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Furniture_Busy_FloatingText">
+        <param name="visible">true</param>
+        <param name="percentage_visible">false</param>
+        <definition>
+            <control type="group">
+                <top>25</top>
+                <height>40</height>
+                <right>100</right>
+                <control type="grouplist">
+                    <orientation>horizontal</orientation>
+                    <align>right</align>
+                    <itemgap>8</itemgap>
+                    <include content="Info_Viewline_Divider">
+                        <param name="align">right</param>
+                        <param name="width">320</param>
+                    </include>
+                    <control type="label">
+                        <font>font_hint_bold</font>
+                        <textcolor>main_fg_70</textcolor>
+                        <label>$PARAM[minilabel]</label>
+                        <width>auto</width>
+                        <align>right</align>
+                        <height>40</height>
+                        <centertop>30</centertop>
+                    </control>
+                    <control type="label">
+                        <font>font_hint_bold</font>
+                        <textcolor>main_fg_70</textcolor>
+                        <label>$PARAM[percentage_label]</label>
+                        <width>auto</width>
+                        <align>right</align>
+                        <visible>$PARAM[percentage_visible]</visible>
+                        <height>40</height>
+                        <centertop>30</centertop>
+                    </control>
+                </control>
+                <control type="label">
+                    <height>40</height>
+                    <centertop>0</centertop>
+                    <font>font_main_bold</font>
+                    <textcolor>main_fg_90</textcolor>
+                    <label>$PARAM[mainlabel]</label>
+                    <align>right</align>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Furniture_Busy_Base">
+        <param name="hasspinner">false</param>
+        <param name="hasprogress">false</param>
+        <param name="hasicon">true</param>
+        <param name="spinspinner">false</param>
+        <param name="spinnervisible">true</param>
+        <param name="icon" />
+        <param name="progress" />
+        <param name="progress_id" />
+        <definition>
+
+            <include content="Furniture_Busy_Icon">
+                <param name="hasspinner">$PARAM[hasspinner]</param>
+                <param name="hasprogress">$PARAM[hasprogress]</param>
+                <param name="hasicon">$PARAM[hasicon]</param>
+                <param name="spinspinner">$PARAM[spinspinner]</param>
+                <param name="flipspinner">$PARAM[flipspinner]</param>
+                <param name="icon">$PARAM[icon]</param>
+                <param name="progress">$PARAM[progress]</param>
+                <param name="progress_id">$PARAM[progress_id]</param>
+                <param name="spinnervisible">$PARAM[spinnervisible]</param>
+                <param name="flipped">true</param>
+            </include>
+
+        </definition>
+    </include>
+
+    <include name="Furniture_Reposition">
+        <animation effect="slide" start="0" end="0,-700" condition="String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Wall) + !$EXP[Exp_InfoDialogs] + [Window.IsMedia | Window.IsVisible(Home) | Window.IsVisible(1101) | Window.IsVisible(1102) | Window.IsVisible(1103) | Window.IsVisible(1104)]">Conditional</animation>
+        <animation effect="slide" start="0" end="0,-70" time="300" tween="sine" easing="inout" condition="Window.IsActive(DialogSeekBar.xml) + [Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)]">Conditional</animation>
+        <animation effect="slide" start="0" end="0,-80" time="300" tween="sine" easing="inout" condition="Window.IsVisible(videoosd) + [Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)]">Conditional</animation>
+    </include>
+
+    <include name="Furniture_Busy_Main">
+        <param name="mainlabel">$LOCALIZE[20186]</param>
+        <param name="minilabel">$LOCALIZE[31023]...</param>
+        <param name="haslabel">true</param>
+        <param name="visible_delay" />
+        <param name="visible_condition" />
+        <param name="windowopen_delay" />
+        <param name="windowopen_condition" />
+        <definition>
+
+            <include>Dimension_DialogNotification</include>
+            <include>Furniture_Reposition</include>
+
+            <include content="Animation_SlideIn_Dialog">
+                <param name="visible_delay">$PARAM[visible_delay]</param>
+                <param name="visible_condition">$PARAM[visible_condition]</param>
+                <param name="windowopen_delay">$PARAM[windowopen_delay]</param>
+                <param name="windowopen_condition">$PARAM[windowopen_condition]</param>
+                <param name="posy">48</param>
+            </include>
+
+            <include content="Furniture_Busy_FloatingText" condition="$PARAM[haslabel]">
+                <param name="mainlabel">$PARAM[mainlabel]</param>
+                <param name="minilabel">$PARAM[minilabel]</param>
+                <param name="percentage_label">$PARAM[percentage_label]</param>
+                <param name="percentage_visible">$PARAM[percentage_visible]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Furniture_Busy">
+        <param name="mainlabel">$LOCALIZE[20186]</param>
+        <param name="minilabel">$LOCALIZE[31023]...</param>
+        <param name="hasspinner">false</param>
+        <param name="hasprogress">false</param>
+        <param name="haslabel">true</param>
+        <param name="hasicon">true</param>
+        <param name="spinspinner">false</param>
+        <param name="spinnervisible">true</param>
+        <param name="visible">true</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+
+                <include content="Furniture_Busy_Main">
+                    <param name="mainlabel">$PARAM[mainlabel]</param>
+                    <param name="minilabel">$PARAM[minilabel]</param>
+                    <param name="haslabel">$PARAM[haslabel]</param>
+                    <param name="visible_delay">$PARAM[visible_delay]</param>
+                    <param name="visible_condition">$PARAM[visible_condition]</param>
+                    <param name="windowopen_delay">$PARAM[windowopen_delay]</param>
+                    <param name="windowopen_condition">$PARAM[windowopen_condition]</param>
+                    <param name="percentage_label">$PARAM[percentage_label]</param>
+                    <param name="percentage_visible">$PARAM[percentage_visible]</param>
+                </include>
+
+                <include content="Furniture_Busy_Base">
+                    <param name="hasspinner">$PARAM[hasspinner]</param>
+                    <param name="hasprogress">$PARAM[hasprogress]</param>
+                    <param name="hasicon">$PARAM[hasicon]</param>
+                    <param name="spinspinner">$PARAM[spinspinner]</param>
+                    <param name="flipspinner">$PARAM[flipspinner]</param>
+                    <param name="spinnervisible">$PARAM[spinnervisible]</param>
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="progress">$PARAM[progress]</param>
+                    <param name="progress_id">$PARAM[progress_id]</param>
+                </include>
+            </control>
+
+        </definition>
+    </include>
+
+
+</includes>

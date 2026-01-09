@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="DialogTextViewer">
+        <definition>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include content="Part_Dialog_Backing">
+                    <param name="dialog_size">Dimension_DialogHugeMenu</param>
+                </include>
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+                    <include content="DialogPlot_Textbox">
+                        <param name="head_id">1</param>
+                        <param name="text_id">5</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogPlot">
+        <param name="include_movement">DialogPlot_OnMove</param>
+        <definition>
+            <include>Part_Dim_Overlay</include>
+
+            <control type="group">
+                <include>Part_Dialog_Backing</include>
+
+                <!-- Content -->
+                <control type="group">
+                    <include>Size_Dialog_Pad</include>
+
+                    <!-- Left -->
+                    <control type="group">
+                        <include>Size_LeftGroup_Large</include>
+                        <include content="DialogPlot_Artwork">
+                            <param name="poster_icon">$PARAM[poster_icon]</param>
+                            <param name="square_icon">$PARAM[square_icon]</param>
+                            <param name="c_logo_icon">$PARAM[c_logo_icon]</param>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <include>Part_Panel</include>
+                        <include>Size_RightGroup_Large</include>
+                        <include content="DialogPlot_Textbox">
+                            <param name="head_id">9999</param>
+                            <param name="header">$INFO[Window(Home).Property(TMDbHelper.ListItem.Base_Label)]</param>
+                            <param name="textbox">$VAR[Label_Overlay_PlotBox]</param>
+                            <param name="include_movement">$PARAM[include_movement]</param>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogCustomPlot">
+        <param name="include_artwork">true</param>
+        <definition>
+            <include>Part_Dim_Overlay</include>
+
+            <control type="group">
+                <include content="Part_Dialog_Backing" condition="![$PARAM[include_artwork]]">
+                    <param name="dialog_size">Dimension_DialogHugeMenu</param>
+                </include>
+                <include content="Part_Dialog_Backing" condition="[$PARAM[include_artwork]]">
+                    <param name="dialog_size">Dimension_DialogFullMenu</param>
+                </include>
+
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+
+                    <!-- Left -->
+                    <include content="Object_Control" condition="$PARAM[include_artwork]">
+                        <param name="control">group</param>
+                        <include>Size_LeftGroup_Large</include>
+                        <include content="DialogPlot_Artwork">
+                            <param name="poster_icon">$VAR[Image_1114_Poster]</param>
+                            <param name="square_icon">$VAR[Image_1114_Icon]</param>
+                            <param name="c_logo_icon">$VAR[Image_1114_Clearlogo]</param>
+                        </include>
+                    </include>
+
+                    <control type="group">
+                        <include condition="$PARAM[include_artwork]">Part_Panel</include>
+                        <include condition="$PARAM[include_artwork]">Size_RightGroup_Large</include>
+                        <control type="group">
+                            <include content="DialogPlot_Textbox">
+                                <param name="head_id">9999</param>
+                                <param name="header">$VAR[Label_Overlay_Header_1114_PlotBox]</param>
+                                <param name="textbox">$VAR[Label_Overlay_1114_PlotBox]</param>
+                                <param name="textbox_visible">Integer.IsEqual(Container(7001).NumItems,0) | String.IsEmpty(Window.Property(ModePath))</param>
+                                <param name="include_movement">DialogCustomPlot_OnMove</param>
+                                <param name="include_divider">String.IsEmpty(Window.Property(path))</param>
+                                <param name="include_top">!String.IsEmpty(Window.Property(path))</param>
+                                <param name="include_closebutton">true</param>
+                            </include>
+                            <include condition="$PARAM[include_artwork] + !String.IsEmpty(Window.Property(tmdb_type)) + !String.IsEmpty(Window.Property(tmdb_id))">DialogCustomPlot_Lists</include>
+
+                            <include condition="!String.IsEmpty(Window.Property(path))">DialogCustomPlot_Switcher</include>
+
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogCustomPlot_Switcher">
+        <control type="group">
+            <include>Size_Group_Head</include>
+            <control type="group">
+                <bottom>-60</bottom>
+                <include>Part_Line</include>
+                <control type="grouplist" id="9000">
+                    <orientation>horizontal</orientation>
+                    <ondown condition="Control.IsVisible(7001)">SetFocus(7001,0,absolute)</ondown>
+                    <ondown condition="Control.IsVisible(61)">61</ondown>
+                    <align>left</align>
+                    <left>40</left>
+                    <right>40</right>
+                    <height>55</height>
+                    <bottom>-5</bottom>
+                    <itemgap>40</itemgap>
+                    <include>DialogCustomPlot_Items</include>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogCustomPlot_Lists">
+        <control type="group">
+            <include>Size_Group_Body</include>
+            <control type="group">
+                <top>60</top>
+                <include content="List_DialogSelect">
+                    <param name="id">7001</param>
+                    <param name="textcolor">dialog_fg</param>
+                    <param name="itemlayout_include">Layout_MediaList</param>
+                    <param name="control">fixedlist</param>
+                    <param name="include_detailed_labels">true</param>
+                    <right>0</right>
+                    <bottom>40</bottom>
+                    <include>Size_Grouplist_Pad</include>
+                    <focusposition>1</focusposition>
+                    <movement>5</movement>
+                    <pagecontrol>62</pagecontrol>
+                    <onright>62</onright>
+                    <onleft>9000</onleft>
+                    <onup>9000</onup>
+                    <ondown>noop</ondown>
+                    <onclick>Dialog.Close(1114)</onclick>
+                    <onclick>Dialog.Close(movieinformation)</onclick>
+                    <onclick>Dialog.Close(musicinformation)</onclick>
+                    <onclick>Dialog.Close(videoosd,true)</onclick>
+                    <onclick>Dialog.Close(1140,true)</onclick>
+                    <onclick>Dialog.Close(1141,true)</onclick>
+                    <onclick>Dialog.Close(videobookmarks,true)</onclick>
+                    <onclick>Skin.SetString(InfoPanel.FullSwitch,Full,Home)</onclick>
+                    <onclick>RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Container(7001).ListItem.FolderPath],call_auto=1190,origin_tmdb_type=$INFO[Window.Property(origin_tmdb_type)],origin_tmdb_id=$INFO[Window.Property(origin_tmdb_id)],origin_season=$INFO[Window.Property(origin_season)],origin_episode=$INFO[Window.Property(origin_episode)],return)</onclick>
+                    <content>$INFO[Window.Property(ModePath)]</content>
+                    <visible>!String.IsEmpty(Window.Property(ModePath))</visible>
+                </include>
+                <include content="Part_Scrollbar_Max">
+                    <param name="id">62</param>
+                    <param name="inset">false</param>
+                    <onleft>7001</onleft>
+                    <onright>9000</onright>
+                    <visible>!String.IsEmpty(Window.Property(ModePath))</visible>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogCustomPlot_Items">
+        <!-- Info -->
+        <include content="Button_Underline_Switcher">
+            <param name="vertical">true</param>
+            <param name="id">9001</param>
+            <param name="groupid">9101</param>
+            <label>$LOCALIZE[29915]</label>
+            <altlabel>$LOCALIZE[29915]</altlabel>
+            <param name="icon">special://skin/extras/icons/info2.png</param>
+            <usealttexture>String.IsEmpty(Window.Property(ModeName))</usealttexture>
+            <onfocus>ClearProperty(ModePath)</onfocus>
+            <onfocus>ClearProperty(ModeName)</onfocus>
+            <onclick>Skin.SetString(InfoPanel.FullSwitch,Full,Home)</onclick>
+            <onclick>RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Window.Property(path)],call_auto=1190,origin_tmdb_type=$INFO[Window.Property(origin_tmdb_type)],origin_tmdb_id=$INFO[Window.Property(origin_tmdb_id)],origin_season=$INFO[Window.Property(origin_season)],origin_episode=$INFO[Window.Property(origin_episode)],return)</onclick>
+            <onclick>Dialog.Close(1114,true)</onclick>
+            <onclick>Dialog.Close(videoosd,true)</onclick>
+            <onclick>Dialog.Close(1140,true)</onclick>
+            <onclick>Dialog.Close(1141,true)</onclick>
+            <onclick>Dialog.Close(videobookmarks,true)</onclick>
+        </include>
+        <!-- Movies -->
+        <include content="Button_Underline_Switcher" condition="!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)">
+            <param name="id">9011</param>
+            <param name="groupid">9111</param>
+            <label>$LOCALIZE[342]</label>
+            <altlabel>$LOCALIZE[342]</altlabel>
+            <param name="icon">special://skin/extras/icons/film.png</param>
+            <usealttexture>String.IsEqual(Window.Property(ModeName),$LOCALIZE[342])</usealttexture>
+            <onfocus>SetProperty(ModeName,$LOCALIZE[342])</onfocus>
+            <onfocus>SetProperty(ModePath,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_movies&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_by=premiered&amp;nextpage=false&amp;cacheonly=true&amp;length=1&amp;exclude_key=genre&amp;exclude_value=Documentary / News / Talk])</onfocus>
+            <onclick condition="!Container(7001).IsUpdating + !Integer.IsEqual(Container(7001).NumItems,0)">SetFocus(7001)</onclick>
+        </include>
+        <!-- TV Shows -->
+        <include content="Button_Underline_Switcher" condition="!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)">
+            <param name="id">9012</param>
+            <param name="groupid">9112</param>
+            <label>$LOCALIZE[20343]</label>
+            <altlabel>$LOCALIZE[20343]</altlabel>
+            <param name="icon">special://skin/extras/icons/tv.png</param>
+            <usealttexture>String.IsEqual(Window.Property(ModeName),$LOCALIZE[20343])</usealttexture>
+            <onfocus>SetProperty(ModeName,$LOCALIZE[20343])</onfocus>
+            <onfocus>SetProperty(ModePath,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=stars_in_tvshows&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_by=premiered&amp;nextpage=false&amp;cacheonly=true&amp;length=1&amp;exclude_key=genre&amp;exclude_value=Documentary / News / Talk])</onfocus>
+            <onclick condition="!Container(7001).IsUpdating + !Integer.IsEqual(Container(7001).NumItems,0)">SetFocus(7001)</onclick>
+        </include>
+        <!-- Crew -->
+        <include content="Button_Underline_Switcher" condition="!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)">
+            <param name="id">9013</param>
+            <param name="groupid">9113</param>
+            <label>$LOCALIZE[31050]</label>
+            <altlabel>$LOCALIZE[31050]</altlabel>
+            <param name="icon">special://skin/extras/icons/director.png</param>
+            <usealttexture>String.IsEqual(Window.Property(ModeName),$LOCALIZE[31035])</usealttexture>
+            <onfocus>SetProperty(ModeName,$LOCALIZE[31035])</onfocus>
+            <onfocus>SetProperty(ModePath,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=crew_in_both&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=250&amp;sort_by=premiered&amp;nextpage=false&amp;cacheonly=true&amp;length=1])</onfocus>
+            <onclick condition="!Container(7001).IsUpdating + !Integer.IsEqual(Container(7001).NumItems,0)">SetFocus(7001)</onclick>
+        </include>
+        <!-- Cast -->
+        <include content="Button_Underline_Switcher" condition="!String.IsEmpty(Window.Property(tmdb_id)) + [String.IsEqual(Window.Property(tmdb_type),movie) | String.IsEqual(Window.Property(tmdb_type),tv)]">
+            <param name="id">9014</param>
+            <param name="groupid">9114</param>
+            <label>$LOCALIZE[206]</label>
+            <altlabel>$LOCALIZE[206]</altlabel>
+            <param name="icon">special://skin/extras/icons/person.png</param>
+            <usealttexture>String.IsEqual(Window.Property(ModeName),$LOCALIZE[31076])</usealttexture>
+            <onfocus>SetProperty(ModeName,$LOCALIZE[31076])</onfocus>
+            <onfocus>SetProperty(ModePath,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=cast&amp;tmdb_id=,&amp;limit=250]$INFO[Window.Property(tmdb_type),&amp;tmdb_type=,&amp;nextpage=false&amp;cacheonly=true&amp;length=1])</onfocus>
+            <onclick condition="!Container(7001).IsUpdating + !Integer.IsEqual(Container(7001).NumItems,0)">SetFocus(7001)</onclick>
+        </include>
+        <!-- Crew -->
+        <include content="Button_Underline_Switcher" condition="!String.IsEmpty(Window.Property(tmdb_id)) + [String.IsEqual(Window.Property(tmdb_type),movie) | String.IsEqual(Window.Property(tmdb_type),tv)]">
+            <param name="id">9015</param>
+            <param name="groupid">9115</param>
+            <label>$LOCALIZE[31050]</label>
+            <altlabel>$LOCALIZE[31050]</altlabel>
+            <param name="icon">special://skin/extras/icons/director.png</param>
+            <usealttexture>String.IsEqual(Window.Property(ModeName),$LOCALIZE[31383])</usealttexture>
+            <onfocus>SetProperty(ModeName,$LOCALIZE[31383])</onfocus>
+            <onfocus>SetProperty(ModePath,$INFO[Window.Property(TMDb_ID),plugin://plugin.video.themoviedb.helper/?info=crew&amp;tmdb_id=,&amp;limit=250]$INFO[Window.Property(tmdb_type),&amp;tmdb_type=,&amp;nextpage=false&amp;cacheonly=true&amp;length=1])</onfocus>
+            <onclick condition="!Container(7001).IsUpdating + !Integer.IsEqual(Container(7001).NumItems,0)">SetFocus(7001)</onclick>
+        </include>
+    </include>
+
+    <include name="DialogPlot_Textbox">
+        <param name="textbox_visible">true</param>
+        <param name="include_divider">true</param>
+        <param name="include_top">false</param>
+        <param name="include_closebutton">true</param>
+        <definition>
+            <control type="group">
+                <include>Size_Group_Head</include>
+                <include content="Part_HeadText">
+                    <param name="id">$PARAM[head_id]</param>
+                    <param name="label">$PARAM[header]</param>
+                </include>
+                <include condition="$PARAM[include_divider]">Part_Line</include>
+                <include condition="$PARAM[include_closebutton]">Part_CloseButton</include>
+            </control>
+            <control type="group">
+                <include>Size_Group_Body</include>
+                <control type="group">
+                    <include content="Object_Top" condition="$PARAM[include_top]">
+                        <param name="top">60</param>
+                    </include>
+                    <include content="Part_PlotText">
+                        <param name="id">$PARAM[text_id]</param>
+                        <param name="textbox">$PARAM[textbox]</param>
+                        <visible>$PARAM[textbox_visible]</visible>
+                    </include>
+                    <include content="Part_Scrollbar_Max">
+                        <param name="id">61</param>
+                        <param name="inset">false</param>
+                        <include>$PARAM[include_movement]</include>
+                        <visible>$PARAM[textbox_visible]</visible>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <variable name="DialogPlot_Artwork_Poster_Image">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Base_Icon)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.TMDb_Type),person)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Base_Icon)]</value>
+        <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.Base_Poster)]</value>
+    </variable>
+
+    <include name="DialogPlot_Artwork">
+        <param name="poster_icon">$VAR[DialogPlot_Artwork_Poster_Image]</param>
+        <param name="square_icon">$INFO[Window(Home).Property(TMDbHelper.ListItem.Base_Icon)]</param>
+        <param name="c_logo_icon">$INFO[Window(Home).Property(TMDbHelper.ListItem.Base_Clearlogo)]</param>
+        <param name="hidden_icon">true</param>
+        <definition>
+            <control type="group">
+                <include>Size_Dialog_Pad</include>
+
+                <!-- Hidden Images to Test Availability -->
+                <control type="image" id="99981">
+                    <texture background="true" colordiffuse="00ffffff">$PARAM[poster_icon]</texture>
+                    <visible>$PARAM[hidden_icon]</visible>
+                </control>
+                <control type="image" id="99982">
+                    <texture background="true" colordiffuse="00ffffff">$PARAM[square_icon]</texture>
+                    <visible>$PARAM[hidden_icon]</visible>
+                </control>
+
+                <!-- Visible Images Based On Availability -->
+                <control type="grouplist">
+                    <orientation>vertical</orientation>
+                    <itemgap>40</itemgap>
+                    <control type="group">
+                        <height>720</height>
+                        <visible>!String.IsEmpty(Control.GetLabel(99981))</visible>
+                        <include content="Part_Box_Outline">
+                            <control type="image">
+                                <aspectratio scalediffuse="false">scale</aspectratio>
+                                <texture background="true" diffuse="diffuse/poster_w480_h720.png">$PARAM[poster_icon]</texture>
+                            </control>
+                        </include>
+                    </control>
+                    <control type="group">
+                        <height>480</height>
+                        <visible>String.IsEmpty(Control.GetLabel(99981))</visible>
+                        <visible>!String.IsEmpty(Control.GetLabel(99982))</visible>
+                        <include content="Part_Box_Outline">
+                            <control type="image">
+                                <aspectratio scalediffuse="false">keep</aspectratio>
+                                <texture background="true" diffuse="diffuse/square_w480_h480.png">$PARAM[square_icon]</texture>
+                            </control>
+                        </include>
+                    </control>
+                    <control type="group">
+                        <height>200</height>
+                        <visible>String.IsEmpty(Control.GetLabel(99981))</visible>
+                        <control type="image">
+                            <aspectratio scalediffuse="false" aligny="center">keep</aspectratio>
+                            <texture background="true">$PARAM[c_logo_icon]</texture>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogPlot_OnMove">
+        <onright>PreviousMenu</onright>
+        <onleft>PreviousMenu</onleft>
+        <showonepage>true</showonepage>
+    </include>
+
+    <include name="DialogCustomPlot_OnMove">
+        <onup>9000</onup>
+        <onleft>9000</onleft>
+        <onright>9000</onright>
+        <showonepage>false</showonepage>
+    </include>
+
+
+</includes>

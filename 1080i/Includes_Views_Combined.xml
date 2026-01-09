@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="View_Combined_Info">
+        <include content="Info_Panel" condition="$EXP[Exp_View_52$PARAM[id]_Include]">
+            <param name="container">Container(53$PARAM[id]).</param>
+            <param name="visible">Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),53$PARAM[id])</param>
+        </include>
+    </include>
+
+    <variable name="View_Combined_SortBy">
+        <value condition="Container.Content(seasons)">episode</value>
+        <value condition="Container.Content(sets) | Container.Content(artists)">year</value>
+        <value>label</value>
+    </variable>
+
+    <variable name="View_530_Content">
+        <value condition="String.IsEmpty(Window.Property(SpecialFolderPath)) + !String.IsEmpty(Container(520).ListItem.FolderPath) + Container(520).ListItem.IsFolder">$INFO[Container(520).ListItem.FolderPath]</value>
+        <value condition="!String.IsEmpty(Window.Property(SpecialFolderPath))">$INFO[Window.Property(SpecialFolderPath)]</value>
+    </variable>
+    <variable name="View_531_Content">
+        <value condition="String.IsEmpty(Window.Property(SpecialFolderPath)) + !String.IsEmpty(Container(521).ListItem.FolderPath) + Container(521).ListItem.IsFolder">$INFO[Container(521).ListItem.FolderPath]</value>
+        <value condition="!String.IsEmpty(Window.Property(SpecialFolderPath))">$INFO[Window.Property(SpecialFolderPath)]</value>
+    </variable>
+    <variable name="View_532_Content">
+        <value condition="String.IsEmpty(Window.Property(SpecialFolderPath)) + !String.IsEmpty(Container(522).ListItem.FolderPath) + Container(522).ListItem.IsFolder">$INFO[Container(522).ListItem.FolderPath]</value>
+        <value condition="!String.IsEmpty(Window.Property(SpecialFolderPath))">$INFO[Window.Property(SpecialFolderPath)]</value>
+    </variable>
+    <variable name="View_533_Content">
+        <value condition="String.IsEmpty(Window.Property(SpecialFolderPath)) + !String.IsEmpty(Container(523).ListItem.FolderPath) + Container(523).ListItem.IsFolder">$INFO[Container(523).ListItem.FolderPath]</value>
+        <value condition="!String.IsEmpty(Window.Property(SpecialFolderPath))">$INFO[Window.Property(SpecialFolderPath)]</value>
+    </variable>
+    <variable name="View_534_Content">
+        <value condition="String.IsEmpty(Window.Property(SpecialFolderPath)) + !String.IsEmpty(Container(524).ListItem.FolderPath) + Container(524).ListItem.IsFolder">$INFO[Container(524).ListItem.FolderPath]</value>
+        <value condition="!String.IsEmpty(Window.Property(SpecialFolderPath))">$INFO[Window.Property(SpecialFolderPath)]</value>
+    </variable>
+    <variable name="View_535_Content">
+        <value condition="String.IsEmpty(Window.Property(SpecialFolderPath)) + !String.IsEmpty(Container(525).ListItem.FolderPath) + Container(525).ListItem.IsFolder">$INFO[Container(525).ListItem.FolderPath]</value>
+        <value condition="!String.IsEmpty(Window.Property(SpecialFolderPath))">$INFO[Window.Property(SpecialFolderPath)]</value>
+    </variable>
+
+    <include name="View_Combined_Info_Panel">
+        <include content="View_Combined_Info">
+            <param name="id">0</param>
+        </include>
+        <include content="View_Combined_Info">
+            <param name="id">1</param>
+        </include>
+        <include content="View_Combined_Info">
+            <param name="id">2</param>
+        </include>
+        <include content="View_Combined_Info">
+            <param name="id">3</param>
+        </include>
+        <include content="View_Combined_Info">
+            <param name="id">4</param>
+        </include>
+    </include>
+
+    <!-- Horizontal Layout (Classic) -->
+    <include name="View_Combined_Row_Horz">
+        <definition>
+            <control type="group">
+                <visible>Control.IsVisible(52$PARAM[id])</visible>
+                <control type="group">
+
+                    <include content="$PARAM[include]">
+                        <param name="id">53$PARAM[id]</param>
+                        <top>view_row</top>
+                        <pagecontrol>60</pagecontrol>
+
+                        <include content="Action_View_Movement_OnBack">
+                            <param name="id">53$PARAM[id]</param>
+                            <param name="onback">[Integer.IsEqual(Container(53$PARAM[id]).CurrentItem,1)]</param>
+                            <param name="always">True</param>
+                            <param name="backid">63</param>
+                        </include>
+
+                        <include content="Object_HitRect">
+                            <param name="x">view_pad</param>
+                            <param name="y">586</param>
+                            <param name="w">1640</param>
+                            <param name="h">view_poster_item_h</param>
+                        </include>
+
+                        <onup>SetFocus(53$PARAM[id],0,absolute)</onup>
+                        <onup>52$PARAM[id]</onup>
+
+                        <include content="Action_View_Movement_OnDown">
+                            <param name="id">$PARAM[id]</param>
+                        </include>
+
+                        <animation type="Conditional" reversible="false" condition="Container(53$PARAM[id]).IsUpdating">
+                            <effect type="fade" start="100" end="0" time="200" delay="600" />
+                        </animation>
+
+                        <visible>Container(52$PARAM[id]).ListItem.IsFolder</visible>
+                        <onclick condition="Container(53$PARAM[id]).ListItem.IsFolder">Container.Update($INFO[Container(53$PARAM[id]).ListItem.FolderPath])</onclick>
+                        <onclick condition="Container(53$PARAM[id]).ListItem.IsFolder">SetFocus(50)</onclick>
+                        <onclick condition="!Container(53$PARAM[id]).ListItem.IsFolder">PlayMedia($ESCINFO[Container(53$PARAM[id]).ListItem.FileNameAndPath])</onclick>
+                        <content target="$VAR[Path_CollectionNode_Target]" sortby="$VAR[View_Combined_SortBy]" sortorder="ascending">$VAR[View_53$PARAM[id]_Content]</content>
+                        <onfocus>SetProperty(TMDbHelper.WidgetContainer,53$PARAM[id])</onfocus>
+                        <onfocus>ClearProperty(Background.ShowOverlay,Home)</onfocus>
+                        <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
+
+                    </include>
+
+                    <include content="Widget_Busy">
+                        <param name="label">$INFO[Container(52$PARAM[id]).ListItem.Label]</param>
+                        <param name="visible">Container(53$PARAM[id]).IsUpdating</param>
+                        <param name="include">$PARAM[include]</param>
+                        <top>view_row</top>
+                        <left>view_pad</left>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="View_Combined_List_Horz_Selector_Content">
+        <include content="Action_View_Movement_OnBack">
+            <param name="id">52$PARAM[id]</param>
+            <param name="onback">[Integer.IsEqual(Container(52$PARAM[id]).CurrentItem,1)]</param>
+            <param name="backid">63</param>
+            <param name="menuid">300</param>
+        </include>
+        <include content="Action_View_Movement_OnUp">
+            <param name="id">52$PARAM[id]</param>
+        </include>
+        <onleft>52$PARAM[id]</onleft>
+        <onright>52$PARAM[id]</onright>
+        <left>40</left>
+        <ondown>53$PARAM[id]</ondown>
+        <centertop>0</centertop>
+        <height>80</height>
+        <onfocus>ClearProperty(TMDbHelper.WidgetContainer)</onfocus>
+        <onfocus>ClearProperty(SpecialFolderPath)</onfocus>
+        <onfocus>ClearProperty(Background.ShowOverlay,Home)</onfocus>
+        <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
+        <visible>$PARAM[visible]</visible>
+        <viewtype label="$PARAM[viewtype_label]">wrap</viewtype>
+    </include>
+
+    <include name="View_Combined_List_Horz">
+        <control type="group">
+            <visible>$PARAM[visible]</visible>
+            <include content="Categories_Selector">
+                <param name="id">52$PARAM[id]</param>
+                <param name="font">font_mini</param>
+                <param name="hitrect_x">0</param>
+                <param name="hitrect_y">0</param>
+                <param name="hitrect_w">1080</param>
+                <param name="hitrect_h">120</param>
+                <param name="detailed">true</param>
+                <include content="View_Combined_List_Horz_Selector_Content">
+                    <param name="id">$PARAM[id]</param>
+                    <param name="visible">$PARAM[visible]</param>
+                    <param name="viewtype_label">$PARAM[viewtype_label]</param>
+                </include>
+            </include>
+        </control>
+    </include>
+
+    <include name="View_Combined_Row">
+        <definition>
+            <control type="group">
+                <include content="View_Combined_Row_Horz">
+                    <param name="id">$PARAM[id]</param>
+                    <param name="include">$PARAM[include]</param>
+                    <param name="visible">$EXP[Exp_View_52$PARAM[id]]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- List Layout -->
+    <include name="View_ComboList_Loading_Item">
+        <control type="group">
+            <top>40</top>
+            <left>40</left>
+            <height>233.33</height>
+            <control type="group">
+                <width>414.81</width>
+                <include content="Object_ItemBack">
+                    <param name="shadow_colordiffuse">shadow_soft</param>
+                    <param name="colordiffuse">main_fg_12</param>
+                </include>
+            </control>
+
+            <control type="group">
+                <left>414.81</left>
+                <top>-5</top>
+                <height>80</height>
+                <control type="group">
+                    <left>40</left>
+                    <top>20</top>
+                    <height>24</height>
+                    <width>40%</width>
+                    <include content="Object_Control">
+                        <param name="control">image</param>
+                        <include content="Dimension_Padding">
+                            <param name="pad">-20</param>
+                        </include>
+                        <bordersize>20</bordersize>
+                        <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
+                        <texture colordiffuse="main_fg_12" border="12">common/widget_text.png</texture>
+                    </include>
+                </control>
+                <control type="group">
+                    <left>40</left>
+                    <top>70</top>
+                    <height>135</height>
+                    <width>80%</width>
+                    <include content="Object_Control">
+                        <param name="control">image</param>
+                        <include content="Dimension_Padding">
+                            <param name="pad">-20</param>
+                        </include>
+                        <bordersize>20</bordersize>
+                        <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
+                        <texture colordiffuse="main_fg_12" border="12">common/widget_text.png</texture>
+                    </include>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="View_ComboList_Include">
+        <param name="width">572</param>
+        <definition>
+
+            <control type="group">
+                <visible>Control.IsVisible(52$PARAM[id])</visible>
+                <include>Dimension_Info</include>
+
+                <nested />
+
+                <control type="group">
+                    <width>$PARAM[width]</width>
+                    <top>130</top>
+                    <bottom>-5</bottom>
+
+                    <include content="List_DialogSelect">
+                        <param name="id">52$PARAM[id]</param>
+                        <param name="textcolor">main_fg</param>
+                        <param name="control">list</param>
+                        <param name="itemlayout_include">Layout_MediaList</param>
+                        <param name="variation">true</param>
+                        <param name="item_height">85</param>
+
+                        <left>-20</left>
+                        <right>-80</right>
+
+                        <onleft>600</onleft>
+                        <onright>53$PARAM[id]</onright>
+
+                        <include content="Action_View_Movement_OnBack">
+                            <param name="id">52$PARAM[id]</param>
+                            <param name="onback">True</param>
+                        </include>
+
+                        <visible>$PARAM[visible]</visible>
+                        <viewtype label="$PARAM[viewtype_label]">list</viewtype>
+                        <onfocus>ClearProperty(TMDbHelper.WidgetContainer)</onfocus>
+                        <onfocus>SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+                    </include>
+                </control>
+
+                <control type="group">
+                    <left>$PARAM[width]</left>
+                    <control type="group">
+
+                        <top>88</top>
+                        <bottom>-45</bottom>
+                        <left>40</left>
+                        <right>-100</right>
+
+                        <include content="List_DialogSelect">
+                            <param name="id">53$PARAM[id]</param>
+                            <param name="textcolor">main_fg</param>
+                            <param name="control">fixedlist</param>
+                            <param name="itemlayout_include">Layout_MediaList_Detailed</param>
+                            <param name="variation">-8</param>
+
+                            <param name="item_height">225</param>
+                            <param name="misc">284.44</param>
+                            <param name="diffuse">diffuse/medialist_expanded_combined.png</param>
+
+                            <!-- <param name="item_height">205</param>
+                            <param name="misc">311</param> -->
+
+                            <include content="Action_View_Movement_OnBack">
+                                <param name="id">53$PARAM[id]</param>
+                                <param name="onback">[Integer.IsEqual(Container(53$PARAM[id]).CurrentItem,1)]</param>
+                                <param name="backid">63</param>
+                                <param name="always">true</param>
+                            </include>
+
+                            <animation type="Conditional" reversible="false" condition="Container(53$PARAM[id]).IsUpdating">
+                                <effect type="fade" start="100" end="0" time="200" delay="600" />
+                            </animation>
+
+                            <content target="$VAR[Path_CollectionNode_Target]" sortby="$VAR[View_Combined_SortBy]" sortorder="ascending">$VAR[View_53$PARAM[id]_Content]</content>
+
+                            <onleft>52$PARAM[id]</onleft>
+                            <onright>64</onright>
+
+                            <focusposition>1</focusposition>
+                            <movement>1</movement>
+                            <pagecontrol>64</pagecontrol>
+
+                            <onfocus>ClearProperty(TMDbHelper.WidgetContainer)</onfocus>
+                            <onfocus>SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+                        </include>
+
+
+                        <control type="grouplist">
+                            <top>-10</top>
+                            <left>20</left>
+                            <orientation>vertical</orientation>
+
+                            <animation type="Conditional" reversible="false" condition="Container(53$PARAM[id]).IsUpdating">
+                                <effect type="fade" start="0" end="100" time="200" delay="600" />
+                            </animation>
+                            <animation type="Conditional" reversible="false" condition="!Container(53$PARAM[id]).IsUpdating">
+                                <effect type="fade" start="100" end="0" time="0" delay="0" />
+                            </animation>
+
+                            <itemgap>20</itemgap>
+
+                            <include>View_ComboList_Loading_Item</include>
+                            <include>View_ComboList_Loading_Item</include>
+                            <include>View_ComboList_Loading_Item</include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Combined Square -->
+    <include name="View_520_Square_Combined_Row">
+        <include content="View_Combined_Row">
+            <param name="id">0</param>
+            <param name="include">List_Square_Row</param>
+        </include>
+    </include>
+
+    <!-- Combined Landscape -->
+    <include name="View_521_Landscape_Combined_Row">
+        <include content="View_Combined_Row">
+            <param name="id">1</param>
+            <param name="include">List_Landscape_Row</param>
+        </include>
+    </include>
+
+    <!-- Combined Poster -->
+    <include name="View_522_Poster_Combined_Row">
+        <include content="View_Combined_Row">
+            <param name="id">2</param>
+            <param name="include">List_Poster_Row</param>
+        </include>
+    </include>
+
+    <!-- Combined Circle -->
+    <include name="View_523_Circle_Combined_Row">
+        <include content="View_Combined_Row">
+            <param name="id">3</param>
+            <param name="include">List_Circle_Row</param>
+        </include>
+    </include>
+
+    <!-- Combined Board -->
+    <include name="View_524_Board_Combined_Row">
+        <include content="View_Combined_Row">
+            <param name="id">4</param>
+            <param name="include">List_Board_Row</param>
+        </include>
+    </include>
+
+    <!-- Combined List -->
+    <include name="View_525_List_Combined">
+        <include content="View_ComboList_Include">
+            <param name="id">5</param>
+            <param name="viewtype_label">$LOCALIZE[31580]</param>
+            <param name="visible">$EXP[Exp_View_525]</param>
+        </include>
+    </include>
+
+    <include name="View_Combined_Row_Horz_Selector">
+        <control type="group">
+            <top>520</top>
+            <height>40</height>
+            <control type="group">
+                <left>view_pad</left>
+                <include>Info_Viewline_Divider</include>
+            </control>
+            <control type="group">
+                <include content="View_Combined_List_Horz" condition="$EXP[Exp_View_520_Include]">
+                    <param name="id">0</param>
+                    <param name="viewtype_label">$LOCALIZE[31002]</param>
+                    <param name="visible">$EXP[Exp_View_520]</param>
+                </include>
+                <include content="View_Combined_List_Horz" condition="$EXP[Exp_View_521_Include]">
+                    <param name="id">1</param>
+                    <param name="viewtype_label">$LOCALIZE[31003]</param>
+                    <param name="visible">$EXP[Exp_View_521]</param>
+                </include>
+                <include content="View_Combined_List_Horz" condition="$EXP[Exp_View_522_Include]">
+                    <param name="id">2</param>
+                    <param name="viewtype_label">$LOCALIZE[31004]</param>
+                    <param name="visible">$EXP[Exp_View_522]</param>
+                </include>
+                <include content="View_Combined_List_Horz" condition="$EXP[Exp_View_523_Include]">
+                    <param name="id">3</param>
+                    <param name="viewtype_label">$LOCALIZE[31005]</param>
+                    <param name="visible">$EXP[Exp_View_523]</param>
+                </include>
+                <include content="View_Combined_List_Horz" condition="$EXP[Exp_View_524_Include]">
+                    <param name="id">4</param>
+                    <param name="viewtype_label">$LOCALIZE[31006]</param>
+                    <param name="visible">$EXP[Exp_View_524]</param>
+                </include>
+            </control>
+        </control>
+    </include>
+</includes>

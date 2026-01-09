@@ -1,0 +1,660 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <variable name="Image_Blur_Fallback">
+        <value condition="!String.IsEmpty(Skin.String(Background.Image))">$INFO[Skin.String(Background.Image)]</value>
+        <value>special://skin/extras/backgrounds/blur/purple_blur.jpg</value>
+    </variable>
+
+    <variable name="Image_OSD_SkipPrev">
+        <value condition="!String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,01)">special://skin/extras/icons/backward-fast.png</value>
+        <value condition="Integer.IsGreater(VideoPlayer.PlaylistPosition,1) + Integer.IsGreater(VideoPlayer.PlaylistLength,1)">special://skin/extras/icons/backward-step.png</value>
+        <value condition="Integer.IsLess(Player.Time(mins),10)">special://skin/extras/icons/backward-step.png</value>
+        <value>special://skin/extras/icons/backward-jump.png</value>
+    </variable>
+
+    <variable name="Image_OSD_SkipNext">
+        <value condition="!String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,Player.ChapterCount)">special://skin/extras/icons/forward-fast.png</value>
+        <value condition="Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)">special://skin/extras/icons/forward-step.png</value>
+        <value condition="Integer.IsLess(Player.TimeRemaining(mins),10)">special://skin/extras/icons/forward-step.png</value>
+        <value>special://skin/extras/icons/forward-jump.png</value>
+    </variable>
+
+    <variable name="Image_1114_Poster">
+        <value condition="Control.HasFocus(7001) + String.IsEqual(Container(7001).ListITem.Property(tmdb_type),person)">$INFO[Container(7001).ListItem.Art(thumb)]</value>
+        <value condition="Control.HasFocus(7001)">$INFO[Container(7001).ListItem.Art(poster)]</value>
+        <value>$INFO[Window.Property(poster)]</value>
+    </variable>
+
+    <variable name="Image_1114_Landscape">
+        <value condition="Control.HasFocus(7001)">$INFO[Container(7001).ListItem.Art(landscape)]</value>
+        <value>$INFO[Window.Property(landscape)]</value>
+    </variable>
+
+    <variable name="Image_1114_Icon">
+        <value condition="Control.HasFocus(7001)">$INFO[Container(7001).ListItem.Icon]</value>
+        <value>$INFO[Window.Property(icon)]</value>
+    </variable>
+
+    <variable name="Image_1114_Clearlogo">
+        <value condition="Control.HasFocus(7001)">$INFO[Container(7001).ListItem.Art(clearlogo)]</value>
+        <value>$INFO[Window.Property(clearlogo)]</value>
+    </variable>
+
+    <variable name="Image_VolumeIcon">
+        <value condition="Player.Muted">special://skin/extras/icons/volume-xmark.png</value>
+        <value>special://skin/extras/icons/volume-low.png</value>
+    </variable>
+
+    <variable name="Image_Reviews">
+        <value condition="!String.IsEmpty(ListItem.Property(special_icon))">$INFO[ListItem.Property(special_icon)]</value>
+        <value>special://skin/extras/icons/comment.png</value>
+    </variable>
+
+    <variable name="Image_VideoOSD_PersonCredits">
+        <value condition="Skin.String(VideoOSD.PersonCredits.WidgetInfo,crew)">special://skin/extras/icons/clapperboard.png</value>
+        <value condition="Skin.String(VideoOSD.PersonCredits.WidgetInfo,both)">special://skin/extras/icons/video.png</value>
+        <value condition="Skin.String(VideoOSD.PersonCredits.WidgetInfo,films)">special://skin/extras/icons/film.png</value>
+        <value condition="Skin.String(VideoOSD.PersonCredits.WidgetInfo,shows)">special://skin/extras/icons/tv.png</value>
+    </variable>
+
+    <variable name="Image_Settings_Level">
+        <value condition="String.IsEqual(Control.GetLabel(20),$LOCALIZE[10039])">special://skin/extras/icons/settings-expert.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(20),$LOCALIZE[10038])">special://skin/extras/icons/settings-advanced.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(20),$LOCALIZE[10037])">special://skin/extras/icons/settings-standard.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(20),$LOCALIZE[10036])">special://skin/extras/icons/settings-basic.png</value>
+    </variable>
+
+    <variable name="Image_SkinSettings_Level">
+        <value condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),3)">special://skin/extras/icons/settings-expert.png</value>
+        <value condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),2)">special://skin/extras/icons/settings-advanced.png</value>
+        <value condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),1)">special://skin/extras/icons/settings-standard.png</value>
+        <value>special://skin/extras/icons/settings-basic.png</value>
+    </variable>
+
+
+    <variable name="Image_Widget_Style">
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Landscape)">special://skin/extras/icons/view-landscape.png</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Square)">special://skin/extras/icons/view-square.png</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Board)">special://skin/extras/icons/window-maximize-regular.png</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Circle)">special://skin/extras/icons/view-circle.png</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Poster)">special://skin/extras/icons/view-poster.png</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Banner)">special://skin/extras/icons/window-maximize-regular.png</value>
+        <value condition="String.IsEqual(ListItem.Property(widget_style),Card)">special://skin/extras/icons/window-maximize-regular.png</value>
+        <value>special://skin/extras/icons/window-maximize-regular.png</value>
+    </variable>
+
+    <variable name="Image_VideoVersion_Poster">
+        <value condition="Control.IsVisible(50) + !String.IsEmpty(Container(50).ListItem.Art(poster))">$INFO[Container(50).ListItem.Art(poster)]</value>
+        <value condition="Control.IsVisible(6) + !String.IsEmpty(Container(6).ListItem.Art(poster))">$INFO[Container(6).ListItem.Art(poster)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+        <value condition="!String.IsEmpty(Window.Property(poster))">$INFO[Window.Property(poster)]</value>
+    </variable>
+
+    <variable name="Image_PlotBoxPoster">
+        <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(season.poster))">$INFO[ListItem.Art(season.poster)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+    </variable>
+
+    <variable name="Image_PlotBoxPoster_C450">
+        <value condition="!String.IsEmpty(Container(450).ListItem.Art(poster))">$INFO[Container(450).ListItem.Art(poster)]</value>
+        <value condition="!String.IsEmpty(Container(450).ListItem.Art(season.poster))">$INFO[Container(450).ListItem.Art(season.poster)]</value>
+        <value condition="!String.IsEmpty(Container(450).ListItem.Art(tvshow.poster))">$INFO[Container(450).ListItem.Art(tvshow.poster)]</value>
+    </variable>
+
+    <variable name="Image_ButtonMenu_NowPlayingThumb">
+        <value condition="!String.IsEmpty(Pvr.EPGEventIcon)">$INFO[Pvr.EPGEventIcon]</value>
+        <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
+        <value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
+        <value condition="!String.IsEmpty(Player.Art(thumb))">$INFO[Player.Art(thumb)]</value>
+        <value>$VAR[Image_ProfileThumb]</value>
+    </variable>
+
+    <variable name="Image_OSD_Landscape">
+        <value condition="!String.IsEmpty(Pvr.EPGEventIcon)">$INFO[Pvr.EPGEventIcon]</value>
+        <value condition="!String.IsEmpty(Player.Art(thumb)) + PVR.IsPlayingRecording">$INFO[Player.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.Art(landscape))">$INFO[VideoPlayer.Art(landscape)]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.Art(tvshow.landscape))">$INFO[VideoPlayer.Art(tvshow.landscape)]</value>
+        <value condition="!String.IsEmpty(Player.Art(landscape))">$INFO[Player.Art(landscape)]</value>
+        <value condition="!String.IsEmpty(Player.Art(tvshow.landscape))">$INFO[Player.Art(tvshow.landscape)]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.Art(fanart))">$INFO[VideoPlayer.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.Art(tvshow.fanart))">$INFO[VideoPlayer.Art(tvshow.fanart)]</value>
+        <value condition="!String.IsEmpty(Player.Art(fanart))">$INFO[Player.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(Player.Art(tvshow.fanart))">$INFO[Player.Art(tvshow.fanart)]</value>
+        <value>$INFO[Player.Art(icon)]</value>
+    </variable>
+
+    <variable name="Image_OSD_Clearart">
+        <value condition="!String.IsEmpty(VideoPlayer.Art(clearart))">$INFO[VideoPlayer.Art(clearart)]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.Art(tvshow.clearart))">$INFO[VideoPlayer.Art(tvshow.clearart)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.ClearArt))">$INFO[Window(Home).Property(TMDbHelper.Player.ClearArt)]</value>
+    </variable>
+
+    <variable name="Image_LandscapeOnly_Container">
+        <value condition="[String.IsEqual(Container.ListItem.DBType,episode) | String.IsEqual(Container.ListItem.DBType,video) | String.IsEqual(Container.ListItem.DBType,musicvideo)] + !String.IsEmpty(Container.ListItem.Art(thumb)) + !String.IsEqual(Container.ListItem.Icon,Container.ListItem.Art(fanart)) + !String.IsEqual(Container.ListItem.Icon,OverlaySpoiler.png) + !String.IsEqual(Container.ListItem.Art(thumb),Container.ListItem.Art(poster)) + !String.IsEqual(Container.ListItem.Art(thumb),Container.ListItem.Art(tvshow.poster))">$INFO[Container.ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(Container.ListItem.Art(landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[Container.ListItem.Art(landscape)]</value>
+        <value condition="!String.IsEmpty(Container.ListItem.Art(season.landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[Container.ListItem.Art(season.landscape)]</value>
+        <value condition="!String.IsEmpty(Container.ListItem.Art(tvshow.landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[Container.ListItem.Art(tvshow.landscape)]</value>
+        <value condition="!String.IsEmpty(Container.ListItem.Art(fanart))">$INFO[Container.ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(Container.ListItem.Art(tvshow.fanart))">$INFO[Container.ListItem.Art(tvshow.fanart)]</value>
+    </variable>
+
+    <variable name="Image_AddonStatus">
+        <value condition="!String.IsEmpty(ListItem.AddonBroken)">indicator/broken.png</value>
+        <value condition="ListItem.Property(addon.orphaned)">indicator/orphaned.png</value>
+        <value condition="ListItem.Property(addon.downloading)">indicator/download.png</value>
+        <value condition="ListItem.Property(addon.isinstalled) + !ListItem.Property(addon.isenabled)">indicator/disabled.png</value>
+        <value condition="ListItem.Property(addon.hasupdate)">indicator/update.png</value>
+        <value condition="ListItem.Property(addon.isinstalled)">indicator/library.png</value>
+    </variable>
+
+    <variable name="Image_AddonsOrigin">
+        <value condition="ListItem.Property(Addon.IsFromOfficialRepo) + ListItem.IsAutoUpdateable">indicator/official.png</value>
+        <value condition="ListItem.Property(Addon.IsFromOfficialRepo)">indicator/official-pinned.png</value>
+        <value condition="String.IsEqual(ListItem.AddonOrigin,$LOCALIZE[25014]) + ListItem.IsAutoUpdateable">indicator/manual.png</value>
+        <value condition="String.IsEqual(ListItem.AddonOrigin,$LOCALIZE[25014])">indicator/manual-pinned.png</value>
+        <value condition="ListItem.IsAutoUpdateable">indicator/install.png</value>
+        <value>indicator/install-pinned.png</value>
+    </variable>
+
+    <variable name="Image_ProfileIcon">
+        <value condition="!String.IsEqual(ListItem.Icon,DefaultUser.png) + !String.IsEmpty(ListItem.Icon)">$INFO[ListItem.Icon]</value>
+        <value>$INFO[ListItem.CurrentItem,special://skin/extras/profiles/Mountains (,).jpg]</value>
+    </variable>
+
+    <variable name="Image_ProfileThumb">
+        <value condition="!String.IsEmpty(Skin.String(SkinVariables.SkinUser.Icon))">$INFO[Skin.String(SkinVariables.SkinUser.Icon)]</value>
+        <value condition="!String.IsEmpty(Skin.String(SkinVariables.SkinUser.Name)) + !String.IsEmpty(Window(Home).Property(System.ProfileNumber))">$INFO[Window(Home).Property(System.ProfileNumber),special://skin/extras/profiles/Mountains (,).jpg]</value>
+        <value condition="!String.IsEqual(System.ProfileThumb,DefaultUser.png) + !String.IsEmpty(System.ProfileThumb)">$INFO[System.ProfileThumb]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(System.ProfileNumber))">$INFO[Window(Home).Property(System.ProfileNumber),special://skin/extras/profiles/Mountains (,).jpg]</value>
+        <value>special://skin/extras/profiles/Mountains (1).jpg</value>
+    </variable>
+
+    <variable name="Image_Player_Status">
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.Status),Returning Series)">flags/monochrome/status/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.Status),Post Production)">flags/monochrome/status/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.Status),Canceled)">flags/monochrome/status/calendar-xmark.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.Status),Ended)">flags/monochrome/status/calendar-check.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.Status),Released)">flags/monochrome/status/calendar-check.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.Status),In Production)">flags/monochrome/status/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.Status),Planned)">flags/monochrome/status/calendar-day.png</value>
+        <value>flags/monochrome/status/calendar-day.png</value>
+    </variable>
+
+    <variable name="Image_ListItem_Status">
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Returning Series) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Returning Series)">flags/monochrome/status/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Post Production) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Post Production)">flags/monochrome/status/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Canceled) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Canceled)">flags/monochrome/status/calendar-xmark.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Ended) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Ended)">flags/monochrome/status/calendar-check.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Released) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Released)">flags/monochrome/status/calendar-check.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),In Production) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),In Production)">flags/monochrome/status/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Planned) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Planned)">flags/monochrome/status/calendar-day.png</value>
+        <value>flags/monochrome/status/calendar-day.png</value>
+    </variable>
+
+    <variable name="Image_DialogInfo_Status">
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Returning Series) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Returning Series)">special://skin/extras/icons/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Post Production) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Post Production)">special://skin/extras/icons/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Canceled) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Canceled)">special://skin/extras/icons/calendar-xmark.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Ended) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Ended)">special://skin/extras/icons/calendar-check.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Released) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Released)">special://skin/extras/icons/calendar-check.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),In Production) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),In Production)">special://skin/extras/icons/calendar-day.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Planned) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Planned)">special://skin/extras/icons/calendar-day.png</value>
+        <value>special://skin/extras/icons/calendar.png</value>
+    </variable>
+
+    <variable name="Image_SimpleDialogBackground">
+        <value condition="Skin.String(Background.DialogImage,Blue)">special://skin/extras/backgrounds/dialogs/blue_blur.png</value>
+        <value condition="Skin.String(Background.DialogImage,Purple)">special://skin/extras/backgrounds/dialogs/purple_blur.png</value>
+        <value condition="Skin.String(Background.DialogImage,Pink)">special://skin/extras/backgrounds/dialogs/pink_blur.png</value>
+        <value condition="Skin.String(Background.DialogImage,Green)">special://skin/extras/backgrounds/dialogs/green_blur.png</value>
+        <value condition="Skin.String(Background.DialogImage,Slate)">special://skin/extras/backgrounds/dialogs/slate_blur.png</value>
+        <value condition="Skin.String(Background.DialogImage,Blush)">special://skin/extras/backgrounds/dialogs/blush_blur.png</value>
+        <value condition="Skin.String(Background.DialogImage,Coal)">special://skin/extras/backgrounds/dialogs/coal_blur.png</value>
+        <value condition="Skin.String(Background.DialogImage,Chalk)">special://skin/extras/backgrounds/dialogs/chalk_blur.png</value>
+        <value>special://skin/extras/backgrounds/dialogs/classic_blur.png</value>
+    </variable>
+
+    <variable name="Image_SimpleBackground">
+        <value condition="!String.IsEmpty(Skin.String(Background.Image))">$INFO[Skin.String(Background.Image)]</value>
+        <value>special://skin/extras/backgrounds/blur/purle_blur.jpg</value>
+    </variable>
+
+    <variable name="Image_OSD_Poster">
+        <value condition="!String.IsEmpty(VideoPlayer.Art(poster))">$INFO[VideoPlayer.Art(poster)]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.Art(tvshow.poster))">$INFO[VideoPlayer.Art(tvshow.poster)]</value>
+        <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
+        <value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
+    </variable>
+
+    <variable name="Image_OSD_7000_Poster">
+        <value condition="!String.IsEmpty(Container(7000).ListItem.Art(poster))">$INFO[Container(7000).ListItem.Art(poster)]</value>
+        <value condition="!String.IsEmpty(Container(7000).ListItem.Art(tvshow.poster))">$INFO[Container(7000).ListItem.Art(tvshow.poster)]</value>
+        <value condition="!String.IsEmpty(Container(7000).ListItem.Icon)">$INFO[Container(7000).ListItem.Icon]</value>
+    </variable>
+
+    <variable name="Image_Current_Background">
+        <value condition="$EXP[Exp_BackgroundArtwork_IsSimple]">$INFO[Window(Home).Property(TMDbHelper.SimpleBackground.BlurImage)]</value>
+        <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.Current.BlurImage)]</value>
+    </variable>
+
+    <variable name="Image_Background">
+        <value condition="$EXP[Exp_BackgroundArtwork_IsSimple]">$INFO[Window(Home).Property(TMDbHelper.SimpleBackground.BlurImage)]</value>
+        <value condition="!String.IsEmpty(Window.Property(TMDbHelper.ListItem.BlurImage))">$INFO[Window.Property(TMDbHelper.ListItem.BlurImage)]</value>
+        <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.Current.BlurImage)]</value>
+    </variable>
+
+    <variable name="Image_Foreground">
+        <value condition="!Skin.HasSetting(TMDbHelper.EnableBlur) + !String.IsEmpty(Container.ListItem.Art(fanart))">$INFO[Container.ListItem.Art(fanart)]</value>
+        <value condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_fanart)]</value>
+        <value condition="$EXP[Exp_BackgroundArtwork_IsSimple]">$INFO[Window(Home).Property(TMDbHelper.SimpleBackground.BlurImage.Original)]</value>
+        <value condition="!String.IsEmpty(Window.Property(TMDbHelper.ListItem.BlurImage.Original))">$INFO[Window.Property(TMDbHelper.ListItem.BlurImage.Original)]</value>
+        <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.Current.BlurImage.Original)]</value>
+    </variable>
+
+    <variable name="Image_OtherIcon">
+        <value condition="$EXP[Exp_IsStudio]">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</value>
+        <value condition="$EXP[Exp_IsCountry]">$INFO[ListItem.Label,resource://resource.images.moviecountryicons.maps/,.png]</value>
+    </variable>
+
+    <variable name="Image_FanartFallback">
+        <value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,musicvideo)] + !String.IsEmpty(ListItem.Art(thumb)) + !String.IsEqual(ListItem.Icon,ListItem.Art(fanart)) + !String.IsEqual(ListItem.Icon,OverlaySpoiler.png) + !String.IsEqual(ListItem.Art(thumb),ListItem.Art(poster)) + !String.IsEqual(ListItem.Art(thumb),ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(thumb)]</value>
+
+        <value condition="!String.IsEmpty(Control.GetLabel(99998))">$INFO[Control.GetLabel(99998)]</value>
+
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart)]</value>
+
+        <value condition="!String.IsEmpty(Skin.String(Startup.ImageFolder))">$INFO[Skin.String(Startup.ImageFolder)]</value>
+        <value>special://skin/extras/backgrounds/launch/</value>
+    </variable>
+
+
+    <variable name="Image_ResourceIcon">
+        <value condition="$EXP[Exp_IsGenre]">$VAR[Image_GenreIcon]</value>
+        <value>$VAR[Image_OtherIcon]</value>
+    </variable>
+
+    <variable name="Image_StartUp">
+        <value condition="Weather.IsFetched + !String.IsEmpty(Weather.FanartCode) + System.HasAddon(resource.images.weatherfanart.multi) + [String.IsEmpty(Skin.String(Startup.ImageFolder)) | Skin.String(Startup.ImageFolder,special://skin/extras/backgrounds/launch/)]">resource://resource.images.weatherfanart.multi/$INFO[Weather.FanartCode]/</value>
+        <value condition="!String.IsEmpty(Skin.String(Startup.ImageFolder))">$INFO[Skin.String(Startup.ImageFolder)]</value>
+        <value>special://skin/extras/backgrounds/launch/</value>
+    </variable>
+
+    <variable name="Image_PVRPoster">
+        <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Poster))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Poster)]</value>
+    </variable>
+
+    <variable name="Image_GenreIcon">
+        <value condition="System.HasAddon(resource.images.moviegenreicons.transparent)">$INFO[ListItem.Label,genres/,.png]</value>
+    </variable>
+
+    <variable name="Image_DiscArt">
+        <value condition="!String.IsEmpty(ListItem.Art(discart))">$INFO[ListItem.Art(discart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(album.discart))">$INFO[ListItem.Art(album.discart)]</value>
+    </variable>
+
+    <variable name="Image_FullscreenWidget_PlayButton">
+        <value condition="Container(301).ListItem.IsFolder">special://skin/extras/icons/folder.png</value>
+        <value>special://skin/extras/icons/play2.png</value>
+    </variable>
+
+    <variable name="Image_DialogInfo_PlayButton">
+        <value condition="$EXP[Exp_IsFolder]">special://skin/extras/icons/folder.png</value>
+        <value>special://skin/extras/icons/play2.png</value>
+    </variable>
+
+    <variable name="Image_FullscreenWidget_InfoButton">
+        <value condition="Skin.HasSetting(Spotlight.UseMenuButton) + $EXP[Exp_Hubs_Spotlight_HasItems]">special://skin/extras/icons/indent.png</value>
+        <value>special://skin/extras/icons/info2.png</value>
+    </variable>
+
+    <variable name="Image_ArtistFanartVis">
+        <value condition="System.HasAddon(script.artistslideshow) + !Skin.HasSetting(ArtistSlideShow.Disabled) + !String.IsEmpty(Window(Visualisation).Property(ArtistSlideshow.Image))">$INFO[Window(Visualisation).Property(ArtistSlideshow.Image)]</value>
+        <value condition="[!System.HasAddon(script.artistslideshow) | Skin.HasSetting(ArtistSlideShow.Disabled) | String.IsEmpty(Window(Visualisation).Property(ArtistSlideshow.Image))] + !String.IsEmpty(Player.Art(fanart))">$INFO[Player.Art(fanart)]</value>
+        <value>common/_none.png</value>
+    </variable>
+
+    <variable name="Image_OSD_Repeat">
+        <value condition="Playlist.IsRepeatOne">special://skin/extras/icons/repeat-one.png</value>
+        <value condition="Playlist.IsRepeat">special://skin/extras/icons/repeat.png</value>
+        <value>special://skin/extras/icons/repeat-off.png</value>
+    </variable>
+
+    <variable name="Image_OSD_Shuffle">
+        <value condition="Playlist.IsRandom">special://skin/extras/icons/shuffle.png</value>
+        <value>special://skin/extras/icons/shuffle-off.png</value>
+    </variable>
+
+    <variable name="Image_UpNext">
+        <value condition="!String.IsEmpty(Window.Property(landscape))">$INFO[Window.Property(landscape)]</value>
+        <value condition="!String.IsEmpty(Window.Property(fanart))">$INFO[Window.Property(fanart)]</value>
+        <value condition="!String.IsEmpty(Window.Property(thumb))">$INFO[Window.Property(thumb)]</value>
+    </variable>
+
+    <variable name="Image_IsCurrentStream">
+        <value condition="!String.IsEmpty(ListItem.Property(iscurrent))">buttons/check-on.png</value>
+        <value>buttons/check-off.png</value>
+    </variable>
+
+    <variable name="Image_Trailer_PlayPause">
+        <value condition="Player.Paused">special://skin/extras/icons/play2.png</value>
+        <value>special://skin/extras/icons/pause.png</value>
+    </variable>
+
+    <variable name="Image_OSD_PausePlay">
+        <value condition="Player.Playing">special://skin/extras/icons/pause.png</value>
+        <value>special://skin/extras/icons/play2.png</value>
+    </variable>
+
+    <variable name="Image_OSD_PlayPause">
+        <value condition="[Window.IsActive(musicosd) | Window.IsActive(videoosd)] + !$EXP[Exp_OSD_HideControls]">$VAR[Image_OSD_PausePlay]</value>
+        <value condition="Player.Paused">special://skin/extras/icons/pause.png</value>
+        <value condition="Player.Forwarding">special://skin/extras/icons/forward.png</value>
+        <value condition="Player.Rewinding">special://skin/extras/icons/backward.png</value>
+        <value>special://skin/extras/icons/play2.png</value>
+    </variable>
+
+    <variable name="Image_NowPlaying_PlayPause">
+        <value condition="Player.Paused">special://skin/extras/icons/pause.png</value>
+        <value condition="Player.Forwarding">special://skin/extras/icons/forward.png</value>
+        <value condition="Player.Rewinding">special://skin/extras/icons/backward.png</value>
+        <value>special://skin/extras/icons/play2.png</value>
+    </variable>
+
+    <variable name="Image_CombinedStudio">
+        <value condition="!String.IsEmpty(Container.ListItem.Studio)">$INFO[Container.ListItem.Studio,resource://resource.images.studios.coloured/,.png]</value>
+        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio,resource://resource.images.studios.coloured/,.png]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Network.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Network.1.Name),resource://resource.images.studios.coloured/,.png]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name),resource://resource.images.studios.coloured/,.png]</value>
+    </variable>
+
+    <variable name="Image_OSD_CombinedStudio">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Network.1.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Network.1.Name),resource://resource.images.studios.coloured/,.png]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Studio.1.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Studio.1.Name),resource://resource.images.studios.coloured/,.png]</value>
+    </variable>
+
+    <variable name="Image_FromWriter">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.1.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.1.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.1.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.1.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.2.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.2.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.2.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.2.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.3.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.3.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.3.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.3.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.4.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.4.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.4.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.4.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.5.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.5.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.5.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.5.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.6.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.6.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.6.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.6.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.7.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.7.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.7.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.7.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.8.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.8.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.8.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.8.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.9.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.9.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.9.job),Screenplay)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.9.Thumb)]</value>
+    </variable>
+
+    <variable name="Image_FromDirector">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.1.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.1.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.1.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.1.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.2.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.2.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.2.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.2.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.3.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.3.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.3.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.3.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.4.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.4.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.4.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.4.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.5.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.5.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.5.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.5.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.6.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.6.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.6.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.6.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.7.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.7.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.7.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.7.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.8.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.8.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.8.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.8.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.9.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.9.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.9.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.9.Thumb)]</value>
+    </variable>
+
+    <variable name="Image_DirectorIcon">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.1.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.1.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.1.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.1.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.2.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.2.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.2.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.2.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.3.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.3.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.3.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.3.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.4.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.4.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.4.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.4.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.5.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.5.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Director.5.job),Director)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.5.Thumb)]</value>
+    </variable>
+    <variable name="Image_OSD_DirectorIcon">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.1.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.1.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.Player.Director.1.job),Director)">$INFO[Window(Home).Property(TMDbHelper.Player.Director.1.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.2.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.2.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.Player.Director.2.job),Director)">$INFO[Window(Home).Property(TMDbHelper.Player.Director.2.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.3.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.3.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.Player.Director.3.job),Director)">$INFO[Window(Home).Property(TMDbHelper.Player.Director.3.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.4.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.4.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.Player.Director.4.job),Director)">$INFO[Window(Home).Property(TMDbHelper.Player.Director.4.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.5.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Director.5.job)) + String.IsEqual(Window(Home).Property(TMDbHelper.Player.Director.5.job),Director)">$INFO[Window(Home).Property(TMDbHelper.Player.Director.5.Thumb)]</value>
+    </variable>
+
+    <variable name="Image_WriterIcon">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.1.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.1.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.1.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.1.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.1.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.2.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.2.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.2.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.2.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.2.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.3.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.3.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.3.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.3.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.3.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.4.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.4.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.4.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.4.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.4.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.5.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.5.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.5.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Writer.5.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.5.Thumb)]</value>
+    </variable>
+    <variable name="Image_OSD_WriterIcon">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.1.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.1.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.1.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.1.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.Player.Writer.1.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.2.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.2.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.2.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.2.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.Player.Writer.2.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.3.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.3.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.3.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.3.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.Player.Writer.3.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.4.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.4.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.4.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.4.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.Player.Writer.4.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.5.Name)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Writer.5.job)) + [String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.5.job),Writer) | String.IsEqual(Window(Home).Property(TMDbHelper.Player.Writer.5.job),Screenplay)]">$INFO[Window(Home).Property(TMDbHelper.Player.Writer.5.Thumb)]</value>
+    </variable>
+
+    <variable name="Image_CreatorIcon">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Creator.1.Thumb))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.1.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Creator.2.Thumb))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.2.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Creator.3.Thumb))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Creator.3.Thumb)]</value>
+    </variable>
+    <variable name="Image_OSD_CreatorIcon">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Creator.1.Thumb))">$INFO[Window(Home).Property(TMDbHelper.Player.Creator.1.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Creator.2.Thumb))">$INFO[Window(Home).Property(TMDbHelper.Player.Creator.2.Thumb)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Creator.3.Thumb))">$INFO[Window(Home).Property(TMDbHelper.Player.Creator.3.Thumb)]</value>
+    </variable>
+
+    <variable name="Image_OSD_StudioIcon">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Studio.1.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Studio.1.Name),resource://resource.images.studios.coloured/,.png]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Network.1.Name))">$INFO[Window(Home).Property(TMDbHelper.Player.Network.1.Name),resource://resource.images.studios.coloured/,.png]</value>
+    </variable>
+
+    <variable name="Image_OSD_Clearlogo">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.CropImage))">$INFO[Window(Home).Property(TMDbHelper.Player.CropImage)]</value>
+        <value condition="!String.IsEmpty(Player.Art(clearlogo))">$INFO[Player.Art(clearlogo)]</value>
+        <value condition="!String.IsEmpty(Player.Art(tvshow.clearlogo))">$INFO[Player.Art(tvshow.clearlogo)]</value>
+        <value condition="!String.IsEmpty(Player.Art(artist.clearlogo))">$INFO[Player.Art(artist.clearlogo)]</value>
+    </variable>
+
+    <variable name="Image_PVREpgLandscapeArt">
+        <value condition="!String.IsEmpty(ListItem.EPGEventIcon) + !String.IsEqual(ListItem.Icon,ListItem.EPGEventIcon)">$INFO[ListItem.EPGEventIcon]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.landscape))">$INFO[ListItem.Art(tvshow.landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(artist.landscape))">$INFO[ListItem.Art(artist.landscape)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Landscape))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Landscape)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.TVShow.Landscape))">$INFO[Window(Home).Property(TMDbHelper.ListItem.TVShow.Landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Fanart))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Fanart)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.TVShow.Fanart))">$INFO[Window(Home).Property(TMDbHelper.ListItem.TVShow.Fanart)]</value>
+    </variable>
+
+    <variable name="Image_Card_Fanart">
+        <value condition="!String.IsEmpty(ListItem.Art(fanart1)) + !String.IsEqual(ListItem.Art(fanart1),ListItem.Art(fanart))">$INFO[ListItem.Art(fanart1)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart1)) + !String.IsEqual(ListItem.Art(tvshow.fanart1),ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart1)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(artist.fanart1)) + !String.IsEqual(ListItem.Art(artist.fanart1),ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart1)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(fanart2)) + !String.IsEqual(ListItem.Art(fanart2),ListItem.Art(fanart))">$INFO[ListItem.Art(fanart2)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart2)) + !String.IsEqual(ListItem.Art(tvshow.fanart2),ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart2)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(artist.fanart2)) + !String.IsEqual(ListItem.Art(artist.fanart2),ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart2)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(artist.fanart))">$INFO[ListItem.Art(artist.fanart)]</value>
+        <value>$VAR[Image_Landscape]</value>
+    </variable>
+
+    <variable name="Image_PVRGrpMgr_HideGroup">
+        <value condition="String.IsEqual(Control.GetLabel(25),_ (*))">special://skin/extras/icons/watched-hide.png</value>
+        <value>special://skin/extras/icons/watched-show.png</value>
+    </variable>
+
+    <variable name="Image_AddonInfo_Enable">
+        <value condition="String.IsEqual(Control.GetLabel(7),$LOCALIZE[24021])">special://skin/extras/icons/enabled.png</value>
+        <value>special://skin/extras/icons/disabled.png</value>
+    </variable>
+
+    <variable name="Image_AddonInfo_Install">
+        <value condition="String.IsEqual(Control.GetLabel(6),$LOCALIZE[24037])">special://skin/extras/icons/uninstall.png</value>
+        <value>special://skin/extras/icons/download.png</value>
+    </variable>
+
+    <variable name="Image_Watched">
+        <value condition="System.Setting(hidewatched)">special://skin/extras/icons/watched-hide.png</value>
+        <value>special://skin/extras/icons/watched-show.png</value>
+    </variable>
+
+    <variable name="Image_Filtered">
+        <value condition="Container.Filtered | !String.IsEmpty(Control.GetLabel(19).index(1))">special://skin/extras/icons/filter-circle-check.png</value>
+        <value>special://skin/extras/icons/filter-circle-xmark.png</value>
+    </variable>
+
+    <variable name="Image_SortDirection">
+        <value condition="!String.IsEmpty(Window.Property(MediaFilter.SortHow)) + Window.IsMedia + String.IsEqual(Container.FolderName,Skin Variables) + !String.IsEmpty(Window.Property(MediaFilter.BaseDir.Name))">special://skin/extras/icons/arrow-down-z-a.png</value>
+        <value condition="String.IsEmpty(Window.Property(MediaFilter.SortHow)) + Window.IsMedia + String.IsEqual(Container.FolderName,Skin Variables) + !String.IsEmpty(Window.Property(MediaFilter.BaseDir.Name))">special://skin/extras/icons/arrow-up-z-a.png</value>
+        <value condition="Container.SortDirection(Descending)">special://skin/extras/icons/arrow-down-z-a.png</value>
+        <value>special://skin/extras/icons/arrow-up-z-a.png</value>
+    </variable>
+
+    <variable name="Image_Player_RottenTomatoes">
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.RottenTomatoes_Image),certified)">certified.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.RottenTomatoes_Image),fresh)">rtfresh.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.Player.RottenTomatoes_Image),rotten)">rtrotten.png</value>
+        <value condition="Integer.IsGreater(Window(Home).Property(TMDbHelper.Player.RottenTomatoes_Rating),59)">rtfresh.png</value>
+        <value>rtrotten.png</value>
+    </variable>
+
+    <variable name="Image_ListItem_RottenTomatoes">
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_Image),certified)">certified.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_Image),fresh)">rtfresh.png</value>
+        <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_Image),rotten)">rtrotten.png</value>
+        <value condition="Integer.IsGreater(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_Rating),59)">rtfresh.png</value>
+        <value>rtrotten.png</value>
+    </variable>
+
+    <variable name="Image_Player_RottenTomatoes_UserMeter">
+        <value condition="Integer.IsGreater(Window(Home).Property(TMDbHelper.Player.RottenTomatoes_UserMeter),59) | String.IsEmpty(Window(Home).Property(TMDbHelper.Player.RottenTomatoes_UserMeter))">popcorn.png</value>
+        <value>popcorn_spilt.png</value>
+    </variable>
+
+    <variable name="Image_ListItem_RottenTomatoes_UserMeter">
+        <value condition="Integer.IsGreater(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter),59) | String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter))">popcorn.png</value>
+        <value>popcorn_spilt.png</value>
+    </variable>
+
+    <variable name="Image_Overlay_List">
+        <value condition="ListItem.IsPlaying">indicator/play.png</value>
+        <value condition="$EXP[Exp_HasWatchedProgress]" />
+        <value condition="!Skin.HasSetting(Indicator.DisableWatched) + [String.IsEqual(ListItem.Overlay,OverlayWatched.png) | [!Integer.IsEqual(ListItem.PlayCount,0) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode)]]]">indicator/checkmark-fo.png</value>
+        <value condition="!String.IsEmpty(ListItem.Property(Item.Info)) + !String.IsEmpty(ListItem.DBID) + !Skin.HasSetting(Indicator.DisableLibrary)">indicator/library.png</value>
+        <value condition="ListItem.IsCollection + !Skin.HasSetting(Indicator.DisableCollection)">indicator/movieset.png</value>
+        <value condition="ListItem.IsFolder">indicator/folder.png</value>
+        <value condition="!String.IsEmpty(ListItem.DBID)">indicator/library.png</value>
+        <value>indicator/dot.png</value>
+    </variable>
+
+    <variable name="Image_PVRGuide_Indicator">
+        <value condition="ListItem.IsRecording">indicator/record.png</value>
+        <value condition="ListItem.HasTimer">indicator/timer.png</value>
+        <value condition="ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)">indicator/library.png</value>
+    </variable>
+
+    <variable name="Image_OSD_UpNext_Playlist_Landscape">
+        <value condition="!Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)">$VAR[Image_Landscape_LIA_C450_0]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,1)">$VAR[Image_Landscape_LIA_C450_1]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,2)">$VAR[Image_Landscape_LIA_C450_2]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,3)">$VAR[Image_Landscape_LIA_C450_3]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,4)">$VAR[Image_Landscape_LIA_C450_4]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,5)">$VAR[Image_Landscape_LIA_C450_5]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,6)">$VAR[Image_Landscape_LIA_C450_6]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,7)">$VAR[Image_Landscape_LIA_C450_7]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,8)">$VAR[Image_Landscape_LIA_C450_8]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,9)">$VAR[Image_Landscape_LIA_C450_9]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,10)">$VAR[Image_Landscape_LIA_C450_10]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,11)">$VAR[Image_Landscape_LIA_C450_11]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,12)">$VAR[Image_Landscape_LIA_C450_12]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,13)">$VAR[Image_Landscape_LIA_C450_13]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,14)">$VAR[Image_Landscape_LIA_C450_14]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,15)">$VAR[Image_Landscape_LIA_C450_15]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,16)">$VAR[Image_Landscape_LIA_C450_16]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,17)">$VAR[Image_Landscape_LIA_C450_17]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,18)">$VAR[Image_Landscape_LIA_C450_18]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,19)">$VAR[Image_Landscape_LIA_C450_19]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,20)">$VAR[Image_Landscape_LIA_C450_20]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,21)">$VAR[Image_Landscape_LIA_C450_21]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,22)">$VAR[Image_Landscape_LIA_C450_22]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,23)">$VAR[Image_Landscape_LIA_C450_23]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,24)">$VAR[Image_Landscape_LIA_C450_24]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,25)">$VAR[Image_Landscape_LIA_C450_25]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,26)">$VAR[Image_Landscape_LIA_C450_26]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,27)">$VAR[Image_Landscape_LIA_C450_27]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,28)">$VAR[Image_Landscape_LIA_C450_28]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,29)">$VAR[Image_Landscape_LIA_C450_29]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,30)">$VAR[Image_Landscape_LIA_C450_30]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,31)">$VAR[Image_Landscape_LIA_C450_31]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,32)">$VAR[Image_Landscape_LIA_C450_32]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,33)">$VAR[Image_Landscape_LIA_C450_33]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,34)">$VAR[Image_Landscape_LIA_C450_34]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,35)">$VAR[Image_Landscape_LIA_C450_35]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,36)">$VAR[Image_Landscape_LIA_C450_36]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,37)">$VAR[Image_Landscape_LIA_C450_37]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,38)">$VAR[Image_Landscape_LIA_C450_38]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,39)">$VAR[Image_Landscape_LIA_C450_39]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,40)">$VAR[Image_Landscape_LIA_C450_40]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,41)">$VAR[Image_Landscape_LIA_C450_41]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,42)">$VAR[Image_Landscape_LIA_C450_42]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,43)">$VAR[Image_Landscape_LIA_C450_43]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,44)">$VAR[Image_Landscape_LIA_C450_44]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,45)">$VAR[Image_Landscape_LIA_C450_45]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,46)">$VAR[Image_Landscape_LIA_C450_46]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,47)">$VAR[Image_Landscape_LIA_C450_47]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,48)">$VAR[Image_Landscape_LIA_C450_48]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,49)">$VAR[Image_Landscape_LIA_C450_49]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,50)">$VAR[Image_Landscape_LIA_C450_50]</value>
+    </variable>
+
+
+    <variable name="Image_DialogConfirm_10">
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[222])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[15067])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[106])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[107])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[186])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[31032])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[13007])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[571])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[409])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[1024])">special://skin/extras/icons/circle-plus.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[15019])">special://skin/extras/icons/circle-plus.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(10),$LOCALIZE[31032])">special://skin/extras/icons/circle-plus.png</value>
+        <value>special://skin/extras/icons/circle-dot.png</value>
+    </variable>
+    <variable name="Image_DialogConfirm_11">
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[222])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[15067])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[106])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[107])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[186])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[31032])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[13007])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[571])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[409])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[1024])">special://skin/extras/icons/circle-plus.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[15019])">special://skin/extras/icons/circle-plus.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(11),$LOCALIZE[31032])">special://skin/extras/icons/circle-plus.png</value>
+        <value>special://skin/extras/icons/circle-dot.png</value>
+    </variable>
+    <variable name="Image_DialogConfirm_12">
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[222])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[15067])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[106])">special://skin/extras/icons/circle-xmark.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[107])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[186])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[31032])">special://skin/extras/icons/circle-check.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[13007])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[571])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[409])">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[1024])">special://skin/extras/icons/circle-plus.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[15019])">special://skin/extras/icons/circle-plus.png</value>
+        <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[31032])">special://skin/extras/icons/circle-plus.png</value>
+        <value>special://skin/extras/icons/circle-dot.png</value>
+    </variable>
+</includes>

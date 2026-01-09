@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="Search">
+        <include>Background</include>
+        <include>Search_Bar</include>
+    </include>
+
+    <include name="Search_Bar">
+
+        <control type="button" id="302">
+            <texturefocus />
+            <texturenofocus />
+            <!-- <onfocus>$VAR[Hub_Action_Reset]</onfocus> -->
+            <onfocus>AlarmClock(resetproperty_1,SetProperty(HomeSwitcher.IsVisible,True,Home),00:00,silent)</onfocus>
+            <onfocus>AlarmClock(resetproperty_2,ClearProperty(TMDBHelper.WidgetContainer),00:00,silent)</onfocus>
+            <onfocus>AlarmClock(refocus,SetFocus(303),00:00,silent)</onfocus>
+        </control>
+
+        <control type="button" id="303">
+            <texturefocus />
+            <texturenofocus />
+            <onfocus>SetFocus(305)</onfocus>
+            <onfocus>SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
+            <onfocus>ClearProperty(TMDBHelper.WidgetContainer)</onfocus>
+        </control>
+
+        <control type="button" id="304">
+            <texturefocus />
+            <texturenofocus />
+            <onfocus>SetFocus(300)</onfocus>
+            <onfocus>SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
+            <onfocus>ClearProperty(TMDBHelper.WidgetContainer)</onfocus>
+        </control>
+
+        <control type="image">
+            <include>Home_Fade_Animation</include>
+            <visible>!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
+            <texture colordiffuse="main_bg_70">background/combined_topmenu.png</texture>
+            <bottom>400</bottom>
+        </control>
+
+
+
+        <control type="group">
+            <include>Animation_Group_Bumper</include>
+
+            <control type="group">
+                <visible>!$EXP[Exp_InfoDialogs]</visible>
+                <control type="group">
+                    <include>Dimension_Bottombar</include>
+                    <include content="View_Furniture_Footer_ViewLine">
+                        <param name="visible">true</param>
+                        <param name="label">$INFO[Container(601).ListItem.Property(widget_numitems),, $LOCALIZE[31022]]</param>
+                        <param name="label_fallback">$VAR[Label_ProfileName]</param>
+                    </include>
+                </control>
+            </control>
+
+            <!-- Content -->
+            <control type="group" id="400">
+
+
+                <control type="group" id="500">
+                    <include>Animation_View_WindowChange</include>
+
+                    <include content="Hub_Combined_Widget">
+                        <param name="id">501</param>
+                        <param name="content">$INFO[window(home).property(tmdbhelper.userdiscover.folderpath)]$INFO[Control.GetLabel(300).index(1),&amp;with_text_query=,]</param>
+                        <param name="include">List_Poster_Row</param>
+                        <param name="target">videos</param>
+                        <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),discover)</param>
+                        <param name="allowhiddenfocus">true</param>
+                    </include>
+                    <include>skinvariables-searchwidgets-combined</include>
+
+                    <include content="Hub_Widget_Switcher">
+                        <param name="include_content">Search_Switcher_Items</param>
+                        <param name="top">520</param>
+                        <param name="wall">false</param>
+                        <param name="onup">302</param>
+                    </include>
+                </control>
+
+
+                <control type="group">
+                    <include content="Animation_ConditionalFade">
+                        <param name="condition">String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | Integer.IsEqual(Container(601).NumItems,0) | Control.HasFocus(300) | Control.HasFocus(305)</param>
+                    </include>
+                    <include content="Hub_Combined_Info">
+                        <param name="id">501</param>
+                    </include>
+                    <include>skinvariables-searchwidgets-info</include>
+                </control>
+
+                <control type="grouplist">
+                    <include content="Animation_ConditionalFade">
+                        <param name="condition">![String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | Integer.IsEqual(Container(601).NumItems,0) | Control.HasFocus(300) | Control.HasFocus(305)]</param>
+                    </include>
+                    <include>Home_Slide_Animation</include>
+                    <orientation>vertical</orientation>
+                    <itemgap>0</itemgap>
+                    <left>view_pad</left>
+                    <top>320</top>
+                    <control type="label">
+                        <width>info_title_w</width>
+                        <height>80</height>
+                        <wrapmultiline>true</wrapmultiline>
+                        <label>$VAR[Label_Search_Title_NoResults]</label>
+                        <font>font_title_midi</font>
+                        <aligny>center</aligny>
+                        <textcolor>main_fg_100</textcolor>
+                    </control>
+                    <control type="textbox">
+                        <font>font_main_plot</font>
+                        <label>$VAR[Label_Search_NoResults]</label>
+                        <align>left</align>
+                        <height>auto</height>
+                        <textcolor>main_fg_30</textcolor>
+                    </control>
+                </control>
+            </control>
+
+            <control type="group">
+                <visible allowhiddenfocus="true">[Control.HasFocus(300) | Control.HasFocus(302) | Control.HasFocus(303) | Control.HasFocus(304) | Control.HasFocus(305)]</visible>
+
+                <include>Home_Animation</include>
+                <control type="group">
+                    <include>Home_Group_Definition</include>
+                    <control type="group">
+                        <include>Search_Bar_Defs</include>
+                        <include>Search_Bar_Edit</include>
+                        <include>Search_Bar_Icon</include>
+                        <include>Search_Bar_Keys</include>
+                    </control>
+                    <include>Home_Switcher_Right_Buttons</include>
+                </control>
+
+                <include content="Furniture_Header">
+                    <param name="label">$LOCALIZE[137]</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <include name="Search_Switcher_Items">
+        <item>
+            <label>$LOCALIZE[31066]</label>
+            <property name="guid">discover</property>
+            <property name="widget_id">$NUMBER[501]</property>
+            <property name="show_artwork">true</property>
+            <property name="widget_numitems">$INFO[Container(501).NumItems]</property>
+            <onclick>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onclick>
+            <visible>!Integer.IsEqual(Container(501).NumItems,0)</visible>
+        </item>
+        <include>skinvariables-searchwidgets-selector</include>
+    </include>
+
+    <include name="Search_Bar_Defs">
+        <left>-20</left>
+        <width>800</width>
+        <height>80</height>
+        <centertop>50%</centertop>
+    </include>
+
+    <include name="Search_Term_DoubleEncoder">
+        <include content="Object_Hidden_List">
+            <param name="id">310</param>
+            <content>plugin://script.skinvariables/?info=get_encoded_string&amp;unencoded_paths=true&amp;&amp;$INFO[Control.GetLabel(300).index(1)]</content>
+        </include>
+        <include content="Object_Hidden_List">
+            <param name="id">320</param>
+            <content>plugin://script.skinvariables/?info=get_encoded_string&amp;unencoded_paths=true&amp;&amp;$INFO[Container(310).ListItem.Label]</content>
+        </include>
+    </include>
+
+    <include name="Search_Autocompletion_Dropdown">
+        <control type="group">
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <left>40</left>
+                <top>200</top>
+                <width>800</width>
+                <height>840</height>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsGreater(Container(304).NumItems,8)</visible>
+                </control>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsEqual(Container(304).NumItems,8)</visible>
+                    <bottom>80</bottom>
+                </control>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsEqual(Container(304).NumItems,7)</visible>
+                    <bottom>160</bottom>
+                </control>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsEqual(Container(304).NumItems,6)</visible>
+                    <bottom>240</bottom>
+                </control>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsEqual(Container(304).NumItems,5)</visible>
+                    <bottom>320</bottom>
+                </control>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsEqual(Container(304).NumItems,4)</visible>
+                    <bottom>400</bottom>
+                </control>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsEqual(Container(304).NumItems,3)</visible>
+                    <bottom>480</bottom>
+                </control>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsEqual(Container(304).NumItems,2)</visible>
+                    <bottom>560</bottom>
+                </control>
+                <control type="group">
+                    <include>Part_Background_Panel</include>
+                    <visible>Integer.IsEqual(Container(304).NumItems,1)</visible>
+                    <bottom>640</bottom>
+                </control>
+                <include content="List_DialogSelect">
+                    <param name="id">304</param>
+                    <param name="itemlayout_include">Layout_DialogBasic</param>
+                    <top>60</top>
+                    <bottom>60</bottom>
+                    <left>60</left>
+                    <right>60</right>
+                    <orientation>vertical</orientation>
+                    <content>plugin://plugin.program.autocompletion?info=autocomplete&amp;&amp;id=$INFO[Control.GetLabel(300).index(1)]</content>
+                    <onclick>SetFocus(300)</onclick>
+                    <onclick>RunScript(script.skinvariables,set_editcontrol=300,window_id=1105,setfocus=300,text=$INFO[Container(304).ListItem.Label])</onclick>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <include name="Search_Bar_Edit">
+        <include>Search_Term_DoubleEncoder</include>
+
+        <!-- Backing Panel -->
+        <control type="image">
+            <texture colordiffuse="main_fg_12" border="40">common/menu-outlined.png</texture>
+            <visible>!Control.HasFocus(300)</visible>
+        </control>
+        <control type="image">
+            <texture colordiffuse="$VAR[ColorHighlight]" border="40">common/menu.png</texture>
+            <visible>Control.HasFocus(300)</visible>
+        </control>
+
+        <!-- Edit Control -->
+        <control type="edit" id="300">
+            <left>40</left>
+            <font>font_main</font>
+            <textcolor>main_fg_30</textcolor>
+            <focusedcolor>$VAR[ColorSelected]</focusedcolor>
+            <align>left</align>
+            <onright>ReplaceWindow(Home)</onright>
+            <onup>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onup>
+            <ondown>305</ondown>
+            <texturefocus />
+            <texturenofocus />
+        </control>
+    </include>
+
+    <include name="Search_Bar_Icon">
+        <control type="group">
+            <left>0</left>
+            <width>80</width>
+            <control type="image">
+                <include>Home_Grouplist_Icon_Definition</include>
+                <texture background="true" colordiffuse="main_fg_30">special://skin/extras/icons/search.png</texture>
+                <visible>!Control.HasFocus(300)</visible>
+            </control>
+            <control type="image">
+                <include>Home_Grouplist_Icon_Definition</include>
+                <texture background="true" colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/search.png</texture>
+                <visible>Control.HasFocus(300)</visible>
+            </control>
+        </control>
+    </include>
+
+    <include name="Search_Bar_Keys">
+        <control type="panel" id="305">
+            <orientation>vertical</orientation>
+            <onup>300</onup>
+            <ondown>601</ondown>
+            <width>700</width>
+            <centerleft>50%</centerleft>
+            <height>100</height>
+            <top>95</top>
+
+            <onfocus>ClearProperty(Background.ShowOverlay,Home)</onfocus>
+
+            <itemlayout width="50" height="50">
+                <control type="label">
+                    <font>font_main</font>
+                    <label>$INFO[ListItem.Label]</label>
+                    <textcolor>dialog_fg_30</textcolor>
+                    <align>center</align>
+                    <height>35</height>
+                </control>
+            </itemlayout>
+
+            <focusedlayout width="50" height="50">
+
+                <control type="group">
+                    <control type="label">
+                        <font>font_main_bold</font>
+                        <label>$INFO[ListItem.Label]</label>
+                        <textcolor>dialog_fg_100</textcolor>
+                        <align>center</align>
+                        <height>35</height>
+                    </control>
+                    <control type="image">
+                        <include>Texture_Highlight_Scrollbar_H</include>
+                        <height>scrollbar_w</height>
+                        <bottom>5</bottom>
+                        <width>75%</width>
+                        <centerleft>50%</centerleft>
+                    </control>
+                </control>
+            </focusedlayout>
+
+            <content>
+                <item>
+                    <label>A</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_a</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>B</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_b</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>C</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_c</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>D</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_d</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>E</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_e</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>F</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_f</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>G</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_g</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>H</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_h</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>I</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_i</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>J</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_j</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>K</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_k</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>L</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_l</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>M</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_m</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>N</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_n</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>O</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_o</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>P</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_p</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>Q</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_q</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>R</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_r</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>S</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_s</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>T</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_t</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>U</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_u</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>V</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_v</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>W</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_w</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>X</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_x</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>Y</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_y</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>Z</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_z</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>_</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click__</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+                <item>
+                    <label>&lt;</label>
+                    <onclick>SetFocus(300)</onclick>
+                    <include>Object_SearchLetter_Click_&lt;</include>
+                    <onclick>SetFocus(305)</onclick>
+                </item>
+            </content>
+        </control>
+    </include>
+
+
+</includes>

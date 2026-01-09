@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog" id="1123">
+
+    <defaultcontrol always="true">9000</defaultcontrol>
+    <onload condition="String.IsEmpty(Window(Home).Property(PlayTrailer))">Close</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(PlayTrailerTitle))">SetProperty(PlayTrailerTitle,$LOCALIZE[20410],Home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(PlayTrailer)) + Player.HasVideo + !String.IsEqual(Window(Home).Property(PlayTrailer),Player.FileNameAndPath)">Action(Stop)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(PlayTrailer)) + [!Player.HasVideo | !String.IsEqual(Window(Home).Property(PlayTrailer),Player.FileNameAndPath)]">PlayMedia($ESCINFO[Window(Home).Property(PlayTrailer)],False,1)</onload>
+    <onunload>ClearProperty(TrailerFullscreen,1123)</onunload>
+    <onunload condition="Player.HasVideo">Action(Stop)</onunload>
+    <onload>SetProperty(TMDbHelper.ContextMenu,True)</onload>
+    <controls>
+        <include>DialogTrailer</include>
+    </controls>
+</window>

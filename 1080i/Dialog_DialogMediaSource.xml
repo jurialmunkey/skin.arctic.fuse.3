@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="DialogMediaSource">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Dimension_DialogHugeMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogHugeMenu</param>
+            </include>
+            <control type="group">
+
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+                    <!-- Left -->
+                    <control type="group">
+                        <include>Size_LeftGroup_Main</include>
+                        <control type="group">
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="id">2</param>
+                            </include>
+                            <include>Part_Line</include>
+                            <include>Part_CloseButton</include>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+
+                            <control type="group">
+                                <include>Size_Grouplist_Pad</include>
+                                <include content="Object_Keyboard_Button" description="Text Entry">
+                                    <param name="id">12</param>
+                                    <param name="control">edit</param>
+                                    <width>100%</width>
+                                    <ondown>11</ondown>
+                                    <textoffsetx>40</textoffsetx>
+                                    <height>80</height>
+                                </include>
+                            </control>
+
+                            <control type="group">
+                                <top>160</top>
+                                <control type="group">
+                                    <top>-constant_dialog_top</top>
+                                    <include>Size_Group_Head</include>
+                                    <include content="Part_ItemPage">
+                                        <param name="id">10</param>
+                                    </include>
+                                </control>
+                                <control type="group">
+                                    <include>Size_Grouplist_Pad</include>
+                                    <include content="List_Dialog">
+                                        <param name="id">10</param>
+                                        <param name="altfocus">Control.HasFocus(10) | Control.HasFocus(11) | Control.HasFocus(13) | Control.HasFocus(14) | Control.HasFocus(9001)</param>
+                                        <param name="itemlayout_include">Layout_DialogBasic</param>
+                                        <param name="misc">160</param>
+                                        <pagecontrol>61</pagecontrol>
+                                        <onright>11</onright>
+                                        <onup condition="Integer.IsEqual(Container(10).CurrentItem,1)">12</onup>
+                                        <onup condition="!Integer.IsEqual(Container(10).CurrentItem,1)">Control.Move(10,-1)</onup>
+                                        <ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">Control.Move(10,1)</ondown>
+                                    </include>
+                                    <control type="grouplist" id="9001">
+                                        <orientation>horizontal</orientation>
+                                        <height>80</height>
+                                        <align>right</align>
+                                        <right>20</right>
+                                        <itemgap>0</itemgap>
+                                        <onleft>10</onleft>
+                                        <onright>61</onright>
+                                        <onup condition="Integer.IsEqual(Container(10).CurrentItem,1)">12</onup>
+                                        <onup condition="!Integer.IsEqual(Container(10).CurrentItem,1)">Control.Move(10,-1)</onup>
+                                        <ondown condition="!String.IsEmpty(Container(10).ListItemNoWrap(1).Label)">Control.Move(10,1)</ondown>
+                                        <animation effect="slide" start="0" end="0,80" condition="Container(10).Position(1)">Conditional</animation>
+                                        <animation effect="slide" start="0" end="0,160" condition="Container(10).Position(2)">Conditional</animation>
+                                        <animation effect="slide" start="0" end="0,240" condition="Container(10).Position(3)">Conditional</animation>
+                                        <animation effect="slide" start="0" end="0,320" condition="Container(10).Position(4)">Conditional</animation>
+                                        <animation effect="slide" start="0" end="0,400" condition="Container(10).Position(5)">Conditional</animation>
+                                        <animation effect="slide" start="0" end="0,480" condition="Container(10).Position(6)">Conditional</animation>
+                                        <animation effect="slide" start="0" end="0,560" condition="Container(10).Position(7)">Conditional</animation>
+                                        <animation effect="slide" start="0" end="0,640" condition="Container(10).Position(8)">Conditional</animation>
+                                        <visible allowhiddenfocus="true">Control.HasFocus(10) | Control.HasFocus(11) | Control.HasFocus(13) | Control.HasFocus(14) | Control.HasFocus(9001)</visible>
+                                        <include content="Settings_EditButton">
+                                            <param name="id">10</param>
+                                            <param name="groupid">9010</param>
+                                            <param name="icon">special://skin/extras/icons/pencil.png</param>
+                                            <param name="hasfocus">[ControlGroup(9001).HasFocus() | Control.HasFocus(10)]</param>
+                                            <param name="hasbutton">false</param>
+                                        </include>
+                                        <include content="Settings_EditButton">
+                                            <param name="id">11</param>
+                                            <param name="groupid">9011</param>
+                                            <param name="icon">special://skin/extras/icons/search.png</param>
+                                            <param name="hasfocus">[ControlGroup(9001).HasFocus() | Control.HasFocus(10)]</param>
+                                            <visible>Control.IsEnabled(11)</visible>
+                                        </include>
+                                        <include content="Settings_EditButton">
+                                            <param name="id">13</param>
+                                            <param name="groupid">9013</param>
+                                            <param name="icon">special://skin/extras/icons/circle-plus.png</param>
+                                            <param name="hasfocus">[ControlGroup(9001).HasFocus() | Control.HasFocus(10)]</param>
+                                            <visible>Control.IsEnabled(13)</visible>
+                                        </include>
+                                        <include content="Settings_EditButton">
+                                            <param name="id">14</param>
+                                            <param name="groupid">9014</param>
+                                            <param name="icon">special://skin/extras/icons/trash-can.png</param>
+                                            <param name="hasfocus">[ControlGroup(9001).HasFocus() | Control.HasFocus(10)]</param>
+                                            <visible>Control.IsEnabled(14)</visible>
+                                        </include>
+
+                                    </control>
+                                </control>
+                                <include content="Part_Scrollbar">
+                                    <param name="id">61</param>
+                                    <onleft>14</onleft>
+                                    <onright>9000</onright>
+                                </include>
+                            </control>
+                        </control>
+
+                    </control>
+                    <!-- Right -->
+                    <include content="Part_Button_Grouplist">
+                        <param name="onleft">61</param>
+                        <param name="items">DialogMediaSource_Items</param>
+                    </include>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <!-- Items -->
+    <include name="DialogMediaSource_Items">
+
+        <include content="Button_Dialog">
+            <param name="id">18</param>
+            <param name="groupid">9118</param>
+            <param name="icon">special://skin/extras/icons/circle-check.png</param>
+            <label>$LOCALIZE[31032]</label>
+            <visible>Control.IsEnabled(18)</visible>
+        </include>
+
+        <include content="Button_Dialog">
+            <param name="id">19</param>
+            <param name="groupid">9119</param>
+            <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+            <label>$LOCALIZE[222]</label>
+            <visible>Control.IsEnabled(19)</visible>
+        </include>
+    </include>
+
+
+</includes>

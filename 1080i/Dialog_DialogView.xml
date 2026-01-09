@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="DialogViewInfo">
+        <param name="header">$LOCALIZE[33063]</param>
+        <param name="onback">PreviousMenu</param>
+        <param name="include_listitems">DialogViewInfo_Items</param>
+        <param name="itemlayout_include">Layout_MenuList</param>
+        <param name="include_definition">Object_Null</param>
+        <definition>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Dialog_Backing_Resizeable">
+                    <param name="id">7000</param>
+                </include>
+            </control>
+            <control type="group">
+                <include>Dimension_DialogMiniMenu</include>
+                <include>Animation_BounceIn_Dialog</include>
+
+                <animation effect="slide" start="0" end="0,40" condition="Integer.IsEqual(Container(7000).NumItems,7)">Conditional</animation>
+                <animation effect="slide" start="0" end="0,80" condition="Integer.IsEqual(Container(7000).NumItems,6)">Conditional</animation>
+                <animation effect="slide" start="0" end="0,120" condition="Integer.IsEqual(Container(7000).NumItems,5)">Conditional</animation>
+                <animation effect="slide" start="0" end="0,160" condition="Integer.IsEqual(Container(7000).NumItems,4)">Conditional</animation>
+                <animation effect="slide" start="0" end="0,200" condition="Integer.IsEqual(Container(7000).NumItems,3)">Conditional</animation>
+                <animation effect="slide" start="0" end="0,240" condition="Integer.IsEqual(Container(7000).NumItems,2)">Conditional</animation>
+                <animation effect="slide" start="0" end="0,280" condition="Integer.IsEqual(Container(7000).NumItems,1)">Conditional</animation>
+
+                <control type="group">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="label">$PARAM[header]</param>
+                        </include>
+                        <include content="Part_ItemPage">
+                            <param name="id">7000</param>
+                        </include>
+                        <include>Part_CloseButton</include>
+                    </control>
+
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <control type="group">
+                            <include>Size_Grouplist_Pad</include>
+                            <include content="List_DialogSelect">
+                                <param name="id">7000</param>
+                                <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
+                                <param name="textcolor">dialog_fg</param>
+                                <param name="include_detailed_labels">true</param>
+                                <include>$PARAM[include_definition]</include>
+                                <orientation>vertical</orientation>
+                                <onleft>$PARAM[onback]</onleft>
+                                <onright>$PARAM[onback]</onright>
+                                <onback>$PARAM[onback]</onback>
+                                <content>
+                                    <include>$PARAM[include_listitems]</include>
+                                </content>
+                            </include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogViewCrew">
+        <param name="header">$VAR[DialogViewCrew_Header]</param>
+        <param name="include_listitems">DialogViewCrew_Items</param>
+        <definition>
+            <include content="DialogViewInfo">
+                <param name="header">$PARAM[header]</param>
+                <param name="include_listitems">$PARAM[include_listitems]</param>
+                <param name="include_definition">DialogViewCrew_Definition</param>
+                <param name="itemlayout_include">Layout_MediaList</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="DialogViewCrew_Definition">
+        <right>-20</right>
+        <onclick>Close</onclick>
+        <include content="DialogInfo_Details_Action">
+            <param name="header">$INFO[Container(7000).ListItem.Label]</param>
+            <param name="poster">$INFO[Container(7000).ListItem.Icon]</param>
+            <param name="path">plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=$INFO[Container(7000).ListItem.Property(tmdb_type)]&amp;tmdb_id=$INFO[Container(7000).ListItem.Property(tmdb_id)]</param>
+            <param name="tmdb_id">$INFO[Container(7000).ListItem.Property(tmdb_id)]</param>
+            <param name="tmdb_type">$INFO[Container(7000).ListItem.Property(tmdb_type)]</param>
+        </include>
+    </include>
+
+    <variable name="DialogViewCrew_Header">
+        <value condition="String.IsEqual(Window.Property(type),Writer)">$LOCALIZE[20417]</value>
+        <value condition="String.IsEqual(Window.Property(type),Director)">$LOCALIZE[20339]</value>
+    </variable>
+
+    <include name="DialogViewCrew_Items">
+        <!-- Writer / Composer -->
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(type),Writer)">
+            <param name="type">Writer</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(type),Writer)">
+            <param name="type">Sound_Department</param>
+            <param name="include_filter">true</param>
+            <param name="filter_value">Composer</param>
+            <param name="filter_key">Role</param>
+        </include>
+
+        <!-- Director / Producer -->
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(type),Director)">
+            <param name="type">Director</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(type),Director)">
+            <param name="type">Photography</param>
+            <param name="include_filter">true</param>
+            <param name="filter_value">Director</param>
+            <param name="filter_key">Role</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(type),Director)">
+            <param name="type">Producer</param>
+            <param name="include_filter">true</param>
+            <param name="filter_value">Producer</param>
+            <param name="filter_key">Role</param>
+        </include>
+    </include>
+
+    <include name="DialogViewInfo_Items">
+
+        <item>
+            <label>$LOCALIZE[207]</label>
+            <icon>special://skin/extras/icons/quote.png</icon>
+            <onclick>Close</onclick>
+            <onclick>ActivateWindow(1113)</onclick>
+        </item>
+
+        <item>
+            <label>$LOCALIZE[39123]</label>
+            <icon>special://skin/extras/icons/image.png</icon>
+            <onclick>SendClick(10)</onclick>
+        </item>
+
+
+        <item>
+            <label>$LOCALIZE[31061]$INFO[ListItem.UserRating, (,)]</label>
+            <icon>special://skin/extras/icons/star.png</icon>
+            <onclick>SendClick(7)</onclick>
+        </item>
+
+        <!-- <item>
+            <label>Trakt</label>
+            <icon>special://skin/extras/icons/trakt.png</icon>
+            <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEqual(ListItem.DBType,musicvideo)</visible>
+            <onclick>$VAR[Action_Sync]</onclick>
+        </item> -->
+
+        <item>
+            <label>$LOCALIZE[40000]</label>
+            <icon>special://skin/extras/icons/bookmarks.png</icon>
+            <onclick>SendClick(14)</onclick>
+            <!-- <visible>ListItem.HasVideoVersions</visible> -->
+        </item>
+
+        <item>
+            <label>$LOCALIZE[40211]</label>
+            <icon>special://skin/extras/icons/director.png</icon>
+            <onclick>SendClick(15)</onclick>
+            <!-- <visible>ListItem.HasVideoExtras</visible> -->
+        </item>
+
+        <item>
+            <label>$LOCALIZE[184]</label>
+            <icon>special://skin/extras/icons/arrows-rotate.png</icon>
+            <onclick>SendClick(6)</onclick>
+        </item>
+    </include>
+
+    <include name="DialogView_Menu">
+        <param name="has_tray">False</param>
+        <definition>
+            <control type="group">
+                <top>300</top>
+                <bottom>40</bottom>
+                <control type="group">
+                    <height>80</height>
+                    <left>20</left>
+                    <include condition="Player.HasMedia" content="ButtonMenu_MediaTray">
+                        <param name="onback">$PARAM[onback]</param>
+                        <onup>7020</onup>
+                        <ondown>SetFocus(8000,0,absolute)</ondown>
+                    </include>
+                </control>
+                <control type="group">
+                    <include content="Object_Top" condition="Player.HasMedia">
+                        <param name="top">80</param>
+                    </include>
+                    <control type="image">
+                        <left>20</left>
+                        <right>20</right>
+                        <height>1</height>
+                        <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                    </control>
+                    <include content="List_DialogSelect">
+                        <param name="id">8000</param>
+                        <param name="itemlayout_include">Layout_MenuList</param>
+                        <top>20</top>
+                        <include content="Object_Bottom" condition="![$PARAM[has_tray]]">
+                            <param name="bottom">0</param>
+                        </include>
+                        <bottom>80</bottom>
+                        <orientation>vertical</orientation>
+                        <onback>$PARAM[onback]</onback>
+                        <onleft>$PARAM[onback]</onleft>
+                        <onup condition="Player.HasMedia">SetFocus(6099,2,absolute)</onup>
+                        <onup condition="!Player.HasMedia">7020</onup>
+                        <ondown condition="![$PARAM[has_tray]]">SetFocus(8000,0,absolute)</ondown>
+                        <ondown condition="![$PARAM[has_tray]]">7010</ondown>
+                        <ondown condition="$PARAM[has_tray]">SetFocus(6000,2)</ondown>
+                        <content>
+                            <include>$PARAM[include_listitems]</include>
+                        </content>
+                    </include>
+                    <include condition="![$PARAM[has_tray]]">DialogView_NoBottomTray</include>
+                    <include condition="$PARAM[has_tray]">DialogView_BottomTray</include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogView_BottomTray">
+        <control type="image">
+            <bottom>60</bottom>
+            <left>20</left>
+            <right>20</right>
+            <height>1</height>
+            <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+        </control>
+        <include>ButtonMenu_BottomTray</include>
+    </include>
+
+    <include name="DialogView_NoBottomTray">
+        <control type="image">
+            <bottom>-20</bottom>
+            <left>20</left>
+            <right>20</right>
+            <height>1</height>
+            <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+        </control>
+    </include>
+
+    <include name="DialogView">
+        <param name="header">$LOCALIZE[33063][COLOR=dialog_fg_30] — [/COLOR]$INFO[System.Time]</param>
+        <param name="onback">PreviousMenu</param>
+        <param name="include_listitems">DialogView_Items</param>
+        <param name="has_tray">!Skin.HasSetting(Options.DisableBottomTray)</param>
+        <param name="visible">[!Window.IsActive(DialogSelect.xml)]</param>
+        <definition>
+
+            <include content="Object_Hidden_Button" condition="!Player.HasMedia">
+                <param name="id">6099</param>
+                <onfocus>SetFocus(8000,0,absolute)</onfocus>
+                <onup>SetFocus(8000,0,absolute)</onup>
+                <ondown>SetFocus(8000,0,absolute)</ondown>
+            </include>
+
+            <include content="Object_Hidden_Button" condition="![$PARAM[has_tray]]">
+                <param name="id">6000</param>
+                <onfocus>SetFocus(8000,9999,absolute)</onfocus>
+                <onup>SetFocus(8000,9999,absolute)</onup>
+                <ondown>SetFocus(8000,9999,absolute)</ondown>
+            </include>
+
+            <include content="Part_Dim_Overlay">
+                <param name="visible">$PARAM[visible]</param>
+            </include>
+
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <include>Animation_Right_Delay</include>
+                <include>Dimension_DialogSideMenu</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogSideMenu</param>
+                    <param name="topline">true</param>
+                </include>
+
+                <control type="group">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="label">$PARAM[header]</param>
+                        </include>
+                        <include>Part_Line</include>
+                        <include>Part_CloseButton</include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <control type="group" id="7000">
+                            <include>Size_Grouplist_Pad</include>
+                            <include content="ButtonMenu_Layout" condition="Skin.String(OptionsTiles.Layout,$NUMBER[2])">
+                                <param name="layout_include">ButtonMenu_Layout_Two</param>
+                                <param name="onback">$PARAM[onback]</param>
+                            </include>
+                            <include content="ButtonMenu_Layout" condition="Skin.String(OptionsTiles.Layout,$NUMBER[3])">
+                                <param name="layout_include">ButtonMenu_Layout_Three</param>
+                                <param name="onback">$PARAM[onback]</param>
+                            </include>
+                            <include content="ButtonMenu_Layout" condition="Skin.String(OptionsTiles.Layout,$NUMBER[4])">
+                                <param name="layout_include">ButtonMenu_Layout_Four</param>
+                                <param name="onback">$PARAM[onback]</param>
+                            </include>
+
+                            <include content="DialogView_Menu">
+                                <param name="has_tray">$PARAM[has_tray]</param>
+                                <param name="include_listitems">$PARAM[include_listitems]</param>
+                                <param name="onback">$PARAM[onback]</param>
+                            </include>
+
+                        </control>
+                    </control>
+                </control>
+
+            </control>
+        </definition>
+
+    </include>
+
+    <variable name="DialogView_ModeSwitch">
+        <value condition="String.IsEqual(Container.Content,genres) + Window.IsVisible(MyMusicNav.xml)">genres-music</value>
+        <value condition="String.IsEqual(Container.Content,years) + Window.IsVisible(MyMusicNav.xml)">years-music</value>
+        <value condition="Container.Content(tvshows) + String.IsEqual(Container.Property(param.info),episode_groups)">episode-groups-tvshows</value>
+        <value condition="Container.Content(seasons) + String.IsEqual(Container.Property(param.info),episode_group_seasons)">episode-groups-seasons</value>
+        <value condition="Container.Content() + String.IsEqual(Container.Property(param.info),watch_providers)">none-providers</value>
+        <value condition="Container.Content() + String.IsEqual(Container.Property(param.info),dir_calendar_library)">none-calendar</value>
+        <value condition="Container.Content() + String.IsEqual(Container.Property(param.info),dir_calendar_trakt)">none-calendar</value>
+        <value condition="!String.IsEmpty(Container.Content)">$INFO[Container.Content]</value>
+        <value condition="Window.IsVisible(MyGames.xml)">none-games</value>
+        <value condition="Window.IsVisible(MyPVRRecordings.xml)">none-recordings</value>
+        <value condition="Window.IsVisible(MyPVRTimers.xml)">none-timers</value>
+        <value condition="Window.IsVisible(MyPVRSearch.xml)">none-search</value>
+        <value>none</value>
+    </variable>
+
+    <include name="DialogView_Items">
+
+        <!-- View -->
+        <item>
+            <label>$INFO[Container.Viewmode]</label>
+            <icon>special://skin/extras/icons/table.png</icon>
+            <onclick condition="[Window.IsVisible(tvchannels) | Window.IsVisible(tvguide)]">SendClick($VAR[Action_CurrentMediaWindow],2)</onclick>
+            <onclick condition="![Window.IsVisible(tvchannels) | Window.IsVisible(tvguide)]">Close</onclick>
+            <onclick condition="![Window.IsVisible(tvchannels) | Window.IsVisible(tvguide)]">Runscript(script.skinvariables,action=buildviews,contentid=$VAR[DialogView_ModeSwitch],pluginname=$INFO[Container.PluginName])</onclick>
+        </item>
+
+
+        <!-- Sort -->
+        <item>
+            <label>$VAR[Label_SortMethod]</label>
+            <icon>special://skin/extras/icons/list-ul.png</icon>
+            <onclick>SendClick($VAR[Action_CurrentMediaWindow],3)</onclick>
+        </item>
+
+        <!-- Order -->
+        <item>
+            <label>$INFO[Container.SortOrder]</label>
+            <!-- <label>$LOCALIZE[31015]</label> -->
+            <icon>$VAR[Image_SortDirection]</icon>
+            <onclick>SendClick($VAR[Action_CurrentMediaWindow],4)</onclick>
+        </item>
+
+        <!-- Group -->
+        <item>
+            <label>$LOCALIZE[19141]</label>
+            <icon>special://skin/extras/icons/object-group.png</icon>
+            <onclick>SendClick($VAR[Action_CurrentMediaWindow],28)</onclick>
+            <visible>[Window.IsVisible(tvchannels) | Window.IsVisible(tvguide)]</visible>
+        </item>
+
+        <!-- Watched -->
+        <item>
+            <label>$VAR[Label_Watched]</label>
+            <icon>$VAR[Image_Watched]</icon>
+            <onclick>SendClick($VAR[Action_CurrentMediaWindow],14)</onclick>
+            <visible>Window.IsVisible(videos)</visible>
+        </item>
+
+        <!-- Filter -->
+        <item>
+            <label>$LOCALIZE[587]</label>
+            <icon>special://skin/extras/icons/filter.png</icon>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>AlarmClock(do_filter,Action(Filter),00:00,silent)</onclick>
+            <visible>Window.IsVisible(videos)</visible>
+        </item>
+
+        <!-- Search -->
+        <item>
+            <label>$LOCALIZE[137]</label>
+            <icon>special://skin/extras/icons/search.png</icon>
+            <onclick>Close</onclick>
+            <onclick>SendClick($VAR[Action_CurrentMediaWindow],8)</onclick>
+            <visible>Window.IsVisible(videos) | Window.IsVisible(music)</visible>
+        </item>
+
+        <!-- Update Library -->
+        <item>
+            <label>$VAR[Label_UpdateLibrary]</label>
+            <icon>special://skin/extras/icons/update.png</icon>
+            <visible>!Container.Content(addons) + String.IsEmpty(Container.PluginName) + [Window.IsVisible(videos) | Window.IsVisible(music)]</visible>
+            <onclick>SetFocus(50)</onclick>
+            <onclick condition="Window.IsVisible(videos)">UpdateLibrary(video)</onclick>
+            <onclick condition="Window.IsVisible(music)">UpdateLibrary(music)</onclick>
+            <visible>Window.IsVisible(videos) | Window.IsVisible(music)</visible>
+        </item>
+
+        <!-- Addon Settings -->
+        <item>
+            <label>$INFO[System.AddonTitle(Container.PluginName),, ]$LOCALIZE[5]</label>
+            <icon>special://skin/extras/icons/settings.png</icon>
+            <visible>!String.IsEmpty(Container.PluginName)</visible>
+            <onclick>Addon.OpenSettings($INFO[Container.PluginName])</onclick>
+        </item>
+
+        <!-- Add Shortcut -->
+        <item>
+            <label>$LOCALIZE[31602]</label>
+            <icon>special://skin/extras/icons/circle-plus.png</icon>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>SetFocus(612)</onclick>
+            <visible>Window.IsVisible(videos) | Window.IsVisible(music)</visible>
+        </item>
+
+        <!-- Guide -->
+        <item>
+            <label>$LOCALIZE[19069]</label>
+            <icon>special://skin/extras/icons/table-list.png</icon>
+            <visible>!Window.IsVisible(tvguide)</visible>
+            <visible>$EXP[Exp_PVRWindows]</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>ActivateWindow(tvguide)</onclick>
+        </item>
+
+        <!-- Channels -->
+        <item>
+            <label>$LOCALIZE[14301]</label>
+            <icon>special://skin/extras/icons/livetv.png</icon>
+            <visible>!Window.IsVisible(tvchannels)</visible>
+            <visible>$EXP[Exp_PVRWindows]</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>ActivateWindow(tvchannels)</onclick>
+        </item>
+
+        <!-- Recordings -->
+        <item>
+            <label>$LOCALIZE[19017]</label>
+            <icon>special://skin/extras/icons/hard-drive.png</icon>
+            <visible>!Window.IsVisible(tvrecordings)</visible>
+            <visible>$EXP[Exp_PVRWindows]</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>ActivateWindow(tvrecordings)</onclick>
+        </item>
+
+        <!-- Timers -->
+        <item>
+            <label>$LOCALIZE[19040]</label>
+            <icon>special://skin/extras/icons/timer.png</icon>
+            <visible>!Window.IsVisible(tvtimers)</visible>
+            <visible>$EXP[Exp_PVRWindows]</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>ActivateWindow(tvtimers)</onclick>
+        </item>
+
+        <!-- Search -->
+        <item>
+            <label>$LOCALIZE[137]</label>
+            <icon>special://skin/extras/icons/search.png</icon>
+            <visible>!Window.IsVisible(tvsearch)</visible>
+            <visible>$EXP[Exp_PVRWindows]</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>ActivateWindow(tvsearch)</onclick>
+        </item>
+    </include>
+
+
+</includes>

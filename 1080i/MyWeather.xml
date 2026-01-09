@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window id="2600">
+    <defaultcontrol always="true">8000</defaultcontrol>
+    <menucontrol>9000</menucontrol>
+    <onload>SetProperty(TMDbHelper.WidgetContainer,8000)</onload>
+    <include content="_Action_Blur_Onload">
+        <param name="sourceimage">Art(fanart)|Property(fanart)|Icon</param>
+    </include>
+    <controls>
+        <include>Background</include>
+        <control type="group">
+            <include>Animation_View_WindowChange</include>
+            <control type="list" id="8000">
+                <orientation>vertical</orientation>
+                <autoscroll delay="0" time="20000" repeat="0">true</autoscroll>
+                <onclick>Weather.LocationNext</onclick>
+                <onleft>ActivateWindow(1161)</onleft>
+                <onright>ActivateWindow(1161)</onright>
+                <itemlayout />
+                <focusedlayout />
+                <content sortby="random" target="images">resource://resource.images.weatherfanart.multi/$INFO[Weather.FanartCode]/</content>
+            </control>
+
+            <control type="group">
+                <include>Dimension_Info</include>
+                <control type="group">
+                    <top>0</top>
+                    <right>-40</right>
+                    <control type="group">
+                        <left>0%</left>
+                        <height>760</height>
+                        <centertop>50%</centertop>
+                        <width>20%</width>
+                        <control type="group">
+                            <right>40</right>
+                            <include content="Weather_Details_HighLow">
+                                <param name="diffuse">diffuse/tall_w320_h720.png</param>
+                                <param name="day">Day0</param>
+                            </include>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <left>20%</left>
+                        <height>760</height>
+                        <centertop>50%</centertop>
+                        <width>20%</width>
+                        <control type="group">
+                            <right>40</right>
+                            <include content="Weather_Details_HighLow">
+                                <param name="diffuse">diffuse/tall_w320_h720.png</param>
+                                <param name="day">Day1</param>
+                            </include>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <left>40%</left>
+                        <height>760</height>
+                        <centertop>50%</centertop>
+                        <width>20%</width>
+                        <control type="group">
+                            <right>40</right>
+                            <include content="Weather_Details_HighLow">
+                                <param name="diffuse">diffuse/tall_w320_h720.png</param>
+                                <param name="day">Day2</param>
+                            </include>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <left>60%</left>
+                        <height>760</height>
+                        <centertop>50%</centertop>
+                        <width>20%</width>
+                        <control type="group">
+                            <right>40</right>
+                            <include content="Weather_Details_HighLow">
+                                <param name="diffuse">diffuse/tall_w320_h720.png</param>
+                                <param name="day">Day3</param>
+                            </include>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <left>80%</left>
+                        <height>760</height>
+                        <centertop>50%</centertop>
+                        <width>20%</width>
+                        <control type="group">
+                            <right>40</right>
+                            <include content="Weather_Details_HighLow">
+                                <param name="diffuse">diffuse/tall_w320_h720.png</param>
+                                <param name="day">Day4</param>
+                            </include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+
+
+
+        </control>
+
+        <control type="group">
+            <include>Dimension_Bottombar</include>
+            <include content="View_Furniture_Footer_ViewLine">
+                <param name="label">$INFO[Weather.Location]$INFO[Window(weather).Property(WeatherProvider), | ,]</param>
+                <param name="align">left</param>
+            </include>
+        </control>
+
+        <include>Furniture_Footer_Right</include>
+        <include>Furniture_Header</include>
+
+        <include content="Furniture_Busy">
+            <param name="hasspinner">true</param>
+            <param name="spinspinner">true</param>
+            <param name="icon">special://skin/extras/icons/kodi.png</param>
+            <param name="haslabel">false</param>
+            <param name="spinnervisible">[!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
+            <param name="visible">!Weather.IsFetched</param>
+        </include>
+
+    </controls>
+
+</window>

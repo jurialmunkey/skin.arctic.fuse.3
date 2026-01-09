@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <zorder>0</zorder>
+    <defaultcontrol always="true">11</defaultcontrol>
+    <onload>CancelAlarm(osd_timeout,true)</onload>
+    <include>Animation_OSD_Dialog_WindowChange</include>
+    <onload>SetProperty(TMDbHelper.WidgetContainer,11)</onload>
+    <controls>
+        <control type="group">
+            <include>OSD_Info_Dimensions</include>
+
+            <control type="group">
+                <left>view_pad</left>
+                <right>view_pad</right>
+                <width>view_landscape_item_w</width>
+                <height>view_landscape_item_h</height>
+                <visible>Integer.IsEqual(Container(11).NumItems,0)</visible>
+                <include>Object_ItemBack</include>
+                <control type="image">
+                    <width>128</width>
+                    <height>128</height>
+                    <centerleft>50%</centerleft>
+                    <centertop>50%</centertop>
+                    <texture colordiffuse="panel_fg_70">special://skin/extras/icons/image.png</texture>
+                </control>
+            </control>
+
+            <!-- Episodes List -->
+            <include content="List_Landscape_Row">
+                <param name="orientation">horizontal</param>
+                <param name="control">fixedlist</param>
+                <param name="id">11</param>
+                <include>OSD_List_Dimensions</include>
+                <onup>PreviousMenu</onup>
+                <ondown>4000</ondown>
+            </include>
+
+            <control type="button" id="4000">
+                <top>340</top>
+                <left>60</left>
+                <height>80</height>
+                <width>440</width>
+                <onup>11</onup>
+                <texturenofocus />
+                <onclick>NextChannelGroup</onclick>
+                <onclick>SetFocus(4000)</onclick>
+                <onright>NextChannelGroup</onright>
+                <onright>SetFocus(4000)</onright>
+                <onleft>PreviousChannelGroup</onleft>
+                <onleft>SetFocus(4000)</onleft>
+            </control>
+
+            <!-- Playing Icon and Details -->
+            <include content="OSD_Info_Tray">
+                <param name="icon">$INFO[Container(11).ListItem.Icon]</param>
+                <param name="role">$INFO[Container(11).ListItem.ChannelName]</param>
+                <param name="name">$INFO[VideoPlayer.ChannelGroup,$LOCALIZE[19141]: ,]</param>
+                <param name="text">$VAR[Label_Plot_C11]</param>
+                <param name="fallback_icon">-</param>
+                <param name="textcolor_top">panel_fg_90</param>
+                <param name="textcolor_sub">panel_fg_70</param>
+                <param name="visible">!Control.HasFocus(4000)</param>
+            </include>
+            <include content="OSD_Info_Tray">
+                <param name="icon">$INFO[Container(11).ListItem.Icon]</param>
+                <param name="role">$INFO[Container(11).ListItem.ChannelName]</param>
+                <param name="name">$INFO[VideoPlayer.ChannelGroup,$LOCALIZE[19141]: ,]</param>
+                <param name="text">$VAR[Label_Plot_C11]</param>
+                <param name="fallback_icon">-</param>
+                <param name="textcolor_top">$VAR[ColorSelected]</param>
+                <param name="textcolor_sub">$VAR[ColorSelected]</param>
+                <param name="visible">Control.HasFocus(4000)</param>
+            </include>
+
+            <include content="OSD_Info_Viewline">
+                <param name="label">$LOCALIZE[31244]</param>
+            </include>
+        </control>
+    </controls>
+</window>

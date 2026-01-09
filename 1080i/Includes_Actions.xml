@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <variable name="Action_DialogInfo_PlayMedia">
+        <!-- Play FileNameAndPath -->
+        <value condition="!String.IsEmpty(ListItem.FileNameAndPath) + !$EXP[Exp_IsFolder]">RunScript(plugin.video.themoviedb.helper,close_dialog=1190,"playmedia=$INFO[ListItem.FileNameAndPath]")</value>
+
+        <!-- Browse Folder -->
+        <value condition="$EXP[Exp_IsFolder] + Window.IsVisible(videos)">RunScript(plugin.video.themoviedb.helper,close_dialog=1190,"call_update=$INFO[ListItem.FolderPath]")</value>
+        <value condition="$EXP[Exp_IsFolder]">RunScript(plugin.video.themoviedb.helper,close_dialog=1190,"call_path=$INFO[ListItem.FolderPath]")</value>
+
+        <!-- Play FolderPath -->
+        <value>RunScript(plugin.video.themoviedb.helper,close_dialog=1190,"playmedia=$INFO[ListItem.FolderPath]")</value>
+    </variable>
+
+    <variable name="Action_Sync">
+        <value condition="[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + !String.IsEmpty(ListItem.Property(tmdb_id))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[ListItem.Property(tmdb_id)],$VAR[Path_Param_Type],cache_refresh)</value>
+        <value condition="[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_ID))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_ID)],$VAR[Path_Param_Type],cache_refresh)</value>
+
+        <value condition="[String.IsEqual(ListItem.DBType,season)] + !String.IsEmpty(ListItem.Property(tvshow.tmdb_id))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[ListItem.Property(tvshow.tmdb_id)],$VAR[Path_Param_Type],season=$INFO[ListItem.Season],cache_refresh)</value>
+        <value condition="[String.IsEqual(ListItem.DBType,season)] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.tvshow.tmdb_id))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[Window(Home).Property(TMDbHelper.ListItem.tvshow.tmdb_id)],$VAR[Path_Param_Type],season=$INFO[ListItem.Season],cache_refresh)</value>
+
+        <value condition="[String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.Property(tvshow.tmdb_id))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[ListItem.Property(tvshow.tmdb_id)],$VAR[Path_Param_Type],season=$INFO[ListItem.Season],episode=$INFO[ListItem.Episode],cache_refresh)</value>
+        <value condition="[String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.tvshow.tmdb_id))">RunScript(plugin.video.themoviedb.helper,sync_trakt,tmdb_id=$INFO[Window(Home).Property(TMDbHelper.ListItem.tvshow.tmdb_id)],$VAR[Path_Param_Type],season=$INFO[ListItem.Season],episode=$INFO[ListItem.Episode],cache_refresh)</value>
+    </variable>
+
+    <include name="Action_ButtonMenu_Onload">
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.Layout))">Skin.SetString(OptionsTiles.Layout,$NUMBER[3])</onload>
+
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.01.Include))">Skin.SetString(OptionsTiles.01.Include,NowPlaying)</onload>
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.02.Include))">Skin.SetString(OptionsTiles.02.Include,Settings)</onload>
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.03.Include))">Skin.SetString(OptionsTiles.03.Include,Weather)</onload>
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.04.Include))">Skin.SetString(OptionsTiles.04.Include,SystemInfo)</onload>
+
+        <onload condition="!String.IsEmpty(Skin.String(OptionsTiles.01.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.01.Path))">Skin.SetString(OptionsTiles.01.Onclick,ActivateWindow($INFO[Skin.String(OptionsTiles.01.Target)],$INFO[Skin.String(OptionsTiles.01.Path)],return))</onload>
+        <onload condition="!String.IsEmpty(Skin.String(OptionsTiles.02.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.02.Path))">Skin.SetString(OptionsTiles.02.Onclick,ActivateWindow($INFO[Skin.String(OptionsTiles.02.Target)],$INFO[Skin.String(OptionsTiles.02.Path)],return))</onload>
+        <onload condition="!String.IsEmpty(Skin.String(OptionsTiles.03.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.03.Path))">Skin.SetString(OptionsTiles.03.Onclick,ActivateWindow($INFO[Skin.String(OptionsTiles.03.Target)],$INFO[Skin.String(OptionsTiles.03.Path)],return))</onload>
+        <onload condition="!String.IsEmpty(Skin.String(OptionsTiles.04.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.04.Path))">Skin.SetString(OptionsTiles.04.Onclick,ActivateWindow($INFO[Skin.String(OptionsTiles.04.Target)],$INFO[Skin.String(OptionsTiles.04.Path)],return))</onload>
+
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.01.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.01.Path))">Skin.SetString(OptionsTiles.01.Onclick,$INFO[Skin.String(OptionsTiles.01.Path)])</onload>
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.02.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.02.Path))">Skin.SetString(OptionsTiles.02.Onclick,$INFO[Skin.String(OptionsTiles.02.Path)])</onload>
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.03.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.03.Path))">Skin.SetString(OptionsTiles.03.Onclick,$INFO[Skin.String(OptionsTiles.03.Path)])</onload>
+        <onload condition="String.IsEmpty(Skin.String(OptionsTiles.04.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.04.Path))">Skin.SetString(OptionsTiles.04.Onclick,$INFO[Skin.String(OptionsTiles.04.Path)])</onload>
+
+        <!-- Check for options tray -->
+        <onload>Skin.SetBool(Options.DisableBottomTray)</onload>
+        <include>skinvariables-powertray-onload</include>
+    </include>
+
+    <variable name="Action_View_ContainerID">
+        <value>500</value>
+    </variable>
+
+    <include name="Action_Media_Onload">
+        <onload>ClearProperty(InfoPanel.FullSwitch,Home)</onload>
+        <onload>AlarmClock(refocus_window,SetFocus(500),00:00,silent)</onload>
+        <onload>ClearProperty(TMDbHelper.ListItem.BlurImage)</onload>
+        <onload>ClearProperty(TMDbHelper.ListItem.BlurImage.Original)</onload>
+    </include>
+
+    <variable name="Action_OSD_SkipPrev">
+        <value condition="!String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,01)">ChapterOrBigStepBack</value>
+        <value condition="Integer.IsGreater(VideoPlayer.PlaylistPosition,1) + Integer.IsGreater(VideoPlayer.PlaylistLength,1)">SkipPrevious</value>
+        <value>ChapterOrBigStepBack</value>
+    </variable>
+
+    <variable name="Action_OSD_SkipNext">
+        <value condition="!String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,Player.ChapterCount)">ChapterOrBigStepForward</value>
+        <value condition="Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)">SkipNext</value>
+        <value condition="!String.IsEmpty(Container(450).ListItem.FileNameAndPath) + Integer.IsLess(Player.TimeRemaining(mins),10)">PlayMedia($ESCINFO[Container(450).ListItem.FileNameAndPath])</value>
+        <value>ChapterOrBigStepForward</value>
+    </variable>
+
+    <variable name="Action_OSD_Main_OnDown">
+        <value condition="VideoPlayer.Content(livetv) + !Skin.HasSetting(OSD.OnDown.DisablePVROSDGuide) + VideoPlayer.HasEpg">pvrosdguide</value>
+        <value condition="VideoPlayer.Content(livetv)">$VAR[Action_OSD_PVROSDGuide_OnDown]</value>
+        <value condition="$EXP[Exp_OSD_HasPlaylist] + !Skin.HasSetting(OSD.OnDown.Disable1140)">1140</value>
+        <value condition="$EXP[Exp_OSD_HasPlaylist]">$VAR[Action_OSD_1140_OnDown]</value>
+        <value condition="!Skin.HasSetting(OSD.OnDown.DisableVideoBookmarks)">videobookmarks</value>
+        <value>$VAR[Action_OSD_VideoBookmarks_OnDown]</value>
+    </variable>
+
+    <variable name="Action_OSD_PVROSDGuide_OnDown">
+        <value condition="!Skin.HasSetting(OSD.OnDown.DisablePVROSDChannels)">pvrosdchannels</value>
+    </variable>
+
+    <variable name="Action_OSD_1140_OnDown">
+        <value condition="VideoPlayer.Content(livetv) + !Skin.HasSetting(OSD.OnDown.DisablePVROSDGuide)">pvrosdguide</value>
+        <value condition="VideoPlayer.Content(livetv)">$VAR[Action_OSD_PVROSDGuide_OnDown]</value>
+        <value condition="!Skin.HasSetting(OSD.OnDown.DisableVideoBookmarks)">videobookmarks</value>
+        <value>$VAR[Action_OSD_VideoBookmarks_OnDown]</value>
+    </variable>
+
+    <variable name="Action_OSD_VideoBookmarks_OnDown">
+        <value condition="!Skin.HasSetting(OSD.OnDown.Disable1141)">1141</value>
+    </variable>
+
+    <include name="Action_BlurImage_SimpleBackground_Onload">
+        <onload>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onload>
+        <onload>ClearProperty(Background.ShowOverlay,Home)</onload>
+        <onload>ClearProperty(InfoPanel.FullSwitch,Home)</onload>
+    </include>
+
+    <include name="Action_SettingsCategories_Onload">
+        <defaultcontrol always="true">$PARAM[defaultcontrol]</defaultcontrol>
+        <onload condition="!String.IsEmpty(Window(Home).Property(SettingsChanger.Switch))">SetFocus($INFO[Window(Home).Property(SettingsChanger.Switch)])</onload>
+        <onload condition="String.IsEmpty(Window(Home).Property(SettingsChanger.Switch))">SetFocus($PARAM[defaultcontrol])</onload>
+        <onload>ClearProperty(SettingsChanger.Switch,Home)</onload>
+        <onload>ClearProperty(Background.ShowOverlay,Home)</onload>
+        <include>Action_BlurImage_SimpleBackground_Onload</include>
+        <menucontrol>30000</menucontrol>
+    </include>
+
+    <include name="Action_Widget_OnBack">
+        <param name="enable">True</param>
+        <param name="onprevious">$EXP[Exp_Navigation_OnPrevious]</param>
+        <param name="onparent">$EXP[Exp_Navigation_OnParent]</param>
+        <definition>
+
+            <!-- Previous: Return to First Item -->
+            <onback condition="$PARAM[enable] + $PARAM[onprevious] + !Integer.IsEqual(Container($PARAM[id]).CurrentItem,1)">$PARAM[grouplistid]</onback>
+            <onback condition="$PARAM[enable] + $PARAM[onprevious] + !Integer.IsEqual(Container($PARAM[id]).CurrentItem,1)">SetFocus($PARAM[id],0,absolute)</onback>
+
+            <!-- Parent: Return to Top Focus (Previous on First Item = Parent Back) -->
+            <onback condition="$PARAM[enable] + [[Integer.IsEqual(Container($PARAM[id]).CurrentItem,1) + $PARAM[onprevious]] | $PARAM[onparent]]">$PARAM[grouplistid]</onback>
+            <onback condition="$PARAM[enable] + [[Integer.IsEqual(Container($PARAM[id]).CurrentItem,1) + $PARAM[onprevious]] | $PARAM[onparent]]">AlarmClock(refocus2,$PARAM[refocus],00:00,silent)</onback>
+
+        </definition>
+    </include>
+
+    <include name="Action_View_Movement_OnUp">
+        <definition>
+            <onup>ActivateWindow(1171)</onup>
+        </definition>
+    </include>
+
+    <variable name="Action_CurrentMediaWindow">
+        <value condition="Window.IsVisible(videos)">videos</value>
+        <value condition="Window.IsVisible(music)">music</value>
+        <value condition="Window.IsVisible(pictures)">pictures</value>
+        <value condition="Window.IsVisible(programs)">programs</value>
+        <value condition="Window.IsVisible(tvchannels)">tvchannels</value>
+        <value condition="Window.IsVisible(tvguide)">tvguide</value>
+    </variable>
+
+    <include name="Action_BuildShortcuts_OnLoad">
+        <onload>runscript(script.skinvariables,"run_executebuiltin=special://skin/shortcuts/skinvariables-build-templates.json",use_rules)</onload>
+    </include>
+
+    <include name="Action_View_Movement_OnDown">
+        <param name="condition">true</param>
+        <definition>
+            <ondown condition="$PARAM[condition]">610</ondown>
+        </definition>
+    </include>
+
+    <include name="Action_View_Movement_OnBack">
+        <param name="onback">True</param>
+        <param name="backid">62</param>
+        <param name="menuid">300</param>
+        <param name="onbump">False</param>
+        <param name="enable">True</param>
+        <param name="always">False</param>
+        <definition>
+            <onback condition="$PARAM[enable] + ![$PARAM[onback] | Container($PARAM[id]).ListItem.IsParentFolder] + $EXP[Exp_Navigation_OnPrevious]">$PARAM[backid]</onback>
+            <onback condition="$PARAM[enable] + ![$PARAM[onback] | Container($PARAM[id]).ListItem.IsParentFolder] + $EXP[Exp_Navigation_OnPrevious]">SetFocus($PARAM[id],0,absolute)</onback>
+            <onback condition="$PARAM[enable] + $PARAM[always]">SetFocus($PARAM[id],0,absolute)</onback>
+            <onback condition="$PARAM[enable] + $PARAM[always]">SetFocus(50)</onback>
+        </definition>
+    </include>
+
+    <include name="Action_OSD_SuspendAutoClose">
+        <onload condition="System.HasAlarm(osd_timeout)">SetProperty(osd_timeout_$PARAM[window],true,home)</onload>
+        <onload condition="System.HasAlarm(osd_timeout)">CancelAlarm(osd_timeout,true)</onload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(osd_timeout_$PARAM[window]))">AlarmClock(osd_timeout,RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-closeosd.json,use_rules=True),$INFO[Skin.String(OSD_Timeout),00:,],silent)</onunload>
+        <onunload condition="!String.IsEmpty(Window(Home).Property(osd_timeout_$PARAM[window]))">ClearProperty(osd_timeout_$PARAM[window],home)</onunload>
+    </include>
+
+    <include name="Action_OSD_Button">
+        <onfocus condition="!String.IsEmpty(Skin.String(OSD_Timeout)) + [Window.IsVisible(videoosd) | Window.IsVisible(musicosd)]">AlarmClock(osd_timeout,RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-closeosd.json,use_rules=True),$INFO[Skin.String(OSD_Timeout),00:,],silent)</onfocus>
+        <onunfocus>CancelAlarm(osd_timeout,true)</onunfocus>
+
+        <onclick condition="!String.IsEmpty(Skin.String(OSD_Timeout)) + [Window.IsVisible(videoosd) | Window.IsVisible(musicosd)]">AlarmClock(osd_timeout,RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-closeosd.json,use_rules=True),$INFO[Skin.String(OSD_Timeout),00:,],silent)</onclick>
+    </include>
+
+    <variable name="Action_OSD_WikiInfo">
+        <value condition="VideoPlayer.Content(livetv)">runscript(script.wikipedia,wikipedia=$INFO[VideoPlayer.Title])</value>
+        <value>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-closeosd.json,use_rules=True,"command=ActivateWindow(1193)")</value>
+    </variable>
+
+    <include name="_Action_Blur_Onload">
+        <param name="sourceimage">Art(fanart)</param>
+        <definition>
+            <onload>SetProperty(TMDbHelper.Blur.SourceImage,$PARAM[sourceimage],Home)</onload>
+            <onload>SetProperty(TMDbHelper.Blur.Fallback,$VAR[Image_Blur_Fallback],Home)</onload>
+        </definition>
+    </include>
+    <include name="Action_Blur_Onload">
+        <include content="_Action_Blur_Onload" condition="!Skin.HasSetting(Background.ExtraFanart)">
+            <param name="sourceimage">Art(fanart)|Property(fanart)||EPGEventIcon||PicturePath</param>
+        </include>
+        <include content="_Action_Blur_Onload" condition="Skin.HasSetting(Background.ExtraFanart)">
+            <param name="sourceimage">Art(tvshow.fanart{x})|Art(fanart{x})|Property(fanart)||EPGEventIcon||PicturePath</param>
+        </include>
+    </include>
+    <include name="_Action_Blur_OnUnload">
+        <param name="sourceimage">Art(fanart)</param>
+        <definition>
+            <onunload>SetProperty(TMDbHelper.Blur.SourceImage,$PARAM[sourceimage],Home)</onunload>
+            <onunload>SetProperty(TMDbHelper.Blur.Fallback,$VAR[Image_Blur_Fallback],Home)</onunload>
+        </definition>
+    </include>
+    <include name="Action_Blur_OnUnload">
+        <include content="_Action_Blur_OnUnload">
+            <param name="sourceimage">Art(fanart)|Property(fanart)</param>
+        </include>
+    </include>
+
+    <variable name="Action_Update_Color">
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),Highlight)">Skin.SetString(focuscolor.name,$VAR[Color_PC_to_Hex])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),Indicator)">Skin.SetString(watchedprogresscolor.name,$INFO[ListItem.Label])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),series_premiere)">Skin.SetString(series_premiere_color.name,$INFO[ListItem.Label])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),season_premiere)">Skin.SetString(season_premiere_color.name,$INFO[ListItem.Label])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),mid_season_premiere)">Skin.SetString(mid_season_premiere_color.name,$INFO[ListItem.Label])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),series_finale)">Skin.SetString(series_finale_color.name,$INFO[ListItem.Label])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),season_finale)">Skin.SetString(season_finale_color.name,$INFO[ListItem.Label])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),mid_season_finale)">Skin.SetString(mid_season_finale_color.name,$INFO[ListItem.Label])</value>
+    </variable>
+
+    <variable name="Action_Update_Color_From_Slider">
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),Highlight)">Skin.SetString(focuscolor.name,$VAR[Color_PC_to_Hex])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),Indicator)">Skin.SetString(watchedprogresscolor.name,$VAR[Color_PC_to_Hex])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),series_premiere)">Skin.SetString(series_premiere_color.name,$VAR[Color_PC_to_Hex])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),season_premiere)">Skin.SetString(season_premiere_color.name,$VAR[Color_PC_to_Hex])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),mid_season_premiere)">Skin.SetString(mid_season_premiere_color.name,$VAR[Color_PC_to_Hex])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),series_finale)">Skin.SetString(series_finale_color.name,$VAR[Color_PC_to_Hex])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),season_finale)">Skin.SetString(season_finale_color.name,$VAR[Color_PC_to_Hex])</value>
+        <value condition="String.IsEqual(Window(Home).Property(ColorPicker_Type),mid_season_finale)">Skin.SetString(mid_season_finale_color.name,$VAR[Color_PC_to_Hex])</value>
+    </variable>
+
+    <include name="Action_PlayTrailer_OnClick">
+        <onclick condition="String.IsEmpty($PARAM[trailer]) + !String.IsEmpty($PARAM[trailer_fallback])">SetProperty(PlayTrailer,$ESCINFO[$PARAM[trailer_fallback]],Home)</onclick>
+        <onclick condition="!String.IsEmpty($PARAM[trailer])">SetProperty(PlayTrailer,$ESCINFO[$PARAM[trailer]],Home)</onclick>
+        <onclick condition="!String.IsEmpty($PARAM[trailer]) | !String.IsEmpty($PARAM[trailer_fallback])">SetProperty(PlayTrailerTitle,$PARAM[title],Home)</onclick>
+        <onclick condition="!String.IsEmpty($PARAM[trailer]) | !String.IsEmpty($PARAM[trailer_fallback])">SetProperty(PlayTrailerItems,$PARAM[items],Home)</onclick>
+        <onclick condition="!String.IsEmpty($PARAM[trailer]) | !String.IsEmpty($PARAM[trailer_fallback])">ActivateWindow(1123)</onclick>
+    </include>
+
+    <include name="Action_Scheme_Onclick_Bright">
+        <onclick>Skin.Reset(focuscolor.name)</onclick>
+        <onclick>Skin.Reset(RevertSelectedText)</onclick>
+        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.Reset(Background.DialogImage)</onclick>
+        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg)</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+    </include>
+
+    <include name="Action_Scheme_Onclick_Miami">
+        <onclick>Skin.SetString(focuscolor.name,ffe91e63)</onclick>
+        <onclick>Skin.SetBool(RevertSelectedText)</onclick>
+        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.Reset(Background.DialogImage)</onclick>
+        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg)</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+    </include>
+
+    <include name="Action_Scheme_Onclick_Aqua">
+        <onclick>Skin.SetString(focuscolor.name,ff00b8d4)</onclick>
+        <onclick>Skin.SetBool(RevertSelectedText)</onclick>
+        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Green)</onclick>
+        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/green_blur.jpg)</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+    </include>
+
+    <include name="Action_Scheme_Onclick_Sunset">
+        <onclick>Skin.SetString(focuscolor.name,fff4511e)</onclick>
+        <onclick>Skin.SetBool(RevertSelectedText)</onclick>
+        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Blush)</onclick>
+        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/pink_blur.jpg)</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+    </include>
+
+    <include name="Action_Scheme_Onclick_Slate">
+        <onclick>Skin.SetString(focuscolor.name,ff0091ea)</onclick>
+        <onclick>Skin.SetBool(RevertSelectedText)</onclick>
+        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Slate)</onclick>
+        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/slate_blur.jpg)</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+    </include>
+
+    <include name="Action_Scheme_Onclick_Midnight">
+        <onclick>Skin.SetString(focuscolor.name,ff5528a8)</onclick>
+        <onclick>Skin.SetBool(RevertSelectedText)</onclick>
+        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Coal)</onclick>
+        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/coal_blur.jpg)</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+    </include>
+
+    <variable name="Action_Shortcut_SetWidgetStyle">
+        <value condition="String.IsEmpty(Container(22001).ListItem.Property(url))" />
+        <value>RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_edit&amp;&amp;widget_style&amp;&amp;$LOCALIZE[20021]=Poster&amp;$LOCALIZE[31045]=Landscape&amp;$LOCALIZE[31320]=Square&amp;$LOCALIZE[31424]=Board&amp;$LOCALIZE[31431]=Circle&amp;&amp;$LOCALIZE[736]&amp;&amp;True)</value>
+    </variable>
+
+    <variable name="Action_FullscreenWidget_InfoButton">
+        <value condition="Skin.HasSetting(Spotlight.UseMenuButton) + $EXP[Exp_Hubs_Spotlight_HasItems]">Action(contextmenu)</value>
+        <value>Action(info)</value>
+    </variable>
+
+    <variable name="Action_RatingsMonitor">
+        <value condition="Skin.String(CustomRating.Movies.Item01,TMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item01,Trakt)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item01,IMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item01,Metacritic)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item01,RottenTomatoesCritic)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item01,RottenTomatoesUser)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item01,MDBList)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item01,Letterboxd)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item01,Awards)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+
+        <value condition="Skin.String(CustomRating.Movies.Item02,TMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item02,Trakt)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item02,IMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item02,Metacritic)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item02,RottenTomatoesCritic)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item02,RottenTomatoesUser)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item02,MDBList)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item02,Letterboxd)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.Movies.Item02,Awards)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+
+        <value condition="Skin.String(CustomRating.TVShows.Item01,TMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item01,Trakt)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item01,IMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item01,Metacritic)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item01,RottenTomatoesCritic)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item01,RottenTomatoesUser)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item01,MDBList)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item01,Letterboxd)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item01,Awards)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+
+        <value condition="Skin.String(CustomRating.TVShows.Item02,TMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item02,Trakt)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item02,IMDb)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item02,Metacritic)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item02,RottenTomatoesCritic)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item02,RottenTomatoesUser)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item02,MDBList)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item02,Letterboxd)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+        <value condition="Skin.String(CustomRating.TVShows.Item02,Awards)">Skin.Reset(TMDbHelper.DisableRatings)</value>
+
+        <value>Skin.SetBool(TMDbHelper.DisableRatings)</value>
+    </variable>
+</includes>

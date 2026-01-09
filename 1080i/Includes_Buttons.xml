@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="Button_Divider_Label">
+        <definition>
+            <control type="label" id="$PARAM[id]">
+                <nested />
+                <align>left</align>
+                <font>font_hint_bold</font>
+                <top>40</top>
+                <height>40</height>
+                <textoffsetx>20</textoffsetx>
+                <textcolor>dialog_fg_30</textcolor>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Button_Dialog_Setting">
+        <param name="control">button</param>
+        <param name="dialog">true</param>
+        <param name="istext">false</param>
+        <param name="top">-80</param>
+        <param name="font">font_main</param>
+        <definition>
+            <include content="Button_Dialog">
+                <param name="id">$PARAM[id]</param>
+                <param name="groupid">$PARAM[groupid]</param>
+                <param name="control">$PARAM[control]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="icon">$PARAM[icon]</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="left">$PARAM[left]</param>
+                <param name="istext">$PARAM[istext]</param>
+                <param name="has_label2">$PARAM[has_label2]</param>
+                <param name="label2">$PARAM[label2]</param>
+                <label>$PARAM[label]</label>
+                <label2>$PARAM[label2]</label2>
+                <texturenofocus />
+                <nested />
+            </include>
+        </definition>
+    </include>
+
+    <include name="Button_Dialog">
+        <param name="control">button</param>
+        <param name="dialog">true</param>
+        <param name="istext">false</param>
+        <definition>
+            <include content="Button_Control">
+                <param name="id">$PARAM[id]</param>
+                <param name="control">$PARAM[control]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <radioposx>-2</radioposx>
+                <font />
+                <nested />
+            </include>
+            <include content="Button_Image" condition="![$PARAM[istext]]">
+                <param name="id">$PARAM[groupid]</param>
+                <param name="buttonid">$PARAM[id]</param>
+                <param name="icon">$PARAM[icon]</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="left">$PARAM[left]</param>
+                <param name="has_label2">$PARAM[has_label2]</param>
+                <param name="label2">$PARAM[label2]</param>
+            </include>
+            <include content="Button_Label" condition="$PARAM[istext]">
+                <param name="id">$PARAM[groupid]</param>
+                <param name="buttonid">$PARAM[id]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="left">$PARAM[left]</param>
+                <param name="has_label2">$PARAM[has_label2]</param>
+                <param name="label2">$PARAM[label2]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Button_Control">
+        <param name="control">button</param>
+        <param name="dialog">false</param>
+        <param name="window" />
+        <param name="reload">false</param>
+        <param name="slevel">0</param>
+        <definition>
+            <control type="$PARAM[control]" id="$PARAM[baseid]$PARAM[id]">
+                <nested />
+                <align>left</align>
+                <font>font_main</font>
+                <height>80</height>
+                <textoffsetx>80</textoffsetx>
+                <include condition="$PARAM[dialog]">defs_dialog_$PARAM[control]</include>
+                <include content="Settings_Button_$PARAM[window]">
+                    <param name="id">$PARAM[id]</param>
+                    <param name="baseid">$PARAM[baseid]</param>
+                    <param name="reload">$PARAM[reload]</param>
+                    <param name="slevel">$PARAM[slevel]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Button_Label_Controls_Objects">
+        <control type="$PARAM[control]">
+            <aligny>center</aligny>
+            <align>$PARAM[align]</align>
+            <font>$PARAM[font]</font>
+            <textcolor>dialog_fg_70</textcolor>
+            <label>$PARAM[label]</label>
+            <visible>!Control.HasFocus($PARAM[buttonid])</visible>
+        </control>
+        <control type="$PARAM[control]">
+            <aligny>center</aligny>
+            <align>$PARAM[align]</align>
+            <font>$PARAM[font]</font>
+            <textcolor>$VAR[ColorSelected]</textcolor>
+            <label>$PARAM[label]</label>
+            <visible>Control.HasFocus($PARAM[buttonid])</visible>
+        </control>
+    </include>
+
+    <include name="Button_Label_Controls">
+        <param name="control">textbox</param>
+        <param name="font">font_mini_bold</param>
+        <param name="left">20</param>
+        <param name="has_label2">false</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <control type="group">
+                    <centertop>50%</centertop>
+                    <left>60</left>
+                    <height>80</height>
+                    <right>30</right>
+                    <include content="Button_Label_Controls_Objects" condition="![$PARAM[has_label2]]">
+                        <param name="control">$PARAM[control]</param>
+                        <param name="font">$PARAM[font]</param>
+                        <param name="label">$PARAM[label]</param>
+                        <param name="buttonid">$PARAM[buttonid]</param>
+                        <param name="align">left</param>
+                    </include>
+                    <include content="Button_Label_Controls_Objects" condition="$PARAM[has_label2]">
+                        <param name="control">label</param>
+                        <param name="font">$PARAM[font]</param>
+                        <param name="label">$PARAM[label]</param>
+                        <param name="buttonid">$PARAM[buttonid]</param>
+                        <param name="align">left</param>
+                    </include>
+                    <include content="Button_Label_Controls_Objects" condition="$PARAM[has_label2]">
+                        <param name="control">label</param>
+                        <param name="font">$PARAM[font]</param>
+                        <param name="label">$PARAM[label2]</param>
+                        <param name="buttonid">$PARAM[buttonid]</param>
+                        <param name="align">right</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Button_Image">
+        <param name="top">-100</param>
+        <param name="left">20</param>
+        <definition>
+            <control type="group" id="$PARAM[id]">
+                <top>$PARAM[top]</top>
+                <height>80</height>
+                <visible>Control.IsVisible($PARAM[buttonid])</visible>
+                <control type="group">
+                    <centertop>50%</centertop>
+                    <left>$PARAM[left]</left>
+                    <width>40</width>
+                    <height>40</height>
+                    <control type="image">
+                        <bordersize>icon_home_bordersize</bordersize>
+                        <texture colordiffuse="dialog_fg_70">$PARAM[icon]</texture>
+                        <visible>!Control.HasFocus($PARAM[buttonid])</visible>
+                    </control>
+                    <control type="image">
+                        <bordersize>icon_home_bordersize</bordersize>
+                        <texture colordiffuse="$VAR[ColorSelected]">$PARAM[icon]</texture>
+                        <visible>Control.HasFocus($PARAM[buttonid])</visible>
+                    </control>
+                </control>
+                <include content="Button_Label_Controls">
+                    <param name="label">$INFO[Control.GetLabel($PARAM[buttonid])]</param>
+                    <param name="buttonid">$PARAM[buttonid]</param>
+                    <param name="font">$PARAM[font]</param>
+                    <param name="top">$PARAM[top]</param>
+                    <param name="left">$PARAM[left]</param>
+                    <param name="has_label2">$PARAM[has_label2]</param>
+                    <param name="label2">$PARAM[label2]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Button_Label">
+        <param name="top">-100</param>
+        <definition>
+            <control type="group" id="$PARAM[id]">
+                <top>$PARAM[top]</top>
+                <height>80</height>
+                <visible>Control.IsVisible($PARAM[buttonid])</visible>
+                <include content="Button_Label_Controls">
+                    <param name="label">$PARAM[label]</param>
+                    <param name="buttonid">$PARAM[buttonid]</param>
+                    <param name="font">$PARAM[font]</param>
+                    <param name="has_label2">$PARAM[has_label2]</param>
+                    <param name="label2">$PARAM[label2]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Button_Underline_Switcher">
+        <control type="togglebutton" id="$PARAM[id]">
+            <nested />
+            <width>auto</width>
+            <aligny>top</aligny>
+            <textoffsetx>0</textoffsetx>
+            <font>font_main_bold</font>
+            <textcolor>dialog_fg_30</textcolor>
+            <focusedcolor>dialog_fg_100</focusedcolor>
+            <include>Texture_Highlight_Underline_H</include>
+        </control>
+    </include>
+</includes>

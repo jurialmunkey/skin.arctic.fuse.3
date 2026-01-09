@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <!-- Group Switcher -->
+    <include name="View_PVR_GroupSwitcher">
+        <include content="Object_Hidden_List">
+            <param name="id">11</param>
+            <orientation>horizontal</orientation>
+            <onfocus>SetFocus(28)</onfocus>
+        </include>
+        <control type="group">
+            <height>80</height>
+            <left>view_pad</left>
+            <centerbottom>100</centerbottom>
+            <control type="button" id="28">
+                <left>-20</left>
+                <right>40</right>
+                <onleft>SetFocus(11)</onleft>
+                <onleft>Action(Left)</onleft>
+                <onleft>SetFocus(28)</onleft>
+                <onright>SetFocus(11)</onright>
+                <onright>Action(Right)</onright>
+                <onright>SetFocus(28)</onright>
+                <ondown>500</ondown>
+                <onup>500</onup>
+                <texturefocus />
+                <texturenofocus />
+                <font />
+            </control>
+            <control type="group">
+                <animation effect="fade" start="100" end="30" condition="true">Conditional</animation>
+                <include content="Info_Viewline">
+                    <param name="label">$INFO[Control.GetLabel(28)]$INFO[Container.NumItems, (,)]</param>
+                    <param name="top">20</param>
+                    <param name="left">0</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <!-- EPG -->
+    <include name="View_PVRGuide_Standard">
+        <param name="viewtype_label">19069</param>
+        <definition>
+            <include content="List_EPGGrid">
+                <param name="id">$PARAM[id]</param>
+                <param name="detailed">$PARAM[detailed]</param>
+                <param name="timeblocks">$PARAM[timeblocks]</param>
+                <param name="rulerunit">$PARAM[rulerunit]</param>
+                <param name="border_genre">37</param>
+                <param name="channelright">40</param>
+                <param name="channelwidth">440</param>
+                <onup>$PARAM[id]</onup>
+                <ondown>$PARAM[id]</ondown>
+                <viewtype label="$PARAM[viewtype_label]">list</viewtype>
+                <progresstexture border="40,0,40,0">$PARAM[progresstexture]</progresstexture>
+                <pagecontrol>8060</pagecontrol>
+                <top>-100</top>
+                <bottom>100</bottom>
+                <left>-40</left>
+            </include>
+        </definition>
+    </include>
+
+    <include name="View_PVRGuide_Horizontal">
+        <param name="viewtype_label">19069</param>
+        <param name="timeblocks">16</param>
+        <param name="rulerunit">6</param>
+        <param name="channelwidth">328</param>
+        <definition>
+            <include content="List_EPGGrid">
+                <param name="id">$PARAM[id]</param>
+                <param name="channelheight">120</param>
+                <param name="channelbottom">40</param>
+                <param name="channelright">0</param>
+                <param name="channelwidth">$PARAM[channelwidth]</param>
+                <param name="programwidth">$PARAM[channelwidth]</param>
+                <param name="rulerwidth">100</param>
+                <param name="rulerdatewidth">100</param>
+                <param name="rulerheight">80</param>
+                <param name="rulerdateheight">80</param>
+                <param name="programheight">80</param>
+                <param name="detailed">$PARAM[detailed]</param>
+                <param name="include_ruler">Layout_PVRGuide_Ruler_Horizontal</param>
+                <param name="border">40</param>
+                <param name="border_genre">40,37,40,37</param>
+                <param name="timeblocks">$PARAM[timeblocks]</param>
+                <param name="rulerunit">$PARAM[rulerunit]</param>
+                <param name="programs_left">20</param>
+                <param name="programs_left_text">60</param>
+                <param name="programs_left_text_slide">90</param>
+                <onup>$PARAM[id]</onup>
+                <ondown>$PARAM[id]</ondown>
+                <viewtype label="$PARAM[viewtype_label]">list</viewtype>
+                <progresstexture border="160,40,60,40">$PARAM[progresstexture]</progresstexture>
+                <pagecontrol>8060</pagecontrol>
+                <!-- <top>-20</top> -->
+                <top>-20</top>
+                <bottom>80</bottom>
+                <!-- <left>-160</left> -->
+                <!-- <right>-40</right> -->
+                <orientation>horizontal</orientation>
+            </include>
+        </definition>
+    </include>
+
+    <include name="View_PVR_ProgrammePanel">
+        <control type="group">
+            <include>Settings_Box</include>
+            <bottom>80</bottom>
+            <top>40</top>
+            <left>380</left>
+        </control>
+    </include>
+
+    <include name="View_PVR_InformationPanel">
+        <control type="group">
+            <right>0</right>
+            <width>400</width>
+            <include>Settings_Box</include>
+            <bottom>80</bottom>
+            <top>40</top>
+
+            <control type="grouplist">
+                <orientation>vertical</orientation>
+                <bottom>20</bottom>
+
+                <control type="group">
+                    <height>242.5</height>
+                    <control type="group">
+                        <include content="Dimension_Padding">
+                            <param name="pad">20</param>
+                        </include>
+                        <include content="Part_Box_Outline">
+                            <control type="image">
+                                <aspectratio scalediffuse="false">keep</aspectratio>
+                                <texture background="true" diffuse="diffuse/landscape_w356_h200.png">$VAR[Image_Landscape]</texture>
+                            </control>
+                        </include>
+                    </control>
+                </control>
+
+                <control type="group">
+                    <height>15</height>
+                </control>
+
+                <control type="label">
+                    <font>font_main_bold</font>
+                    <height>40</height>
+                    <aligny>top</aligny>
+                    <textcolor>main_fg_90</textcolor>
+                    <label>$INFO[ListItem.Title]</label>
+                    <left>30</left>
+                    <right>30</right>
+                    <visible>!String.IsEmpty(ListItem.Title)</visible>
+                </control>
+
+                <control type="textbox">
+                    <font>font_mini_plot</font>
+                    <height>80</height>
+                    <aligny>top</aligny>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$INFO[ListItem.StartDate,,[CR]]$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</label>
+                    <left>30</left>
+                    <right>30</right>
+                </control>
+
+                <control type="textbox">
+                    <font>font_mini_plot</font>
+                    <height>340</height>
+                    <top>15</top>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$VAR[Label_PVR_Episode,,[CR]]$INFO[ListItem.Plot]</label>
+                    <left>30</left>
+                    <right>30</right>
+                </control>
+
+            </control>
+
+        </control>
+    </include>
+
+    <include name="View_PVR_HalfLandscapePanel">
+        <control type="group">
+            <right>0</right>
+            <width>464</width>
+            <include>Settings_Box</include>
+            <bottom>80</bottom>
+            <top>40</top>
+            <control type="grouplist">
+                <orientation>vertical</orientation>
+                <include content="Dimension_Padding">
+                    <param name="pad">20</param>
+                </include>
+                <control type="group">
+                    <height>241</height>
+                    <include content="Part_Box_Outline">
+                        <control type="image">
+                            <aspectratio scalediffuse="false" aligny="top">keep</aspectratio>
+                            <texture background="true" diffuse="diffuse/landscape_w356_h200.png">$VAR[Image_Landscape]</texture>
+                        </control>
+                    </include>
+                </control>
+                <control type="label">
+                    <top>15</top>
+                    <height>30</height>
+                    <font>font_mini_bold</font>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$INFO[ListItem.Title]</label>
+                </control>
+                <control type="label">
+                    <height>30</height>
+                    <font>font_mini</font>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$VAR[Label_PVR_Episode]</label>
+                </control>
+            </control>
+        </control>
+    </include>
+
+
+    <include name="View_PVRGuide">
+        <control type="group">
+            <visible>Control.IsVisible(500)</visible>
+            <include>Dimension_PVR_FullGuide</include>
+            <include>View_PVR_ProgrammePanel</include>
+            <include content="View_PVRGuide_Standard">
+                <param name="id">500</param>
+                <param name="progresstexture">pvr/progressline-full.png</param>
+                <param name="viewtype_label">$LOCALIZE[31013]</param>
+            </include>
+        </control>
+        <control type="group">
+            <visible>Control.IsVisible(501)</visible>
+            <include>Dimension_PVR_FullGuide</include>
+            <control type="group">
+                <right>pvr_panelgroup_w</right>
+                <include>View_PVR_ProgrammePanel</include>
+                <include content="View_PVRGuide_Standard">
+                    <param name="id">501</param>
+                    <param name="progresstexture">pvr/progressline-full.png</param>
+                    <param name="viewtype_label">$LOCALIZE[31014]</param>
+                    <param name="timeblocks">16</param>
+                </include>
+            </control>
+            <include>View_PVR_InformationPanel</include>
+        </control>
+        <control type="group">
+            <visible>Control.IsVisible(502)</visible>
+            <control type="group">
+                <include>Dimension_PVR_HalfGuide</include>
+                <include>View_PVR_ProgrammePanel</include>
+                <include content="View_PVRGuide_Standard">
+                    <param name="id">502</param>
+                    <param name="progresstexture">pvr/progressline-half.png</param>
+                    <param name="viewtype_label">$LOCALIZE[31480]</param>
+                </include>
+            </control>
+        </control>
+        <control type="group">
+            <visible>Control.IsVisible(503)</visible>
+            <control type="group">
+                <include>Dimension_PVR_HalfGuide</include>
+                <control type="group">
+                    <right>504</right>
+                    <include>View_PVR_ProgrammePanel</include>
+                    <include content="View_PVRGuide_Standard">
+                        <param name="id">503</param>
+                        <param name="progresstexture">pvr/progressline-half.png</param>
+                        <param name="viewtype_label">$LOCALIZE[31017]</param>
+                        <param name="timeblocks">16</param>
+                    </include>
+                </control>
+                <include>View_PVR_HalfLandscapePanel</include>
+            </control>
+        </control>
+        <control type="group">
+            <visible>Control.IsVisible(504)</visible>
+            <include>Dimension_PVR_FullGuide</include>
+            <control type="group">
+                <top>120</top>
+                <left>-280</left>
+                <include>View_PVR_ProgrammePanel</include>
+            </control>
+            <include content="View_PVRGuide_Horizontal">
+                <param name="id">504</param>
+                <param name="progresstexture">pvr/progressline-horz.png</param>
+                <param name="viewtype_label">$LOCALIZE[31019]</param>
+            </include>
+        </control>
+        <control type="group">
+            <visible>Control.IsVisible(505)</visible>
+            <include>Dimension_PVR_FullGuide</include>
+            <control type="group">
+                <right>pvr_panelgroup_w</right>
+                <control type="group">
+                    <top>120</top>
+                    <left>-280</left>
+                    <include>View_PVR_ProgrammePanel</include>
+                </control>
+                <include content="View_PVRGuide_Horizontal">
+                    <param name="id">505</param>
+                    <param name="progresstexture">pvr/progressline-horz.png</param>
+                    <param name="viewtype_label">$LOCALIZE[31020]</param>
+                    <param name="channelwidth">300</param>
+                </include>
+            </control>
+            <include>View_PVR_InformationPanel</include>
+        </control>
+    </include>
+
+    <include name="View_PVR_Full">
+        <control type="group">
+            <include>Animation_Group_Bumper</include>
+            <control type="group">
+                <include>Animation_View_WindowChange</include>
+                <include>$PARAM[include]</include>
+            </control>
+            <include>View_PVR_GroupSwitcher</include>
+            <control type="group">
+                <visible>!Control.IsVisible(52)</visible>
+                <visible>!Control.IsVisible(502)</visible>
+                <visible>!Control.IsVisible(503)</visible>
+                <include>Furniture_Header</include>
+            </control>
+            <control type="group">
+                <visible>Control.IsVisible(502) | Control.IsVisible(503)</visible>
+                <include content="Info_Viewline">
+                    <param name="label">$VAR[Label_Header_Main]</param>
+                </include>
+                <control type="group">
+                    <include>Info_Panel_Dimensions</include>
+                    <include>Info_Panel</include>
+                </control>
+            </control>
+        </control>
+        <include>Furniture_Footer_Right</include>
+    </include>
+
+    <include name="View_PVR_Main">
+        <include content="Object_Hidden_Button">
+            <param name="id">67</param>
+            <onfocus>SetFocus(50)</onfocus>
+            <onfocus>ActivateWindow(1171)</onfocus>
+        </include>
+        <control type="group">
+            <visible>!Window.IsVisible(pvrchannelguide)</visible>
+            <include content="View_PVR_Full">
+                <param name="include">$PARAM[include]</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- CHANNELS -->
+    <include name="View_PVRChannels_Standard">
+        <param name="channelheight">80</param>
+        <param name="channelwidth">420</param>
+        <definition>
+            <control type="group">
+                <top>-10</top>
+                <height>50</height>
+
+                <control type="group">
+                    <left>$PARAM[channelwidth]</left>
+
+                    <control type="group">
+                        <left>20</left>
+                        <right>-20</right>
+                        <bottom>-15</bottom>
+                        <top>5</top>
+                        <control type="group">
+                            <control type="image">
+                                <width>1</width>
+                                <texture colordiffuse="main_fg_30">common/white.png</texture>
+                                <bottom>15</bottom>
+                                <top>15</top>
+                            </control>
+                            <control type="label">
+                                <bottom>5</bottom>
+                                <left>10</left>
+                                <width>$PARAM[channelwidth]</width>
+                                <align>left</align>
+                                <aligny>center</aligny>
+                                <font>font_tiny</font>
+                                <label>$LOCALIZE[19030]</label>
+                                <textcolor>main_fg_70</textcolor>
+                                <shadowcolor>main_bg_12</shadowcolor>
+                            </control>
+                        </control>
+
+                        <control type="group">
+                            <left>50%</left>
+                            <control type="image">
+                                <width>1</width>
+                                <texture colordiffuse="main_fg_30">common/white.png</texture>
+                                <bottom>15</bottom>
+                                <top>15</top>
+                            </control>
+                            <control type="label">
+                                <bottom>5</bottom>
+                                <left>10</left>
+                                <width>$PARAM[channelwidth]</width>
+                                <align>left</align>
+                                <aligny>center</aligny>
+                                <font>font_tiny</font>
+                                <label>$LOCALIZE[19031]</label>
+                                <textcolor>main_fg_70</textcolor>
+                                <shadowcolor>main_bg_12</shadowcolor>
+                            </control>
+                        </control>
+
+                    </control>
+                </control>
+            </control>
+
+            <control type="fixedlist" id="$PARAM[id]">
+                <top>60</top>
+                <bottom>99</bottom>
+                <left>-40</left>
+                <orientation>vertical</orientation>
+                <focusposition>$PARAM[focusposition]</focusposition>
+                <movement>$PARAM[movement]</movement>
+
+                <onright>ActivateWindow(1171)</onright>
+
+                <viewtype label="$PARAM[viewtype_label]">list</viewtype>
+                <onfocus>SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+
+                <itemlayout height="$PARAM[channelheight]">
+                    <include content="Layout_PVRChannel">
+                        <param name="channelwidth">$PARAM[channelwidth]</param>
+                        <param name="detailed">$PARAM[detailed]</param>
+                    </include>
+                </itemlayout>
+                <focusedlayout height="$PARAM[channelheight]">
+                    <control type="group">
+                        <visible>[$EXP[Exp_PVRGuide_NoFocus]]</visible>
+                        <include content="Layout_PVRChannel">
+                            <param name="channelwidth">$PARAM[channelwidth]</param>
+                            <param name="detailed">$PARAM[detailed]</param>
+                            <param name="selected">false</param>
+                        </include>
+                    </control>
+                    <control type="group">
+                        <visible>![$EXP[Exp_PVRGuide_NoFocus]]</visible>
+                        <include content="Layout_PVRChannel">
+                            <param name="channelwidth">$PARAM[channelwidth]</param>
+                            <param name="detailed">$PARAM[detailed]</param>
+                            <param name="selected">true</param>
+                        </include>
+                    </control>
+                </focusedlayout>
+            </control>
+        </definition>
+    </include>
+
+    <include name="View_PVRChannels">
+        <control type="group">
+            <visible>Control.IsVisible(500)</visible>
+            <include>Dimension_PVR_FullGuide</include>
+            <include>View_PVR_ProgrammePanel</include>
+            <include content="View_PVRChannels_Standard">
+                <param name="id">500</param>
+                <param name="viewtype_label">$LOCALIZE[31013]</param>
+                <param name="focusposition">4</param>
+                <param name="movement">4</param>
+            </include>
+        </control>
+        <control type="group">
+            <visible>Control.IsVisible(501)</visible>
+            <include>Dimension_PVR_FullGuide</include>
+            <control type="group">
+                <right>pvr_panelgroup_w</right>
+                <include>View_PVR_ProgrammePanel</include>
+                <include content="View_PVRChannels_Standard">
+                    <param name="id">501</param>
+                    <param name="viewtype_label">$LOCALIZE[31014]</param>
+                    <param name="focusposition">4</param>
+                    <param name="movement">4</param>
+                </include>
+            </control>
+            <include>View_PVR_InformationPanel</include>
+        </control>
+        <control type="group">
+            <visible>Control.IsVisible(502)</visible>
+            <include content="Info_Viewline">
+                <param name="label">$VAR[Label_Header_Main]</param>
+            </include>
+            <include content="View_Row_Include">
+                <param name="id">502</param>
+                <param name="include">List_Landscape_Row</param>
+                <param name="viewtype_label">$LOCALIZE[31112]</param>
+            </include>
+            <control type="group">
+                <include>Info_Panel_Dimensions</include>
+                <include>Info_Panel</include>
+            </control>
+        </control>
+    </include>
+
+    <variable name="PVR_GenreType">
+        <value condition="String.IsEmpty(ListItem.Genre) | [!String.IsEmpty(ListItem.Property(GenreType)) + !Integer.IsEqual(ListItem.Property(GenreType),256)]">$INFO[ListItem.Property(GenreType)]</value>
+        <value condition="String.Contains(ListItem.Genre,Drama) | String.Contains(ListItem.Genre,Comedy) | String.Contains(ListItem.Genre,Adventure) | String.Contains(ListItem.Genre,Crime) | String.Contains(ListItem.Genre,Horror) | String.Contains(ListItem.Genre,Action) | String.Contains(ListItem.Genre,Thriller) | String.Contains(ListItem.Genre,Movie) | String.Contains(ListItem.Genre,Fantasy) | String.Contains(ListItem.Genre,Science Fiction) | String.Contains(ListItem.Genre,Romance) | String.Contains(ListItem.Genre,Western)">16</value>
+        <value condition="String.Contains(ListItem.Genre,Documentary) | String.Contains(ListItem.Genre,News) | String.Contains(ListItem.Genre,Current Affairs)">32</value>
+        <value condition="String.Contains(ListItem.Genre,Entertainment) | String.Contains(ListItem.Genre,Reality) | String.Contains(ListItem.Genre,Game Show)">48</value>
+        <value condition="String.Contains(ListItem.Genre,Sport) | String.Contains(ListItem.Genre,Football) | String.Contains(ListItem.Genre,Golf) | String.Contains(ListItem.Genre,Cricket) | String.Contains(ListItem.Genre,Baseball) | String.Contains(ListItem.Genre,Basketball) | String.Contains(ListItem.Genre,Hockey) | String.Contains(ListItem.Genre,Tennis) | String.Contains(ListItem.Genre,Athletics) | String.Contains(ListItem.Genre,Squash) | String.Contains(ListItem.Genre,Equestrian) | String.Contains(ListItem.Genre,Soccer) | String.Contains(ListItem.Genre,Olympics)">64</value>
+        <value condition="String.Contains(ListItem.Genre,Kids) | String.Contains(ListItem.Genre,Family) | String.Contains(ListItem.Genre,Children) | String.Contains(ListItem.Genre,Cartoon)">80</value>
+        <value condition="String.Contains(ListItem.Genre,Music) | String.Contains(ListItem.Genre,Ballet) | String.Contains(ListItem.Genre,Dance) | String.Contains(ListItem.Genre,Opera)">96</value>
+        <value condition="String.Contains(ListItem.Genre,Arts) | String.Contains(ListItem.Genre,Culture) | String.Contains(ListItem.Genre,Religion) | String.Contains(ListItem.Genre,Fashion)">112</value>
+        <value condition="String.Contains(ListItem.Genre,Social) | String.Contains(ListItem.Genre,Political) | String.Contains(ListItem.Genre,Economics)">128</value>
+        <value condition="String.Contains(ListItem.Genre,Science) | String.Contains(ListItem.Genre,Nature) | String.Contains(ListItem.Genre,Education)">144</value>
+        <value condition="String.Contains(ListItem.Genre,Lifestyle) | String.Contains(ListItem.Genre,Special Interest) | String.Contains(ListItem.Genre,Cooking) | String.Contains(ListItem.Genre,Food) | String.Contains(ListItem.Genre,Fitness) | String.Contains(ListItem.Genre,Gardening) | String.Contains(ListItem.Genre,Advertisment) | String.Contains(ListItem.Genre,Shopping)">160</value>
+        <value condition="String.Contains(ListItem.Genre,Special) | String.Contains(ListItem.Genre,Live)">192</value>
+        <value>256</value>
+    </variable>
+</includes>

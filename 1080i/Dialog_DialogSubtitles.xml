@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="DialogSubtitles">
+        <include content="Object_Hidden_List">
+            <param name="id">150</param>
+            <onright>120</onright>
+            <onleft>120</onleft>
+            <onup>120</onup>
+            <ondown>120</ondown>
+        </include>
+        <control type="image" id="110" description="Service Logo">
+            <visible>false</visible>
+        </control>
+        <control type="label" id="130" description="Textbox">
+            <visible>false</visible>
+        </control>
+        <control type="label" id="140" description="Textbox">
+            <visible>false</visible>
+        </control>
+
+        <include content="Part_Dim_Overlay">
+            <param name="visible">!Window.IsVisible(DialogSlider.xml)</param>
+        </include>
+        <control type="group">
+            <visible>!Window.IsVisible(DialogSlider.xml)</visible>
+            <include>Dimension_DialogFullMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogFullMenu</param>
+            </include>
+            <control type="group">
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+                    <!-- Left -->
+                    <control type="group">
+                        <include>Size_LeftGroup_Main</include>
+                        <control type="group">
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="id">100</param>
+                            </include>
+                            <include content="Part_ItemPage">
+                                <param name="id">120</param>
+                                <param name="items_label">$LOCALIZE[287]</param>
+                            </include>
+                            <include>Part_CloseButton</include>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <control type="group">
+                                <bottom>60</bottom>
+                                <include content="List_DialogSelect">
+                                    <param name="id">120</param>
+                                    <param name="itemlayout_include">Layout_DialogSubtitles</param>
+                                    <param name="item_height">140</param>
+                                    <param name="textcolor">dialog_fg</param>
+                                    <onright>61</onright>
+                                    <pagecontrol>61</pagecontrol>
+                                    <include>Size_Grouplist_Pad</include>
+                                </include>
+                                <include content="Part_Scrollbar_Max">
+                                    <param name="id">61</param>
+                                    <param name="inset">false</param>
+                                    <onleft>120</onleft>
+                                    <onright>9000</onright>
+                                </include>
+                            </control>
+                            <control type="group">
+                                <height>80</height>
+                                <bottom>0</bottom>
+                                <include content="Part_InfoText">
+                                    <param name="label">$INFO[Player.FileName,,[CR]]$INFO[Control.GetLabel(140)]$INFO[Control.GetLabel(130), - ,]</param>
+                                    <param name="include_hintlabel">false</param>
+                                    <param name="centerbottom">50%</param>
+                                </include>
+                            </control>
+
+                        </control>
+                    </control>
+                    <!-- Right -->
+                    <include content="Part_Button_Grouplist">
+                        <param name="onleft">61</param>
+                        <param name="items">DialogSubtitles_Items</param>
+                    </include>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogSubtitles_Items_ListItem">
+        <include content="Button_Dialog">
+            <param name="id">90$PARAM[id]</param>
+            <param name="groupid">91$PARAM[id]</param>
+            <param name="control">radiobutton</param>
+            <param name="istext">true</param>
+            <param name="label">$INFO[Container(150).ListItemAbsolute($PARAM[pos]).Label]</param>
+            <selected>String.IsEqual(Container(150).ListItemAbsolute($PARAM[pos]).Label,Control.GetLabel(100))</selected>
+            <visible>!String.IsEmpty(Container(150).ListItemAbsolute($PARAM[pos]).Label)</visible>
+            <onclick>SetFocus(150,$PARAM[pos],absolute)</onclick>
+            <onclick>Action(Select)</onclick>
+        </include>
+    </include>
+
+    <include name="DialogSubtitles_Items">
+        <definition>
+            <include content="Button_Dialog">
+                <param name="id">160</param>
+                <param name="groupid">9160</param>
+                <param name="icon">special://skin/extras/icons/search.png</param>
+                <label>$LOCALIZE[137]</label>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">01</param>
+                <param name="pos">0</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">02</param>
+                <param name="pos">1</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">03</param>
+                <param name="pos">2</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">04</param>
+                <param name="pos">3</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">05</param>
+                <param name="pos">4</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">06</param>
+                <param name="pos">5</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">07</param>
+                <param name="pos">6</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">08</param>
+                <param name="pos">7</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">09</param>
+                <param name="pos">8</param>
+            </include>
+            <include content="DialogSubtitles_Items_ListItem">
+                <param name="id">10</param>
+                <param name="pos">9</param>
+            </include>
+
+
+        </definition>
+    </include>
+
+</includes>
