@@ -5,6 +5,7 @@
         <include content="Info_Panel" condition="$EXP[Exp_View_52$PARAM[id]_Include]">
             <param name="container">Container(53$PARAM[id]).</param>
             <param name="visible">Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),53$PARAM[id])</param>
+            <param name="include_details">$PARAM[include_details]</param>
         </include>
     </include>
 
@@ -58,6 +59,14 @@
         </include>
         <include content="View_Combined_Info">
             <param name="id">4</param>
+        </include>
+        <include content="View_Combined_Info">
+            <param name="id">6</param>
+            <param name="include_details">false</param>
+        </include>
+        <include content="View_Combined_Info">
+            <param name="id">8</param>
+            <param name="include_details">false</param>
         </include>
     </include>
 
@@ -201,54 +210,57 @@
 
     <!-- List Layout -->
     <include name="View_ComboList_Loading_Item">
-        <control type="group">
-            <top>40</top>
-            <left>40</left>
-            <height>233.33</height>
+        <param name="height">165</param>
+        <param name="width">284.44</param>
+        <definition>
             <control type="group">
-                <width>414.81</width>
-                <include content="Object_ItemBack">
-                    <param name="shadow_colordiffuse">shadow_soft</param>
-                    <param name="colordiffuse">main_fg_12</param>
-                </include>
-            </control>
+                <top>40</top>
+                <left>40</left>
+                <height>$PARAM[height]</height>
+                <control type="group">
+                    <width>$PARAM[width]</width>
+                    <include content="Object_ItemBack">
+                        <param name="shadow_colordiffuse">shadow_soft</param>
+                        <param name="colordiffuse">main_fg_12</param>
+                    </include>
+                </control>
 
-            <control type="group">
-                <left>414.81</left>
-                <top>-5</top>
-                <height>80</height>
                 <control type="group">
-                    <left>40</left>
-                    <top>20</top>
-                    <height>24</height>
-                    <width>40%</width>
-                    <include content="Object_Control">
-                        <param name="control">image</param>
-                        <include content="Dimension_Padding">
-                            <param name="pad">-20</param>
+                    <left>$PARAM[width]</left>
+                    <top>-10</top>
+                    <control type="group">
+                        <left>40</left>
+                        <top>20</top>
+                        <height>24</height>
+                        <width>40%</width>
+                        <include content="Object_Control">
+                            <param name="control">image</param>
+                            <include content="Dimension_Padding">
+                                <param name="pad">-20</param>
+                            </include>
+                            <bordersize>20</bordersize>
+                            <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
+                            <texture colordiffuse="main_fg_12" border="12">common/widget_text.png</texture>
                         </include>
-                        <bordersize>20</bordersize>
-                        <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
-                        <texture colordiffuse="main_fg_12" border="12">common/widget_text.png</texture>
-                    </include>
-                </control>
-                <control type="group">
-                    <left>40</left>
-                    <top>70</top>
-                    <height>135</height>
-                    <width>80%</width>
-                    <include content="Object_Control">
-                        <param name="control">image</param>
-                        <include content="Dimension_Padding">
-                            <param name="pad">-20</param>
+                    </control>
+                    <control type="group">
+                        <left>40</left>
+                        <top>70</top>
+                        <bottom>0</bottom>
+                        <width>80%</width>
+                        <include content="Object_Control">
+                            <param name="control">image</param>
+                            <include content="Dimension_Padding">
+                                <param name="pad">-20</param>
+                            </include>
+                            <bordersize>20</bordersize>
+                            <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
+                            <texture colordiffuse="main_fg_12" border="12">common/widget_text.png</texture>
                         </include>
-                        <bordersize>20</bordersize>
-                        <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
-                        <texture colordiffuse="main_fg_12" border="12">common/widget_text.png</texture>
-                    </include>
+                    </control>
                 </control>
             </control>
-        </control>
+        </definition>
     </include>
 
     <include name="View_ComboList_Include">
@@ -310,26 +322,28 @@
                             <onleft>52$PARAM[id]</onleft>
                             <onfocus>SetProperty(InfoPanel.FullSwitch,List,Home)</onfocus>
                         </include>
+
+                        <control type="grouplist">
+                            <top>-20</top>
+                            <left>20</left>
+                            <orientation>vertical</orientation>
+
+                            <animation type="Conditional" reversible="false" condition="Container(53$PARAM[id]).IsUpdating">
+                                <effect type="fade" start="0" end="100" time="200" delay="600" />
+                            </animation>
+                            <animation type="Conditional" reversible="false" condition="!Container(53$PARAM[id]).IsUpdating">
+                                <effect type="fade" start="100" end="0" time="0" delay="0" />
+                            </animation>
+
+                            <itemgap>20</itemgap>
+
+                            <include>View_ComboList_Loading_Item</include>
+                            <include>View_ComboList_Loading_Item</include>
+                            <include>View_ComboList_Loading_Item</include>
+                        </control>
                     </control>
 
-                    <control type="grouplist">
-                        <top>-10</top>
-                        <left>20</left>
-                        <orientation>vertical</orientation>
 
-                        <animation type="Conditional" reversible="false" condition="Container(53$PARAM[id]).IsUpdating">
-                            <effect type="fade" start="0" end="100" time="200" delay="600" />
-                        </animation>
-                        <animation type="Conditional" reversible="false" condition="!Container(53$PARAM[id]).IsUpdating">
-                            <effect type="fade" start="100" end="0" time="0" delay="0" />
-                        </animation>
-
-                        <itemgap>20</itemgap>
-
-                        <include>View_ComboList_Loading_Item</include>
-                        <include>View_ComboList_Loading_Item</include>
-                        <include>View_ComboList_Loading_Item</include>
-                    </control>
                 </control>
 
 
@@ -374,7 +388,7 @@
                 <pagecontrol>64</pagecontrol>
                 <onright>64</onright>
 
-                <onfocus>ClearProperty(TMDbHelper.WidgetContainer)</onfocus>
+                <onfocus>SetProperty(TMDbHelper.WidgetContainer,53$PARAM[id])</onfocus>
                 <onfocus>SetProperty(Background.ShowOverlay,True,Home)</onfocus>
             </include>
         </definition>
@@ -423,7 +437,7 @@
     <!-- Combined List -->
     <include name="View_526_List_Combined">
         <include content="View_ComboList_Include">
-            <param name="id">5</param>
+            <param name="id">6</param>
             <param name="viewtype_label">$LOCALIZE[31580]</param>
             <param name="visible">$EXP[Exp_View_526]</param>
         </include>
@@ -447,6 +461,34 @@
                 <ondown>528</ondown>
                 <onfocus>SetProperty(InfoPanel.FullSwitch,List,Home)</onfocus>
             </include>
+            <control type="grouplist">
+                <top>-20</top>
+                <left>20</left>
+                <right>-80</right>
+                <orientation>vertical</orientation>
+
+                <animation type="Conditional" reversible="false" condition="Container(538).IsUpdating">
+                    <effect type="fade" start="0" end="100" time="200" delay="600" />
+                </animation>
+                <animation type="Conditional" reversible="false" condition="!Container(538).IsUpdating">
+                    <effect type="fade" start="100" end="0" time="0" delay="0" />
+                </animation>
+
+                <itemgap>25</itemgap>
+
+                <include content="View_ComboList_Loading_Item">
+                    <param name="height">140</param>
+                    <param name="width">248.88</param>
+                </include>
+                <include content="View_ComboList_Loading_Item">
+                    <param name="height">140</param>
+                    <param name="width">248.88</param>
+                </include>
+                <include content="View_ComboList_Loading_Item">
+                    <param name="height">140</param>
+                    <param name="width">248.88</param>
+                </include>
+            </control>
         </control>
         <control type="group">
             <bottom>180</bottom>
@@ -455,34 +497,6 @@
             <visible>Control.IsVisible(528)</visible>
         </control>
     </include>
-    <!-- <include name="View_528_List_Combined">
-        <control type="group">
-            <left>20</left>
-            <right>1168</right>
-            <top>310</top>
-            <bottom>140</bottom>
-            <visible>Control.IsVisible(528)</visible>
-            <include content="View_ComboList_Expanded">
-                <param name="id">8</param>
-                <param name="item_height">85</param>
-                <param name="itemlayout_include">Layout_MediaList</param>
-                <param name="movement">5</param>
-                <onup>528</onup>
-                <ondown>SetFocus(538,0,absolute)</ondown>
-                <ondown>528</ondown>
-
-                <left>40</left>
-                <bottom>40</bottom>
-                <right>20</right>
-            </include>
-        </control>
-        <control type="group">
-            <bottom>180</bottom>
-            <right>80</right>
-            <include>View_Media_Landscape</include>
-            <visible>Control.IsVisible(528)</visible>
-        </control>
-    </include> -->
 
     <include name="View_Combined_Row_Horz_Selector">
         <control type="group">
