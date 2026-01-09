@@ -127,7 +127,35 @@
         </definition>
     </include>
 
+    <include name="Background_Video_Offscreen">
+        <control type="group">
+            <description>Off-screen videowindow for avoiding sync issues</description>
+            <control type="videowindow">
+                <description>Hide behind background</description>
+                <visible>!Window.IsVisible(1123)</visible>
+            </control>
+            <control type="image">
+                <texture colordiffuse="black">common/white.png</texture>
+            </control>
+        </control>
+    </include>
+
     <include name="Background_Video">
+        <control type="group">
+            <description>On-screen videowindow for background video</description>
+            <control type="videowindow">
+                <visible>!Window.IsVisible(1123)</visible>
+            </control>
+            <control type="visualisation">
+                <visible>!Window.IsVisible(1123)</visible>
+            </control>
+            <control type="image">
+                <texture colordiffuse="black">diffuse/flixart/flixart_invert.png</texture>
+            </control>
+        </control>
+    </include>
+
+    <include name="Background_Video_FlixArt">
         <control type="group">
             <description>On-screen videowindow for background video</description>
             <control type="group">
@@ -137,10 +165,12 @@
                 <control type="videowindow">
                     <right>0</right>
                     <width>flixart_size_w</width>
+                    <visible>!Window.IsVisible(1123)</visible>
                 </control>
                 <control type="visualisation">
                     <right>0</right>
                     <width>flixart_size_w</width>
+                    <visible>!Window.IsVisible(1123)</visible>
                 </control>
                 <control type="image">
                     <right>0</right>
@@ -222,6 +252,7 @@
         <param name="condition_zoomer">[!$EXP[Exp_InfoDialogs] + $EXP[Hub_Spotlight_Visible_Expression]]</param>
         <param name="include_zoomer">Window.IsVisible(Home) | Window.IsVisible(1101) | Window.IsVisible(1102) | Window.IsVisible(1103) | Window.IsVisible(1104)</param>
         <definition>
+            <include condition="![$PARAM[video_background]]">Background_Video_Offscreen</include>
             <include condition="$PARAM[video_background]">Background_Video</include>
 
             <control type="group">
