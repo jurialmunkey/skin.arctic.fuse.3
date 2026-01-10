@@ -6,7 +6,7 @@
         <value>$LOCALIZE[10106]</value>
     </variable>
 
-    <expression name="DialogContextMenu_HasArtwork">[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_poster)) + !$EXP[Exp_InfoDialogs]]</expression>
+    <expression name="DialogContextMenu_HasArtwork">[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_poster)) + !$EXP[Exp_InfoDialogs] + !Skin.HasSetting(ContextMenu.DisableArtwork)]</expression>
 
     <variable name="DialogContextMenu_OnUp">
         <value condition="Control.IsVisible(1020)">SetFocus(1020)</value>
@@ -34,7 +34,7 @@
 	<include name="DialogContextMenu">
         <param name="has_artwork">$EXP[DialogContextMenu_HasArtwork]</param>
         <param name="has_template">true</param>
-        <param name="has_menu">true</param>
+        <param name="has_menu">!Skin.HasSetting(ContextMenu.DisableOptionsTray)</param>
         <param name="include_tray">DialogContextMenu_Items</param>
         <param name="hidden_icon">true</param>
         <param name="scrollbar_id">61</param>
@@ -114,9 +114,9 @@
                                 <control type="grouplist" id="996">
                                     <pagecontrol>$PARAM[scrollbar_id]</pagecontrol>
                                     <onright>$PARAM[scrollbar_id]</onright>
-                                    <onup>6000</onup>
-                                    <ondown>SetFocus(1001)</ondown>
-                                    <ondown>SetFocus(6000)</ondown>
+                                    <onup condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">6000</onup>
+                                    <ondown condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">SetFocus(1001)</ondown>
+                                    <ondown condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">SetFocus(6000)</ondown>
                                     <include>Size_Grouplist_Pad</include>
                                 </control>
                                 <include content="Part_Scrollbar">
