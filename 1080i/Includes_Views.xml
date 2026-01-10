@@ -21,11 +21,12 @@
     <expression name="View_Scrollbar_Horizontal_Expression">[$EXP[View_Mode_Rows_Expression] | $EXP[View_Mode_Comb_Flix_Expression]]</expression>
     <expression name="View_Scrollbar_Vertical_Flix_Expression">[$EXP[View_Mode_List_Flix_Expression]]</expression>
     <expression name="View_Scrollbar_Vertical_Full_Expression">[$EXP[View_Mode_List_Full_Expression] | $EXP[View_Mode_Comb_Full_Expression] | $EXP[View_Mode_Comb_Tall_Expression]]</expression>
-    <expression name="View_Scrollbar_Vertical_Wall_Expression">[$EXP[View_Mode_Wall_Expression]]</expression>
+    <expression name="View_Scrollbar_Vertical_Wall_Expression">[$EXP[View_Mode_Wall_Expression] + !Control.IsVisible(512)]</expression>
 
     <include name="View_Row_Line">
         <control type="group">
             <visible>!Integer.IsEqual(Container.NumItems,0)</visible>
+            <visible>!Control.IsVisible(512)</visible>
             <control type="group">
                 <visible>$EXP[View_Row_Info_Details_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Flix_Expression]</visible>
@@ -59,6 +60,7 @@
     <include name="View_Row_Info">
         <control type="group">
             <visible>!Integer.IsEqual(Container.NumItems,0)</visible>
+            <visible>!Control.IsVisible(512)</visible>
             <include>Info_Panel_Dimensions</include>
             <include content="Info_Panel">
                 <param name="visible">String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer))</param>
@@ -333,6 +335,12 @@
             <control type="group">
                 <include>Furniture_Reposition</include>
                 <visible>!$EXP[Exp_InfoDialogs]</visible>
+                <visible>!Control.IsVisible(510)</visible>
+                <visible>!Control.IsVisible(511)</visible>
+                <visible>!Control.IsVisible(512)</visible>
+                <visible>!Control.IsVisible(513)</visible>
+                <visible>!Control.IsVisible(514)</visible>
+                <visible>!String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Wall)</visible>
                 <include>Furniture_Footer_Right</include>
             </control>
         </definition>
