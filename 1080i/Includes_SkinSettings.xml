@@ -479,11 +479,31 @@
 
     <!-- Details -->
     <include name="SkinSettings_Items_Details">
+
+        <include content="Settings_Label" description="TMDbHelper">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">001</param>
+            <label>TMDbHelper</label>
+        </include>
+
+        <include content="Settings_Button" description="TMDbHelper Service">
+            <param name="control">radiobutton</param>
+            <param name="dialog">false</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">002</param>
+            <label>TMDbHelper $LOCALIZE[19099]</label>
+            <include>Action_TMDbHelper_Toggle_Onclick</include>
+            <selected>$EXP[Exp_TMDbHelper_IsData]</selected>
+        </include>
+
         <include content="Settings_Label" description="Ratings">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">006</param>
             <label>$LOCALIZE[31202]</label>
+            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </include>
 
         <include content="Settings_Button" description="CustomDialog Movie  Ratings">
@@ -496,6 +516,7 @@
             <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31202]: $LOCALIZE[342][/CAPITALIZE],Home)</onclick>
             <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Ratings_Movies_Items,Home)</onclick>
             <onclick>ActivateWindow(1118)</onclick>
+            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </include>
 
         <include content="Settings_Button" description="CustomDialog TV Ratings">
@@ -508,6 +529,7 @@
             <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31202]: $LOCALIZE[20343][/CAPITALIZE],Home)</onclick>
             <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Ratings_TVShows_Items,Home)</onclick>
             <onclick>ActivateWindow(1118)</onclick>
+            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </include>
 
     </include>
@@ -636,6 +658,7 @@
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">020</param>
+            <param name="slevel">2</param>
             <label>$LOCALIZE[10039]</label>
         </include>
         <include content="Settings_Button" description="Nuke Everything">
@@ -648,16 +671,6 @@
             <onclick>SetProperty(StartupReplaceWindow,skinsettings,Home)</onclick>
             <onclick>Skin.ResetSettings</onclick>
             <onclick>ActivateWindow(1198)</onclick>
-        </include>
-        <include content="Settings_Button" description="Nuke Search History">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">022</param>
-            <param name="slevel">1</param>
-            <label>$LOCALIZE[31376]</label>
-            <visible>!String.IsEmpty(Skin.String(SearchHistory))</visible>
-            <onclick>Skin.Reset(SearchHistory)</onclick>
         </include>
         <include content="Settings_Button" description="TMDbHelper for PVR">
             <param name="dialog">false</param>

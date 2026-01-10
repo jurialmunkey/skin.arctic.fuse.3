@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <include name="Action_TMDbHelper_Toggle_Onclick">
+        <onclick>Skin.ToggleSetting(TMDbHelper.Service)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_tvshowtitle,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_plot,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_studio,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_poster,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_fanart,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_thumb,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_clearlogo,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_isfolder,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_icon,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_title,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_folderpath,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_dbtype,Home)</onclick>
+        <onclick>ClearProperty(TMDbHelper.ListItem.base_label,Home)</onclick>
+    </include>
+
     <variable name="Action_DialogInfo_PlayMedia">
         <!-- Play FileNameAndPath -->
         <value condition="!String.IsEmpty(ListItem.FileNameAndPath) + !$EXP[Exp_IsFolder]">RunScript(plugin.video.themoviedb.helper,close_dialog=1190,"playmedia=$INFO[ListItem.FileNameAndPath]")</value>
@@ -198,12 +215,13 @@
         </definition>
     </include>
     <include name="Action_Blur_Onload">
-        <include content="_Action_Blur_Onload" condition="!Skin.HasSetting(Background.ExtraFanart)">
+        <include content="_Action_Blur_Onload" condition="!Skin.HasSetting(Background.ExtraFanart) + $EXP[Exp_TMDbHelper_IsBlur]">
             <param name="sourceimage">Art(fanart)|Property(fanart)||EPGEventIcon||PicturePath</param>
         </include>
-        <include content="_Action_Blur_Onload" condition="Skin.HasSetting(Background.ExtraFanart)">
+        <include content="_Action_Blur_Onload" condition="Skin.HasSetting(Background.ExtraFanart) + $EXP[Exp_TMDbHelper_IsBlur]">
             <param name="sourceimage">Art(tvshow.fanart{x})|Art(fanart{x})|Property(fanart)||EPGEventIcon||PicturePath</param>
         </include>
+
     </include>
     <include name="_Action_Blur_OnUnload">
         <param name="sourceimage">Art(fanart)</param>
@@ -251,8 +269,8 @@
     <include name="Action_Scheme_Onclick_Bright">
         <onclick>Skin.Reset(focuscolor.name)</onclick>
         <onclick>Skin.Reset(RevertSelectedText)</onclick>
-        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.Reset(Background.DialogImage)</onclick>
-        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.Reset(Background.DialogImage)</onclick>
+        <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
     </include>
@@ -260,8 +278,8 @@
     <include name="Action_Scheme_Onclick_Miami">
         <onclick>Skin.SetString(focuscolor.name,ffe91e63)</onclick>
         <onclick>Skin.SetBool(RevertSelectedText)</onclick>
-        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.Reset(Background.DialogImage)</onclick>
-        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.Reset(Background.DialogImage)</onclick>
+        <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
     </include>
@@ -269,8 +287,8 @@
     <include name="Action_Scheme_Onclick_Aqua">
         <onclick>Skin.SetString(focuscolor.name,ff00b8d4)</onclick>
         <onclick>Skin.SetBool(RevertSelectedText)</onclick>
-        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Green)</onclick>
-        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Green)</onclick>
+        <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/green_blur.jpg)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
     </include>
@@ -278,8 +296,8 @@
     <include name="Action_Scheme_Onclick_Sunset">
         <onclick>Skin.SetString(focuscolor.name,fff4511e)</onclick>
         <onclick>Skin.SetBool(RevertSelectedText)</onclick>
-        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Blush)</onclick>
-        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Blush)</onclick>
+        <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/pink_blur.jpg)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
     </include>
@@ -287,8 +305,8 @@
     <include name="Action_Scheme_Onclick_Slate">
         <onclick>Skin.SetString(focuscolor.name,ff0091ea)</onclick>
         <onclick>Skin.SetBool(RevertSelectedText)</onclick>
-        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Slate)</onclick>
-        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Slate)</onclick>
+        <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/slate_blur.jpg)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
     </include>
@@ -296,8 +314,8 @@
     <include name="Action_Scheme_Onclick_Midnight">
         <onclick>Skin.SetString(focuscolor.name,ff5528a8)</onclick>
         <onclick>Skin.SetBool(RevertSelectedText)</onclick>
-        <onclick condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Coal)</onclick>
-        <onclick condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+        <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Coal)</onclick>
+        <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/coal_blur.jpg)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
     </include>

@@ -43,10 +43,10 @@
     <include name="Background_Artwork">
         <param name="fadetime">background_fadetime</param>
         <definition>
-            <include content="Background_FlixArt" condition="Skin.HasSetting(TMDbHelper.EnableBlur)">
+            <include content="Background_FlixArt" condition="$EXP[Exp_TMDbHelper_IsBlur]">
                 <param name="fadetime">$PARAM[fadetime]</param>
             </include>
-            <include content="Background_FlixArt" condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">
+            <include content="Background_FlixArt" condition="!$EXP[Exp_TMDbHelper_IsBlur]">
                 <param name="fadetime">$PARAM[fadetime]</param>
                 <param name="diffuse">diffuse/flixart/flixart_new.png</param>
             </include>
@@ -78,12 +78,12 @@
         <definition>
             <control type="group">
                 <include>Background_NotVideo</include>
-                <include content="Background_Blur_Quadrants" condition="Skin.HasSetting(TMDbHelper.EnableBlur)">
+                <include content="Background_Blur_Quadrants" condition="$EXP[Exp_TMDbHelper_IsBlur]">
                     <param name="flixart_size_w">$PARAM[flixart_size_w]</param>
                     <param name="flixart_size_h">$PARAM[flixart_size_h]</param>
                     <param name="fadetime">$PARAM[fadetime]</param>
                 </include>
-                <include content="Background_Image" condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">
+                <include content="Background_Image" condition="!$EXP[Exp_TMDbHelper_IsBlur]">
                     <param name="fadetime">$PARAM[fadetime]</param>
                 </include>
             </control>
@@ -193,7 +193,7 @@
     <include name="Background_Main_Plain">
         <control type="group">
             <description>Plain background used to prevent fadetime transitions</description>
-            <include content="Background_Blur" condition="Skin.HasSetting(TMDbHelper.EnableBlur)">
+            <include content="Background_Blur">
                 <param name="fadetime">0</param>
             </include>
             <include content="Background_Artwork">
@@ -206,7 +206,7 @@
         <control type="group">
             <animation effect="fade" start="0" end="100" time="background_fadetime">Visible</animation>
             <animation effect="fade" start="100" end="0" time="background_fadetime">Hidden</animation>
-            <include condition="Skin.HasSetting(TMDbHelper.EnableBlur)">Background_Blur</include>
+            <include>Background_Blur</include>
             <include>Background_Artwork</include>
         </control>
     </include>

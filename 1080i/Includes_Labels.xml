@@ -135,7 +135,7 @@
     </variable>
 
     <variable name="Label_Setting_BackgroundBlur">
-        <value condition="!Skin.HasSetting(TMDbHelper.EnableBlur)">$LOCALIZE[39173] ($LOCALIZE[474])</value>
+        <value condition="!$EXP[Exp_TMDbHelper_IsBlur]">$LOCALIZE[39173] ($LOCALIZE[474])</value>
         <value condition="Skin.String(TMDbHelper.Blur.Size,720)">$LOCALIZE[39173] ($LOCALIZE[13508])</value>
         <value condition="Skin.String(TMDbHelper.Blur.Size,240)">$LOCALIZE[39173] ($LOCALIZE[418])</value>
         <value>$LOCALIZE[39173] ($LOCALIZE[571])</value>
@@ -342,7 +342,7 @@
     </variable>
 
     <variable name="Label_Studio">
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_studio))">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_studio)]</value>
+        <value condition="!String.IsEmpty(ListItem.Studio)">$INFO[ListItem.Studio]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Network.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Network.1.Name)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Studio.1.Name)]</value>
     </variable>
@@ -1058,10 +1058,12 @@
     </variable>
 
     <variable name="Label_Overlay_Directing">
+        <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.Director]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.1.Name)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.1.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.2.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.2.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.3.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.3.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.4.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.4.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.5.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.5.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.6.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.6.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.7.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.7.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.8.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.8.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.9.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Director.9.Role), (,)]</value>
     </variable>
 
     <variable name="Label_Overlay_Writing">
+        <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.Writing]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.1.Name)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.1.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.2.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.2.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.3.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.3.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.4.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.4.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.5.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.5.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.6.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.6.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.7.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.7.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.8.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.8.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.9.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Writer.9.Role), (,)]</value>
     </variable>
 
@@ -1086,16 +1088,28 @@
     </variable>
 
     <variable name="Label_Overlay_TopCast">
+        <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.Cast]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.1.Name))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.1.Name)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.1.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.2.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.2.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.3.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.3.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.4.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.4.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.5.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.5.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.6.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.6.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.7.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.7.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.8.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.8.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.9.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Cast.9.Role), (,)]</value>
     </variable>
 
     <variable name="Label_Overlay_Premiered">
+        <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.Premiered]</value>
         <value condition="!String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_Type),person)">[B][COLOR=dialog_fg_90]$VAR[Label_ListItem_NextAired_Header][/B][/COLOR][CR]$VAR[Label_ListItem_NextAired]$VAR[Label_ListItem_Status, (,)]</value>
         <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_Type),person)">$INFO[Window(Home).Property(TMDbHelper.ListItem.Birthday),[B][COLOR=dialog_fg_90]$LOCALIZE[31169][/B][/COLOR][CR],[CR][CR]]$INFO[Window(Home).Property(TMDbHelper.ListItem.Deathday),[B][COLOR=dialog_fg_90]$LOCALIZE[21897][/B][/COLOR][CR],[CR][CR]]$INFO[Window(Home).Property(TMDbHelper.ListItem.Age),[B][COLOR=dialog_fg_90]$LOCALIZE[31322][/B][/COLOR][CR],[CR][CR]]$INFO[Window(Home).Property(TMDbHelper.ListItem.Gender),[B][COLOR=dialog_fg_90]$LOCALIZE[39025][/B][/COLOR][CR],[CR][CR]]</value>
     </variable>
 
+    <variable name="Label_Overlay_Tagline">
+        <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.TagLine]</value>
+        <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.Tagline)]</value>
+    </variable>
+
+    <variable name="Label_Overlay_Title">
+        <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.Label]</value>
+        <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.base_label)]</value>
+    </variable>
+
     <variable name="Label_Overlay_PlotBox">
-        <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.Tagline),[B][COLOR=dialog_fg_90]$LOCALIZE[202][/COLOR][/B][CR],[CR][CR]]$VAR[Label_Plot_TMDbHelper,[B][COLOR=dialog_fg_90]$LOCALIZE[31028][/COLOR][/B][CR],]$VAR[Label_Overlay_Critics,[CR][CR],]$VAR[Label_Overlay_Directing,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31038][/COLOR][/B][CR],]$VAR[Label_Overlay_Writing,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31039][/COLOR][/B][CR],]$VAR[Label_Overlay_TopCast,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31076][/COLOR][/B][CR],]$VAR[Label_Overlay_Production,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31383][/COLOR][/B][CR],]$VAR[Label_Overlay_Sound,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31052][/COLOR][/B][CR],]$VAR[Label_Overlay_ArtDepartment,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31072][/COLOR][/B][CR],]$VAR[Label_Overlay_Cinematography,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31067][/COLOR][/B][CR],]$VAR[Label_Overlay_Editing,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31075][/COLOR][/B][CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards),[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31064][/COLOR][/B][CR],]$VAR[Label_Overlay_AwardsWon]$VAR[Label_Overlay_AwardsNominated]$VAR[Label_Overlay_Providers,[CR][CR][B][COLOR=dialog_fg_90]JustWatch[/COLOR][/B][CR],]$VAR[Label_Overlay_FileDetails,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[561] $LOCALIZE[33029][/COLOR][/B],]</value>
+        <value>$VAR[Label_Overlay_Tagline,[B][COLOR=dialog_fg_90]$LOCALIZE[202][/COLOR][/B][CR],[CR][CR]]$VAR[Label_Plot_TMDbHelper,[B][COLOR=dialog_fg_90]$LOCALIZE[31028][/COLOR][/B][CR],]$VAR[Label_Overlay_Critics,[CR][CR],]$VAR[Label_Overlay_Directing,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31038][/COLOR][/B][CR],]$VAR[Label_Overlay_Writing,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31039][/COLOR][/B][CR],]$VAR[Label_Overlay_TopCast,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31076][/COLOR][/B][CR],]$VAR[Label_Overlay_Production,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31383][/COLOR][/B][CR],]$VAR[Label_Overlay_Sound,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31052][/COLOR][/B][CR],]$VAR[Label_Overlay_ArtDepartment,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31072][/COLOR][/B][CR],]$VAR[Label_Overlay_Cinematography,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31067][/COLOR][/B][CR],]$VAR[Label_Overlay_Editing,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31075][/COLOR][/B][CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards),[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[31064][/COLOR][/B][CR],]$VAR[Label_Overlay_AwardsWon]$VAR[Label_Overlay_AwardsNominated]$VAR[Label_Overlay_Providers,[CR][CR][B][COLOR=dialog_fg_90]JustWatch[/COLOR][/B][CR],]$VAR[Label_Overlay_FileDetails,[CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[561] $LOCALIZE[33029][/COLOR][/B],]</value>
     </variable>
 
     <variable name="Label_Overlay_1114_PlotBox">
@@ -1144,6 +1158,7 @@
     </variable>
 
     <variable name="Label_Plot_TMDbHelper">
+        <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.Plot]</value>
         <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.DBType),episode) + !String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.base_plot))">$VAR[Label_Plot_Episode_Type_TMDBHelper,,: ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Title)]$INFO[Window(Home).Property(TMDBHelper.ListItem.base_plot), ~ ,]</value>
         <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.DBType),episode) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Plot))">$VAR[Label_Plot_Episode_Type_TMDBHelper,,: ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Title)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Plot), ~ ,]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.base_plot))">$INFO[Window(Home).Property(TMDBHelper.ListItem.base_plot)]</value>
