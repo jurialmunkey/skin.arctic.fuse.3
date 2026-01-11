@@ -43,7 +43,6 @@
                                     <property name="widgets">true</property>
                                     <property name="enabled">true</property>
                                     <property name="mode">$INFO[Skin.String(HomeSwitcher.1105.Mode)]</property>
-                                    <!-- <property name="rename">HomeSwitcher.1105</property> -->
                                 </item>
                                 <item id="0">
                                     <label>$VAR[Home_Name_home]</label>
@@ -53,10 +52,8 @@
                                     <property name="submenu">true</property>
                                     <property name="rename">HomeSwitcher.Home</property>
                                     <property name="enabled">true</property>
-                                    <property name="shortcut">$INFO[Skin.String(HomeSwitcher.Home.Shortcut.Path)]</property>
                                     <property name="mode">$INFO[Skin.String(HomeSwitcher.Home.Mode)]</property>
-                                    <property name="spotlight">$INFO[Skin.String(HomeSwitcher.Home.Spotlight.Path)]</property>
-                                    <property name="spotlight_label">$INFO[Skin.String(HomeSwitcher.Home.Spotlight.Label)]</property>
+                                    <property name="spotlight">true</property>
                                     <property name="custom">true</property>
                                 </item>
                                 <item id="1">
@@ -68,10 +65,8 @@
                                     <property name="rename">HomeSwitcher.1101</property>
                                     <property name="toggle">true</property>
                                     <property name="enabled">$INFO[Skin.String(HomeSwitcher.1101.Toggle)]</property>
-                                    <property name="shortcut">$INFO[Skin.String(HomeSwitcher.1101.Shortcut.Path)]</property>
                                     <property name="mode">$INFO[Skin.String(HomeSwitcher.1101.Mode)]</property>
-                                    <property name="spotlight">$INFO[Skin.String(HomeSwitcher.1101.Spotlight.Path)]</property>
-                                    <property name="spotlight_label">$INFO[Skin.String(HomeSwitcher.1101.Spotlight.Label)]</property>
+                                    <property name="spotlight">true</property>
                                     <property name="custom">true</property>
                                 </item>
                                 <item id="2">
@@ -83,10 +78,8 @@
                                     <property name="rename">HomeSwitcher.1102</property>
                                     <property name="toggle">true</property>
                                     <property name="enabled">$INFO[Skin.String(HomeSwitcher.1102.Toggle)]</property>
-                                    <property name="shortcut">$INFO[Skin.String(HomeSwitcher.1102.Shortcut.Path)]</property>
                                     <property name="mode">$INFO[Skin.String(HomeSwitcher.1102.Mode)]</property>
-                                    <property name="spotlight">$INFO[Skin.String(HomeSwitcher.1102.Spotlight.Path)]</property>
-                                    <property name="spotlight_label">$INFO[Skin.String(HomeSwitcher.1102.Spotlight.Label)]</property>
+                                    <property name="spotlight">true</property>
                                     <property name="custom">true</property>
                                 </item>
                                 <item id="3">
@@ -98,10 +91,8 @@
                                     <property name="rename">HomeSwitcher.1103</property>
                                     <property name="toggle">true</property>
                                     <property name="enabled">$INFO[Skin.String(HomeSwitcher.1103.Toggle)]</property>
-                                    <property name="shortcut">$INFO[Skin.String(HomeSwitcher.1103.Shortcut.Path)]</property>
                                     <property name="mode">$INFO[Skin.String(HomeSwitcher.1103.Mode)]</property>
-                                    <property name="spotlight">$INFO[Skin.String(HomeSwitcher.1103.Spotlight.Path)]</property>
-                                    <property name="spotlight_label">$INFO[Skin.String(HomeSwitcher.1103.Spotlight.Label)]</property>
+                                    <property name="spotlight">true</property>
                                     <property name="custom">true</property>
                                 </item>
                                 <item id="4">
@@ -113,17 +104,14 @@
                                     <property name="rename">HomeSwitcher.1104</property>
                                     <property name="toggle">true</property>
                                     <property name="enabled">$INFO[Skin.String(HomeSwitcher.1104.Toggle)]</property>
-                                    <property name="shortcut">$INFO[Skin.String(HomeSwitcher.1104.Shortcut.Path)]</property>
                                     <property name="mode">$INFO[Skin.String(HomeSwitcher.1104.Mode)]</property>
-                                    <property name="spotlight">$INFO[Skin.String(HomeSwitcher.1104.Spotlight.Path)]</property>
-                                    <property name="spotlight_label">$INFO[Skin.String(HomeSwitcher.1104.Spotlight.Label)]</property>
+                                    <property name="spotlight">true</property>
                                     <property name="custom">true</property>
                                 </item>
                                 <item id="9">
                                     <label>$LOCALIZE[33060]</label>
                                     <icon>special://skin/extras/icons/power.png</icon>
                                     <property name="editmenu">menu=power</property>
-                                    <property name="widgets">false</property>
                                 </item>
                             </content>
                         </include>
@@ -166,61 +154,45 @@
                                     <visible>!String.IsEmpty(Container(30000).ListItem.Property(toggle))</visible>
                                 </include>
 
-                                <!-- Search -->
-                                <include content="Settings_Button" description="cOMBINED">
-                                    <param name="control">radiobutton</param>
+                                <!-- Widget Mode -->
+                                <include content="Settings_Button" description="Layout (Hubs)">
+                                    <param name="dialog">false</param>
+                                    <param name="id">9006</param>
+                                    <label>$LOCALIZE[31158]</label>
+                                    <label2>$VAR[Label_Setting_Hub_Mode]</label2>
+                                    <onclick>SetProperty(Dialog.1125.Value,$INFO[Container(30000).ListItem.Property(rename)],Home)</onclick>
+                                    <onclick>ActivateWindow(1125)</onclick>
+                                    <visible>!String.IsEmpty(Container(30000).ListItem.Property(rename))</visible>
+                                    <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
+                                </include>
+                                <include content="Settings_Button" description="Layout (Search)">
+                                    <param name="control">button</param>
                                     <param name="dialog">false</param>
                                     <param name="id">9053</param>
-                                    <label>$LOCALIZE[31083]</label>
-                                    <selected>!Skin.HasSetting(Search.DisableCombined)</selected>
+                                    <label>$LOCALIZE[31158]</label>
+                                    <label2>$VAR[Label_Setting_Search_Mode]</label2>
                                     <onclick>Skin.ToggleSetting(Search.DisableCombined)</onclick>
                                     <visible>String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search)</visible>
                                 </include>
 
-
-                                <include content="Settings_Button" description="Label">
+                                <!-- Customisation -->
+                                <include content="Settings_Label">
+                                    <param name="id">9011</param>
+                                    <param name="control">label</param>
                                     <param name="dialog">false</param>
-                                    <param name="id">9003</param>
-                                    <label>$LOCALIZE[21899]</label>
-                                    <label2>$INFO[Container(30000).ListItem.Label]</label2>
-                                    <onclick>Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.Name])</onclick>
-                                    <visible>String.IsEqual(Container(30000).ListItem.Property(custom),true)</visible>
-                                    <visible>!String.IsEmpty(Container(30000).ListItem.Property(rename))</visible>
-                                    <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
-                                </include>
-
-                                <include content="Settings_Button" description="Icon">
-                                    <param name="dialog">false</param>
-                                    <param name="id">9004</param>
-                                    <label>$LOCALIZE[31274]</label>
-                                    <label2>$INFO[Container(30000).ListItem.Icon]</label2>
-                                    <onclick>SetProperty(setting,$INFO[Container(30000).ListItem.Property(rename),,.Icon],1117)</onclick>
-                                    <onclick>ActivateWindow(1117)</onclick>
-                                    <visible>String.IsEqual(Container(30000).ListItem.Property(custom),true)</visible>
-                                    <visible>!String.IsEmpty(Container(30000).ListItem.Property(rename))</visible>
+                                    <description>Default Setting Label</description>
+                                    <label>$LOCALIZE[31203]</label>
                                     <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
                                 </include>
 
                                 <include content="Settings_Button" description="Shortcut">
                                     <param name="dialog">false</param>
-                                    <param name="id">9005</param>
+                                    <param name="id">9003</param>
                                     <label>$LOCALIZE[31511]</label>
-                                    <label2>$INFO[Container(30000).ListItem.Property(Shortcut)]</label2>
+                                    <onclick>SetProperty(Dialog.1124.Header,Shortcut,Home)</onclick>
+                                    <onclick>SetProperty(Dialog.1124.Window,$INFO[Container(30000).ListItem.Property(rename)],Home)</onclick>
+                                    <onclick>ActivateWindow(1124)</onclick>
                                     <visible>String.IsEqual(Container(30000).ListItem.Property(custom),true)</visible>
-                                    <visible>!String.IsEmpty(Container(30000).ListItem.Property(rename))</visible>
-                                    <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
-                                    <onclick>SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
-                                    <onclick>RunScript(script.skinvariables,set_shortcut=$INFO[Container(30000).ListItem.Property(rename)].Shortcut)</onclick>
-                                </include>
-
-                                <include content="Settings_Button" description="Style">
-                                    <param name="dialog">false</param>
-                                    <param name="id">9006</param>
-                                    <label>$LOCALIZE[456]</label>
-                                    <label2>$INFO[Container(30000).ListItem.Property(Mode)]</label2>
-                                    <onclick>SetProperty(Dialog.1125.Value,$INFO[Container(30000).ListItem.Property(rename)],Home)</onclick>
-                                    <onclick>ActivateWindow(1125)</onclick>
-                                    <visible>!String.IsEmpty(Container(30000).ListItem.Property(rename))</visible>
                                     <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
                                 </include>
 
@@ -236,6 +208,17 @@
                                     <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
                                 </include>
 
+                                <include content="Settings_Button" description="Spotlight">
+                                    <param name="dialog">false</param>
+                                    <param name="id">9009</param>
+                                    <label>$LOCALIZE[31105]</label>
+                                    <onclick>SetProperty(Dialog.1124.Header,Spotlight,Home)</onclick>
+                                    <onclick>SetProperty(Dialog.1124.Window,$INFO[Container(30000).ListItem.Property(rename)],Home)</onclick>
+                                    <onclick>ActivateWindow(1124)</onclick>
+                                    <visible>String.IsEqual(Container(30000).ListItem.Property(spotlight),true)</visible>
+                                    <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
+                                </include>
+
                                 <include content="Settings_Button" description="Widgets">
                                     <param name="dialog">false</param>
                                     <param name="id">9008</param>
@@ -248,36 +231,15 @@
                                     <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
                                 </include>
 
-                                <include content="Settings_Button" description="Spotlight">
-                                    <param name="dialog">false</param>
-                                    <param name="id">9009</param>
-                                    <label>$LOCALIZE[31105]: $LOCALIZE[573]</label>
-                                    <label2>$INFO[Container(30000).ListItem.Property(Spotlight)]</label2>
-                                    <visible>!String.IsEmpty(Container(30000).ListItem.Property(rename))</visible>
-                                    <visible>String.IsEqual(Container(30000).ListItem.Property(custom),true)</visible>
-                                    <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
-                                    <onclick>ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
-                                    <onclick>RunScript(script.skinvariables,set_shortcut=$INFO[Container(30000).ListItem.Property(rename)].Spotlight,use_rawpath=True)</onclick>
-                                </include>
 
-                                <include content="Settings_Button" description="Spotlight: Label">
-                                    <param name="dialog">false</param>
-                                    <param name="id">9010</param>
-                                    <label>$LOCALIZE[31105]: $LOCALIZE[551]</label>
-                                    <label2>$INFO[Container(30000).ListItem.Property(Spotlight_Label)]</label2>
-                                    <visible>!String.IsEmpty(Container(30000).ListItem.Property(Spotlight_Label))</visible>
-                                    <visible>String.IsEqual(Container(30000).ListItem.Property(custom),true)</visible>
-                                    <visible>String.IsEqual(Container(30000).ListItem.Property(enabled),true)</visible>
-                                    <visible>!String.IsEmpty(Container(30000).ListItem.Property(rename))</visible>
-                                    <onclick>Skin.SetString($INFO[Container(30000).ListItem.Property(rename)].Spotlight.Label)</onclick>
-                                </include>
+
 
                                 <!-- POWER MENU -->
                                 <include content="Settings_Button">
                                     <param name="id">8001</param>
                                     <param name="control">button</param>
-                                    <label>$LOCALIZE[31468]</label>
-                                    <label2>$INFO[Skin.String(OptionsTiles.Layout),, $LOCALIZE[31022]]</label2>
+                                    <label>$LOCALIZE[31158]</label>
+                                    <label2>$INFO[Skin.String(OptionsTiles.Layout),, $LOCALIZE[31048]]</label2>
                                     <onclick condition="Skin.String(OptionsTiles.Layout,$NUMBER[2])">Skin.SetString(OptionsTiles.Layout,$NUMBER[3])</onclick>
                                     <onclick condition="Skin.String(OptionsTiles.Layout,$NUMBER[3])">Skin.SetString(OptionsTiles.Layout,$NUMBER[4])</onclick>
                                     <onclick condition="Skin.String(OptionsTiles.Layout,$NUMBER[4])">Skin.SetString(OptionsTiles.Layout,$NUMBER[2])</onclick>
@@ -321,7 +283,7 @@
                                     <onclick>ClearProperty(Shortcuts.EditMode,Home)</onclick>
                                     <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
                                     <onclick>ActivateWindow(1116)</onclick>
-                                    <label>$LOCALIZE[31516]</label>
+                                    <label>$LOCALIZE[33061]</label>
                                     <visible>String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=power)</visible>
                                 </include>
                                 <include content="Settings_Button">
@@ -331,7 +293,7 @@
                                     <onclick>ClearProperty(Shortcuts.EditMode,Home)</onclick>
                                     <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
                                     <onclick>ActivateWindow(1116)</onclick>
-                                    <label>$LOCALIZE[31601]</label>
+                                    <label>$LOCALIZE[31043]</label>
                                     <visible>String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=power)</visible>
                                 </include>
 
