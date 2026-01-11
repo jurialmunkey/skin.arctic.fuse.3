@@ -563,30 +563,33 @@
         </control>
     </include>
 
+    <include name="Hub_Window_Refocus_Buttons">
+        <include content="Object_Hidden_Button">
+            <param name="id">302</param>
+            <onfocus>$VAR[Hub_Action_Reset]</onfocus>
+            <onfocus condition="!Control.IsVisible(301)">SetFocus(300)</onfocus>
+            <onfocus condition="Control.IsVisible(301)">SetFocus(301)</onfocus>
+        </include>
+
+        <include content="Object_Hidden_Button">
+            <param name="id">303</param>
+            <onfocus>$VAR[Hub_Action_Reset]</onfocus>
+            <onfocus>SetFocus(300)</onfocus>
+            <onfocus>ActivateWindow(1170)</onfocus>
+        </include>
+
+        <include content="Object_Hidden_Button">
+            <param name="id">304</param>
+            <onfocus>$VAR[Hub_Action_Reset]</onfocus>
+            <onfocus condition="Control.IsVisible(301)">SetFocus(301)</onfocus>
+            <onfocus>AlarmClock(refocus_300,SetFocus(300),00:00,silent)</onfocus>
+        </include>
+    </include>
+
     <include name="Hub_Window">
         <param name="overlay">true</param>
         <definition>
-            <include content="Object_Hidden_Button">
-                <param name="id">302</param>
-                <onfocus>$VAR[Hub_Action_Reset]</onfocus>
-                <onfocus condition="!Control.IsVisible(301)">SetFocus(300)</onfocus>
-                <onfocus condition="Control.IsVisible(301)">SetFocus(301)</onfocus>
-            </include>
-
-            <include content="Object_Hidden_Button">
-                <param name="id">303</param>
-                <onfocus>$VAR[Hub_Action_Reset]</onfocus>
-                <onfocus>SetFocus(300)</onfocus>
-                <onfocus>ActivateWindow(1170)</onfocus>
-            </include>
-
-            <include content="Object_Hidden_Button">
-                <param name="id">304</param>
-                <onfocus>$VAR[Hub_Action_Reset]</onfocus>
-                <onfocus condition="Control.IsVisible(301)">SetFocus(301)</onfocus>
-                <onfocus>AlarmClock(refocus_300,SetFocus(300),00:00,silent)</onfocus>
-            </include>
-
+            <include>Hub_Window_Refocus_Buttons</include>
             <include>Background</include>
             <include condition="Skin.HasSetting(Submenu.EnableSideMode)">Hub_Submenu_Fade</include>
 
@@ -606,7 +609,7 @@
                 <onup condition="Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1180)</onup>
                 <oninfo condition="Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1170)</oninfo>
                 <ondown>$VAR[Hub_Action_Down]</ondown>
-                <onback condition="Window.IsVisible(Home)">303</onback>
+                <onback>303</onback>
             </include>
 
             <control type="group">
