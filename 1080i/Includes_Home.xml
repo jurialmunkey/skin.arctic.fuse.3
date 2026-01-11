@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <variable name="Home_1105_onleft">
+        <value condition="Skin.HasSetting(HomeSwitcher.LoopBack)">$VAR[Home_1108_onleft]</value>
+    </variable>
+
     <variable name="Home_Name_home">
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.Home.Name))">$INFO[Skin.String(HomeSwitcher.Home.Name)]</value>
         <value>$LOCALIZE[10000]</value>
@@ -106,7 +110,9 @@
         <value>$VAR[Home_1107_onleft]</value>
     </variable>
     <variable name="Home_1108_onright">
-        <value>ActivateWindow(1170)</value>
+        <value condition="!Skin.HasSetting(HomeSwitcher.LoopBack)">ActivateWindow(1170)</value>
+        <value condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">ReplaceWindow(1105)</value>
+        <value>ReplaceWindow(Home)</value>
     </variable>
 
     <include name="Home_Control">
@@ -219,7 +225,7 @@
                 <param name="window">1108</param>
                 <param name="id">3108</param>
             </include>
-            <include>Home_Settings_Button</include>
+            <include condition="!Skin.HasSetting(HomeSwitcher.LoopBack)">Home_Settings_Button</include>
             <control type="group">
                 <width>0</width>
             </control>
