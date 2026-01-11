@@ -680,6 +680,12 @@
                 <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[infolabel_audiochannels])</param>
                 <param name="infolabel_audiochannels">$PARAM[infolabel_audiochannels]</param>
             </include>
+            <include content="Info_Line_LightPill_Text">
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="label">8K</param>
+                <param name="visible">$PARAM[visible] + $PARAM[is_8k]</param>
+                <param name="width">60</param>
+            </include>
         </definition>
     </include>
 
@@ -857,11 +863,11 @@
                 <param name="icon">$VAR[Image_ListItem_Status]</param>
                 <param name="visible">[[String.IsEqual($PARAM[container]ListItem.DBType,tvshow) | String.IsEqual($PARAM[container]ListItem.DBType,season) | String.IsEqual($PARAM[container]ListItem.DBType,episode)] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Status))]</param>
             </include>
-            <include content="Info_Meta_Object" condition="$PARAM[is_player]">
+            <!-- <include content="Info_Meta_Object" condition="$PARAM[is_player]">
                 <param name="label">$VAR[Label_Player_Status]</param>
                 <param name="icon">$VAR[Image_Player_Status]</param>
                 <param name="visible">[VideoPlayer.Content(episodes) + !String.IsEmpty(Window(Home).Property(TMDBHelper.Player.Status))]</param>
-            </include>
+            </include> -->
         </definition>
     </include>
 
@@ -1297,6 +1303,20 @@
                 </include>
                 <control type="grouplist">
                     <include>Info_Meta_Grouplist_Definition</include>
+
+                    <include content="Info_Meta_Object">
+                        <param name="bordersize">-12</param>
+                        <param name="icon">special://skin/extras/icons/table-list.png</param>
+                        <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode,0,]</param>
+                        <param name="visible">[String.IsEqual($PARAM[container]ListItem.DBType,episode) | $PARAM[is_player]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Episode) + !Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</param>
+                    </include>
+                    <include content="Info_Meta_Object">
+                        <param name="bordersize">-12</param>
+                        <param name="icon">special://skin/extras/icons/table-list.png</param>
+                        <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode]</param>
+                        <param name="visible">[String.IsEqual($PARAM[container]ListItem.DBType,episode) | $PARAM[is_player]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Episode) + Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</param>
+                    </include>
+
                     <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="item">Item01</param>
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -1309,6 +1329,8 @@
                         <param name="container">$PARAM[container]</param>
                         <param name="is_player">$PARAM[is_player]</param>
                     </include>
+
+
 
                     <include content="Info_Meta_Object" condition="!$EXP[Exp_TMDbHelper_IsData]">
                         <param name="bordersize">-12</param>
