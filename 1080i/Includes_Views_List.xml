@@ -97,8 +97,24 @@
             <param name="movement">2</param>
             <param name="overlay">false</param>
             <param name="scrollbar_id">65</param>
+            <include>View_MediaList_Landscape</include>
+        </include>
+    </include>
+
+    <!-- FlixArt List -->
+    <include name="View_549_Flixart_List">
+        <include content="View_MediaList_Include">
+            <param name="id">549</param>
+            <param name="viewtype_label">$LOCALIZE[31040]</param>
+            <param name="visible">$EXP[Exp_View_549]</param>
+            <param name="right">984</param>
+            <param name="top">400</param>
+            <param name="focusposition">1</param>
+            <param name="movement">2</param>
+            <param name="overlay">false</param>
+            <param name="scrollbar_id">65</param>
             <include content="View_MediaList_Landscape">
-                <param name="flipx">false</param>
+                <param name="has_poster">true</param>
             </include>
         </include>
     </include>
@@ -162,19 +178,32 @@
 
     <include name="View_MediaList_Landscape">
         <param name="visible">!$EXP[Exp_InfoDialogs]</param>
-        <param name="flipx">false</param>
+        <param name="has_poster">false</param>
         <definition>
+            <control type="group">
+                <visible>$PARAM[has_poster]</visible>
+                <right>-40</right>
+                <bottom>-40</bottom>
+                <height>391</height>
+                <control type="group">
+                    <right>664</right>
+                    <height>391</height>
+                    <width>280</width>
+                    <include content="Layout_Poster">
+                        <param name="icon">$VAR[Image_Poster]</param>
+                        <param name="diffuse">diffuse/poster_w217_h310.png</param>
+                        <param name="indicator">true</param>
+                        <param name="item_w">240</param>
+                        <param name="item_h">351</param>
+                    </include>
+                </control>
+            </control>
             <control type="group">
                 <right>-40</right>
                 <bottom>-40</bottom>
                 <height>391</height>
                 <control type="group">
-                    <include content="Object_Left" condition="$PARAM[flipx]">
-                        <param name="left">0</param>
-                    </include>
-                    <include content="Object_Right" condition="![$PARAM[flipx]]">
-                        <param name="right">0</param>
-                    </include>
+                    <right>0</right>
                     <height>391</height>
                     <width>664</width>
                     <include content="Layout_Poster">

@@ -287,7 +287,7 @@
             <param name="dialog">true</param>
             <param name="id">23098</param>
             <label>$LOCALIZE[1034] $LOCALIZE[33063]</label>
-            <visible>$EXP[DialogShortcuts_HasCustomSubmenu_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_HasCustomSubmenu_Expression] | $EXP[DialogShortcuts_IsSubMenuMode_Expression]</visible>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
             <onback>22904</onback>
         </include>
@@ -307,6 +307,19 @@
             <onclick>SetProperty(Shortcuts.EditMode,mode=submenu,Home)</onclick>
             <onback>22904</onback>
         </include>
+
+        <!-- Widgets: Limit -->
+        <include content="Settings_Button">
+            <param name="dialog">true</param>
+            <param name="id">23043</param>
+            <param name="control">button</param>
+            <label>Jump to widget</label>
+            <label2>$INFO[Container(22001).ListItem.Property(quickjump)]</label2>
+            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_numeric&amp;&amp;quickjump&amp;&amp;heading::Jump to widget])</onclick>
+            <visible>$EXP[DialogShortcuts_IsSubMenuMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
+            <onback>22904</onback>
+        </include>
     </include>
 
     <include name="DialogShortcuts_Items_Widget">
@@ -314,7 +327,7 @@
             <param name="dialog">true</param>
             <param name="id">23902</param>
             <label>$LOCALIZE[31282] $LOCALIZE[33063]</label>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression] | [String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
+            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -418,69 +431,6 @@
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
-
-        <!-- Submenu: Widget Style -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="id">23049</param>
-            <label> -- $LOCALIZE[736]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <label2>$VAR[Label_Shortcut_Widget_Style]</label2>
-            <onclick>$VAR[Action_Shortcut_SetWidgetStyle]</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Submenu: Widget Sort by -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="id">23050</param>
-            <label> -- $LOCALIZE[31016]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <label2>[CAPITALIZE]$INFO[Container(22001).ListItem.Property(widget_sortby)][/CAPITALIZE]</label2>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_sortby&amp;&amp;default&amp;label&amp;userpreference&amp;random&amp;dateadded&amp;lastplayed&amp;playcount&amp;year&amp;rating&amp;userrating&amp;votes&amp;genre&amp;country&amp;studio&amp;playlist&amp;episodenumber&amp;season&amp;totalepisodes&amp;watchedepisodes&amp;tvshowstatus&amp;tvshowtitle&amp;file&amp;title&amp;track&amp;time&amp;artist&amp;album&amp;lastupdated&amp;lastused&amp;date&amp;&amp;Sort by&amp;&amp;True])</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Submenu: Widget Sort order -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="control">radiobutton</param>
-            <param name="id">23051</param>
-            <label> -- $LOCALIZE[31517]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <visible>!String.IsEmpty(Container(22001).ListItem.Property(widget_sortby)) + !String.IsEqual(Container(22001).ListItem.Property(widget_sortby),random)</visible>
-            <selected>!String.IsEmpty(Container(22001).ListItem.Property(widget_sortorder))</selected>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_toggle&amp;&amp;widget_sortorder])</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Submenu: Widget Limit -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="id">23052</param>
-            <label> -- $LOCALIZE[31188]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <label2>$INFO[Container(22001).ListItem.Property(widget_limit)]</label2>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_numeric&amp;&amp;widget_limit&amp;&amp;heading::Limit])</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Submenu: Widget Autoscroll -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="control">radiobutton</param>
-            <param name="id">23053</param>
-            <label> -- $LOCALIZE[31185]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <selected>!String.IsEmpty(Container(22001).ListItem.Property(widget_autoscroll))</selected>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_toggle&amp;&amp;widget_autoscroll])</onclick>
-            <onback>22904</onback>
-        </include>
     </include>
 
     <include name="DialogShortcuts_Items">
@@ -496,6 +446,8 @@
         <value condition="ControlGroup(29000).HasFocus()">dialog_fg_70</value>
         <value>$VAR[ColorSelected_30]</value>
     </variable>
+
+    <expression name="DialogShortcuts_IsSubMenuMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=submenu)]</expression>
 
     <expression name="DialogShortcuts_IsWidgetMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=widgets)]</expression>
 
