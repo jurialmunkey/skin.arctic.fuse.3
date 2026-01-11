@@ -600,8 +600,10 @@
             <include content="Home_Control">
                 <param name="window">$PARAM[window]</param>
                 <param name="overlay">[String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall) + String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Target))]</param>
-                <onup>ActivateWindow(1181)</onup>
-                <oninfo>ActivateWindow(1181)</oninfo>
+                <onup condition="!Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1181)</onup>
+                <oninfo condition="!Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1181)</oninfo>
+                <onup condition="Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1180)</onup>
+                <oninfo condition="Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1170)</oninfo>
                 <ondown>$VAR[Hub_Action_Down]</ondown>
                 <onback condition="Window.IsVisible(Home)">303</onback>
             </include>
