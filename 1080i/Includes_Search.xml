@@ -46,13 +46,14 @@
             <include>Animation_Group_Bumper</include>
 
             <control type="group">
+                <visible>!Skin.HasSetting(Search.DisableCombined)</visible>
                 <visible>!$EXP[Exp_InfoDialogs]</visible>
                 <control type="group">
                     <include>Dimension_Bottombar</include>
                     <include content="View_Furniture_Footer_ViewLine">
                         <param name="visible">true</param>
                         <param name="label">$INFO[Container(601).ListItem.Property(widget_numitems),, $LOCALIZE[31022]]</param>
-                        <param name="label_fallback">$VAR[Label_ProfileName]</param>
+                        <param name="label_fallback">$INFO[System.AddonVersion(skin.arctic.fuse.3),arctic.fuse v,]</param>
                     </include>
                 </control>
             </control>
@@ -64,7 +65,7 @@
                 <control type="group" id="500">
                     <include>Animation_View_WindowChange</include>
 
-                    <include content="Hub_Combined_Widget">
+                    <include content="Hub_Combined_Widget" condition="!Skin.HasSetting(Search.DisableDiscover) + !Skin.HasSetting(Search.DisableCombined)">
                         <param name="id">501</param>
                         <param name="content">$INFO[window(home).property(tmdbhelper.userdiscover.folderpath)]$INFO[Control.GetLabel(300).index(1),&amp;with_text_query=,]</param>
                         <param name="include">List_Poster_Row</param>
@@ -72,9 +73,11 @@
                         <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),discover)</param>
                         <param name="allowhiddenfocus">true</param>
                     </include>
-                    <include>skinvariables-searchwidgets-combined</include>
 
-                    <include content="Hub_Widget_Switcher">
+                    <include condition="!Skin.HasSetting(Search.DisableCombined)">skinvariables-searchwidgets-combined</include>
+                    <include condition="Skin.HasSetting(Search.DisableCombined)">skinvariables-searchwidgets-standard</include>
+
+                    <include content="Hub_Widget_Switcher" condition="!Skin.HasSetting(Search.DisableCombined)">
                         <param name="include_content">Search_Switcher_Items</param>
                         <param name="top">520</param>
                         <param name="wall">false</param>
@@ -87,7 +90,7 @@
                     <include content="Animation_ConditionalFade">
                         <param name="condition">String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | Integer.IsEqual(Container(601).NumItems,0) | Control.HasFocus(300) | Control.HasFocus(305)</param>
                     </include>
-                    <include content="Hub_Combined_Info">
+                    <include content="Hub_Combined_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + !Skin.HasSetting(Search.DisableCombined)">
                         <param name="id">501</param>
                     </include>
                     <include>skinvariables-searchwidgets-info</include>
@@ -262,8 +265,9 @@
             <textcolor>main_fg_30</textcolor>
             <focusedcolor>$VAR[ColorSelected]</focusedcolor>
             <align>left</align>
+            <onleft>$VAR[Home_1105_onleft]</onleft>
             <onright>ReplaceWindow(Home)</onright>
-            <onup>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onup>
+            <onup condition="!Skin.HasSetting(Search.DisableDiscover) + !Skin.HasSetting(Search.DisableCombined)">RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onup>
             <ondown>305</ondown>
             <texturefocus />
             <texturenofocus />
@@ -291,7 +295,8 @@
         <control type="panel" id="305">
             <orientation>vertical</orientation>
             <onup>300</onup>
-            <ondown>601</ondown>
+            <ondown condition="!Skin.HasSetting(Search.DisableCombined)">601</ondown>
+            <ondown condition="Skin.HasSetting(Search.DisableCombined)">602</ondown>
             <width>700</width>
             <centerleft>50%</centerleft>
             <height>100</height>

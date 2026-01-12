@@ -18,6 +18,11 @@
             </control>
         </control>
     </include>
+
+
+    <variable name="Furniture_Header_Right_Temperature">
+        <value condition="!Skin.HasSetting(Header.DisableWeather)">$INFO[Weather.Temperature]</value>
+    </variable>
     <include name="Furniture_Header_Right">
         <control type="group">
             <right>0</right>
@@ -27,7 +32,7 @@
                 <param name="align">right</param>
             </include>
             <control type="label">
-                <label>$INFO[System.Time]$INFO[Weather.Temperature, • ,]</label>
+                <label>$INFO[System.Time]$VAR[Furniture_Header_Right_Temperature, • ,]</label>
                 <align>right</align>
                 <aligny>center</aligny>
                 <textcolor>$PARAM[textcolor]</textcolor>
@@ -74,7 +79,7 @@
                         <control type="group">
                             <height>80</height>
                             <top>-5</top>
-                            <include>Furniture_Studio</include>
+                            <include condition="!Skin.HasSetting(Footer.DisableStudio)">Furniture_Studio</include>
                             <include condition="!Skin.HasSetting(Footer.DisableNowPlaying)">Furniture_Player</include>
                             <include condition="Skin.HasSetting(Footer.EnableCodecs)">Furniture_Codecs</include>
                         </control>
@@ -224,7 +229,7 @@
             </include>
             <include content="View_Furniture_Footer_ViewLine" condition="$EXP[Exp_PlainBackgroundWindows]">
                 <param name="visible">true</param>
-                <param name="label">$VAR[Label_ProfileName]</param>
+                <param name="label">$INFO[System.AddonVersion(skin.arctic.fuse.3),arctic.fuse v,]</param>
             </include>
         </control>
     </include>

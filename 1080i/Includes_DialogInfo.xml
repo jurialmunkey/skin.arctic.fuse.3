@@ -128,20 +128,20 @@
                 <include content="Info_Panel" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
                     <param name="plotheight">120</param>
                     <param name="plotwidth">$PARAM[plotwidth]</param>
-                    <param name="mainlogo_visible">[!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.Current.CropImage))]</param>
-                    <param name="mainlogo_texture">$INFO[Window(Home).Property(TMDBHelper.ListItem.Current.CropImage)]</param>
                     <param name="is_player">$PARAM[is_player]</param>
                     <param name="include_title">true</param>
                     <param name="include_details">false</param>
+                    <param name="mainlogo_visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListITem.Current.CropImage))</param>
+                    <param name="mainlogo_texture">$INFO[Window(Home).Property(TMDbHelper.ListITem.Current.CropImage)]</param>
                 </include>
                 <include content="Info_Panel" condition="String.IsEqual(ListItem.Property(tmdb_type),person)">
                     <param name="plotheight">560</param>
                     <param name="plotwidth">$PARAM[plotwidth]</param>
-                    <param name="mainlogo_visible">[!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.Current.CropImage))]</param>
-                    <param name="mainlogo_texture">$INFO[Window(Home).Property(TMDBHelper.ListItem.Current.CropImage)]</param>
                     <param name="is_player">$PARAM[is_player]</param>
                     <param name="include_title">true</param>
                     <param name="include_details">false</param>
+                    <param name="mainlogo_visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListITem.Current.CropImage))</param>
+                    <param name="mainlogo_texture">$INFO[Window(Home).Property(TMDbHelper.ListITem.Current.CropImage)]</param>
                 </include>
             </control>
             <control type="group">
@@ -375,7 +375,7 @@
     <include name="DialogInfo_VideoWidgets">
 
         <!-- Cast-->
-        <include content="Widget_Info_Row" condition="Skin.HasSetting(Info.UseLocalCast)">
+        <include content="Widget_Info_Row" condition="Skin.HasSetting(Info.UseLocalCast) | !$EXP[Exp_TMDbHelper_IsData]">
             <param name="id">50</param>
             <param name="baseid" />
             <param name="basegroupid">51</param>
@@ -390,7 +390,7 @@
             <param name="altvisible">true</param>
             <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
         </include>
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast)">
+        <include content="Widget_Info_Row" condition="![Skin.HasSetting(Info.UseLocalCast) | !$EXP[Exp_TMDbHelper_IsData]]">
             <param name="id">50</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -409,7 +409,7 @@
         </include>
 
         <!-- Collection -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + !Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) + [String.IsEqual(ListItem.DBType,movie)]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + ![Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) | !$EXP[Exp_TMDbHelper_IsData]] + [String.IsEqual(ListItem.DBType,movie)]">
             <param name="id">11</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -426,7 +426,7 @@
             <content>$VAR[Path_VideoInfo_OnlineCollection]</content>
             <include>DialogInfo_Widgets_Action</include>
         </include>
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) + [String.IsEqual(ListItem.DBType,movie)]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + [Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) | !$EXP[Exp_TMDbHelper_IsData]] + [String.IsEqual(ListItem.DBType,movie)]">
             <param name="id">11</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -445,7 +445,7 @@
         </include>
 
         <!-- Studio -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableStudio)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableStudio) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">12</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -464,7 +464,7 @@
         </include>
 
         <!-- Year -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableYear)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableYear) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">13</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -483,7 +483,7 @@
         </include>
 
         <!-- Seasons and Episodes -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableSeasons) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableSeasons) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)] + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">18</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -501,7 +501,7 @@
             <!-- <onclick>RunScript(plugin.video.themoviedb.helper,close_dialog=1190,call_path=$INFO[Container(5018).ListItem.FolderPath])</onclick> -->
             <include>DialogInfo_Widgets_Action</include>
         </include>
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableEpisodes) + !Skin.HasSetting(VideoInfo.Widgets.DisableSeasons) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableEpisodes) + !Skin.HasSetting(VideoInfo.Widgets.DisableSeasons) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)] + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">19</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -520,7 +520,7 @@
             <!-- <onclick>RunScript(plugin.video.themoviedb.helper,close_dialog=1190,playmedia=$INFO[Container(5019).ListItem.FolderPath])</onclick> -->
             <include>DialogInfo_Widgets_Action</include>
         </include>
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableEpisodes) + Skin.HasSetting(VideoInfo.Widgets.DisableSeasons) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableEpisodes) + Skin.HasSetting(VideoInfo.Widgets.DisableSeasons) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)] + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">19</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -540,7 +540,7 @@
         </include>
 
         <!-- Director -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableDirector)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableDirector) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">01</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -572,7 +572,7 @@
         </include>
 
         <!-- Writer -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableWriter)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableWriter) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">02</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -604,7 +604,7 @@
         </include>
 
         <!-- Creator -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCreator) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCreator) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)] + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">03</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -636,7 +636,7 @@
         </include>
 
         <!-- Starring First Actor -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast) + !Skin.HasSetting(VideoInfo.Widgets.DisableStarring)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast) + !Skin.HasSetting(VideoInfo.Widgets.DisableStarring) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">51</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -669,7 +669,7 @@
         </include>
 
         <!-- Starring Second Actor -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast) + !Skin.HasSetting(VideoInfo.Widgets.DisableStarring)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast) + !Skin.HasSetting(VideoInfo.Widgets.DisableStarring) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">52</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -702,49 +702,49 @@
         </include>
 
         <!-- Crew Lists -->
-        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">21</param>
             <param name="type">Director</param>
             <param name="label">$LOCALIZE[31050] ($LOCALIZE[31038])</param>
         </include>
-        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">22</param>
             <param name="type">Writer</param>
             <param name="label">$LOCALIZE[31050] ($LOCALIZE[31039])</param>
         </include>
-        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">23</param>
             <param name="type">Creator</param>
             <param name="label">$LOCALIZE[31050] ($LOCALIZE[31065])</param>
         </include>
-        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">24</param>
             <param name="type">Producer</param>
             <param name="label">$LOCALIZE[31050] ($LOCALIZE[38039])</param>
         </include>
-        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">25</param>
             <param name="type">Sound_Department</param>
             <param name="label">$LOCALIZE[31050] ($LOCALIZE[31052])</param>
         </include>
-        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">26</param>
             <param name="type">Art_Department</param>
             <param name="label">$LOCALIZE[31050] ($LOCALIZE[31072])</param>
         </include>
-        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">27</param>
             <param name="type">Photography</param>
             <param name="label">$LOCALIZE[31050] ($LOCALIZE[31347])</param>
         </include>
-        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew)">
+        <include content="DialogInfo_CrewWidget" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCrew) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">28</param>
             <param name="type">Editor</param>
             <param name="label">$LOCALIZE[31050] ($LOCALIZE[31075])</param>
         </include>
 
         <!-- Videos -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableVideos)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableVideos) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">14</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -767,7 +767,7 @@
         </include>
 
         <!-- Comments -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableComments)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableComments) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">15</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -797,7 +797,7 @@
         </include>
 
         <!-- Recommendations -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableRecommendations)">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableRecommendations) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">16</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -975,8 +975,8 @@
                     <visible>!String.IsEmpty(ListItem.Art(artist.landscape))</visible>
                 </item>
             </content>
-            <include condition="Window.IsVisible(DialogVideoInfo.xml) + !Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) + !String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_VideoFanartContent</include>
-            <include condition="Window.IsVisible(DialogVideoInfo.xml) + !Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) + String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_PersonImageContent</include>
+            <include condition="Window.IsVisible(DialogVideoInfo.xml) + ![Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) | !$EXP[Exp_TMDbHelper_IsData]] + !String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_VideoFanartContent</include>
+            <include condition="Window.IsVisible(DialogVideoInfo.xml) + ![Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) | !$EXP[Exp_TMDbHelper_IsData]] + String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_PersonImageContent</include>
         </include>
     </include>
 
@@ -1350,7 +1350,7 @@
                     <height>57</height>
                     <itemgap>40</itemgap>
                     <ondown>90001</ondown>
-                    <onup>ActivateWindow(1113)</onup>
+                    <onup condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1113)</onup>
 
                     <!-- Info -->
                     <include content="Button_Underline_Switcher">
@@ -1382,6 +1382,7 @@
                         <label>Trakt</label>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEqual(  ListItem.DBType,musicvideo)</visible>
                         <onclick>$VAR[Action_Sync]</onclick>
+                        <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
                     </include>
 
                     <!-- Wikipedia -->
@@ -1430,10 +1431,8 @@
                         <param name="shot">$VAR[Image_DirectorIcon]</param>
                         <param name="tmdb_type">person</param>
                         <param name="tmdb_id">$VAR[Path_FromDirector]</param>
-                        <onclick>SetProperty(type,Director,1120)</onclick>
-                        <onclick>ActivateWindow(1120)</onclick>
-                        <!-- <onclick>SetFocus(5000)</onclick>
-                        <onclick>AlarmClock(resetfocus,SetFocus(5021),00:00,silent)</onclick> -->
+                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(type,Director,1120)</onclick>
+                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1120)</onclick>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director)) | !String.IsEmpty(ListItem.Director)</visible>
                     </include>
 
@@ -1446,10 +1445,8 @@
                         <param name="shot">$VAR[Image_WriterIcon]</param>
                         <param name="tmdb_type">person</param>
                         <param name="tmdb_id">$VAR[Path_FromWriter]</param>
-                        <onclick>SetProperty(type,Writer,1120)</onclick>
-                        <onclick>ActivateWindow(1120)</onclick>
-                        <!-- <onclick>SetFocus(5000)</onclick>
-                        <onclick>AlarmClock(resetfocus,SetFocus(5022),00:00,silent)</onclick> -->
+                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(type,Writer,1120)</onclick>
+                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1120)</onclick>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer)) | !String.IsEmpty(ListItem.Writer)</visible>
                     </include>
 
@@ -1478,101 +1475,16 @@
                         <visible>!String.IsEmpty(ListItem.Property(totalepisodes))</visible>
                     </include>
 
+
                     <!-- Codecs -->
-                    <include content="Object_InfoCircle_Detail">
-                        <param name="id">05</param>
-                        <param name="role">$INFO[ListItem.VideoVersionName]</param>
-                        <param name="icon">special://skin/extras/icons/photo-film.png</param>
-                        <param name="fallback_role">$LOCALIZE[31207]</param>
-                        <param name="shot">$INFO[ListItem.Art(poster)]</param>
-
-                        <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
-
-                        <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.1)) | !String.IsEmpty(ListItem.Property(AudioLanguage.2)) | !String.IsEmpty(ListItem.Property(AudioLanguage.3)) | !String.IsEmpty(ListItem.Property(AudioLanguage.4)) | !String.IsEmpty(ListItem.Property(AudioLanguage.5)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.1)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.2)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.3)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.4)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.5))</visible>
-
-                        <control type="grouplist">
-                            <orientation>horizontal</orientation>
-                            <align>left</align>
-                            <itemgap>20</itemgap>
-                            <left>116</left>
-
-                            <height>80</height>
-                            <bottom>-16</bottom>
-                            <control type="image">
-                                <left>-10</left>
-                                <width>64</width>
-                                <height>64</height>
-                                <texture background="true" colordiffuse="main_fg_90">special://skin/extras/icons/language.png</texture>
-                                <centertop>50%</centertop>
-                                <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.1)) | !String.IsEmpty(ListItem.Property(AudioLanguage.2)) | !String.IsEmpty(ListItem.Property(AudioLanguage.3)) | !String.IsEmpty(ListItem.Property(AudioLanguage.4)) | !String.IsEmpty(ListItem.Property(AudioLanguage.5))</visible>
-                            </control>
-
-                            <control type="group">
-                                <left>-40</left>
-                                <width>0</width>
-                                <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.1)) | !String.IsEmpty(ListItem.Property(AudioLanguage.2)) | !String.IsEmpty(ListItem.Property(AudioLanguage.3)) | !String.IsEmpty(ListItem.Property(AudioLanguage.4)) | !String.IsEmpty(ListItem.Property(AudioLanguage.5))</visible>
-                            </control>
-
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">AudioLanguage.1</param>
-                            </include>
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">AudioLanguage.2</param>
-                            </include>
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">AudioLanguage.3</param>
-                            </include>
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">AudioLanguage.4</param>
-                            </include>
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">AudioLanguage.5</param>
-                            </include>
-
-                            <control type="image">
-                                <left>-10</left>
-                                <width>64</width>
-                                <height>64</height>
-                                <texture background="true" colordiffuse="main_fg_90">special://skin/extras/icons/spell-check.png</texture>
-                                <centertop>50%</centertop>
-                                <visible>!String.IsEmpty(ListItem.Property(SubtitleLanguage.1)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.2)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.3)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.4)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.5))</visible>
-                            </control>
-
-                            <control type="group">
-                                <left>-42</left>
-                                <width>0</width>
-                                <visible>!String.IsEmpty(ListItem.Property(SubtitleLanguage.1)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.2)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.3)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.4)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.5))</visible>
-                            </control>
-
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">SubtitleLanguage.1</param>
-                            </include>
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">SubtitleLanguage.2</param>
-                            </include>
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">SubtitleLanguage.3</param>
-                            </include>
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">SubtitleLanguage.4</param>
-                            </include>
-                            <include content="DialogInfo_Flag_Language">
-                                <param name="property">SubtitleLanguage.5</param>
-                            </include>
-                        </control>
-
-                    </include>
-
                     <include content="Object_InfoCircle_Detail">
                         <param name="id">06</param>
                         <param name="role">$INFO[ListItem.VideoVersionName]</param>
                         <param name="icon">special://skin/extras/icons/photo-film.png</param>
                         <param name="fallback_role">$LOCALIZE[31207]</param>
                         <param name="shot">$INFO[ListItem.Art(poster)]</param>
-                        <param name="name">$LOCALIZE[19055]</param>
+                        <param name="name">$INFO[ListItem.VideoCodec]$INFO[ListItem.VideoResolution, • ,p]$INFO[ListItem.VideoAspect, • ,]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,]</param>
                         <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
-
-                        <visible>![!String.IsEmpty(ListItem.Property(AudioLanguage.1)) | !String.IsEmpty(ListItem.Property(AudioLanguage.2)) | !String.IsEmpty(ListItem.Property(AudioLanguage.3)) | !String.IsEmpty(ListItem.Property(AudioLanguage.4)) | !String.IsEmpty(ListItem.Property(AudioLanguage.5)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.1)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.2)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.3)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.4)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.5))]</visible>
                     </include>
 
                     <!-- Providers -->
@@ -1685,7 +1597,7 @@
                     <height>57</height>
                     <itemgap>40</itemgap>
                     <ondown>5000</ondown>
-                    <onup>ActivateWindow(1113)</onup>
+                    <onup condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1113)</onup>
 
                     <!-- Info -->
                     <include content="Button_Underline_Switcher">

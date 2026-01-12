@@ -6,7 +6,7 @@
         <value>$LOCALIZE[10106]</value>
     </variable>
 
-    <expression name="DialogContextMenu_HasArtwork">[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_poster)) + !$EXP[Exp_InfoDialogs]]</expression>
+    <expression name="DialogContextMenu_HasArtwork">[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_poster)) + !$EXP[Exp_InfoDialogs] + !Skin.HasSetting(ContextMenu.DisableArtwork)]</expression>
 
     <variable name="DialogContextMenu_OnUp">
         <value condition="Control.IsVisible(1020)">SetFocus(1020)</value>
@@ -34,7 +34,7 @@
 	<include name="DialogContextMenu">
         <param name="has_artwork">$EXP[DialogContextMenu_HasArtwork]</param>
         <param name="has_template">true</param>
-        <param name="has_menu">true</param>
+        <param name="has_menu">!Skin.HasSetting(ContextMenu.DisableOptionsTray)</param>
         <param name="include_tray">DialogContextMenu_Items</param>
         <param name="hidden_icon">true</param>
         <param name="scrollbar_id">61</param>
@@ -114,9 +114,9 @@
                                 <control type="grouplist" id="996">
                                     <pagecontrol>$PARAM[scrollbar_id]</pagecontrol>
                                     <onright>$PARAM[scrollbar_id]</onright>
-                                    <onup>6000</onup>
-                                    <ondown>SetFocus(1001)</ondown>
-                                    <ondown>SetFocus(6000)</ondown>
+                                    <onup condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">6000</onup>
+                                    <ondown condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">SetFocus(1001)</ondown>
+                                    <ondown condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">SetFocus(6000)</ondown>
                                     <include>Size_Grouplist_Pad</include>
                                 </control>
                                 <include content="Part_Scrollbar">
@@ -161,6 +161,7 @@
             <onclick>Close</onclick>
             <onclick>ActivateWindow(1113)</onclick>
             <visible>[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_plot))]</visible>
+            <selected>$EXP[Exp_TMDbHelper_IsData]</selected>
         </item>
         <item>
             <label>Wiki</label>
@@ -168,6 +169,7 @@
             <visible>[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_title))]</visible>
             <onclick>Dialog.Close(contextmenu,true)</onclick>
             <onclick>runscript(script.wikipedia,wikipedia=$VAR[DialogContextMenu_Wiki_Title]$VAR[DialogContextMenu_Wiki_Type])</onclick>
+            <selected>$EXP[Exp_TMDbHelper_IsData]</selected>
         </item>
         <item>
             <label>$LOCALIZE[31041]</label>
@@ -175,6 +177,7 @@
             <visible>[String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),tvshow) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),season) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),episode) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),movie)]</visible>
             <onclick>Dialog.Close(contextmenu,true)</onclick>
             <onclick>RunScript(plugin.video.themoviedb.helper,related_lists,query=$VAR[Path_ContextParams_Query],tmdb_type=$VAR[Path_ContextParams_TMDbType])</onclick>
+            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </item>
         <item>
             <label>$LOCALIZE[31393]</label>
@@ -183,6 +186,7 @@
             <onclick>Dialog.Close(contextmenu,true)</onclick>
             <onclick>SetProperty(PlayTrailerItems,$VAR[Path_VideoInfo_Trailers],Home)</onclick>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-playtrailer.json,use_rules)</onclick>
+            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </item>
         <item>
             <label>$LOCALIZE[15019]</label>

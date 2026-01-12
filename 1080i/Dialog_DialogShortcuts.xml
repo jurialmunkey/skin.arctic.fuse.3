@@ -152,14 +152,14 @@
                 <animation effect="slide" start="0" end="0,896" condition="Container(22001).Position(7)">Conditional</animation>
                 <control type="grouplist" id="22900">
                     <orientation>horizontal</orientation>
-                    <itemgap>-16</itemgap>
+                    <itemgap>-20</itemgap>
                     <onup>Control.Move(22001,-1)</onup>
                     <ondown>Control.Move(22001,1)</ondown>
 
                     <onright>61</onright>
                     <onback>29999</onback>
 
-                    <height>64</height>
+                    <height>72</height>
                     <centertop>64</centertop>
 
                     <align>right</align>
@@ -170,8 +170,8 @@
                         <texturefocus colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/circle-arrow-up.png</texturefocus>
                         <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_move&amp;&amp;move::-1&amp;&amp;window_prop::url]$INFO[Container(22001).ListItem(-1).Property(item),&amp;&amp;offset::,])</onclick>
                         <onback>29999</onback>
-                        <width>64</width>
-                        <height>64</height>
+                        <width>72</width>
+                        <height>72</height>
                     </control>
 
                     <control type="button" id="22902">
@@ -179,8 +179,8 @@
                         <texturefocus colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/circle-arrow-down.png</texturefocus>
                         <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_move&amp;&amp;move::1&amp;&amp;window_prop::url]$INFO[Container(22001).ListItem(1).Property(item),&amp;&amp;offset::,])</onclick>
                         <onback>29999</onback>
-                        <width>64</width>
-                        <height>64</height>
+                        <width>72</width>
+                        <height>72</height>
                     </control>
 
                     <control type="button" id="22903">
@@ -193,8 +193,8 @@
                         <onclick>RunScript(script.skinvariables,run_dialog=yesnocustom,"heading=$LOCALIZE[31568]","message=$LOCALIZE[31567]",nolabel=$LOCALIZE[31533],yeslabel=$LOCALIZE[31569],customlabel=$LOCALIZE[222],"executebuiltin_1=RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_new]$VAR[Path_Shortcut_UseRawPath])","executebuiltin_0=ClearProperty(Shortcuts.Groupings.Links,Home)||RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_list_add&amp;&amp;item_limit::80]$VAR[Path_Shortcut_UseRawPath])")</onclick>
 
                         <onback>29999</onback>
-                        <width>64</width>
-                        <height>64</height>
+                        <width>72</width>
+                        <height>72</height>
                     </control>
 
                     <control type="button" id="22904">
@@ -205,8 +205,8 @@
 
                         <onclick>RunScript(script.skinvariables,run_dialog=yesnocustom,"heading=$LOCALIZE[31570]","message=$LOCALIZE[31571]",nolabel=$LOCALIZE[31573],yeslabel=$LOCALIZE[31572],customlabel=$LOCALIZE[31535],"executebuiltin_1=RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_delete])","executebuiltin_0=ClearProperty(Shortcuts.Groupings.Links,Home)||RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_list_del]$VAR[Path_Shortcut_UseRawPath])","executebuiltin_2=RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_refresh]&amp;&amp;restore::True&amp;&amp;executebuiltin::ActivateWindow(1116))")</onclick>
                         <onback>29999</onback>
-                        <width>64</width>
-                        <height>64</height>
+                        <width>72</width>
+                        <height>72</height>
                     </control>
                 </control>
 
@@ -236,7 +236,7 @@
         <include content="Settings_ButtonImage">
             <param name="id">29002</param>
             <param name="groupid">29102</param>
-            <label>$LOCALIZE[31511]</label>
+            <label>$LOCALIZE[424]</label>
             <param name="icon">special://skin/extras/icons/share.png</param>
             <onclick condition="!$EXP[DialogShortcuts_IsWidgetMode_Expression]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
             <onclick condition="$EXP[DialogShortcuts_IsWidgetMode_Expression]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
@@ -245,11 +245,11 @@
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
 
-        <!-- Action -->
+        <!-- Path -->
         <include content="Settings_ButtonImage">
             <param name="id">29003</param>
             <param name="groupid">29103</param>
-            <label>$LOCALIZE[15217]</label>
+            <label>$LOCALIZE[573]</label>
             <param name="icon">special://skin/extras/icons/terminal.png</param>
             <onclick condition="!$EXP[DialogShortcuts_IsWidgetMode_Expression]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
             <onclick condition="$EXP[DialogShortcuts_IsWidgetMode_Expression]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
@@ -287,7 +287,7 @@
             <param name="dialog">true</param>
             <param name="id">23098</param>
             <label>$LOCALIZE[1034] $LOCALIZE[33063]</label>
-            <visible>$EXP[DialogShortcuts_HasCustomSubmenu_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_HasCustomSubmenu_Expression] | $EXP[DialogShortcuts_IsSubMenuMode_Expression]</visible>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
             <onback>22904</onback>
         </include>
@@ -307,6 +307,19 @@
             <onclick>SetProperty(Shortcuts.EditMode,mode=submenu,Home)</onclick>
             <onback>22904</onback>
         </include>
+
+        <!-- Widgets: Limit -->
+        <include content="Settings_Button">
+            <param name="dialog">true</param>
+            <param name="id">23043</param>
+            <param name="control">button</param>
+            <label>$LOCALIZE[31042]</label>
+            <label2>$INFO[Container(22001).ListItem.Property(quickjump)]</label2>
+            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_numeric&amp;&amp;quickjump&amp;&amp;heading::Jump to widget])</onclick>
+            <visible>$EXP[DialogShortcuts_IsSubMenuMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
+            <onback>22904</onback>
+        </include>
     </include>
 
     <include name="DialogShortcuts_Items_Widget">
@@ -314,7 +327,7 @@
             <param name="dialog">true</param>
             <param name="id">23902</param>
             <label>$LOCALIZE[31282] $LOCALIZE[33063]</label>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression] | [String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
+            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -418,69 +431,6 @@
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
-
-        <!-- Submenu: Widget Style -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="id">23049</param>
-            <label> -- $LOCALIZE[736]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <label2>$VAR[Label_Shortcut_Widget_Style]</label2>
-            <onclick>$VAR[Action_Shortcut_SetWidgetStyle]</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Submenu: Widget Sort by -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="id">23050</param>
-            <label> -- $LOCALIZE[31016]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <label2>[CAPITALIZE]$INFO[Container(22001).ListItem.Property(widget_sortby)][/CAPITALIZE]</label2>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_sortby&amp;&amp;default&amp;label&amp;userpreference&amp;random&amp;dateadded&amp;lastplayed&amp;playcount&amp;year&amp;rating&amp;userrating&amp;votes&amp;genre&amp;country&amp;studio&amp;playlist&amp;episodenumber&amp;season&amp;totalepisodes&amp;watchedepisodes&amp;tvshowstatus&amp;tvshowtitle&amp;file&amp;title&amp;track&amp;time&amp;artist&amp;album&amp;lastupdated&amp;lastused&amp;date&amp;&amp;Sort by&amp;&amp;True])</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Submenu: Widget Sort order -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="control">radiobutton</param>
-            <param name="id">23051</param>
-            <label> -- $LOCALIZE[31517]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <visible>!String.IsEmpty(Container(22001).ListItem.Property(widget_sortby)) + !String.IsEqual(Container(22001).ListItem.Property(widget_sortby),random)</visible>
-            <selected>!String.IsEmpty(Container(22001).ListItem.Property(widget_sortorder))</selected>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_toggle&amp;&amp;widget_sortorder])</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Submenu: Widget Limit -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="id">23052</param>
-            <label> -- $LOCALIZE[31188]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <label2>$INFO[Container(22001).ListItem.Property(widget_limit)]</label2>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_numeric&amp;&amp;widget_limit&amp;&amp;heading::Limit])</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Submenu: Widget Autoscroll -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="control">radiobutton</param>
-            <param name="id">23053</param>
-            <label> -- $LOCALIZE[31185]</label>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
-            <visible>[String.IsEqual(Container(22001).ListItem.Property(use_as_widget),True) + !String.IsEmpty(Container(22001).ListItem.Property(submenulist_path))]</visible>
-            <selected>!String.IsEmpty(Container(22001).ListItem.Property(widget_autoscroll))</selected>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_toggle&amp;&amp;widget_autoscroll])</onclick>
-            <onback>22904</onback>
-        </include>
     </include>
 
     <include name="DialogShortcuts_Items">
@@ -497,6 +447,8 @@
         <value>$VAR[ColorSelected_30]</value>
     </variable>
 
+    <expression name="DialogShortcuts_IsSubMenuMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=submenu) + Skin.HasSetting(Submenu.EnableSideMode)]</expression>
+
     <expression name="DialogShortcuts_IsWidgetMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=widgets)]</expression>
 
     <expression name="DialogShortcuts_HasCustomSubmenu_Expression">[String.IsEqual(Container(22001).ListItem.Property(path),Custom_Submenu)]</expression>
@@ -504,4 +456,77 @@
     <expression name="DialogShortcuts_IsEnabled_Expression">[!String.IsEqual(Container(22001).ListItem.Property(disabled),True) + $EXP[DialogShortcuts_IsNotBlank_Expression]]</expression>
     <expression name="DialogShortcuts_IsNotBlank_Expression">[!String.IsEqual(Container(22001).ListItem.Property(blank),True)]</expression>
 
+
+
+    <include name="DialogCustom_Shortcuts_Items">
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.Home)">
+            <param name="window">home</param>
+        </include>
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1101)">
+            <param name="window">1101</param>
+        </include>
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1102)">
+            <param name="window">1102</param>
+        </include>
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1103)">
+            <param name="window">1103</param>
+        </include>
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1103)">
+            <param name="window">1103</param>
+        </include>
+    </include>
+
+    <include name="DialogCustom_Shortcuts_Items_ShortcutConfigure">
+        <include content="DialogCustom_Shortcuts_Items">
+            <param name="include">DialogCustom_Shortcuts_Items_ShortcutConfigure_Items</param>
+        </include>
+    </include>
+    <include name="DialogCustom_Shortcuts_Items_ShortcutConfigure_Items">
+        <include content="Settings_Button" description="Label">
+            <param name="dialog">false</param>
+            <param name="id">8001</param>
+            <label>$LOCALIZE[21899]</label>
+            <label2>$VAR[Home_Name_$PARAM[window]]</label2>
+            <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Name)</onclick>
+        </include>
+        <include content="Settings_Button" description="Icon">
+            <param name="dialog">false</param>
+            <param name="id">8002</param>
+            <label>$LOCALIZE[31274]</label>
+            <label2>$VAR[Home_Icon_$PARAM[window]]</label2>
+            <onclick>SetProperty(setting,HomeSwitcher.$PARAM[window].Icon,1117)</onclick>
+            <onclick>ActivateWindow(1117)</onclick>
+        </include>
+        <include content="Settings_Button" description="Path">
+            <param name="dialog">false</param>
+            <param name="id">8003</param>
+            <label>$LOCALIZE[573]</label>
+            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Shortcut.Path)]</label2>
+            <onclick>SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
+            <onclick>RunScript(script.skinvariables,set_shortcut=HomeSwitcher.$PARAM[window].Shortcut)</onclick>
+        </include>
+    </include>
+
+    <include name="DialogCustom_Shortcuts_Items_SpotlightConfigure">
+        <include content="DialogCustom_Shortcuts_Items">
+            <param name="include">DialogCustom_Shortcuts_Items_SpotlightConfigure_Items</param>
+        </include>
+    </include>
+    <include name="DialogCustom_Shortcuts_Items_SpotlightConfigure_Items">
+        <include content="Settings_Button" description="Label">
+            <param name="dialog">false</param>
+            <param name="id">8001</param>
+            <label>$LOCALIZE[21899]</label>
+            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Label)]</label2>
+            <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.Label)</onclick>
+        </include>
+        <include content="Settings_Button" description="Path">
+            <param name="dialog">false</param>
+            <param name="id">8003</param>
+            <label>$LOCALIZE[573]</label>
+            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)]</label2>
+            <onclick>SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
+            <onclick>RunScript(script.skinvariables,set_shortcut=HomeSwitcher.$PARAM[window].Spotlight,use_rawpath=True)</onclick>
+        </include>
+    </include>
 </includes>
