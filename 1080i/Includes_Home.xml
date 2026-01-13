@@ -2,6 +2,7 @@
 <includes>
 
     <variable name="Home_1105_onleft">
+        <value condition="Skin.HasSetting(HomeSwitcher.LoopBack) + !String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))">ReplaceWindow(1108)</value>
         <value condition="Skin.HasSetting(HomeSwitcher.LoopBack)">$VAR[Home_1108_onleft]</value>
     </variable>
 
@@ -14,7 +15,8 @@
         <value>special://skin/extras/icons/home.png</value>
     </variable>
     <variable name="Home_home_onleft">
-        <value>ReplaceWindow(1105)</value>
+        <value condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">ReplaceWindow(1105)</value>
+        <value>$VAR[Home_1105_onleft]</value>
     </variable>
     <variable name="Home_home_onright">
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1101.Toggle))">ReplaceWindow(1101)</value>
@@ -203,6 +205,9 @@
 
     <include name="Home_Switcher_Right_Buttons">
         <control type="grouplist">
+            <include content="Object_Right" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
+                <param name="right">-40</param>
+            </include>
             <right>-30</right>
             <align>right</align>
             <height>80</height>
@@ -237,8 +242,11 @@
         <param name="include_control">Home_Grouplist_Name</param>
         <definition>
             <control type="grouplist">
+                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
+                    <param name="left">-30</param>
+                </include>
                 <include>Home_Grouplist_Definition</include>
-                <include content="Home_Grouplist_Icon">
+                <include content="Home_Grouplist_Icon" condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">
                     <param name="id">3105</param>
                     <param name="icon">special://skin/extras/icons/search.png</param>
                     <param name="window">1105</param>
@@ -299,7 +307,9 @@
     <include name="Home_Submenu">
         <definition>
             <control type="group">
-
+                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
+                    <param name="left">-10</param>
+                </include>
                 <include>Home_Group_Definition</include>
                 <control type="grouplist">
                     <top>-100</top>
@@ -332,6 +342,9 @@
                         <param name="visible">!Window.IsVisible(home) + !Window.IsVisible(1101) + !Window.IsVisible(1102) + !Window.IsVisible(1103) + !Window.IsVisible(1104)</param>
                     </include>
                     <control type="group">
+                        <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
+                            <param name="left">20</param>
+                        </include>
                         <left>0</left>
                         <top>100</top>
                         <width>560</width>
@@ -410,6 +423,9 @@
                         </control>
                     </control>
                     <control type="group">
+                        <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
+                            <param name="left">-500</param>
+                        </include>
                         <left>-480</left>
                         <height>80</height>
                         <top>100</top>
