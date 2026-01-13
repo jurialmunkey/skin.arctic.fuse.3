@@ -11,7 +11,6 @@
         <control type="button" id="302">
             <texturefocus />
             <texturenofocus />
-            <!-- <onfocus>$VAR[Hub_Action_Reset]</onfocus> -->
             <onfocus>AlarmClock(resetproperty_1,SetProperty(HomeSwitcher.IsVisible,True,Home),00:00,silent)</onfocus>
             <onfocus>AlarmClock(resetproperty_2,ClearProperty(TMDBHelper.WidgetContainer),00:00,silent)</onfocus>
             <onfocus>AlarmClock(refocus,SetFocus(303),00:00,silent)</onfocus>
@@ -83,6 +82,12 @@
                         <param name="wall">false</param>
                         <param name="onup">302</param>
                     </include>
+                    <include content="Hub_Widget_Switcher" condition="Skin.HasSetting(Search.DisableCombined)">
+                        <param name="include_content">Search_Switcher_Items</param>
+                        <param name="top">-520</param>
+                        <param name="wall">false</param>
+                        <param name="onup">302</param>
+                    </include>
                 </control>
 
 
@@ -96,32 +101,22 @@
                     <include>skinvariables-searchwidgets-info</include>
                 </control>
 
-                <control type="grouplist">
+                <control type="label">
+                    <wrapmultiline>true</wrapmultiline>
+                    <font>font_main_plot</font>
+                    <label>$VAR[Label_Search_NoResults]</label>
+                    <align>left</align>
+                    <height>80</height>
+                    <textcolor>main_fg_30</textcolor>
+
                     <include content="Animation_ConditionalFade">
                         <param name="condition">![String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | Integer.IsEqual(Container(601).NumItems,0) | Control.HasFocus(300) | Control.HasFocus(305)]</param>
                     </include>
                     <include>Home_Slide_Animation</include>
-                    <orientation>vertical</orientation>
-                    <itemgap>0</itemgap>
                     <left>view_pad</left>
-                    <top>320</top>
-                    <control type="label">
-                        <width>info_title_w</width>
-                        <height>80</height>
-                        <wrapmultiline>true</wrapmultiline>
-                        <label>$VAR[Label_Search_Title_NoResults]</label>
-                        <font>font_title_midi</font>
-                        <aligny>center</aligny>
-                        <textcolor>main_fg_100</textcolor>
-                    </control>
-                    <control type="textbox">
-                        <font>font_main_plot</font>
-                        <label>$VAR[Label_Search_NoResults]</label>
-                        <align>left</align>
-                        <height>auto</height>
-                        <textcolor>main_fg_30</textcolor>
-                    </control>
+                    <top>360</top>
                 </control>
+
             </control>
 
             <control type="group">

@@ -1132,22 +1132,43 @@
         </definition>
     </include>
 
-    <include name="Info_Plot_Textbox">
+    <include name="Info_Plot_Fakebox">
         <param name="visible">true</param>
         <param name="is_player">false</param>
-        <param name="height">120</param>
-        <param name="max_height">120</param>
         <definition>
+            <control type="group">
+                <nested />
+                <height>$PARAM[height]</height>
+                <visible>$PARAM[visible]</visible>
+                <control type="label">
+                    <left>40</left>
+                    <top>10</top>
+                    <bottom>10</bottom>
+                    <width>$PARAM[width]</width>
+                    <font>font_main_plot</font>
+                    <aligny>center</aligny>
+                    <textcolor>$PARAM[colordiffuse]_70</textcolor>
+                    <wrapmultiline>true</wrapmultiline>
+                    <label>$PARAM[label]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
 
+    <include name="Info_Plot_Autobox">
+        <param name="visible">true</param>
+        <param name="is_player">false</param>
+        <definition>
             <control type="textbox">
                 <left>40</left>
-                <height max="$PARAM[max_height]">$PARAM[height]</height>
                 <width>$PARAM[width]</width>
                 <font>font_main_plot</font>
                 <aligny>center</aligny>
                 <textcolor>$PARAM[colordiffuse]_70</textcolor>
-                <visible>$PARAM[visible]</visible>
+                <label>$PARAM[label]</label>
                 <nested />
+                <height max="$PARAM[height]">auto</height>
+                <visible>$PARAM[visible]</visible>
             </control>
         </definition>
     </include>
@@ -1155,36 +1176,45 @@
     <include name="Info_Plot">
         <param name="visible">true</param>
         <param name="is_player">false</param>
-        <param name="height">120</param>
-        <param name="max_height">120</param>
         <param name="listitem">ListItem</param>
+        <param name="height">120</param>
+        <param name="autoheight">false</param>
         <definition>
 
-            <include content="Info_Plot_Textbox">
+            <include content="Info_Plot_Fakebox" condition="![$PARAM[autoheight]]">
                 <param name="is_player">$PARAM[is_player]</param>
                 <param name="container">$PARAM[container]</param>
-                <param name="max_height">$PARAM[max_height]</param>
                 <param name="height">$PARAM[height]</param>
                 <param name="width">$PARAM[width]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="visible">$PARAM[visible]</param>
-                <label>$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</label>
-                <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)</visible>
+                <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
+                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
                 <include content="Info_Details_Visible" condition="![$PARAM[is_player]]">
                     <param name="container">$PARAM[container]</param>
                 </include>
             </include>
 
-            <include content="Info_Plot_Textbox" condition="![$PARAM[is_player]]">
+            <include content="Info_Plot_Autobox" condition="[$PARAM[autoheight]]">
                 <param name="is_player">$PARAM[is_player]</param>
                 <param name="container">$PARAM[container]</param>
-                <param name="max_height">240</param>
-                <param name="height">auto</param>
+                <param name="height">$PARAM[height]</param>
                 <param name="width">$PARAM[width]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="visible">$PARAM[visible]</param>
-                <label>$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</label>
-                <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)</visible>
+                <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
+                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
+                <include content="Info_Details_Visible" condition="![$PARAM[is_player]]">
+                    <param name="container">$PARAM[container]</param>
+                </include>
+            </include>
+
+            <include content="Info_Plot_Fakebox" condition="![$PARAM[is_player]]">
+                <param name="is_player">$PARAM[is_player]</param>
+                <param name="container">$PARAM[container]</param>
+                <param name="height">240</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
+                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
                 <top>20</top>
                 <include content="Info_Details_Visible" condition="![$PARAM[is_player]]">
                     <param name="container">$PARAM[container]</param>
@@ -1397,6 +1427,7 @@
         <param name="visible_line">true</param>
         <param name="visible_plot">true</param>
         <param name="visible_meta">true</param>
+        <param name="autoheight">false</param>
         <definition>
 
             <control type="grouplist">
@@ -1434,8 +1465,8 @@
                     <param name="container">$PARAM[container]</param>
                     <param name="width">$PARAM[plotwidth]</param>
                     <param name="height">$PARAM[plotheight]</param>
-                    <param name="max_height">$PARAM[plotmaxheight]</param>
                     <param name="visible">$PARAM[visible_plot]</param>
+                    <param name="autoheight">$PARAM[autoheight]</param>
                 </include>
 
                 <include content="Info_Meta" condition="$PARAM[include_details]">
