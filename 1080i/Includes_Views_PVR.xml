@@ -155,7 +155,8 @@
                     <visible>!String.IsEmpty(ListItem.Title)</visible>
                 </control>
 
-                <control type="textbox">
+                <control type="label">
+                    <wrapmultiline>true</wrapmultiline>
                     <font>font_mini_plot</font>
                     <height>80</height>
                     <aligny>top</aligny>
@@ -165,7 +166,8 @@
                     <right>30</right>
                 </control>
 
-                <control type="textbox">
+                <control type="label">
+                    <wrapmultiline>true</wrapmultiline>
                     <font>font_mini_plot</font>
                     <height>340</height>
                     <top>15</top>
@@ -355,6 +357,7 @@
     <include name="View_PVRChannels_Standard">
         <param name="channelheight">80</param>
         <param name="channelwidth">420</param>
+        <param name="overlay">true</param>
         <definition>
             <control type="group">
                 <top>-10</top>
@@ -424,7 +427,8 @@
                 <onright>ActivateWindow(1171)</onright>
 
                 <viewtype label="$PARAM[viewtype_label]">list</viewtype>
-                <onfocus>SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+                <onfocus condition="$PARAM[overlay]">SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+                <onfocus condition="![$PARAM[overlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
 
                 <itemlayout height="$PARAM[channelheight]">
                     <include content="Layout_PVRChannel">
@@ -491,10 +495,18 @@
                 <param name="include">List_Landscape_Row</param>
                 <param name="viewtype_label">$LOCALIZE[31112]</param>
             </include>
-            <control type="group">
-                <include>Info_Panel_Dimensions</include>
-                <include>Info_Panel</include>
-            </control>
+        </control>
+        <control type="group">
+            <visible>Control.IsVisible(503)</visible>
+            <include>Dimension_PVR_HalfGuide</include>
+            <include>View_PVR_ProgrammePanel</include>
+            <include content="View_PVRChannels_Standard">
+                <param name="id">503</param>
+                <param name="viewtype_label">$LOCALIZE[31480]</param>
+                <param name="focusposition">1</param>
+                <param name="movement">2</param>
+                <param name="overlay">false</param>
+            </include>
         </control>
     </include>
 

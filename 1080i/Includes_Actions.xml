@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <variable name="Action_SearchEnabled">
+        <value condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">true</value>
+    </variable>
+
     <variable name="Action_FirstStart_HomeFocus">
         <value condition="Skin.HasSetting(HomeSwitcher.DisableFirstWidgetFocus)">SetFocus(300)</value>
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.Home.Spotlight.Target))">SetFocus(310)</value>
@@ -73,7 +77,6 @@
 
         <!-- Check for options tray -->
         <onload>Skin.SetBool(Options.DisableBottomTray)</onload>
-        <include>skinvariables-powertray-onload</include>
     </include>
 
     <variable name="Action_View_ContainerID">
@@ -133,9 +136,6 @@
 
     <include name="Action_SettingsCategories_Onload">
         <defaultcontrol always="true">$PARAM[defaultcontrol]</defaultcontrol>
-        <onload condition="!String.IsEmpty(Window(Home).Property(SettingsChanger.Switch))">SetFocus($INFO[Window(Home).Property(SettingsChanger.Switch)])</onload>
-        <onload condition="String.IsEmpty(Window(Home).Property(SettingsChanger.Switch))">SetFocus($PARAM[defaultcontrol])</onload>
-        <onload>ClearProperty(SettingsChanger.Switch,Home)</onload>
         <onload>ClearProperty(Background.ShowOverlay,Home)</onload>
         <include>Action_BlurImage_SimpleBackground_Onload</include>
         <menucontrol>30000</menucontrol>
