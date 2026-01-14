@@ -1347,7 +1347,7 @@
                     <orientation>horizontal</orientation>
                     <top>-2</top>
                     <left>20</left>
-                    <height>57</height>
+                    <height>65</height>
                     <itemgap>40</itemgap>
                     <ondown>90001</ondown>
                     <onup condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1113)</onup>
@@ -1359,6 +1359,14 @@
                         <usealttexture>false</usealttexture>
                         <onfocus>ClearProperty(Background.DialogInfo.HideArtwork,Home)</onfocus>
                         <onclick>$VAR[Action_DialogInfo_PlayMedia]</onclick>
+                    </include>
+
+                    <!-- Plot -->
+                    <include content="Button_Underline_Switcher">
+                        <param name="id">4007</param>
+                        <label>$LOCALIZE[207]</label>
+                        <usealttexture>false</usealttexture>
+                        <onclick>ActivateWindow(1113)</onclick>
                     </include>
 
                     <!-- Trailer -->
@@ -1375,22 +1383,12 @@
                         </include>
                     </include>
 
-                    <!-- Trakt -->
+                    <!-- Version -->
                     <include content="Button_Underline_Switcher">
-                        <param name="id">4003</param>
+                        <param name="id">4008</param>
+                        <label>$LOCALIZE[40000]</label>
                         <usealttexture>false</usealttexture>
-                        <label>Trakt</label>
-                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEqual(  ListItem.DBType,musicvideo)</visible>
-                        <onclick>$VAR[Action_Sync]</onclick>
-                        <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
-                    </include>
-
-                    <!-- Wikipedia -->
-                    <include content="Button_Underline_Switcher" condition="!Skin.HasSetting(Info.Button.DisableWiki)">
-                        <param name="id">4005</param>
-                        <label>Wikipedia</label>
-                        <usealttexture>false</usealttexture>
-                        <onclick>runscript(script.wikipedia,wikipedia=$VAR[Path_Wikipedia_Title],tmdb_type=$VAR[Path_Wikipedia_Type])</onclick>
+                        <onclick>SendClick(14)</onclick>
                     </include>
 
                     <!-- Options -->
