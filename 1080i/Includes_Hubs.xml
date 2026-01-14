@@ -6,6 +6,11 @@
         <onload condition="String.IsEmpty(Window($PARAM[window]).Property(TMDbHelper.WidgetContainer)) + String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Target))">SetProperty(TMDbHelper.WidgetContainer,501,$PARAM[window])</onload>
     </include>
 
+    <include name="Hub_Disabled_Onload">
+        <include>Action_Blur_Onload</include>
+        <defaultcontrol always="true">$PARAM[defaultcontrol]</defaultcontrol>
+        <onload>SetFocus($PARAM[defaultcontrol])</onload>
+    </include>
 
     <include name="Hub_Onload">
         <definition>
@@ -202,6 +207,19 @@
                 <param name="container">Container($PARAM[id]).</param>
                 <param name="logo_height">90</param>
                 <param name="title_height">90</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Hub_Wall_AlwaysVisible_Info">
+        <control type="group">
+            <include>Info_Panel_Dimensions</include>
+            <include content="Info_Panel">
+                <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])]</param>
+                <param name="visible_line">false</param>
+                <param name="visible_plot">false</param>
+                <param name="visible_meta">false</param>
+                <param name="container">Container($PARAM[id]).</param>
             </include>
         </control>
     </include>
@@ -902,6 +920,21 @@
             <param name="layout_h">view_poster_itemlayout_h</param>
             <param name="art_h">view_poster_item_w</param>
             <param name="img_h">view_poster_item_h</param>
+        </include>
+    </include>
+
+    <include name="Hub_Addons_Info">
+        <include content="Hub_Wall_AlwaysVisible_Info">
+            <param name="id">501</param>
+        </include>
+        <include content="Hub_Wall_AlwaysVisible_Info">
+            <param name="id">502</param>
+        </include>
+        <include content="Hub_Wall_AlwaysVisible_Info">
+            <param name="id">503</param>
+        </include>
+        <include content="Hub_Wall_AlwaysVisible_Info">
+            <param name="id">504</param>
         </include>
     </include>
 
