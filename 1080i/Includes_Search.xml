@@ -19,6 +19,7 @@
         <control type="button" id="303">
             <texturefocus />
             <texturenofocus />
+            <onfocus condition="Skin.HasSetting(Search.DisableCombined)">$VAR[Hub_Action_Reset]</onfocus>
             <onfocus>SetFocus(305)</onfocus>
             <onfocus>SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
             <onfocus>ClearProperty(TMDBHelper.WidgetContainer)</onfocus>
@@ -109,10 +110,9 @@
                     <height>80</height>
                     <textcolor>main_fg_30</textcolor>
 
-                    <include content="Animation_ConditionalFade">
-                        <param name="condition">![String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | Integer.IsEqual(Container(601).NumItems,0) | Control.HasFocus(300) | Control.HasFocus(305)]</param>
-                    </include>
-                    <include>Home_Slide_Animation</include>
+                    <visible>[String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | Integer.IsEqual(Container(601).NumItems,0) | Control.HasFocus(300) | Control.HasFocus(305)]</visible>
+                    <include>Home_Animation</include>
+                    <!-- <include>Home_Slide_Animation</include> -->
                     <left>view_pad</left>
                     <top>360</top>
                 </control>
