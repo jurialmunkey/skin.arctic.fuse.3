@@ -682,12 +682,6 @@
                 <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[infolabel_audiochannels])</param>
                 <param name="infolabel_audiochannels">$PARAM[infolabel_audiochannels]</param>
             </include>
-            <include content="Info_Line_LightPill_Text">
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">8K</param>
-                <param name="visible">$PARAM[visible] + $PARAM[is_8k]</param>
-                <param name="width">60</param>
-            </include>
         </definition>
     </include>
 
@@ -1157,6 +1151,7 @@
     <include name="Info_Plot_Autobox">
         <param name="visible">true</param>
         <param name="is_player">false</param>
+        <param name="autoheight">auto</param>
         <definition>
             <control type="textbox">
                 <left>40</left>
@@ -1166,24 +1161,26 @@
                 <textcolor>$PARAM[colordiffuse]_70</textcolor>
                 <label>$PARAM[label]</label>
                 <nested />
-                <height max="$PARAM[height]">auto</height>
+                <height max="$PARAM[height]">$PARAM[autoheight]</height>
                 <visible>$PARAM[visible]</visible>
             </control>
         </definition>
     </include>
 
-    <include name="Info_Plot">
+    <include name="Info_Plot_Content">
         <param name="visible">true</param>
         <param name="is_player">false</param>
         <param name="listitem">ListItem</param>
         <param name="height">120</param>
         <param name="autoheight">false</param>
+        <param name="include">Info_Plot_Fakebox</param>
         <definition>
 
-            <include content="Info_Plot_Fakebox" condition="![$PARAM[autoheight]]">
+            <include content="$PARAM[include]" condition="![$PARAM[autoheight]]">
                 <param name="is_player">$PARAM[is_player]</param>
                 <param name="container">$PARAM[container]</param>
                 <param name="height">$PARAM[height]</param>
+                <param name="autoheight">$PARAM[height]</param>
                 <param name="width">$PARAM[width]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
@@ -1206,10 +1203,11 @@
                 </include>
             </include>
 
-            <include content="Info_Plot_Fakebox" condition="![$PARAM[is_player]]">
+            <include content="$PARAM[include]" condition="![$PARAM[is_player]]">
                 <param name="is_player">$PARAM[is_player]</param>
                 <param name="container">$PARAM[container]</param>
                 <param name="height">240</param>
+                <param name="autoheight">240</param>
                 <param name="width">$PARAM[width]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
@@ -1222,6 +1220,31 @@
             </include>
 
         </definition>
+    </include>
+
+    <include name="Info_Plot">
+        <include content="Info_Plot_Content" condition="!Skin.HasSetting(Textboxes.DisableFakeBox)">
+            <param name="include">Info_Plot_Fakebox</param>
+            <param name="is_player">$PARAM[is_player]</param>
+            <param name="container">$PARAM[container]</param>
+            <param name="listitem">$PARAM[listitem]</param>
+            <param name="height">$PARAM[height]</param>
+            <param name="autoheight">$PARAM[height]</param>
+            <param name="width">$PARAM[width]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            <param name="visible">$PARAM[visible]</param>
+        </include>
+        <include content="Info_Plot_Content" condition="Skin.HasSetting(Textboxes.DisableFakeBox)">
+            <param name="include">Info_Plot_Autobox</param>
+            <param name="is_player">$PARAM[is_player]</param>
+            <param name="container">$PARAM[container]</param>
+            <param name="listitem">$PARAM[listitem]</param>
+            <param name="height">$PARAM[height]</param>
+            <param name="autoheight">$PARAM[height]</param>
+            <param name="width">$PARAM[width]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            <param name="visible">$PARAM[visible]</param>
+        </include>
     </include>
 
     <include name="Info_Meta_Object">
