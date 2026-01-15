@@ -159,14 +159,15 @@
                             <param name="selected">$PARAM[selected]</param>
                             <param name="label">$INFO[ListItem.VideoVersionName]</param>
                             <param name="label2">[UPPERCASE]$VAR[Label_VideoQuality]$INFO[ListItem.VideoCodec, • ,]$INFO[ListItem.VideoAspect, • ,:1]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,][/UPPERCASE]</param>
-                            <param name="label2_visible">true</param>
+                            <param name="label2_visible">!String.IsEmpty(ListItem.VideoCodec)</param>
                         </include>
-                        <animation effect="slide" start="0" end="0,-20" condition="true">Conditional</animation>
+                        <animation effect="slide" start="0" end="0,-20" condition="!String.IsEmpty(ListItem.Property(AudioLanguage.1)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.1))">Conditional</animation>
                     </control>
                     <control type="group">
                         <left>$PARAM[item_h]</left>
                         <height>60</height>
                         <centertop>50%</centertop>
+                        <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.1)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.1))</visible>
                         <animation effect="slide" start="0" end="0,20" condition="true">Conditional</animation>
                         <control type="label">
                             <left>-10</left>
