@@ -121,7 +121,8 @@
         <param name="onclick_condition">true</param>
         <definition>
             <control type="button" id="300">
-                <height>200</height>
+                <top>-1000</top>
+                <height>10</height>
                 <texturenofocus />
                 <texturefocus />
                 <onleft>$VAR[Home_$PARAM[window]_onleft]</onleft>
@@ -138,6 +139,17 @@
                 <onclick condition="Window.IsVisible(1108)">ActivateWindow(addonbrowser)</onclick>
                 <onclick condition="Window.IsVisible(1107)">ActivateWindow(tvchannels)</onclick>
                 <nested />
+            </control>
+            <control type="button">
+                <height>200</height>
+                <texturenofocus />
+                <texturefocus />
+                <onfocus>SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
+                <onfocus condition="$PARAM[overlay]">SetProperty(InfoPanel.FullSwitch,Wall,Home)</onfocus>
+                <onfocus condition="![$PARAM[overlay]]">ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
+                <onfocus condition="$PARAM[overlay]">SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+                <onfocus condition="![$PARAM[overlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
+                <onfocus>ActivateWindow(1183)</onfocus>
             </control>
             <control type="image">
                 <include>Home_Fade_Animation</include>
@@ -508,6 +520,7 @@
                 <height>80</height>
                 <centertop>50%</centertop>
                 <control type="button" id="$PARAM[id]">
+                    <onclick>Dialog.Close(1183,true)</onclick>
                     <onclick>ReplaceWindow($PARAM[window])</onclick>
                     <texturenofocus />
                 </control>
@@ -549,6 +562,7 @@
                 <height>80</height>
                 <width>auto</width>
                 <centertop>50%</centertop>
+                <onclick>Dialog.Close(1183,true)</onclick>
                 <onclick>ReplaceWindow($PARAM[window])</onclick>
                 <include>Texture_Highlight_ToggleButton_FakeFocus_H</include>
                 <usealttexture>Window.IsVisible($PARAM[window]) + Integer.IsEqual(System.CurrentControlID,300)</usealttexture>
