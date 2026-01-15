@@ -4,8 +4,8 @@
     <defaultcontrol always="true">8100</defaultcontrol>
     <onload>SetFocus(8100,1,absolute)</onload>
     <onload>ClearProperty(SelectionList)</onload>
-    <onunload>ClearProperty(url)</onunload>
-    <onunload>ClearProperty(setting)</onunload>
+    <onunload>ClearProperty(url,1117)</onunload>
+    <onunload>ClearProperty(setting,1117)</onunload>
     <controls>
 
         <include content="Object_Hidden_List">
@@ -39,16 +39,15 @@
                         <control type="grouplist" id="8200">
                             <include>Size_Grouplist_Pad</include>
                             <onright>450</onright>
-                            <onleft>9000</onleft>
                             <onup>SetFocus(8100,9999,absolute)</onup>
                             <ondown>SetFocus(8100,0,absolute)</ondown>
-                            <include content="Settings_Label">
+                            <!-- <include content="Settings_Label">
                                 <param name="dialog">true</param>
                                 <param name="id">8091</param>
                                 <label>$LOCALIZE[587]</label>
                                 <top>0</top>
                                 <height>40</height>
-                            </include>
+                            </include> -->
                             <include content="Settings_Button">
                                 <param name="dialog">true</param>
                                 <param name="id">8001</param>
@@ -66,12 +65,35 @@
                                     <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
                                 </control>
                             </control>
+                            <include content="Settings_ButtonImage">
+                                <param name="dialog">true</param>
+                                <param name="id">8002</param>
+                                <param name="groupid">8102</param>
+                                <param name="control">button</param>
+                                <param name="icon">special://skin/extras/icons/folder.png</param>
+                                <param name="left">20</param>
+                                <label>$LOCALIZE[1024]</label>
+                                <onclick condition="!String.IsEmpty(Window.Property(url))">RunPlugin($INFO[Window.Property(url),,&amp;func=do_icon&amp;&amp;icon_dir::])</onclick>
+                                <onclick condition="String.IsEmpty(Window.Property(url)) + !String.IsEmpty(Window.Property(setting))">Skin.SetImage($INFO[Window.Property(setting)])</onclick>
+                                <texturenofocus />
+                            </include>
+                            <control type="group" id="8093">
+                                <top>0</top>
+                                <height>40</height>
+                                <control type="image">
+                                    <height>1</height>
+                                    <left>20</left>
+                                    <right>20</right>
+                                    <centertop>50%</centertop>
+                                    <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                                </control>
+                            </control>
                         </control>
                         <include content="List_Dialog">
                             <param name="id">8100</param>
                             <param name="textcolor">dialog_fg</param>
                             <param name="misc">[!String.IsEmpty(Window.Property(SelectionList)) + Integer.IsEqual(ListItem.CurrentItem,Container(8100).CurrentItem)]</param>
-                            <top>180</top>
+                            <top>260</top>
                             <left>20</left>
                             <right>20</right>
                             <bottom>20</bottom>
@@ -79,7 +101,7 @@
                             <ondown>ClearProperty(SelectionList)</ondown>
                             <ondown>8001</ondown>
                             <onup>ClearProperty(SelectionList)</onup>
-                            <onup>8001</onup>
+                            <onup>8002</onup>
                             <onfocus>SetProperty(SelectionList,1)</onfocus>
                             <content>
                                 <item>
@@ -130,7 +152,7 @@
                         <param name="itemlayout_w">250</param>
                         <param name="detailed">true</param>
                         <param name="textcolor">dialog_fg</param>
-                        <onleft>8000</onleft>
+                        <onleft>8100</onleft>
                         <onright>61</onright>
                         <pagecontrol>61</pagecontrol>
                         <content>plugin://script.skinvariables/?info=get_container_labels&amp;containers=451&amp;infolabel=Label&amp;thumb=PicturePath&amp;reload=$INFO[Container(451).NumItems]$VAR[Path_IconSelector_Filter]</content>
