@@ -12,32 +12,95 @@
 
         <control type="group">
             <include>Animation_Group_Bumper</include>
-            <include>Animation_View_WindowChange</include>
 
             <control type="group">
                 <include>Info_Panel_Dimensions</include>
-                <include content="Info_Panel">
-                    <param name="details">false</param>
-                </include>
+                <control type="group">
+                    <visible>!$EXP[Exp_InfoDialogs]</visible>
+                    <include content="Info_Panel">
+                        <param name="include_details">false</param>
+                    </include>
+                </control>
             </control>
 
-            <include content="Info_Viewline">
-                <param name="top">280</param>
-                <param name="left">view_pad</param>
-            </include>
+            <control type="group">
+                <include>Animation_View_WindowChange</include>
 
-            <include content="View_MediaList_Include">
-                <param name="id">50</param>
-                <param name="viewtype_label">$LOCALIZE[31479]</param>
-                <param name="left">0</param>
-                <param name="right">infodialog_left_w</param>
-                <param name="top">160</param>
-                <param name="focusposition">1</param>
-                <param name="movement">5</param>
-                <param name="scrollbar_id">66</param>
-                <param name="overlay">true</param>
-                <include>View_MediaListOverview_Artwork</include>
-            </include>
+
+                <include content="Object_Hidden_Button">
+                    <param name="id">611</param>
+                    <onfocus>SetFocus(64)</onfocus>
+                </include>
+                <control type="group">
+                    <centerright>40</centerright>
+                    <width>scrollbar_w</width>
+                    <visible allowhiddenfocus="true">Control.HasFocus(64)</visible>
+                    <bottom>180</bottom>
+                    <height>612</height>
+                    <control type="image">
+                        <width>1</width>
+                        <centerleft>50%</centerleft>
+                        <texture colordiffuse="main_fg_12">common/white.png</texture>
+                    </control>
+                    <control type="scrollbar" id="64">
+                        <orientation>vertical</orientation>
+                        <texturesliderbackground />
+                        <include>Texture_Scrollbar_SliderBar_V</include>
+                        <include>Texture_Scrollbar_V</include>
+                        <onleft>50</onleft>
+                        <onright>50</onright>
+                        <onright>ActivateWindow(1171)</onright>
+                        <onback>50</onback>
+                        <showonepage>true</showonepage>
+                    </control>
+                </control>
+
+                <include content="Info_Viewline">
+                    <param name="top">260</param>
+                    <param name="left">view_pad</param>
+                </include>
+
+                <include content="View_MediaList_Include" condition="Window.IsVisible(musicplaylist)">
+                    <param name="id">50</param>
+                    <param name="viewtype_label">$LOCALIZE[31479]</param>
+                    <param name="left">0</param>
+                    <param name="right">692</param>
+                    <param name="top">130</param>
+                    <param name="focusposition">1</param>
+                    <param name="movement">5</param>
+                    <param name="overlay">true</param>
+                    <param name="item_height">85</param>
+                    <include>View_Media_Square</include>
+                </include>
+                <include content="View_MediaList_Include" condition="Window.IsVisible(videoplaylist)">
+                    <param name="id">50</param>
+                    <param name="viewtype_label">$LOCALIZE[31479]</param>
+                    <param name="left">-40</param>
+                    <param name="right">470</param>
+                    <param name="top">130</param>
+                    <param name="bottom">0</param>
+                    <param name="focusposition">1</param>
+                    <param name="movement">1</param>
+                    <param name="overlay">true</param>
+                    <param name="itemlayout_include">Layout_MediaList_Detailed</param>
+                    <param name="item_height">205</param>
+                    <param name="misc">248.88</param>
+                    <param name="diffuse">diffuse/landscape_w249_h140.png</param>
+                    <include>View_Media_Poster</include>
+                </include>
+
+                <control type="group">
+                    <visible>!$EXP[View_Mode_Wall_Expression]</visible>
+                    <include>Furniture_Footer_Left</include>
+                </control>
+            </control>
+
+        </control>
+
+        <control type="group">
+            <include>Furniture_Reposition</include>
+            <visible>!$EXP[Exp_InfoDialogs]</visible>
+            <include>Furniture_Footer_Right</include>
         </control>
 
     </controls>

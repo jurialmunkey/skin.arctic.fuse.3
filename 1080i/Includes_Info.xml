@@ -369,6 +369,8 @@
         <param name="width">auto</param>
         <param name="min_width">60</param>
         <param name="textoffsetx">10</param>
+        <param name="font">font_infotag_bold</param>
+        <param name="textoffsety">info_tag_offset_y</param>
         <definition>
             <control type="button">
                 <visible>$PARAM[visible]</visible>
@@ -377,10 +379,10 @@
                 <texturefocus colordiffuse="$PARAM[colordiffuse]_90" border="4">flags/blank.png</texturefocus>
                 <texturenofocus colordiffuse="$PARAM[colordiffuse]_90" border="4">flags/blank.png</texturenofocus>
                 <align>center</align>
-                <textoffsety>info_tag_offset_y</textoffsety>
+                <textoffsety>$PARAM[textoffsety]</textoffsety>
                 <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
                 <aligny>top</aligny>
-                <font>font_infotag_bold</font>
+                <font>$PARAM[font]</font>
                 <textcolor>ff2a2a2a</textcolor>
                 <shadowcolor>20ffffff</shadowcolor>
                 <label>$PARAM[label]</label>
@@ -659,6 +661,7 @@
     </include>
 
     <include name="Info_Line_Codecs">
+        <param name="listitem">ListItem</param>
         <definition>
             <include content="Info_Line_VideoQuality_Resolution">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -669,14 +672,14 @@
                 <param name="is_hd">[Integer.IsEqual($PARAM[container]$PARAM[infolabel_videoresolution],720)]</param>
                 <param name="is_sd">[!String.IsEmpty($PARAM[container]$PARAM[infolabel_videoresolution])]</param>
             </include>
-            <include content="Info_Line_VideoQuality_HDRType" condition="!Skin.HasSetting(InfoTags.DisableHDR)">
+            <include content="Info_Line_VideoQuality_HDRType" condition="Skin.HasSetting(InfoTags.EnableHDR)">
                 <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[infolabel_hdrtype])</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="is_dolbyvision">[String.IsEqual($PARAM[container]$PARAM[infolabel_hdrtype],dolbyvision)]</param>
                 <param name="is_hdr">[String.IsEqual($PARAM[container]$PARAM[infolabel_hdrtype],hdr10)]</param>
                 <param name="is_hlg">[String.IsEqual($PARAM[container]$PARAM[infolabel_hdrtype],hlg)]</param>
             </include>
-            <include content="Info_Line_AudioChannels_Resolution" condition="!Skin.HasSetting(InfoTags.DisableAudioChannels)">
+            <include content="Info_Line_AudioChannels_Resolution" condition="Skin.HasSetting(InfoTags.EnableAudioChannels)">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="container">$PARAM[container]</param>
                 <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[infolabel_audiochannels])</param>
@@ -1179,6 +1182,7 @@
         <param name="include">Info_Plot_Fakebox</param>
         <definition>
 
+            <!-- Standard Plot -->
             <include content="$PARAM[include]" condition="![$PARAM[autoheight]]">
                 <param name="is_player">$PARAM[is_player]</param>
                 <param name="container">$PARAM[container]</param>
@@ -1188,11 +1192,11 @@
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
                 <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
+                <visible>![String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | [$PARAM[is_player] + VideoPlayer.Content(episodes)]]</visible>
                 <include content="Info_Details_Visible" condition="![$PARAM[is_player]]">
                     <param name="container">$PARAM[container]</param>
                 </include>
             </include>
-
             <include content="Info_Plot_Autobox" condition="[$PARAM[autoheight]]">
                 <param name="is_player">$PARAM[is_player]</param>
                 <param name="container">$PARAM[container]</param>
@@ -1201,11 +1205,36 @@
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
                 <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
+                <visible>![String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | [$PARAM[is_player] + VideoPlayer.Content(episodes)]]</visible>
                 <include content="Info_Details_Visible" condition="![$PARAM[is_player]]">
                     <param name="container">$PARAM[container]</param>
                 </include>
             </include>
 
+            <!-- Episode Plot -->
+            <include content="$PARAM[include]" condition="![$PARAM[autoheight]]">
+                <param name="is_player">$PARAM[is_player]</param>
+                <param name="container">$PARAM[container]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="autoheight">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot)]</param>
+                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode,,. ]$INFO[$PARAM[container]$PARAM[listitem].Title,, - ]$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]</param>
+                <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | [$PARAM[is_player] + VideoPlayer.Content(episodes)]</visible>
+            </include>
+            <include content="Info_Plot_Autobox" condition="[$PARAM[autoheight]]">
+                <param name="is_player">$PARAM[is_player]</param>
+                <param name="container">$PARAM[container]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="visible">[$PARAM[visible]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot)]</param>
+                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode,,. ]$INFO[$PARAM[container]$PARAM[listitem].Title,, - ]$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]</param>
+                <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | [$PARAM[is_player] + VideoPlayer.Content(episodes)]</visible>
+            </include>
+
+            <!-- Addon Music and Misc Plot -->
             <include content="$PARAM[include]" condition="![$PARAM[is_player]]">
                 <param name="is_player">$PARAM[is_player]</param>
                 <param name="container">$PARAM[container]</param>
@@ -1359,7 +1388,7 @@
                 <control type="grouplist">
                     <include>Info_Meta_Grouplist_Definition</include>
 
-                    <include content="Info_Meta_Object">
+                    <!-- <include content="Info_Meta_Object">
                         <param name="bordersize">-12</param>
                         <param name="icon">special://skin/extras/icons/table-list.png</param>
                         <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode,0,]</param>
@@ -1370,7 +1399,7 @@
                         <param name="icon">special://skin/extras/icons/table-list.png</param>
                         <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode]</param>
                         <param name="visible">[String.IsEqual($PARAM[container]ListItem.DBType,episode) | $PARAM[is_player]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Episode) + Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</param>
-                    </include>
+                    </include> -->
 
                     <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="item">Item01</param>

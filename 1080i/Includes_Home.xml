@@ -121,7 +121,8 @@
         <param name="onclick_condition">true</param>
         <definition>
             <control type="button" id="300">
-                <height>200</height>
+                <top>-1000</top>
+                <height>10</height>
                 <texturenofocus />
                 <texturefocus />
                 <onleft>$VAR[Home_$PARAM[window]_onleft]</onleft>
@@ -138,6 +139,17 @@
                 <onclick condition="Window.IsVisible(1108)">ActivateWindow(addonbrowser)</onclick>
                 <onclick condition="Window.IsVisible(1107)">ActivateWindow(tvchannels)</onclick>
                 <nested />
+            </control>
+            <control type="button">
+                <height>200</height>
+                <texturenofocus />
+                <texturefocus />
+                <onfocus>SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
+                <onfocus condition="$PARAM[overlay]">SetProperty(InfoPanel.FullSwitch,Wall,Home)</onfocus>
+                <onfocus condition="![$PARAM[overlay]]">ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
+                <onfocus condition="$PARAM[overlay]">SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+                <onfocus condition="![$PARAM[overlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
+                <onfocus>ActivateWindow(1183)</onfocus>
             </control>
             <control type="image">
                 <include>Home_Fade_Animation</include>
@@ -176,9 +188,10 @@
             <param name="visible">Window.IsActive(1181)</param>
         </include>
         <control type="group">
+            <animation effect="slide" start="0" end="0,-70" condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Conditional</animation>
             <visible>!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
             <include>Home_Animation</include>
-            <include content="Furniture_Header">
+            <include content="Furniture_Header" condition="!Skin.HasSetting(HomeSwitcher.DisableHeader)">
                 <param name="label">$VAR[Home_Header_Label]</param>
                 <param name="top">20</param>
             </include>
@@ -242,7 +255,7 @@
         <param name="include_control">Home_Grouplist_Name</param>
         <definition>
             <control type="grouplist">
-                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
+                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch) + !Skin.HasSetting(HomeSwitcher.EnableIcons)">
                     <param name="left">-30</param>
                 </include>
                 <include>Home_Grouplist_Definition</include>
@@ -307,12 +320,19 @@
     <include name="Home_Submenu">
         <definition>
             <control type="group">
-                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
+                <animation effect="slide" start="0" end="0,-70" condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Conditional</animation>
+                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch) + !Skin.HasSetting(HomeSwitcher.EnableIcons)">
                     <param name="left">-10</param>
+                </include>
+                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch) + Skin.HasSetting(HomeSwitcher.EnableIcons)">
+                    <param name="left">-20</param>
                 </include>
                 <include>Home_Group_Definition</include>
                 <control type="grouplist">
                     <top>-100</top>
+                    <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.EnableIcons)">
+                        <param name="left">-10</param>
+                    </include>
                     <left>-20</left>
                     <orientation>horizontal</orientation>
                     <height>1080</height>
@@ -509,6 +529,7 @@
                 <height>80</height>
                 <centertop>50%</centertop>
                 <control type="button" id="$PARAM[id]">
+                    <onclick>Dialog.Close(1183,true)</onclick>
                     <onclick>ReplaceWindow($PARAM[window])</onclick>
                     <texturenofocus />
                 </control>
@@ -550,6 +571,7 @@
                 <height>80</height>
                 <width>auto</width>
                 <centertop>50%</centertop>
+                <onclick>Dialog.Close(1183,true)</onclick>
                 <onclick>ReplaceWindow($PARAM[window])</onclick>
                 <include>Texture_Highlight_ToggleButton_FakeFocus_H</include>
                 <usealttexture>Window.IsVisible($PARAM[window]) + Integer.IsEqual(System.CurrentControlID,300)</usealttexture>
@@ -566,7 +588,7 @@
                 <label>$PARAM[name]</label>
                 <height>80</height>
                 <include content="Object_Width" condition="$PARAM[use_icons]">
-                    <param name="width">90</param>
+                    <param name="width">100</param>
                 </include>
                 <width>auto</width>
                 <centertop>50%</centertop>
