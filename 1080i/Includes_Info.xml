@@ -852,6 +852,38 @@
         </definition>
     </include>
 
+    <include name="Info_Meta_Object_GoldenGlobe">
+        <param name="is_player">false</param>
+        <definition>
+            <include content="Info_Meta_Object" condition="![$PARAM[is_player]]">
+                <param name="icon">flags/monochrome/ratings/goldenglobe.png</param>
+                <param name="label">$INFO[Window(Home).Property(TMDbHelper.ListItem.GoldenGlobe_Wins),x,]</param>
+                <param name="visible">[String.IsEqual($PARAM[container]ListItem.DBType,movie)] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.GoldenGlobe_Wins))</param>
+            </include>
+            <include content="Info_Meta_Object" condition="[$PARAM[is_player]]">
+                <param name="icon">flags/monochrome/ratings/goldenglobe.png</param>
+                <param name="label">$INFO[Window(Home).Property(TMDbHelper.Player.GoldenGlobe_Wins),x,]</param>
+                <param name="visible">VideoPlayer.Content(movies) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.GoldenGlobe_Wins))</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Info_Meta_Object_Emmy">
+        <param name="is_player">false</param>
+        <definition>
+            <include content="Info_Meta_Object" condition="![$PARAM[is_player]]">
+                <param name="icon">flags/monochrome/ratings/emmy.png</param>
+                <param name="label">$INFO[Window(Home).Property(TMDbHelper.ListItem.Emmy_Wins),x,]</param>
+                <param name="visible">[String.IsEqual($PARAM[container]ListItem.DBType,tvshow) | String.IsEqual($PARAM[container]ListItem.DBType,season)] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Emmy_Wins))</param>
+            </include>
+            <include content="Info_Meta_Object" condition="[$PARAM[is_player]]">
+                <param name="icon">flags/monochrome/ratings/emmy.png</param>
+                <param name="label">$INFO[Window(Home).Property(TMDbHelper.Player.Emmy_Wins),x,]</param>
+                <param name="visible">VideoPlayer.Content(episodes) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.Emmy_Wins))</param>
+            </include>
+        </definition>
+    </include>
+
     <include name="Info_Meta_Object_Status">
         <param name="is_player">false</param>
         <definition>
@@ -906,6 +938,24 @@
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
         </include>
         <include content="Info_Meta_Object_Letterboxd" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Letterboxd)">
+            <param name="visible">$PARAM[visible]</param>
+            <param name="container">$PARAM[container]</param>
+            <param name="is_player">$PARAM[is_player]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+        <include content="Info_Meta_Object_Awards" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Awards)">
+            <param name="visible">$PARAM[visible]</param>
+            <param name="container">$PARAM[container]</param>
+            <param name="is_player">$PARAM[is_player]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+        <include content="Info_Meta_Object_GoldenGlobe" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],GoldenGlobe)">
+            <param name="visible">$PARAM[visible]</param>
+            <param name="container">$PARAM[container]</param>
+            <param name="is_player">$PARAM[is_player]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+        <include content="Info_Meta_Object_Emmy" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Emmy)">
             <param name="visible">$PARAM[visible]</param>
             <param name="container">$PARAM[container]</param>
             <param name="is_player">$PARAM[is_player]</param>
@@ -1175,7 +1225,7 @@
         <param name="visible">true</param>
         <param name="is_player">false</param>
         <param name="listitem">ListItem</param>
-        <param name="height">120</param>
+        <param name="height">100</param>
         <param name="autoheight">false</param>
         <param name="include">Info_Plot_Fakebox</param>
         <definition>
@@ -1379,25 +1429,15 @@
             <control type="group">
                 <left>40</left>
                 <height>60</height>
+                <orientation>vertical</orientation>
+                <itemgap>10</itemgap>
                 <visible>$PARAM[visible]</visible>
                 <include content="Info_Details_Visible" condition="![$PARAM[is_player]]">
                     <param name="container">$PARAM[container]</param>
                 </include>
+                <!-- Ratings Row -->
                 <control type="grouplist">
                     <include>Info_Meta_Grouplist_Definition</include>
-
-                    <!-- <include content="Info_Meta_Object">
-                        <param name="bordersize">-12</param>
-                        <param name="icon">special://skin/extras/icons/table-list.png</param>
-                        <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode,0,]</param>
-                        <param name="visible">[String.IsEqual($PARAM[container]ListItem.DBType,episode) | $PARAM[is_player]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Episode) + !Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</param>
-                    </include>
-                    <include content="Info_Meta_Object">
-                        <param name="bordersize">-12</param>
-                        <param name="icon">special://skin/extras/icons/table-list.png</param>
-                        <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode]</param>
-                        <param name="visible">[String.IsEqual($PARAM[container]ListItem.DBType,episode) | $PARAM[is_player]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Episode) + Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</param>
-                    </include> -->
 
                     <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="item">Item01</param>
@@ -1411,8 +1451,42 @@
                         <param name="container">$PARAM[container]</param>
                         <param name="is_player">$PARAM[is_player]</param>
                     </include>
-
-
+                    <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
+                        <param name="item">Item03</param>
+                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="is_player">$PARAM[is_player]</param>
+                    </include>
+                    <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
+                        <param name="item">Item04</param>
+                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="is_player">$PARAM[is_player]</param>
+                    </include>
+                    <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
+                        <param name="item">Item05</param>
+                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="is_player">$PARAM[is_player]</param>
+                    </include>
+                    <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
+                        <param name="item">Item06</param>
+                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="is_player">$PARAM[is_player]</param>
+                    </include>
+                    <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
+                        <param name="item">Item07</param>
+                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="is_player">$PARAM[is_player]</param>
+                    </include>
+                    <include content="Info_Meta_Item" condition="$EXP[Exp_TMDbHelper_IsData]">
+                        <param name="item">Item08</param>
+                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="is_player">$PARAM[is_player]</param>
+                    </include>
 
                     <include content="Info_Meta_Object" condition="!$EXP[Exp_TMDbHelper_IsData]">
                         <param name="bordersize">-12</param>
@@ -1459,6 +1533,126 @@
                     </include>
                 </control>
             </control>
+            <!-- Parental Guide Row -->
+            <control type="grouplist">
+                <left>30</left>
+                <top>5</top>
+                <height>40</height>
+                <orientation>horizontal</orientation>
+                <itemgap>8</itemgap>
+
+                <visible>[String.IsEqual($PARAM[container]ListItem.DBType,movie) | String.IsEqual($PARAM[container]ListItem.DBType,tvshow) | String.IsEqual($PARAM[container]ListItem.DBType,episode)]</visible>
+                <control type="group" description="Avoid grouplist chop with spacer">
+                    <left>-12</left>
+                    <width>20</width>
+                </control>
+                
+                <!-- IMDB Provider Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(IMDB-Icon)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(IMDB-Icon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <!-- IMDB Severity Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(IMDB-NIcon)]</param>
+                    <param name="label">$INFO[Window(home).Property(IMDB-NVotes)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(IMDB-NIcon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="font">font_tiny</param>
+                </include>
+                
+                <!-- Kids In Mind Provider Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(KidsInMind-Icon)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(KidsInMind-Icon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <!-- Kids In Mind Severity Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(KidsInMind-NIcon)]</param>
+                    <param name="label">$INFO[Window(home).Property(KidsInMind-NRate)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(KidsInMind-NIcon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="font">font_tiny</param>
+                </include>
+                
+                <!-- Movie Guide Provider Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(MovieGuide-Icon)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(MovieGuide-Icon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <!-- Movie Guide Severity Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(MovieGuide-NIcon)]</param>
+                    <param name="label">$INFO[Window(home).Property(MovieGuide-NRate)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(MovieGuide-NIcon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="font">font_tiny</param>
+                </include>
+                
+                <!-- Dove Foundation Provider Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(DoveFoundation-Icon)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(DoveFoundation-Icon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <!-- Dove Foundation Severity Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(DoveFoundation-NIcon)]</param>
+                    <param name="label">$INFO[Window(home).Property(DoveFoundation-NRate)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(DoveFoundation-NIcon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="font">font_tiny</param>
+                </include>
+                
+                <!-- Parent Previews Provider Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(ParentPreviews-Icon)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(ParentPreviews-Icon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <!-- Parent Previews Severity Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(ParentPreviews-NIcon)]</param>
+                    <param name="label">$INFO[Window(home).Property(ParentPreviews-NRate)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(ParentPreviews-NIcon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="font">font_tiny</param>
+                </include>
+                
+                <!-- CSM Provider Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(CSM-Icon)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(CSM-Icon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <!-- CSM Age Severity Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(CSM-NIcon)]</param>
+                    <param name="label">$INFO[Window(home).Property(CSM-Age)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(CSM-Age))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="font">font_tiny</param>
+                </include>
+                
+                <!-- Raising Children Provider Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(RaisingChildren-Icon)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(RaisingChildren-Icon))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <!-- Raising Children Age Severity Icon -->
+                <include content="Info_Meta_Object">
+                    <param name="icon">$INFO[Window(home).Property(RaisingChildren-NIcon)]</param>
+                    <param name="label">$INFO[Window(home).Property(RaisingChildren-Age)]</param>
+                    <param name="visible">!String.IsEmpty(Window(home).Property(RaisingChildren-Age))</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="font">font_tiny</param>
+                </include>
+            </control>
+
         </definition>
     </include>
 
