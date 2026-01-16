@@ -1876,7 +1876,7 @@
                         <height>30</height>
                         <align>center</align>
                         <label>$INFO[$PARAM[listitem].Label]</label>
-                        <font>font_tiny_bold</font>
+                        <font>font_tiny</font>
                         <textcolor>main_fg_90</textcolor>
                         <selectedcolor>main_fg_90</selectedcolor>
                         <visible>!$PARAM[selected]</visible>
@@ -1887,12 +1887,94 @@
                         <height>30</height>
                         <align>center</align>
                         <label>$INFO[$PARAM[listitem].Label]</label>
-                        <font>font_tiny_bold</font>
+                        <font>font_tiny</font>
                         <textcolor>main_fg_90</textcolor>
                         <selectedcolor>main_fg_90</selectedcolor>
                         <scroll>true</scroll>
                         <visible>$PARAM[selected]</visible>
                     </control>
+                </control>
+
+            </control>
+
+        </definition>
+    </include>
+
+    <include name="Layout_Poster_Card">
+        <param name="detailed">false</param>
+        <param name="selected">false</param>
+        <param name="indicator">true</param>
+        <param name="diffuse">diffuse/poster_w217_h310.png</param>
+        <param name="icon">$VAR[Image_Poster]</param>
+        <param name="listitem">ListItem</param>
+        <param name="image_h"></param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+
+                <control type="group">
+                    <include content="Object_ItemBack">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                    </include>
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">image</param>
+                        <include>Texture_Box_Highlight_V</include>
+                    </include>
+                    <control type="textbox">
+                        <textcolor>main_fg_70</textcolor>
+                        <label>$INFO[$PARAM[listitem].$PARAM[listitem_label]]</label>
+                        <include content="Dimension_Padding">
+                            <param name="pad">20</param>
+                        </include>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_mini_bold</font>
+                        <visible>String.IsEmpty(ListItem.Icon)</visible>
+                        <visible>String.IsEmpty(ListItem.Art(poster))</visible>
+                        <visible>String.IsEmpty(ListItem.Art(tvshow.poster))</visible>
+                    </control>
+                    <include content="Object_Layout_Image_Icon">
+                        <param name="diffuse">$PARAM[diffuse]</param>
+                        <param name="icon">$PARAM[icon]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="aspectratio">scale</param>
+                        <param name="selected">$PARAM[selected]</param>
+                    </include>
+                </control>
+                <control type="group">
+                    <visible>String.IsEqual($PARAM[listitem].DBType,actor) | String.IsEqual($PARAM[listitem].DBType,video) | $PARAM[detailed]</visible>
+                    <include content="Layout_Labels">
+                        <param name="top">-85</param>
+                        <param name="left">20</param>
+                        <param name="right">20</param>
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="textcolor">panel_fg</param>
+                        <param name="fade">true</param>
+                        <param name="include_detailed_labels">true</param>
+                        <param name="use_label2">$PARAM[use_label2]</param>
+                    </include>
+                </control>
+                <control type="group">
+                    <include content="Object_ContentBanner" condition="$PARAM[indicator]">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include condition="!$PARAM[selected] + $PARAM[indicator]" content="Object_Indicator">
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Object_SelectBox" condition="$PARAM[selected]">
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="indicator">$PARAM[indicator]</param>
+                        <param name="focusbounce">true</param>
+                    </include>
                 </control>
 
             </control>
@@ -1988,7 +2070,7 @@
                         <height>30</height>
                         <align>center</align>
                         <label>$INFO[$PARAM[listitem].Label]</label>
-                        <font>font_tiny_bold</font>
+                        <font>font_tiny</font>
                         <textcolor>main_fg_90</textcolor>
                         <selectedcolor>main_fg_90</selectedcolor>
                         <visible>!$PARAM[selected]</visible>
@@ -1999,7 +2081,7 @@
                         <height>30</height>
                         <align>center</align>
                         <label>$INFO[$PARAM[listitem].Label]</label>
-                        <font>font_tiny_bold</font>
+                        <font>font_tiny</font>
                         <textcolor>main_fg_90</textcolor>
                         <selectedcolor>main_fg_90</selectedcolor>
                         <scroll>true</scroll>
