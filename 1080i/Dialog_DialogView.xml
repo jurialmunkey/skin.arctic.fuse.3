@@ -126,49 +126,12 @@
     </include>
 
     <include name="DialogViewInfo_Items">
-
-        <item>
-            <label>$LOCALIZE[31061]$INFO[ListItem.UserRating, (,)]</label>
-            <icon>special://skin/extras/icons/star.png</icon>
-            <onclick>Close</onclick>
-            <onclick>SendClick(7)</onclick>
-        </item>
-
-        <item>
-            <label>$LOCALIZE[39123]</label>
-            <icon>special://skin/extras/icons/image.png</icon>
-            <onclick>Close</onclick>
-            <onclick>SendClick(10)</onclick>
-        </item>
-
-        <item>
-            <label>Trakt</label>
-            <icon>special://skin/extras/icons/trakt.png</icon>
-            <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEqual(ListItem.DBType,musicvideo)</visible>
-            <onclick>$VAR[Action_Sync]</onclick>
-            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
-        </item>
-
-        <item>
-            <label>Wikipedia</label>
-            <icon>special://skin/extras/icons/globe.png</icon>
-            <onclick>runscript(script.wikipedia,wikipedia=$VAR[Path_Wikipedia_Title],tmdb_type=$VAR[Path_Wikipedia_Type])</onclick>
-            <visible>!Skin.HasSetting(Info.Button.DisableWiki)</visible>
-        </item>
-
-        <item>
-            <label>$LOCALIZE[40211]</label>
-            <icon>special://skin/extras/icons/director.png</icon>
-            <onclick>Close</onclick>
-            <onclick>SendClick(15)</onclick>
-        </item>
-
-        <item>
-            <label>$LOCALIZE[184]</label>
-            <icon>special://skin/extras/icons/arrows-rotate.png</icon>
-            <onclick>Close</onclick>
-            <onclick>SendClick(6)</onclick>
-        </item>
+        <include content="DialogInfo_VideoButtons_Overflow" condition="String.IsEqual(Window(Home).Property(Dialog.1172.DBTYPE),movie)">
+            <param name="type">movies</param>
+        </include>
+        <include content="DialogInfo_VideoButtons_Overflow" condition="!String.IsEqual(Window(Home).Property(Dialog.1172.DBTYPE),movie)">
+            <param name="type">others</param>
+        </include>
     </include>
 
     <include name="DialogView_Menu">
