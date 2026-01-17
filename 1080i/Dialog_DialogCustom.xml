@@ -152,6 +152,7 @@
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Autoscroll_Items)">DialogCustom_Autoscroll_Items</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_VideoOSD_Items)">DialogCustom_VideoOSD_Items</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_VideoInfo_Items)">DialogCustom_VideoInfo_Items</include>
+        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Buttons_Items)">DialogCustom_Buttons_Items</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Ratings_Movies_Items)">DialogCustom_Ratings_Movies_Items</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Ratings_TVShows_Items)">DialogCustom_Ratings_TVShows_Items</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_SpotlightStyle_Items)">DialogCustom_SpotlightStyle_Items</include>
@@ -1214,6 +1215,59 @@
             <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery)</selected>
             <visible>!Skin.HasSetting(VideoInfo.Widgets.DisableGallery)</visible>
             <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
+        </include>
+    </include>
+
+    <include name="DialogCustom_Buttons_Item">
+        <include content="Settings_Button">
+            <param name="dialog">true</param>
+            <param name="id">$PARAM[id]</param>
+            <label>$LOCALIZE[31080] $PARAM[number]</label>
+            <label2>$INFO[Skin.String(DialogInfo.$PARAM[type].Item$PARAM[number])]</label2>
+            <onclick>RunScript(script.skinvariables,run_dialog=select,list=Trailer / Trakt / Wikipedia / Plot / Artwork / UserRating / Versions / Extras / Refresh,separator=' / ',heading=$PARAM[type] $PARAM[number],"executebuiltin=Skin.SetString(DialogInfo.$PARAM[type].Item$PARAM[number],{v})")</onclick>
+        </include>
+    </include>
+
+    <include name="DialogCustom_Buttons_Items">
+        <include content="Settings_Label">
+            <param name="id">8001</param>
+            <param name="dialog">true</param>
+            <label>$LOCALIZE[342]</label>
+        </include>
+        <include content="DialogCustom_Buttons_Item">
+            <param name="id">8002</param>
+            <param name="number">01</param>
+            <param name="type">Movies</param>
+        </include>
+        <include content="DialogCustom_Buttons_Item">
+            <param name="id">8003</param>
+            <param name="number">02</param>
+            <param name="type">Movies</param>
+        </include>
+        <include content="DialogCustom_Buttons_Item">
+            <param name="id">8004</param>
+            <param name="number">03</param>
+            <param name="type">Movies</param>
+        </include>
+        <include content="Settings_Label">
+            <param name="id">8005</param>
+            <param name="dialog">true</param>
+            <label>$LOCALIZE[31081]</label>
+        </include>
+        <include content="DialogCustom_Buttons_Item">
+            <param name="id">8006</param>
+            <param name="number">01</param>
+            <param name="type">Others</param>
+        </include>
+        <include content="DialogCustom_Buttons_Item">
+            <param name="id">8007</param>
+            <param name="number">02</param>
+            <param name="type">Others</param>
+        </include>
+        <include content="DialogCustom_Buttons_Item">
+            <param name="id">8008</param>
+            <param name="number">03</param>
+            <param name="type">Others</param>
         </include>
     </include>
 

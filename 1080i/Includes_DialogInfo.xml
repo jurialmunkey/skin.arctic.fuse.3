@@ -1319,19 +1319,152 @@
         </definition>
     </include>
 
-    <!-- Additional Video Info Details not included in info line such as Director and Genres -->
-    <include name="DialogInfo_VideoDetails">
-        <include content="_DialogInfo_VideoDetails">
-            <param name="left_group_width">480</param>
-            <param name="right">80</param>
+    <include name="DialogInfo_VideoButtons_Trailer">
+        <item>
+            <icon>special://skin/extras/icons/video.png</icon>
+            <label>$LOCALIZE[31393]</label>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <include content="Action_PlayTrailer_OnClick">
+                <param name="trailer">ListItem.Trailer</param>
+                <param name="trailer_fallback">Window(Home).Property(TMDbHelper.ListItem.Trailer)</param>
+                <param name="title">$VAR[Label_Title]</param>
+                <param name="items">$VAR[Path_VideoInfo_Trailers]</param>
+            </include>
+            <visible>!String.IsEmpty(ListItem.Trailer) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer))</visible>
+        </item>
+    </include>
+
+    <include name="DialogInfo_VideoButtons_Trakt">
+        <item>
+            <label>Trakt</label>
+            <icon>special://skin/extras/icons/trakt.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>$VAR[Action_Sync]</onclick>
+            <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEqual(  ListItem.DBType,musicvideo)</visible>
+            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
+        </item>
+    </include>
+
+    <include name="DialogInfo_VideoButtons_Wikipedia">
+        <item>
+            <label>Wikipedia</label>
+            <icon>special://skin/extras/icons/globe.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>runscript(script.wikipedia,wikipedia=$VAR[Path_Wikipedia_Title],tmdb_type=$VAR[Path_Wikipedia_Type])</onclick>
+        </item>
+    </include>
+
+    <include name="DialogInfo_VideoButtons_Plot">
+        <item>
+            <label>$LOCALIZE[207]</label>
+            <icon>special://skin/extras/icons/quote.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>ActivateWindow(1113)</onclick>
+            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
+        </item>
+    </include>
+    <include name="DialogInfo_VideoButtons_Artwork">
+        <item>
+            <label>$LOCALIZE[39123]</label>
+            <icon>special://skin/extras/icons/image.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>SendClick(10)</onclick>
+        </item>
+    </include>
+    <include name="DialogInfo_VideoButtons_UserRating">
+        <item>
+            <label>$LOCALIZE[31061]$INFO[ListItem.UserRating, (,)]</label>
+            <icon>special://skin/extras/icons/star.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>SendClick(7)</onclick>
+        </item>
+    </include>
+    <include name="DialogInfo_VideoButtons_Versions">
+        <item>
+            <label>$LOCALIZE[40000]</label>
+            <icon>special://skin/extras/icons/bookmarks.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>SendClick(14)</onclick>
+        </item>
+    </include>
+    <include name="DialogInfo_VideoButtons_Extras">
+        <item>
+            <label>$LOCALIZE[40211]</label>
+            <icon>special://skin/extras/icons/director.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>SendClick(15)</onclick>
+        </item>
+    </include>
+    <include name="DialogInfo_VideoButtons_Refresh">
+        <item>
+            <label>$LOCALIZE[184]</label>
+            <icon>special://skin/extras/icons/arrows-rotate.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>SendClick(6)</onclick>
+        </item>
+    </include>
+
+    <include name="DialogInfo_VideoButtons_Position">
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Trailer)">DialogInfo_VideoButtons_Trailer</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Trakt)">DialogInfo_VideoButtons_Trakt</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Wikipedia)">DialogInfo_VideoButtons_Wikipedia</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Plot)">DialogInfo_VideoButtons_Plot</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Artwork)">DialogInfo_VideoButtons_Artwork</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],UserRating)">DialogInfo_VideoButtons_UserRating</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Versions)">DialogInfo_VideoButtons_Versions</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Extras)">DialogInfo_VideoButtons_Extras</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Refresh)">DialogInfo_VideoButtons_Refresh</include>
+    </include>
+
+    <include name="DialogInfo_VideoButtons_Overflow">
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Trailer) + !Skin.String(DialogInfo.$PARAM[type].item02,Trailer) + !Skin.String(DialogInfo.$PARAM[type].item03,Trailer)">DialogInfo_VideoButtons_Trailer</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Trakt) + !Skin.String(DialogInfo.$PARAM[type].item02,Trakt) + !Skin.String(DialogInfo.$PARAM[type].item03,Trakt)">DialogInfo_VideoButtons_Trakt</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Wikipedia) + !Skin.String(DialogInfo.$PARAM[type].item02,Wikipedia) + !Skin.String(DialogInfo.$PARAM[type].item03,Wikipedia)">DialogInfo_VideoButtons_Wikipedia</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Plot) + !Skin.String(DialogInfo.$PARAM[type].item02,Plot) + !Skin.String(DialogInfo.$PARAM[type].item03,Plot)">DialogInfo_VideoButtons_Plot</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Artwork) + !Skin.String(DialogInfo.$PARAM[type].item02,Artwork) + !Skin.String(DialogInfo.$PARAM[type].item03,Artwork)">DialogInfo_VideoButtons_Artwork</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,UserRating) + !Skin.String(DialogInfo.$PARAM[type].item02,UserRating) + !Skin.String(DialogInfo.$PARAM[type].item03,UserRating)">DialogInfo_VideoButtons_UserRating</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Versions) + !Skin.String(DialogInfo.$PARAM[type].item02,Versions) + !Skin.String(DialogInfo.$PARAM[type].item03,Versions)">DialogInfo_VideoButtons_Versions</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Extras) + !Skin.String(DialogInfo.$PARAM[type].item02,Extras) + !Skin.String(DialogInfo.$PARAM[type].item03,Extras)">DialogInfo_VideoButtons_Extras</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Refresh) + !Skin.String(DialogInfo.$PARAM[type].item02,Refresh) + !Skin.String(DialogInfo.$PARAM[type].item03,Refresh)">DialogInfo_VideoButtons_Refresh</include>
+    </include>
+
+    <include name="DialogInfo_VideoButtons">
+        <include content="Object_Hidden_List">
+            <param name="id">4900</param>
+            <content>
+                <include content="DialogInfo_VideoButtons_Position" condition="String.IsEqual(ListItem.DBType,movie)">
+                    <param name="type">movies</param>
+                    <param name="item">item01</param>
+                </include>
+                <include content="DialogInfo_VideoButtons_Position" condition="String.IsEqual(ListItem.DBType,movie)">
+                    <param name="type">movies</param>
+                    <param name="item">item02</param>
+                </include>
+                <include content="DialogInfo_VideoButtons_Position" condition="String.IsEqual(ListItem.DBType,movie)">
+                    <param name="type">movies</param>
+                    <param name="item">item03</param>
+                </include>
+                <include content="DialogInfo_VideoButtons_Position" condition="!String.IsEqual(ListItem.DBType,movie)">
+                    <param name="type">others</param>
+                    <param name="item">item01</param>
+                </include>
+                <include content="DialogInfo_VideoButtons_Position" condition="!String.IsEqual(ListItem.DBType,movie)">
+                    <param name="type">others</param>
+                    <param name="item">item02</param>
+                </include>
+                <include content="DialogInfo_VideoButtons_Position" condition="!String.IsEqual(ListItem.DBType,movie)">
+                    <param name="type">others</param>
+                    <param name="item">item03</param>
+                </include>
+            </content>
         </include>
     </include>
-    <include name="_DialogInfo_VideoDetails">
+
+    <!-- Additional Video Info Details not included in info line such as Director and Genres -->
+    <include name="DialogInfo_VideoDetails">
         <param name="left_group_width">480</param>
         <param name="right">80</param>
         <definition>
-
-
             <control type="group">
                 <top>20</top>
                 <left>20</left>
@@ -1351,52 +1484,53 @@
                     <ondown>90001</ondown>
                     <onup condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1113)</onup>
 
-                    <!-- Info -->
+                    <!-- Play/Browse -->
                     <include content="Button_Underline_Switcher">
                         <param name="id">4001</param>
+                        <param name="control">button</param>
                         <label>$VAR[Label_DialogInfo_PlayButton]</label>
-                        <usealttexture>false</usealttexture>
-                        <onfocus>ClearProperty(Background.DialogInfo.HideArtwork,Home)</onfocus>
                         <onclick>$VAR[Action_DialogInfo_PlayMedia]</onclick>
                     </include>
 
-                    <!-- Trailer -->
-                    <include content="Button_Underline_Switcher" condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + !Skin.HasSetting(Info.Button.DisableTrailer)">
+                    <!-- Button 0 -->
+                    <include content="Button_Underline_Switcher">
                         <param name="id">4002</param>
-                        <label>$LOCALIZE[31393]</label>
-                        <usealttexture>false</usealttexture>
-                        <visible>!String.IsEmpty(ListItem.Trailer) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer))</visible>
-                        <include content="Action_PlayTrailer_OnClick">
-                            <param name="trailer">ListItem.Trailer</param>
-                            <param name="trailer_fallback">Window(Home).Property(TMDbHelper.ListItem.Trailer)</param>
-                            <param name="title">$VAR[Label_Title]</param>
-                            <param name="items">$VAR[Path_VideoInfo_Trailers]</param>
-                        </include>
+                        <param name="control">button</param>
+                        <label>$INFO[Container(4900).ListItemAbsolute(0).Label]</label>
+                        <onclick>SetFocus(4900,0,absolute)</onclick>
+                        <onclick>Action(select)</onclick>
+                        <onclick>SetFocus(4002)</onclick>
+                        <visible>!String.IsEmpty(Container(4900).ListItemAbsolute(0).Label)</visible>
                     </include>
 
-                    <!-- Trakt -->
+                    <!-- Button 1 -->
                     <include content="Button_Underline_Switcher">
                         <param name="id">4003</param>
-                        <usealttexture>false</usealttexture>
-                        <label>Trakt</label>
-                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.TraktIsAuth)) + !String.IsEqual(  ListItem.DBType,musicvideo)</visible>
-                        <onclick>$VAR[Action_Sync]</onclick>
-                        <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
+                        <param name="control">button</param>
+                        <label>$INFO[Container(4900).ListItemAbsolute(1).Label]</label>
+                        <onclick>SetFocus(4900,1,absolute)</onclick>
+                        <onclick>Action(select)</onclick>
+                        <onclick>SetFocus(4002)</onclick>
+                        <visible>!String.IsEmpty(Container(4900).ListItemAbsolute(1).Label)</visible>
                     </include>
 
-                    <!-- Wikipedia -->
-                    <include content="Button_Underline_Switcher" condition="!Skin.HasSetting(Info.Button.DisableWiki)">
-                        <param name="id">4005</param>
-                        <label>Wikipedia</label>
-                        <usealttexture>false</usealttexture>
-                        <onclick>runscript(script.wikipedia,wikipedia=$VAR[Path_Wikipedia_Title],tmdb_type=$VAR[Path_Wikipedia_Type])</onclick>
+                    <!-- Button 2 -->
+                    <include content="Button_Underline_Switcher">
+                        <param name="id">4004</param>
+                        <param name="control">button</param>
+                        <label>$INFO[Container(4900).ListItemAbsolute(2).Label]</label>
+                        <onclick>SetFocus(4900,2,absolute)</onclick>
+                        <onclick>Action(select)</onclick>
+                        <onclick>SetFocus(4002)</onclick>
+                        <visible>!String.IsEmpty(Container(4900).ListItemAbsolute(2).Label)</visible>
                     </include>
 
                     <!-- Options -->
                     <include content="Button_Underline_Switcher">
-                        <param name="id">4004</param>
+                        <param name="id">4005</param>
+                        <param name="control">button</param>
                         <label>$LOCALIZE[33063]</label>
-                        <usealttexture>false</usealttexture>
+                        <onclick>SetProperty(Dialog.1172.DBTYPE,$INFO[ListITem.DBTYpe],Home)</onclick>
                         <onclick>ActivateWindow(1172)</onclick>
                     </include>
 
