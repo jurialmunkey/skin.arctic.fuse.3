@@ -75,7 +75,6 @@
                             <include content="Part_HeadText">
                                 <param name="label">$VAR[DialogContextMenu_HeaderLabel]</param>
                             </include>
-                            <include>Part_Line</include>
                             <include>Part_CloseButton</include>
                         </control>
                         <control type="group">
@@ -84,26 +83,27 @@
                             <!-- Plot Buttons -->
                             <include content="Object_Control" condition="$PARAM[has_menu]">
                                 <param name="control">group</param>
-                                <control type="fixedlist" id="6000">
-                                    <centertop>70</centertop>
-                                    <left>40</left>
-                                    <onup>$VAR[DialogContextMenu_OnUp]</onup>
-                                    <ondown>1001</ondown>
+                                <control type="list" id="6000">
+                                    <top>20</top>
+                                    <centerright>50</centerright>
+                                    <orientation>vertical</orientation>
+                                    <height>700</height>
+                                    <width>100</width>
+                                    <onleft>$PARAM[scrollbar_id]</onleft>
                                     <include content="ButtonMenu_Tray_Layout">
                                         <param name="id">6000</param>
+                                        <param name="slide">false</param>
                                     </include>
                                     <content>
                                         <include>$PARAM[include_tray]</include>
                                     </content>
                                 </control>
+                                <control type="group">
+                                    <right>120</right>
+                                    <include>Part_Line_Vert</include>
+                                </control>
                             </include>
                             <control type="group">
-                                <include content="Object_Top" condition="$PARAM[has_menu]">
-                                    <param name="top">120</param>
-                                </include>
-                                <include content="Object_Bottom" condition="$PARAM[has_menu]">
-                                    <param name="bottom">40</param>
-                                </include>
                                 <control type="group">
                                     <top>-120</top>
                                     <height>40</height>
@@ -114,17 +114,17 @@
                                 <control type="grouplist" id="996">
                                     <pagecontrol>$PARAM[scrollbar_id]</pagecontrol>
                                     <onright>$PARAM[scrollbar_id]</onright>
-                                    <onup condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">6000</onup>
-                                    <ondown condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">SetFocus(1001)</ondown>
-                                    <ondown condition="!Skin.HasSetting(ContextMenu.DisableOptionsTray)">SetFocus(6000)</ondown>
                                     <include>Size_Grouplist_Pad</include>
                                 </control>
                                 <include content="Part_Scrollbar">
                                     <param name="id">$PARAM[scrollbar_id]</param>
+                                    <include content="Object_CenterRight" condition="$PARAM[has_menu]">
+                                        <param name="centerright">120</param>
+                                    </include>
+                                    <onright>6000</onright>
                                     <onleft>996</onleft>
                                     <top>20</top>
                                 </include>
-                                <include condition="$PARAM[has_menu]">Part_Line</include>
                             </control>
                         </control>
                     </control>
@@ -135,6 +135,9 @@
                 <param name="id">1000</param>
                 <param name="control">button</param>
                 <param name="dialog">true</param>
+                <include content="Object_Width" condition="$PARAM[has_menu]">
+                    <param name="width">400</param>
+                </include>
                 <width>dialog_main_button_w</width>
             </include>
         </definition>
