@@ -59,7 +59,7 @@
                 <textoffsetx>0</textoffsetx>
                 <aligny>center</aligny>
                 <height>40</height>
-                <font>font_debug</font>
+                <font>font_tiny</font>
                 <align>left</align>
                 <textcolor>magenta</textcolor>
                 <width>auto</width>
@@ -263,6 +263,29 @@
         </control>
     </include>
 
+    <variable name="Overlay_WidgetContainer">
+        <value condition="Window.IsVisible(10000)">$INFO[Window(10000).Property(TMDbHelper.WidgetContainer),, ](10000)</value>
+        <value condition="Window.IsVisible(11101)">$INFO[Window(11101).Property(TMDbHelper.WidgetContainer),, ](11101)</value>
+        <value condition="Window.IsVisible(11102)">$INFO[Window(11102).Property(TMDbHelper.WidgetContainer),, ](11102)</value>
+        <value condition="Window.IsVisible(11103)">$INFO[Window(11103).Property(TMDbHelper.WidgetContainer),, ](11103)</value>
+        <value condition="Window.IsVisible(11104)">$INFO[Window(11104).Property(TMDbHelper.WidgetContainer),, ](11104)</value>
+        <value condition="Window.IsVisible(11105)">$INFO[Window(11105).Property(TMDbHelper.WidgetContainer),, ](11105)</value>
+        <value condition="Window.IsVisible(11106)">$INFO[Window(11106).Property(TMDbHelper.WidgetContainer),, ](11106)</value>
+        <value condition="Window.IsVisible(11107)">$INFO[Window(11107).Property(TMDbHelper.WidgetContainer),, ](11107)</value>
+        <value condition="Window.IsVisible(11108)">$INFO[Window(11108).Property(TMDbHelper.WidgetContainer),, ](11108)</value>
+        <value condition="Window.IsVisible(11109)">$INFO[Window(11109).Property(TMDbHelper.WidgetContainer),, ](11109)</value>
+        <value condition="Window.IsVisible(videos)">$INFO[Window(videos).Property(TMDbHelper.WidgetContainer)],, (videos)</value>
+        <value condition="Window.IsVisible(music)">$INFO[Window(music).Property(TMDbHelper.WidgetContainer),, ](music)</value>
+        <value condition="Window.IsVisible(pictures)">$INFO[Window(pictures).Property(TMDbHelper.WidgetContainer)](p,, ictures)</value>
+        <value condition="Window.IsVisible(programs)">$INFO[Window(programs).Property(TMDbHelper.WidgetContainer)](p,, rograms)</value>
+        <value condition="Window.IsVisible(games)">$INFO[Window(games).Property(TMDbHelper.WidgetContainer),, ](games)</value>
+        <value condition="Window.IsVisible(tvchannels)">$INFO[Window(tvchannels).Property(TMDbHelper.WidgetContainer)](tvc,, hannels)</value>
+        <value condition="Window.IsVisible(tvsearch)">$INFO[Window(tvsearch).Property(TMDbHelper.WidgetContainer)](t,, vsearch)</value>
+        <value condition="Window.IsVisible(tvguide)">$INFO[Window(tvguide).Property(TMDbHelper.WidgetContainer)](,, tvguide)</value>
+        <value condition="Window.IsVisible(tvrecordings)">$INFO[Window(tvrecordings).Property(TMDbHelper.WidgetContainer)](tvrec,, ordings)</value>
+        <value condition="Window.IsVisible(tvtimers)">$INFO[Window(tvtimers).Property(TMDbHelper.WidgetContainer)](t,, vtimers)</value>
+    </variable>
+
     <include name="Overlay_DebugInfo">
         <control type="group">
             <control type="grouplist">
@@ -273,14 +296,17 @@
                     <align>right</align>
                     <orientation>horizontal</orientation>
                     <include content="Overlay_InfoLabel">
-                        <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.base_label), [,] ]</label>
+                        <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.base_title),title: , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.base_year),year: , ]</label>
                         <textcolor>magenta</textcolor>
-                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_isfolder))</visible>
                     </include>
+                </control>
+                <control type="grouplist">
+                    <height>40</height>
+                    <align>right</align>
+                    <orientation>horizontal</orientation>
                     <include content="Overlay_InfoLabel">
-                        <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.base_label), , ]</label>
+                        <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.base_tmdb_id),tmdb_id: , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.base_imdb_id),imdb_id: , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.base_tvdb_id),tvdb_id: , ]</label>
                         <textcolor>magenta</textcolor>
-                        <visible>String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_isfolder))</visible>
                     </include>
                 </control>
                 <control type="grouplist">
@@ -305,7 +331,7 @@
                     <textcolor>yellowgreen</textcolor>
                 </include>
                 <include content="Overlay_InfoLabel">
-                    <label> -tmdbhelper.isupdating: $INFO[Window(Home).Property(TMDBHelper.CurrentWindow),window: , ]$VAR[Overlay_IsUpdating,service: , ]</label>
+                    <label> -tmdbhelper.isupdating: $INFO[Window(Home).Property(TMDBHelper.CurrentWindow),window: , ]$VAR[Overlay_WidgetContainer,widget: , ]$VAR[Overlay_IsUpdating,service: , ]</label>
                     <textcolor>yellowgreen</textcolor>
                 </include>
             </control>
@@ -313,7 +339,7 @@
                 <align>bottom</align>
                 <orientation>vertical</orientation>
                 <include content="Overlay_InfoLabel">
-                    <label> -content.dbtype:$INFO[Container.Content, container: , |]$INFO[ListItem.DBType, listitem: ,]$INFO[ListItem.Property(tmdb_type), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.base_dbtype), | TMDbHelper: , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_Type),(,)]$INFO[Container(55).ListItem.Property(param.info)]</label>
+                    <label> -content.dbtype:$INFO[Container.Content, container: , |]$INFO[ListItem.DBType, listitem: ,]$INFO[ListItem.Property(tmdb_type), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.base_dbtype), | TMDbHelper: , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_Type),(,)]</label>
                     <textcolor>cyan</textcolor>
                 </include>
                 <include content="Overlay_InfoLabel">
