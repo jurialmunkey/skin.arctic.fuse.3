@@ -162,7 +162,7 @@
             <control type="group">
                 <include>OSD_Info_Dimensions</include>
 
-                <include content="OSD_Info_Viewline">
+                <include content="OSD_View_Line">
                     <param name="label">$PARAM[label]$PARAM[secondary_label]</param>
                 </include>
 
@@ -557,37 +557,34 @@
                     <param name="colordiffuse">panel_fg</param>
                     <param name="container" />
                     <param name="label">$VAR[Label_OSD_Title]</param>
-                    <param name="is_player">true</param>
                     <param name="mainlogo_visible">[!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.CropImage))]</param>
                     <param name="mainlogo_texture">$INFO[Window(Home).Property(TMDbHelper.Player.CropImage)]</param>
-                    <param name="autoheight">true</param>
                     <param name="listitem">Player</param>
                 </include>
 
                 <include content="Info_Line">
-                    <param name="is_player">true</param>
                     <param name="colordiffuse">panel_fg</param>
-                    <param name="infolabel_rating">VideoPlayer.Rating</param>
-                    <param name="infolabel_userrating">VideoPlayer.UserRating</param>
-                    <param name="infolabel_videoresolution">VideoPlayer.VideoResolution</param>
-                    <param name="infolabel_hdrtype">VideoPlayer.HdrType</param>
-                    <param name="infolabel_audiochannels">VideoPlayer.AudioChannels</param>
-                    <param name="infolabel_premiered">VideoPlayer.Premiered</param>
-                    <param name="infolabel_mpaa">VideoPlayer.MPAA</param>
+                    <param name="container" />
+                    <param name="listitem">VideoPlayer</param>
+                    <param name="override">true</param>
                 </include>
 
                 <include content="Info_Plot" condition="$PARAM[plot_visible]">
-                    <param name="is_player">true</param>
                     <param name="colordiffuse">panel_fg</param>
                     <param name="listitem">VideoPlayer</param>
                     <param name="width">info_panel_w</param>
+                    <param name="include_main">!VideoPlayer.Content(episodes)</param>
+                    <param name="include_episode">VideoPlayer.Content(episodes)</param>
+                    <param name="include_other">false</param>
+                    <param name="override">true</param>
                 </include>
 
                 <include content="Info_Meta">
-                    <param name="is_player">true</param>
                     <param name="colordiffuse">panel_fg</param>
-                    <param name="infolabel_endtime">Player.FinishTime</param>
                     <param name="listitem">VideoPlayer</param>
+                    <param name="service">Player</param>
+                    <param name="override_tvshow">VideoPlayer.Content(episodes)</param>
+                    <param name="override_movie">!VideoPlayer.Content(episodes)</param>
                 </include>
 
                 <control type="group" description="Avoid grouplist chop with spacer">
@@ -1001,7 +998,6 @@
                 <param name="label">$VAR[Label_OSD_Title]</param>
                 <param name="mainlogo_visible">[!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.CropImage))]</param>
                 <param name="mainlogo_texture">$INFO[Window(Home).Property(TMDbHelper.Player.CropImage)]</param>
-                <param name="autoheight">true</param>
                 <param name="left">0</param>
                 <param name="width">$PARAM[top_logo_width]</param>
             </include>

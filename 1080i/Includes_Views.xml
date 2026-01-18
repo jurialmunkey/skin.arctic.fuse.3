@@ -1,6 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <include name="View_Line_Label">
+        <control type="label">
+            <label fallback="$PARAM[label_fallback]">$PARAM[label]</label>
+            <align>$PARAM[align]</align>
+            <haspath>$PARAM[haspath]</haspath>
+            <textcolor>$PARAM[textcolor]</textcolor>
+            <aligny>center</aligny>
+            <textcolor>main_fg_100</textcolor>
+            <font>font_main_bold</font>
+            <width>auto</width>
+            <height>80</height>
+        </control>
+    </include>
+
+    <include name="View_Line_SubLabel">
+        <control type="label">
+            <label fallback="$PARAM[label_fallback]">$PARAM[label]</label>
+            <align>$PARAM[align]</align>
+            <haspath>$PARAM[haspath]</haspath>
+            <textcolor>$PARAM[textcolor]</textcolor>
+            <aligny>center</aligny>
+            <textcolor>main_fg_100</textcolor>
+            <font>font_hint_bold</font>
+            <width>auto</width>
+            <centertop>30</centertop>
+            <height>40</height>
+            <visible>$PARAM[visible]</visible>
+        </control>
+    </include>
+
+    <include name="View_Line_Divider_left">
+        <left>0</left>
+        <texture colordiffuse="main_fg_12" flipx="true">common/gradient-box.png</texture>
+    </include>
+    <include name="View_Line_Divider_right">
+        <right>0</right>
+        <texture colordiffuse="main_fg_12" flipx="false">common/gradient-box.png</texture>
+    </include>
+
+    <include name="View_Line_Divider">
+        <param name="align">left</param>
+        <param name="width">720</param>
+        <definition>
+            <control type="image">
+                <height>1</height>
+                <centerbottom>10</centerbottom>
+                <width>$PARAM[width]</width>
+                <include>View_Line_Divider_$PARAM[align]</include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="View_Line">
+        <param name="label">$VAR[Label_Section_Main]$VAR[Label_Section_SortMethod, [COLOR=main_fg_30]&gt;[/COLOR] ,]</param>
+        <param name="label_fallback" />
+        <param name="haspath">false</param>
+        <param name="textcolor">main_fg_90</param>
+        <param name="subtextcolor">main_fg_70</param>
+        <param name="top">520</param>
+        <param name="visible">true</param>
+        <param name="left">view_pad</param>
+        <param name="right">view_pad</param>
+        <param name="use_spinner">false</param>
+        <param name="run_spinner">false</param>
+        <param name="use_subtext">false</param>
+        <param name="sub_visible">false</param>
+        <definition>
+
+            <control type="group">
+                <top>$PARAM[top]</top>
+                <height>40</height>
+                <left>$PARAM[left]</left>
+                <right>$PARAM[right]</right>
+                <visible>$PARAM[visible]</visible>
+
+                <control type="group">
+                    <centertop>0</centertop>
+                    <height>80</height>
+                    <include content="View_Line_Label">
+                        <param name="label">$PARAM[label]</param>
+                        <param name="align">$PARAM[align]</param>
+                        <param name="haspath">$PARAM[haspath]</param>
+                        <param name="textcolor">$PARAM[textcolor]</param>
+                        <param name="label_fallback">$PARAM[label_fallback]</param>
+                    </include>
+                    <include content="View_Line_Spinner" condition="$PARAM[use_spinner]">
+                        <param name="label">$PARAM[label]</param>
+                        <param name="haspath">$PARAM[haspath]</param>
+                        <param name="textcolor">$PARAM[textcolor]</param>
+                        <param name="label_fallback">$PARAM[label_fallback]</param>
+                        <param name="visible">$PARAM[run_spinner]</param>
+                    </include>
+                </control>
+
+                <control type="grouplist">
+                    <orientation>horizontal</orientation>
+                    <align>$PARAM[align]</align>
+                    <itemgap>8</itemgap>
+                    <width>720</width>
+                    <include content="View_Line_SubLabel" condition="$PARAM[use_subtext]">
+                        <param name="label">$PARAM[sublabel]</param>
+                        <param name="align">$PARAM[align]</param>
+                        <param name="haspath">$PARAM[haspath]</param>
+                        <param name="textcolor">$PARAM[subtextcolor]</param>
+                        <param name="label_fallback">$PARAM[sublabel_fallback]</param>
+                        <param name="visible">$PARAM[sub_visible]</param>
+                    </include>
+                    <include content="View_Line_Divider">
+                        <param name="align">$PARAM[align]</param>
+                    </include>
+                </control>
+
+            </control>
+        </definition>
+    </include>
+
+    <include name="View_Line_Spinner">
+        <control type="grouplist">
+            <itemgap>20</itemgap>
+            <orientation>horizontal</orientation>
+            <height>80</height>
+            <control type="label">
+                <label fallback="$PARAM[label_fallback]">$PARAM[label]</label>
+                <textcolor>00ffffff</textcolor>
+                <width>auto</width>
+                <haspath>$PARAM[haspath]</haspath>
+                <font>font_main_bold</font>
+                <animation effect="fade" start="0" end="0" condition="true">Conditional</animation>
+            </control>
+            <control type="image">
+                <width>32</width>
+                <height>32</height>
+                <aspectratio>keep</aspectratio>
+                <centertop>42</centertop>
+                <bordersize>-16</bordersize>
+                <texture colordiffuse="$PARAM[textcolor]">special://skin/extras/icons/update.png</texture>
+                <animation effect="rotate" start="0" end="-180" time="1200" delay="1200" loop="true" center="auto" tween="back" condition="true">Conditional</animation>
+                <animation effect="fade" start="0" end="100" delay="1600" time="1" reversible="true">Visible</animation>
+                <animation effect="fade" start="100" end="0" delay="400" time="1" reversible="true">Hidden</animation>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </control>
+    </include>
+
     <!-- Expressions -->
     <expression name="View_Mode_Rows_Expression">[$EXP[Exp_View_500] | $EXP[Exp_View_501] | $EXP[Exp_View_502] | $EXP[Exp_View_503] | $EXP[Exp_View_504] | $EXP[Exp_View_505]]</expression>
 
@@ -30,7 +174,7 @@
                 <visible>$EXP[View_Row_Info_Details_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Flix_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Tall_Expression]</visible>
-                <include content="Info_Viewline">
+                <include content="View_Line">
                     <param name="use_spinner">true</param>
                     <param name="run_spinner">[Container.IsUpdating]</param>
                 </include>
@@ -39,7 +183,7 @@
                 <visible>!$EXP[View_Row_Info_Details_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Flix_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Tall_Expression]</visible>
-                <include content="Info_Viewline">
+                <include content="View_Line">
                     <param name="use_spinner">true</param>
                     <param name="run_spinner">[Container.IsUpdating]</param>
                     <param name="top">260</param>
@@ -118,7 +262,7 @@
         <definition>
             <control type="group">
                 <visible>$PARAM[visible]</visible>
-                <include content="Info_Viewline">
+                <include content="View_Line">
                     <param name="label">$PARAM[label]</param>
                     <param name="align">$PARAM[align]</param>
                     <param name="haspath">$PARAM[haspath]</param>
