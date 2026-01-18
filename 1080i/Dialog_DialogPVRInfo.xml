@@ -133,7 +133,7 @@
                 <param name="id">05</param>
                 <param name="icon">special://skin/extras/icons/play2.png</param>
                 <label>$LOCALIZE[19165]</label>
-                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(5) + Control.IsVisible(5)</param>
+                <visible>Window.IsActive(PVRGuideInfo) + Control.IsEnabled(5) + Control.IsVisible(5)</visible>
             </include>
 
             <include content="Button_Dialog" description="Play Programme">
@@ -141,7 +141,7 @@
                 <param name="id">10</param>
                 <param name="icon">special://skin/extras/icons/play3.png</param>
                 <label>$LOCALIZE[208]</label>
-                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(10) + Control.IsVisible(10)</param>
+                <visible>Window.IsActive(PVRGuideInfo) + Control.IsEnabled(10) + Control.IsVisible(10)</visible>
             </include>
 
             <include content="Button_Dialog" description="Play Recording">
@@ -149,7 +149,7 @@
                 <param name="id">08</param>
                 <param name="icon">special://skin/extras/icons/play3.png</param>
                 <label>$LOCALIZE[208]</label>
-                <param name="visible">[Window.IsActive(PVRGuideInfo) | Window.IsActive(PVRRecordingInfo)] + Control.IsEnabled(8) + Control.IsVisible(8)</param>
+                <visible>[Window.IsActive(PVRGuideInfo) | Window.IsActive(PVRRecordingInfo)] + Control.IsEnabled(8) + Control.IsVisible(8)</visible>
             </include>
 
             <include content="Button_Dialog" description="Record">
@@ -157,7 +157,7 @@
                 <param name="id">06</param>
                 <param name="icon">special://skin/extras/icons/record-vinyl.png</param>
                 <label>$LOCALIZE[264]</label>
-                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(6) + Control.IsVisible(6)</param>
+                <visible>Window.IsActive(PVRGuideInfo) + Control.IsEnabled(6) + Control.IsVisible(6)</visible>
             </include>
 
             <include content="Button_Dialog" description="Add Timer">
@@ -165,7 +165,7 @@
                 <param name="id">09</param>
                 <param name="icon">special://skin/extras/icons/clock.png</param>
                 <label>$LOCALIZE[19061]</label>
-                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(9) + Control.IsVisible(9)</param>
+                <visible>Window.IsActive(PVRGuideInfo) + Control.IsEnabled(9) + Control.IsVisible(9)</visible>
             </include>
 
             <include content="Button_Dialog" description="Set Reminder">
@@ -173,7 +173,7 @@
                 <param name="id">11</param>
                 <param name="icon">special://skin/extras/icons/clock.png</param>
                 <label>$LOCALIZE[826]</label>
-                <param name="visible">Window.IsActive(PVRGuideInfo) + Control.IsEnabled(11) + Control.IsVisible(11)</param>
+                <visible>Window.IsActive(PVRGuideInfo) + Control.IsEnabled(11) + Control.IsVisible(11)</visible>
             </include>
 
             <include content="Button_Dialog" description="Similar">
@@ -181,16 +181,28 @@
                 <param name="id">04</param>
                 <param name="icon">special://skin/extras/icons/binoculars.png</param>
                 <label>$LOCALIZE[31041]</label>
-                <param name="visible">[Window.IsActive(PVRGuideInfo) | Window.IsActive(PVRRecordingInfo)] + Control.IsEnabled(4) + Control.IsVisible(4)</param>
+                <visible>[Window.IsActive(PVRGuideInfo) | Window.IsActive(PVRRecordingInfo)] + Control.IsEnabled(4) + Control.IsVisible(4)</visible>
             </include>
 
             <include content="Button_Dialog">
                 <param name="groupid">9226</param>
-                <param name="id">4082</param>
+                <param name="id">9026</param>
                 <param name="icon">special://skin/extras/icons/globe.png</param>
                 <label>Wiki</label>
                 <onclick>Close</onclick>
                 <onclick>runscript(script.wikipedia,wikipedia=$VAR[Path_Wikipedia_Title],tmdb_type=$VAR[Path_Wikipedia_Type])</onclick>
+            </include>
+
+            <include content="Button_Dialog">
+                <param name="groupid">9227</param>
+                <param name="id">9027</param>
+                <param name="icon">special://skin/extras/icons/info2.png</param>
+                <label>$LOCALIZE[14116]</label>
+                <onclick>Close</onclick>
+                <onclick>Skin.SetString(InfoPanel.FullSwitch,Full,Home)</onclick>
+                <onclick>RunScript(plugin.video.themoviedb.helper,add_tmdb=$INFO[Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_ID)],tmdb_type=$INFO[Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_Type)],call_auto=1190,return)</onclick>
+                <visible>!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_ID))</visible>
+                <visible>String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating))</visible>
             </include>
 
         </definition>
