@@ -10,10 +10,12 @@
         <include>Action_Blur_Onload</include>
         <defaultcontrol always="true">$PARAM[defaultcontrol]</defaultcontrol>
         <onload>SetFocus($PARAM[defaultcontrol])</onload>
+        <onload>ClearProperty(HomeSwitcher.IsVisible,Home)</onload>
     </include>
 
     <include name="Hub_Onload">
         <definition>
+
             <include>Action_Blur_Onload</include>
 
             <include content="Hub_Onload_Window">
@@ -39,9 +41,6 @@
 
             <menucontrol>300</menucontrol>
             <defaultcontrol>300</defaultcontrol>
-
-            <!-- Reset Splash Timeout -->
-            <onload>AlarmClock(SplashTimeOut,noop,00:59,silent)</onload>
 
             <!-- Build Shortcuts -->
             <include>Action_BuildShortcuts_OnLoad</include>
@@ -151,7 +150,7 @@
                 <include condition="$PARAM[wall]">Hub_Spotlight_Content_Slide</include>
                 <control type="group">
                     <left>view_pad</left>
-                    <include>Info_Viewline_Divider</include>
+                    <include>View_Line_Divider</include>
                 </control>
                 <include content="Categories_Selector">
                     <param name="id">601</param>
@@ -382,7 +381,7 @@
                 <include>Home_Info_Animation</include>
                 <control type="group">
                     <animation effect="fade" start="100" end="30" time="200" condition="!ControlGroup(310).HasFocus() + !String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible)) + Skin.HasSetting(Spotlight.EnableSlide)">Conditional</animation>
-                    <include content="Info_Viewline">
+                    <include content="View_Line">
                         <param name="use_spinner">true</param>
                         <param name="run_spinner">[Container(301).IsUpdating]</param>
                         <param name="label">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Label),, ]</param>
@@ -434,8 +433,9 @@
                             <param name="label">$VAR[Label_FullscreenWidget_PlayButton]</param>
                             <param name="image">$VAR[Image_FullscreenWidget_PlayButton]</param>
                             <onclick>SetFocus(301)</onclick>
-                            <onclick>Action(select)</onclick>
-                            <onclick>SetFocus(312)</onclick>
+                            <onclick condition="!Skin.HasSetting(Spotlight.UsePlayButton)">Action(select)</onclick>
+                            <onclick condition="Skin.HasSetting(Spotlight.UsePlayButton)">Action(play)</onclick>
+                            <onclick>SetFocus(311)</onclick>
                             <include content="Hub_Spotlight_Button">
                                 <param name="id">311</param>
                                 <param name="window">$PARAM[window]</param>
@@ -708,8 +708,6 @@
                     <visible>!$EXP[Exp_InfoDialogs]</visible>
                     <include>Furniture_Footer_Right</include>
                 </control>
-
-                <include>Home_Switcher</include>
             </control>
 
         </definition>

@@ -5,7 +5,7 @@
         <control type="group">
             <left>0</left>
             <width>720</width>
-            <include content="Info_Viewline_Divider">
+            <include content="View_Line_Divider">
                 <param name="align">left</param>
             </include>
             <control type="label">
@@ -28,7 +28,7 @@
             <right>0</right>
             <width>720</width>
             <visible>$PARAM[visible_right]</visible>
-            <include content="Info_Viewline_Divider">
+            <include content="View_Line_Divider">
                 <param name="align">right</param>
             </include>
             <control type="label">
@@ -108,7 +108,7 @@
                     <param name="windowopen_condition">false</param>
                     <param name="posy">48</param>
                 </include>
-                <include content="Info_FooterItemIcon">
+                <include content="Furniture_ItemIcon">
                     <param name="icon">$VAR[Image_NowPlaying_PlayPause]</param>
                     <param name="flipped">true</param>
                     <param name="right">15</param>
@@ -295,7 +295,7 @@
                 </include>
 
                 <control type="group">
-                    <include content="Info_FooterItemIcon" condition="$PARAM[hasicon]">
+                    <include content="Furniture_ItemIcon" condition="$PARAM[hasicon]">
                         <param name="icon">$PARAM[icon]</param>
                         <param name="centered">true</param>
                         <param name="size">50</param>
@@ -326,6 +326,44 @@
         </definition>
     </include>
 
+    <include name="Furniture_ItemIcon">
+        <param name="bordersize">0</param>
+        <param name="icon_colordiffuse">main_bg_90</param>
+        <param name="icon_diffuse">diffuse/circle/provider_circle.png</param>
+        <param name="centerleft">50%</param>
+        <param name="centered">false</param>
+        <param name="flipped">false</param>
+        <param name="visible">true</param>
+        <param name="size">40</param>
+        <param name="icon_visible">true</param>
+        <definition>
+            <control type="group">
+                <centertop>50%</centertop>
+                <width>$PARAM[size]</width>
+                <height>$PARAM[size]</height>
+                <include content="Object_PosX">
+                    <param name="left">$PARAM[left]</param>
+                    <param name="right">$PARAM[right]</param>
+                    <param name="centerleft">$PARAM[centerleft]</param>
+                    <param name="centerright">$PARAM[centerright]</param>
+                    <param name="centered">$PARAM[centered]</param>
+                    <param name="flipped">$PARAM[flipped]</param>
+                </include>
+                <visible>$PARAM[visible]</visible>
+                <control type="image">
+                    <include>Texture_Shadow_Provider</include>
+                    <texture colordiffuse="main_fg_100">$PARAM[icon_diffuse]</texture>
+                </control>
+                <control type="image">
+                    <aspectratio>keep</aspectratio>
+                    <texture colordiffuse="$PARAM[icon_colordiffuse]" diffuse="$PARAM[icon_diffuse]">$PARAM[icon]</texture>
+                    <bordersize>$PARAM[bordersize]</bordersize>
+                    <visible>$PARAM[icon_visible]</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Furniture_Busy_FloatingText">
         <param name="visible">true</param>
         <param name="percentage_visible">false</param>
@@ -338,7 +376,7 @@
                     <orientation>horizontal</orientation>
                     <align>right</align>
                     <itemgap>8</itemgap>
-                    <include content="Info_Viewline_Divider">
+                    <include content="View_Line_Divider">
                         <param name="align">right</param>
                         <param name="width">320</param>
                     </include>

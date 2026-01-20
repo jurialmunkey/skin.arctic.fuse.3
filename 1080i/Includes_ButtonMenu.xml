@@ -110,42 +110,51 @@
         </definition>
     </include>
 
-    <include name="ButtonMenu_Tray_Layout">
-        <scrolltime tween="quadratic">400</scrolltime>
-        <orientation>horizontal</orientation>
-        <height>100</height>
-        <focusposition>2</focusposition>
-        <movement>2</movement>
-
+    <include name="ButtonMenu_Tray_Layout_Slide">
         <animation effect="slide" start="0" end="-50" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2) | Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
+    </include>
 
-        <itemlayout width="100" height="100">
-            <include content="Layout_OptionTray">
-                <param name="selected">false</param>
-                <param name="color_nf">dialog_fg_70</param>
-                <param name="centertop">40</param>
+    <include name="ButtonMenu_Tray_Layout">
+        <param name="slide">true</param>
+        <definition>
+            <scrolltime tween="quadratic">400</scrolltime>
+            <orientation>horizontal</orientation>
+            <height>100</height>
+            <focusposition>2</focusposition>
+            <movement>2</movement>
+
+            <include content="ButtonMenu_Tray_Layout_Slide" condition="$PARAM[slide]">
+                <param name="id">$PARAM[id]</param>
             </include>
-        </itemlayout>
 
-        <focusedlayout width="100" height="100">
-            <control type="group">
-                <visible>Control.HasFocus($PARAM[id])</visible>
-                <include content="Layout_OptionTray">
-                    <param name="selected">true</param>
-                    <param name="color_nf">dialog_fg_70</param>
-                    <param name="centertop">40</param>
-                    <param name="include_hintlabel">true</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>!Control.HasFocus($PARAM[id])</visible>
+            <itemlayout width="100" height="100">
                 <include content="Layout_OptionTray">
                     <param name="selected">false</param>
                     <param name="color_nf">dialog_fg_70</param>
                     <param name="centertop">40</param>
                 </include>
-            </control>
-        </focusedlayout>
+            </itemlayout>
+
+            <focusedlayout width="100" height="100">
+                <control type="group">
+                    <visible>Control.HasFocus($PARAM[id])</visible>
+                    <include content="Layout_OptionTray">
+                        <param name="selected">true</param>
+                        <param name="color_nf">dialog_fg_70</param>
+                        <param name="centertop">40</param>
+                        <param name="include_hintlabel">true</param>
+                    </include>
+                </control>
+                <control type="group">
+                    <visible>!Control.HasFocus($PARAM[id])</visible>
+                    <include content="Layout_OptionTray">
+                        <param name="selected">false</param>
+                        <param name="color_nf">dialog_fg_70</param>
+                        <param name="centertop">40</param>
+                    </include>
+                </control>
+            </focusedlayout>
+        </definition>
     </include>
 
     <include name="ButtonMenu_BottomTray">

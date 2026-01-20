@@ -21,12 +21,8 @@
         <onclick>Skin.ToggleSetting(TMDbHelper.Service)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_tvshowtitle,Home)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_plot,Home)</onclick>
-        <onclick>ClearProperty(TMDbHelper.ListItem.base_studio,Home)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_poster,Home)</onclick>
-        <onclick>ClearProperty(TMDbHelper.ListItem.base_fanart,Home)</onclick>
-        <onclick>ClearProperty(TMDbHelper.ListItem.base_thumb,Home)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_clearlogo,Home)</onclick>
-        <onclick>ClearProperty(TMDbHelper.ListItem.base_isfolder,Home)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_icon,Home)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_title,Home)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_folderpath,Home)</onclick>
@@ -76,7 +72,7 @@
         <onload condition="String.IsEmpty(Skin.String(OptionsTiles.04.Target)) + !String.IsEmpty(Skin.String(OptionsTiles.04.Path))">Skin.SetString(OptionsTiles.04.Onclick,$INFO[Skin.String(OptionsTiles.04.Path)])</onload>
 
         <!-- Check for options tray -->
-        <onload>Skin.SetBool(Options.DisableBottomTray)</onload>
+        <include>skinvariables-powertray-onload</include>
     </include>
 
     <variable name="Action_View_ContainerID">
@@ -171,6 +167,8 @@
         <value condition="Window.IsVisible(programs)">programs</value>
         <value condition="Window.IsVisible(tvchannels)">tvchannels</value>
         <value condition="Window.IsVisible(tvguide)">tvguide</value>
+        <value condition="Window.IsVisible(musicplaylist)">musicplaylist</value>
+        <value condition="Window.IsVisible(videoplaylist)">videoplaylist</value>
     </variable>
 
     <include name="Action_BuildShortcuts_OnLoad">
@@ -233,7 +231,6 @@
         <include content="_Action_Blur_Onload" condition="Skin.HasSetting(Background.ExtraFanart) + $EXP[Exp_TMDbHelper_IsBlur]">
             <param name="sourceimage">Art(tvshow.fanart{x})|Art(fanart{x})|Property(fanart)||EPGEventIcon||PicturePath</param>
         </include>
-
     </include>
     <include name="_Action_Blur_OnUnload">
         <param name="sourceimage">Art(fanart)</param>
@@ -334,7 +331,7 @@
 
     <variable name="Action_Shortcut_SetWidgetStyle">
         <value condition="String.IsEmpty(Container(22001).ListItem.Property(url))" />
-        <value>RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_edit&amp;&amp;widget_style&amp;&amp;$LOCALIZE[20021]=Poster&amp;$LOCALIZE[31045]=Landscape&amp;$LOCALIZE[31320]=Square&amp;$LOCALIZE[31424]=Board&amp;$LOCALIZE[31431]=Circle&amp;&amp;$LOCALIZE[736]&amp;&amp;True)</value>
+        <value>RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_edit&amp;&amp;widget_style&amp;&amp;$LOCALIZE[20021]=Poster&amp;$LOCALIZE[31045]=Landscape&amp;$LOCALIZE[31320]=Square&amp;$LOCALIZE[31424]=Board&amp;$LOCALIZE[31431]=Circle&amp;$LOCALIZE[31423]=Card&amp;&amp;$LOCALIZE[736]&amp;&amp;True)</value>
     </variable>
 
     <variable name="Action_FullscreenWidget_InfoButton">
