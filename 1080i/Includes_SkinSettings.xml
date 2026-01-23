@@ -139,17 +139,6 @@
             <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_BackgroundDialogImage,Home)</onclick>
             <onclick>ActivateWindow(1118)</onclick>
         </include>
-        <include content="Settings_Button" description="Customise Fanart Fallback Folder">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">006</param>
-            <param name="slevel">3</param>
-            <label> - $LOCALIZE[31303]</label>
-            <label2>$VAR[Label_Setting_FallbackImage]</label2>
-            <onclick condition="!String.IsEmpty(Skin.String(Background.MultiImage))">Skin.Reset(Background.MultiImage)</onclick>
-            <onclick condition="String.IsEmpty(Skin.String(Background.MultiImage))">Skin.SetPath(Background.MultiImage)</onclick>
-        </include>
         <include content="Settings_Button" description="Customise Startup">
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
@@ -427,6 +416,18 @@
             <label2>$VAR[Label_Settings_WidgetNoResults]</label2>
             <onclick condition="Skin.HasSetting(Widgets.DisableNoResultsItem)">Skin.Reset(Widgets.DisableNoResultsItem)</onclick>
             <onclick condition="!Skin.HasSetting(Widgets.DisableNoResultsItem)">RunScript(script.skinvariables,run_dialog=yesno,"heading=$LOCALIZE[31519]","message=[B][COLOR=red][UPPERCASE]$LOCALIZE[14117][/UPPERCASE][/B][/COLOR] - $LOCALIZE[31522] $LOCALIZE[31524] $LOCALIZE[31523]",yeslabel=$LOCALIZE[31162],nolabel=$LOCALIZE[222],defaultbutton=10,"executebuiltin=Skin.SetBool(Widgets.DisableNoResultsItem)")</onclick>
+        </include>
+        <include content="Settings_Button" description="Extra fanart">
+            <param name="dialog">false</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">042</param>
+            <param name="dialog">false</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31093]</label>
+            <onclick>Skin.ToggleSetting(Background.ExtraFanart)</onclick>
+            <selected>Skin.HasSetting(Background.ExtraFanart)</selected>
+            <visible>$EXP[Exp_TMDbHelper_IsBlur]</visible>
         </include>
 
         <include content="Settings_Label" description="Navigation">

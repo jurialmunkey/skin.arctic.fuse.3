@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <variable name="Label_Version_Title">
+        <value condition="!String.IsEmpty(ListItem.VideoVersionName)">$INFO[ListItem.VideoVersionName]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+
     <variable name="Label_GameOSD_Heading">
         <value condition="Window.ISVisible(gamevideofilter)">$LOCALIZE[10823]</value>
         <value condition="Window.ISVisible(gamestretchmode)">$LOCALIZE[10824]</value>
@@ -215,11 +220,6 @@
         <value>$LOCALIZE[571]</value>
     </variable>
 
-    <variable name="Label_Setting_FallbackImage">
-        <value condition="!String.IsEmpty(Skin.String(Background.MultiImage))">$INFO[Skin.String(Background.MultiImage)]</value>
-        <value>$LOCALIZE[231]</value>
-    </variable>
-
     <variable name="Label_Setting_StartUpImage">
         <value condition="!String.IsEmpty(Skin.String(Startup.VideoPath))">$INFO[Skin.String(Startup.VideoPath)]</value>
         <value condition="String.IsEmpty(Skin.String(Startup.ImageFolder))">$LOCALIZE[571]</value>
@@ -278,6 +278,12 @@
         <value condition="Integer.IsGreater(Container.ListItem.VideoResolution,720)">HD</value>
         <value condition="Integer.IsGreater(Container.ListItem.VideoResolution,719)">HD</value>
         <value condition="!String.IsEmpty(Container.ListItem.VideoResolution)">SD</value>
+    </variable>
+
+    <variable name="Label_ListItem_VideoQuality">
+        <value condition="Integer.IsGreater(ListItem.VideoResolution,2160) | String.IsEqual(ListItem.VideoResolution,8K)">8K</value>
+        <value condition="Integer.IsGreater(ListItem.VideoResolution,1080) | String.IsEqual(ListItem.VideoResolution,4K)">4K</value>
+        <value>$INFO[ListItem.VideoResolution,,p]</value>
     </variable>
 
     <variable name="Label_AudioLanguages">
