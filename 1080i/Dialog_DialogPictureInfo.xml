@@ -6,6 +6,7 @@
         <param name="include_items">Object_Null</param>
         <param name="include_movement">Object_Null</param>
         <param name="dialog_size">Dimension_DialogFullMenu</param>
+        <param name="dialog_right">520</param>
         <definition>
             <include>Part_Dim_Overlay</include>
 
@@ -20,7 +21,7 @@
 
                     <!-- Left -->
                     <control type="group">
-                        <right>520</right>
+                        <right>$PARAM[dialog_right]</right>
                         <control type="group">
                             <include>Size_Group_Head</include>
                             <include content="Part_HeadText">
@@ -32,14 +33,16 @@
                         </control>
                         <control type="group">
                             <include>Size_Group_Body</include>
-                            <include>$PARAM[include_picture]</include>
+                            <include content="$PARAM[include_picture]">
+                                <param name="icon">$PARAM[icon]</param>
+                            </include>
                         </control>
                     </control>
 
                     <control type="group">
                         <include>Part_Panel</include>
                         <right>0</right>
-                        <width>520</width>
+                        <width>$PARAM[dialog_right]</width>
                         <control type="list" id="5">
                             <top>14</top>
                             <bottom>20</bottom>
@@ -110,6 +113,56 @@
             <visible>!String.IsEqual($PARAM[info],$LOCALIZE[13205])</visible>
             <visible>!VideoPlayer.Content(livetv)</visible>
         </item>
+    </include>
+
+    <include name="DialogPictureInfo_VideoInfo_Items">
+        <content>
+            <item>
+                <label>$LOCALIZE[561]</label>
+                <label2>$INFO[ListItem.Filename]</label2>
+                <visible>!String.IsEmpty(ListItem.Filename)</visible>
+            </item>
+            <item>
+                <label>$LOCALIZE[19076]</label>
+                <label2>$INFO[ListItem.FolderName]</label2>
+                <visible>!String.IsEmpty(ListItem.FolderName)</visible>
+            </item>
+            <item>
+                <label>$LOCALIZE[573]</label>
+                <label2>$INFO[ListItem.Path]</label2>
+                <visible>!String.IsEmpty(ListItem.Path)</visible>
+            </item>
+            <item>
+                <label>$LOCALIZE[14241]</label>
+                <label2>$INFO[ListItem.Size]$INFO[ListItem.Date, (,)]</label2>
+                <visible>!String.IsEmpty(ListItem.Size)</visible>
+            </item>
+            <item>
+                <label>$LOCALIZE[570]</label>
+                <label2>$INFO[ListItem.DateAdded]</label2>
+                <visible>!String.IsEmpty(ListItem.DateAdded)</visible>
+            </item>
+            <item>
+                <label>$LOCALIZE[568]</label>
+                <label2>$INFO[ListItem.LastPlayed]$INFO[ListItem.Playcount,$COMMA , $LOCALIZE[31096]]</label2>
+                <visible>!String.IsEmpty(ListItem.LastPlayed)</visible>
+            </item>
+            <item>
+                <label>$LOCALIZE[31207]</label>
+                <label2>$INFO[ListItem.VideoCodec]$VAR[Label_ListItem_VideoQuality, • ,]$INFO[ListItem.HdrType, • ,]$INFO[ListItem.VideoAspect, • ,]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,]</label2>
+                <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
+            </item>
+            <item>
+                <label>IDs</label>
+                <label2>$INFO[ListItem.DBID,DBID: ,]$INFO[ListItem.UniqueID(tmdb), • TMDb: ,]$INFO[ListItem.UniqueID(imdb), • IMDb: ,]$INFO[ListItem.UniqueID(tvdb), • TVDb: ,]</label2>
+                <visible>!String.IsEmpty(ListItem.DBID)</visible>
+            </item>
+            <item>
+                <label>URI</label>
+                <label2>$INFO[ListItem.FolderPath]</label2>
+                <visible>!String.IsEmpty(ListItem.FolderPath)</visible>
+            </item>
+        </content>
     </include>
 
     <include name="DialogPictureInfo_PlayerProcessInfo_Items">
