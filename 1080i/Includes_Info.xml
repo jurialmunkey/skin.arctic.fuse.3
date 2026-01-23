@@ -359,10 +359,10 @@
 
     <include name="Info_Title">
         <param name="left">40</param>
-        <param name="mainlogo_visible">!String.IsEmpty(Window.Property(TMDbHelper.ListITem.CropImage))</param>
-        <param name="mainlogo_texture">$INFO[Window.Property(TMDbHelper.ListITem.CropImage)]</param>
         <param name="width">info_title_w</param>
         <param name="listitem">ListItem</param>
+        <param name="service">ListItem</param>
+        <param name="wrapmultiline">true</param>
         <definition>
             <control type="group">
                 <left>$PARAM[left]</left>
@@ -372,15 +372,15 @@
                     <height>info_title_logo_h</height>
                     <aspectratio align="left" aligny="center">keep</aspectratio>
                     <fadetime>0</fadetime>
-                    <texture background="true">$PARAM[mainlogo_texture]</texture>
-                    <visible>[$PARAM[mainlogo_visible] + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
+                    <texture background="true">$INFO[Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)]</texture>
+                    <visible>[!String.IsEmpty(Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)) + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
                 </control>
                 <control type="image">
                     <height>info_title_logo_h</height>
                     <aspectratio align="left" aligny="center">keep</aspectratio>
                     <fadetime>0</fadetime>
                     <texture background="true">$INFO[$PARAM[container]$PARAM[listitem].Art(clearlogo)]</texture>
-                    <visible>![$PARAM[mainlogo_visible] + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
+                    <visible>![!String.IsEmpty(Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)) + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
                     <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Art(clearlogo))</visible>
                 </control>
                 <control type="image">
@@ -388,7 +388,7 @@
                     <aspectratio align="left" aligny="center">keep</aspectratio>
                     <fadetime>0</fadetime>
                     <texture background="true">$INFO[$PARAM[container]$PARAM[listitem].Art(tvshow.clearlogo)]</texture>
-                    <visible>![$PARAM[mainlogo_visible] + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
+                    <visible>![!String.IsEmpty(Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)) + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
                     <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(clearlogo))</visible>
                     <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Art(tvshow.clearlogo))</visible>
                 </control>
@@ -397,20 +397,59 @@
                     <aspectratio align="left" aligny="center">keep</aspectratio>
                     <fadetime>0</fadetime>
                     <texture background="true">$INFO[$PARAM[container]$PARAM[listitem].Art(artist.clearlogo)]</texture>
-                    <visible>![$PARAM[mainlogo_visible] + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
+                    <visible>![!String.IsEmpty(Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)) + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
                     <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(clearlogo))</visible>
                     <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(tvshow.clearlogo))</visible>
                     <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Art(artist.clearlogo))</visible>
                 </control>
                 <control type="label">
                     <wrapmultiline>true</wrapmultiline>
-                    <label>$INFO[$PARAM[container]$PARAM[listitem].Label]</label>
+                    <label>$INFO[$PARAM[container]$PARAM[listitem].TVShowTitle]</label>
                     <font>font_title_midi</font>
                     <aligny>center</aligny>
-                    <visible>![$PARAM[mainlogo_visible] + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
+                    <visible>![!String.IsEmpty(Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)) + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
                     <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(clearlogo))</visible>
                     <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(tvshow.clearlogo))</visible>
                     <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(artist.clearlogo))</visible>
+                    <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                </control>
+                <control type="label">
+                    <wrapmultiline>$PARAM[wrapmultiline]</wrapmultiline>
+                    <label>$INFO[$PARAM[container]$PARAM[listitem].Artist]</label>
+                    <font>font_title_midi</font>
+                    <aligny>center</aligny>
+                    <visible>![!String.IsEmpty(Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)) + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(tvshow.clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(artist.clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle)</visible>
+                    <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                </control>
+                <control type="label">
+                    <wrapmultiline>$PARAM[wrapmultiline]</wrapmultiline>
+                    <label>$INFO[$PARAM[container]$PARAM[listitem].Title]</label>
+                    <font>font_title_midi</font>
+                    <aligny>center</aligny>
+                    <visible>![!String.IsEmpty(Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)) + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(tvshow.clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(artist.clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle)</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Artist)</visible>
+                    <textcolor>$PARAM[colordiffuse]_100</textcolor>
+                </control>
+                <control type="label">
+                    <wrapmultiline>$PARAM[wrapmultiline]</wrapmultiline>
+                    <label>$INFO[$PARAM[container]$PARAM[listitem].Label]</label>
+                    <font>font_title_midi</font>
+                    <aligny>center</aligny>
+                    <visible>![!String.IsEmpty(Window.Property(TMDbHelper.$PARAM[service]$PARAM[logo_affix].CropImage)) + $EXP[Exp_TMDbHelper_IsCrop]]</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(tvshow.clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Art(artist.clearlogo))</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle)</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Artist)</visible>
+                    <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Title)</visible>
                     <textcolor>$PARAM[colordiffuse]_100</textcolor>
                 </control>
             </control>
@@ -897,8 +936,8 @@
                     <param name="colordiffuse">$PARAM[colordiffuse]</param>
                     <param name="container">$PARAM[container]</param>
                     <param name="listitem">$PARAM[listitem]</param>
-                    <param name="mainlogo_visible">$PARAM[mainlogo_visible]</param>
-                    <param name="mainlogo_texture">$PARAM[mainlogo_texture]</param>
+                    <param name="service">$PARAM[service]</param>
+                    <param name="logo_affix">$PARAM[logo_affix]</param>
                 </include>
                 <include content="Object_Control" condition="![$PARAM[include_title]]">
                     <param name="control">group</param>
