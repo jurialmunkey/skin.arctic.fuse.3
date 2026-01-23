@@ -15,6 +15,7 @@
 
     <include name="Hub_Onload">
         <definition>
+
             <include>Action_Blur_Onload</include>
 
             <include content="Hub_Onload_Window">
@@ -40,9 +41,6 @@
 
             <menucontrol>300</menucontrol>
             <defaultcontrol>300</defaultcontrol>
-
-            <!-- Reset Splash Timeout -->
-            <onload>AlarmClock(SplashTimeOut,noop,00:59,silent)</onload>
 
             <!-- Build Shortcuts -->
             <include>Action_BuildShortcuts_OnLoad</include>
@@ -169,6 +167,7 @@
                     <param name="detailed">true</param>
                     <param name="hidden_button">List_ButtonMenu_Row_HiddenButton_ERow</param>
                     <param name="hidden_button_enabled">true</param>
+                    <param name="extended">$PARAM[extended]</param>
                     <onup condition="!Control.IsVisible(301)">$PARAM[onup]</onup>
                     <onup condition="Control.IsVisible(301)">301</onup>
                     <onback condition="!Control.IsVisible(301)">$PARAM[onup]</onback>
@@ -865,7 +864,14 @@
             <onclick>ActivateWindow(programs,addons://sources/executable/,return)</onclick>
             <visible>!Integer.IsEqual(Container(504).NumItems,0) | Container(504).IsUpdating</visible>
         </item>
-
+        <item>
+            <label>$LOCALIZE[10821]</label>
+            <property name="guid">game</property>
+            <property name="widget_id">$NUMBER[505]</property>
+            <property name="show_overlay">true</property>
+            <onclick>ActivateWindow(programs,addons://sources/game/,return)</onclick>
+            <visible>!Integer.IsEqual(Container(505).NumItems,0) | Container(505).IsUpdating</visible>
+        </item>
     </include>
 
     <include name="Hub_Addons_Widgets">
@@ -921,6 +927,16 @@
             <param name="art_h">view_poster_item_w</param>
             <param name="img_h">view_poster_item_h</param>
         </include>
+        <include content="Hub_Wall_Widget">
+            <param name="id">505</param>
+            <param name="content">addons://sources/game/</param>
+            <param name="include">List_Square_Row</param>
+            <param name="target">programs</param>
+            <param name="sortby">lastused</param>
+            <param name="sortorder">descending</param>
+            <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),game)</param>
+            <param name="home_switcher">true</param>
+        </include>
     </include>
 
     <include name="Hub_Addons_Info">
@@ -936,7 +952,15 @@
         <include content="Hub_Wall_AlwaysVisible_Info">
             <param name="id">504</param>
         </include>
+        <include content="Hub_Wall_AlwaysVisible_Info">
+            <param name="id">505</param>
+        </include>
     </include>
+
+    <variable name="Hub_PVR_Items_GroupName">
+        <value condition="!String.IsEmpty(Container(509).ListItemAbsolute(0).Label)">$INFO[Container(509).ListItemAbsolute(0).Label]</value>
+        <value>$LOCALIZE[503]</value>
+    </variable>
 
     <include name="Hub_PVR_Items">
         <item>
@@ -948,7 +972,7 @@
             <property name="show_overlay">true</property>
         </item>
         <item>
-            <label>$INFO[Container(509).ListItemAbsolute(0).Label]</label>
+            <label>$VAR[Hub_PVR_Items_GroupName]</label>
             <onclick>ActivateWindow(tvchannels,$INFO[Container(509).ListItemAbsolute(0).FolderPath],return)</onclick>
             <visible>!Integer.IsEqual(Container(509).NumItems,0) | !Integer.IsEqual(Container(502).NumItems,0) | Container(502).IsUpdating</visible>
             <property name="widget_id">$NUMBER[502]</property>
