@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <expression name="DialogSelect_Conditional_Buttons_Expression">[[Control.IsEnabled(5) + Control.IsVisible(5)] | [Control.IsEnabled(8) + Control.IsVisible(8)]]</expression>
+    <expression name="DialogSelect_Conditional_Buttons_Expression">[[[Control.IsEnabled(5) + Control.IsVisible(5)] | [Control.IsEnabled(8) + Control.IsVisible(8)]] + ![[Window.IsVisible(gamevideofilter) | Window.IsVisible(gamestretchmode) | Window.IsVisible(gamesaves) | Window.IsVisible(gamevideorotation) | Window.IsVisible(ingamesaves)]]]</expression>
 
     <include name="DialogSelect_Standard">
         <include>Part_Dim_Overlay</include>
@@ -46,7 +46,7 @@
                             <onright>61</onright>
                             <include>Size_Grouplist_Pad</include>
                         </include>
-                        <include content="List_Dialog" condition="![[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamesaves) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]]">
+                        <include content="List_Dialog" condition="![[Window.IsVisible(gamevideofilter) | Window.IsVisible(gamestretchmode) | Window.IsVisible(gamesaves) | Window.IsVisible(gamevideorotation) | Window.IsVisible(ingamesaves)]]">
                             <param name="id">6</param>
                             <param name="item_height">128</param>
                             <param name="itemlayout_include">List_Layout_Dialog_DetailedCheckmark</param>
@@ -55,7 +55,7 @@
                             <onright>62</onright>
                             <include>Size_Grouplist_Pad</include>
                         </include>
-                        <include content="List_DialogSelect" condition="[Window.IsActive(gamevideofilter) | Window.IsActive(gamestretchmode) | Window.IsActive(gamesaves) | Window.IsActive(gamevideorotation) | Window.IsActive(ingamesaves)]">
+                        <include content="List_DialogSelect" condition="[Window.IsVisible(gamevideofilter) | Window.IsVisible(gamestretchmode) | Window.IsVisible(gamesaves) | Window.IsVisible(gamevideorotation) | Window.IsVisible(ingamesaves)]">
                             <param name="id">10811</param>
                             <param name="itemlayout_include">Layout_GameFilter</param>
                             <param name="item_height">128</param>
@@ -141,6 +141,83 @@
                         <texture background="true" diffuse="diffuse/landscape_w1140_h680.png">$INFO[Container(3).ListItem.Icon]</texture>
                         <aspectratio scalediffuse="false">scale</aspectratio>
                         <fadetime>200</fadetime>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogSelect_GameFilters">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Dimension_DialogMainMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogMainMenu</param>
+                <param name="topline">false</param>
+            </include>
+            <!-- Content -->
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+                <control type="group">
+                    <width>480</width>
+                    <right>0</right>
+                    <include>Part_Panel</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="id">1</param>
+                            <param name="label">$VAR[Label_GameOSD_Heading]</param>
+                        </include>
+                        <include content="Part_ItemPage">
+                            <param name="id">3</param>
+                        </include>
+                        <include>Part_CloseButton</include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <include content="List_Dialog">
+                            <param name="id">10811</param>
+                            <pagecontrol>61</pagecontrol>
+                            <onright>61</onright>
+                            <include>Size_Grouplist_Pad</include>
+                            <include>$PARAM[include_content]</include>
+                        </include>
+                    </control>
+                    <include content="Part_Scrollbar">
+                        <param name="id">61</param>
+                        <onleft>10811</onleft>
+                    </include>
+                </control>
+                <control type="group">
+                    <right>480</right>
+                    <control type="group">
+                        <include>Size_Dialog_Pad</include>
+                        <control type="image">
+                            <texture border="20" colordiffuse="black">common/dialog.png</texture>
+                        </control>
+                        <control type="image">
+                            <aspectratio>scale</aspectratio>
+                            <texture border="4">$INFO[Container(10811).ListItem.Icon]</texture>
+                            <bordertexture colordiffuse="black" border="20">common/dialog.png</bordertexture>
+                            <bordersize>20</bordersize>
+                        </control>
+                        <control type="group">
+                            <left>20</left>
+                            <right>20</right>
+                            <control type="gamewindow">
+                                <videofilter>$INFO[Container(10811).ListItem.Property(game.videofilter)]</videofilter>
+                                <stretchmode>$INFO[Container(10811).ListItem.Property(game.stretchmode)]</stretchmode>
+                                <rotation>$INFO[Container(10811).ListItem.Property(game.videorotation)]</rotation>
+                                <visible>String.IsEmpty(Container(10811).ListItem.Art(screenshot))</visible>
+                            </control>
+                        </control>
+                        <control type="image">
+                            <aspectratio>scale</aspectratio>
+                            <texture border="4">$INFO[Container(10811).ListItem.Art(screenshot)]</texture>
+                            <bordertexture colordiffuse="black" border="20">common/dialog.png</bordertexture>
+                            <bordersize>20</bordersize>
+                        </control>
                     </control>
                 </control>
             </control>
