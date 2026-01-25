@@ -39,18 +39,6 @@
             <label>$LOCALIZE[31158]</label>
         </include>
 
-        <include content="Settings_Button" description="Header">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">015</param>
-            <param name="dialog">false</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31208]</label>
-            <onclick>Skin.ToggleSetting(HomeSwitcher.DisableHeader)</onclick>
-            <selected>!Skin.HasSetting(HomeSwitcher.DisableHeader)</selected>
-        </include>
-
         <include content="Settings_Button" description="Icon Mode">
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
@@ -340,7 +328,13 @@
             <param name="control">button</param>
             <label>$LOCALIZE[10000]</label>
             <label2>$VAR[Label_SkinSettings_Header]</label2>
-            <onclick>Skin.ToggleSetting(Header.DisableDate)</onclick>
+
+            <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableDate)</onclick>
+            <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableHeader)</onclick>
+
+            <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableDate)</onclick>
+
+            <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableHeader) + Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableHeader)</onclick>
         </include>
 
         <include content="Settings_Label" description="Context">
