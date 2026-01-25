@@ -94,18 +94,16 @@
     <include name="DialogSelect_Viewtype">
         <include>Part_Dim_Overlay</include>
         <control type="group">
-            <include>Dimension_DialogMainMenu</include>
+            <include>Dimension_DialogFullMenu</include>
             <include>Animation_BounceIn_Dialog</include>
             <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogMainMenu</param>
+                <param name="dialog_size">Dimension_DialogFullMenu</param>
                 <param name="topline">false</param>
             </include>
             <!-- Content -->
             <control type="group" id="8000">
                 <include>Size_Dialog_Pad</include>
                 <control type="group">
-                    <width>480</width>
-                    <right>0</right>
                     <include>Part_Panel</include>
                     <control type="group">
                         <include>Size_Group_Head</include>
@@ -120,32 +118,142 @@
                     </control>
                     <control type="group">
                         <include>Size_Group_Body</include>
-                        <include content="List_Dialog">
-                            <param name="id">3</param>
-                            <pagecontrol>61</pagecontrol>
-                            <onright>61</onright>
-                            <include>Size_Grouplist_Pad</include>
-                            <include>$PARAM[include_content]</include>
-                        </include>
+
+                        <control type="group">
+                            <left>0</left>
+                            <right>0</right>
+                            <top>20</top>
+                            <bottom>20</bottom>
+                            <control type="grouplist">
+                                <orientation>horizontal</orientation>
+                                <itemgap>0</itemgap>
+                                <control type="group">
+                                    <width>1000</width>
+                                    <height>580</height>
+                                    <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
+                                    <include content="Layout_ViewType">
+                                        <param name="selected">false</param>
+                                        <param name="icon">$INFO[Container(3).ListItem(-1).Icon]</param>
+                                    </include>
+                                </control>
+                                <control type="group">
+                                    <width>1000</width>
+                                    <height>580</height>
+                                    <include content="Layout_ViewType">
+                                        <param name="selected">true</param>
+                                        <param name="icon">$INFO[Container(3).ListItem.Icon]</param>
+                                    </include>
+                                </control>
+                                <control type="group">
+                                    <width>1000</width>
+                                    <height>580</height>
+                                    <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
+                                    <include content="Layout_ViewType">
+                                        <param name="selected">false</param>
+                                        <param name="icon">$INFO[Container(3).ListItem(1).Icon]</param>
+                                    </include>
+                                </control>
+                            </control>
+
+                            <control type="wraplist" id="3">
+
+                                <include content="Animation_ConditionalFade">
+                                    <param name="condition">true</param>
+                                </include>
+
+                                <orientation>horizontal</orientation>
+                                <focusposition>1</focusposition>
+                                <preloaditems>2</preloaditems>
+                                <scrolltime>0</scrolltime>
+
+                                <itemlayout width="1000" height="580">
+                                    <include content="Layout_ViewType">
+                                        <param name="selected">false</param>
+                                    </include>
+                                </itemlayout>
+
+                                <focusedlayout width="1000" height="580">
+                                    <include content="Layout_ViewType">
+                                        <param name="selected">false</param>
+                                    </include>
+                                </focusedlayout>
+
+                                <include>$PARAM[include_content]</include>
+                            </control>
+                        </control>
+
+                        <control type="group">
+                            <height>105</height>
+                            <bottom>-5</bottom>
+                            <left>40</left>
+                            <right>40</right>
+
+                            <control type="button">
+                                <texturenofocus />
+                                <texturefocus />
+                                <width>400</width>
+                                <onclick>Control.Move(3,-1)</onclick>
+                            </control>
+                            <control type="label">
+                                <left>40</left>
+                                <textcolor>dialog_fg_70</textcolor>
+                                <align>left</align>
+                                <font>font_mini</font>
+                                <label>$INFO[Container(3).ListItem(-1).Label]</label>
+                            </control>
+                            <control type="image">
+                                <centerleft>0</centerleft>
+                                <centertop>50%</centertop>
+                                <width>40</width>
+                                <height>40</height>
+                                <bordersize>-12</bordersize>
+                                <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-left.png</texture>
+                            </control>
+
+                            <control type="label">
+                                <left>400</left>
+                                <right>400</right>
+                                <textcolor>dialog_fg_90</textcolor>
+                                <align>center</align>
+                                <font>font_main_bold</font>
+                                <label>$INFO[Container(3).ListItem.Label]</label>
+                            </control>
+
+                            <control type="button">
+                                <texturenofocus />
+                                <texturefocus />
+                                <right>0</right>
+                                <width>400</width>
+                                <onclick>Control.Move(3,1)</onclick>
+                            </control>
+                            <control type="label">
+                                <right>40</right>
+                                <textcolor>dialog_fg_70</textcolor>
+                                <align>right</align>
+                                <font>font_mini</font>
+                                <label>$INFO[Container(3).ListItem(1).Label]</label>
+                            </control>
+                            <control type="image">
+                                <centerright>0</centerright>
+                                <centertop>50%</centertop>
+                                <width>40</width>
+                                <height>40</height>
+                                <bordersize>-12</bordersize>
+                                <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-right.png</texture>
+                            </control>
+                        </control>
+
                     </control>
-                    <include content="Part_Scrollbar">
+                    <!-- <include content="Part_Scrollbar">
                         <param name="id">61</param>
                         <onleft>3</onleft>
                         <onright>9000</onright>
-                    </include>
-                </control>
-                <control type="group">
-                    <right>480</right>
-                    <control type="image">
-                        <include>Size_Dialog_Pad</include>
-                        <texture background="true" diffuse="diffuse/landscape_w1140_h680.png">$INFO[Container(3).ListItem.Icon]</texture>
-                        <aspectratio scalediffuse="false">scale</aspectratio>
-                        <fadetime>200</fadetime>
-                    </control>
+                    </include> -->
                 </control>
             </control>
         </control>
     </include>
+
 
     <include name="DialogSelect_GameFilters">
         <include>Part_Dim_Overlay</include>
@@ -270,51 +378,24 @@
                             <include content="Object_Hidden_List" condition="![$PARAM[hasbuttons]]">
                                 <param name="id">3</param>
                             </include>
-                            <include content="List_Dialog">
-                                <param name="id">$PARAM[listid]</param>
-                                <param name="item_height">160</param>
-                                <param name="itemlayout_include">List_Layout_Dialog_VideoVersions</param>
-                                <param name="altfocus">ControlGroup(22900).HasFocus()</param>
-                                <onfocus condition="$PARAM[hasbuttons]">SetFocus(22900)</onfocus>
+                            <control type="list" id="$PARAM[listid]">
                                 <pagecontrol>61</pagecontrol>
                                 <onright>61</onright>
                                 <include>Size_Grouplist_Pad</include>
-                            </include>
-                            <control type="group">
-                                <visible>$PARAM[hasbuttons]</visible>
-                                <animation effect="slide" start="0" end="0,160" condition="Container($PARAM[listid]).Position(1)">Conditional</animation>
-                                <animation effect="slide" start="0" end="0,320" condition="Container($PARAM[listid]).Position(2)">Conditional</animation>
-                                <animation effect="slide" start="0" end="0,480" condition="Container($PARAM[listid]).Position(3)">Conditional</animation>
-                                <animation effect="slide" start="0" end="0,640" condition="Container($PARAM[listid]).Position(4)">Conditional</animation>
-                                <include>Size_Grouplist_Pad</include>
-                                <control type="grouplist" id="22900">
-                                    <orientation>horizontal</orientation>
-                                    <itemgap>-8</itemgap>
-                                    <onup>SetFocus($PARAM[listid])</onup>
-                                    <onup>Action(Up)</onup>
-                                    <onup>SetFocus(22900)</onup>
-
-                                    <ondown>SetFocus($PARAM[listid])</ondown>
-                                    <ondown>Action(Down)</ondown>
-                                    <ondown>SetFocus(22900)</ondown>
-
-                                    <onright>61</onright>
-
-                                    <height>64</height>
-                                    <centertop>80</centertop>
-                                    <onleft>noop</onleft>
-
-                                    <align>right</align>
-                                    <right>20</right>
-                                    <include content="DialogSelect_Versions_Buttons">
-                                        <param name="listid">$PARAM[listid]</param>
+                                <itemlayout height="160">
+                                    <include content="List_Layout_Dialog_VideoVersions">
+                                        <param name="selected">false</param>
+                                        <param name="item_h">160</param>
+                                        <param name="id">$PARAM[listid]</param>
                                     </include>
-
-                                    <include content="Animation_ConditionalFade">
-                                        <param name="condition">!ControlGroup(22900).HasFocus()</param>
+                                </itemlayout>
+                                <focusedlayout height="160">
+                                    <include content="List_Layout_Dialog_VideoVersions">
+                                        <param name="selected">true</param>
+                                        <param name="item_h">160</param>
+                                        <param name="id">$PARAM[listid]</param>
                                     </include>
-
-                                </control>
+                                </focusedlayout>
                             </control>
                         </control>
                         <control type="group">
@@ -430,7 +511,7 @@
 
     <include name="DialogSelect_Versions_Items">
         <definition>
-            <!-- <include content="Button_Dialog">
+            <include content="Button_Dialog">
                 <param name="id">21</param>
                 <param name="groupid">9321</param>
                 <param name="control">button</param>
@@ -438,7 +519,7 @@
                 <param name="icon">special://skin/extras/icons/play3.png</param>
                 <label>$LOCALIZE[208]</label>
                 <visible>Control.IsEnabled(21)</visible>
-            </include> -->
+            </include>
             <include content="Button_Dialog">
                 <param name="id">22</param>
                 <param name="groupid">9322</param>
@@ -457,7 +538,7 @@
                 <label>$LOCALIZE[15019]</label>
                 <visible>Control.IsEnabled(23) + Window.IsVisible(managevideoextras)</visible>
             </include>
-            <!-- <include content="Button_Dialog">
+            <include content="Button_Dialog">
                 <param name="id">24</param>
                 <param name="groupid">9324</param>
                 <param name="control">button</param>
@@ -465,8 +546,8 @@
                 <param name="icon">special://skin/extras/icons/i-cursor.png</param>
                 <label>$LOCALIZE[118]</label>
                 <visible>Control.IsEnabled(24)</visible>
-            </include> -->
-            <!-- <include content="Button_Dialog">
+            </include>
+            <include content="Button_Dialog">
                 <param name="id">25</param>
                 <param name="groupid">9325</param>
                 <param name="control">button</param>
@@ -474,8 +555,8 @@
                 <param name="icon">special://skin/extras/icons/heart-circle-plus.png</param>
                 <label>$LOCALIZE[571]</label>
                 <visible>Control.IsEnabled(25) + Window.IsVisible(managevideoversions)</visible>
-            </include> -->
-            <!-- <include content="Button_Dialog">
+            </include>
+            <include content="Button_Dialog">
                 <param name="id">26</param>
                 <param name="groupid">9326</param>
                 <param name="control">button</param>
@@ -492,8 +573,8 @@
                 <param name="icon">special://skin/extras/icons/images.png</param>
                 <label>$LOCALIZE[39123]</label>
                 <visible>Control.IsEnabled(27)</visible>
-            </include> -->
-            <include content="Button_Dialog">
+            </include>
+            <!-- <include content="Button_Dialog">
                 <param name="id">9001</param>
                 <param name="groupid">9301</param>
                 <param name="control">button</param>
@@ -501,7 +582,7 @@
                 <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
                 <label>$LOCALIZE[15067]</label>
                 <onclick>PreviousMenu</onclick>
-            </include>
+            </include> -->
         </definition>
     </include>
 

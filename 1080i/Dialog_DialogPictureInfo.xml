@@ -7,6 +7,8 @@
         <param name="include_movement">Object_Null</param>
         <param name="dialog_size">Dimension_DialogFullMenu</param>
         <param name="dialog_right">520</param>
+        <param name="include_itemline">false</param>
+        <param name="itemline_haspath">true</param>
         <definition>
             <include>Part_Dim_Overlay</include>
 
@@ -28,7 +30,12 @@
                                 <param name="id">9999</param>
                                 <param name="label">$PARAM[header]</param>
                             </include>
-                            <include>Part_Line</include>
+                            <include content="Part_ItemLine" condition="$PARAM[include_itemline]">
+                                <param name="visible">true</param>
+                                <param name="label">$PARAM[itemline]</param>
+                                <param name="haspath">$PARAM[itemline_haspath]</param>
+                            </include>
+                            <include condition="![$PARAM[include_itemline]]">Part_Line</include>
                             <include>Part_CloseButton</include>
                         </control>
                         <control type="group">
@@ -118,49 +125,99 @@
     <include name="DialogPictureInfo_VideoInfo_Items">
         <content>
             <item>
-                <label>$LOCALIZE[561]</label>
-                <label2>$INFO[ListItem.Filename]</label2>
-                <visible>!String.IsEmpty(ListItem.Filename)</visible>
+                <label>$INFO[Window.Property(Data01.Label)]</label>
+                <label2>$INFO[Window.Property(Data01.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data01.Label2))</visible>
             </item>
             <item>
-                <label>$LOCALIZE[19076]</label>
-                <label2>$INFO[ListItem.FolderName]</label2>
-                <visible>!String.IsEmpty(ListItem.FolderName)</visible>
+                <label>$INFO[Window.Property(Data02.Label)]</label>
+                <label2>$INFO[Window.Property(Data02.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data02.Label2))</visible>
             </item>
             <item>
-                <label>$LOCALIZE[573]</label>
-                <label2>$INFO[ListItem.Path]</label2>
-                <visible>!String.IsEmpty(ListItem.Path)</visible>
+                <label>$INFO[Window.Property(Data03.Label)]</label>
+                <label2>$INFO[Window.Property(Data03.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data03.Label2))</visible>
             </item>
             <item>
-                <label>$LOCALIZE[14241]</label>
-                <label2>$INFO[ListItem.Size]$INFO[ListItem.Date, (,)]</label2>
-                <visible>!String.IsEmpty(ListItem.Size)</visible>
+                <label>$INFO[Window.Property(Data04.Label)]</label>
+                <label2>$INFO[Window.Property(Data04.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data04.Label2))</visible>
             </item>
             <item>
-                <label>$LOCALIZE[570]</label>
-                <label2>$INFO[ListItem.DateAdded]</label2>
-                <visible>!String.IsEmpty(ListItem.DateAdded)</visible>
+                <label>$INFO[Window.Property(Data05.Label)]</label>
+                <label2>$INFO[Window.Property(Data05.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data05.Label2))</visible>
             </item>
             <item>
-                <label>$LOCALIZE[568]</label>
-                <label2>$INFO[ListItem.LastPlayed]$INFO[ListItem.Playcount,$COMMA , $LOCALIZE[31096]]</label2>
-                <visible>!String.IsEmpty(ListItem.LastPlayed)</visible>
+                <label>$INFO[Window.Property(Data06.Label)]</label>
+                <label2>$INFO[Window.Property(Data06.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data06.Label2))</visible>
             </item>
             <item>
-                <label>$LOCALIZE[31207]</label>
-                <label2>$INFO[ListItem.VideoCodec]$VAR[Label_ListItem_VideoQuality, • ,]$INFO[ListItem.HdrType, • ,]$INFO[ListItem.VideoAspect, • ,]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,]</label2>
-                <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
+                <label>$INFO[Window.Property(Data07.Label)]</label>
+                <label2>$INFO[Window.Property(Data07.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data07.Label2))</visible>
             </item>
             <item>
-                <label>IDs</label>
-                <label2>$INFO[ListItem.DBID,DBID: ,]$INFO[ListItem.UniqueID(tmdb), • TMDb: ,]$INFO[ListItem.UniqueID(imdb), • IMDb: ,]$INFO[ListItem.UniqueID(tvdb), • TVDb: ,]</label2>
-                <visible>!String.IsEmpty(ListItem.DBID)</visible>
+                <label>$INFO[Window.Property(Data08.Label)]</label>
+                <label2>$INFO[Window.Property(Data08.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data08.Label2))</visible>
             </item>
             <item>
-                <label>URI</label>
-                <label2>$INFO[ListItem.FolderPath]</label2>
-                <visible>!String.IsEmpty(ListItem.FolderPath)</visible>
+                <label>$INFO[Window.Property(Data09.Label)]</label>
+                <label2>$INFO[Window.Property(Data09.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data09.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data10.Label)]</label>
+                <label2>$INFO[Window.Property(Data10.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data10.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data11.Label)]</label>
+                <label2>$INFO[Window.Property(Data11.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data11.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data12.Label)]</label>
+                <label2>$INFO[Window.Property(Data12.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data12.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data13.Label)]</label>
+                <label2>$INFO[Window.Property(Data13.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data13.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data14.Label)]</label>
+                <label2>$INFO[Window.Property(Data14.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data14.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data15.Label)]</label>
+                <label2>$INFO[Window.Property(Data15.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data15.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data16.Label)]</label>
+                <label2>$INFO[Window.Property(Data16.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data16.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data17.Label)]</label>
+                <label2>$INFO[Window.Property(Data17.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data17.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data18.Label)]</label>
+                <label2>$INFO[Window.Property(Data18.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data18.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data19.Label)]</label>
+                <label2>$INFO[Window.Property(Data19.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data19.Label2))</visible>
             </item>
         </content>
     </include>
