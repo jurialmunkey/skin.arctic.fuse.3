@@ -154,37 +154,37 @@
                     <include>Info_Meta_Grouplist_Definition</include>
 
                     <!-- Ratings -->
-                    <include content="Info_Meta_Ratings" condition="Skin.HasSetting(TMDBHelper.Service)">
+                    <include content="Info_Meta_Ratings" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="content">Movies</param>
                         <param name="item">Item01</param>
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
                         <param name="service">$PARAM[service]</param>
                     </include>
-                    <include content="Info_Meta_Ratings" condition="Skin.HasSetting(TMDBHelper.Service)">
+                    <include content="Info_Meta_Ratings" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="content">Movies</param>
                         <param name="item">Item02</param>
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
                         <param name="service">$PARAM[service]</param>
                     </include>
-                    <include content="Info_Meta_Ratings" condition="Skin.HasSetting(TMDBHelper.Service)">
+                    <include content="Info_Meta_Ratings" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="content">Movies</param>
                         <param name="item">Item03</param>
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
                         <param name="service">$PARAM[service]</param>
                     </include>
-                    <include content="Info_Meta_Ratings" condition="Skin.HasSetting(TMDBHelper.Service)">
+                    <include content="Info_Meta_Ratings" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="content">TVShows</param>
                         <param name="item">Item01</param>
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season)</param>
                         <param name="service">$PARAM[service]</param>
                     </include>
-                    <include content="Info_Meta_Ratings" condition="Skin.HasSetting(TMDBHelper.Service)">
+                    <include content="Info_Meta_Ratings" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="content">TVShows</param>
                         <param name="item">Item02</param>
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season)</param>
                         <param name="service">$PARAM[service]</param>
                     </include>
-                    <include content="Info_Meta_Ratings" condition="Skin.HasSetting(TMDBHelper.Service)">
+                    <include content="Info_Meta_Ratings" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="content">TVShows</param>
                         <param name="item">Item03</param>
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season)</param>
@@ -192,7 +192,7 @@
                     </include>
 
                     <!-- Total Episodes (Service Disabled) -->
-                    <include content="Info_Meta_Object" condition="!Skin.HasSetting(TMDBHelper.Service)">
+                    <include content="Info_Meta_Object" condition="!$EXP[Exp_TMDbHelper_IsData]">
                         <param name="bordersize">-12</param>
                         <param name="icon">special://skin/extras/icons/table-list.png</param>
                         <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Property(totalepisodes),, $LOCALIZE[20360]]</param>
@@ -236,14 +236,14 @@
                     </include>
 
                     <!-- Status -->
-                    <include content="Info_Meta_Object" condition="Skin.HasSetting(TMDBHelper.Service)">
+                    <include content="Info_Meta_Object" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="label">$VAR[Label_$PARAM[service]_Status]$VAR[Label_$PARAM[service]_StatusDate, ,]</param>
                         <param name="icon">$VAR[Image_$PARAM[service]_Status]</param>
                         <param name="visible">[[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | $PARAM[override_tvshow]] + !String.IsEmpty(Window(Home).Property(TMDbHelper.$PARAM[service].Status))]</param>
                     </include>
 
                     <!-- Awards -->
-                    <include content="Info_Meta_Object" condition="Skin.HasSetting(TMDBHelper.Service) + String.IsEmpty(Skin.String(CustomRating.Movies.Item03))">
+                    <include content="Info_Meta_Object" condition="$EXP[Exp_TMDbHelper_IsData] + String.IsEmpty(Skin.String(CustomRating.Movies.Item03))">
                         <param name="icon">flags/$VAR[Color_Directory]/ratings/oscars.png</param>
                         <param name="label">$INFO[Window(Home).Property(TMDbHelper.$PARAM[service].Oscar_Wins),x,]</param>
                         <param name="visible">[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]] + !String.IsEmpty(Window(Home).Property(TMDbHelper.$PARAM[service].Oscar_Wins))</param>
