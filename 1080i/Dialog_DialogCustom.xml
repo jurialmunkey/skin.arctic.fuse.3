@@ -40,12 +40,16 @@
     </include>
 
     <include name="DialogCustom_Resizer_Backing">
-        <control type="group">
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Dialog_Backing_Resizeable">
-                <param name="id">$PARAM[id]</param>
-            </include>
-        </control>
+        <param name="visible">true</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Dialog_Backing_Resizeable">
+                    <param name="id">$PARAM[id]</param>
+                </include>
+            </control>
+        </definition>
     </include>
 
     <include name="DialogCustom_Favourites">
@@ -56,12 +60,17 @@
         <param name="include_list">DialogCustom_Favourites_List</param>
         <param name="dialog_size">Dimension_DialogWideMenu</param>
         <param name="resize">false</param>
+        <param name="visible">true</param>
         <definition>
-            <include>Part_Dim_Overlay</include>
+            <include content="Part_Dim_Overlay">
+                <param name="visible">$PARAM[visible]</param>
+            </include>
             <include condition="$PARAM[resize]" content="DialogCustom_Resizer_Backing">
                 <param name="id">$PARAM[id]</param>
+                <param name="visible">$PARAM[visible]</param>
             </include>
             <control type="group">
+                <visible>$PARAM[visible]</visible>
                 <include content="Part_Dialog_Backing" condition="![$PARAM[resize]]">
                     <param name="dialog_size">$PARAM[dialog_size]</param>
                 </include>
@@ -78,7 +87,11 @@
                         <include content="Part_ItemPage">
                             <param name="id">$PARAM[id]</param>
                         </include>
-                        <include>Part_CloseButton</include>
+                        <include content="Part_CloseButton">
+                            <param name="id">$PARAM[closebutton_id]</param>
+                            <param name="groupid">$PARAM[closebutton_groupid]</param>
+                            <param name="onclick">$PARAM[closebutton_onclick]</param>
+                        </include>
                     </control>
                     <control type="group">
                         <include>Size_Group_Body</include>
