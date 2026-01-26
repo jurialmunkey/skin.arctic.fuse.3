@@ -825,6 +825,7 @@
             <property name="show_overlay">true</property>
             <onclick>ActivateWindow(videos,addons://sources/video/,return)</onclick>
             <visible>!Integer.IsEqual(Container(501).NumItems,0) | Container(501).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisableVideo)</visible>
         </item>
         <item>
             <label>$LOCALIZE[249]</label>
@@ -833,6 +834,7 @@
             <property name="show_overlay">true</property>
             <onclick>ActivateWindow(music,addons://sources/audio/,return)</onclick>
             <visible>!Integer.IsEqual(Container(502).NumItems,0) | Container(502).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisableMusic)</visible>
         </item>
         <item>
             <label>$LOCALIZE[31011]</label>
@@ -841,6 +843,7 @@
             <property name="show_overlay">true</property>
             <onclick>ActivateWindow(programs,addons://sources/image/,return)</onclick>
             <visible>!Integer.IsEqual(Container(503).NumItems,0) | Container(503).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisablePicture)</visible>
         </item>
         <item>
             <label>$LOCALIZE[31010]</label>
@@ -849,6 +852,7 @@
             <property name="show_overlay">true</property>
             <onclick>ActivateWindow(programs,addons://sources/executable/,return)</onclick>
             <visible>!Integer.IsEqual(Container(504).NumItems,0) | Container(504).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisableProgram)</visible>
         </item>
         <item>
             <label>$LOCALIZE[10821]</label>
@@ -857,11 +861,12 @@
             <property name="show_overlay">true</property>
             <onclick>ActivateWindow(programs,addons://sources/game/,return)</onclick>
             <visible>!Integer.IsEqual(Container(505).NumItems,0) | Container(505).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisableGame)</visible>
         </item>
     </include>
 
     <include name="Hub_Addons_Widgets">
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisableVideo)">
             <param name="id">501</param>
             <param name="content">addons://sources/video/</param>
             <param name="include">List_Square_Row</param>
@@ -871,7 +876,7 @@
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),videos)</param>
             <param name="home_switcher">true</param>
         </include>
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisableMusic)">
             <param name="id">502</param>
             <param name="content">addons://sources/audio/</param>
             <param name="include">List_Square_Row</param>
@@ -881,7 +886,7 @@
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),music)</param>
             <param name="home_switcher">true</param>
         </include>
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisablePicture)">
             <param name="id">503</param>
             <param name="content">addons://sources/image/</param>
             <param name="include">List_Square_Row</param>
@@ -891,7 +896,7 @@
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),image)</param>
             <param name="home_switcher">true</param>
         </include>
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisableProgram)">
             <param name="id">504</param>
             <param name="content">addons://sources/executable/</param>
             <param name="include">List_Square_Row</param>
@@ -901,7 +906,7 @@
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),executable)</param>
             <param name="home_switcher">true</param>
         </include>
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisableGame)">
             <param name="id">505</param>
             <param name="content">addons://sources/game/</param>
             <param name="include">List_Square_Row</param>
@@ -944,6 +949,7 @@
             <property name="widget_id">$NUMBER[501]</property>
             <property name="guid">pvr-501</property>
             <property name="show_overlay">true</property>
+            <visible>!Skin.HasSetting(Hub.1107.DisableSearch)</visible>
         </item>
         <item>
             <label>$VAR[Hub_PVR_Items_GroupName]</label>
@@ -952,6 +958,7 @@
             <property name="widget_id">$NUMBER[502]</property>
             <property name="guid">pvr-502</property>
             <property name="show_overlay">true</property>
+            <visible>!Skin.HasSetting(Hub.1107.DisableChannels)</visible>
         </item>
         <item>
             <label>$LOCALIZE[19145]</label>
@@ -960,6 +967,7 @@
             <property name="widget_id">$NUMBER[503]</property>
             <property name="guid">pvr-503</property>
             <property name="show_overlay">true</property>
+            <visible>!Skin.HasSetting(Hub.1107.DisableGroups)</visible>
         </item>
         <item>
             <label>$LOCALIZE[19017]</label>
@@ -968,12 +976,13 @@
             <property name="widget_id">$NUMBER[504]</property>
             <property name="guid">pvr-504</property>
             <property name="show_overlay">true</property>
+            <visible>!Skin.HasSetting(Hub.1107.DisableRecordings)</visible>
         </item>
 
     </include>
 
     <include name="Hub_PVR_Widgets">
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1107.DisableSearch)">
             <param name="id">501</param>
             <param name="target">tvsearch</param>
             <param name="content">pvr://channels/tv/*?view=lastplayed</param>
@@ -983,7 +992,7 @@
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),pvr-501)</param>
             <param name="home_switcher">true</param>
         </include>
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1107.DisableChannels)">
             <param name="id">502</param>
             <param name="target">tvchannels</param>
             <param name="content">$INFO[Container(509).ListItemAbsolute(0).FolderPath]</param>
@@ -991,7 +1000,7 @@
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),pvr-502)</param>
             <param name="home_switcher">true</param>
         </include>
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1107.DisableGroups)">
             <param name="id">503</param>
             <param name="target">tvchannels</param>
             <param name="content">pvr://channels/tv/</param>
@@ -999,7 +1008,7 @@
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),pvr-503)</param>
             <param name="home_switcher">true</param>
         </include>
-        <include content="Hub_Wall_Widget">
+        <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1107.DisableRecordings)">
             <param name="id">504</param>
             <param name="target">tvrecordings</param>
             <param name="content">pvr://recordings/tv/active?view=flat</param>

@@ -28,20 +28,15 @@
 
                         <include content="List_DialogSelect">
                             <param name="id">30000</param>
-                            <param name="itemlayout_include">Layout_MenuList</param>
+                            <param name="itemlayout_include">Layout_ShortcutCategories</param>
                             <param name="textcolor">main_fg</param>
                             <param name="altfocus">!Control.HasFocus(20)</param>
-                            <param name="misc">15</param>
+                            <param name="misc">!String.IsEmpty(ListItem.Property(enabled))</param>
+                            <param name="variation">!String.IsEmpty(ListItem.Property(checkmark))</param>
                             <right>40</right>
                             <onright>340</onright>
 
                             <content>
-                                <item id="5">
-                                    <label>$LOCALIZE[137]</label>
-                                    <icon>special://skin/extras/icons/search.png</icon>
-                                    <property name="editmenu">menu=search</property>
-                                    <onclick>Skin.ToggleSetting(HomeSwitcher.DisableSearch)</onclick>
-                                </item>
                                 <item id="0">
                                     <label>$VAR[Home_Name_home]</label>
                                     <icon>$VAR[Home_Icon_home]</icon>
@@ -53,6 +48,7 @@
                                 <item id="1">
                                     <label>$VAR[Home_Name_1101]</label>
                                     <icon>$VAR[Home_Icon_1101]</icon>
+                                    <property name="checkmark">true</property>
                                     <property name="editmenu">menu=1101</property>
                                     <property name="rename">HomeSwitcher.1101</property>
                                     <property name="enabled">$INFO[Skin.String(HomeSwitcher.1101.Toggle)]</property>
@@ -63,6 +59,7 @@
                                 <item id="2">
                                     <label>$VAR[Home_Name_1102]</label>
                                     <icon>$VAR[Home_Icon_1102]</icon>
+                                    <property name="checkmark">true</property>
                                     <property name="editmenu">menu=1102</property>
                                     <property name="rename">HomeSwitcher.1102</property>
                                     <property name="enabled">$INFO[Skin.String(HomeSwitcher.1102.Toggle)]</property>
@@ -73,6 +70,7 @@
                                 <item id="3">
                                     <label>$VAR[Home_Name_1103]</label>
                                     <icon>$VAR[Home_Icon_1103]</icon>
+                                    <property name="checkmark">true</property>
                                     <property name="editmenu">menu=1103</property>
                                     <property name="rename">HomeSwitcher.1103</property>
                                     <property name="enabled">$INFO[Skin.String(HomeSwitcher.1103.Toggle)]</property>
@@ -83,12 +81,21 @@
                                 <item id="4">
                                     <label>$VAR[Home_Name_1104]</label>
                                     <icon>$VAR[Home_Icon_1104]</icon>
+                                    <property name="checkmark">true</property>
                                     <property name="editmenu">menu=1104</property>
                                     <property name="rename">HomeSwitcher.1104</property>
                                     <property name="enabled">$INFO[Skin.String(HomeSwitcher.1104.Toggle)]</property>
                                     <property name="mode">$INFO[Skin.String(HomeSwitcher.1104.Mode)]</property>
                                     <onclick condition="String.IsEmpty(Container(30000).ListItem.Property(enabled))">Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.Toggle],true)</onclick>
                                     <onclick condition="String.IsEqual(Container(30000).ListItem.Property(enabled),true)">Skin.Reset($INFO[Container(30000).ListItem.Property(rename),,.Toggle])</onclick>
+                                </item>
+                                <item id="5">
+                                    <label>$LOCALIZE[137]</label>
+                                    <icon>special://skin/extras/icons/search.png</icon>
+                                    <property name="checkmark">true</property>
+                                    <property name="editmenu">menu=search</property>
+                                    <property name="enabled">$VAR[Action_SearchEnabled]</property>
+                                    <onclick>Skin.ToggleSetting(HomeSwitcher.DisableSearch)</onclick>
                                 </item>
                                 <item id="8">
                                     <label>$LOCALIZE[31604]</label>
