@@ -53,6 +53,7 @@
         <param name="visible">true</param>
         <param name="allowhiddenfocus">true</param>
         <param name="home_switcher">false</param>
+        <param name="include_action">Object_Null</param>
         <definition>
             <control type="group">
                 <height>1080</height>
@@ -66,6 +67,7 @@
                     <top>290</top>
                     <bottom>-40</bottom>
                     <onup>601</onup>
+                    <include>$PARAM[include_action]</include>
                     <include>Hub_Grouplist_OnLeftRight</include>
                     <onback condition="$EXP[Exp_Navigation_OnParent]">SetFocus($PARAM[id],0,absolute)</onback>
                     <include content="Action_Widget_OnBack">
@@ -823,11 +825,11 @@
             <right>40</right>
             <left>80</left>
             <top>320</top>
-            <bottom>view_top</bottom>
+            <bottom>90</bottom>
             <visible>String.IsEqual(Container(601).ListItem.Property(guid),weather)</visible>
             <control type="group">
                 <left>0%</left>
-                <height>570</height>
+                <height>660</height>
                 <bottom>0</bottom>
                 <width>20%</width>
                 <control type="group">
@@ -840,7 +842,7 @@
             </control>
             <control type="group">
                 <left>20%</left>
-                <height>570</height>
+                <height>660</height>
                 <bottom>0</bottom>
                 <width>20%</width>
                 <control type="group">
@@ -853,7 +855,7 @@
             </control>
             <control type="group">
                 <left>40%</left>
-                <height>570</height>
+                <height>660</height>
                 <bottom>0</bottom>
                 <width>20%</width>
                 <control type="group">
@@ -866,7 +868,7 @@
             </control>
             <control type="group">
                 <left>60%</left>
-                <height>570</height>
+                <height>660</height>
                 <bottom>0</bottom>
                 <width>20%</width>
                 <control type="group">
@@ -879,7 +881,7 @@
             </control>
             <control type="group">
                 <left>80%</left>
-                <height>570</height>
+                <height>660</height>
                 <bottom>0</bottom>
                 <width>20%</width>
                 <control type="group">
@@ -902,6 +904,39 @@
             <onclick>ActivateWindow(1161)</onclick>
             <visible>!Integer.IsEqual(Container(501).NumItems,0) | Container(501).IsUpdating</visible>
         </item>
+        <item>
+            <label>$LOCALIZE[1036]</label>
+            <property name="guid">favourites</property>
+            <property name="widget_id">$NUMBER[502]</property>
+            <property name="show_overlay">true</property>
+            <onclick>ActivateWindow(1160)</onclick>
+            <visible>!Integer.IsEqual(Container(502).NumItems,0) | Container(502).IsUpdating</visible>
+        </item>
+        <item>
+            <label>$LOCALIZE[5]</label>
+            <property name="guid">settings</property>
+            <property name="widget_id">$NUMBER[503]</property>
+            <property name="show_overlay">true</property>
+            <onclick>ActivateWindow(settings)</onclick>
+            <visible>!Integer.IsEqual(Container(503).NumItems,0) | Container(503).IsUpdating</visible>
+        </item>
+    </include>
+
+    <include name="Hub_Settings_Favourites_Onclick">
+        <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-openfavourite.json,use_rules,close_dialog=false,folderpath=$INFO[Container(502).ListItem.FolderPath])</onclick>
+    </include>
+
+    <include name="Hub_Settings_Widgets">
+        <include content="Hub_Wall_Widget">
+            <param name="id">502</param>
+            <param name="content">favourites://</param>
+            <param name="include">List_Square_Row</param>
+            <param name="sortby">lastused</param>
+            <param name="sortorder">descending</param>
+            <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),favourites)</param>
+            <param name="home_switcher">true</param>
+            <param name="include_action">Hub_Settings_Favourites_Onclick</param>
+        </include>
     </include>
 
     <include name="Hub_Addons_Items">
