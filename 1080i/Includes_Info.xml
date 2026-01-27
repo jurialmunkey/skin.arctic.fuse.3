@@ -223,6 +223,14 @@
                         <param name="visible">[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,actor) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,artist) | String.IsEqual($PARAM[listitem].Property(tmdb_type),person)] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(deathday))</param>
                     </include>
 
+                    <!-- Start at -->
+                    <include content="Info_Meta_Object">
+                        <!-- <param name="bordersize">-12</param> -->
+                        <param name="icon">flags/$VAR[Color_Directory]/ratings/ends.png</param>
+                        <param name="label">$INFO[$PARAM[container]$PARAM[listitem].StartTime]$INFO[$PARAM[container]$PARAM[listitem].EndTime, - ,]</param>
+                        <param name="visible">[!String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel)] + !String.IsEmpty($PARAM[container]$PARAM[listitem].StartTime)</param>
+                    </include>
+
                     <!-- EndTime -->
                     <include content="Info_Meta_Object">
                         <param name="icon">flags/$VAR[Color_Directory]/ratings/ends.png</param>
@@ -468,7 +476,7 @@
                 <left>$PARAM[left]</left>
                 <height>80</height>
 
-                <visible>[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,song) | $PARAM[override]]</visible>
+                <visible>[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,song) | !String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel) | $PARAM[override]]</visible>
 
 
                 <control type="grouplist">
@@ -542,7 +550,21 @@
                     <include content="Info_Line_Label">
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
                         <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Premiered]</param>
-                        <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Premiered) + [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | $PARAM[override]]</param>
+                        <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Premiered) + [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | !String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel) | $PARAM[override]]</param>
+                    </include>
+
+                    <!-- Channel Name -->
+                    <include content="Info_Line_Label">
+                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        <param name="label">$INFO[$PARAM[container]$PARAM[listitem].ChannelName]</param>
+                        <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelName)</param>
+                    </include>
+
+                    <!-- Channel Name -->
+                    <include content="Info_Line_Label">
+                        <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        <param name="label">$INFO[$PARAM[container]$PARAM[listitem].ChannelNumberLabel,Channel ,]</param>
+                        <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel)</param>
                     </include>
 
                     <!-- MPAA -->
@@ -861,7 +883,7 @@
 
             <!-- Default Plot -->
             <include content="Info_Plot_TextBox" condition="$PARAM[include_main]">
-                <param name="visible">[$PARAM[visible]] + [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,song) | $PARAM[override]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
+                <param name="visible">[$PARAM[visible]] + [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,song) | !String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel) | $PARAM[override]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
                 <param name="top">0</param>
                 <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
                 <param name="height">$PARAM[height]</param>
@@ -885,7 +907,7 @@
 
             <!-- Other Plot -->
             <include content="Info_Plot_TextBox" condition="$PARAM[include_other]">
-                <param name="visible">[$PARAM[visible]] + [![String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,song)] | $PARAM[override]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
+                <param name="visible">[$PARAM[visible]] + [![String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,song) | !String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel)] | $PARAM[override]] + [!String.IsEmpty($PARAM[container]$PARAM[listitem].Plot) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description)) | !String.IsEmpty($PARAM[container]$PARAM[listitem].AddonDescription)]</param>
                 <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
                 <param name="height">240</param>
                 <param name="top">10</param>
