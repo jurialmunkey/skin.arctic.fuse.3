@@ -92,12 +92,13 @@
         <param name="visible">true</param>
         <param name="onleft">61</param>
         <param name="ondown">9000</param>
+        <param name="id">9000</param>
         <definition>
             <control type="group">
                 <visible>$PARAM[visible]</visible>
                 <include>Size_Group_Panel_Right</include>
                 <include>Part_Panel</include>
-                <control type="grouplist" id="9000">
+                <control type="grouplist" id="$PARAM[id]">
                     <onleft>$PARAM[onleft]</onleft>
                     <ondown>$PARAM[ondown]</ondown>
                     <itemgap>20</itemgap>
@@ -240,6 +241,17 @@
         </definition>
     </include>
 
+    <include name="Part_Page_Indicator">
+        <control type="image">
+            <width>10</width>
+            <height>10</height>
+            <centertop>50%</centertop>
+            <texture colordiffuse="dialog_fg_100">common/circle.png</texture>
+            <visible>!Integer.IsLess(Container($PARAM[id]).NumPages,$PARAM[page])</visible>
+            <animation effect="fade" start="100" end="30" condition="!Integer.IsEqual(Container($PARAM[id]).CurrentPage,$PARAM[page])">Conditional</animation>
+        </control>
+    </include>
+
     <include name="Part_Scrollbar">
         <param name="id">61</param>
         <param name="showonepage">false</param>
@@ -355,6 +367,8 @@
         <param name="left">20</param>
         <param name="right">20</param>
         <param name="centerbottom">40</param>
+        <param name="subline">false</param>
+        <param name="scroll">false</param>
         <definition>
             <control type="group">
                 <height>40</height>
@@ -374,15 +388,37 @@
                     <bordersize>-12</bordersize>
                     <texture colordiffuse="$PARAM[colordiffuse]">special://skin/extras/icons/info2.png</texture>
                 </control>
-                <control type="textbox" id="$PARAM[id]">
-                    <font>font_tiny</font>
+                <control type="group">
                     <left>90</left>
                     <right>20</right>
                     <height>55</height>
                     <centertop>50%</centertop>
-                    <aligny>center</aligny>
-                    <textcolor>$PARAM[colordiffuse]</textcolor>
-                    <label fallback="$PARAM[fallback]">$PARAM[label]</label>
+                    <control type="textbox" id="$PARAM[id]">
+                        <font>font_tiny</font>
+                        <aligny>center</aligny>
+                        <textcolor>$PARAM[colordiffuse]</textcolor>
+                        <label fallback="$PARAM[fallback]">$PARAM[label]</label>
+                        <visible>![$PARAM[subline]]</visible>
+                    </control>
+                    <control type="label">
+                        <font>font_tiny</font>
+                        <aligny>center</aligny>
+                        <height>50%</height>
+                        <textcolor>$PARAM[colordiffuse]</textcolor>
+                        <label fallback="$PARAM[fallback]">$PARAM[label]</label>
+                        <visible>$PARAM[subline]</visible>
+                        <scroll>$PARAM[scroll]</scroll>
+                    </control>
+                    <control type="label">
+                        <font>font_tiny</font>
+                        <aligny>center</aligny>
+                        <height>50%</height>
+                        <bottom>0</bottom>
+                        <textcolor>$PARAM[colordiffuse]</textcolor>
+                        <label>$PARAM[label2]</label>
+                        <visible>$PARAM[subline]</visible>
+                        <scroll>$PARAM[scroll]</scroll>
+                    </control>
                 </control>
             </control>
         </definition>

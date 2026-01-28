@@ -18,7 +18,7 @@
     </variable>
 
     <include name="Action_TMDbHelper_Toggle_Onclick">
-        <onclick>Skin.ToggleSetting(TMDbHelper.Service)</onclick>
+        <onclick>Skin.ToggleSetting(TMDbHelper.EnableData)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_tvshowtitle,Home)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_plot,Home)</onclick>
         <onclick>ClearProperty(TMDbHelper.ListItem.base_poster,Home)</onclick>
@@ -139,6 +139,7 @@
 
     <include name="Action_Widget_OnBack">
         <param name="enable">True</param>
+        <param name="ondisabled">noop</param>
         <param name="onprevious">$EXP[Exp_Navigation_OnPrevious]</param>
         <param name="onparent">$EXP[Exp_Navigation_OnParent]</param>
         <definition>
@@ -231,6 +232,9 @@
         <include content="_Action_Blur_Onload" condition="Skin.HasSetting(Background.ExtraFanart) + $EXP[Exp_TMDbHelper_IsBlur]">
             <param name="sourceimage">Art(tvshow.fanart{x})|Art(fanart{x})|Property(fanart)||EPGEventIcon||PicturePath</param>
         </include>
+
+        <onload condition="Skin.HasSetting(TMDbHelper.EnableData)">Skin.SetBool(TMDbHelper.Service)</onload>
+        <onload condition="!Skin.HasSetting(TMDbHelper.EnableData)">Skin.Reset(TMDbHelper.Service)</onload>
     </include>
     <include name="_Action_Blur_OnUnload">
         <param name="sourceimage">Art(fanart)</param>

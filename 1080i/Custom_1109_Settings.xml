@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="window" id="1109">
+    <include content="Hub_Onload" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1109.Toggle))">
+        <param name="window_id">1109</param>
+    </include>
+    <include content="Hub_Disabled_Onload" condition="String.IsEmpty(Skin.String(HomeSwitcher.1109.Toggle))">
+        <param name="defaultcontrol">601</param>
+    </include>
+    <controls>
+
+        <control type="list" id="501">
+            <orientation>horizontal</orientation>
+            <autoscroll delay="0" time="20000" repeat="0">true</autoscroll>
+            <onclick>Weather.LocationNext</onclick>
+            <onup>601</onup>
+            <onfocus>SetFocus(601)</onfocus>
+            <itemlayout />
+            <focusedlayout />
+            <content sortby="random" target="images">resource://resource.images.weatherfanart.multi/$INFO[Weather.FanartCode]/</content>
+        </control>
+
+        <include>Background</include>
+
+        <include>Hub_Window_Refocus_Buttons</include>
+
+        <include content="Home_Control" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1109.Toggle))">
+            <param name="window">1109</param>
+            <param name="overlay">true</param>
+            <onup>ActivateWindow(1181)</onup>
+            <oninfo>ActivateWindow(1181)</oninfo>
+            <ondown>$VAR[Hub_Action_Down]</ondown>
+            <onback>303</onback>
+        </include>
+
+        <control type="group">
+            <include>Animation_Group_Bumper</include>
+
+            <include content="Hub_Widget_Switcher">
+                <param name="home_switcher">true</param>
+                <param name="include_content">Hub_Settings_Items</param>
+                <param name="extended">true</param>
+            </include>
+
+            <!-- Widgets Groups -->
+            <control type="group" id="500">
+                <include content="Hub_Combined_Widgets_Grouplist">
+                    <include>Hub_Settings_Widgets</include>
+                </include>
+
+                <include>Hub_Weather_Widget</include>
+
+
+                <include content="List_SettingsWidget">
+                    <param name="id">503</param>
+                    <param name="itemlayout_w">600</param>
+                    <pagecontrol>60</pagecontrol>
+                    <top>330</top>
+                    <left>80</left>
+                    <right>40</right>
+                    <bottom>50</bottom>
+                    <onleft>3</onleft>
+                    <onright>60</onright>
+                    <visible>String.IsEqual(Container(601).ListItem.Property(guid),settings)</visible>
+                    <content>
+                        <include>Settings_Landing_Items</include>
+                    </content>
+                </include>
+            </control>
+
+            <!-- <control type="group">
+                <visible>!$EXP[Exp_InfoDialogs]</visible>
+                <visible>String.IsEqual(Container(601).ListItem.Property(guid),weather)</visible>
+                <include>Dimension_Bottombar</include>
+                <include content="View_Furniture_Footer_ViewLine">
+                    <param name="label">$INFO[Weather.Location]</param>
+                    <param name="align">left</param>
+                </include>
+            </control> -->
+
+            <control type="group">
+                <include>Furniture_Reposition</include>
+                <visible>!$EXP[Exp_InfoDialogs]</visible>
+                <include>Furniture_Footer_Right</include>
+            </control>
+
+        </control>
+
+
+    </controls>
+</window>

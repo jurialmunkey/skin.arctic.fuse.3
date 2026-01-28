@@ -6,6 +6,9 @@
         <param name="include_items">Object_Null</param>
         <param name="include_movement">Object_Null</param>
         <param name="dialog_size">Dimension_DialogFullMenu</param>
+        <param name="dialog_right">520</param>
+        <param name="include_itemline">false</param>
+        <param name="itemline_haspath">true</param>
         <definition>
             <include>Part_Dim_Overlay</include>
 
@@ -20,47 +23,76 @@
 
                     <!-- Left -->
                     <control type="group">
-                        <right>520</right>
+                        <left>$PARAM[dialog_right]</left>
+                        <include>Part_Panel</include>
                         <control type="group">
                             <include>Size_Group_Head</include>
                             <include content="Part_HeadText">
                                 <param name="id">9999</param>
                                 <param name="label">$PARAM[header]</param>
                             </include>
-                            <include>Part_Line</include>
+                            <include content="Part_ItemLine" condition="$PARAM[include_itemline]">
+                                <param name="visible">true</param>
+                                <param name="label">$PARAM[itemline]</param>
+                                <param name="haspath">$PARAM[itemline_haspath]</param>
+                            </include>
+                            <include condition="![$PARAM[include_itemline]]">Part_Line</include>
                             <include>Part_CloseButton</include>
                         </control>
                         <control type="group">
                             <include>Size_Group_Body</include>
-                            <include>$PARAM[include_picture]</include>
+                            <include content="$PARAM[include_picture]">
+                                <param name="icon">$PARAM[icon]</param>
+                            </include>
                         </control>
                     </control>
 
                     <control type="group">
-                        <include>Part_Panel</include>
-                        <right>0</right>
-                        <width>520</width>
-                        <control type="list" id="5">
+                        <!-- <include>Part_Panel</include> -->
+                        <left>0</left>
+                        <width>$PARAM[dialog_right]</width>
+                        <control type="panel" id="5">
+                            <left>0</left>
+                            <right>0</right>
                             <top>14</top>
                             <bottom>20</bottom>
                             <include>Size_Dialog_Pad</include>
-                            <pagecontrol>61</pagecontrol>
-                            <onright>61</onright>
-                            <onleft>Close</onleft>
+                            <onclick>RunScript(script.skinvariables,run_dialog=ok,heading=$INFO[Container(5).ListItem.Label],message=$INFO[Container(5).ListItem.Label2])</onclick>
+                            <orientation>horizontal</orientation>
                             <orientation>vertical</orientation>
                             <itemlayout height="106">
                                 <include>Layout_BasicMeta</include>
                             </itemlayout>
                             <focusedlayout height="106">
-                                <include>Layout_BasicMeta</include>
+                                <include content="Layout_BasicMeta">
+                                    <param name="selected">true</param>
+                                </include>
                             </focusedlayout>
                             <include>$PARAM[include_items]</include>
                         </control>
-                        <include content="Part_Scrollbar_Max">
-                            <param name="id">61</param>
-                            <param name="inset">false</param>
-                            <include>$PARAM[include_movement]</include>
-                        </include>
+                        <control type="grouplist">
+                            <align>center</align>
+                            <orientation>horizontal</orientation>
+                            <itemgap>10</itemgap>
+                            <bottom>10</bottom>
+                            <height>20</height>
+                            <include content="Part_Page_Indicator">
+                                <param name="id">5</param>
+                                <param name="page">1</param>
+                            </include>
+                            <include content="Part_Page_Indicator">
+                                <param name="id">5</param>
+                                <param name="page">2</param>
+                            </include>
+                            <include content="Part_Page_Indicator">
+                                <param name="id">5</param>
+                                <param name="page">3</param>
+                            </include>
+                            <include content="Part_Page_Indicator">
+                                <param name="id">5</param>
+                                <param name="page">4</param>
+                            </include>
+                        </control>
                     </control>
                 </control>
             </control>
@@ -88,7 +120,7 @@
     <include name="DialogPictureInfo_Video">
         <include content="DialogPictureInfo_Image">
             <param name="icon">$INFO[Player.Icon]</param>
-            <param name="diffuse">diffuse/square_w600_h600.png</param>
+            <!-- <param name="diffuse">diffuse/square_w600_h600.png</param> -->
         </include>
     </include>
 
@@ -110,6 +142,106 @@
             <visible>!String.IsEqual($PARAM[info],$LOCALIZE[13205])</visible>
             <visible>!VideoPlayer.Content(livetv)</visible>
         </item>
+    </include>
+
+    <include name="DialogPictureInfo_VideoInfo_Items">
+        <content>
+            <item>
+                <label>$INFO[Window.Property(Data01.Label)]</label>
+                <label2>$INFO[Window.Property(Data01.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data01.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data02.Label)]</label>
+                <label2>$INFO[Window.Property(Data02.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data02.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data03.Label)]</label>
+                <label2>$INFO[Window.Property(Data03.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data03.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data04.Label)]</label>
+                <label2>$INFO[Window.Property(Data04.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data04.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data05.Label)]</label>
+                <label2>$INFO[Window.Property(Data05.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data05.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data06.Label)]</label>
+                <label2>$INFO[Window.Property(Data06.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data06.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data07.Label)]</label>
+                <label2>$INFO[Window.Property(Data07.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data07.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data08.Label)]</label>
+                <label2>$INFO[Window.Property(Data08.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data08.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data09.Label)]</label>
+                <label2>$INFO[Window.Property(Data09.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data09.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data10.Label)]</label>
+                <label2>$INFO[Window.Property(Data10.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data10.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data11.Label)]</label>
+                <label2>$INFO[Window.Property(Data11.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data11.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data12.Label)]</label>
+                <label2>$INFO[Window.Property(Data12.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data12.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data13.Label)]</label>
+                <label2>$INFO[Window.Property(Data13.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data13.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data14.Label)]</label>
+                <label2>$INFO[Window.Property(Data14.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data14.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data15.Label)]</label>
+                <label2>$INFO[Window.Property(Data15.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data15.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data16.Label)]</label>
+                <label2>$INFO[Window.Property(Data16.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data16.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data17.Label)]</label>
+                <label2>$INFO[Window.Property(Data17.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data17.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data18.Label)]</label>
+                <label2>$INFO[Window.Property(Data18.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data18.Label2))</visible>
+            </item>
+            <item>
+                <label>$INFO[Window.Property(Data19.Label)]</label>
+                <label2>$INFO[Window.Property(Data19.Label2)]</label2>
+                <visible>!String.IsEmpty(Window.Property(Data19.Label2))</visible>
+            </item>
+        </content>
     </include>
 
     <include name="DialogPictureInfo_PlayerProcessInfo_Items">

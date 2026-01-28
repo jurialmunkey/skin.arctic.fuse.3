@@ -130,8 +130,7 @@
                     <param name="plotwidth">$PARAM[plotwidth]</param>
                     <param name="include_title">true</param>
                     <param name="include_details">false</param>
-                    <param name="mainlogo_visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListITem.Current.CropImage))</param>
-                    <param name="mainlogo_texture">$INFO[Window(Home).Property(TMDbHelper.ListITem.Current.CropImage)]</param>
+                    <param name="croplogo">Window(Home).Property(TMDbHelper.ListItem.Current.CropImage)</param>
                 </include>
                 <include content="Info_Panel" condition="String.IsEqual(ListItem.Property(tmdb_type),person)">
                     <param name="use_textbox">true</param>
@@ -140,8 +139,7 @@
                     <param name="plotwidth">$PARAM[plotwidth]</param>
                     <param name="include_title">true</param>
                     <param name="include_details">false</param>
-                    <param name="mainlogo_visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListITem.Current.CropImage))</param>
-                    <param name="mainlogo_texture">$INFO[Window(Home).Property(TMDbHelper.ListITem.Current.CropImage)]</param>
+                    <param name="croplogo">Window(Home).Property(TMDbHelper.ListItem.Current.CropImage)</param>
                 </include>
             </control>
             <control type="group">
@@ -154,8 +152,6 @@
                 <include content="Info_Panel" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
                     <param name="plotheight">120</param>
                     <param name="plotwidth">$PARAM[plotwidth]</param>
-                    <param name="mainlogo_visible">$PARAM[mainlogo_visible]</param>
-                    <param name="mainlogo_texture">$PARAM[mainlogo_texture]</param>
                     <param name="include_title">false</param>
                 </include>
                 <include content="Info_Panel" condition="String.IsEqual(ListItem.Property(tmdb_type),person)">
@@ -163,8 +159,6 @@
                     <param name="plotheight">auto</param>
                     <param name="plotmax">560</param>
                     <param name="plotwidth">$PARAM[plotwidth]</param>
-                    <param name="mainlogo_visible">$PARAM[mainlogo_visible]</param>
-                    <param name="mainlogo_texture">$PARAM[mainlogo_texture]</param>
                     <param name="include_title">false</param>
                 </include>
             </control>
@@ -374,7 +368,7 @@
     <include name="DialogInfo_VideoWidgets">
 
         <!-- Cast-->
-        <include content="Widget_Info_Row" condition="Skin.HasSetting(Info.UseLocalCast) | !$EXP[Exp_TMDbHelper_IsData]">
+        <include content="Widget_Info_Row" condition="![!Skin.HasSetting(Info.UseLocalCast) + $EXP[Exp_TMDbHelper_IsData]]">
             <param name="id">50</param>
             <param name="baseid" />
             <param name="basegroupid">51</param>
@@ -389,7 +383,7 @@
             <param name="altvisible">true</param>
             <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
         </include>
-        <include content="Widget_Info_Row" condition="![Skin.HasSetting(Info.UseLocalCast) | !$EXP[Exp_TMDbHelper_IsData]]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(Info.UseLocalCast) + $EXP[Exp_TMDbHelper_IsData]">
             <param name="id">50</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -408,7 +402,7 @@
         </include>
 
         <!-- Collection -->
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + ![Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) | !$EXP[Exp_TMDbHelper_IsData]] + [String.IsEqual(ListItem.DBType,movie)]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + !Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) + $EXP[Exp_TMDbHelper_IsData] + String.IsEqual(ListItem.DBType,movie)">
             <param name="id">11</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -425,7 +419,7 @@
             <content>$VAR[Path_VideoInfo_OnlineCollection]</content>
             <include>DialogInfo_Widgets_Action</include>
         </include>
-        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + [Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) | !$EXP[Exp_TMDbHelper_IsData]] + [String.IsEqual(ListItem.DBType,movie)]">
+        <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + ![!Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) + $EXP[Exp_TMDbHelper_IsData]] + String.IsEqual(ListItem.DBType,movie)">
             <param name="id">11</param>
             <param name="baseid">50</param>
             <param name="basegroupid">51</param>
@@ -1129,8 +1123,52 @@
         </include>
     </include>
 
+    <include name="DialogInfo_FileProperties_Onload">
+        <onload>SetProperty(Icon,$VAR[Image_Landscape],1126)</onload>
+        <onload>SetProperty(Header,$INFO[ListItem.Label],1126)</onload>
+        <onload>SetProperty(Itemline,$INFO[ListItem.FileName],1126)</onload>
+
+        <onload>SetProperty(Data01.Label,$LOCALIZE[19076],1126)</onload>
+        <onload>SetProperty(Data01.Label2,$INFO[ListItem.FolderName],1126)</onload>
+        <onload>SetProperty(Data02.Label,$LOCALIZE[573],1126)</onload>
+        <onload>SetProperty(Data02.Label2,$INFO[ListItem.Path],1126)</onload>
+        <onload>SetProperty(Data03.Label,$LOCALIZE[31102],1126)</onload>
+        <onload>SetProperty(Data03.Label2,$INFO[ListItem.FileExtension],1126)</onload>
+
+        <onload>SetProperty(Data04.Label,$LOCALIZE[570],1126)</onload>
+        <onload>SetProperty(Data04.Label2,$INFO[ListItem.DateAdded],1126)</onload>
+        <onload>SetProperty(Data05.Label,$LOCALIZE[568],1126)</onload>
+        <onload>SetProperty(Data05.Label2,$INFO[ListItem.LastPlayed]$INFO[ListItem.Playcount,$COMMA , $LOCALIZE[31096]],1126)</onload>
+        <onload>SetProperty(Data06.Label,$LOCALIZE[31207],1126)</onload>
+        <onload>SetProperty(Data06.Label2,$INFO[ListItem.VideoCodec]$VAR[Label_ListItem_VideoQuality, • ,]$INFO[ListItem.HdrType, • ,]$INFO[ListItem.VideoAspect, • ,]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,],1126)</onload>
+
+        <onload>SetProperty(Data11.Label,DBID,1126)</onload>
+        <onload>SetProperty(Data11.Label2,$INFO[ListItem.DBID],1126)</onload>
+        <onload>SetProperty(Data12.Label,$LOCALIZE[20141] DBID,1126)</onload>
+        <onload>SetProperty(Data12.Label2,$INFO[ListItem.SetID],1126)</onload>
+        <onload>SetProperty(Data13.Label,$LOCALIZE[20364] DBID,1126)</onload>
+        <onload>SetProperty(Data13.Label2,$INFO[ListItem.TVShowDBID],1126)</onload>
+
+        <onload>SetProperty(Data14.Label,TMDb ID,1126)</onload>
+        <onload>SetProperty(Data14.Label2,$INFO[ListItem.UniqueID(tmdb)],1126)</onload>
+        <onload>SetProperty(Data15.Label,IMDb ID,1126)</onload>
+        <onload>SetProperty(Data15.Label2,$INFO[ListItem.UniqueID(imdb)],1126)</onload>
+        <onload>SetProperty(Data16.Label,TVDb ID,1126)</onload>
+        <onload>SetProperty(Data16.Label2,$INFO[ListItem.UniqueID(tvdb)],1126)</onload>
+
+        <onload>SetProperty(Data19.Label,URI,1126)</onload>
+        <onload>SetProperty(Data19.Label2,$INFO[ListItem.FolderPath],1126)</onload>
+
+
+    </include>
+
     <include name="DialogInfo_Onload">
         <onload>ClearProperty(TMDbHelper.WidgetContainer)</onload>
+        <include>DialogInfo_FileProperties_Onload</include>
+        <onload>SetProperty(Poster,$VAR[Image_Poster],managevideoversions)</onload>
+        <onload>SetProperty(Poster,$VAR[Image_Poster],managevideoextras)</onload>
+        <onload>SetProperty(Poster,$VAR[Image_Poster],selectvideoversion)</onload>
+        <onload>SetProperty(Poster,$VAR[Image_Poster],selectvideoextra)</onload>
     </include>
 
     <include name="DialogInfo_Button_GroupBuiltin">
@@ -1403,6 +1441,14 @@
             <onclick>SendClick(6)</onclick>
         </item>
     </include>
+    <include name="DialogInfo_VideoButtons_FileInfo">
+        <item>
+            <label>$LOCALIZE[31097]</label>
+            <icon>special://skin/extras/icons/file.png</icon>
+            <onclick>Dialog.Close(1172,true)</onclick>
+            <onclick>ActivateWindow(1126)</onclick>
+        </item>
+    </include>
 
     <include name="DialogInfo_VideoButtons_Position">
         <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Trailer)">DialogInfo_VideoButtons_Trailer</include>
@@ -1414,6 +1460,7 @@
         <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Versions)">DialogInfo_VideoButtons_Versions</include>
         <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Extras)">DialogInfo_VideoButtons_Extras</include>
         <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],Refresh)">DialogInfo_VideoButtons_Refresh</include>
+        <include condition="Skin.String(DialogInfo.$PARAM[type].$PARAM[item],FileInfo)">DialogInfo_VideoButtons_FileInfo</include>
     </include>
 
     <include name="DialogInfo_VideoButtons_Overflow">
@@ -1425,6 +1472,7 @@
         <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,UserRating) + !Skin.String(DialogInfo.$PARAM[type].item02,UserRating) + !Skin.String(DialogInfo.$PARAM[type].item03,UserRating)">DialogInfo_VideoButtons_UserRating</include>
         <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Versions) + !Skin.String(DialogInfo.$PARAM[type].item02,Versions) + !Skin.String(DialogInfo.$PARAM[type].item03,Versions)">DialogInfo_VideoButtons_Versions</include>
         <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Extras) + !Skin.String(DialogInfo.$PARAM[type].item02,Extras) + !Skin.String(DialogInfo.$PARAM[type].item03,Extras)">DialogInfo_VideoButtons_Extras</include>
+        <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,FileInfo) + !Skin.String(DialogInfo.$PARAM[type].item02,FileInfo) + !Skin.String(DialogInfo.$PARAM[type].item03,FileInfo)">DialogInfo_VideoButtons_FileInfo</include>
         <include condition="!Skin.String(DialogInfo.$PARAM[type].item01,Refresh) + !Skin.String(DialogInfo.$PARAM[type].item02,Refresh) + !Skin.String(DialogInfo.$PARAM[type].item03,Refresh)">DialogInfo_VideoButtons_Refresh</include>
     </include>
 
@@ -1510,7 +1558,7 @@
                         <label>$INFO[Container(4900).ListItemAbsolute(1).Label]</label>
                         <onclick>SetFocus(4900,1,absolute)</onclick>
                         <onclick>Action(select)</onclick>
-                        <onclick>SetFocus(4002)</onclick>
+                        <onclick>SetFocus(4003)</onclick>
                         <visible>!String.IsEmpty(Container(4900).ListItemAbsolute(1).Label)</visible>
                     </include>
 
@@ -1521,7 +1569,7 @@
                         <label>$INFO[Container(4900).ListItemAbsolute(2).Label]</label>
                         <onclick>SetFocus(4900,2,absolute)</onclick>
                         <onclick>Action(select)</onclick>
-                        <onclick>SetFocus(4002)</onclick>
+                        <onclick>SetFocus(4004)</onclick>
                         <visible>!String.IsEmpty(Container(4900).ListItemAbsolute(2).Label)</visible>
                     </include>
 
@@ -1566,11 +1614,12 @@
                         <param name="tmdb_id">$VAR[Path_FromDirector]</param>
                         <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(type,Director,1120)</onclick>
                         <onclick condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1120)</onclick>
+                        <onclick condition="!$EXP[Exp_TMDbHelper_IsData]">SendClick(13)</onclick>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director)) | !String.IsEmpty(ListItem.Director)</visible>
                     </include>
 
                     <!-- Writer -->
-                    <include content="Object_InfoCircle_Button">
+                    <include content="Object_InfoCircle_Button" condition="$EXP[Exp_TMDbHelper_IsData]">
                         <param name="id">02</param>
                         <param name="name">$VAR[Label_FromWriter]</param>
                         <param name="role">$LOCALIZE[20417]</param>
@@ -1578,8 +1627,16 @@
                         <param name="shot">$VAR[Image_WriterIcon]</param>
                         <param name="tmdb_type">person</param>
                         <param name="tmdb_id">$VAR[Path_FromWriter]</param>
-                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(type,Writer,1120)</onclick>
-                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1120)</onclick>
+                        <onclick>SetProperty(type,Writer,1120)</onclick>
+                        <onclick>ActivateWindow(1120)</onclick>
+                        <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer)) | !String.IsEmpty(ListItem.Writer)</visible>
+                    </include>
+                    <include content="Object_InfoCircle_Detail" condition="!$EXP[Exp_TMDbHelper_IsData]">
+                        <param name="id">02</param>
+                        <param name="name">$VAR[Label_FromWriter]</param>
+                        <param name="role">$LOCALIZE[20417]</param>
+                        <param name="icon">special://skin/extras/icons/write.png</param>
+                        <param name="shot">$VAR[Image_WriterIcon]</param>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer)) | !String.IsEmpty(ListItem.Writer)</visible>
                     </include>
 
@@ -1591,8 +1648,6 @@
                         <param name="icon">special://skin/extras/icons/director.png</param>
                         <param name="shot">$VAR[Image_CombinedStudio]</param>
                         <param name="alt1">true</param>
-                        <!-- <onclick>SetFocus(5000)</onclick>
-                        <onclick>AlarmClock(resetfocus,SetFocus(5012),00:00,silent)</onclick> -->
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Studio)) | !String.IsEmpty(ListItem.Studio)</visible>
                     </include>
 
@@ -1603,8 +1658,6 @@
                         <param name="role">$LOCALIZE[20360]</param>
                         <param name="icon">special://skin/extras/icons/photo-film.png</param>
                         <param name="shot">$INFO[ListItem.Art(poster)]</param>
-                        <!-- <onclick>SetFocus(5000)</onclick>
-                        <onclick>AlarmClock(resetfocus,SetFocus(5018),00:00,silent)</onclick> -->
                         <visible>!String.IsEmpty(ListItem.Property(totalepisodes))</visible>
                     </include>
 
@@ -1616,7 +1669,7 @@
                         <param name="icon">special://skin/extras/icons/photo-film.png</param>
                         <param name="fallback_role">$LOCALIZE[31207]</param>
                         <param name="shot">$INFO[ListItem.Art(poster)]</param>
-                        <param name="name">$INFO[ListItem.VideoCodec]$INFO[ListItem.VideoResolution, • ,p]$INFO[ListItem.VideoAspect, • ,]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,]</param>
+                        <param name="name">$INFO[ListItem.VideoCodec]$VAR[Label_ListItem_VideoQuality, • ,]$INFO[ListItem.VideoAspect, • ,]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,]</param>
                         <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
                     </include>
 

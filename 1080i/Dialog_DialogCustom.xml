@@ -40,12 +40,16 @@
     </include>
 
     <include name="DialogCustom_Resizer_Backing">
-        <control type="group">
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Dialog_Backing_Resizeable">
-                <param name="id">$PARAM[id]</param>
-            </include>
-        </control>
+        <param name="visible">true</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Dialog_Backing_Resizeable">
+                    <param name="id">$PARAM[id]</param>
+                </include>
+            </control>
+        </definition>
     </include>
 
     <include name="DialogCustom_Favourites">
@@ -56,12 +60,17 @@
         <param name="include_list">DialogCustom_Favourites_List</param>
         <param name="dialog_size">Dimension_DialogWideMenu</param>
         <param name="resize">false</param>
+        <param name="visible">true</param>
         <definition>
-            <include>Part_Dim_Overlay</include>
+            <include content="Part_Dim_Overlay">
+                <param name="visible">$PARAM[visible]</param>
+            </include>
             <include condition="$PARAM[resize]" content="DialogCustom_Resizer_Backing">
                 <param name="id">$PARAM[id]</param>
+                <param name="visible">$PARAM[visible]</param>
             </include>
             <control type="group">
+                <visible>$PARAM[visible]</visible>
                 <include content="Part_Dialog_Backing" condition="![$PARAM[resize]]">
                     <param name="dialog_size">$PARAM[dialog_size]</param>
                 </include>
@@ -78,7 +87,11 @@
                         <include content="Part_ItemPage">
                             <param name="id">$PARAM[id]</param>
                         </include>
-                        <include>Part_CloseButton</include>
+                        <include content="Part_CloseButton">
+                            <param name="id">$PARAM[closebutton_id]</param>
+                            <param name="groupid">$PARAM[closebutton_groupid]</param>
+                            <param name="onclick">$PARAM[closebutton_onclick]</param>
+                        </include>
                     </control>
                     <control type="group">
                         <include>Size_Group_Body</include>
@@ -155,7 +168,8 @@
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Buttons_Items)">DialogCustom_Buttons_Items</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Ratings_Movies_Items)">DialogCustom_Ratings_Movies_Items</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Ratings_TVShows_Items)">DialogCustom_Ratings_TVShows_Items</include>
-        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_SpotlightStyle_Items)">DialogCustom_SpotlightStyle_Items</include>
+
+        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_GameOptions_Items)">DialogCustom_GameOptions_Items</include>
     </include>
 
     <include name="DialogCustom_Settings_Items_ColourPresets">
@@ -1335,33 +1349,6 @@
         </include>
     </include>
 
-    <include name="DialogCustom_SpotlightStyle_Items">
-        <include content="Settings_Button" description="Slide">
-            <param name="dialog">true</param>
-            <param name="id">8001</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31060]</label>
-            <selected>Skin.HasSetting(Spotlight.EnableSlide)</selected>
-            <onclick>Skin.ToggleSetting(Spotlight.EnableSlide)</onclick>
-        </include>
-        <include content="Settings_Button">
-            <param name="id">8002</param>
-            <param name="control">button</param>
-            <param name="dialog">true</param>
-            <label>$LOCALIZE[31080] 1</label>
-            <label2>$VAR[Label_Setting_Spotlight_UsePlayButton]</label2>
-            <onclick>Skin.ToggleSetting(Spotlight.UsePlayButton)</onclick>
-        </include>
-        <include content="Settings_Button" description="Spotlight">
-            <param name="dialog">true</param>
-            <param name="id">8003</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31080] 2</label>
-            <label2>$VAR[Label_Setting_Spotlight_UseMenuButton]</label2>
-            <onclick>Skin.ToggleSetting(Spotlight.UseMenuButton)</onclick>
-        </include>
-    </include>
-
     <include name="DialogCustom_Autoscroll_Items">
         <include content="Settings_Button">
             <param name="id">8001</param>
@@ -1487,56 +1474,119 @@
             <visible>Visualisation.HasPresets</visible>
         </include>
     </include>
-    <include name="DialogCustom_PowerTile_Items">
-        <include content="Settings_Button">
-            <param name="id">80$PARAM[item]5</param>
-            <param name="control">button</param>
-            <param name="dialog">true</param>
-            <label>$LOCALIZE[31025] $PARAM[item]</label>
-            <label2>$INFO[Skin.String(OptionsTiles.0$PARAM[item].Include)]</label2>
-            <visible>$PARAM[visible]</visible>
 
-            <onclick condition="!Skin.String(OptionsTiles.0$PARAM[item].Include,Profile) + !Skin.String(OptionsTiles.0$PARAM[item].Include,Settings) + !Skin.String(OptionsTiles.0$PARAM[item].Include,Weather) + !Skin.String(OptionsTiles.0$PARAM[item].Include,SystemInfo)">Skin.SetString(OptionsTiles.0$PARAM[item].Include,Settings)</onclick>
-            <onclick condition="Skin.String(OptionsTiles.0$PARAM[item].Include,Settings)">Skin.SetString(OptionsTiles.0$PARAM[item].Include,Profile)</onclick>
-            <onclick condition="Skin.String(OptionsTiles.0$PARAM[item].Include,Profile)">Skin.SetString(OptionsTiles.0$PARAM[item].Include,NowPlaying)</onclick>
-            <onclick condition="Skin.String(OptionsTiles.0$PARAM[item].Include,NowPlaying)">Skin.SetString(OptionsTiles.0$PARAM[item].Include,Weather)</onclick>
-            <onclick condition="Skin.String(OptionsTiles.0$PARAM[item].Include,Weather)">Skin.SetString(OptionsTiles.0$PARAM[item].Include,SystemInfo)</onclick>
-            <onclick condition="Skin.String(OptionsTiles.0$PARAM[item].Include,SystemInfo)">Skin.SetString(OptionsTiles.0$PARAM[item].Include,Custom)</onclick>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="id">80$PARAM[item]6</param>
-            <param name="control">button</param>
-            <param name="dialog">true</param>
-            <label> - $LOCALIZE[31469]</label>
-            <label2>$INFO[Skin.String(OptionsTiles.0$PARAM[item].Path)]</label2>
-            <visible>$PARAM[visible]</visible>
-            <onclick>SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
-            <onclick>RunScript(script.skinvariables,set_shortcut=OptionsTiles.0$PARAM[item])</onclick>
-            <visible>Skin.String(OptionsTiles.0$PARAM[item].Include,Custom)</visible>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="id">80$PARAM[item]7</param>
-            <param name="control">button</param>
-            <param name="dialog">true</param>
-            <label> - $LOCALIZE[21899]</label>
-            <label2>$INFO[Skin.String(OptionsTiles.0$PARAM[item].Label)]</label2>
-            <visible>$PARAM[visible]</visible>
-            <onclick>Skin.SetString(OptionsTiles.0$PARAM[item].Label)</onclick>
-            <visible>Skin.String(OptionsTiles.0$PARAM[item].Include,Custom)</visible>
-        </include>
-
+    <include name="DialogCustom_GameOptions_Items">
         <include content="Settings_ButtonImage">
-            <param name="id">80$PARAM[item]8</param>
-            <param name="groupid">82$PARAM[item]8</param>
-            <param name="control">button</param>
+            <param name="id">8001</param>
+            <param name="groupid">8101</param>
             <param name="dialog">true</param>
-            <param name="icon">$INFO[Skin.String(OptionsTiles.0$PARAM[item].Icon)]</param>
-            <label> - $LOCALIZE[31274]</label>
-            <visible>$PARAM[visible]</visible>
-            <onclick>Skin.SetImage(OptionsTiles.0$PARAM[item].Icon,special://skin/extras/icons/)</onclick>
-            <visible>Skin.String(OptionsTiles.0$PARAM[item].Include,Custom)</visible>
+            <param name="icon">special://skin/extras/icons/image.png</param>
+            <description>Video filter button</description>
+            <label>$LOCALIZE[35225]</label>
+            <onclick>ActivateWindow(GameVideoFilter)</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8002</param>
+            <param name="groupid">8102</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/arrows-left-right-to-line.png</param>
+            <description>Stretch mode button</description>
+            <label>$LOCALIZE[35233]</label>
+            <onclick>ActivateWindow(GameStretchMode)</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8003</param>
+            <param name="groupid">8103</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/arrow-rotate-right.png</param>
+            <description>Video rotation button</description>
+            <label>$LOCALIZE[35227]</label>
+            <onclick>ActivateWindow(GameVideoRotation)</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8004</param>
+            <param name="groupid">8104</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/volume-low.png</param>
+            <description>Volume button</description>
+            <label>$LOCALIZE[13376]</label>
+            <param name="label2">$LOCALIZE[31338]</param>
+            <param name="has_label2">true</param>
+            <onclick>ActivateWindow(GameVolume)</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8005</param>
+            <param name="groupid">8105</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/gamepad.png</param>
+            <description>Controller settings button</description>
+            <label>$LOCALIZE[35234]</label>
+            <onclick>ActivateWindow(GameControllers)</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8006</param>
+            <param name="groupid">8106</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/plug.png</param>
+            <description>Controller port configuration</description>
+            <label>$LOCALIZE[35110]</label>
+            <onclick>ActivateWindow(GamePorts)</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8007</param>
+            <param name="groupid">8107</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/screwdriver-wrench.png</param>
+            <description>Advanced settings</description>
+            <label>$LOCALIZE[35226]</label>
+            <onclick>ActivateWindow(GameAdvancedSettings)</onclick>
+        </include>
+    </include>
+
+    <include name="DialogCustom_GameOSD_Items">
+        <include content="Settings_ButtonImage">
+            <param name="id">8001</param>
+            <param name="groupid">8101</param>
+            <description>Pause / Resume button</description>
+            <label>$LOCALIZE[35224]</label>
+            <label2>$LOCALIZE[31336]</label2>
+            <param name="icon">special://skin/extras/icons/play2.png</param>
+            <onclick>Play</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8002</param>
+            <param name="groupid">8102</param>
+            <description>Save / Load button</description>
+            <label>$LOCALIZE[35249]</label>
+            <param name="icon">special://skin/extras/icons/floppy-disk.png</param>
+            <onclick>ActivateWindow(InGameSaves)</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8003</param>
+            <param name="groupid">8103</param>
+            <description>Reset button</description>
+            <label>$LOCALIZE[13007]</label>
+            <param name="icon">special://skin/extras/icons/rotate.png</param>
+            <onclick>PlayerControl(Reset)</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8004</param>
+            <param name="groupid">8104</param>
+            <description>Stop button</description>
+            <label>$LOCALIZE[35222]</label>
+            <label2>$LOCALIZE[31337]</label2>
+            <param name="icon">special://skin/extras/icons/stop.png</param>
+            <onclick>Stop</onclick>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8005</param>
+            <param name="groupid">8105</param>
+            <description>Settings button</description>
+            <label>$LOCALIZE[5]</label>
+            <param name="icon">special://skin/extras/icons/settings.png</param>
+            <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[5][/CAPITALIZE],Home)</onclick>
+            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_GameOptions_Items,Home)</onclick>
+            <onclick>ActivateWindow(1118)</onclick>
         </include>
     </include>
 

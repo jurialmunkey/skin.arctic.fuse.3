@@ -2,11 +2,11 @@
 <includes>
 
     <variable name="DialogContextMenu_HeaderLabel">
-        <value condition="!String.ISEmpty(Window(Home).Property(TMDbHelper.ListItem.base_label)) + !$EXP[Exp_InfoDialogs]">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_label)]</value>
+        <value condition="!String.ISEmpty(Window(Home).Property(TMDbHelper.ListItem.base_label)) + $EXP[Exp_AllowExpandedContextMenu]">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_label)]</value>
         <value>$LOCALIZE[10106]</value>
     </variable>
 
-    <expression name="DialogContextMenu_HasArtwork">[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_poster)) + !$EXP[Exp_InfoDialogs] + !Skin.HasSetting(ContextMenu.DisableArtwork)]</expression>
+    <expression name="DialogContextMenu_HasArtwork">[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_poster)) + $EXP[Exp_AllowExpandedContextMenu] + !Skin.HasSetting(ContextMenu.DisableArtwork)]</expression>
 
     <variable name="DialogContextMenu_OnUp">
         <value condition="Control.IsVisible(1020)">SetFocus(1020)</value>
@@ -34,7 +34,7 @@
 	<include name="DialogContextMenu">
         <param name="has_artwork">$EXP[DialogContextMenu_HasArtwork]</param>
         <param name="has_template">true</param>
-        <param name="has_menu">!Skin.HasSetting(ContextMenu.DisableOptionsTray)</param>
+        <param name="has_menu">[!Skin.HasSetting(ContextMenu.DisableOptionsTray) + $EXP[Exp_AllowExpandedContextMenu]]</param>
         <param name="include_tray">DialogContextMenu_Items</param>
         <param name="hidden_icon">true</param>
         <param name="scrollbar_id">61</param>
@@ -57,6 +57,8 @@
 
                     <!-- Left -->
                     <control type="group">
+                        <!-- <right>0</right>
+                        <include condition="$PARAM[has_artwork]">Part_Panel</include> -->
                         <include condition="$PARAM[has_artwork]">Size_LeftGroup_Large</include>
                         <include content="DialogPlot_Artwork" condition="$PARAM[has_artwork]">
                             <param name="poster_icon">$INFO[Window(Home).Property(TMDbHelper.ListItem.base_poster)]</param>
@@ -68,6 +70,8 @@
                     <control type="group">
                         <include condition="$PARAM[has_artwork]">Part_Panel</include>
                         <include condition="$PARAM[has_artwork]">Size_RightGroup_Large</include>
+
+                        <!-- <include condition="$PARAM[has_artwork]">Size_RightGroup_Flipped_Large</include> -->
 
 
                         <control type="group">

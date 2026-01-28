@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <variable name="Label_Version_Title">
+        <value condition="!String.IsEmpty(ListItem.VideoVersionName)">$INFO[ListItem.VideoVersionName]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+
+    <variable name="Label_GameOSD_Heading">
+        <value condition="Window.ISVisible(gamevideofilter)">$LOCALIZE[10823]</value>
+        <value condition="Window.ISVisible(gamestretchmode)">$LOCALIZE[10824]</value>
+        <value condition="Window.ISVisible(gamevideorotation)">$LOCALIZE[35227]</value>
+        <value condition="Window.ISVisible(gamesaves)">$LOCALIZE[31087]</value>
+        <value condition="Window.ISVisible(ingamesaves)">$LOCALIZE[31091]</value>
+    </variable>
+
     <variable name="Label_Setting_Ratings">
         <value condition="Skin.HasSetting(Ratings.EnableColor)">$LOCALIZE[737]</value>
         <value>$LOCALIZE[31458]</value>
@@ -18,7 +31,8 @@
     </variable>
 
     <variable name="Label_SkinSettings_Header">
-        <value condition="Skin.HasSetting(Header.DisableDate)">$LOCALIZE[31053]</value>
+        <value condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">$LOCALIZE[1223]</value>
+        <value condition="Skin.HasSetting(HomeSwitcher.DisableDate)">$LOCALIZE[31053]</value>
         <value>$LOCALIZE[552]</value>
     </variable>
 
@@ -207,11 +221,6 @@
         <value>$LOCALIZE[571]</value>
     </variable>
 
-    <variable name="Label_Setting_FallbackImage">
-        <value condition="!String.IsEmpty(Skin.String(Background.MultiImage))">$INFO[Skin.String(Background.MultiImage)]</value>
-        <value>$LOCALIZE[231]</value>
-    </variable>
-
     <variable name="Label_Setting_StartUpImage">
         <value condition="!String.IsEmpty(Skin.String(Startup.VideoPath))">$INFO[Skin.String(Startup.VideoPath)]</value>
         <value condition="String.IsEmpty(Skin.String(Startup.ImageFolder))">$LOCALIZE[571]</value>
@@ -270,6 +279,12 @@
         <value condition="Integer.IsGreater(Container.ListItem.VideoResolution,720)">HD</value>
         <value condition="Integer.IsGreater(Container.ListItem.VideoResolution,719)">HD</value>
         <value condition="!String.IsEmpty(Container.ListItem.VideoResolution)">SD</value>
+    </variable>
+
+    <variable name="Label_ListItem_VideoQuality">
+        <value condition="Integer.IsGreater(ListItem.VideoResolution,2160) | String.IsEqual(ListItem.VideoResolution,8K)">8K</value>
+        <value condition="Integer.IsGreater(ListItem.VideoResolution,1080) | String.IsEqual(ListItem.VideoResolution,4K)">4K</value>
+        <value>$INFO[ListItem.VideoResolution,,p]</value>
     </variable>
 
     <variable name="Label_AudioLanguages">
@@ -498,7 +513,6 @@
         <value condition="!String.IsEmpty(Player.PlaySpeed) + !String.IsEqual(Player.PlaySpeed,1.00) + !String.IsEqual(Player.PlaySpeed,0.00)">$INFO[Player.PlaySpeed,$LOCALIZE[31071] ,x]</value>
         <value condition="!String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + [Player.Seeking | Player.HasPerformedSeek(3) | Integer.IsEqual(System.CurrentControlID,8200)]">$INFO[Player.Chapter,$LOCALIZE[21396] ,]$INFO[Player.ChapterCount, / ,]$INFO[Player.ChapterName, - ,]</value>
         <value condition="Player.Paused">$LOCALIZE[112]</value>
-        <value condition="VideoPlayer.Content(livetv) + !String.IsEmpty(VideoPlayer.ChannelNumberLabel)">$INFO[VideoPlayer.ChannelNumberLabel,$LOCALIZE[19029] ,]</value>
         <value>$LOCALIZE[31134]</value>
     </variable>
 
@@ -527,7 +541,7 @@
     </variable>
 
     <variable name="Label_FullscreenWidget_PlayButton">
-        <value condition="Container(301).ListItem.IsFolder + !Skin.HasSetting(Spotlight.UsePlayButton)">$LOCALIZE[1024]</value>
+        <value condition="Container(301).ListItem.IsFolder + !String.StartsWith(Container(301).ListItem.FolderPath,videodb://)">$LOCALIZE[1024]</value>
         <value>$LOCALIZE[208]</value>
     </variable>
 
@@ -541,14 +555,14 @@
         <value>$LOCALIZE[29915]</value>
     </variable>
 
-    <variable name="Label_Setting_Spotlight_UsePlayButton">
-        <value condition="Skin.HasSetting(Spotlight.UsePlayButton)">$LOCALIZE[208]</value>
-        <value>$LOCALIZE[208] / $LOCALIZE[1024]</value>
+    <variable name="Label_Setting_Sidemenu">
+        <value condition="Skin.HasSetting(Submenu.EnableSideMode)">$LOCALIZE[31059]</value>
+        <value>$LOCALIZE[31106]</value>
     </variable>
 
-    <variable name="Label_Setting_Sidemenu">
-        <value condition="Skin.HasSetting(Submenu.EnableSideMode)">$LOCALIZE[1034]</value>
-        <value>$LOCALIZE[31058]</value>
+    <variable name="Label_Setting_HomeIcons">
+        <value condition="Skin.HasSetting(HomeSwitcher.EnableIcons)">$LOCALIZE[536]</value>
+        <value>$LOCALIZE[31329]</value>
     </variable>
 
     <variable name="Label_DialogInfo_PlayButton">
@@ -1073,6 +1087,7 @@
         <value condition="Window.IsVisible(10502)">$LOCALIZE[14237]</value>
         <value condition="Window.IsVisible(pictures)">$LOCALIZE[10002]</value>
         <value condition="Window.IsVisible(favouritesbrowser)">$LOCALIZE[31382]</value>
+        <value condition="Window.IsVisible(games)">$LOCALIZE[10821]</value>
 
         <value condition="!String.IsEmpty(Skin.String(Home.Label))">$INFO[Skin.String(Home.Label)]</value>
         <value>$LOCALIZE[10000]</value>

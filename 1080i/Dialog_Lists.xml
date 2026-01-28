@@ -137,7 +137,10 @@
     <include name="List_Layout_Dialog_VideoVersions">
         <param name="selected">false</param>
         <definition>
-            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="group">
+                <animation effect="fade" start="100" end="50" condition="!Control.HasFocus($PARAM[id])">Conditional</animation>
+                <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            </control>
             <control type="group">
                 <left>40</left>
                 <right>40</right>
@@ -157,8 +160,8 @@
                         <include content="List_Layout_Dialog_Labels">
                             <param name="item_h">$PARAM[item_h]</param>
                             <param name="selected">$PARAM[selected]</param>
-                            <param name="label">$INFO[ListItem.VideoVersionName]</param>
-                            <param name="label2">[UPPERCASE]$VAR[Label_VideoQuality]$INFO[ListItem.VideoCodec, • ,]$INFO[ListItem.VideoAspect, • ,:1]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,][/UPPERCASE]</param>
+                            <param name="label">$VAR[Label_Version_Title]</param>
+                            <param name="label2">[UPPERCASE]$VAR[Label_VideoQuality]$INFO[ListItem.VideoCodec, • ,]$INFO[ListItem.HdrType, • ,]$INFO[ListItem.VideoAspect, • ,:1]$INFO[ListItem.AudioCodec, • ,]$VAR[Label_ListItem_AudioChannels, • ,][/UPPERCASE]</param>
                             <param name="label2_visible">!String.IsEmpty(ListItem.VideoCodec)</param>
                         </include>
                         <animation effect="slide" start="0" end="0,-20" condition="!String.IsEmpty(ListItem.Property(AudioLanguage.1)) | !String.IsEmpty(ListItem.Property(SubtitleLanguage.1))">Conditional</animation>
