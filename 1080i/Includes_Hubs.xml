@@ -69,12 +69,17 @@
                     <onup>601</onup>
                     <include>$PARAM[include_action]</include>
                     <include>Hub_Grouplist_OnLeftRight</include>
-                    <onback condition="$EXP[Exp_Navigation_OnParent]">SetFocus($PARAM[id],0,absolute)</onback>
+                    <onback condition="$EXP[Exp_Navigation_OnParent] + !Player.HasMedia">SetFocus($PARAM[id],0,absolute)</onback>
                     <include content="Action_Widget_OnBack">
                         <param name="id">$PARAM[id]</param>
                         <param name="grouplistid">500</param>
                         <param name="refocus">SetFocus(601)</param>
+                        <param name="enable">!Player.HasMedia</param>
                     </include>
+
+                    <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus($PARAM[id]))</onback>
+                    <onback condition="Player.HasMedia">309</onback>
+
                     <ondown>ActivateWindow(1180)</ondown>
                     <onfocus>SetProperty(TMDbHelper.WidgetContainer,$PARAM[id])</onfocus>
                     <onfocus>SetProperty(Background.ShowOverlay,True,Home)</onfocus>
@@ -114,7 +119,11 @@
                     <param name="id">$PARAM[id]</param>
                     <param name="grouplistid">500</param>
                     <param name="refocus">SetFocus(601)</param>
+                    <param name="enable">!Player.HasMedia</param>
                 </include>
+                <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus($PARAM[id]))</onback>
+                <onback condition="Player.HasMedia">309</onback>
+
                 <include>Hub_Grouplist_OnLeftRight</include>
                 <ondown>ActivateWindow(1180)</ondown>
                 <onfocus>SetProperty(TMDbHelper.WidgetContainer,$PARAM[id])</onfocus>
@@ -162,8 +171,10 @@
                     <param name="extended">$PARAM[extended]</param>
                     <onup condition="!Control.IsVisible(301)">$PARAM[onup]</onup>
                     <onup condition="Control.IsVisible(301)">301</onup>
-                    <onback condition="!Control.IsVisible(301)">$PARAM[onup]</onback>
-                    <onback condition="Control.IsVisible(301)">301</onback>
+                    <onback condition="!Control.IsVisible(301) + !Player.HasMedia">$PARAM[onup]</onback>
+                    <onback condition="Control.IsVisible(301) + !Player.HasMedia">301</onback>
+                    <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus(601))</onback>
+                    <onback condition="Player.HasMedia">309</onback>
                     <ondown>SetFocus($INFO[Container(601).ListItem.Property(widget_id)])</ondown>
                     <onfocus condition="$PARAM[wall]">SetProperty(InfoPanel.FullSwitch,Wall,Home)</onfocus>
                     <onfocus condition="![$PARAM[wall]]">ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
@@ -313,7 +324,9 @@
         <oninfo>Action(Info)</oninfo>
         <oninfo>SetFocus($PARAM[id])</oninfo>
 
-        <onback>300</onback>
+        <onback condition="!Player.HasMedia">300</onback>
+        <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus($PARAM[id]))</onback>
+        <onback condition="Player.HasMedia">309</onback>
     </include>
 
     <include name="Hub_Spotlight_Button_Circle">
@@ -614,6 +627,13 @@
             <onfocus condition="Control.IsVisible(301)">SetFocus(301)</onfocus>
             <onfocus>AlarmClock(refocus_300,SetFocus(300),00:00,silent)</onfocus>
         </include>
+
+        <include content="Object_Hidden_Button">
+            <param name="id">309</param>
+            <onfocus>$INFO[Window.Property(FullscreenRefocus)]</onfocus>
+            <onfocus>ClearProperty(FullscreenRefocus)</onfocus>
+            <onfocus>Action(Fullscreen)</onfocus>
+        </include>
     </include>
 
     <include name="Hub_Window_Slide_OnSpotlight">
@@ -644,7 +664,10 @@
                 <onup condition="Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1180)</onup>
                 <oninfo condition="Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1170)</oninfo>
                 <ondown>$VAR[Hub_Action_Down]</ondown>
-                <onback>303</onback>
+
+                <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus(300))</onback>
+                <onback condition="Player.HasMedia">309</onback>
+                <onback condition="!Player.HasMedia">303</onback>
             </include>
 
             <control type="group">
@@ -766,8 +789,12 @@
                 <height>500</height>
                 <left>-60</left>
 
-                <onback>500</onback>
-                <onback>SetFocus($INFO[Window.Property(TMDBHelper.WidgetContainer)])</onback>
+                <onback condition="!Player.HasMedia">500</onback>
+                <onback condition="!Player.HasMedia">SetFocus($INFO[Window.Property(TMDBHelper.WidgetContainer)])</onback>
+                <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus(800))</onback>
+                <onback condition="Player.HasMedia">309</onback>
+
+
 
                 <onleft>SetProperty(Bumper.Direction,Left,Home)</onleft>
                 <onleft>ActivateWindow(1180)</onleft>
