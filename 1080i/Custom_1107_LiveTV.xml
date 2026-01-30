@@ -10,45 +10,16 @@
             <content>pvr://channels/tv/</content>
         </include>
 
-        <include>Background</include>
-
-        <include>Hub_Window_Refocus_Buttons</include>
-
-        <include content="Home_Control">
+        <include content="Hub_Prefab_Window">
             <param name="window">1107</param>
-            <param name="overlay">true</param>
-            <onup>ActivateWindow(1181)</onup>
-            <oninfo>ActivateWindow(1181)</oninfo>
-            <ondown>$VAR[Hub_Action_Down]</ondown>
-            <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus(300))</onback>
-            <onback condition="Player.HasMedia">309</onback>
-            <onback condition="!Player.HasMedia">303</onback>
+            <param name="widgets_wall">LiveTV_Wall_Widgets</param>
+            <param name="widgets_combined">LiveTV_Combined_Widgets</param>
+            <param name="widgets_standard">LiveTV_Content</param>
+            <param name="info_combined">NextAired_Info</param>
+            <param name="info_wall">NextAired_Wall_Info</param>
+            <param name="swticher_content">LiveTV_Switcher_Items</param>
         </include>
 
-        <control type="group">
-            <include>Animation_Group_Bumper</include>
-
-            <include condition="!String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Wall)">NextAired_Info</include>
-
-            <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Wall)">
-                <param name="home_switcher">true</param>
-                <param name="include_content">LiveTV_Switcher_Items</param>
-            </include>
-
-            <!-- Widgets Groups -->
-            <control type="group" id="500">
-                <include content="Hub_Combined_Widgets_Grouplist" condition="String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Wall)">
-                    <include>LiveTV_Wall_Widgets</include>
-                </include>
-                <include condition="String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Standard)">LiveTV_Content</include>
-            </control>
-
-            <control type="group">
-                <include>Furniture_Reposition</include>
-                <visible>!$EXP[Exp_InfoDialogs]</visible>
-                <include>Furniture_Footer_Right</include>
-            </control>
-        </control>
 
 
     </controls>

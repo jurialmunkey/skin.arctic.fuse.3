@@ -6,13 +6,6 @@
         <onload condition="String.IsEmpty(Window($PARAM[window]).Property(TMDbHelper.WidgetContainer)) + String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Target))">SetProperty(TMDbHelper.WidgetContainer,501,$PARAM[window])</onload>
     </include>
 
-    <include name="Hub_Disabled_Onload">
-        <include>Action_Blur_Onload</include>
-        <defaultcontrol always="true">$PARAM[defaultcontrol]</defaultcontrol>
-        <onload>SetFocus($PARAM[defaultcontrol])</onload>
-        <onload>ClearProperty(HomeSwitcher.IsVisible,Home)</onload>
-    </include>
-
     <include name="Hub_Onload">
         <definition>
 
@@ -221,19 +214,6 @@
             <animation effect="fade" start="100" end="0" condition="$EXP[Hub_Spotlight_Visible_Expression]">Conditional</animation>
             <visible>String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
             <include>Home_Info_Animation</include>
-            <include>Info_Panel_Dimensions</include>
-            <include content="Info_Panel">
-                <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])]</param>
-                <param name="visible_line">false</param>
-                <param name="visible_plot">false</param>
-                <param name="visible_meta">false</param>
-                <param name="container">Container($PARAM[id]).</param>
-            </include>
-        </control>
-    </include>
-
-    <include name="Hub_Wall_AlwaysVisible_Info">
-        <control type="group">
             <include>Info_Panel_Dimensions</include>
             <include content="Info_Panel">
                 <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])]</param>
@@ -760,6 +740,70 @@
         </definition>
     </include>
 
+    <include name="Hub_Prefab_Window">
+        <param name="overlay">true</param>
+        <definition>
+            <include>Hub_Window_Refocus_Buttons</include>
+            <include>Background</include>
+
+            <include content="Home_Control">
+                <param name="window">$PARAM[window]</param>
+                <param name="overlay">[String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall)]</param>
+                <onup condition="!Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1181)</onup>
+                <oninfo condition="!Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1181)</oninfo>
+                <onup condition="Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1180)</onup>
+                <oninfo condition="Skin.HasSetting(Submenu.EnableSideMode)">ActivateWindow(1170)</oninfo>
+                <ondown>$VAR[Hub_Action_Down]</ondown>
+                <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus(300))</onback>
+                <onback condition="Player.HasMedia">309</onback>
+                <onback condition="!Player.HasMedia">303</onback>
+            </include>
+
+            <control type="group">
+                <include>Animation_Group_Bumper</include>
+
+                <control type="group">
+                    <!-- Content -->
+                    <control type="group" id="400">
+                        <include>Animation_View_WindowChange</include>
+                        <!-- Widgets Groups -->
+                        <control type="group" id="500">
+                            <include content="Hub_Combined_Widgets_Grouplist" condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall)">
+                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall)">$PARAM[widgets_wall]</include>
+                            </include>
+                            <include condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Combined)">$PARAM[widgets_combined]</include>
+                            <include condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Standard)">$PARAM[widgets_standard]</include>
+                        </control>
+
+                        <!-- Switching Groups -->
+                        <control type="group" id="600">
+                            <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall)">
+                                <param name="include_content">$PARAM[swticher_content]</param>
+                            </include>
+                            <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Combined)">
+                                <param name="include_content">$PARAM[swticher_content]</param>
+                                <param name="top">520</param>
+                                <param name="wall">false</param>
+                            </include>
+                        </control>
+                    </control>
+
+                    <!-- Info Panels -->
+                    <include condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall)">$PARAM[info_wall]</include>
+                    <include condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Combined) | String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Standard)">$PARAM[info_combined]</include>
+                </control>
+
+
+                <control type="group">
+                    <include>Furniture_Reposition</include>
+                    <visible>!$EXP[Exp_InfoDialogs]</visible>
+                    <include>Furniture_Footer_Right</include>
+                </control>
+            </control>
+
+        </definition>
+    </include>
+
     <include name="Hub_SideMenu_QuickJump">
         <control type="button">
             <onfocus condition="!String.IsEqual(Window.Property(QuickJump),ListItem.Property(quickjump)) + !String.IsEqual(Window.Property(QuickJump),Disable)">$INFO[ListItem.Property(quickjump)]</onfocus>
@@ -1044,7 +1088,7 @@
             <param name="sortby">lastused</param>
             <param name="sortorder">descending</param>
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),videos)</param>
-            <param name="home_switcher">true</param>
+            <param name="home_switcher">false</param>
         </include>
         <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisableMusic)">
             <param name="id">502</param>
@@ -1054,7 +1098,7 @@
             <param name="sortby">lastused</param>
             <param name="sortorder">descending</param>
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),music)</param>
-            <param name="home_switcher">true</param>
+            <param name="home_switcher">false</param>
         </include>
         <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisablePicture)">
             <param name="id">503</param>
@@ -1064,7 +1108,7 @@
             <param name="sortby">lastused</param>
             <param name="sortorder">descending</param>
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),image)</param>
-            <param name="home_switcher">true</param>
+            <param name="home_switcher">false</param>
         </include>
         <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisableProgram)">
             <param name="id">504</param>
@@ -1074,7 +1118,7 @@
             <param name="sortby">lastused</param>
             <param name="sortorder">descending</param>
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),executable)</param>
-            <param name="home_switcher">true</param>
+            <param name="home_switcher">false</param>
         </include>
         <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Hub.1108.DisableGame)">
             <param name="id">505</param>
@@ -1084,24 +1128,24 @@
             <param name="sortby">lastused</param>
             <param name="sortorder">descending</param>
             <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),game)</param>
-            <param name="home_switcher">true</param>
+            <param name="home_switcher">false</param>
         </include>
     </include>
 
     <include name="Hub_Addons_Info">
-        <include content="Hub_Wall_AlwaysVisible_Info">
+        <include content="Hub_Wall_Info">
             <param name="id">501</param>
         </include>
-        <include content="Hub_Wall_AlwaysVisible_Info">
+        <include content="Hub_Wall_Info">
             <param name="id">502</param>
         </include>
-        <include content="Hub_Wall_AlwaysVisible_Info">
+        <include content="Hub_Wall_Info">
             <param name="id">503</param>
         </include>
-        <include content="Hub_Wall_AlwaysVisible_Info">
+        <include content="Hub_Wall_Info">
             <param name="id">504</param>
         </include>
-        <include content="Hub_Wall_AlwaysVisible_Info">
+        <include content="Hub_Wall_Info">
             <param name="id">505</param>
         </include>
     </include>
