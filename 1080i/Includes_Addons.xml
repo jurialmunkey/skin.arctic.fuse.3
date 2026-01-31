@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="Addons_Switcher_Items">
+        <item>
+            <label>$LOCALIZE[157]</label>
+            <property name="guid">videos</property>
+            <property name="widget_id">$NUMBER[501]</property>
+            <include content="Hub_Widget_Overlay"><param name="window_id">1108</param></include>
+            <onclick>ActivateWindow(videos,addons://sources/video/,return)</onclick>
+            <visible>!Integer.IsEqual(Container(501).NumItems,0) | Container(501).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisableVideo)</visible>
+        </item>
+        <item>
+            <label>$LOCALIZE[249]</label>
+            <property name="guid">music</property>
+            <property name="widget_id">$NUMBER[502]</property>
+            <include content="Hub_Widget_Overlay"><param name="window_id">1108</param></include>
+            <onclick>ActivateWindow(music,addons://sources/audio/,return)</onclick>
+            <visible>!Integer.IsEqual(Container(502).NumItems,0) | Container(502).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisableMusic)</visible>
+        </item>
+        <item>
+            <label>$LOCALIZE[31011]</label>
+            <property name="guid">image</property>
+            <property name="widget_id">$NUMBER[503]</property>
+            <include content="Hub_Widget_Overlay"><param name="window_id">1108</param></include>
+            <onclick>ActivateWindow(programs,addons://sources/image/,return)</onclick>
+            <visible>!Integer.IsEqual(Container(503).NumItems,0) | Container(503).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisablePicture)</visible>
+        </item>
+        <item>
+            <label>$LOCALIZE[31010]</label>
+            <property name="guid">executable</property>
+            <property name="widget_id">$NUMBER[504]</property>
+            <include content="Hub_Widget_Overlay"><param name="window_id">1108</param></include>
+            <onclick>ActivateWindow(programs,addons://sources/executable/,return)</onclick>
+            <visible>!Integer.IsEqual(Container(504).NumItems,0) | Container(504).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisableProgram)</visible>
+        </item>
+        <item>
+            <label>$LOCALIZE[10821]</label>
+            <property name="guid">game</property>
+            <property name="widget_id">$NUMBER[505]</property>
+            <include content="Hub_Widget_Overlay"><param name="window_id">1108</param></include>
+            <onclick>ActivateWindow(programs,addons://sources/game/,return)</onclick>
+            <visible>!Integer.IsEqual(Container(505).NumItems,0) | Container(505).IsUpdating</visible>
+            <visible>!Skin.HasSetting(Hub.1108.DisableGame)</visible>
+        </item>
+    </include>
+
+    <include name="Addons_Widgets">
+        <param name="altvisible">true</param>
+        <param name="include">Hub_Standard_Widget</param>
+        <definition>
+            <include content="$PARAM[include]" condition="!Skin.HasSetting(Hub.1108.DisableVideo)">
+                <param name="id">$PARAM[baseid]01</param>
+                <param name="content">addons://sources/video/</param>
+                <param name="include">List_Square_Row</param>
+                <param name="target">videos</param>
+                <param name="sortby">lastused</param>
+                <param name="sortorder">descending</param>
+                <param name="visible">$PARAM[altvisible] | String.IsEqual(Container(601).ListItem.Property(guid),videos)</param>
+                <param name="home_switcher">false</param>
+                <param name="dynamic">true</param>
+                <param name="label">$LOCALIZE[157]</param>
+            </include>
+            <include content="$PARAM[include]" condition="!Skin.HasSetting(Hub.1108.DisableMusic)">
+                <param name="id">$PARAM[baseid]02</param>
+                <param name="content">addons://sources/audio/</param>
+                <param name="include">List_Square_Row</param>
+                <param name="target">music</param>
+                <param name="sortby">lastused</param>
+                <param name="sortorder">descending</param>
+                <param name="visible">$PARAM[altvisible] | String.IsEqual(Container(601).ListItem.Property(guid),music)</param>
+                <param name="home_switcher">false</param>
+                <param name="dynamic">true</param>
+                <param name="label">$LOCALIZE[249]</param>
+            </include>
+            <include content="$PARAM[include]" condition="!Skin.HasSetting(Hub.1108.DisablePicture)">
+                <param name="id">$PARAM[baseid]03</param>
+                <param name="content">addons://sources/image/</param>
+                <param name="include">List_Square_Row</param>
+                <param name="target">pictures</param>
+                <param name="sortby">lastused</param>
+                <param name="sortorder">descending</param>
+                <param name="visible">$PARAM[altvisible] | String.IsEqual(Container(601).ListItem.Property(guid),image)</param>
+                <param name="home_switcher">false</param>
+                <param name="dynamic">true</param>
+                <param name="label">$LOCALIZE[31011]</param>
+            </include>
+            <include content="$PARAM[include]" condition="!Skin.HasSetting(Hub.1108.DisableProgram)">
+                <param name="id">$PARAM[baseid]04</param>
+                <param name="content">addons://sources/executable/</param>
+                <param name="include">List_Square_Row</param>
+                <param name="target">programs</param>
+                <param name="sortby">lastused</param>
+                <param name="sortorder">descending</param>
+                <param name="visible">$PARAM[altvisible] | String.IsEqual(Container(601).ListItem.Property(guid),executable)</param>
+                <param name="home_switcher">false</param>
+                <param name="dynamic">true</param>
+                <param name="label">$LOCALIZE[31010]</param>
+            </include>
+            <include content="$PARAM[include]" condition="!Skin.HasSetting(Hub.1108.DisableGame)">
+                <param name="id">$PARAM[baseid]05</param>
+                <param name="content">addons://sources/game/</param>
+                <param name="include">List_Square_Row</param>
+                <param name="target">programs</param>
+                <param name="sortby">lastused</param>
+                <param name="sortorder">descending</param>
+                <param name="visible">$PARAM[altvisible] | String.IsEqual(Container(601).ListItem.Property(guid),game)</param>
+                <param name="home_switcher">false</param>
+                <param name="dynamic">true</param>
+                <param name="label">$LOCALIZE[10821]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Addons_Combined_Widgets">
+        <include content="Addons_Widgets">
+            <param name="baseid">5</param>
+            <param name="include">Hub_Combined_Widget</param>
+            <param name="altvisible">false</param>
+        </include>
+    </include>
+
+    <include name="Addons_Wall_Widgets">
+        <include content="Addons_Widgets">
+            <param name="baseid">5</param>
+            <param name="include">Hub_Wall_Widget</param>
+            <param name="altvisible">false</param>
+        </include>
+    </include>
+
+    <include name="Addons_Content">
+        <include content="Hub_Widgets_Grouplist">
+            <include content="Addons_Widgets">
+                <param name="info">$PARAM[info]</param>
+            </include>
+        </include>
+    </include>
+
+</includes>
