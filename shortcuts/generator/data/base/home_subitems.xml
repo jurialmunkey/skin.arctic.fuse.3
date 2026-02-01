@@ -13,8 +13,27 @@
                 <value name="parts_additional">
                     <![CDATA[
                     <property name="quickjump">{item_quickjump_command}</property>
-                    <onclick condition="!Control.HasFocus(800)">Close</onclick>
+                    <onclick condition="!Control.HasFocus(800)">{item_closemenu_command}</onclick>
                     ]]>
+                </value>
+                <value name="parts_extraitems">
+                    <items menu="{item_menu}" item="{item_x}" mode="submenu">
+                        <item>
+                            <value name="parts_visible">String.IsEqual(Window(Home).Property(SubGroup.IsVisible),{parent_item_guid})</value>
+                            <template>generator/data/parts/menu_item.xmltemplate</template>
+                            <datafile>generator/data/setup/onclick_path.xml</datafile>
+                            <datafile>generator/data/setup/powermenu_item.xml</datafile>
+                            <condition>{item_disabled}!=True</condition>
+                            <condition>{item_label}!=</condition>
+                            <value name="parts_additional">
+                                <![CDATA[
+                                <property name="subgroup_guid">{parent_item_guid}</property>
+                                <property name="quickjump">{item_quickjump_command}</property>
+                                <onclick condition="!Control.HasFocus(800)">{item_closemenu_command}</onclick>
+                                ]]>
+                            </value>
+                        </item>
+                    </items>
                 </value>
             </item>
         </items>
