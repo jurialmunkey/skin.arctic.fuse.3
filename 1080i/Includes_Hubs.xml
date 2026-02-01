@@ -135,6 +135,7 @@
         <param name="include">List_Poster_Row</param>
         <param name="visible">true</param>
         <param name="allowhiddenfocus">false</param>
+        <param name="autoscroll">false</param>
         <definition>
             <include content="$PARAM[include]">
                 <param name="id">$PARAM[id]</param>
@@ -158,6 +159,11 @@
                 <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
                 <content sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" target="$PARAM[target]" limit="$PARAM[limit]" browse="$VAR[Defs_BrowseLimitedLists]">$PARAM[content]</content>
                 <visible allowhiddenfocus="$PARAM[allowhiddenfocus]">$PARAM[visible]</visible>
+
+                <include content="Defs_AutoScroll" condition="$PARAM[autoscroll]">
+                    <param name="condition">[!Control.HasFocus($PARAM[id]) | System.IdleTime(3)]</param>
+                </include>
+
             </include>
             <include content="Widget_Busy">
                 <param name="visible">Container($PARAM[id]).IsUpdating + Integer.IsEqual(Container($PARAM[id]).NumItems)</param>
