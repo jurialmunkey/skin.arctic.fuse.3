@@ -151,17 +151,68 @@
             <control type="group">
                 <left>$PARAM[misc]</left>
 
-                <include content="Layout_MenuList_Labels">
-                    <param name="detailed">$PARAM[detailed]</param>
-                    <param name="selected">$PARAM[selected]</param>
-                    <param name="textcolor">$PARAM[textcolor]</param>
-                </include>
+                <control type="group">
+                    <visible>![$PARAM[detailed]]</visible>
+                    <visible>!String.IsEmpty(ListItem.Property(subgroup_guid))</visible>
+                    <centerleft>40</centerleft>
+                    <centertop>50%</centertop>
+                    <width>40</width>
+                    <height>40</height>
+                    <control type="image">
+                        <!-- <bordersize>icon_home_bordersize</bordersize> -->
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>$PARAM[textcolor]_70</colordiffuse>
+                        <texture>special://skin/extras/icons/arrow-turn-right.png</texture>
+                    </control>
+                </control>
 
-                <include content="Layout_MenuList_Icon">
-                    <param name="detailed">$PARAM[detailed]</param>
-                    <param name="selected">$PARAM[selected]</param>
-                    <param name="textcolor">$PARAM[textcolor]</param>
-                </include>
+                <control type="group">
+                    <animation effect="slide" start="0" end="40" condition="!String.IsEmpty(ListItem.Property(subgroup_guid))">Conditional</animation>
+
+                    <include content="Layout_MenuList_Labels">
+                        <param name="detailed">$PARAM[detailed]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="textcolor">$PARAM[textcolor]</param>
+                    </include>
+
+                    <include content="Layout_MenuList_Icon">
+                        <param name="detailed">$PARAM[detailed]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="textcolor">$PARAM[textcolor]</param>
+                    </include>
+                </control>
+
+                <control type="group">
+                    <visible>![$PARAM[detailed]]</visible>
+                    <visible>String.IsEqual(ListItem.Property(path),Custom_Submenu)</visible>
+                    <centerright>40</centerright>
+                    <centertop>50%</centertop>
+                    <width>40</width>
+                    <height>40</height>
+                    <control type="image">
+                        <bordersize>-16</bordersize>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>$PARAM[textcolor]_70</colordiffuse>
+                        <texture>special://skin/extras/icons/caret-right.png</texture>
+                        <visible>!String.IsEqual(ListItem.Property(guid),Window(Home).Property(SubGroup.IsVisible))</visible>
+                    </control>
+                    <control type="image">
+                        <bordersize>-16</bordersize>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
+                            <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        </include>
+                        <colordiffuse>$PARAM[textcolor]_70</colordiffuse>
+                        <texture>special://skin/extras/icons/caret-down.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(guid),Window(Home).Property(SubGroup.IsVisible))</visible>
+                    </control>
+                </control>
             </control>
 
         </definition>

@@ -1,41 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <variable name="Home_Name_home">
-        <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.Home.Name))">$INFO[Skin.String(HomeSwitcher.Home.Name)]</value>
-        <value>$LOCALIZE[10000]</value>
-    </variable>
     <variable name="Home_Icon_home">
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.Home.Icon))">$INFO[Skin.String(HomeSwitcher.Home.Icon)]</value>
         <value>special://skin/extras/icons/home.png</value>
-    </variable>
-    <variable name="Home_Name_1101">
-        <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1101.Name))">$INFO[Skin.String(HomeSwitcher.1101.Name)]</value>
-        <value>$LOCALIZE[636]</value>
     </variable>
     <variable name="Home_Icon_1101">
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1101.Icon))">$INFO[Skin.String(HomeSwitcher.1101.Icon)]</value>
         <value>special://skin/extras/icons/shapes.png</value>
     </variable>
-    <variable name="Home_Name_1102">
-        <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1102.Name))">$INFO[Skin.String(HomeSwitcher.1102.Name)]</value>
-        <value>$LOCALIZE[636]</value>
-    </variable>
     <variable name="Home_Icon_1102">
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1102.Icon))">$INFO[Skin.String(HomeSwitcher.1102.Icon)]</value>
         <value>special://skin/extras/icons/shapes.png</value>
     </variable>
-    <variable name="Home_Name_1103">
-        <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1103.Name))">$INFO[Skin.String(HomeSwitcher.1103.Name)]</value>
-        <value>$LOCALIZE[636]</value>
-    </variable>
     <variable name="Home_Icon_1103">
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1103.Icon))">$INFO[Skin.String(HomeSwitcher.1103.Icon)]</value>
         <value>special://skin/extras/icons/shapes.png</value>
-    </variable>
-    <variable name="Home_Name_1104">
-        <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1104.Name))">$INFO[Skin.String(HomeSwitcher.1104.Name)]</value>
-        <value>$LOCALIZE[636]</value>
     </variable>
     <variable name="Home_Icon_1104">
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.1104.Icon))">$INFO[Skin.String(HomeSwitcher.1104.Icon)]</value>
@@ -68,7 +48,7 @@
 
     <include name="Home_ControlList_Item_Home">
         <include content="Home_ControlList_Item">
-            <param name="label">$VAR[Home_Name_home]</param>
+            <param name="label">$INFO[Skin.String(HomeSwitcher.Home.Name)]</param>
             <param name="icon">$VAR[Home_Icon_home]</param>
             <param name="action">ReplaceWindow(Home)</param>
             <param name="enabled">true</param>
@@ -79,7 +59,7 @@
 
     <include name="Home_ControlList_Item_1101">
         <include content="Home_ControlList_Item">
-            <param name="label">$VAR[Home_Name_1101]</param>
+            <param name="label">$INFO[Skin.String(HomeSwitcher.1101.Name)]</param>
             <param name="icon">$VAR[Home_Icon_1101]</param>
             <param name="action">ReplaceWindow(1101)</param>
             <param name="enabled">!String.IsEmpty(Skin.String(HomeSwitcher.1101.Toggle))</param>
@@ -90,7 +70,7 @@
 
     <include name="Home_ControlList_Item_1102">
         <include content="Home_ControlList_Item">
-            <param name="label">$VAR[Home_Name_1102]</param>
+            <param name="label">$INFO[Skin.String(HomeSwitcher.1102.Name)]</param>
             <param name="icon">$VAR[Home_Icon_1102]</param>
             <param name="action">ReplaceWindow(1102)</param>
             <param name="enabled">!String.IsEmpty(Skin.String(HomeSwitcher.1102.Toggle))</param>
@@ -101,7 +81,7 @@
 
     <include name="Home_ControlList_Item_1103">
         <include content="Home_ControlList_Item">
-            <param name="label">$VAR[Home_Name_1103]</param>
+            <param name="label">$INFO[Skin.String(HomeSwitcher.1103.Name)]</param>
             <param name="icon">$VAR[Home_Icon_1103]</param>
             <param name="action">ReplaceWindow(1103)</param>
             <param name="enabled">!String.IsEmpty(Skin.String(HomeSwitcher.1103.Toggle))</param>
@@ -112,7 +92,7 @@
 
     <include name="Home_ControlList_Item_1104">
         <include content="Home_ControlList_Item">
-            <param name="label">$VAR[Home_Name_1104]</param>
+            <param name="label">$INFO[Skin.String(HomeSwitcher.1104.Name)]</param>
             <param name="icon">$VAR[Home_Icon_1104]</param>
             <param name="action">ReplaceWindow(1104)</param>
             <param name="enabled">!String.IsEmpty(Skin.String(HomeSwitcher.1104.Toggle))</param>
@@ -238,17 +218,6 @@
                 <onclick condition="Window.IsVisible(1107)">ActivateWindow(tvchannels)</onclick>
                 <nested />
             </control>
-            <control type="button">
-                <height>200</height>
-                <texturenofocus />
-                <texturefocus />
-                <onfocus>SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
-                <onfocus condition="$PARAM[overlay]">SetProperty(InfoPanel.FullSwitch,Wall,Home)</onfocus>
-                <onfocus condition="![$PARAM[overlay]]">ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
-                <onfocus condition="$PARAM[overlay]">SetProperty(Background.ShowOverlay,True,Home)</onfocus>
-                <onfocus condition="![$PARAM[overlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
-                <onfocus>ActivateWindow(1183)</onfocus>
-            </control>
             <control type="image">
                 <include>Home_Fade_Animation</include>
                 <visible>!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
@@ -277,16 +246,27 @@
         <!-- <animation effect="fade" end="0" start="100" time="200" tween="cubic" easing="in">Hidden</animation> -->
     </include>
 
+    <include name="Home_Reposition">
+        <animation effect="slide" start="0" end="0,-70" condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Conditional</animation>
+        <animation effect="slide" start="0" end="-90" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">Conditional</animation>
+    </include>
+
     <variable name="Home_Header_Label">
         <value condition="Skin.HasSetting(HomeSwitcher.DisableDate)">$VAR[Label_ProfileName]</value>
         <value>$INFO[System.Date]</value>
     </variable>
     <include name="Home_Switcher">
-        <include content="Part_Dim_Overlay">
-            <param name="visible">Window.IsActive(1181)</param>
-        </include>
+        <control type="image">
+            <visible>Window.IsActive(1181)</visible>
+            <include content="Animation_Fade_In">
+                <param name="type">Visible</param>
+            </include>
+            <include content="Animation_Fade_Out">
+                <param name="type">Hidden</param>
+            </include>
+            <texture colordiffuse="shadow_back">common/white.png</texture>
+        </control>
         <control type="group">
-            <animation effect="slide" start="0" end="0,-70" condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Conditional</animation>
             <visible>!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
             <include>Home_Animation</include>
             <include content="Furniture_Header" condition="!Skin.HasSetting(HomeSwitcher.DisableHeader)">
@@ -295,11 +275,44 @@
             <control type="group">
                 <include>Home_Group_Definition</include>
                 <control type="group">
-                    <include content="Home_Switcher_Layout" condition="Skin.HasSetting(HomeSwitcher.EnableIcons)">
-                        <param name="include_control">Home_Grouplist_Icon</param>
+                    <include>Home_Reposition</include>
+                    <visible>!Skin.HasSetting(HomeSwitcher.DisableSearch)</visible>
+                    <left>-20</left>
+                    <width>80</width>
+                    <control type="image">
+                        <include>Home_Grouplist_Icon_Definition</include>
+                        <texture background="true" colordiffuse="main_fg_30">special://skin/extras/icons/search.png</texture>
+                        <visible>!Control.HasFocus(300)</visible>
+                    </control>
+                </control>
+                <control type="grouplist">
+                    <include>Home_Reposition</include>
+                    <top>-100</top>
+                    <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.EnableIcons)">
+                        <param name="left">-10</param>
                     </include>
-                    <include content="Home_Switcher_Layout" condition="!Skin.HasSetting(HomeSwitcher.EnableIcons)">
-                        <param name="include_control">Home_Grouplist_Name</param>
+                    <left>-20</left>
+                    <orientation>horizontal</orientation>
+                    <height>1080</height>
+                    <include content="Home_Object">
+                        <param name="window">home</param>
+                        <param name="id">00</param>
+                    </include>
+                    <include content="Home_Object" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1101.Toggle))">
+                        <param name="window">1101</param>
+                        <param name="id">01</param>
+                    </include>
+                    <include content="Home_Object" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1102.Toggle))">
+                        <param name="window">1102</param>
+                        <param name="id">02</param>
+                    </include>
+                    <include content="Home_Object" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1103.Toggle))">
+                        <param name="window">1103</param>
+                        <param name="id">03</param>
+                    </include>
+                    <include content="Home_Object" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1104.Toggle))">
+                        <param name="window">1104</param>
+                        <param name="id">04</param>
                     </include>
                 </control>
 
@@ -348,53 +361,6 @@
         </control>
     </include>
 
-    <include name="Home_Switcher_Layout">
-        <param name="include_control">Home_Grouplist_Name</param>
-        <definition>
-            <control type="grouplist">
-                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch) + !Skin.HasSetting(HomeSwitcher.EnableIcons)">
-                    <param name="left">-30</param>
-                </include>
-                <include>Home_Grouplist_Definition</include>
-                <include content="Home_Grouplist_Icon" condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">
-                    <param name="id">3105</param>
-                    <param name="icon">special://skin/extras/icons/search.png</param>
-                    <param name="window">1105</param>
-                </include>
-                <include content="$PARAM[include_control]">
-                    <param name="name">$VAR[Home_Name_home]</param>
-                    <param name="icon">$VAR[Home_Icon_home]</param>
-                    <param name="window">Home</param>
-                    <param name="id">3100</param>
-                </include>
-                <include content="$PARAM[include_control]" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1101.Toggle))">
-                    <param name="name">$VAR[Home_Name_1101]</param>
-                    <param name="icon">$VAR[Home_Icon_1101]</param>
-                    <param name="window">1101</param>
-                    <param name="id">3101</param>
-                </include>
-                <include content="$PARAM[include_control]" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1102.Toggle))">
-                    <param name="name">$VAR[Home_Name_1102]</param>
-                    <param name="icon">$VAR[Home_Icon_1102]</param>
-                    <param name="window">1102</param>
-                    <param name="id">3102</param>
-                </include>
-                <include content="$PARAM[include_control]" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1103.Toggle))">
-                    <param name="name">$VAR[Home_Name_1103]</param>
-                    <param name="icon">$VAR[Home_Icon_1103]</param>
-                    <param name="window">1103</param>
-                    <param name="id">3103</param>
-                </include>
-                <include content="$PARAM[include_control]" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1104.Toggle))">
-                    <param name="name">$VAR[Home_Name_1104]</param>
-                    <param name="icon">$VAR[Home_Icon_1104]</param>
-                    <param name="window">1104</param>
-                    <param name="id">3104</param>
-                </include>
-            </control>
-        </definition>
-    </include>
-
     <include name="Home_Settings_Button">
         <param name="icon">special://skin/extras/icons/settings.png</param>
         <param name="window">1170</param>
@@ -414,188 +380,228 @@
         </definition>
     </include>
 
-    <include name="Home_Submenu">
+    <include name="Home_Submenu_Panel">
         <definition>
             <control type="group">
-                <animation effect="slide" start="0" end="0,-70" condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Conditional</animation>
-                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch) + !Skin.HasSetting(HomeSwitcher.EnableIcons)">
-                    <param name="left">-10</param>
-                </include>
-                <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch) + Skin.HasSetting(HomeSwitcher.EnableIcons)">
-                    <param name="left">-20</param>
-                </include>
-                <include>Home_Group_Definition</include>
-                <control type="grouplist">
-                    <top>-100</top>
-                    <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.EnableIcons)">
-                        <param name="left">-10</param>
-                    </include>
-                    <left>-20</left>
-                    <orientation>horizontal</orientation>
-                    <height>1080</height>
-                    <include content="Home_Grouplist_Name_Spacer">
-                        <param name="name">$VAR[Home_Name_home]</param>
-                        <param name="icon">$VAR[Home_Icon_home]</param>
-                        <param name="visible">!Window.IsVisible(home)</param>
-                    </include>
-                    <include content="Home_Grouplist_Name_Spacer" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1101.Toggle))">
-                        <param name="name">$VAR[Home_Name_1101]</param>
-                        <param name="icon">$VAR[Home_Icon_1101]</param>
-                        <param name="visible">!Window.IsVisible(home) + !Window.IsVisible(1101)</param>
-                    </include>
-                    <include content="Home_Grouplist_Name_Spacer" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1102.Toggle))">
-                        <param name="name">$VAR[Home_Name_1102]</param>
-                        <param name="icon">$VAR[Home_Icon_1102]</param>
-                        <param name="visible">!Window.IsVisible(home) + !Window.IsVisible(1101) + !Window.IsVisible(1102)</param>
-                    </include>
-                    <include content="Home_Grouplist_Name_Spacer" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1103.Toggle))">
-                        <param name="name">$VAR[Home_Name_1103]</param>
-                        <param name="icon">$VAR[Home_Icon_1103]</param>
-                        <param name="visible">!Window.IsVisible(home) + !Window.IsVisible(1101) + !Window.IsVisible(1102) + !Window.IsVisible(1103)</param>
-                    </include>
-                    <include content="Home_Grouplist_Name_Spacer" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1104.Toggle))">
-                        <param name="name">$VAR[Home_Name_1104]</param>
-                        <param name="icon">$VAR[Home_Icon_1104]</param>
-                        <param name="visible">!Window.IsVisible(home) + !Window.IsVisible(1101) + !Window.IsVisible(1102) + !Window.IsVisible(1103) + !Window.IsVisible(1104)</param>
-                    </include>
+                <top>100</top>
+                <width>560</width>
+                <height>880</height>
+                <control type="group">
+                    <visible>Window.IsVisible($PARAM[window])</visible>
+                    <include>Animation_SlideIn_Dialog</include>
                     <control type="group">
-                        <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
-                            <param name="left">20</param>
-                        </include>
-                        <left>0</left>
-                        <top>100</top>
-                        <width>560</width>
-                        <height>880</height>
-                        <control type="group">
-                            <include>Animation_SlideIn_Dialog</include>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsGreater(Container(8000).NumItems,8)</visible>
-                            </control>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsEqual(Container(8000).NumItems,8)</visible>
-                                <bottom>80</bottom>
-                            </control>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsEqual(Container(8000).NumItems,7)</visible>
-                                <bottom>160</bottom>
-                            </control>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsEqual(Container(8000).NumItems,6)</visible>
-                                <bottom>240</bottom>
-                            </control>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsEqual(Container(8000).NumItems,5)</visible>
-                                <bottom>320</bottom>
-                            </control>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsEqual(Container(8000).NumItems,4)</visible>
-                                <bottom>400</bottom>
-                            </control>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsEqual(Container(8000).NumItems,3)</visible>
-                                <bottom>480</bottom>
-                            </control>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsEqual(Container(8000).NumItems,2)</visible>
-                                <bottom>560</bottom>
-                            </control>
-                            <control type="group">
-                                <include>Part_Background_Panel</include>
-                                <visible>Integer.IsEqual(Container(8000).NumItems,1)</visible>
-                                <bottom>640</bottom>
-                            </control>
-                            <include content="List_DialogSelect">
-                                <param name="id">8000</param>
-                                <param name="itemlayout_include">Layout_MenuList</param>
-                                <top>100</top>
-                                <bottom>60</bottom>
-                                <left>60</left>
-                                <right>60</right>
-                                <oninfo>PreviousMenu</oninfo>
-                                <ondown>noop</ondown>
-                                <onleft>PreviousMenu</onleft>
-                                <onright>61</onright>
-                                <onup>PreviousMenu</onup>
-                                <orientation>vertical</orientation>
-                                <pagecontrol>61</pagecontrol>
-                                <content>
-                                    <include>skinvariables-$PARAM[window]submenu-staticitems</include>
-                                </content>
-                            </include>
-                            <include content="Part_Scrollbar">
-                                <centerright>40</centerright>
-                                <top>60</top>
-                                <bottom>60</bottom>
-                                <onleft>8000</onleft>
-                                <onright>PreviousMenu</onright>
-                            </include>
-                        </control>
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsGreater(Container(80$PARAM[id]).NumItems,8)</visible>
                     </control>
                     <control type="group">
-                        <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">
-                            <param name="left">-500</param>
-                        </include>
-                        <left>-480</left>
-                        <height>80</height>
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsEqual(Container(80$PARAM[id]).NumItems,8)</visible>
+                        <bottom>80</bottom>
+                    </control>
+                    <control type="group">
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsEqual(Container(80$PARAM[id]).NumItems,7)</visible>
+                        <bottom>160</bottom>
+                    </control>
+                    <control type="group">
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsEqual(Container(80$PARAM[id]).NumItems,6)</visible>
+                        <bottom>240</bottom>
+                    </control>
+                    <control type="group">
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsEqual(Container(80$PARAM[id]).NumItems,5)</visible>
+                        <bottom>320</bottom>
+                    </control>
+                    <control type="group">
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsEqual(Container(80$PARAM[id]).NumItems,4)</visible>
+                        <bottom>400</bottom>
+                    </control>
+                    <control type="group">
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsEqual(Container(80$PARAM[id]).NumItems,3)</visible>
+                        <bottom>480</bottom>
+                    </control>
+                    <control type="group">
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsEqual(Container(80$PARAM[id]).NumItems,2)</visible>
+                        <bottom>560</bottom>
+                    </control>
+                    <control type="group">
+                        <include>Part_Background_Panel</include>
+                        <visible>Integer.IsEqual(Container(80$PARAM[id]).NumItems,1)</visible>
+                        <bottom>640</bottom>
+                    </control>
+                    <include content="List_DialogSelect">
+                        <param name="id">80$PARAM[id]</param>
+                        <param name="itemlayout_include">Layout_MenuList</param>
                         <top>100</top>
-                        <include>Home_Grouplist_Name_Faker</include>
-                        <animation effect="fade" start="0" end="100" time="150">WindowOpen</animation>
+                        <bottom>60</bottom>
+                        <left>60</left>
+                        <right>60</right>
+                        <oninfo>PreviousMenu</oninfo>
+                        <ondown>noop</ondown>
+                        <onleft>PreviousMenu</onleft>
+                        <onright>61$PARAM[id]</onright>
+                        <onup>PreviousMenu</onup>
+                        <orientation>vertical</orientation>
+                        <pagecontrol>61$PARAM[id]</pagecontrol>
+                        <content>
+                            <include>skinvariables-$PARAM[window]submenu-staticitems</include>
+                        </content>
+                    </include>
+                    <include content="Part_Scrollbar">
+                        <param name="id">61$PARAM[id]</param>
+                        <centerright>40</centerright>
+                        <top>60</top>
+                        <bottom>60</bottom>
+                        <onleft>80$PARAM[id]</onleft>
+                        <onright>PreviousMenu</onright>
+                    </include>
+                </control>
+            </control>
+            <include content="Home_Focus_Object">
+                <param name="window">$PARAM[window]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Home_Object">
+        <param name="use_icons">Skin.HasSetting(HomeSwitcher.EnableIcons)</param>
+        <definition>
+            <control type="group">
+                <top>100</top>
+                <width>560</width>
+                <height>80</height>
+                <control type="group">
+                    <left>80</left>
+                    <control type="label">
+                        <font>font_main_bold</font>
+                        <textcolor>main_fg_30</textcolor>
+                        <label>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Name)]</label>
+                        <left>30</left>
+                        <visible>![$PARAM[use_icons]]</visible>
+                    </control>
+                    <control type="group">
+                        <left>10</left>
+                        <width>80</width>
+                        <visible>$PARAM[use_icons]</visible>
+                        <control type="image">
+                            <include>Home_Grouplist_Icon_Definition</include>
+                            <texture background="true" colordiffuse="main_fg_30">$VAR[Home_Icon_$PARAM[window]]</texture>
+                        </control>
+                    </control>
+                </control>
+            </control>
+            <include content="Home_Focus_Object">
+                <param name="window">$PARAM[window]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Home_Focus_Object">
+        <include content="Home_Focus_Faker">
+            <param name="window">$PARAM[window]</param>
+        </include>
+        <include content="Home_Spacer">
+            <param name="name">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Name)]</param>
+            <param name="icon">$VAR[Home_Icon_$PARAM[window]]</param>
+        </include>
+    </include>
+
+    <include name="Home_Focus_Faker">
+        <param name="use_icons">Skin.HasSetting(HomeSwitcher.EnableIcons)</param>
+        <definition>
+            <control type="group">
+                <left>-480</left>
+                <width>480</width>
+                <top>100</top>
+                <height>80</height>
+                <control type="group">
+                    <visible>Window.IsVisible($PARAM[window])</visible>
+                    <control type="button">
+                        <font>font_main_bold</font>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
+                        <label>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Name)]</label>
+                        <width>auto</width>
+                        <include>Texture_Highlight_Button_FakeFocus_H</include>
+                        <visible>![$PARAM[use_icons]]</visible>
+                    </control>
+                    <control type="label">
+                        <font>font_main_bold</font>
+                        <textcolor>$VAR[ColorSelected]</textcolor>
+                        <label>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Name)]</label>
+                        <left>30</left>
+                        <visible>![$PARAM[use_icons]]</visible>
+                    </control>
+                    <control type="group">
+                        <left>10</left>
+                        <width>80</width>
+                        <visible>$PARAM[use_icons]</visible>
+                        <control type="image">
+                            <include>Texture_Menu_Highlight_H</include>
+                        </control>
+                        <control type="image">
+                            <include>Home_Grouplist_Icon_Definition</include>
+                            <texture background="true" colordiffuse="$VAR[ColorSelected]">$VAR[Home_Icon_$PARAM[window]]</texture>
+                        </control>
                     </control>
                 </control>
             </control>
         </definition>
     </include>
 
-    <variable name="Home_Name_Current">
-        <value condition="Window.IsVisible(Home)">$VAR[Home_Name_home]</value>
-        <value condition="Window.IsVisible(1101)">$VAR[Home_Name_1101]</value>
-        <value condition="Window.IsVisible(1102)">$VAR[Home_Name_1102]</value>
-        <value condition="Window.IsVisible(1103)">$VAR[Home_Name_1103]</value>
-        <value condition="Window.IsVisible(1104)">$VAR[Home_Name_1104]</value>
-    </variable>
+    <include name="Home_Submenu_Start">
+        <control type="button" id="70$PARAM[id]">
+            <texturefocus />
+            <texturenofocus />
+            <onfocus condition="!Integer.IsEqual(Container(80$PARAM[id]).NumItems,0)">SetFocus(80$PARAM[id],0,absolute)</onfocus>
+            <onfocus condition="Integer.IsEqual(Container(80$PARAM[id]).NumItems,0)">PreviousMenu</onfocus>
+            <onfocus condition="Integer.IsEqual(Container(80$PARAM[id]).NumItems,0)">SetProperty(Bumper.Direction,Up,Home)</onfocus>
+            <onfocus condition="Integer.IsEqual(Container(80$PARAM[id]).NumItems,0)">ActivateWindow(1180)</onfocus>
+        </control>
+    </include>
 
-    <variable name="Home_Icon_Current">
-        <value condition="Window.IsVisible(Home)">$VAR[Home_Icon_home]</value>
-        <value condition="Window.IsVisible(1101)">$VAR[Home_Icon_1101]</value>
-        <value condition="Window.IsVisible(1102)">$VAR[Home_Icon_1102]</value>
-        <value condition="Window.IsVisible(1103)">$VAR[Home_Icon_1103]</value>
-        <value condition="Window.IsVisible(1104)">$VAR[Home_Icon_1104]</value>
-    </variable>
-
-    <include name="Home_Grouplist_Name_Faker">
-        <param name="use_icons">Skin.HasSetting(HomeSwitcher.EnableIcons)</param>
+    <include name="Home_Submenu">
         <definition>
+            <include content="Home_Submenu_Start"><param name="id">00</param></include>
+            <include content="Home_Submenu_Start"><param name="id">01</param></include>
+            <include content="Home_Submenu_Start"><param name="id">02</param></include>
+            <include content="Home_Submenu_Start"><param name="id">03</param></include>
+            <include content="Home_Submenu_Start"><param name="id">04</param></include>
             <control type="group">
-                <height>80</height>
-                <centertop>50%</centertop>
-                <control type="button">
-                    <font>font_main_bold</font>
-                    <textcolor>$VAR[ColorSelected]</textcolor>
-                    <focusedcolor>$VAR[ColorSelected]</focusedcolor>
-                    <label>$VAR[Home_Name_Current]</label>
-                    <width>auto</width>
-                    <include>Texture_Highlight_Button_FakeFocus_H</include>
-                    <visible>![$PARAM[use_icons]]</visible>
-                </control>
-                <control type="group">
-                    <left>10</left>
-                    <width>80</width>
-                    <visible>$PARAM[use_icons]</visible>
-                    <control type="image">
-                        <include>Texture_Menu_Highlight_H</include>
-                    </control>
-                    <control type="image">
-                        <include>Home_Grouplist_Icon_Definition</include>
-                        <texture background="true" colordiffuse="$VAR[ColorSelected]">$VAR[Home_Icon_Current]</texture>
-                    </control>
+                <include>Home_Group_Definition</include>
+                <control type="grouplist">
+                    <top>-100</top>
+                    <include>Home_Reposition</include>
+                    <include content="Object_Left" condition="Skin.HasSetting(HomeSwitcher.EnableIcons)">
+                        <param name="left">-10</param>
+                    </include>
+                    <left>-20</left>
+                    <orientation>horizontal</orientation>
+                    <height>1080</height>
+                    <include content="Home_Submenu_Panel">
+                        <param name="window">home</param>
+                        <param name="id">00</param>
+                    </include>
+                    <include content="Home_Submenu_Panel" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1101.Toggle))">
+                        <param name="window">1101</param>
+                        <param name="id">01</param>
+                    </include>
+                    <include content="Home_Submenu_Panel" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1102.Toggle))">
+                        <param name="window">1102</param>
+                        <param name="id">02</param>
+                    </include>
+                    <include content="Home_Submenu_Panel" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1103.Toggle))">
+                        <param name="window">1103</param>
+                        <param name="id">03</param>
+                    </include>
+                    <include content="Home_Submenu_Panel" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1104.Toggle))">
+                        <param name="window">1104</param>
+                        <param name="id">04</param>
+                    </include>
                 </control>
             </control>
         </definition>
@@ -626,7 +632,6 @@
                 <height>80</height>
                 <centertop>50%</centertop>
                 <control type="button" id="$PARAM[id]">
-                    <onclick>Dialog.Close(1183,true)</onclick>
                     <onclick>ReplaceWindow($PARAM[window])</onclick>
                     <texturenofocus />
                 </control>
@@ -657,28 +662,12 @@
         </definition>
     </include>
 
-    <include name="Home_Grouplist_Name">
-        <definition>
-            <control type="togglebutton">
-                <font>font_main_bold</font>
-                <textcolor>main_fg_30</textcolor>
-                <focusedcolor>$VAR[ColorSelected]</focusedcolor>
-                <label>$PARAM[name]</label>
-                <altlabel>[COLOR=$VAR[ColorSelected]]$PARAM[name][/COLOR]</altlabel>
-                <height>80</height>
-                <width>auto</width>
-                <centertop>50%</centertop>
-                <onclick>Dialog.Close(1183,true)</onclick>
-                <onclick>ReplaceWindow($PARAM[window])</onclick>
-                <include>Texture_Highlight_ToggleButton_FakeFocus_H</include>
-                <usealttexture>Window.IsVisible($PARAM[window]) + Integer.IsEqual(System.CurrentControlID,300)</usealttexture>
-            </control>
-        </definition>
-    </include>
-    <include name="Home_Grouplist_Name_Spacer">
+    <include name="Home_Spacer">
+        <param name="visible">true</param>
         <param name="use_icons">Skin.HasSetting(HomeSwitcher.EnableIcons)</param>
         <definition>
             <control type="button">
+                <left>-560</left>
                 <font>font_main_bold</font>
                 <textcolor>00ffffff</textcolor>
                 <focusedcolor>00ffffff</focusedcolor>
