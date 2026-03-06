@@ -543,6 +543,37 @@
             <onclick>ClearProperty(Shortcuts.Groupings.Subgroup,Home)</onclick>
             <onclick>RunScript(script.skinvariables,set_shortcut=HomeSwitcher.$PARAM[window].Spotlight,use_rawpath=True)</onclick>
         </include>
+        <include content="Settings_Button" description="Limit">
+            <param name="dialog">true</param>
+            <param name="id">8004</param>
+            <param name="control">button</param>
+            <label>$LOCALIZE[31188]</label>
+            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Limit)]</label2>
+            <onclick>Skin.SetNumeric(HomeSwitcher.$PARAM[window].Spotlight.Limit)</onclick>
+            <visible>![String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path,noop)]</visible>
+        </include>
+        <include content="Settings_Button" description="Sort by">
+            <param name="dialog">true</param>
+            <param name="id">8005</param>
+            <param name="control">button</param>
+            <label>$LOCALIZE[31016]</label>
+            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortMethod)]</label2>
+            <onclick>RunScript(script.skinvariables,run_dialog=select,heading=$LOCALIZE[31016],separator=||,list=default||label||userpreference||random||dateadded||lastplayed||playcount||year||rating||userrating||votes||genre||country||studio||playlist||episodenumber||season||totalepisodes||watchedepisodes||tvshowstatus||tvshowtitle||file||title||track||time||artist||album||lastupdated||lastused||date,"executebuiltin=Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortMethod,{v})")</onclick>
+            <visible>![String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path,noop)]</visible>
+        </include>
+        
+        <include content="Settings_Button" description="Sort order">
+            <param name="dialog">true</param>
+            <param name="id">8006</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31517]</label>
+            <onclick condition="String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,ascending)">Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)</onclick>
+            <onclick condition="Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)">Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,ascending)</onclick>
+            <selected>Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)</selected>
+            <visible>![String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path,noop)]</visible>
+            <visible>!String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortMethod))</visible>
+            <visible>!String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortMethod),random)</visible>
+        </include>
     </include>
 
     <include name="DialogShortcuts_Window_Settings_Search">
