@@ -293,7 +293,7 @@
             <param name="dialog">true</param>
             <param name="id">23098</param>
             <label>$LOCALIZE[1034] $LOCALIZE[33063]</label>
-            <visible>$EXP[DialogShortcuts_HasCustomSubmenu_Expression] | $EXP[DialogShortcuts_IsSubMenuMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_HasCustomSubmenu_Expression]</visible>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
             <onback>22904</onback>
         </include>
@@ -311,19 +311,6 @@
             <onclick>SetProperty(Shortcuts.EditGUID,guid=$INFO[Container(22001).ListItem.Property(guid)],Home)</onclick>
             <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(22001).ListItem.Property(menu)],Home)</onclick>
             <onclick>SetProperty(Shortcuts.EditMode,mode=submenu,Home)</onclick>
-            <onback>22904</onback>
-        </include>
-
-        <!-- Widgets: Limit -->
-        <include content="Settings_Button">
-            <param name="dialog">true</param>
-            <param name="id">23043</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31042]</label>
-            <label2>$INFO[Container(22001).ListItem.Property(quickjump)]</label2>
-            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_numeric&amp;&amp;quickjump&amp;&amp;heading::Jump to widget])</onclick>
-            <visible>$EXP[DialogShortcuts_IsSubMenuMode_Expression]</visible>
-            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
             <onback>22904</onback>
         </include>
     </include>
@@ -459,8 +446,6 @@
     </include>
 
     <expression name="DialogShortcuts_IsSubGrouping_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homesubmenu)]</expression>
-
-    <expression name="DialogShortcuts_IsSubMenuMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=submenu) + Skin.HasSetting(Submenu.EnableSideMode)]</expression>
 
     <expression name="DialogShortcuts_IsWidgetMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=widgets)]</expression>
 
@@ -860,6 +845,7 @@
                 <description>Default Setting Label</description>
                 <label>$LOCALIZE[5]</label>
                 <visible>$PARAM[visible]</visible>
+                <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
             </include>
             <include content="Settings_Button" description="Loopback">
                 <param name="id">9631</param>
@@ -868,6 +854,7 @@
                 <onclick>Skin.ToggleSetting(HomeSwitcher.LoopBack)</onclick>
                 <selected>!Skin.HasSetting(HomeSwitcher.LoopBack)</selected>
                 <visible>$PARAM[visible]</visible>
+                <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
             </include>
         </definition>
     </include>

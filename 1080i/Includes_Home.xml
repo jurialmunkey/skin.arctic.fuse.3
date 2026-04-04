@@ -40,7 +40,7 @@
             <param name="label">Search</param>
             <param name="icon">special://skin/extras/icons/search.png</param>
             <param name="action">ReplaceWindow(1105)</param>
-            <param name="enabled">!Skin.HasSetting(HomeSwitcher.DisableSearch)</param>
+            <param name="enabled">[!Skin.HasSetting(HomeSwitcher.DisableSearch) + !Skin.HasSetting(HomeSwitcher.Vertical)]</param>
             <param name="visible">Window.IsVisible(1105)</param>
             <param name="mod">$PARAM[mod]</param>
         </include>
@@ -180,11 +180,11 @@
 
                 <item>
                     <property name="action">ActivateWindow(1170)</property>
-                    <visible>!Skin.HasSetting(HomeSwitcher.LoopBack)</visible>
+                    <visible>!$EXP[Exp_Hubs_Menu_Loopback]</visible>
                 </item>
                 <item>
                     <property name="action">noop</property>
-                    <visible>!Skin.HasSetting(HomeSwitcher.LoopBack)</visible>
+                    <visible>!$EXP[Exp_Hubs_Menu_Loopback]</visible>
                 </item>
 
                 <include content="Home_ControlList_Items">
@@ -192,6 +192,33 @@
                 </include>
             </content>
         </control>
+    </include>
+
+    <include name="Home_Horz_Movement">
+        <onup>ActivateWindow(1181)</onup>
+        <oninfo>ActivateWindow(1181)</oninfo>
+        <ondown>$VAR[Hub_Action_Down]</ondown>
+    </include>
+
+    <include name="Home_Vert_Movement">
+        <onleft>SetProperty(Bumper.Direction,Left,Home)</onleft>
+        <onleft>ActivateWindow(1180)</onleft>
+
+        <onright condition="![String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall) | String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Combined)]">SetFocus($INFO[Window.Property(TMDBHelper.WidgetContainer)],0,absolute)</onright>
+        <onright condition="[String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall) | String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Combined)]">400</onright>
+    </include>
+
+    <include name="Home_Movement">
+        <include content="Home_Horz_Movement" condition="!Skin.HasSetting(HomeSwitcher.Vertical)">
+            <param name="window">$PARAM[window]</param>
+        </include>
+        <include content="Home_Vert_Movement" condition="Skin.HasSetting(HomeSwitcher.Vertical)">
+            <param name="window">$PARAM[window]</param>
+        </include>
+
+        <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus(300))</onback>
+        <onback condition="Player.HasMedia">309</onback>
+        <onback condition="!Player.HasMedia">303</onback>
     </include>
 
     <include name="Home_Control">
@@ -204,8 +231,10 @@
                 <texturenofocus />
                 <texturefocus />
 
-                <onleft>$INFO[Container(399).ListItem(-1).Property(action)]</onleft>
-                <onright>$INFO[Container(399).ListItem(1).Property(action)]</onright>
+                <onleft condition="!Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(-1).Property(action)]</onleft>
+                <onright condition="!Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(1).Property(action)]</onright>
+                <onup condition="Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(-1).Property(action)]</onup>
+                <ondown condition="Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(1).Property(action)]</ondown>
 
                 <onfocus>SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
                 <onfocus condition="$PARAM[overlay]">SetProperty(InfoPanel.FullSwitch,Wall,Home)</onfocus>
@@ -216,11 +245,17 @@
                 <onclick condition="$PARAM[onclick_condition] + String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Shortcut.Target))">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Shortcut.Path)]</onclick>
                 <onclick condition="Window.IsVisible(1108)">ActivateWindow(addonbrowser)</onclick>
                 <onclick condition="Window.IsVisible(1107)">ActivateWindow(tvchannels)</onclick>
+
+                <include content="Home_Movement">
+                    <param name="window">$PARAM[window]</param>
+                </include>
+
                 <nested />
             </control>
             <control type="image">
                 <include>Home_Fade_Animation</include>
                 <visible>!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
+                <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
                 <texture colordiffuse="main_bg_70">background/combined_topmenu.png</texture>
                 <bottom>0</bottom>
             </control>
@@ -238,8 +273,8 @@
         <animation effect="fade" end="0" start="100" time="200" tween="cubic" easing="out">Hidden</animation>
     </include>
     <include name="Home_Slide_Animation">
-        <animation effect="slide" start="0,-200" end="0" time="400" tween="cubic" easing="out" reversible="false" condition="!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))">Conditional</animation>
-        <animation effect="slide" end="0,-200" start="0" delay="100" time="400" tween="cubic" easing="out" reversible="false" condition="String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))">Conditional</animation>
+        <animation effect="slide" start="0,-200" end="0" time="400" tween="cubic" easing="out" reversible="false" condition="![String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible)) | Skin.HasSetting(HomeSwitcher.Vertical)]">Conditional</animation>
+        <animation effect="slide" end="0,-200" start="0" delay="100" time="400" tween="cubic" easing="out" reversible="false" condition="String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible)) | Skin.HasSetting(HomeSwitcher.Vertical)">Conditional</animation>
     </include>
     <include name="Home_Info_Animation">
         <animation effect="fade" start="0" end="100" time="400" delay="200" tween="cubic" easing="in">Visible</animation>
@@ -255,7 +290,8 @@
         <value condition="Skin.HasSetting(HomeSwitcher.DisableDate)">$VAR[Label_ProfileName]</value>
         <value>$INFO[System.Date]</value>
     </variable>
-    <include name="Home_Switcher">
+
+    <include name="Home_Switcher_Horz">
         <control type="image">
             <visible>Window.IsActive(1181)</visible>
             <include content="Animation_Fade_In">
@@ -321,6 +357,99 @@
         </control>
     </include>
 
+    <include name="Home_Switcher_Vert">
+        <control type="image">
+            <visible>Window.IsActive(1181)</visible>
+            <include content="Animation_Fade_In">
+                <param name="type">Visible</param>
+            </include>
+            <include content="Animation_Fade_Out">
+                <param name="type">Hidden</param>
+            </include>
+            <texture colordiffuse="shadow_back">common/white.png</texture>
+        </control>
+        <control type="group">
+            <animation type="Conditional" reversible="false" condition="!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))">
+                <effect type="fade" start="0" end="100" time="400" delay="200" tween="cubic" easing="out" />
+                <effect type="slide" tween="cubic" start="0" end="100" time="400" />
+            </animation>
+            <animation type="Conditional" reversible="false" condition="String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))">
+                <effect type="fade" end="0" start="100" time="200" tween="cubic" easing="out" />
+                <effect type="slide" tween="cubic" start="100" end="0" time="400" />
+            </animation>
+            <control type="group">
+                <control type="grouplist">
+                    <orientation>vertical</orientation>
+                    <centerleft>0</centerleft>
+                    <width>80</width>
+                    <itemgap>20</itemgap>
+                    <align>center</align>
+                    <include content="Home_Object_VertIcon">
+                        <param name="icon">$VAR[Home_Icon_home]</param>
+                        <param name="window">home</param>
+                    </include>
+                    <include content="Home_Object_VertIcon" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1101.Toggle))">
+                        <param name="icon">$VAR[Home_Icon_1101]</param>
+                        <param name="window">1101</param>
+                    </include>
+                    <include content="Home_Object_VertIcon" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1102.Toggle))">
+                        <param name="icon">$VAR[Home_Icon_1102]</param>
+                        <param name="window">1102</param>
+                    </include>
+                    <include content="Home_Object_VertIcon" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1103.Toggle))">
+                        <param name="icon">$VAR[Home_Icon_1103]</param>
+                        <param name="window">1103</param>
+                    </include>
+                    <include content="Home_Object_VertIcon" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1104.Toggle))">
+                        <param name="icon">$VAR[Home_Icon_1104]</param>
+                        <param name="window">1104</param>
+                    </include>
+                    <include content="Home_Object_VertIcon" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1106.Toggle))">
+                        <param name="icon">$VAR[Home_Switcher_Right_Buttons_Calendar]</param>
+                        <param name="window">1106</param>
+                    </include>
+                    <include content="Home_Object_VertIcon" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))">
+                        <param name="icon">special://skin/extras/icons/livetv.png</param>
+                        <param name="window">1107</param>
+                        <param name="visible">System.HasPVRAddon + PVR.HasTVChannels</param>
+                    </include>
+                    <include content="Home_Object_VertIcon" condition="!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))">
+                        <param name="icon">special://skin/extras/icons/addon.png</param>
+                        <param name="window">1108</param>
+                    </include>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="Home_Object_VertIcon">
+        <param name="visible">True</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <height>80</height>
+                <width>80</width>
+                <control type="group">
+                    <visible>Window.IsVisible($PARAM[window])</visible>
+                    <control type="image">
+                        <include>Texture_Menu_Highlight_H</include>
+                    </control>
+                    <control type="image">
+                        <include>Home_Grouplist_Icon_Definition</include>
+                        <texture background="true" colordiffuse="$VAR[ColorSelected]">$PARAM[icon]</texture>
+                    </control>
+                </control>
+                <control type="group">
+                    <visible>!Window.IsVisible($PARAM[window])</visible>
+                    <control type="image">
+                        <include>Home_Grouplist_Icon_Definition</include>
+                        <texture background="true" colordiffuse="main_fg_30">$PARAM[icon]</texture>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <variable name="Home_Switcher_Right_Buttons_Calendar">
         <value condition="Skin.String(HomeSwitcher.1106.UpNextMode,trakt_calendar)">special://skin/extras/icons/trakt.png</value>
         <value>special://skin/extras/icons/calendar.png</value>
@@ -354,7 +483,7 @@
                 <param name="window">1108</param>
                 <param name="id">3108</param>
             </include>
-            <include condition="!Skin.HasSetting(HomeSwitcher.LoopBack)">Home_Settings_Button</include>
+            <include condition="!$EXP[Exp_Hubs_Menu_Loopback]">Home_Settings_Button</include>
             <control type="group">
                 <width>0</width>
             </control>
