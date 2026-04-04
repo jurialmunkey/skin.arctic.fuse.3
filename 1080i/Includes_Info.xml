@@ -97,7 +97,8 @@
             <left>40</left>
             <height>40</height>
             <visible>$PARAM[visible]</visible>
-            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,$PARAM[dbtype]) + !String.IsEmpty($PARAM[container]$PARAM[listitem].$PARAM[infolabel])</visible>
+            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,$PARAM[dbtype])</visible>
+            <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].$PARAM[infolabel])</visible>
             <control type="grouplist">
                 <include>Info_Meta_Grouplist_Definition</include>
                 <include content="Info_Meta_Object">
@@ -118,32 +119,39 @@
         <param name="override_tvshow">false</param>
         <definition>
 
-            <include content="Info_Meta_Item_Row">
-                <param name="icon">special://skin/extras/icons/music.png</param>
-                <param name="infolabel">Title</param>
-                <param name="listitem">$PARAM[listitem]</param>
-                <param name="container">$PARAM[container]</param>
-                <param name="label_prefix">$INFO[$PARAM[container]$PARAM[listitem].TrackNumber,,. ]</param>
-                <param name="dbtype">song</param>
-                <param name="visible">$PARAM[visible] + String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) + String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description))</param>
-            </include>
-            <include content="Info_Meta_Item_Row">
-                <param name="icon">special://skin/extras/icons/person.png</param>
-                <param name="infolabel">Contributors</param>
-                <param name="listitem">$PARAM[listitem]</param>
-                <param name="container">$PARAM[container]</param>
-                <param name="dbtype">song</param>
-                <param name="visible">$PARAM[visible] + String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) + String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description))</param>
-            </include>
-            <include content="Info_Meta_Item_Row">
-                <param name="icon">special://skin/extras/icons/clock-rotate-left.png</param>
-                <param name="infolabel">LastPlayed</param>
-                <param name="listitem">$PARAM[listitem]</param>
-                <param name="container">$PARAM[container]</param>
-                <param name="label_suffix">$INFO[$PARAM[container]$PARAM[listitem].PlayCount, x, ]</param>
-                <param name="dbtype">song</param>
-                <param name="visible">$PARAM[visible] + String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Album_Description)) + String.IsEmpty($PARAM[container]$PARAM[listitem].Property(Artist_Description))</param>
-            </include>
+            <control type="group">
+                <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,song)</visible>
+                <height>120</height>
+                <control type="grouplist">
+                    <orientation>vertical</orientation>
+                    <include content="Info_Meta_Item_Row">
+                        <param name="icon">special://skin/extras/icons/music.png</param>
+                        <param name="infolabel">Title</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="label_prefix">$INFO[$PARAM[container]$PARAM[listitem].TrackNumber,,. ]</param>
+                        <param name="dbtype">song</param>
+                        <param name="visible">$PARAM[visible]</param>
+                    </include>
+                    <include content="Info_Meta_Item_Row">
+                        <param name="icon">special://skin/extras/icons/person.png</param>
+                        <param name="infolabel">Contributors</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="dbtype">song</param>
+                        <param name="visible">$PARAM[visible]</param>
+                    </include>
+                    <include content="Info_Meta_Item_Row">
+                        <param name="icon">special://skin/extras/icons/clock-rotate-left.png</param>
+                        <param name="infolabel">LastPlayed</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="label_suffix">$INFO[$PARAM[container]$PARAM[listitem].PlayCount, x, ]</param>
+                        <param name="dbtype">song</param>
+                        <param name="visible">$PARAM[visible]</param>
+                    </include>
+                </control>
+            </control>
 
             <control type="group">
                 <left>40</left>
@@ -956,10 +964,10 @@
             </control>
         </control>
 
-        <!-- Season / Video / Album / Song / Channel -->
+        <!-- Season / Video / Album / Channel -->
         <control type="group">
             <height>120</height>
-            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,song) | !String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel)</visible>
+            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | !String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel)</visible>
             <include content="Info_Plot_TextBox">
                 <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
