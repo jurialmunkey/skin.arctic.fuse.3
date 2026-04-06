@@ -61,6 +61,24 @@
             <onclick>Skin.ToggleSetting(HomeSwitcher.EnableIcons)</onclick>
             <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
         </include>
+        <include content="Settings_Button" description="Header">
+            <param name="dialog">false</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">011</param>
+            <param name="dialog">false</param>
+            <param name="control">button</param>
+            <label>$LOCALIZE[31208]</label>
+            <label2>$VAR[Label_SkinSettings_Header]</label2>
+            <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
+
+            <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableDate)</onclick>
+            <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableHeader)</onclick>
+
+            <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableDate)</onclick>
+
+            <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableHeader) + Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableHeader)</onclick>
+        </include>
 
 
         <include content="Settings_Label" description="Layout">
@@ -335,23 +353,7 @@
             <onclick>Skin.ToggleSetting(Header.DisableWeather)</onclick>
             <selected>!Skin.HasSetting(Header.DisableWeather)</selected>
         </include>
-        <include content="Settings_Button" description="Date">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">007</param>
-            <param name="dialog">false</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[10000]</label>
-            <label2>$VAR[Label_SkinSettings_Header]</label2>
 
-            <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableDate)</onclick>
-            <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableHeader)</onclick>
-
-            <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableDate)</onclick>
-
-            <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableHeader) + Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableHeader)</onclick>
-        </include>
 
         <include content="Settings_Label" description="Context">
             <param name="window">skinsettings</param>
