@@ -71,7 +71,7 @@
                 <include content="Object_ContentDynamic" condition="$PARAM[dynamic]">
                     <param name="content">$PARAM[content]</param>
                     <param name="sortby">$PARAM[sortby]</param>
-                    <param name="sorthow">$PARAM[sorthow]</param>
+                    <param name="sortorder">$PARAM[sortorder]</param>
                     <param name="target">$PARAM[target]</param>
                 </include>
                 <nested />
@@ -299,6 +299,7 @@
     <include name="Hub_Widgets_Grouplist">
         <control type="grouplist" id="602">
             <animation effect="slide" start="0" end="0,-440" condition="true">Conditional</animation>
+
             <onup condition="!Control.IsVisible(301) + Skin.HasSetting(HomeSwitcher.Vertical)">SetProperty(Bumper.Direction,Up,Home)</onup>
             <onup condition="!Control.IsVisible(301) + Skin.HasSetting(HomeSwitcher.Vertical)">ActivateWindow(1180)</onup>
             <onup condition="!Control.IsVisible(301) + !Skin.HasSetting(HomeSwitcher.Vertical)">302</onup>
@@ -581,6 +582,8 @@
 
                 <onfocus condition="Integer.IsEqual(Container(301).NumItems,0)">SetFocus(300)</onfocus>
                 <onfocus condition="!Integer.IsEqual(Container(301).NumItems,0)">SetFocus(311)</onfocus>
+
+                <visible>$EXP[Exp_Hubs_Spotlight_HasItems]</visible>
 
                 <orientation>horizontal</orientation>
                 <scrolltime tween="quadratic">400</scrolltime>
