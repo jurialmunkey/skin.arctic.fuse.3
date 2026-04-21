@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <variable name="Label_Setting_Plotline">
-        <value condition="Skin.HasSetting(Plotline.EnableGenre)">$LOCALIZE[515]</value>
+    <variable name="Label_Setting_Plotline_Movies">
+        <value condition="Skin.String(Plotline.Movies,Genre)">$LOCALIZE[515]</value>
+        <value condition="String.IsEmpty(Skin.String(Plotline.Movies)) + Skin.HasSetting(Plotline.EnableGenre)">$LOCALIZE[515]</value>
+        <value condition="Skin.String(Plotline.Movies,Director)">$LOCALIZE[20339]</value>
+        <value condition="Skin.String(Plotline.Movies,None)">None</value>
+        <value>$LOCALIZE[202]</value>
+    </variable>
+
+    <variable name="Label_Setting_Plotline_TV">
+        <value condition="Skin.String(Plotline.TV,Genre)">$LOCALIZE[515]</value>
+        <value condition="String.IsEmpty(Skin.String(Plotline.TV)) + Skin.HasSetting(Plotline.EnableGenre)">$LOCALIZE[515]</value>
+        <value condition="Skin.String(Plotline.TV,None)">None</value>
         <value>$LOCALIZE[202]</value>
     </variable>
 
@@ -491,6 +501,14 @@
     </variable>
 
     <variable name="Label_Tagline">
+        <value condition="Skin.String(Plotline.Movies,Director) + String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Director)">$INFO[ListItem.Director]</value>
+        <value condition="Skin.String(Plotline.Movies,Director) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.DBType),movie) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director))">$VAR[Label_FromDirector]</value>
+        <value condition="Skin.String(Plotline.Movies,Director) + String.IsEqual(ListItem.DBType,movie)" />
+        <value condition="Skin.String(Plotline.Movies,Director) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.DBType),movie)" />
+        <value condition="Skin.String(Plotline.Movies,None) + String.IsEqual(ListItem.DBType,movie)" />
+        <value condition="Skin.String(Plotline.Movies,None) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.DBType),movie)" />
+        <value condition="Skin.String(Plotline.TV,None) + String.IsEqual(ListItem.DBType,tvshow)" />
+        <value condition="Skin.String(Plotline.TV,None) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.DBType),tvshow)" />
         <value condition="!String.IsEmpty(ListItem.Tagline)">$INFO[ListItem.Tagline]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Tagline))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Tagline)]</value>
     </variable>

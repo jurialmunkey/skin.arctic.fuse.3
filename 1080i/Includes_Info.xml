@@ -930,14 +930,23 @@
             <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | $PARAM[override]</visible>
             <height>$PARAM[height]</height>
             <control type="group">
-                <visible>[!String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline) + !Skin.HasSetting(Plotline.EnableGenre)] | [!String.IsEmpty($PARAM[container]$PARAM[listitem].Genre) + Skin.HasSetting(Plotline.EnableGenre)]</visible>
+                <visible>[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + [Skin.String(Plotline.Movies,Genre) | [String.IsEmpty(Skin.String(Plotline.Movies)) + Skin.HasSetting(Plotline.EnableGenre)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + Skin.String(Plotline.Movies,Director) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Director)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + String.IsEmpty(Skin.String(Plotline.Movies)) + !Skin.HasSetting(Plotline.EnableGenre) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + [Skin.String(Plotline.TV,Genre) | [String.IsEmpty(Skin.String(Plotline.TV)) + Skin.HasSetting(Plotline.EnableGenre)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + String.IsEmpty(Skin.String(Plotline.TV)) + !Skin.HasSetting(Plotline.EnableGenre) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline)]</visible>
+                <control type="label">
+                    <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                    <label>$INFO[$PARAM[container]$PARAM[listitem].Director]</label>
+                    <left>40</left>
+                    <height>40</height>
+                    <font>font_main_bold</font>
+                    <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + Skin.String(Plotline.Movies,Director) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Director)</visible>
+                    <width>$PARAM[width]</width>
+                </control>
                 <control type="label">
                     <textcolor>$PARAM[colordiffuse]_90</textcolor>
                     <label>$INFO[$PARAM[container]$PARAM[listitem].Tagline]</label>
                     <left>40</left>
                     <height>40</height>
                     <font>font_main_bold</font>
-                    <visible>!Skin.HasSetting(Plotline.EnableGenre)</visible>
+                    <visible>[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + String.IsEmpty(Skin.String(Plotline.Movies)) + !Skin.HasSetting(Plotline.EnableGenre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + String.IsEmpty(Skin.String(Plotline.TV)) + !Skin.HasSetting(Plotline.EnableGenre)]</visible>
                     <width>$PARAM[width]</width>
                 </control>
                 <control type="label">
@@ -947,7 +956,7 @@
                     <height>40</height>
                     <font>font_main_bold</font>
                     <width>$PARAM[width]</width>
-                    <visible>Skin.HasSetting(Plotline.EnableGenre)</visible>
+                    <visible>[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + [Skin.String(Plotline.Movies,Genre) | [String.IsEmpty(Skin.String(Plotline.Movies)) + Skin.HasSetting(Plotline.EnableGenre)]]] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + [Skin.String(Plotline.TV,Genre) | [String.IsEmpty(Skin.String(Plotline.TV)) + Skin.HasSetting(Plotline.EnableGenre)]]]</visible>
                 </control>
                 <include content="Info_Plot_TextBox">
                     <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot]</param>
@@ -959,7 +968,7 @@
                 </include>
             </control>
             <control type="group">
-                <visible>![[!String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline) + !Skin.HasSetting(Plotline.EnableGenre)] | [!String.IsEmpty($PARAM[container]$PARAM[listitem].Genre) + Skin.HasSetting(Plotline.EnableGenre)]]</visible>
+                <visible>![[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + [Skin.String(Plotline.Movies,Genre) | [String.IsEmpty(Skin.String(Plotline.Movies)) + Skin.HasSetting(Plotline.EnableGenre)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + Skin.String(Plotline.Movies,Director) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Director)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + String.IsEmpty(Skin.String(Plotline.Movies)) + !Skin.HasSetting(Plotline.EnableGenre) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + [Skin.String(Plotline.TV,Genre) | [String.IsEmpty(Skin.String(Plotline.TV)) + Skin.HasSetting(Plotline.EnableGenre)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + String.IsEmpty(Skin.String(Plotline.TV)) + !Skin.HasSetting(Plotline.EnableGenre) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline)]]</visible>
                 <include content="Info_Plot_TextBox">
                     <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot]</param>
                     <param name="colordiffuse">$PARAM[colordiffuse]</param>
