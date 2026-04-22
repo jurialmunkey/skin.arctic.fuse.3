@@ -922,41 +922,17 @@
         </control>
     </include>
 
-    <include name="Info_Plot_Main">
-
-        <!-- Movie / TV -->
-        <control type="group">
-            <visible>$PARAM[visible]</visible>
-            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | $PARAM[override]</visible>
-            <height>$PARAM[height]</height>
+    <include name="Info_Plot_Main_Plotline">
+        <definition>
             <control type="group">
-                <visible>[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + [Skin.String(Plotline.Movies,Genre) | [String.IsEmpty(Skin.String(Plotline.Movies)) + Skin.HasSetting(Plotline.EnableGenre)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + Skin.String(Plotline.Movies,Director) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Director)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + String.IsEmpty(Skin.String(Plotline.Movies)) + !Skin.HasSetting(Plotline.EnableGenre) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + [Skin.String(Plotline.TV,Genre) | [String.IsEmpty(Skin.String(Plotline.TV)) + Skin.HasSetting(Plotline.EnableGenre)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + String.IsEmpty(Skin.String(Plotline.TV)) + !Skin.HasSetting(Plotline.EnableGenre) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline)]</visible>
+                <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].$PARAM[infolabel])</visible>
                 <control type="label">
                     <textcolor>$PARAM[colordiffuse]_90</textcolor>
-                    <label>$INFO[$PARAM[container]$PARAM[listitem].Director]</label>
-                    <left>40</left>
-                    <height>40</height>
-                    <font>font_main_bold</font>
-                    <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + Skin.String(Plotline.Movies,Director) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Director)</visible>
-                    <width>$PARAM[width]</width>
-                </control>
-                <control type="label">
-                    <textcolor>$PARAM[colordiffuse]_90</textcolor>
-                    <label>$INFO[$PARAM[container]$PARAM[listitem].Tagline]</label>
-                    <left>40</left>
-                    <height>40</height>
-                    <font>font_main_bold</font>
-                    <visible>[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + String.IsEmpty(Skin.String(Plotline.Movies)) + !Skin.HasSetting(Plotline.EnableGenre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + String.IsEmpty(Skin.String(Plotline.TV)) + !Skin.HasSetting(Plotline.EnableGenre)]</visible>
-                    <width>$PARAM[width]</width>
-                </control>
-                <control type="label">
-                    <textcolor>$PARAM[colordiffuse]_90</textcolor>
-                    <label>$INFO[$PARAM[container]$PARAM[listitem].Genre]</label>
+                    <label>$INFO[$PARAM[container]$PARAM[listitem].$PARAM[infolabel]]</label>
                     <left>40</left>
                     <height>40</height>
                     <font>font_main_bold</font>
                     <width>$PARAM[width]</width>
-                    <visible>[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + [Skin.String(Plotline.Movies,Genre) | [String.IsEmpty(Skin.String(Plotline.Movies)) + Skin.HasSetting(Plotline.EnableGenre)]]] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + [Skin.String(Plotline.TV,Genre) | [String.IsEmpty(Skin.String(Plotline.TV)) + Skin.HasSetting(Plotline.EnableGenre)]]]</visible>
                 </control>
                 <include content="Info_Plot_TextBox">
                     <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot]</param>
@@ -967,8 +943,9 @@
                     <param name="top">40</param>
                 </include>
             </control>
+
             <control type="group">
-                <visible>![[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + [Skin.String(Plotline.Movies,Genre) | [String.IsEmpty(Skin.String(Plotline.Movies)) + Skin.HasSetting(Plotline.EnableGenre)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + Skin.String(Plotline.Movies,Director) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Director)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + String.IsEmpty(Skin.String(Plotline.Movies)) + !Skin.HasSetting(Plotline.EnableGenre) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + [Skin.String(Plotline.TV,Genre) | [String.IsEmpty(Skin.String(Plotline.TV)) + Skin.HasSetting(Plotline.EnableGenre)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Genre)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) + String.IsEmpty(Skin.String(Plotline.TV)) + !Skin.HasSetting(Plotline.EnableGenre) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Tagline)]]</visible>
+                <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].$PARAM[infolabel])</visible>
                 <include content="Info_Plot_TextBox">
                     <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot]</param>
                     <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -977,6 +954,98 @@
                     <param name="width">$PARAM[width]</param>
                 </include>
             </control>
+        </definition>
+    </include>
+
+    <include name="Info_Plot_Main">
+
+        <!-- Movie -->
+        <control type="group">
+            <visible>$PARAM[visible]</visible>
+            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override]</visible>
+            <height>$PARAM[height]</height>
+
+            <!-- No Plotline -->
+            <include content="Info_Plot_TextBox"  condition="Skin.String(Plotline.Movie,None)">
+                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="use_textbox">$PARAM[use_textbox]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+            </include>
+
+            <!-- Director Plotline -->
+            <include content="Info_Plot_Main_Plotline" condition="Skin.String(Plotline.Movie,Director)">
+                <param name="infolabel">Director</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="container">$PARAM[container]</param>
+                <param name="listitem">$PARAM[listitem]</param>
+                <param name="use_textbox">$PARAM[use_textbox]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+            </include>
+
+            <!-- Genre Plotline -->
+            <include content="Info_Plot_Main_Plotline" condition="Skin.String(Plotline.Movie,Genre)">
+                <param name="infolabel">Genre</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="container">$PARAM[container]</param>
+                <param name="listitem">$PARAM[listitem]</param>
+                <param name="use_textbox">$PARAM[use_textbox]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+            </include>
+
+            <!-- Tagline Plotline-->
+            <include content="Info_Plot_Main_Plotline" condition="String.IsEmpty(Skin.String(Plotline.Movie))">
+                <param name="infolabel">Tagline</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="container">$PARAM[container]</param>
+                <param name="listitem">$PARAM[listitem]</param>
+                <param name="use_textbox">$PARAM[use_textbox]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+            </include>
+
+        </control>
+
+        <!-- TVShow -->
+        <control type="group">
+            <visible>$PARAM[visible]</visible>
+            <visible>![$PARAM[override]]</visible>
+            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow)</visible>
+            <height>$PARAM[height]</height>
+
+            <!-- No Plotline -->
+            <include content="Info_Plot_TextBox"  condition="Skin.String(Plotline.TVShow,None)">
+                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="use_textbox">$PARAM[use_textbox]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+            </include>
+
+            <!-- Genre Plotline -->
+            <include content="Info_Plot_Main_Plotline" condition="Skin.String(Plotline.TVShow,Genre)">
+                <param name="infolabel">Genre</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="container">$PARAM[container]</param>
+                <param name="listitem">$PARAM[listitem]</param>
+                <param name="use_textbox">$PARAM[use_textbox]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+            </include>
+
+            <!-- Tagline Plotline-->
+            <include content="Info_Plot_Main_Plotline" condition="String.IsEmpty(Skin.String(Plotline.TVShow))">
+                <param name="infolabel">Tagline</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="container">$PARAM[container]</param>
+                <param name="listitem">$PARAM[listitem]</param>
+                <param name="use_textbox">$PARAM[use_textbox]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="width">$PARAM[width]</param>
+            </include>
         </control>
 
         <!-- Season / Video / Album / Channel -->
