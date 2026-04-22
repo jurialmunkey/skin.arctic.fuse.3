@@ -645,19 +645,43 @@
         <include content="Settings_Label" description="Interface">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">006</param>
-            <label>$LOCALIZE[19033]</label>
+            <param name="id">010</param>
+            <label>$LOCALIZE[31126]</label>
         </include>
-        <include content="Settings_Button" description="Genre">
+        <include content="Settings_Button" description="Movie plotline">
             <param name="dialog">false</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">010</param>
+            <param name="id">011</param>
             <param name="dialog">false</param>
             <param name="control">button</param>
-            <label>$LOCALIZE[31123]</label>
-            <label2>$VAR[Label_Setting_Plotline]</label2>
-            <onclick>Skin.ToggleSetting(Plotline.EnableGenre)</onclick>
+            <label>$LOCALIZE[342]</label>
+            <label2>$VAR[Label_Setting_Plotline_Movies]</label2>
+            <onclick condition="String.IsEmpty(Skin.String(Plotline.Movie))">Skin.SetString(Plotline.Movie,Genre)</onclick>
+            <onclick condition="Skin.String(Plotline.Movie,Genre)">Skin.SetString(Plotline.Movie,Director)</onclick>
+            <onclick condition="Skin.String(Plotline.Movie,Director)">Skin.SetString(Plotline.Movie,None)</onclick>
+            <onclick condition="Skin.String(Plotline.Movie,None)">Skin.Reset(Plotline.Movie)</onclick>
+        </include>
+        <include content="Settings_Button" description="TV plotline">
+            <param name="dialog">false</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">012</param>
+            <param name="dialog">false</param>
+            <param name="control">button</param>
+            <label>$LOCALIZE[20343]</label>
+            <label2>$VAR[Label_Setting_Plotline_TVShow]</label2>
+            <onclick condition="String.IsEmpty(Skin.String(Plotline.TVShow))">Skin.SetString(Plotline.TVShow,Genre)</onclick>
+            <onclick condition="Skin.String(Plotline.TVShow,Genre)">Skin.SetString(Plotline.TVShow,Episodes)</onclick>
+            <onclick condition="Skin.String(Plotline.TVShow,Episodes)">Skin.SetString(Plotline.TVShow,None)</onclick>
+            <onclick condition="Skin.String(Plotline.TVShow,None)">Skin.Reset(Plotline.TVShow)</onclick>
+        </include>
+
+        <include content="Settings_Label" description="Interface">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">006</param>
+            <label>$LOCALIZE[19033]</label>
         </include>
         <include content="Settings_Button" description="Star Rating">
             <param name="dialog">false</param>
