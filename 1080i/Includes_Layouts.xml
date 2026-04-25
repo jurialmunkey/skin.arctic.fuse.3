@@ -45,6 +45,7 @@
 
     <include name="Layout_ViewType">
         <param name="selected">false</param>
+        <param name="current">ListItem.IsSelected</param>
         <param name="icon">$INFO[ListItem.Icon]</param>
         <definition>
             <control type="group">
@@ -61,6 +62,34 @@
                     <include content="Object_SelectBox" condition="$PARAM[selected]">
                         <param name="indicator">false</param>
                         <param name="focusbounce">true</param>
+                    </include>
+
+                    <include content="Object_Control" condition="$PARAM[selected]">
+                        <param name="control">group</param>
+                        <visible>$PARAM[current]</visible>
+                        <centerbottom>0</centerbottom>
+                        <right>25</right>
+                        <width>64</width>
+                        <height>64</height>
+
+                        <!-- Focused Item -->
+                        <include content="Object_Indicator_Selected">
+                            <param name="shadow">false</param>
+                        </include>
+
+                        <!-- Black Circle Backing -->
+                        <control type="image">
+                            <texture colordiffuse="ff333333">indicator/circle-colordiffuse.png</texture>
+                        </control>
+
+                        <control type="image">
+                            <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true" flipx="true" flipy="true">progress/circle/p100.png</texture>
+                            <aspectratio align="center" aligny="center">keep</aspectratio>
+                        </control>
+                        <control type="image">
+                            <bordersize>20</bordersize>
+                            <texture colordiffuse="$VAR[ColorWatchedProgress]">indicator/checkmark.png</texture>
+                        </control>
                     </include>
                 </control>
             </control>
