@@ -969,7 +969,7 @@
 
         <!-- Episodes Plotline -->
         <include content="Info_Plot_Main_Plotline_Content" condition="Skin.String(Plotline.$PARAM[dbtype],Episodes)">
-            <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Property(totalepisodes),, $LOCALIZE[20453]]$INFO[$PARAM[container]$PARAM[listitem].Property(totalseasons), $LOCALIZE[31373] , $LOCALIZE[36905]]</param>
+            <param name="label">$INFO[ListItem.Property(watchedepisodes),$LOCALIZE[16102] , $LOCALIZE[1443] ]$INFO[ListItem.Property(totalepisodes)] $LOCALIZE[20453]</param>
             <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Property(totalepisodes))</param>
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
             <param name="container">$PARAM[container]</param>
@@ -1034,11 +1034,11 @@
             </include>
         </control>
 
-        <!-- TVShow -->
+        <!-- TVShow / Season -->
         <control type="group">
             <visible>$PARAM[visible]</visible>
             <visible>![$PARAM[override]]</visible>
-            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow)</visible>
+            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow)</visible>
             <height>$PARAM[height]</height>
             <include content="Info_Plot_Main_Plotline">
                 <param name="dbtype">tvshow</param>
@@ -1051,12 +1051,12 @@
             </include>
         </control>
 
-        <!-- Season / Video / Album / Channel -->
+        <!-- Video / Album / Channel -->
         <control type="group">
             <height>$PARAM[height]</height>
             <visible>$PARAM[visible]</visible>
             <visible>![$PARAM[override]]</visible>
-            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | !String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel)</visible>
+            <visible>String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,album) | !String.IsEmpty($PARAM[container]$PARAM[listitem].ChannelNumberLabel)</visible>
             <include content="Info_Plot_TextBox">
                 <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot,, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Album_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].Property(Artist_Description),, ]$INFO[$PARAM[container]$PARAM[listitem].AddonDescription,, ]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
