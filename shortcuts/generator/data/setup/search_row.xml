@@ -27,4 +27,20 @@
             <value>False</value>
         </rule>
     </rules>
+    <rules name="widget_custom_onclick">
+        <rule>
+            <condition>{item_widget_action}==ActivateWindow(VideoInfo,return)</condition>
+            <value><![CDATA[
+                <onclick>Action(Info)</onclick>
+            ]]></value>
+        </rule>
+        <rule>
+            <condition>{item_widget_action}==play</condition>
+            <value><![CDATA[
+                <onclick condition="!String.IsEmpty(ListItem.FileNameAndPath)">PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
+                <onclick condition="String.IsEmpty(ListItem.FileNameAndPath) + !String.IsEmpty(ListItem.FolderPath)">PlayMedia($ESCINFO[ListItem.FolderPath])</onclick>
+                <onclick condition="String.IsEmpty(ListItem.FileNameAndPath) + String.IsEmpty(ListItem.FolderPath)">Action(Select)</onclick>
+            ]]></value>
+        </rule>
+    </rules>
 </contents>

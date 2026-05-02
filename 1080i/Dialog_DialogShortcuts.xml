@@ -338,6 +338,23 @@
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
 
+        <!-- Widgets: Action -->
+        <!-- Cycle Default -> VideoInfo -> Play -> Default.
+             Stored VideoInfo is URL-encoded; generator maps it to Action(Info). -->
+        <include content="Settings_Button">
+            <param name="dialog">true</param>
+            <param name="id">23012</param>
+            <param name="control">button</param>
+            <label>Widget action</label>
+            <label2>$VAR[Label_Shortcut_Widget_Action]</label2>
+            <onclick condition="!String.Contains(Container(22001).ListItem.Property(widget_action),VideoInfo) + !String.IsEqual(Container(22001).ListItem.Property(widget_action),play)">RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_action&amp;&amp;ActivateWindow%28VideoInfo%2Creturn%29])</onclick>
+            <onclick condition="String.Contains(Container(22001).ListItem.Property(widget_action),VideoInfo)">RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_action&amp;&amp;play])</onclick>
+            <onclick condition="String.IsEqual(Container(22001).ListItem.Property(widget_action),play)">RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_action&amp;&amp;null])</onclick>
+            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <onback>22904</onback>
+            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
+        </include>
+
         <!-- Widgets: Sort by -->
         <include content="Settings_Button">
             <param name="dialog">true</param>

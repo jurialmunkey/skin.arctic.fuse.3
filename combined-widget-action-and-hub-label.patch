@@ -1,0 +1,214 @@
+diff -ruN a/1080i/Dialog_DialogShortcuts.xml b/1080i/Dialog_DialogShortcuts.xml
+--- a/1080i/Dialog_DialogShortcuts.xml	2026-04-28 09:23:52.000000000 +0000
++++ b/1080i/Dialog_DialogShortcuts.xml	2026-05-02 06:59:03.516090377 +0000
+@@ -338,6 +338,23 @@
+             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
+         </include>
+ 
++        <!-- Widgets: Action -->
++        <!-- Cycle Default -> VideoInfo -> Play -> Default.
++             Stored VideoInfo is URL-encoded; generator maps it to Action(Info). -->
++        <include content="Settings_Button">
++            <param name="dialog">true</param>
++            <param name="id">23012</param>
++            <param name="control">button</param>
++            <label>Widget action</label>
++            <label2>$VAR[Label_Shortcut_Widget_Action]</label2>
++            <onclick condition="!String.Contains(Container(22001).ListItem.Property(widget_action),VideoInfo) + !String.IsEqual(Container(22001).ListItem.Property(widget_action),play)">RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_action&amp;&amp;ActivateWindow%28VideoInfo%2Creturn%29])</onclick>
++            <onclick condition="String.Contains(Container(22001).ListItem.Property(widget_action),VideoInfo)">RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_action&amp;&amp;play])</onclick>
++            <onclick condition="String.IsEqual(Container(22001).ListItem.Property(widget_action),play)">RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_action&amp;&amp;null])</onclick>
++            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
++            <onback>22904</onback>
++            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
++        </include>
++
+         <!-- Widgets: Sort by -->
+         <include content="Settings_Button">
+             <param name="dialog">true</param>
+diff -ruN a/1080i/Includes_Hubs.xml b/1080i/Includes_Hubs.xml
+--- a/1080i/Includes_Hubs.xml	2026-04-28 09:23:52.000000000 +0000
++++ b/1080i/Includes_Hubs.xml	2026-05-02 06:59:06.551806501 +0000
+@@ -101,6 +101,7 @@
+                     <onup>601</onup>
+                     <include>$PARAM[include_action]</include>
+                     <include>Hub_Grouplist_OnLeftRight</include>
++                    <nested />
+                     <onback condition="$EXP[Exp_Navigation_OnParent] + !Player.HasMedia">SetFocus($PARAM[id],0,absolute)</onback>
+                     <include content="Action_Widget_OnBack">
+                         <param name="id">$PARAM[id]</param>
+@@ -158,6 +159,7 @@
+                 <onback condition="Player.HasMedia">309</onback>
+ 
+                 <include>Hub_Grouplist_OnLeftRight</include>
++                <nested />
+                 <ondown>ActivateWindow(1180)</ondown>
+                 <onfocus>SetProperty(TMDbHelper.WidgetContainer,$PARAM[id])</onfocus>
+                 <onfocus>ClearProperty(Background.ShowOverlay,Home)</onfocus>
+@@ -709,6 +711,30 @@
+         <include>Background</include>
+         <include condition="Skin.HasSetting(HomeSwitcher.Vertical)">Hub_Submenu_Fade</include>
+     </include>
++
++    <include name="Hub_Moving_Hub_Label">
++        <param name="window">home</param>
++        <definition>
++            <control type="group">
++                <top>920</top>
++                <left>view_pad</left>
++                <width>900</width>
++                <height>80</height>
++                <visible>!$EXP[Exp_InfoDialogs]</visible>
++                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Name))</visible>
++                <control type="label">
++                    <width>900</width>
++                    <height>80</height>
++                    <align>left</align>
++                    <aligny>center</aligny>
++                    <font>font_midi_bold</font>
++                    <textcolor>main_fg_50</textcolor>
++                    <label>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Name)]</label>
++                </control>
++            </control>
++        </definition>
++    </include>
++
+     <include name="Hub_Window">
+         <param name="overlay">true</param>
+         <param name="spotlight">true</param>
+@@ -772,6 +798,9 @@
+                                     <param name="wall">false</param>
+                                 </include>
+                             </control>
++                            <include content="Hub_Moving_Hub_Label">
++                                <param name="window">$PARAM[window]</param>
++                            </include>
+                         </control>
+ 
+                         <!-- Info Panels -->
+@@ -841,6 +870,9 @@
+                                 <param name="wall">false</param>
+                             </include>
+                         </control>
++                        <include content="Hub_Moving_Hub_Label">
++                            <param name="window">$PARAM[window]</param>
++                        </include>
+                     </control>
+ 
+                     <!-- Info Panels -->
+diff -ruN a/1080i/Includes_Labels.xml b/1080i/Includes_Labels.xml
+--- a/1080i/Includes_Labels.xml	2026-04-28 09:23:52.000000000 +0000
++++ b/1080i/Includes_Labels.xml	2026-05-02 06:59:00.415010096 +0000
+@@ -1223,6 +1223,12 @@
+         <value>$LOCALIZE[571]</value>
+     </variable>
+ 
++    <variable name="Label_Shortcut_Widget_Action">
++        <value condition="String.Contains(Container(22001).ListItem.Property(widget_action),VideoInfo)">VideoInfo</value>
++        <value condition="String.IsEqual(Container(22001).ListItem.Property(widget_action),play)">Play</value>
++        <value>$LOCALIZE[571]</value>
++    </variable>
++
+     <variable name="Label_Plot_TMDbHelper">
+         <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.Plot]</value>
+         <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.DBType),episode) + !String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.base_plot))">$VAR[Label_Plot_Episode_Type_TMDBHelper,,: ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Title)]$INFO[Window(Home).Property(TMDBHelper.ListItem.base_plot), ~ ,]</value>
+diff -ruN a/shortcuts/generator/data/parts/search_row.xmltemplate b/shortcuts/generator/data/parts/search_row.xmltemplate
+--- a/shortcuts/generator/data/parts/search_row.xmltemplate	2026-04-28 09:23:52.000000000 +0000
++++ b/shortcuts/generator/data/parts/search_row.xmltemplate	2026-05-02 06:59:00.438063570 +0000
+@@ -8,4 +8,5 @@
+     <param name="limit">{widget_limit}</param>
+     <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),{widget_guid})</param>
+     <param name="allowhiddenfocus">true</param>
++    {widget_custom_onclick}
+ </include>
+\ No newline at end of file
+diff -ruN a/shortcuts/generator/data/parts/search_row_standard.xmltemplate b/shortcuts/generator/data/parts/search_row_standard.xmltemplate
+--- a/shortcuts/generator/data/parts/search_row_standard.xmltemplate	2026-04-28 09:23:52.000000000 +0000
++++ b/shortcuts/generator/data/parts/search_row_standard.xmltemplate	2026-05-02 06:59:00.464152153 +0000
+@@ -26,4 +26,6 @@
+     <include content="Defs_AutoScroll" condition="{widget_isautoscroll}">
+         <param name="condition">[!Control.HasFocus({widget_id}) | System.IdleTime(3)]</param>
+     </include>
++
++    {widget_custom_onclick}
+ </include>
+diff -ruN a/shortcuts/generator/data/parts/widgets_combined.xmltemplate b/shortcuts/generator/data/parts/widgets_combined.xmltemplate
+--- a/shortcuts/generator/data/parts/widgets_combined.xmltemplate	2026-04-28 09:23:52.000000000 +0000
++++ b/shortcuts/generator/data/parts/widgets_combined.xmltemplate	2026-05-02 06:59:00.488472141 +0000
+@@ -8,4 +8,5 @@
+     <param name="limit">{widget_limit}</param>
+     <param name="autoscroll">{widget_isautoscroll}</param>
+     <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),{widget_guid})</param>
++    {widget_custom_onclick}
+ </include>
+\ No newline at end of file
+diff -ruN a/shortcuts/generator/data/parts/widgets_wall.xmltemplate b/shortcuts/generator/data/parts/widgets_wall.xmltemplate
+--- a/shortcuts/generator/data/parts/widgets_wall.xmltemplate	2026-04-28 09:23:52.000000000 +0000
++++ b/shortcuts/generator/data/parts/widgets_wall.xmltemplate	2026-05-02 06:59:00.515122485 +0000
+@@ -7,4 +7,5 @@
+     <param name="sortorder">{widget_sortorder}</param>
+     <param name="limit">{widget_limit}</param>
+     <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),{widget_guid})</param>
++    {widget_custom_onclick}
+ </include>
+\ No newline at end of file
+diff -ruN a/shortcuts/generator/data/setup/search_row.xml b/shortcuts/generator/data/setup/search_row.xml
+--- a/shortcuts/generator/data/setup/search_row.xml	2026-04-28 09:23:52.000000000 +0000
++++ b/shortcuts/generator/data/setup/search_row.xml	2026-05-02 06:59:00.542305381 +0000
+@@ -27,4 +27,20 @@
+             <value>False</value>
+         </rule>
+     </rules>
++    <rules name="widget_custom_onclick">
++        <rule>
++            <condition>{item_widget_action}==ActivateWindow(VideoInfo,return)</condition>
++            <value><![CDATA[
++                <onclick>Action(Info)</onclick>
++            ]]></value>
++        </rule>
++        <rule>
++            <condition>{item_widget_action}==play</condition>
++            <value><![CDATA[
++                <onclick condition="!String.IsEmpty(ListItem.FileNameAndPath)">PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
++                <onclick condition="String.IsEmpty(ListItem.FileNameAndPath) + !String.IsEmpty(ListItem.FolderPath)">PlayMedia($ESCINFO[ListItem.FolderPath])</onclick>
++                <onclick condition="String.IsEmpty(ListItem.FileNameAndPath) + String.IsEmpty(ListItem.FolderPath)">Action(Select)</onclick>
++            ]]></value>
++        </rule>
++    </rules>
+ </contents>
+\ No newline at end of file
+diff -ruN a/shortcuts/generator/data/setup/widgets_row.xml b/shortcuts/generator/data/setup/widgets_row.xml
+--- a/shortcuts/generator/data/setup/widgets_row.xml	2026-04-28 09:23:52.000000000 +0000
++++ b/shortcuts/generator/data/setup/widgets_row.xml	2026-05-02 06:59:00.569969390 +0000
+@@ -179,6 +179,20 @@
+     </rules>
+     <rules name="widget_custom_onclick">
+         <rule>
++            <condition>{item_widget_action}==ActivateWindow(VideoInfo,return)</condition>
++            <value><![CDATA[
++                <onclick>Action(Info)</onclick>
++            ]]></value>
++        </rule>
++        <rule>
++            <condition>{item_widget_action}==play</condition>
++            <value><![CDATA[
++                <onclick condition="!String.IsEmpty(ListItem.FileNameAndPath)">PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
++                <onclick condition="String.IsEmpty(ListItem.FileNameAndPath) + !String.IsEmpty(ListItem.FolderPath)">PlayMedia($ESCINFO[ListItem.FolderPath])</onclick>
++                <onclick condition="String.IsEmpty(ListItem.FileNameAndPath) + String.IsEmpty(ListItem.FolderPath)">Action(Select)</onclick>
++            ]]></value>
++        </rule>
++        <rule>
+             <condition>{item_path}==Custom_Submenu</condition>
+             <value><![CDATA[
+                 <onclick condition="String.IsEmpty(ListItem.Property(target))">$INFO[ListItem.FolderPath]</onclick>
+diff -ruN a/shortcuts/skinvariables-generator.json b/shortcuts/skinvariables-generator.json
+--- a/shortcuts/skinvariables-generator.json	2026-04-28 09:23:52.000000000 +0000
++++ b/shortcuts/skinvariables-generator.json	2026-05-02 06:59:03.517235128 +0000
+@@ -3,7 +3,7 @@
+     "output": "script-skinvariables-generator-includes-{skinuser}.xml",
+     "header": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<includes>",
+     "footer": "</includes>",
+-    "buildv": "0.1.5",
++    "buildv": "0.1.5-widget-action",
+     "skinid": "skin.arctic.fuse.3",
+     "getnfo": {},
+     "global": {

@@ -101,6 +101,7 @@
                     <onup>601</onup>
                     <include>$PARAM[include_action]</include>
                     <include>Hub_Grouplist_OnLeftRight</include>
+                    <nested />
                     <onback condition="$EXP[Exp_Navigation_OnParent] + !Player.HasMedia">SetFocus($PARAM[id],0,absolute)</onback>
                     <include content="Action_Widget_OnBack">
                         <param name="id">$PARAM[id]</param>
@@ -158,6 +159,7 @@
                 <onback condition="Player.HasMedia">309</onback>
 
                 <include>Hub_Grouplist_OnLeftRight</include>
+                <nested />
                 <ondown>ActivateWindow(1180)</ondown>
                 <onfocus>SetProperty(TMDbHelper.WidgetContainer,$PARAM[id])</onfocus>
                 <onfocus>ClearProperty(Background.ShowOverlay,Home)</onfocus>
@@ -709,6 +711,30 @@
         <include>Background</include>
         <include condition="Skin.HasSetting(HomeSwitcher.Vertical)">Hub_Submenu_Fade</include>
     </include>
+
+    <include name="Hub_Moving_Hub_Label">
+        <param name="window">home</param>
+        <definition>
+            <control type="group">
+                <top>920</top>
+                <left>view_pad</left>
+                <width>900</width>
+                <height>80</height>
+                <visible>!$EXP[Exp_InfoDialogs]</visible>
+                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Name))</visible>
+                <control type="label">
+                    <width>900</width>
+                    <height>80</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <font>font_midi_bold</font>
+                    <textcolor>main_fg_50</textcolor>
+                    <label>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Name)]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Hub_Window">
         <param name="overlay">true</param>
         <param name="spotlight">true</param>
@@ -772,6 +798,9 @@
                                     <param name="wall">false</param>
                                 </include>
                             </control>
+                            <include content="Hub_Moving_Hub_Label">
+                                <param name="window">$PARAM[window]</param>
+                            </include>
                         </control>
 
                         <!-- Info Panels -->
@@ -841,6 +870,9 @@
                                 <param name="wall">false</param>
                             </include>
                         </control>
+                        <include content="Hub_Moving_Hub_Label">
+                            <param name="window">$PARAM[window]</param>
+                        </include>
                     </control>
 
                     <!-- Info Panels -->
