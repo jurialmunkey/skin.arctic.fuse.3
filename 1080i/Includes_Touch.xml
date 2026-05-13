@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Includes_Touch.xml
+    Centralised touch / mouse / fingertip-friendly helpers for Arctic Fuse 3.
+
+    Goals:
+      - Provide larger fingertip hit targets without enlarging visible chrome.
+      - Make remote-only navigation chords (bumper window, spotlight arrows,
+        sidebar switcher) tappable with explicit visible affordances.
+      - Widen scrollbars only when the user has enabled Touchscreen mode.
+      - Keep remote and keyboard navigation untouched. Every touch helper here
+        is additive; nothing here removes or rewires existing onleft/onright/
+        onup/ondown/onback hooks.
+
+    Conventions:
+      * IDs in the 92xxx range are reserved for touch overlay controls.
+      * Visible affordances are gated on Skin.HasSetting(Touchscreen.Enabled).
+      * Invisible hit-rect helpers may be enabled regardless because they
+        only expand mouse/touch hit areas, never visible layout.
+-->
+<includes>
+
+    <!-- =========================================================== -->
+    <!-- Expressions & Variables                                     -->
+    <!-- =========================================================== -->
+
+    <expression name="Exp_Touch_Enabled">Skin.HasSetting(Touchscreen.Enabled)</expression>
+
+    <!-- Used by Part_Scrollbar to size scrollbars on touch screens. -->
+    <variable name="Var_Scrollbar_Width">
+        <value condition="$EXP[Exp_Touch_Enabled]">scrollbar_touch_w</value>
+        <value>scrollbar_w</value>
+    </variable>
+
+
+    <!-- =========================================================== -->
+    <!-- Reusable touch helpers                                      -->
+    <!-- =========================================================== -->
+
+    <!--
+        Touch_HitRect_Generous
+
+        Drop-in extension of Object_HitRect that enlarges the hit area of the
+        nesting control. Defaults grow the rect outwards by 20px on each side.
+        Negative x/y combined with extra w/h gives a padded mouse/touch area.
+    -->
+    <include name="Touch_HitRect_Generous">
+        <param name="x">-20</param>
+        <param name="y">-20</param>
+        <param name="w">160</param>
+        <param name="h">120</param>
+        <definition>
+            <include content="Object_HitRect">
+                <param name="x">$PARAM[x]</param>
+                <param name="y">$PARAM[y]</param>
+                <param name="w">$PARAM[w]</param>
+                <param name="h">$PARAM[h]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!--
+        Touch_Invisible_Tap_Button
+
+        Creates a transparent, focus-bypassing button that catches taps over
+        a region. Uses Object_Hidden_Button defaults so it remains keyboard
+        invisible (focus jumps off after a frame via onfocus), then re-runs
+        $PARAM[onclick] when actually tapped.
+
+        Important: This button is positioned by the caller via <nested />.
+    -->
+    <include name="Touch_Invisible_Tap_Button">
+        <param name="onclick">noop</param>
+        <param name="visible">true</param>
+        <definition>
+            <control type="button">
+                <nested />
+                <texturefocus />
+                <texturenofocus />
+                <font />
+                <visible>$PARAM[visible]</visible>
+                <onclick>$PARAM[onclick]</onclick>
+                <!--
+                    Bounce focus immediately so this overlay never traps the
+                    remote focus graph. Touch + mouse still fire onclick.
+                -->
+                <onfocus>$PARAM[onfocus]</onfocus>
+            </control>
+        </definition>
+    </include>
+
+
+    <!-- =========================================================== -->
+    <!-- Spotlight directional arrows                                -->
+    <!-- =========================================================== -->
+
+    <!--
+        Touch_Spotlight_Arrow_Tap
+
+        Overlay button matched to the position of Hub spotlight arrows
+        (controls 314 / 315). Calls Control.Move on the underlying wraplist
+        (301) and refocuses the spotlight grouplist (310) so the visual
+        movement matches a remote left/right press.
+
+        Always enabled because the arrows are already visible in the spotlight
+        layout — making them tappable cannot regress remote behaviour and
+        helps mouse users too.
+    -->
+    <include name="Touch_Spotlight_Arrow_Tap">
+        <param name="direction">1</param>
+        <param name="left">0</param>
+        <param name="right">auto</param>
+        <param name="width">80</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <right>$PARAM[right]</right>
+                <width>$PARAM[width]</width>
+                <centertop>50%</centertop>
+                <height>120</height>
+                <visible>$EXP[Hub_Spotlight_Visible_Expression]</visible>
+                <include content="Touch_Invisible_Tap_Button">
+                    <param name="onclick">Control.Move(301,$PARAM[direction])</param>
+                    <param name="onfocus">SetFocus(310)</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+
+    <!-- =========================================================== -->
+    <!-- Hub-edge tap zone (jump to top hub menu)                    -->
+    <!-- =========================================================== -->
+
+    <!--
+        Touch_Hub_EdgeTap_Top
+
+        Faint hairline strip with an upward chevron at the very top of a hub
+        window. Tapping it returns focus to the home / hub selector (control
+        300) — analogous to a "scroll to top" affordance. Visible only when
+        Touchscreen mode is enabled so remote users see no visual change.
+
+        The underlying button uses Object_Hidden_Button so it's invisible to
+        the remote focus graph (no texturefocus / texturenofocus) but still
+        catches mouse / finger taps. We do NOT wire any onleft/onright/onup/
+        ondown into existing controls toward it, so the focus graph is intact.
+    -->
+    <include name="Touch_Hub_EdgeTap_Top">
+        <param name="visible">true</param>
+        <param name="onclick">$VAR[Touch_Hub_EdgeTap_Top_Action]</param>
+        <definition>
+            <control type="group">
+                <visible>$EXP[Exp_Touch_Enabled] + $PARAM[visible]</visible>
+                <top>0</top>
+                <left>0</left>
+                <right>0</right>
+                <height>36</height>
+                <!-- Affordance line + chevron, very subtle. -->
+                <control type="image">
+                    <texture colordiffuse="main_fg_12">common/white.png</texture>
+                    <bottom>0</bottom>
+                    <left>40%</left>
+                    <right>40%</right>
+                    <height>2</height>
+                </control>
+                <control type="image">
+                    <texture colordiffuse="main_fg_30">special://skin/extras/icons/chevron-up.png</texture>
+                    <centertop>50%</centertop>
+                    <centerleft>50%</centerleft>
+                    <width>40</width>
+                    <height>20</height>
+                </control>
+                <!-- Tap target. Uses an unparameterised button so neither
+                     defaultcontrol traversal nor sibling onup/ondown reach
+                     it; only direct pointer events fire onclick. -->
+                <control type="button">
+                    <texturefocus />
+                    <texturenofocus />
+                    <font />
+                    <onclick>$PARAM[onclick]</onclick>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <variable name="Touch_Hub_EdgeTap_Top_Action">
+        <value condition="Control.IsVisible(300)">SetFocus(300)</value>
+        <value>noop</value>
+    </variable>
+
+
+    <!-- =========================================================== -->
+    <!-- Touch close button (for dialogs that lack one)              -->
+    <!-- =========================================================== -->
+
+    <!--
+        Touch_Close_Button_Overlay
+
+        Floating xmark close button anchored top-right of a window. Use in
+        windows or dialogs that historically relied on remote Back to dismiss.
+        Always enabled (mouse users benefit too); design matches Part_CloseButton.
+    -->
+    <include name="Touch_Close_Button_Overlay">
+        <param name="id">92001</param>
+        <param name="groupid">92101</param>
+        <param name="onclick">PreviousMenu</param>
+        <param name="icon">special://skin/extras/icons/xmark.png</param>
+        <param name="top">20</param>
+        <param name="right">20</param>
+        <definition>
+            <control type="group">
+                <top>$PARAM[top]</top>
+                <right>$PARAM[right]</right>
+                <height>80</height>
+                <width>80</width>
+                <control type="button" id="$PARAM[id]">
+                    <include>Texture_Circle_Highlight_Focus_V</include>
+                    <texturenofocus />
+                    <onclick>$PARAM[onclick]</onclick>
+                    <!--
+                        Don't break focus graphs: bounce focus away when the
+                        remote happens to land on this button.
+                    -->
+                    <onfocus>$PARAM[onfocus]</onfocus>
+                </control>
+                <include content="OSD_Button_Icon_Overlay">
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="id">$PARAM[id]</param>
+                    <param name="groupid">$PARAM[groupid]</param>
+                    <param name="itemgap">80</param>
+                    <param name="itemgap_mod"> </param>
+                    <param name="icon_colordiffuse">dialog_fg_70</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+
+    <!-- =========================================================== -->
+    <!-- OSD close affordance                                        -->
+    <!-- =========================================================== -->
+
+    <!--
+        Touch_OSD_Close_Button
+
+        Visible top-right close button for VideoOSD / MusicOSD. Touch users
+        cannot easily reach a remote "back" key while the OSD is shown.
+        Action(Back) drops the OSD without affecting the underlying playback.
+        Cancels the auto-close alarm first so a stray tap on this button
+        never lets the timeout race the user.
+    -->
+    <include name="Touch_OSD_Close_Button">
+        <param name="id">92201</param>
+        <param name="groupid">92301</param>
+        <param name="top">40</param>
+        <param name="right">40</param>
+        <definition>
+            <control type="group">
+                <visible>$EXP[Exp_Touch_Enabled]</visible>
+                <top>$PARAM[top]</top>
+                <right>$PARAM[right]</right>
+                <height>80</height>
+                <width>80</width>
+                <control type="button" id="$PARAM[id]">
+                    <include>Texture_Circle_Highlight_Focus_V</include>
+                    <texturenofocus />
+                    <onclick>CancelAlarm(osd_timeout,true)</onclick>
+                    <onclick>Action(Back)</onclick>
+                </control>
+                <include content="OSD_Button_Icon_Overlay">
+                    <param name="icon">special://skin/extras/icons/xmark.png</param>
+                    <param name="id">$PARAM[id]</param>
+                    <param name="groupid">$PARAM[groupid]</param>
+                    <param name="itemgap">80</param>
+                    <param name="itemgap_mod"> </param>
+                    <param name="icon_colordiffuse">panel_fg_70</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+
+    <!-- =========================================================== -->
+    <!-- Touch-friendly scrollbar (wider on touch)                   -->
+    <!-- =========================================================== -->
+
+    <!--
+        Touch_Scrollbar_Width
+
+        Convenience include used inside a <scrollbar> control to set its
+        width via the $Var_Scrollbar_Width variable, which expands to
+        scrollbar_touch_w when Touchscreen mode is on.
+    -->
+    <include name="Touch_Scrollbar_Width">
+        <width>$VAR[Var_Scrollbar_Width]</width>
+    </include>
+
+</includes>

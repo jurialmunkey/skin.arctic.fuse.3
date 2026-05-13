@@ -537,6 +537,41 @@
                     </control>
 
                 </control>
+
+                <!-- Touch overlay: tap zones flanking the spotlight grouplist
+                     (310) so finger / mouse can scroll the spotlight wraplist
+                     (301) without first focusing 310 and pressing left/right.
+                     Placed at the parent group level so they don't interfere
+                     with the horizontal grouplist's item layout. -->
+                <control type="group">
+                    <centertop>140</centertop>
+                    <height>160</height>
+                    <left>0</left>
+                    <right>0</right>
+                    <visible>$EXP[Hub_Spotlight_Visible_Expression]</visible>
+                    <control type="group">
+                        <left>0</left>
+                        <width>40</width>
+                        <height>160</height>
+                        <control type="button">
+                            <texturefocus />
+                            <texturenofocus />
+                            <font />
+                            <onclick>Control.Move(301,-1)</onclick>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <right>0</right>
+                        <width>40</width>
+                        <height>160</height>
+                        <control type="button">
+                            <texturefocus />
+                            <texturenofocus />
+                            <font />
+                            <onclick>Control.Move(301,1)</onclick>
+                        </control>
+                    </control>
+                </control>
             </control>
         </definition>
     </include>
@@ -789,6 +824,11 @@
                     <visible>!$EXP[Exp_InfoDialogs]</visible>
                     <include>Furniture_Footer_Right</include>
                 </control>
+
+                <!-- Touch affordance: tappable hairline at the very top
+                     of a hub window that jumps focus back to the hub
+                     selector (300). Only visible when Touchscreen mode is on. -->
+                <include>Touch_Hub_EdgeTap_Top</include>
             </control>
 
         </definition>
@@ -857,6 +897,9 @@
                     <visible>!$EXP[Exp_InfoDialogs]</visible>
                     <include>Furniture_Footer_Right</include>
                 </control>
+
+                <!-- Touch affordance: same top-edge tap as Hub_Window. -->
+                <include>Touch_Hub_EdgeTap_Top</include>
             </control>
 
         </definition>
