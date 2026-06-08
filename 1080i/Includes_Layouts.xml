@@ -2047,12 +2047,20 @@
         <param name="diffuse">diffuse/poster_w217_h310.png</param>
         <param name="icon">$VAR[Image_Poster]</param>
         <param name="listitem">ListItem</param>
+        <param name="itemlayout_h">view_poster_itemlayout_h</param>
+        <param name="show_wall_label">false</param>
+        <param name="indicator_centerbottom">0</param>
+        <param name="indicator_top">0</param>
+        <param name="indicator_right">25</param>
+        <param name="indicator_use_top">false</param>
         <definition>
             <control type="group">
                 <width>$PARAM[item_w]</width>
-                <height>$PARAM[item_h]</height>
+                <height>$PARAM[itemlayout_h]</height>
 
                 <control type="group">
+                    <width>$PARAM[item_w]</width>
+                    <height>$PARAM[item_h]</height>
                     <include content="Object_ItemBack">
                         <param name="selected">$PARAM[selected]</param>
                         <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
@@ -2082,6 +2090,33 @@
                         <param name="selected">$PARAM[selected]</param>
                     </include>
                 </control>
+                <control type="label">
+                    <top>$PARAM[item_h]</top>
+                    <width>$PARAM[item_w]</width>
+                    <height>40</height>
+                    <font>font_mini</font>
+                    <label>$INFO[$PARAM[listitem].Label]</label>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <scroll>false</scroll>
+                    <textcolor>main_fg_70</textcolor>
+                    <visible>$PARAM[show_wall_label]</visible>
+                    <visible>![$PARAM[selected]]</visible>
+                </control>
+                <control type="label">
+                    <top>$PARAM[item_h]</top>
+                    <width>$PARAM[item_w]</width>
+                    <height>40</height>
+                    <font>font_mini</font>
+                    <label>$INFO[$PARAM[listitem].Label]</label>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <scroll>true</scroll>
+                    <textcolor>main_fg_70</textcolor>
+                    <include>Color_SelectedText</include>
+                    <visible>$PARAM[show_wall_label]</visible>
+                    <visible>$PARAM[selected]</visible>
+                </control>
                 <control type="group">
                     <visible>String.IsEqual($PARAM[listitem].DBType,actor) | String.IsEqual($PARAM[listitem].DBType,video) | $PARAM[detailed]</visible>
                     <include content="Layout_Labels">
@@ -2098,6 +2133,8 @@
                     </include>
                 </control>
                 <control type="group">
+                    <width>$PARAM[item_w]</width>
+                    <height>$PARAM[item_h]</height>
                     <include content="Object_ContentBanner" condition="$PARAM[indicator]">
                         <param name="listitem">$PARAM[listitem]</param>
                     </include>
@@ -2107,12 +2144,20 @@
                     <include condition="!$PARAM[selected] + $PARAM[indicator]" content="Object_Indicator">
                         <param name="affix">$PARAM[affix]</param>
                         <param name="listitem">$PARAM[listitem]</param>
+                        <param name="centerbottom">$PARAM[indicator_centerbottom]</param>
+                        <param name="top">$PARAM[indicator_top]</param>
+                        <param name="right">$PARAM[indicator_right]</param>
+                        <param name="use_top">$PARAM[indicator_use_top]</param>
                     </include>
                     <include content="Object_SelectBox" condition="$PARAM[selected]">
                         <param name="affix">$PARAM[affix]</param>
                         <param name="listitem">$PARAM[listitem]</param>
                         <param name="indicator">$PARAM[indicator]</param>
                         <param name="focusbounce">true</param>
+                        <param name="indicator_centerbottom">$PARAM[indicator_centerbottom]</param>
+                        <param name="indicator_top">$PARAM[indicator_top]</param>
+                        <param name="indicator_right">$PARAM[indicator_right]</param>
+                        <param name="indicator_use_top">$PARAM[indicator_use_top]</param>
                     </include>
                 </control>
 

@@ -31,6 +31,48 @@
         </include>
     </include>
 
+    <!-- Poster Wall Details -->
+    <include name="View_515_Poster_Wall_Details">
+        <control type="group">
+            <visible>Control.IsVisible(515)</visible>
+            <include>View_Poster_Wall_Details</include>
+            <control type="group">
+                <include content="List_Poster_Row">
+                    <param name="id">515</param>
+                    <param name="control">panel</param>
+                    <param name="orientation">vertical</param>
+                    <param name="item_w">view_poster_wall_item_w</param>
+                    <param name="item_h">view_poster_wall_item_h</param>
+                    <param name="itemlayout_w">view_poster_wall_itemlayout_w</param>
+                    <param name="itemlayout_h">view_poster_wall_itemlayout_h</param>
+                    <param name="offset_x">14</param>
+                    <param name="offset_y">18</param>
+                    <param name="show_wall_label">true</param>
+                    <param name="indicator_top">-18</param>
+                    <param name="indicator_right">-18</param>
+                    <param name="indicator_use_top">true</param>
+                    <preloaditems>0</preloaditems>
+                    <top>52</top>
+                    <bottom>-20</bottom>
+                    <left>view_poster_wall_grid_l</left>
+                    <right>view_poster_wall_grid_r</right>
+                    <onright>611</onright>
+                    <onleft>ActivateWindow(1171)</onleft>
+                    <pagecontrol>66</pagecontrol>
+                    <include content="Action_View_Movement_OnBack">
+                        <param name="id">515</param>
+                        <param name="onback">True</param>
+                    </include>
+                    <visible>$EXP[Exp_View_515]</visible>
+                    <viewtype label="$LOCALIZE[31558]">wrap</viewtype>
+                    <onfocus>ClearProperty(TMDbHelper.WidgetContainer)</onfocus>
+                    <onfocus>SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+                    <onfocus>SetProperty(InfoPanel.FullSwitch,Wall,Home)</onfocus>
+                </include>
+            </control>
+        </control>
+    </include>
+
     <!-- Circle Wall -->
     <include name="View_513_Circle_Wall">
         <include content="View_Wall_Include">
@@ -83,5 +125,112 @@
                 </control>
             </control>
         </definition>
+    </include>
+
+    <include name="View_Poster_Wall_Details">
+        <control type="group">
+            <visible>Control.IsVisible(515)</visible>
+            <visible>!Integer.IsEqual(Container.NumItems,0)</visible>
+            <left>view_pad</left>
+            <top>80</top>
+            <width>view_poster_wall_details_w</width>
+            <height>920</height>
+
+            <control type="textbox">
+                <width>view_poster_wall_details_w</width>
+                <height>116</height>
+                <font>font_title_main</font>
+                <label>$VAR[Label_MediaList_Title]</label>
+                <textcolor>main_fg_100</textcolor>
+                <aligny>center</aligny>
+            </control>
+
+            <control type="grouplist">
+                <top>132</top>
+                <height>46</height>
+                <width>view_poster_wall_details_w</width>
+                <orientation>horizontal</orientation>
+                <itemgap>10</itemgap>
+                <include content="Info_Line_VideoQuality_Resolution">
+                    <param name="colordiffuse">main_fg</param>
+                    <param name="visible">true</param>
+                    <param name="is_8k">[Integer.IsGreater(ListItem.VideoResolution,2160) | String.IsEqual(ListItem.VideoResolution,8K)]</param>
+                    <param name="is_4k">[Integer.IsGreater(ListItem.VideoResolution,1080) | String.IsEqual(ListItem.VideoResolution,4K)]</param>
+                    <param name="is_fd">[Integer.IsGreater(ListItem.VideoResolution,720)]</param>
+                    <param name="is_hd">[Integer.IsEqual(ListItem.VideoResolution,720)]</param>
+                    <param name="is_sd">[!String.IsEmpty(ListItem.VideoResolution)]</param>
+                </include>
+                <include content="Info_Line_VideoQuality_HDRType" condition="Skin.HasSetting(InfoTags.EnableHDR)">
+                    <param name="colordiffuse">main_fg</param>
+                    <param name="container" />
+                    <param name="listitem">ListItem</param>
+                </include>
+                <include content="Info_Line_AudioChannels_Resolution" condition="Skin.HasSetting(InfoTags.EnableAudioChannels)">
+                    <param name="colordiffuse">main_fg</param>
+                    <param name="container" />
+                    <param name="listitem">ListItem</param>
+                </include>
+                <include content="Info_Line_StarRating" condition="!Skin.HasSetting(InfoTags.DisableStarRating)">
+                    <param name="colordiffuse">main_fg</param>
+                    <param name="rating">ListItem.Rating</param>
+                    <param name="visible">!String.IsEmpty(ListItem.Rating) + String.IsEmpty(ListItem.UserRating)</param>
+                </include>
+                <include content="Info_Line_StarRating" condition="!Skin.HasSetting(InfoTags.DisableStarRating)">
+                    <param name="colordiffuse">main_fg</param>
+                    <param name="rating">ListItem.UserRating</param>
+                    <param name="visible">!String.IsEmpty(ListItem.UserRating)</param>
+                </include>
+            </control>
+
+            <control type="label">
+                <top>190</top>
+                <width>view_poster_wall_details_w</width>
+                <height>34</height>
+                <font>font_mini_bold</font>
+                <label>$INFO[ListItem.Year]$INFO[ListItem.MPAA,  -  ,]$INFO[ListItem.Duration(h),  -  ,h ]$INFO[ListItem.Duration(m),,m]</label>
+                <textcolor>main_fg_70</textcolor>
+            </control>
+
+            <control type="group">
+                <top>250</top>
+                <left>-40</left>
+                <include content="Info_Plot">
+                    <param name="colordiffuse">main_fg</param>
+                    <param name="width">520</param>
+                    <param name="height">380</param>
+                    <param name="listitem">ListItem</param>
+                    <param name="visible">true</param>
+                </include>
+            </control>
+
+            <control type="grouplist">
+                <bottom>-90</bottom>
+                <left>-70</left>
+                <height>112</height>
+                <orientation>vertical</orientation>
+                <itemgap>8</itemgap>
+                <width>view_poster_wall_details_w</width>
+                <control type="label">
+                    <height>28</height>
+                    <font>font_hint_bold</font>
+                    <label>$INFO[ListItem.Genre]</label>
+                    <textcolor>main_fg_50</textcolor>
+                    <visible>!String.IsEmpty(ListItem.Genre)</visible>
+                </control>
+                <control type="label">
+                    <height>28</height>
+                    <font>font_hint_bold</font>
+                    <label>$INFO[ListItem.Studio]</label>
+                    <textcolor>main_fg_50</textcolor>
+                    <visible>!String.IsEmpty(ListItem.Studio)</visible>
+                </control>
+                <control type="label">
+                    <height>28</height>
+                    <font>font_hint_bold</font>
+                    <label>$INFO[Container.CurrentItem,, / ]$INFO[Container.NumItems]</label>
+                    <textcolor>main_fg_30</textcolor>
+                </control>
+            </control>
+        </control>
     </include>
 </includes>
