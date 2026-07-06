@@ -106,6 +106,52 @@
         </control>
     </include>
 
+    <include name="DialogShortcuts_ShortcutList_FakeButton">
+        <definition>
+            <control type="group">
+                <nested />
+                <width>72</width>
+                <height>72</height>
+                <control type="image">
+                    <texture colordiffuse="$VAR[ColorSelected_30]">$PARAM[icon]</texture>
+                    <visible>!Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="image">
+                    <texture colordiffuse="$VAR[ColorSelected]">$PARAM[icon]</texture>
+                    <visible>Control.HasFocus($PARAM[id])</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogShortcuts_ShortcutList_FakeButtons">
+        <control type="group">
+            <right>20</right>
+            <height>72</height>
+            <centertop>50%</centertop>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22901</param>
+                <param name="icon">special://skin/extras/icons/circle-arrow-up.png</param>
+                <right>156</right>
+            </include>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22902</param>
+                <param name="icon">special://skin/extras/icons/circle-arrow-down.png</param>
+                <right>104</right>
+            </include>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22903</param>
+                <param name="icon">special://skin/extras/icons/circle-plus.png</param>
+                <right>52</right>
+            </include>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22904</param>
+                <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+                <right>0</right>
+            </include>
+        </control>
+    </include>
+
     <include name="DialogShortcuts_ShortcutList">
         <control type="group">
             <include>Size_Grouplist_Pad</include>
@@ -190,6 +236,7 @@
                                 <param name="id">22001</param>
                                 <param name="textcolor">dialog_fg_70</param>
                             </include>
+                            <include>DialogShortcuts_ShortcutList_FakeButtons</include>
                         </control>
                     </focusedlayout>
                     <content>plugin://script.skinvariables/?info=get_shortcuts_node&amp;edit=true&amp;skin=$VAR[Path_SkinVariables_SkinFolder]$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload),&amp;reload=,]$INFO[Window(Home).Property(Shortcuts.EditMenu),&amp;,]$INFO[Window(Home).Property(Shortcuts.EditMode),&amp;,]$INFO[Window(Home).Property(Shortcuts.EditGUID),&amp;,]</content>
@@ -200,6 +247,7 @@
                 </control>
 
                 <control type="group">
+                    <include>Animation_ConditionalFade</include>
                     <visible allowhiddenfocus="true">!ControlGroup(22800).HasFocus()</visible>
                     <animation effect="slide" start="0" end="0,140" condition="Container(22001).Position(1)">Conditional</animation>
                     <animation effect="slide" start="0" end="0,280" condition="Container(22001).Position(2)">Conditional</animation>
@@ -226,7 +274,7 @@
                         <right>20</right>
 
                         <control type="button" id="22901">
-                            <texturenofocus colordiffuse="$VAR[DialogShortcuts_ColorSelected_30]">special://skin/extras/icons/circle-arrow-up.png</texturenofocus>
+                            <texturenofocus colordiffuse="$VAR[$VAR[ColorSelected_30]]">special://skin/extras/icons/circle-arrow-up.png</texturenofocus>
                             <texturefocus colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/circle-arrow-up.png</texturefocus>
                             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_move&amp;&amp;move::-1&amp;&amp;window_prop::url]$INFO[Container(22001).ListItem(-1).Property(item),&amp;&amp;offset::,])</onclick>
                             <onback>29999</onback>
@@ -235,7 +283,7 @@
                         </control>
 
                         <control type="button" id="22902">
-                            <texturenofocus colordiffuse="$VAR[DialogShortcuts_ColorSelected_30]">special://skin/extras/icons/circle-arrow-down.png</texturenofocus>
+                            <texturenofocus colordiffuse="$VAR[$VAR[ColorSelected_30]]">special://skin/extras/icons/circle-arrow-down.png</texturenofocus>
                             <texturefocus colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/circle-arrow-down.png</texturefocus>
                             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_move&amp;&amp;move::1&amp;&amp;window_prop::url]$INFO[Container(22001).ListItem(1).Property(item),&amp;&amp;offset::,])</onclick>
                             <onback>29999</onback>
@@ -244,7 +292,7 @@
                         </control>
 
                         <control type="button" id="22903">
-                            <texturenofocus colordiffuse="$VAR[DialogShortcuts_ColorSelected_30]">special://skin/extras/icons/circle-plus.png</texturenofocus>
+                            <texturenofocus colordiffuse="$VAR[$VAR[ColorSelected_30]]">special://skin/extras/icons/circle-plus.png</texturenofocus>
                             <texturefocus colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/circle-plus.png</texturefocus>
 
                             <include>DialogShortcuts_Allow_SubGroups_Onclick</include>
@@ -254,15 +302,13 @@
 
                             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_new]$VAR[Path_Shortcut_UseRawPath])</onclick>
 
-                            <!-- <onclick>RunScript(script.skinvariables,run_dialog=yesnocustom,"heading=$LOCALIZE[31568]","message=$LOCALIZE[31567]",nolabel=$LOCALIZE[31533],yeslabel=$LOCALIZE[31569],customlabel=$LOCALIZE[222],"executebuiltin_1=RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_new]$VAR[Path_Shortcut_UseRawPath])","executebuiltin_0=ClearProperty(Shortcuts.Groupings.Links,Home)||RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_list_add&amp;&amp;item_limit::80]$VAR[Path_Shortcut_UseRawPath])")</onclick> -->
-
                             <onback>29999</onback>
                             <width>72</width>
                             <height>72</height>
                         </control>
 
                         <control type="button" id="22904">
-                            <texturenofocus colordiffuse="$VAR[DialogShortcuts_ColorSelected_30]">special://skin/extras/icons/circle-xmark.png</texturenofocus>
+                            <texturenofocus colordiffuse="$VAR[$VAR[ColorSelected_30]]">special://skin/extras/icons/circle-xmark.png</texturenofocus>
                             <texturefocus colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/circle-xmark.png</texturefocus>
 
                             <include>DialogShortcuts_Allow_SubGroups_Onclick</include>
@@ -271,7 +317,6 @@
 
                             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_delete])</onclick>
 
-                            <!-- <onclick>RunScript(script.skinvariables,run_dialog=yesnocustom,"heading=$LOCALIZE[31570]","message=$LOCALIZE[31571]",nolabel=$LOCALIZE[31573],yeslabel=$LOCALIZE[31572],customlabel=$LOCALIZE[31535],"executebuiltin_1=RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_delete])","executebuiltin_0=ClearProperty(Shortcuts.Groupings.Links,Home)||RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_list_del]$VAR[Path_Shortcut_UseRawPath])","executebuiltin_2=RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_refresh]&amp;&amp;restore::True&amp;&amp;executebuiltin::ActivateWindow(1116))")</onclick> -->
                             <onback>29999</onback>
                             <width>72</width>
                             <height>72</height>
@@ -498,12 +543,6 @@
             <include>DialogShortcuts_Items_Submenu</include>
         </definition>
     </include>
-
-     <!-- Selected Color -->
-    <variable name="DialogShortcuts_ColorSelected_30">
-        <value condition="ControlGroup(29000).HasFocus()">dialog_fg_70</value>
-        <value>$VAR[ColorSelected_30]</value>
-    </variable>
 
     <include name="DialogShortcuts_Allow_SubGroups_Onclick">
         <onclick condition="$EXP[DialogShortcuts_IsSubGrouping_Expression]">SetProperty(Shortcuts.Groupings.Subgroup,True,Home)</onclick>
