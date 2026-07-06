@@ -230,12 +230,28 @@
         </control>
     </include>
 
-    <include name="Background_HolidayTheme_FrostOverlay">
+    <include name="Background_SeasonalOverlay">
         <control type="image">
-            <texture background="true">special://skin/extras/backgrounds/holiday/winter/frost.png</texture>
+            <texture background="true">special://skin/extras/backgrounds/holiday/$PARAM[file_path]</texture>
             <aspectratio>stretch</aspectratio>
-            <visible>$EXP[Exp_Christmas_Theme]</visible>
-            <visible>!Skin.HasSetting(HolidayMode.Australia)</visible>
+        </control>
+    </include>
+
+    <include name="Background_SeasonalThemes">
+        <control type="group">
+            <visible>!Skin.HasSetting(SeasonalTheme.DisableOverlay) + $EXP[Exp_SeasonalTheme_Visible]</visible>
+
+            <include condition="$EXP[Exp_SeasonalTheme_Christmas]" content="Background_SeasonalOverlay">
+                <param name="file_path">winter/frost.png</param>
+            </include>
+
+            <include condition="$EXP[Exp_SeasonalTheme_Summer]" content="Background_SeasonalOverlay">
+                <param name="file_path">summer/sun-glare.png</param>
+            </include>
+
+            <include condition="$EXP[Exp_SeasonalTheme_Halloween]" content="Background_SeasonalOverlay">
+                <param name="file_path">halloween/web.png</param>
+            </include>
         </control>
     </include>
 
@@ -264,7 +280,7 @@
             </control>
             <include>$PARAM[include_layer]</include>
             <include>Background_Main_Overlay</include>
-            <include condition="Skin.HasSetting(EnableHolidayTheme) + Skin.HasSetting(HolidayMode.Frost)">Background_HolidayTheme_FrostOverlay</include>
+            <include condition="Skin.HasSetting(SeasonalTheme.Enable)">Background_SeasonalThemes</include>
         </definition>
     </include>
 
