@@ -1,0 +1,69 @@
+name: Apply top menu Up action patch
+
+on:
+  push:
+    branches:
+      - agent/top-menu-up-action
+
+permissions:
+  contents: write
+
+jobs:
+  apply-patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/top-menu-up-action
+
+      - name: Apply AF3 top menu Up action setting
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          home = Path('1080i/Includes_Home.xml')
+          text = home.read_text()
+
+          variable_anchor = '    <variable name="Home_Icon_home">\n'
+          variable_block = '''    <variable name="Label_Setting_TopMenuUpAction">\n        <value condition="Skin.HasSetting(HomeSwitcher.TopUpOpensOptions)">$LOCALIZE[33063]</value>\n        <value>$LOCALIZE[1034]</value>\n    </variable>\n\n'''
+          if 'Label_Setting_TopMenuUpAction' not in text:
+              if variable_anchor not in text:
+                  raise SystemExit('Includes_Home.xml variable anchor not found')
+              text = text.replace(variable_anchor, variable_block + variable_anchor, 1)
+
+          old_movement = '''    <include name="Home_Horz_Movement">\n        <onup>SetProperty(Bumper.Direction,Up,Home)</onup>\n        <onup>ActivateWindow(1181)</onup>\n        <oninfo>ActivateWindow(1181)</oninfo>\n        <ondown>$VAR[Hub_Action_Down]</ondown>\n    </include>'''
+          new_movement = '''    <include name="Home_Horz_Movement">\n        <onup>SetProperty(Bumper.Direction,Up,Home)</onup>\n        <onup condition="Skin.HasSetting(HomeSwitcher.TopUpOpensOptions)">ActivateWindow(1170)</onup>\n        <onup condition="!Skin.HasSetting(HomeSwitcher.TopUpOpensOptions)">ActivateWindow(1181)</onup>\n        <oninfo>ActivateWindow(1181)</oninfo>\n        <ondown>$VAR[Hub_Action_Down]</ondown>\n    </include>'''
+          if old_movement in text:
+              text = text.replace(old_movement, new_movement, 1)
+          elif 'HomeSwitcher.TopUpOpensOptions' not in text:
+              raise SystemExit('Includes_Home.xml movement anchor not found')
+          home.write_text(text)
+
+          settings = Path('1080i/SkinSettings.xml')
+          text = settings.read_text()
+          menu_anchor = '''                        <include content="SkinSettings_Items_Menus">\n                            <param name="baseid">0</param>\n                        </include>\n'''
+          setting_block = '''                        <include content="SkinSettings_Items_Menus">\n                            <param name="baseid">0</param>\n                        </include>\n                        <include content="Settings_Button" description="Top Menu Up Action">\n                            <param name="dialog">false</param>\n                            <param name="window">skinsettings</param>\n                            <param name="baseid">0</param>\n                            <param name="id">090</param>\n                            <param name="control">button</param>\n                            <label>$LOCALIZE[31349]</label>\n                            <label2>$VAR[Label_Setting_TopMenuUpAction]</label2>\n                            <onclick>Skin.ToggleSetting(HomeSwitcher.TopUpOpensOptions)</onclick>\n                            <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>\n                        </include>\n'''
+          if 'description="Top Menu Up Action"' not in text:
+              if menu_anchor not in text:
+                  raise SystemExit('SkinSettings.xml menu anchor not found')
+              text = text.replace(menu_anchor, setting_block, 1)
+          settings.write_text(text)
+
+          ET.parse(home)
+          ET.parse(settings)
+          print('XML validation passed')
+          PY
+
+      - name: Commit feature and remove temporary workflow
+        shell: bash
+        run: |
+          git config user.name "Eric Engert"
+          git config user.email "eengert@users.noreply.github.com"
+          git rm .github/workflows/apply-top-menu-up-action.yml
+          git add 1080i/Includes_Home.xml 1080i/SkinSettings.xml
+          git diff --cached --check
+          git commit -m "Add configurable top menu Up action"
+          git push origin HEAD:agent/top-menu-up-action
