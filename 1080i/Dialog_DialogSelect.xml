@@ -54,6 +54,7 @@
                             <pagecontrol>62</pagecontrol>
                             <onright>62</onright>
                             <include>Size_Grouplist_Pad</include>
+                            <oninfo>SetFocus(99001)</oninfo>
                         </include>
                         <include content="List_DialogSelect" condition="[Window.IsVisible(gamevideofilter) | Window.IsVisible(gamestretchmode) | Window.IsVisible(gamesaves) | Window.IsVisible(gamevideorotation) | Window.IsVisible(ingamesaves)]">
                             <param name="id">10811</param>
@@ -89,6 +90,63 @@
                 </control>
             </control>
         </control>
+    </include>
+
+    <include name="DialogSelect_ArtworkPreview">
+        <param name="listid">6</param>
+        <param name="visible">[Control.HasFocus(99001) | Control.HasFocus(99002) | Control.HasFocus(99003)]</param>
+        <definition>
+            <control type="group">
+                <control type="button" id="99003">
+                    <texturenofocus />
+                    <texturefocus />
+                    <onclick>SetFocus($PARAM[listid])</onclick>
+                    <oninfo>SetFocus($PARAM[listid])</oninfo>
+                    <onback>$PARAM[listid]</onback>
+                    <visible>$PARAM[visible]</visible>
+                </control>
+                <include content="Part_Dim_Overlay">
+                    <param name="visible">$PARAM[visible]</param>
+                </include>
+                <control type="group">
+                    <visible>$PARAM[visible]</visible>
+                    <include>Dimension_DialogSelectPreview</include>
+                    <include>Animation_BounceIn_Dialog</include>
+                    <include content="Part_Background_Panel">
+                        <param name="dialog_size">Dimension_DialogSelectPreview</param>
+                        <param name="topline">false</param>
+                    </include>
+                    <control type="group">
+                        <include>Size_Dialog_Pad</include>
+                        <control type="group">
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="label">$INFO[Container($PARAM[listid]).ListItem.Label]</param>
+                                <param name="id">99002</param>
+                            </include>
+                            <include content="Part_CloseButton">
+                                <param name="id">99001</param>
+                                <param name="groupid">99101</param>
+                                <param name="onclick">SetFocus($PARAM[listid])</param>
+                                <param name="oninfo">SetFocus($PARAM[listid])</param>
+                                <param name="onback">$PARAM[listid]</param>
+                            </include>
+                            <include>Part_Line</include>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <include content="Part_Box_Outline">
+                                <include>Size_Dialog_Pad</include>
+                                <control type="image">
+                                    <texture background="true">$INFO[Container($PARAM[listid]).ListItem.Icon]</texture>
+                                    <aspectratio>keep</aspectratio>
+                                </control>
+                            </include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
     </include>
 
     <include name="DialogSelect_Viewtype">
@@ -534,6 +592,15 @@
             <visible>Control.IsEnabled(7) + Control.IsVisible(7)</visible>
             <onclick>SetFocus(7)</onclick>
             <onclick>Action(Select)</onclick>
+        </include>
+
+        <include content="Button_Dialog">
+            <param name="id">9004</param>
+            <param name="groupid">9104</param>
+            <label>Preview</label>
+            <param name="icon">special://skin/extras/icons/images.png</param>
+            <visible>Control.IsEnabled(6) + Control.IsVisible(6)</visible>
+            <onclick>SetFocus(99001)</onclick>
         </include>
     </include>
 

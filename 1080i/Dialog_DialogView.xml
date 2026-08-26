@@ -229,6 +229,20 @@
                 <ondown>SetFocus(8000,9999,absolute)</ondown>
             </include>
 
+            <!-- Playlist -->
+            <include content="Object_Hidden_Button" condition="Window.IsVisible(MyPlaylist.xml)">
+                <param name="id">20</param>
+            </include>
+            <include content="Object_Hidden_Button" condition="Window.IsVisible(MyPlaylist.xml)">
+                <param name="id">21</param>
+            </include>
+            <include content="Object_Hidden_Button" condition="Window.IsVisible(MyPlaylist.xml)">
+                <param name="id">22</param>
+            </include>
+            <include content="Object_Hidden_Button" condition="Window.IsVisible(MyPlaylist.xml)">
+                <param name="id">26</param>
+            </include>
+
             <include content="Part_Dim_Overlay">
                 <param name="visible">$PARAM[visible]</param>
             </include>
@@ -380,6 +394,42 @@
             <visible>!String.IsEmpty(Container.PluginName)</visible>
             <onclick>Dialog.Close(1171,true)</onclick>
             <onclick>Addon.OpenSettings($INFO[Container.PluginName])</onclick>
+        </item>
+
+        <!-- Shuffle -->
+        <item>
+            <label>$LOCALIZE[191]</label>
+            <icon>$VAR[Image_OSD_Shuffle]</icon>
+            <visible>Window.IsVisible(MyPlaylist.xml) + Control.IsVisible(20) + Control.IsEnabled(20)</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>SendClick(20)</onclick>
+        </item>
+
+        <!-- Repeat -->
+        <item>
+            <label>$LOCALIZE[486]</label>
+            <icon>$VAR[Image_OSD_Repeat]</icon>
+            <visible>Window.IsVisible(MyPlaylist.xml) + Control.IsVisible(26) + Control.IsEnabled(26)</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>SendClick(26)</onclick>
+        </item>
+
+        <!-- Save -->
+        <item>
+            <label>$LOCALIZE[190]</label>
+            <icon>special://skin/extras/icons/floppy-disk.png</icon>
+            <visible>Window.IsVisible(MyPlaylist.xml) + Control.IsVisible(21) + Control.IsEnabled(21)</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>SendClick(21)</onclick>
+        </item>
+
+        <!-- Clear -->
+        <item>
+            <label>$LOCALIZE[192]</label>
+            <icon>special://skin/extras/icons/triangle-exclamation.png</icon>
+            <visible>Window.IsVisible(MyPlaylist.xml) + Control.IsVisible(22) + Control.IsEnabled(22)</visible>
+            <onclick>Dialog.Close(1171,true)</onclick>
+            <onclick>SendClick(22)</onclick>
         </item>
 
         <!-- Add Shortcut -->
