@@ -2,6 +2,10 @@
 <includes>
 
     <include name="OSD_UpNext_Buttons">
+        <param name="primary_label">$LOCALIZE[208]</param>
+        <param name="close_id">4013</param>
+        <param name="close_proxy">true</param>
+        <definition>
 
         <control type="grouplist" id="4000">
             <top>300</top>
@@ -17,7 +21,7 @@
                 <param name="icon">special://skin/extras/icons/play2.png</param>
                 <param name="id">3012</param>
                 <param name="groupid">5012</param>
-                <param name="label">$LOCALIZE[208]</param>
+                <param name="label">$PARAM[primary_label]</param>
                 <param name="include_hintlabel">true</param>
             </include>
 
@@ -29,14 +33,15 @@
             <include content="DialogInfo_Button">
                 <param name="vertical">false</param>
                 <param name="icon">special://skin/extras/icons/xmark.png</param>
-                <param name="id">4013</param>
+                <param name="id">$PARAM[close_id]</param>
                 <param name="groupid">5013</param>
                 <param name="label">$LOCALIZE[222]</param>
                 <param name="include_hintlabel">true</param>
-                <onclick>SetFocus(3013)</onclick>
-                <onclick>Action(Select)</onclick>
+                <onclick condition="$PARAM[close_proxy]">SetFocus(3013)</onclick>
+                <onclick condition="$PARAM[close_proxy]">Action(Select)</onclick>
             </include>
         </control>
+        </definition>
     </include>
 
     <include name="OSD_UpNext_Progress">
@@ -196,6 +201,17 @@
                 <param name="id">3013</param>
             </include>
         </definition>
+    </include>
+
+    <include name="OSD_JellyfinSkip_Buttons">
+        <control type="group">
+            <include>OSD_Info_Dimensions</include>
+            <include content="OSD_UpNext_Buttons">
+                <param name="primary_label">$INFO[Window.Property(skip_label)]</param>
+                <param name="close_id">3013</param>
+                <param name="close_proxy">false</param>
+            </include>
+        </control>
     </include>
 
 
@@ -1251,5 +1267,3 @@
         </definition>
     </include>
 </includes>
-
-
