@@ -20,7 +20,7 @@
 
                 <control type="group">
                     <include condition="Skin.HasSetting(HomeSwitcher.Vertical)">Hub_Window_Side_Slide</include>
-                    <include condition="!Skin.HasSetting(Search.DisableCombined)">Search_Footer_Left</include>
+                    <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">Search_Footer_Left</include>
 
                     <!-- Content -->
                     <control type="group" id="400">
@@ -51,7 +51,9 @@
                             <include>Animation_View_WindowChange</include>
 
                             <control type="group" id="500">
-                                <include content="Hub_Combined_Widget" condition="!Skin.HasSetting(Search.DisableDiscover) + !Skin.HasSetting(Search.DisableCombined)">
+
+                                <!-- Combined -->
+                                <include content="Hub_Combined_Widget" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
                                     <param name="id">501</param>
                                     <param name="content">$INFO[window(home).property(tmdbhelper.userdiscover.folderpath)]$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</param>
                                     <param name="include">List_Poster_Row</param>
@@ -59,18 +61,35 @@
                                     <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),discover)</param>
                                     <param name="allowhiddenfocus">true</param>
                                 </include>
-                                <include condition="!Skin.HasSetting(Search.DisableCombined)">skinvariables-searchwidgets-combined</include>
-                                <include condition="Skin.HasSetting(Search.DisableCombined)">skinvariables-searchwidgets-standard</include>
+                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">skinvariables-searchwidgets-combined</include>
+
+                                <!-- Wall -->
+                                <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">
+                                    <param name="id">501</param>
+                                    <param name="content">$INFO[window(home).property(tmdbhelper.userdiscover.folderpath)]$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</param>
+                                    <param name="include">List_Poster_Row</param>
+                                    <param name="target">videos</param>
+                                    <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),discover)</param>
+                                    <param name="allowhiddenfocus">true</param>
+                                </include>
+                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">skinvariables-searchwidgets-wall</include>
+
+                                <!-- Standard -->
+                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">skinvariables-searchwidgets-standard</include>
                             </control>
 
                             <control type="group" id="600">
-                                <include content="Hub_Widget_Switcher" condition="!Skin.HasSetting(Search.DisableCombined)">
+                                <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">
+                                    <param name="include_content">Search_Switcher_Wall_Items</param>
+                                    <param name="onup">302</param>
+                                </include>
+                                <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
                                     <param name="include_content">Search_Switcher_Items</param>
                                     <param name="top">520</param>
                                     <param name="wall">false</param>
                                     <param name="onup">302</param>
                                 </include>
-                                <include content="Hub_Widget_Switcher" condition="Skin.HasSetting(Search.DisableCombined)">
+                                <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
                                     <param name="include_content">Search_Switcher_Items</param>
                                     <param name="top">-520</param>
                                     <param name="wall">false</param>
@@ -100,7 +119,7 @@
                 <top>560</top>
                 <!-- <top>280</top> -->
                 <left>view_pad</left>
-                <visible>[String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | [Integer.IsEqual(Container(601).NumItems,0) + !Skin.HasSetting(Search.DisableCombined)] | [Skin.HasSetting(Search.DisableCombined) + Integer.IsEqual(Container(602).NumItems,0)]]</visible>
+                <visible>[String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | [Integer.IsEqual(Container(601).NumItems,0) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)] | [String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard) + Integer.IsEqual(Container(602).NumItems,0)]]</visible>
                 <include>Home_Animation</include>
                 <control type="label">
                     <font>font_head_bold</font>
@@ -123,12 +142,20 @@
         </control>
     </include>
 
-    <include name="Search_Combined_Info">
-        <include content="Info_Panel">
+    <include name="Search_Info">
+        <include content="Info_Panel" condition="!String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">
             <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])]</param>
             <param name="visible_line">true</param>
             <param name="visible_plot">true</param>
             <param name="visible_meta">true</param>
+            <param name="include_title">true</param>
+            <param name="container">Container($PARAM[id]).</param>
+        </include>
+        <include content="Info_Panel" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">
+            <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])]</param>
+            <param name="visible_line">false</param>
+            <param name="visible_plot">false</param>
+            <param name="visible_meta">false</param>
             <param name="include_title">true</param>
             <param name="container">Container($PARAM[id]).</param>
         </include>
@@ -139,7 +166,7 @@
             <visible>!$EXP[Exp_Hubs_Searchbar_IsVisible]</visible>
             <include>Info_Panel_Dimensions</include>
             <include>Home_Info_Animation</include>
-            <include content="Search_Combined_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + !Skin.HasSetting(Search.DisableCombined)">
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + [String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall) | String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)]">
                 <param name="id">501</param>
             </include>
             <include>skinvariables-searchwidgets-info</include>
@@ -157,6 +184,19 @@
             <visible>!Integer.IsEqual(Container(501).NumItems,0)</visible>
         </item>
         <include>skinvariables-searchwidgets-selector</include>
+    </include>
+
+    <include name="Search_Switcher_Wall_Items">
+        <item>
+            <label>$LOCALIZE[31066]</label>
+            <property name="guid">discover</property>
+            <property name="widget_id">$NUMBER[501]</property>
+            <property name="show_overlay">true</property>
+            <property name="widget_numitems">$INFO[Container(501).NumItems]</property>
+            <onclick>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onclick>
+            <visible>!Integer.IsEqual(Container(501).NumItems,0)</visible>
+        </item>
+        <include>skinvariables-searchwidgets-wall-selector</include>
     </include>
 
     <include name="Search_Footer_Left">
@@ -186,9 +226,10 @@
             <left>0</left>
             <right>0</right>
             <height>140</height>
+            <visible>!String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)</visible>
             <control type="group">
                 <visible>!String.IsEmpty(Control.GetLabel(3000).index(1))</visible>
-                <visible>Skin.HasSetting(Search.DisableCombined) | Skin.HasSetting(Search.DisableDiscover)</visible>
+                <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard) | Skin.HasSetting(Search.DisableDiscover)</visible>
                 <control type="group">
                     <left>0</left>
                     <width>80</width>
@@ -211,7 +252,7 @@
                 </control>
             </control>
             <control type="group">
-                <visible>![Skin.HasSetting(Search.DisableCombined) | Skin.HasSetting(Search.DisableDiscover)]</visible>
+                <visible>![String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard) | Skin.HasSetting(Search.DisableDiscover)]</visible>
                 <!-- Backing Panel -->
                 <!-- <control type="image">
                     <texture colordiffuse="main_fg_12" border="40">common/menu-outlined.png</texture>
@@ -224,8 +265,9 @@
                 <control type="button" id="3003">
                     <onup>3002</onup>
                     <onback>3002</onback>
-                    <ondown condition="!Skin.HasSetting(Search.DisableCombined)">601</ondown>
-                    <ondown condition="Skin.HasSetting(Search.DisableCombined)">602</ondown>
+                    <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">601</ondown>
+                    <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">601</ondown>
+                    <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">602</ondown>
                     <include>Object_Hidden_Button_Definition</include>
                     <onclick>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onclick>
                 </control>
@@ -398,7 +440,6 @@
             <onleft condition="!Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(-1).Property(action)]</onleft>
             <onright condition="!Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(1).Property(action)]</onright>
 
-            <!-- <onup condition="!Skin.HasSetting(Search.DisableDiscover) + !Skin.HasSetting(Search.DisableCombined)">RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onup> -->
             <ondown>3002</ondown>
 
             <texturefocus />
@@ -427,10 +468,12 @@
     <include name="Search_Bar_Keys">
         <control type="button" id="301">
             <include>Object_Hidden_Button_Definition</include>
-            <onfocus condition="![Skin.HasSetting(Search.DisableCombined) | Skin.HasSetting(Search.DisableDiscover)]">SetFocus(3003)</onfocus>
-            <onfocus condition="Skin.HasSetting(Search.DisableCombined) | Skin.HasSetting(Search.DisableDiscover)">SetFocus(3002)</onfocus>
+            <onfocus condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)">SetFocus(3003)</onfocus>
+            <onfocus condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard) | [String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + Skin.HasSetting(Search.DisableDiscover)]">SetFocus(3002)</onfocus>
+            <onfocus condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">SetFocus(3001)</onfocus>
         </control>
         <control type="panel" id="3002">
+            <visible>!String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)</visible>
             <orientation>vertical</orientation>
             <onunfocus condition="Skin.HasSetting(HomeSwitcher.Vertical)">ClearProperty(HomeSwitcher.IsVisible,Home)</onunfocus>
             <onfocus condition="!Skin.HasSetting(HomeSwitcher.Vertical)">SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
@@ -440,8 +483,6 @@
             <onback>SetProperty(RefocusMenu,True)</onback>
             <onback>3001</onback>
             <ondown>3003</ondown>
-            <!-- <ondown condition="!Skin.HasSetting(Search.DisableCombined)">601</ondown>
-            <ondown condition="Skin.HasSetting(Search.DisableCombined)">602</ondown> -->
             <width>700</width>
             <!-- <width>750</width>
             <focusposition>7</focusposition> -->
