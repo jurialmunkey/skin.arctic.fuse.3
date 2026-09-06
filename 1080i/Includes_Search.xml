@@ -53,15 +53,7 @@
                             <control type="group" id="500">
 
                                 <!-- Combined -->
-                                <include content="Hub_Combined_Widget" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
-                                    <param name="id">501</param>
-                                    <param name="content">$INFO[window(home).property(tmdbhelper.userdiscover.folderpath)]$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</param>
-                                    <param name="include">List_Poster_Row</param>
-                                    <param name="target">videos</param>
-                                    <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),discover)</param>
-                                    <param name="allowhiddenfocus">true</param>
-                                </include>
-                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">skinvariables-searchwidgets-combined</include>
+                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">Search_Widgets_Combined</include>
 
                                 <!-- Wall -->
                                 <include content="Hub_Wall_Widget" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">
@@ -82,12 +74,14 @@
                                 <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">
                                     <param name="include_content">Search_Switcher_Wall_Items</param>
                                     <param name="onup">302</param>
+                                    <param name="extended">true</param>
                                 </include>
                                 <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
                                     <param name="include_content">Search_Switcher_Items</param>
                                     <param name="top">520</param>
                                     <param name="wall">false</param>
                                     <param name="onup">302</param>
+                                    <param name="extended">true</param>
                                 </include>
                                 <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
                                     <param name="include_content">Search_Switcher_Items</param>
@@ -120,7 +114,8 @@
                 <!-- <top>280</top> -->
                 <left>view_pad</left>
                 <visible>[String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer)) | [Integer.IsEqual(Container(601).NumItems,0) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)] | [String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard) + Integer.IsEqual(Container(602).NumItems,0)]]</visible>
-                <include>Home_Animation</include>
+                <animation effect="fade" start="0" end="100" time="400" delay="800" tween="cubic" easing="out">Visible</animation>
+                <animation effect="fade" end="0" start="100" time="200" tween="cubic" easing="out">Hidden</animation>
                 <control type="label">
                     <font>font_head_bold</font>
                     <label>$VAR[Label_Search_Title_NoResults]</label>
@@ -170,8 +165,128 @@
                 <param name="id">501</param>
             </include>
             <include>skinvariables-searchwidgets-info</include>
+
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+                <param name="id">550</param>
+            </include>
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+                <param name="id">551</param>
+            </include>
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+                <param name="id">552</param>
+            </include>
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+                <param name="id">553</param>
+            </include>
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+                <param name="id">554</param>
+            </include>
+
+
         </control>
     </include>
+
+    <include name="Search_Widgets_Combined">
+        <include content="Hub_Combined_Widget" condition="!Skin.HasSetting(Search.DisableDiscover)">
+            <param name="id">501</param>
+            <param name="content">$INFO[window(home).property(tmdbhelper.userdiscover.folderpath)]$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="target">videos</param>
+            <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),discover)</param>
+            <param name="allowhiddenfocus">true</param>
+        </include>
+        <include>skinvariables-searchwidgets-combined</include>
+
+        <!-- Extended Discover -->
+        <include content="Search_Widget_Extended_Discover">
+            <param name="id">550</param>
+        </include>
+        <include content="Search_Widget_Extended_Discover">
+            <param name="id">551</param>
+        </include>
+        <include content="Search_Widget_Extended_Discover">
+            <param name="id">552</param>
+        </include>
+        <include content="Search_Widget_Extended_Discover">
+            <param name="id">553</param>
+        </include>
+        <include content="Search_Widget_Extended_Discover">
+            <param name="id">554</param>
+        </include>
+    </include>
+
+    <include name="Search_Widget_Extended_Discover">
+        <include content="Hub_Combined_Widget" condition="!Skin.HasSetting(Search.DisableDiscover)">
+            <param name="id">$PARAM[id]</param>
+            <param name="content">$VAR[Search_Path_Extended_Discover_$PARAM[id]]</param>
+            <param name="include">List_Poster_Row</param>
+            <param name="target">videos</param>
+            <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),extended-$PARAM[id])</param>
+            <param name="allowhiddenfocus">true</param>
+        </include>
+    </include>
+
+    <variable name="Search_Path_Extended_Discover_550">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=movie&amp;primary_release_date.gte=1980-01-01&amp;primary_release_date.lte=1989-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=tv&amp;first_air_date.gte=1980-01-01&amp;first_air_date.lte=1989-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(0).FolderPath]</value>
+        <value>-</value>
+    </variable>
+    <variable name="Search_Path_Extended_Discover_551">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=movie&amp;primary_release_date.gte=1990-01-01&amp;primary_release_date.lte=1999-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=tv&amp;first_air_date.gte=1990-01-01&amp;first_air_date.lte=1999-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(1).FolderPath]</value>
+        <value>-</value>
+    </variable>
+    <variable name="Search_Path_Extended_Discover_552">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=movie&amp;primary_release_date.gte=2000-01-01&amp;primary_release_date.lte=2009-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=tv&amp;first_air_date.gte=2000-01-01&amp;first_air_date.lte=2009-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(2).FolderPath]</value>
+        <value>-</value>
+    </variable>
+    <variable name="Search_Path_Extended_Discover_553">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=movie&amp;primary_release_date.gte=2010-01-01&amp;primary_release_date.lte=2019-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=tv&amp;first_air_date.gte=2010-01-01&amp;first_air_date.lte=2019-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(3).FolderPath]</value>
+        <value>-</value>
+    </variable>
+    <variable name="Search_Path_Extended_Discover_554">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=movie&amp;primary_release_date.gte=2020-01-01&amp;primary_release_date.lte=2029-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">plugin://plugin.video.themoviedb.helper?info=discover&amp;tmdb_type=tv&amp;first_air_date.gte=2020-01-01&amp;first_air_date.lte=2029-12-31&amp;cacheonly=true&amp;nextpage=false$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(4).FolderPath]</value>
+        <value>-</value>
+    </variable>
+
+    <variable name="Search_Label_Extended_Discover_550">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">1980s</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">1980s</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(0).Label]</value>
+        <value>-</value>
+    </variable>
+    <variable name="Search_Label_Extended_Discover_551">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">1990s</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">1990s</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(1).Label]</value>
+        <value>-</value>
+    </variable>
+    <variable name="Search_Label_Extended_Discover_552">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">2000s</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">2000s</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(2).Label]</value>
+        <value>-</value>
+    </variable>
+    <variable name="Search_Label_Extended_Discover_553">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">2010s</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">2010s</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(3).Label]</value>
+        <value>-</value>
+    </variable>
+    <variable name="Search_Label_Extended_Discover_554">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviedecades)">2020s</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),tvdecades)">2020s</value>
+        <value condition="[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)]">$INFO[Container(3004).ListItemAbsolute(4).Label]</value>
+        <value>-</value>
+    </variable>
 
     <include name="Search_Switcher_Items">
         <item>
@@ -182,8 +297,40 @@
             <property name="widget_numitems">$INFO[Container(501).NumItems]</property>
             <onclick>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onclick>
             <visible>!Integer.IsEqual(Container(501).NumItems,0)</visible>
+            <visible>String.IsEqual(Container(3003).ListItem.Property(mode),discover)</visible>
+            <visible>!Container(501).IsUpdating</visible>
         </item>
         <include>skinvariables-searchwidgets-selector</include>
+        <include content="Search_Switcher_Items_Extended">
+            <param name="id">0</param>
+        </include>
+        <include content="Search_Switcher_Items_Extended">
+            <param name="id">1</param>
+        </include>
+        <include content="Search_Switcher_Items_Extended">
+            <param name="id">2</param>
+        </include>
+        <include content="Search_Switcher_Items_Extended">
+            <param name="id">3</param>
+        </include>
+        <include content="Search_Switcher_Items_Extended">
+            <param name="id">4</param>
+        </include>
+    </include>
+
+    <include name="Search_Switcher_Items_Extended">
+        <item>
+            <label>$VAR[Search_Label_Extended_Discover_55$PARAM[id]]</label>
+            <property name="guid">extended-55$PARAM[id]</property>
+            <property name="widget_id">$NUMBER[55$PARAM[id]]</property>
+            <property name="show_artwork">true</property>
+            <property name="widget_numitems">$INFO[Container(55$PARAM[id]).NumItems]</property>
+            <visible>!Integer.IsEqual(Container(55$PARAM[id]).NumItems,0)</visible>
+            <visible>!String.IsEqual(Container(3003).ListItem.Property(mode),discover)</visible>
+            <visible>!String.IsEqual(Container(3003).ListItem.Property(mode),search)</visible>
+            <visible>!Container(55$PARAM[id]).IsUpdating</visible>
+            <visible>![String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)] | [[String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords) | String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)] + !String.IsEmpty(Container(3004).ListItemAbsolute($PARAM[id]).Label)]</visible>
+        </item>
     </include>
 
     <include name="Search_Switcher_Wall_Items">
@@ -220,6 +367,12 @@
         <centertop>50%</centertop>
     </include>
 
+    <variable name="Search_Bar_Disc_KeywordPath">
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),moviekeywords)">$INFO[Control.GetLabel(3000).index(1),plugin://plugin.video.themoviedb.helper?info=search&amp;tmdb_type=keyword&amp;nextpage=false&amp;cacheonly=true&amp;query=,]</value>
+        <value condition="String.IsEqual(Container(3003).ListItem.Property(mode),mdblists)">$INFO[Control.GetLabel(3000).index(1),plugin://plugin.video.themoviedb.helper?info=mdblist_searchlists&amp;tmdb_type=both&amp;nextpage=false&amp;query=,]</value>
+        <value>-</value>
+    </variable>
+
     <include name="Search_Bar_Disc">
         <control type="group">
             <top>200</top>
@@ -228,67 +381,120 @@
             <height>140</height>
             <visible>!String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)</visible>
             <control type="group">
-                <visible>!String.IsEmpty(Control.GetLabel(3000).index(1))</visible>
-                <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard) | Skin.HasSetting(Search.DisableDiscover)</visible>
-                <control type="group">
-                    <left>0</left>
-                    <width>80</width>
-                    <control type="image">
-                        <include>Home_Grouplist_Icon_Definition</include>
-                        <texture background="true" colordiffuse="main_fg_30">special://skin/extras/icons/chart-simple.png</texture>
-                    </control>
-                </control>
-                <control type="label">
-                    <font>font_main_plot</font>
-                    <aligny>center</aligny>
-                    <label>$INFO[Control.GetLabel(3000).index(1),$LOCALIZE[31153] ","]$INFO[Container(601).ListItemAbsolute(0).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(0).Label, ,]$INFO[Container(601).ListItemAbsolute(1).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(1).Label, ,]$INFO[Container(601).ListItemAbsolute(2).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(2).Label, ,]$INFO[Container(601).ListItemAbsolute(3).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(3).Label, ,]$INFO[Container(601).ListItemAbsolute(4).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(4).Label, ,]$INFO[Container(601).ListItemAbsolute(5).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(5).Label, ,]$INFO[Container(601).ListItemAbsolute(6).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(6).Label, ,]$INFO[Container(601).ListItemAbsolute(7).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(7).Label, ,]$INFO[Container(601).ListItemAbsolute(8).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(8).Label, ,]$INFO[Container(601).ListItemAbsolute(9).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(9).Label, ,]</label>
-                    <align>left</align>
-                    <textcolor>main_fg_30</textcolor>
-                    <wrapmultiline>true</wrapmultiline>
-                    <left>70</left>
-                    <right>40</right>
-                    <height>80</height>
-                    <centertop>50%</centertop>
-                </control>
-            </control>
-            <control type="group">
-                <visible>![String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard) | Skin.HasSetting(Search.DisableDiscover)]</visible>
+                <visible>!String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)</visible>
                 <!-- Backing Panel -->
                 <!-- <control type="image">
                     <texture colordiffuse="main_fg_12" border="40">common/menu-outlined.png</texture>
                     <visible>!Control.HasFocus(3003)</visible>
                 </control> -->
+
+                <control type="image">
+                    <texture colordiffuse="main_fg_100" flipx="false">arrows/arrow-menu.png</texture>
+                    <visible>Control.HasFocus(3003)</visible>
+                    <height>16</height>
+                    <width>16</width>
+                    <centerleft>-20</centerleft>
+                    <centertop>50%</centertop>
+                    <visible>Integer.IsGreater(Container(3003).NumItems,1)</visible>
+                </control>
+                <control type="image">
+                    <texture colordiffuse="main_fg_100" flipx="true">arrows/arrow-menu.png</texture>
+                    <visible>Control.HasFocus(3003)</visible>
+                    <height>16</height>
+                    <width>16</width>
+                    <centerright>-20</centerright>
+                    <centertop>50%</centertop>
+                    <visible>Integer.IsGreater(Container(3003).NumItems,1)</visible>
+                </control>
+
                 <control type="image">
                     <texture colordiffuse="$VAR[ColorHighlight]" border="40">common/menu.png</texture>
                     <visible>Control.HasFocus(3003)</visible>
                 </control>
-                <control type="button" id="3003">
+                <control type="list" id="3004">
+                    <include>Object_Hidden_List_Definition</include>
+                    <content>$VAR[Search_Bar_Disc_KeywordPath]</content>
+                </control>
+                <control type="list" id="3003">
+                    <orientation>horizontal</orientation>
+                    <itemlayout />
+                    <focusedlayout />
                     <onup>3002</onup>
                     <onback>3002</onback>
                     <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">601</ondown>
                     <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">601</ondown>
                     <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">602</ondown>
-                    <include>Object_Hidden_Button_Definition</include>
-                    <onclick>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onclick>
+                    <content>
+                        <item>
+                            <label>$LOCALIZE[31066]$INFO[Window(Home).Property(TMDbHelper.UserDiscover.FolderPath.Name), ,]</label>
+                            <icon>special://skin/extras/icons/binoculars.png</icon>
+                            <property name="mode">discover</property>
+                            <onclick>RunPlugin(plugin://plugin.video.themoviedb.helper/?info=user_discover$INFO[Window(Home).Property(TMDbHelper.UserDiscover.Folderpath.ParamString),&amp;,])</onclick>
+                            <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[137]$VAR[Search_Label_Results]</label>
+                            <icon>special://skin/extras/icons/chart-simple.png</icon>
+                            <property name="mode">search</property>
+                            <onclick>SetFocus(3000)</onclick>
+                            <onclick>Action(Select)</onclick>
+                            <onclick>SetFocus(3003)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31155]$VAR[Search_Label_Results]</label>
+                            <icon>special://skin/extras/icons/calendar.png</icon>
+                            <property name="mode">moviedecades</property>
+                            <onclick>SetFocus(3000)</onclick>
+                            <onclick>Action(Select)</onclick>
+                            <onclick>SetFocus(3003)</onclick>
+                            <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[21861]$VAR[Search_Label_Results]</label>
+                            <icon>special://skin/extras/icons/key.png</icon>
+                            <property name="mode">moviekeywords</property>
+                            <onclick>SetFocus(3000)</onclick>
+                            <onclick>Action(Select)</onclick>
+                            <onclick>SetFocus(3003)</onclick>
+                            <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)</visible>
+                        </item>
+                        <item>
+                            <label>MDbLists $VAR[Search_Label_Results]</label>
+                            <icon>special://skin/extras/icons/list-ul.png</icon>
+                            <property name="mode">mdblists</property>
+                            <onclick>SetFocus(3000)</onclick>
+                            <onclick>Action(Select)</onclick>
+                            <onclick>SetFocus(3003)</onclick>
+                            <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)</visible>
+                        </item>
+                        <!-- <item>
+                            <label>$LOCALIZE[20364] $LOCALIZE[31155]$VAR[Search_Label_Results]</label>
+                            <icon>special://skin/extras/icons/tv.png</icon>
+                            <property name="mode">tvdecades</property>
+                            <onclick>SetFocus(3000)</onclick>
+                            <onclick>Action(Select)</onclick>
+                            <onclick>SetFocus(3003)</onclick>
+                        </item> -->
+                    </content>
                 </control>
                 <control type="group">
                     <left>0</left>
                     <width>80</width>
                     <control type="image">
                         <include>Home_Grouplist_Icon_Definition</include>
-                        <texture background="true" colordiffuse="main_fg_30">special://skin/extras/icons/binoculars.png</texture>
+                        <texture background="true" colordiffuse="main_fg_30">$INFO[Container(3003).ListItem.Icon]</texture>
                         <visible>!Control.HasFocus(3003)</visible>
                     </control>
                     <control type="image">
                         <include>Home_Grouplist_Icon_Definition</include>
-                        <texture background="true" colordiffuse="$VAR[ColorSelected]">special://skin/extras/icons/binoculars.png</texture>
+                        <texture background="true" colordiffuse="$VAR[ColorSelected]">$INFO[Container(3003).ListItem.Icon]</texture>
                         <visible>Control.HasFocus(3003)</visible>
                     </control>
                 </control>
                 <control type="label">
                     <font>font_main_plot</font>
                     <aligny>center</aligny>
-                    <label>$LOCALIZE[31066] $INFO[Window(Home).Property(TMDbHelper.UserDiscover.FolderPath.Name)]</label>
+                    <label>$INFO[Container(3003).ListItem.Label]</label>
                     <align>left</align>
                     <textcolor>main_fg_30</textcolor>
                     <wrapmultiline>true</wrapmultiline>
@@ -301,7 +507,7 @@
                 <control type="label">
                     <font>font_main_plot</font>
                     <aligny>center</aligny>
-                    <label>$LOCALIZE[31066] $INFO[Window(Home).Property(TMDbHelper.UserDiscover.FolderPath.Name)]</label>
+                    <label>$INFO[Container(3003).ListItem.Label]</label>
                     <align>left</align>
                     <textcolor>$VAR[ColorSelected]</textcolor>
                     <wrapmultiline>true</wrapmultiline>
@@ -314,6 +520,10 @@
             </control>
         </control>
     </include>
+
+    <variable name="Search_Label_Results">
+        <value>$INFO[Control.GetLabel(3000).index(1), $LOCALIZE[31153] ","]$INFO[Container(601).ListItemAbsolute(0).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(0).Label, ,]$INFO[Container(601).ListItemAbsolute(1).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(1).Label, ,]$INFO[Container(601).ListItemAbsolute(2).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(2).Label, ,]$INFO[Container(601).ListItemAbsolute(3).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(3).Label, ,]$INFO[Container(601).ListItemAbsolute(4).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(4).Label, ,]$INFO[Container(601).ListItemAbsolute(5).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(5).Label, ,]$INFO[Container(601).ListItemAbsolute(6).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(6).Label, ,]$INFO[Container(601).ListItemAbsolute(7).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(7).Label, ,]$INFO[Container(601).ListItemAbsolute(8).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(8).Label, ,]$INFO[Container(601).ListItemAbsolute(9).Property(widget_numitems), | ,]$INFO[Container(601).ListItemAbsolute(9).Label, ,]</value>
+    </variable>
 
     <include name="Search_Term_DoubleEncoder">
         <include content="Object_Hidden_List">
@@ -468,8 +678,8 @@
     <include name="Search_Bar_Keys">
         <control type="button" id="301">
             <include>Object_Hidden_Button_Definition</include>
-            <onfocus condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)">SetFocus(3003)</onfocus>
-            <onfocus condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard) | [String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + Skin.HasSetting(Search.DisableDiscover)]">SetFocus(3002)</onfocus>
+            <onfocus condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">SetFocus(3003)</onfocus>
+            <onfocus condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">SetFocus(3002)</onfocus>
             <onfocus condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">SetFocus(3001)</onfocus>
         </control>
         <control type="panel" id="3002">
