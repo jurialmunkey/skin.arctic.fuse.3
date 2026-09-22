@@ -110,6 +110,278 @@
         </include>
     </include>
 
+    <include name="DialogGameAchievements">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Dimension_DialogFullMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogFullMenu</param>
+            </include>
+
+            <control type="group">
+                <visible>!RetroPlayer.AchievementsLoggedIn</visible>
+                <include>Size_Dialog_Pad</include>
+                <control type="group">
+                    <include>Size_Group_Head</include>
+                    <include content="Part_HeadText">
+                        <param name="id">9998</param>
+                        <param name="label">$LOCALIZE[35287]</param>
+                    </include>
+                    <include>Part_CloseButton</include>
+                    <include>Part_Line</include>
+                </control>
+                <control type="group">
+                    <include>Size_Group_Body</include>
+                    <control type="label">
+                        <top>10</top>
+                        <height>50</height>
+                        <align>center</align>
+                        <font>font_main_bold</font>
+                        <textcolor>dialog_fg_90</textcolor>
+                        <label>$LOCALIZE[35367]</label>
+                    </control>
+                    <control type="image">
+                        <top>80</top>
+                        <centerleft>50%</centerleft>
+                        <width>480</width>
+                        <height>480</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture>special://xbmc/media/qr/games/retroachievements.png</texture>
+                    </control>
+                    <control type="label">
+                        <top>580</top>
+                        <height>50</height>
+                        <align>center</align>
+                        <font>font_main</font>
+                        <textcolor>dialog_fg_70</textcolor>
+                        <label>$LOCALIZE[35368]</label>
+                    </control>
+                </control>
+            </control>
+
+            <!-- Content -->
+            <control type="group" id="8000">
+                <visible>RetroPlayer.AchievementsLoggedIn</visible>
+                <include>Size_Dialog_Pad</include>
+
+                <control type="group">
+                    <right>440</right>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="id">9999</param>
+                            <param name="label">$INFO[Window.Property(Header)]</param>
+                            <param name="right">constant_dialog_pad</param>
+                        </include>
+                        <include content="Part_ItemPage">
+                            <param name="id">3</param>
+                            <param name="items_label">$LOCALIZE[35287]</param>
+                        </include>
+                        <include>Part_Line</include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <include content="List_DialogSelect">
+                            <param name="id">3</param>
+                            <param name="itemlayout_include">Layout_GameAchievement</param>
+                            <param name="item_height">128</param>
+                            <pagecontrol>61</pagecontrol>
+                            <onright>61</onright>
+                            <include>Size_Grouplist_Pad</include>
+                        </include>
+                        <include content="Part_Scrollbar_Max">
+                            <param name="id">61</param>
+                            <param name="inset">false</param>
+                            <onleft>3</onleft>
+                            <onright>9000</onright>
+                        </include>
+                    </control>
+                </control>
+
+                <control type="group">
+                    <width>440</width>
+                    <right>0</right>
+                    <include>Part_Panel</include>
+                    <control type="grouplist" id="9000">
+                        <onleft>3</onleft>
+                        <itemgap>20</itemgap>
+                        <orientation>vertical</orientation>
+                        <include>Size_Grouplist_Pad</include>
+                        <include>DialogGameAchievements_Items</include>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogGameAchievements_Items">
+        <definition>
+            <include content="Button_Dialog">
+                <param name="id">108333</param>
+                <param name="groupid">108433</param>
+                <param name="icon">special://skin/extras/icons/trophy.png</param>
+                <label>$LOCALIZE[35331]</label>
+                <onclick>ActivateWindow(gameleaderboards)</onclick>
+            </include>
+            <include content="Settings_ButtonRadio">
+                <param name="id">108331</param>
+                <param name="dialog">true</param>
+                <label>$LOCALIZE[35303]</label>
+                <selected>System.GetBool(gamesachievements.encore)</selected>
+            </include>
+            <include content="Settings_ButtonRadio">
+                <param name="id">108332</param>
+                <param name="dialog">true</param>
+                <label>$LOCALIZE[35365]</label>
+                <selected>System.GetBool(gamesachievements.challengeindicator)</selected>
+            </include>
+            <control type="textbox">
+                <height>200</height>
+                <font>font_tiny</font>
+                <textcolor>dialog_fg_50</textcolor>
+                <label>$VAR[Label_GameAchievements_Help]</label>
+            </control>
+        </definition>
+    </include>
+
+    <variable name="Label_GameAchievements_Help">
+        <value condition="Control.HasFocus(108331)">$LOCALIZE[35304]</value>
+        <value condition="Control.HasFocus(108332)">$LOCALIZE[35366]</value>
+    </variable>
+
+    <include name="DialogGameLeaderboards">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Dimension_DialogFullMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogFullMenu</param>
+            </include>
+
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+
+                <control type="group">
+                    <include>Size_Group_Head</include>
+                    <include content="Part_HeadText">
+                        <param name="id">9999</param>
+                        <param name="label">$LOCALIZE[35331]$INFO[RetroPlayer.Title, - ,]</param>
+                    </include>
+                    <include content="Part_ItemPage">
+                        <param name="id">3</param>
+                        <param name="items_label">$LOCALIZE[35331]</param>
+                    </include>
+                    <include>Part_CloseButton</include>
+                    <include>Part_Line</include>
+                </control>
+
+                <control type="group">
+                    <include>Size_Group_Body</include>
+                    <bottom>64</bottom>
+                    <include content="List_DialogSelect">
+                        <param name="id">3</param>
+                        <param name="itemlayout_include">Layout_GameLeaderboard</param>
+                        <param name="item_height">128</param>
+                        <param name="item_w">1480</param>
+                        <param name="itemlayout_w">1480</param>
+                        <pagecontrol>61</pagecontrol>
+                        <onright>61</onright>
+                        <include>Size_Grouplist_Pad</include>
+                    </include>
+                </control>
+
+                <control type="label">
+                    <description>Said once, at the foot, rather than on every row</description>
+                    <bottom>10</bottom>
+                    <height>40</height>
+                    <width>100%</width>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <font>font_tiny</font>
+                    <textcolor>dialog_fg_50</textcolor>
+                    <label>$LOCALIZE[35332]</label>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogGameLeaderboardEntries">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Dimension_DialogFullMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogFullMenu</param>
+            </include>
+
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+
+                <control type="group">
+                    <include>Size_Group_Head</include>
+                    <include content="Part_HeadText">
+                        <param name="id">9999</param>
+                        <param name="label">$INFO[Window.Property(Leaderboards.Title)]</param>
+                    </include>
+                    <include>Part_CloseButton</include>
+                    <include>Part_Line</include>
+                </control>
+
+                <control type="label">
+                    <description>What the leaderboard measures</description>
+                    <left>constant_dialog_pad</left>
+                    <top>120</top>
+                    <height>32</height>
+                    <width>60%</width>
+                    <font>font_tiny</font>
+                    <textcolor>dialog_fg_50</textcolor>
+                    <label>$INFO[Window.Property(Leaderboards.Description)]</label>
+                </control>
+
+                <control type="label">
+                    <right>constant_dialog_pad</right>
+                    <top>120</top>
+                    <height>32</height>
+                    <width>36%</width>
+                    <align>right</align>
+                    <font>font_tiny</font>
+                    <textcolor>dialog_fg_100</textcolor>
+                    <label>$INFO[Window.Property(Leaderboards.PlayerBest)]</label>
+                    <visible>!String.IsEmpty(Window.Property(Leaderboards.PlayerBest))</visible>
+                </control>
+
+                <control type="label">
+                    <description>Loading, or nothing to show</description>
+                    <top>300</top>
+                    <height>40</height>
+                    <width>100%</width>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <font>font_mini</font>
+                    <textcolor>dialog_fg_90</textcolor>
+                    <label>$INFO[Window.Property(Leaderboards.Status)]</label>
+                    <visible>!String.IsEmpty(Window.Property(Leaderboards.Status))</visible>
+                </control>
+
+                <control type="group">
+                    <top>140</top>
+                    <visible>String.IsEmpty(Window.Property(Leaderboards.Status))</visible>
+                    <include content="List_DialogSelect">
+                        <param name="id">3</param>
+                        <param name="itemlayout_include">Layout_GameLeaderboardEntry</param>
+                        <param name="item_height">62</param>
+                        <param name="item_w">1480</param>
+                        <param name="itemlayout_w">1480</param>
+                        <pagecontrol>61</pagecontrol>
+                        <onright>61</onright>
+                        <include>Size_Grouplist_Pad</include>
+                    </include>
+                </control>
+            </control>
+        </control>
+    </include>
+
     <include name="DialogGameControllers_Button_Movement">
         <onback>9001</onback>
     </include>
