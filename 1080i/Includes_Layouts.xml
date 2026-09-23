@@ -2643,4 +2643,105 @@
             </control>
         </definition>
     </include>
+    <include name="Layout_GameAchievement">
+        <param name="selected">false</param>
+        <definition>
+            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <include content="Part_List_Icon" description="Badge, dimmed while the achievement is locked">
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="is_defaulticon">[True]</param>
+                    <param name="colordiffuse">$VAR[Color_GameAchievementBadge]</param>
+                </include>
+                <control type="group" description="Title, and how the achievement is earned">
+                    <right>400</right>
+                    <include content="List_Layout_Dialog_Labels">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="label2_visible">true</param>
+                    </include>
+                    <animation effect="slide" start="0" end="0,-20" condition="true">Conditional</animation>
+                </control>
+                <control type="group" description="How rare it is">
+                    <left>$PARAM[item_h]</left>
+                    <right>400</right>
+                    <height>60</height>
+                    <centertop>50%</centertop>
+                    <animation effect="slide" start="0" end="0,20" condition="true">Conditional</animation>
+                    <control type="label">
+                        <left>-10</left>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>dialog_fg_70</textcolor>
+                        <selectedcolor>dialog_fg_70</selectedcolor>
+                        <disabledcolor>dialog_fg_30</disabledcolor>
+                        <font>font_tiny</font>
+                        <label>$INFO[ListItem.Property(achievement.raritystars)]$INFO[ListItem.Property(achievement.raritycategory), ,]</label>
+                        <height>30</height>
+                        <bottom>0</bottom>
+                    </control>
+                </control>
+                <control type="group" description="What it is worth, and whether it has been earned">
+                    <width>400</width>
+                    <right>0</right>
+                    <height>100</height>
+                    <centertop>50%</centertop>
+                    <control type="label">
+                        <right>10</right>
+                        <top>0</top>
+                        <height>40</height>
+                        <align>right</align>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>dialog_fg_70</textcolor>
+                        <selectedcolor>dialog_fg_70</selectedcolor>
+                        <font>font_main_bold</font>
+                        <label>$INFO[ListItem.Property(achievement.points)]</label>
+                    </control>
+                    <control type="label" description="Unlock date, shown only for earned achievements">
+                        <right>10</right>
+                        <top>40</top>
+                        <height>30</height>
+                        <align>right</align>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>$VAR[ColorWatchedProgress]</textcolor>
+                        <selectedcolor>$VAR[ColorWatchedProgress]</selectedcolor>
+                        <font>font_tiny</font>
+                        <label>$INFO[ListItem.Property(achievement.unlockeddate)]</label>
+                        <visible>!String.IsEmpty(ListItem.Property(achievement.earned))</visible>
+                    </control>
+                    <control type="label">
+                        <right>10</right>
+                        <top>40</top>
+                        <height>30</height>
+                        <align>right</align>
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <textcolor>dialog_fg_70</textcolor>
+                        <selectedcolor>dialog_fg_70</selectedcolor>
+                        <font>font_tiny</font>
+                        <label>$INFO[ListItem.Property(achievement.measuredprogress)]</label>
+                        <visible>!String.IsEmpty(ListItem.Property(achievement.measured))</visible>
+                    </control>
+                    <control type="progress">
+                        <include condition="$PARAM[selected]">Layout_GameAchievement_Progress_Selected</include>
+                        <right>10</right>
+                        <width>260</width>
+                        <bottom>12</bottom>
+                        <height>4</height>
+                        <texturebg colordiffuse="dialog_fg_12" border="12,0,12,0">progress/progress-nib.png</texturebg>
+                        <midtexture colordiffuse="$VAR[ColorHighlight]" border="12,0,12,0">progress/progress-nib.png</midtexture>
+                        <info>ListItem.Property(achievement.measuredpercent)</info>
+                        <visible>!String.IsEmpty(ListItem.Property(achievement.measured))</visible>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_GameAchievement_Progress_Selected">
+        <texturebg colordiffuse="$VAR[ColorSelected_30]" border="12,0,12,0">progress/progress-nib.png</texturebg>
+        <midtexture colordiffuse="$VAR[ColorSelected]" border="12,0,12,0">progress/progress-nib.png</midtexture>
+    </include>
+
+
 </includes>
