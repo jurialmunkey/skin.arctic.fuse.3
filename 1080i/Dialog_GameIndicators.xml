@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="Layout_GameIndicator">
+        <param name="condition"></param>
+        <param name="badge"></param>
+        <param name="title"></param>
+        <param name="detail"></param>
+        <param name="bar"></param>
+        <param name="height">100</param>
+        <param name="left">100</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[condition]</visible>
+                <width>440</width>
+                <height>$PARAM[height]</height>
+                <animation effect="fade" time="200">VisibleChange</animation>
+
+                <control type="image">
+                    <texture border="20" colordiffuse="main_bg_70">common/menu.png</texture>
+                </control>
+
+                <control type="image" description="The badge, where there is one to show">
+                    <left>20</left>
+                    <top>20</top>
+                    <width>60</width>
+                    <height>60</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true" diffuse="diffuse/square_w120_h120.png">$INFO[$PARAM[badge]]</texture>
+                    <visible>!String.IsEmpty($PARAM[badge])</visible>
+                </control>
+
+                <control type="label">
+                    <left>$PARAM[left]</left>
+                    <right>160</right>
+                    <top>20</top>
+                    <height>40</height>
+                    <font>font_mini</font>
+                    <textcolor>main_fg_100</textcolor>
+                    <label>$INFO[$PARAM[title]]</label>
+                    <scroll>true</scroll>
+                    <scrollsuffix>   </scrollsuffix>
+                </control>
+
+                <control type="label" description="How far along, where that is counted">
+                    <right>20</right>
+                    <width>120</width>
+                    <top>20</top>
+                    <height>40</height>
+                    <align>right</align>
+                    <font>font_mini</font>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$INFO[$PARAM[detail]]</label>
+                    <visible>!String.IsEmpty($PARAM[detail])</visible>
+                </control>
+
+                <control type="progress">
+                    <left>$PARAM[left]</left>
+                    <right>20</right>
+                    <bottom>20</bottom>
+                    <height>4</height>
+                    <texturebg colordiffuse="main_fg_12" border="12,0,12,0">progress/progress-nib.png</texturebg>
+                    <midtexture colordiffuse="$VAR[ColorHighlight]" border="12,0,12,0">progress/progress-nib.png</midtexture>
+                    <info>$PARAM[bar]</info>
+                    <visible>!String.IsEmpty($PARAM[bar])</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogGameIndicators">
+        <control type="grouplist">
+            <right>60</right>
+            <top>60</top>
+            <width>440</width>
+            <height>400</height>
+            <orientation>vertical</orientation>
+            <itemgap>20</itemgap>
+            <align>right</align>
+
+            <include content="Layout_GameIndicator" description="The achievement being attempted">
+                <param name="condition">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
+                <param name="badge">RetroPlayer.AchievementsChallengeBadge</param>
+                <param name="title">RetroPlayer.AchievementsChallengeTitle</param>
+                <param name="height">80</param>
+            </include>
+
+            <include content="Layout_GameIndicator" description="How far along a measured achievement is">
+                <param name="condition">!String.IsEmpty(RetroPlayer.AchievementsIndicatorTitle)</param>
+                <param name="badge">RetroPlayer.AchievementsIndicatorBadge</param>
+                <param name="title">RetroPlayer.AchievementsIndicatorTitle</param>
+                <param name="detail">RetroPlayer.AchievementsIndicatorProgress</param>
+                <param name="bar">RetroPlayer.AchievementsIndicatorPercent</param>
+            </include>
+
+            <include content="Layout_GameIndicator" description="The value a leaderboard attempt is tracking">
+                <param name="condition">!String.IsEmpty(RetroPlayer.LeaderboardTracker)</param>
+                <param name="title">RetroPlayer.LeaderboardTracker</param>
+                <param name="left">20</param>
+                <param name="height">80</param>
+            </include>
+        </control>
+    </include>
+</includes>
