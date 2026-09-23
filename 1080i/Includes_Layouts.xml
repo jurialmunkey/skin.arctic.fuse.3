@@ -2643,4 +2643,95 @@
             </control>
         </definition>
     </include>
+    <include name="Layout_GameLeaderboardRank">
+        <param name="medal"></param>
+        <param name="color">dialog_fg_70</param>
+        <param name="selected">false</param>
+        <definition>
+            <control type="label">
+                <width>100</width>
+                <height>40</height>
+                <centertop>50%</centertop>
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <font>font_main_bold</font>
+                <textcolor>$PARAM[color]</textcolor>
+                <selectedcolor>$PARAM[color]</selectedcolor>
+                <label>$INFO[ListItem.Property(RankLabel)]</label>
+                <visible>String.IsEqual(ListItem.Property(Medal),$PARAM[medal])</visible>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_GameLeaderboardEntry">
+        <param name="selected">false</param>
+        <definition>
+            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="image" description="The signed-in player's own row">
+                <texture border="40" colordiffuse="dialog_fg_12">common/menu.png</texture>
+                <visible>!String.IsEmpty(ListItem.Property(IsPlayer))</visible>
+            </control>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <include content="Layout_GameLeaderboardRank">
+                    <param name="medal">gold</param>
+                    <param name="color">FFFFD24A</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Layout_GameLeaderboardRank">
+                    <param name="medal">silver</param>
+                    <param name="color">FFB9C6D2</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Layout_GameLeaderboardRank">
+                    <param name="medal">bronze</param>
+                    <param name="color">FFCD8B45</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Layout_GameLeaderboardRank">
+                    <param name="medal"></param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <control type="group">
+                    <left>100</left>
+                    <right>500</right>
+                    <include content="Part_List_Icon" description="The player's RetroAchievements avatar">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="fallback">DefaultUser.png</param>
+                        <param name="is_defaulticon">[False]</param>
+                    </include>
+                    <include content="List_Layout_Dialog_Labels">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="label2_visible">false</param>
+                    </include>
+                </control>
+                <control type="label" description="When the score was set">
+                    <width>260</width>
+                    <right>240</right>
+                    <height>40</height>
+                    <centertop>50%</centertop>
+                    <align>right</align>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <font>font_tiny</font>
+                    <label>$INFO[ListItem.Property(DateRelative)]</label>
+                </control>
+                <control type="label" description="The score, as this leaderboard measures it">
+                    <width>220</width>
+                    <right>10</right>
+                    <height>40</height>
+                    <centertop>50%</centertop>
+                    <align>right</align>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <selectedcolor>dialog_fg_70</selectedcolor>
+                    <font>font_main_bold</font>
+                    <label>$INFO[ListItem.Label2]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
 </includes>
