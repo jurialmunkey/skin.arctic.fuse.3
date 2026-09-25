@@ -425,6 +425,99 @@
         </definition>
     </include>
 
+    <include name="Layout_GamePort">
+        <param name="selected">false</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+            </include>
+            <control type="label">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <left>40</left>
+                <right>520</right>
+                <font>font_main_bold</font>
+                <textcolor>dialog_fg_90</textcolor>
+                <selectedcolor>dialog_fg_90</selectedcolor>
+                <label>$INFO[ListItem.Label]</label>
+            </control>
+            <control type="label">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <right>140</right>
+                <width>360</width>
+                <align>right</align>
+                <font>font_main</font>
+                <textcolor>dialog_fg_70</textcolor>
+                <selectedcolor>dialog_fg_70</selectedcolor>
+                <label>$INFO[ListItem.Label2]</label>
+            </control>
+            <control type="gamecontroller">
+                <right>30</right>
+                <centertop>50%</centertop>
+                <width>90</width>
+                <height>90</height>
+                <texture>$INFO[ListItem.Icon]</texture>
+                <portaddress>$INFO[ListItem.FilenameAndPath]</portaddress>
+                <controllerdiffuse>$VAR[ColorHighlight]</controllerdiffuse>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_GameAgentPort">
+        <control type="gamecontroller">
+            <top>8</top>
+            <width>80</width>
+            <height>80</height>
+            <texture>$INFO[ListItem.Icon]</texture>
+            <controllerid>$INFO[ListItem.Property(game.controllerid)]</controllerid>
+            <controlleraddress>$INFO[ListItem.FilenameAndPath]</controlleraddress>
+            <controllerdiffuse>$VAR[ColorHighlight]</controllerdiffuse>
+        </control>
+    </include>
+
+    <include name="Layout_GameAgentController">
+        <control type="gamecontroller">
+            <top>8</top>
+            <width>80</width>
+            <height>80</height>
+            <texture>$INFO[ListItem.Icon]</texture>
+            <controllerid>$INFO[ListItem.Property(game.controllerid)]</controllerid>
+            <peripherallocation>$INFO[ListItem.FilenameAndPath]</peripherallocation>
+            <controllerdiffuse>$VAR[ColorHighlight]</controllerdiffuse>
+        </control>
+    </include>
+
+    <include name="Layout_GameAgent">
+        <param name="selected">false</param>
+        <definition>
+            <include content="Object_Control" condition="$PARAM[selected]">
+                <param name="control">image</param>
+                <include>Texture_Menu_Highlight_H</include>
+            </include>
+            <control type="label">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <left>40</left>
+                <width>300</width>
+                <font>font_main_bold</font>
+                <textcolor>dialog_fg_90</textcolor>
+                <selectedcolor>dialog_fg_90</selectedcolor>
+                <label>$INFO[ListItem.Label]</label>
+            </control>
+            <control type="gamecontrollerlist">
+                <left>360</left>
+                <right>20</right>
+                <orientation>horizontal</orientation>
+                <enable>false</enable>
+                <itemlayout width="80" height="96">
+                    <include>Layout_GameAgentController</include>
+                </itemlayout>
+                <focusedlayout width="80" height="96">
+                    <include>Layout_GameAgentController</include>
+                </focusedlayout>
+            </control>
+        </definition>
+    </include>
+
     <include name="Layout_GameFilter">
         <param name="selected">false</param>
         <param name="detailed">false</param>
