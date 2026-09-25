@@ -210,58 +210,57 @@
         </include>
     </include>
 
-
-    <include name="DialogGamePorts">
-        <include>Part_Dim_Overlay</include>
-        <control type="group">
-            <include>Dimension_DialogFullMenu</include>
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogFullMenu</param>
-            </include>
-            <control type="group" id="8000">
-                <include>Size_Dialog_Pad</include>
-                <control type="group">
-                    <include>Size_LeftGroup_Main</include>
-                    <control type="group">
-                        <include>Size_Group_Head</include>
-                        <include content="Part_HeadText">
-                            <param name="id">2</param>
-                            <param name="label">$LOCALIZE[35110]</param>
-                            <param name="right">constant_dialog_pad</param>
-                        </include>
-                        <include content="Part_ItemPage">
-                            <param name="id">3</param>
-                        </include>
-                        <include>Part_Line</include>
-                    </control>
-                    <control type="group">
-                        <include>Size_Group_Body</include>
-                        <include content="List_DialogSelect">
-                            <param name="id">3</param>
-                            <param name="itemlayout_include">Layout_GamePort</param>
-                            <param name="item_height">100</param>
-                            <pagecontrol>62</pagecontrol>
-                            <onright>62</onright>
-                            <include>Size_Grouplist_Pad</include>
-                        </include>
-                        <include content="Part_Scrollbar_Max">
-                            <param name="id">62</param>
-                            <param name="inset">false</param>
-                            <onleft>3</onleft>
-                            <onright>9000</onright>
-                        </include>
-                    </control>
-                </control>
-                <include content="Part_Button_Grouplist">
-                    <param name="onleft">3</param>
-                    <param name="items">DialogGamePorts_Items</param>
+    <include name="DialogGameControllers_GamePorts">
+        <param name="id">3</param>
+        <param name="header">$LOCALIZE[35110]</param>
+        <param name="itemlayout_include">List_Layout_GameController</param>
+        <param name="items">DialogGameControllers_DialogGameAgents_Items</param>
+        <definition>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Dimension_DialogHugeMenu</include>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogHugeMenu</param>
                 </include>
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_LeftGroup_Main</include>
+                        <include content="Part_HeaderBasic">
+                            <param name="id">$PARAM[id]</param>
+                            <param name="header_id">2</param>
+                            <param name="header">$PARAM[header]</param>
+                        </include>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <include content="List_DialogSelect">
+                                <param name="id">$PARAM[id]</param>
+                                <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
+                                <param name="item_height">128</param>
+                                <param name="detailed">false</param>
+                                <pagecontrol>61</pagecontrol>
+                                <onright>61</onright>
+                                <include>Size_Grouplist_Pad</include>
+                            </include>
+                            <include content="Part_Scrollbar_Max">
+                                <param name="id">61</param>
+                                <param name="inset">false</param>
+                                <onleft>$PARAM[id]</onleft>
+                                <onright>9000</onright>
+                            </include>
+                        </control>
+                    </control>
+                    <include content="Part_Button_Grouplist">
+                        <param name="onleft">$PARAM[id]</param>
+                        <param name="items">DialogGameControllers_GamePorts_Items</param>
+                    </include>
+                </control>
             </control>
-        </control>
+        </definition>
     </include>
 
-    <include name="DialogGamePorts_Items">
+    <include name="DialogGameControllers_GamePorts_Items">
         <definition>
             <include content="Button_Dialog">
                 <param name="id">18</param>
@@ -278,94 +277,112 @@
         </definition>
     </include>
 
-    <include name="DialogGameAgents">
-        <include>Part_Dim_Overlay</include>
-        <control type="group">
-            <include>Dimension_DialogFullMenu</include>
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogFullMenu</param>
-            </include>
-            <control type="group" id="8000">
-                <include>Size_Dialog_Pad</include>
-                <control type="group">
-                    <include>Size_LeftGroup_Main</include>
-                    <control type="group">
-                        <include>Size_Group_Head</include>
-                        <include content="Part_HeadText">
-                            <param name="id">9999</param>
-                            <param name="label">$LOCALIZE[35172]</param>
-                            <param name="right">constant_dialog_pad</param>
-                        </include>
-                        <include>Part_Line</include>
-                    </control>
-                    <control type="group">
-                        <include>Size_Group_Body</include>
-                        <control type="group">
-                            <left>constant_grouplist_pad</left>
-                            <right>constant_grouplist_pad</right>
-                            <height>96</height>
-                            <control type="label">
-                                <left>40</left>
-                                <width>300</width>
-                                <font>font_mini</font>
-                                <textcolor>dialog_fg_50</textcolor>
-                                <label>$LOCALIZE[35110]</label>
-                            </control>
-                            <control type="gamecontrollerlist" id="4">
-                                <left>360</left>
-                                <right>20</right>
-                                <orientation>horizontal</orientation>
-                                <enable>false</enable>
-                                <itemlayout width="80" height="96">
-                                    <include>Layout_GameAgentPort</include>
-                                </itemlayout>
-                                <focusedlayout width="80" height="96">
-                                    <include>Layout_GameAgentPort</include>
-                                </focusedlayout>
-                            </control>
-                        </control>
-                        <control type="group">
-                            <top>116</top>
-                            <include content="List_DialogSelect">
-                                <param name="id">7</param>
-                                <param name="itemlayout_include">Layout_GameAgent</param>
-                                <param name="item_height">96</param>
-                                <pagecontrol>61</pagecontrol>
-                                <onright>61</onright>
-                                <include>Size_Grouplist_Pad</include>
-                            </include>
-                            <include content="Part_Scrollbar_Max">
-                                <param name="id">61</param>
-                                <param name="inset">false</param>
-                                <onleft>7</onleft>
-                                <onright>9000</onright>
-                            </include>
-                        </control>
-                    </control>
-                </control>
-                <include content="Part_Button_Grouplist">
-                    <param name="onleft">7</param>
-                    <param name="items">DialogGameAgents_Items</param>
+    <include name="DialogGameControllers_GameAgents">
+        <param name="id">7</param>
+        <param name="header">$LOCALIZE[35172]</param>
+        <param name="itemlayout_include">List_Layout_GameAgents</param>
+        <definition>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Dimension_DialogHugeMenu</include>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogHugeMenu</param>
                 </include>
+                <control type="group">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_LeftGroup_Main</include>
+                        <control type="group">
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="id">2</param>
+                                <param name="label">$PARAM[header]</param>
+                                <param name="right">constant_dialog_pad</param>
+                            </include>
+                            <include content="Part_ItemLine">
+                                <param name="visible">true</param>
+                                <param name="label">$LOCALIZE[35110]</param>
+                            </include>
+                        </control>
+                        <control type="group" id="8000">
+                            <include>Size_Group_Body</include>
+                            <control type="group">
+                                <height>140</height>
+                                <control type="group">
+                                    <include>Size_Grouplist_Pad</include>
+                                    <control type="button" id="3">
+                                        <label />
+                                        <texturenofocus />
+                                        <font>font_main</font>
+                                        <textcolor>dialog_fg_90</textcolor>
+                                        <onup>SetFocus($PARAM[id],999,absolute)</onup>
+                                        <ondown>SetFocus($PARAM[id],0,absolute)</ondown>
+                                        <onclick>ActivateWindow(GamePorts)</onclick>
+                                        <onright>61</onright>
+                                    </control>
+                                    <control type="group">
+                                        <left>20</left>
+                                        <right>20</right>
+                                        <include content="Part_List_GameAgents">
+                                            <param name="id">4</param>
+                                            <param name="colordiffuse">dialog_fg_90</param>
+                                        </include>
+                                    </control>
+                                </control>
+                                <control type="group">
+                                    <top>20</top>
+                                    <bottom>-20</bottom>
+                                    <include content="Part_ItemPage">
+                                        <param name="id">$PARAM[id]</param>
+                                    </include>
+                                </control>
+                            </control>
+                            <control type="group">
+                                <top>140</top>
+                                <include content="List_DialogSelect">
+                                    <param name="id">$PARAM[id]</param>
+                                    <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
+                                    <param name="item_height">100</param>
+                                    <param name="detailed">false</param>
+                                    <pagecontrol>61</pagecontrol>
+                                    <onright>61</onright>
+                                    <include>Size_Grouplist_Pad</include>
+                                    <onup>3</onup>
+                                    <ondown>3</ondown>
+                                </include>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <control type="group">
+                                <top>140</top>
+                                <include content="Part_Scrollbar_Max">
+                                    <param name="id">61</param>
+                                    <param name="inset">false</param>
+                                    <onleft>8000</onleft>
+                                    <onright>9000</onright>
+                                </include>
+                            </control>
+                        </control>
+                    </control>
+                    <include content="Part_Button_Grouplist">
+                        <param name="onleft">61</param>
+                        <param name="items">DialogGameControllers_DialogGameAgents_Items</param>
+                    </include>
+                </control>
             </control>
-        </control>
+        </definition>
     </include>
 
-    <include name="DialogGameAgents_Items">
+
+    <include name="DialogGameControllers_DialogGameAgents_Items">
         <definition>
             <include content="Button_Dialog">
                 <param name="id">18</param>
                 <param name="groupid">9318</param>
                 <param name="icon">special://skin/extras/icons/circle-check.png</param>
                 <label>$LOCALIZE[186]</label>
-            </include>
-            <include content="Button_Dialog">
-                <param name="id">3</param>
-                <param name="groupid">9303</param>
-                <param name="icon">special://skin/extras/icons/plug.png</param>
-                <label>$LOCALIZE[35110]</label>
-                <onclick>ActivateWindow(GamePorts)</onclick>
             </include>
         </definition>
     </include>

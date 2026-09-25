@@ -30,19 +30,22 @@
         </definition>
     </include>
 
+    <include name="Part_List_Icon_Padding">
+        <left>0</left>
+        <top>20</top>
+        <bottom>20</bottom>
+        <right>40</right>
+    </include>
+
     <include name="Part_List_Icon">
         <param name="icon">$INFO[ListItem.Icon]</param>
         <param name="is_defaulticon">[String.StartsWith(ListItem.Icon,Default) | String.StartsWith(ListItem.Icon,special://skin/extras/icons/)]</param>
         <param name="colordiffuse">dialog_fg_90</param>
         <definition>
             <control type="group">
-                <left>0</left>
                 <width>$PARAM[item_h]</width>
                 <control type="group">
-                    <left>0</left>
-                    <top>20</top>
-                    <bottom>20</bottom>
-                    <right>40</right>
+                    <include>Part_List_Icon_Padding</include>
                     <control type="image">
                         <aspectratio>keep</aspectratio>
                         <texture background="true" fallback="$PARAM[fallback]" diffuse="diffuse/square_w120_h120.png">$PARAM[icon]</texture>
@@ -54,6 +57,55 @@
                         <visible>$PARAM[is_defaulticon]</visible>
                     </control>
                 </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Part_List_GameController">
+        <param name="icon">$INFO[ListItem.Icon]</param>
+        <param name="colordiffuse">dialog_fg_90</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_h]</width>
+                <control type="group">
+                    <include>Part_List_Icon_Padding</include>
+                    <control type="gamecontroller">
+                        <aspectratio>keep</aspectratio>
+                        <texture background="true" fallback="$PARAM[fallback]" colordiffuse="$PARAM[colordiffuse]" diffuse="diffuse/square_w120_h120.png">$PARAM[icon]</texture>
+                        <portaddress>$INFO[ListItem.FilenameAndPath]</portaddress>
+                        <controllerdiffuse>$VAR[ColorHighlight]</controllerdiffuse>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Part_List_GameAgents">
+        <param name="icon">$INFO[ListItem.Icon]</param>
+        <param name="colordiffuse">dialog_fg_90</param>
+        <definition>
+            <control type="gamecontrollerlist" id="$PARAM[id]">
+                <orientation>horizontal</orientation>
+                <itemlayout width="100" height="100">
+                    <control type="gamecontroller">
+                        <width>100</width>
+                        <height>100</height>
+                        <texture>$INFO[ListItem.Icon]</texture>
+                        <controllerid>$INFO[ListItem.Property(game.controllerid)]</controllerid>
+                        <peripherallocation>$INFO[ListItem.FilenameAndPath]</peripherallocation>
+                        <controllerdiffuse>$VAR[ColorHighlight]</controllerdiffuse>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="100" height="100">
+                    <control type="gamecontroller">
+                        <width>100</width>
+                        <height>100</height>
+                        <texture>$INFO[ListItem.Icon]</texture>
+                        <controllerid>$INFO[ListItem.Property(game.controllerid)]</controllerid>
+                        <peripherallocation>$INFO[ListItem.FilenameAndPath]</peripherallocation>
+                        <controllerdiffuse>$VAR[ColorHighlight]</controllerdiffuse>
+                    </control>
+                </focusedlayout>
             </control>
         </definition>
     </include>
@@ -174,6 +226,20 @@
                 </control>
             </control>
         </definition>
+    </include>
+
+    <include name="Part_HeaderBasic">
+        <control type="group">
+            <include>Size_Group_Head</include>
+            <include content="Part_HeadText">
+                <param name="id">$PARAM[header_id]</param>
+                <param name="label">$PARAM[header]</param>
+                <param name="right">constant_dialog_pad</param>
+            </include>
+            <include content="Part_ItemPage">
+                <param name="id">$PARAM[id]</param>
+            </include>
+        </control>
     </include>
 
     <include name="Part_Line">
