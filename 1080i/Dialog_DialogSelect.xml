@@ -150,375 +150,189 @@
     </include>
 
     <include name="DialogSelect_Viewtype">
-        <include>Part_Dim_Overlay</include>
-        <control type="group">
-            <include>Dimension_DialogFullMenu</include>
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogFullMenu</param>
-                <param name="topline">false</param>
-            </include>
-            <!-- Content -->
-            <control type="group" id="8000">
-                <include>Size_Dialog_Pad</include>
-                <control type="group">
-                    <include>Part_Panel</include>
+        <param name="id">3</param>
+        <param name="itemlayout_include">Layout_ViewType</param>
+        <param name="windowopen_delay">200</param>
+        <definition>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Dimension_DialogFullMenu</include>
+                <include content="Animation_BounceIn_Dialog">
+                    <param name="windowopen_delay">$PARAM[windowopen_delay]</param>
+                </include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogFullMenu</param>
+                    <param name="topline">false</param>
+                </include>
+                <!-- Content -->
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
                     <control type="group">
-                        <include>Size_Group_Head</include>
-                        <include content="Part_HeadText">
-                            <param name="id">1</param>
-                            <param name="label">$PARAM[header]</param>
-                        </include>
-                        <include content="Part_ItemPage">
-                            <param name="id">3</param>
-                        </include>
-                        <include>Part_CloseButton</include>
-                    </control>
-                    <control type="group">
-                        <include>Size_Group_Body</include>
-
+                        <include>Part_Panel</include>
                         <control type="group">
-                            <left>0</left>
-                            <right>0</right>
-                            <top>20</top>
-                            <bottom>20</bottom>
-                            <!-- <control type="grouplist">
-                                <orientation>horizontal</orientation>
-                                <itemgap>0</itemgap>
-                                <control type="group">
-                                    <width>1000</width>
-                                    <height>580</height>
-                                    <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">false</param>
-                                        <param name="icon">$INFO[Container(3).ListItem(-1).Icon]</param>
-                                    </include>
-                                </control>
-                                <control type="group">
-                                    <width>1000</width>
-                                    <height>580</height>
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">true</param>
-                                        <param name="icon">$INFO[Container(3).ListItem.Icon]</param>
-                                    </include>
-                                </control>
-                                <control type="group">
-                                    <width>1000</width>
-                                    <height>580</height>
-                                    <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">false</param>
-                                        <param name="icon">$INFO[Container(3).ListItem(1).Icon]</param>
-                                    </include>
-                                </control>
-                            </control> -->
-
-                            <control type="wraplist" id="3">
-
-                                <!-- <include content="Animation_ConditionalFade">
-                                    <param name="condition">true</param>
-                                </include> -->
-                                <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
-                                <orientation>horizontal</orientation>
-                                <focusposition>1</focusposition>
-                                <preloaditems>2</preloaditems>
-                                <!-- <scrolltime>0</scrolltime> -->
-
-                                <itemlayout width="1000" height="580">
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">false</param>
-                                    </include>
-                                </itemlayout>
-
-                                <focusedlayout width="1000" height="580">
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">false</param>
-                                    </include>
-                                </focusedlayout>
-
-                                <include>$PARAM[include_content]</include>
-                            </control>
-
-                            <control type="grouplist">
-                                <orientation>horizontal</orientation>
-                                <itemgap>0</itemgap>
-                                <control type="group">
-                                    <width>1000</width>
-                                </control>
-                                <control type="group">
-                                    <width>1000</width>
-                                    <height>580</height>
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">true</param>
-                                        <param name="icon">$INFO[Container(3).ListItem.Icon]</param>
-                                        <param name="current">Container(3).ListItem.IsSelected</param>
-                                    </include>
-                                </control>
-                            </control>
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="id">1</param>
+                                <param name="label">$PARAM[header]</param>
+                            </include>
+                            <include content="Part_ItemPage">
+                                <param name="id">$PARAM[id]</param>
+                            </include>
+                            <include>Part_CloseButton</include>
                         </control>
-
                         <control type="group">
-                            <height>105</height>
-                            <bottom>-5</bottom>
-                            <left>40</left>
-                            <right>40</right>
+                            <include>Size_Group_Body</include>
 
-                            <control type="button">
-                                <texturenofocus />
-                                <texturefocus />
-                                <width>400</width>
-                                <onclick>Control.Move(3,-1)</onclick>
-                            </control>
-                            <control type="label">
-                                <left>40</left>
-                                <textcolor>dialog_fg_70</textcolor>
-                                <align>left</align>
-                                <font>font_mini</font>
-                                <label>$INFO[Container(3).ListItem(-1).Label]</label>
-                            </control>
-                            <control type="image">
-                                <centerleft>0</centerleft>
-                                <centertop>50%</centertop>
-                                <width>40</width>
-                                <height>40</height>
-                                <bordersize>-12</bordersize>
-                                <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-left.png</texture>
-                            </control>
-
-                            <control type="label">
-                                <left>400</left>
-                                <right>400</right>
-                                <textcolor>dialog_fg_90</textcolor>
-                                <align>center</align>
-                                <font>font_main_bold</font>
-                                <label>$INFO[Container(3).ListItem.Label]</label>
-                            </control>
-
-                            <control type="button">
-                                <texturenofocus />
-                                <texturefocus />
+                            <control type="group">
+                                <left>0</left>
                                 <right>0</right>
-                                <width>400</width>
-                                <onclick>Control.Move(3,1)</onclick>
-                            </control>
-                            <control type="label">
-                                <right>40</right>
-                                <textcolor>dialog_fg_70</textcolor>
-                                <align>right</align>
-                                <font>font_mini</font>
-                                <label>$INFO[Container(3).ListItem(1).Label]</label>
-                            </control>
-                            <control type="image">
-                                <centerright>0</centerright>
-                                <centertop>50%</centertop>
-                                <width>40</width>
-                                <height>40</height>
-                                <bordersize>-12</bordersize>
-                                <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-right.png</texture>
-                            </control>
-                        </control>
+                                <top>20</top>
+                                <bottom>20</bottom>
 
-                    </control>
-                    <!-- <include content="Part_Scrollbar">
-                        <param name="id">61</param>
-                        <onleft>3</onleft>
-                        <onright>9000</onright>
-                    </include> -->
-                </control>
-            </control>
-        </control>
-    </include>
+                                <control type="wraplist" id="$PARAM[id]">
 
+                                    <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
+                                    <orientation>horizontal</orientation>
+                                    <focusposition>1</focusposition>
+                                    <preloaditems>2</preloaditems>
+                                    <itemlayout width="1000" height="580">
+                                        <include content="$PARAM[itemlayout_include]">
+                                            <param name="selected">false</param>
+                                        </include>
+                                    </itemlayout>
 
-    <include name="DialogSelect_GamePreview">
-        <include>Part_Dim_Overlay</include>
-        <control type="group">
-            <include>Dimension_DialogFullMenu</include>
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogFullMenu</param>
-                <param name="topline">false</param>
-            </include>
-            <!-- Content -->
-            <control type="group" id="8000">
-                <include>Size_Dialog_Pad</include>
-                <control type="group">
-                    <include>Part_Panel</include>
-                    <control type="group">
-                        <include>Size_Group_Head</include>
-                        <include content="Part_HeadText">
-                            <param name="id">1</param>
-                            <param name="label">$VAR[Label_GameOSD_Heading]</param>
-                        </include>
-                        <include content="Part_ItemPage">
-                            <param name="id">10811</param>
-                        </include>
-                        <include>Part_CloseButton</include>
-                    </control>
-                    <control type="group">
-                        <include>Size_Group_Body</include>
+                                    <focusedlayout width="1000" height="580">
+                                        <include content="$PARAM[itemlayout_include]">
+                                            <param name="selected">false</param>
+                                        </include>
+                                    </focusedlayout>
 
-                        <control type="group">
-                            <left>0</left>
-                            <right>0</right>
-                            <top>20</top>
-                            <bottom>20</bottom>
-
-                            <control type="wraplist" id="10811">
-                                <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
-                                <orientation>horizontal</orientation>
-                                <focusposition>1</focusposition>
-                                <preloaditems>2</preloaditems>
-
-                                <itemlayout width="1000" height="580">
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">false</param>
-                                    </include>
-                                </itemlayout>
-
-                                <focusedlayout width="1000" height="580">
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">false</param>
-                                    </include>
-                                </focusedlayout>
-                            </control>
-
-                            <control type="grouplist">
-                                <orientation>horizontal</orientation>
-                                <itemgap>0</itemgap>
-                                <control type="group">
-                                    <width>1000</width>
+                                    <include>$PARAM[include_content]</include>
                                 </control>
-                                <control type="group">
-                                    <width>1000</width>
-                                    <height>580</height>
-                                    <include content="Layout_ViewType">
-                                        <param name="selected">true</param>
-                                        <param name="icon">$INFO[Container(10811).ListItem.Icon]</param>
-                                        <param name="current">Container(10811).ListItem.IsSelected</param>
-                                    </include>
+
+                                <control type="grouplist">
+                                    <orientation>horizontal</orientation>
+                                    <itemgap>0</itemgap>
                                     <control type="group">
-                                        <description>
-                                            The running game stands in for a preview the item does
-                                            not carry its own picture for. The offsets match
-                                            Layout_ViewType, which draws the picture this sits over.
-                                        </description>
-                                        <left>-740</left>
-                                        <right>740</right>
-                                        <control type="group">
-                                            <description>
-                                                Inset, because a gamewindow takes no diffuse and its
-                                                square edge would otherwise cross the focus ring the
-                                                rounded picture sits inside.
-                                            </description>
-                                            <include content="Dimension_Padding">
-                                                <param name="pad">40</param>
-                                            </include>
-                                            <control type="gamewindow">
-                                                <videofilter>$INFO[Container(10811).ListItem.Property(game.videofilter)]</videofilter>
-                                                <stretchmode>$INFO[Container(10811).ListItem.Property(game.stretchmode)]</stretchmode>
-                                                <rotation>$INFO[Container(10811).ListItem.Property(game.videorotation)]</rotation>
-                                                <visible>String.IsEmpty(Container(10811).ListItem.Art(screenshot))</visible>
-                                            </control>
-                                        </control>
-                                        <control type="group">
-                                            <include content="Dimension_Padding">
-                                                <param name="pad">20</param>
-                                            </include>
-                                            <control type="image">
-                                                <aspectratio>scale</aspectratio>
-                                                <texture background="true" diffuse="diffuse/landscape_w1040_h585.png">$INFO[Container(10811).ListItem.Art(screenshot)]</texture>
-                                            </control>
-                                        </control>
+                                        <width>1000</width>
+                                    </control>
+                                    <control type="group">
+                                        <width>1000</width>
+                                        <height>580</height>
+                                        <include content="$PARAM[itemlayout_include]">
+                                            <param name="selected">true</param>
+                                            <param name="icon">$INFO[Container($PARAM[id]).ListItem.Icon]</param>
+                                            <param name="current">Container($PARAM[id]).ListItem.IsSelected</param>
+                                        </include>
                                     </control>
                                 </control>
                             </control>
-                        </control>
-
-                        <control type="group">
-                            <top>580</top>
-                            <bottom>0</bottom>
-                            <left>40</left>
-                            <right>40</right>
-
-                            <control type="button">
-                                <texturenofocus />
-                                <texturefocus />
-                                <width>400</width>
-                                <onclick>Control.Move(10811,-1)</onclick>
-                            </control>
-                            <control type="label">
-                                <left>40</left>
-                                <textcolor>dialog_fg_70</textcolor>
-                                <align>left</align>
-                                <font>font_mini</font>
-                                <label>$INFO[Container(10811).ListItem(-1).Label]</label>
-                            </control>
-                            <control type="image">
-                                <centerleft>0</centerleft>
-                                <centertop>50%</centertop>
-                                <width>40</width>
-                                <height>40</height>
-                                <bordersize>-12</bordersize>
-                                <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-left.png</texture>
-                            </control>
 
                             <control type="group">
-                                <left>400</left>
-                                <right>400</right>
-                                <height>80</height>
-                                <centertop>50%</centertop>
-                                <control type="label">
-                                    <textcolor>dialog_fg_90</textcolor>
-                                    <align>center</align>
-                                    <font>font_main_bold</font>
-                                    <label>$INFO[Container(10811).ListItem.Label]</label>
-                                    <visible>String.IsEmpty(Container(10811).ListItem.Label2)</visible>
-                                </control>
-                                <control type="label">
-                                    <top>0</top>
-                                    <height>40</height>
-                                    <textcolor>dialog_fg_90</textcolor>
-                                    <align>center</align>
-                                    <font>font_main_bold</font>
-                                    <label>$INFO[Container(10811).ListItem.Label]</label>
-                                    <visible>!String.IsEmpty(Container(10811).ListItem.Label2)</visible>
-                                </control>
-                                <control type="label">
-                                    <bottom>0</bottom>
-                                    <height>40</height>
-                                    <textcolor>dialog_fg_70</textcolor>
-                                    <align>center</align>
-                                    <font>font_tiny</font>
-                                    <label>$INFO[Container(10811).ListItem.Label2]</label>
-                                    <visible>!String.IsEmpty(Container(10811).ListItem.Label2)</visible>
-                                </control>
-                            </control>
-
-                            <control type="button">
-                                <texturenofocus />
-                                <texturefocus />
-                                <right>0</right>
-                                <width>400</width>
-                                <onclick>Control.Move(10811,1)</onclick>
-                            </control>
-                            <control type="label">
+                                <height>105</height>
+                                <bottom>-5</bottom>
+                                <left>40</left>
                                 <right>40</right>
-                                <textcolor>dialog_fg_70</textcolor>
-                                <align>right</align>
-                                <font>font_mini</font>
-                                <label>$INFO[Container(10811).ListItem(1).Label]</label>
-                            </control>
-                            <control type="image">
-                                <centerright>0</centerright>
-                                <centertop>50%</centertop>
-                                <width>40</width>
-                                <height>40</height>
-                                <bordersize>-12</bordersize>
-                                <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-right.png</texture>
+
+                                <control type="button">
+                                    <texturenofocus />
+                                    <texturefocus />
+                                    <width>400</width>
+                                    <onclick>Control.Move($PARAM[id],-1)</onclick>
+                                </control>
+                                <control type="label">
+                                    <left>40</left>
+                                    <textcolor>dialog_fg_70</textcolor>
+                                    <align>left</align>
+                                    <font>font_mini</font>
+                                    <label>$INFO[Container($PARAM[id]).ListItem(-1).Label]</label>
+                                </control>
+                                <control type="image">
+                                    <centerleft>0</centerleft>
+                                    <centertop>50%</centertop>
+                                    <width>40</width>
+                                    <height>40</height>
+                                    <bordersize>-12</bordersize>
+                                    <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-left.png</texture>
+                                </control>
+
+                                <control type="label">
+                                    <left>400</left>
+                                    <right>400</right>
+                                    <textcolor>dialog_fg_90</textcolor>
+                                    <align>center</align>
+                                    <font>font_main_bold</font>
+                                    <label>$INFO[Container($PARAM[id]).ListItem.Label]</label>
+                                </control>
+
+                                <control type="button">
+                                    <texturenofocus />
+                                    <texturefocus />
+                                    <right>0</right>
+                                    <width>400</width>
+                                    <onclick>Control.Move($PARAM[id],1)</onclick>
+                                </control>
+                                <control type="label">
+                                    <right>40</right>
+                                    <textcolor>dialog_fg_70</textcolor>
+                                    <align>right</align>
+                                    <font>font_mini</font>
+                                    <label>$INFO[Container($PARAM[id]).ListItem(1).Label]</label>
+                                </control>
+                                <control type="image">
+                                    <centerright>0</centerright>
+                                    <centertop>50%</centertop>
+                                    <width>40</width>
+                                    <height>40</height>
+                                    <bordersize>-12</bordersize>
+                                    <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-right.png</texture>
+                                </control>
                             </control>
                         </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
 
+    <include name="DialogSelect_GamePreview">
+        <control type="image">
+            <description>Black out to blend gamewindow mask</description>
+            <width>1600</width>
+            <centerleft>50%</centerleft>
+            <texture colordiffuse="black">common/white.png</texture>
+            <include>Animation_FadeIn</include>
+            <include>Animation_FadeOut</include>
+        </control>
+        <include content="DialogSelect_Viewtype">
+            <param name="id">10811</param>
+            <param name="itemlayout_include">Layout_GameWindow</param>
+            <param name="header">$VAR[Label_GameOSD_Heading]</param>
+            <param name="windowopen_delay">400</param>  <!-- Delay to wait for blackout mask -->
+        </include>
+        <control type="group">
+            <description>Mask gamewindow overlap in itemlayout due to wraplist not masking</description>
+            <include>Animation_FadeIn</include>
+            <include>Animation_FadeOut</include>
+            <control type="group">
+                <left>1600</left>
+                <right>0</right>
+                <control type="group">
+                    <left>50%</left>
+                    <control type="image">
+                        <left>-40</left>
+                        <texture colordiffuse="black">common/white.png</texture>
+                    </control>
+                </control>
+            </control>
+            <control type="group">
+                <left>0</left>
+                <right>1600</right>
+                <control type="group">
+                    <right>50%</right>
+                    <control type="image">
+                        <right>-40</right>
+                        <texture colordiffuse="black">common/white.png</texture>
                     </control>
                 </control>
             </control>
@@ -571,31 +385,9 @@
                     <right>480</right>
                     <control type="group">
                         <include>Size_Dialog_Pad</include>
-                        <control type="image">
-                            <texture border="20" colordiffuse="black">common/dialog.png</texture>
-                        </control>
-                        <control type="image">
-                            <aspectratio>scale</aspectratio>
-                            <texture border="4">$INFO[Container(10811).ListItem.Icon]</texture>
-                            <bordertexture colordiffuse="black" border="20">common/dialog.png</bordertexture>
-                            <bordersize>20</bordersize>
-                        </control>
-                        <control type="group">
-                            <left>20</left>
-                            <right>20</right>
-                            <control type="gamewindow">
-                                <videofilter>$INFO[Container(10811).ListItem.Property(game.videofilter)]</videofilter>
-                                <stretchmode>$INFO[Container(10811).ListItem.Property(game.stretchmode)]</stretchmode>
-                                <rotation>$INFO[Container(10811).ListItem.Property(game.videorotation)]</rotation>
-                                <visible>String.IsEmpty(Container(10811).ListItem.Art(screenshot))</visible>
-                            </control>
-                        </control>
-                        <control type="image">
-                            <aspectratio>scale</aspectratio>
-                            <texture border="4">$INFO[Container(10811).ListItem.Art(screenshot)]</texture>
-                            <bordertexture colordiffuse="black" border="20">common/dialog.png</bordertexture>
-                            <bordersize>20</bordersize>
-                        </control>
+                        <include content="Part_GameWindow">
+                            <param name="container">Container(10811).</param>
+                        </include>
                     </control>
                 </control>
             </control>
