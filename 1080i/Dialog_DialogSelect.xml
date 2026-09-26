@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <expression name="DialogSelect_Conditional_Buttons_Expression">[[[Control.IsEnabled(5) + Control.IsVisible(5)] | [Control.IsEnabled(8) + Control.IsVisible(8)]] + ![[Window.IsVisible(gamevideofilter) | Window.IsVisible(gamestretchmode) | Window.IsVisible(gamesaves) | Window.IsVisible(gamevideorotation) | Window.IsVisible(ingamesaves)]]]</expression>
+    <expression name="DialogSelect_Conditional_Buttons_Expression">[[Control.IsEnabled(5) + Control.IsVisible(5)] | [Control.IsEnabled(8) + Control.IsVisible(8)]]</expression>
 
     <include name="DialogSelect_Standard">
         <include>Part_Dim_Overlay</include>
@@ -46,7 +46,7 @@
                             <onright>61</onright>
                             <include>Size_Grouplist_Pad</include>
                         </include>
-                        <include content="List_Dialog" condition="![[Window.IsVisible(gamevideofilter) | Window.IsVisible(gamestretchmode) | Window.IsVisible(gamesaves) | Window.IsVisible(gamevideorotation) | Window.IsVisible(ingamesaves)]]">
+                        <include content="List_Dialog">
                             <param name="id">6</param>
                             <param name="item_height">128</param>
                             <param name="itemlayout_include">List_Layout_Dialog_DetailedCheckmark</param>
@@ -55,15 +55,7 @@
                             <onright>62</onright>
                             <include>Size_Grouplist_Pad</include>
                             <oninfo>SetFocus(99001)</oninfo>
-                        </include>
-                        <include content="List_DialogSelect" condition="[Window.IsVisible(gamevideofilter) | Window.IsVisible(gamestretchmode) | Window.IsVisible(gamesaves) | Window.IsVisible(gamevideorotation) | Window.IsVisible(ingamesaves)]">
-                            <param name="id">10811</param>
-                            <param name="itemlayout_include">Layout_GameFilter</param>
-                            <param name="item_height">128</param>
-                            <param name="textcolor">dialog_fg</param>
-                            <pagecontrol>63</pagecontrol>
-                            <onright>63</onright>
-                            <include>Size_Grouplist_Pad</include>
+                            <onleft>SetFocus(99001)</onleft>
                         </include>
                     </control>
 
@@ -80,21 +72,17 @@
                             <onleft>6</onleft>
                             <onright>9000</onright>
                         </include>
-                        <include content="Part_Scrollbar">
-                            <param name="id">63</param>
-                            <visible>Control.IsVisible(10811)</visible>
-                            <onleft>10811</onleft>
-                            <onright>9000</onright>
-                        </include>
                     </control>
                 </control>
             </control>
         </control>
+        <include>DialogSelect_ArtworkPreview</include>
     </include>
 
     <include name="DialogSelect_ArtworkPreview">
         <param name="listid">6</param>
         <param name="visible">[Control.HasFocus(99001) | Control.HasFocus(99002) | Control.HasFocus(99003)]</param>
+        <param name="image">Icon</param>
         <definition>
             <control type="group">
                 <control type="button" id="99003">
@@ -138,7 +126,7 @@
                             <include content="Part_Box_Outline">
                                 <include>Size_Dialog_Pad</include>
                                 <control type="image">
-                                    <texture background="true">$INFO[Container($PARAM[listid]).ListItem.Icon]</texture>
+                                    <texture background="true">$INFO[Container($PARAM[listid]).ListItem.$PARAM[image]]</texture>
                                     <aspectratio>keep</aspectratio>
                                 </control>
                             </include>
@@ -341,154 +329,141 @@
 
 
     <include name="DialogSelect_GameSaves">
-        <include>Part_Dim_Overlay</include>
-        <control type="group">
-            <include>Dimension_DialogWideMenu</include>
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogWideMenu</param>
+        <param name="id">3</param>
+        <param name="items">DialogSelect_GameSaves_Items</param>
+        <param name="header_id">10820</param>
+        <param name="header">$LOCALIZE[35260]</param>
+        <definition>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Dimension_DialogHugeMenu</include>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogHugeMenu</param>
+                </include>
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_LeftGroup_Main</include>
+                        <include content="Part_HeaderBasic">
+                            <param name="header_id">$PARAM[header_id]</param>
+                            <param name="header">$PARAM[header]</param>
+                            <param name="id">$PARAM[id]</param>
+                        </include>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <include content="List_DialogSelect">
+                                <param name="id">$PARAM[id]</param>
+                                <param name="itemlayout_include">List_Layout_Dialog_GameSaves</param>
+                                <param name="item_height">128</param>
+                                <pagecontrol>61</pagecontrol>
+                                <onright>61</onright>
+                                <include>Size_Grouplist_Pad</include>
+                                <oninfo>SetFocus(99001)</oninfo>
+                                <onleft>SetFocus(99001)</onleft>
+                            </include>
+                            <include content="Part_Scrollbar_Max">
+                                <param name="id">61</param>
+                                <param name="inset">false</param>
+                                <onleft>$PARAM[id]</onleft>
+                                <onright>9000</onright>
+                            </include>
+                        </control>
+                    </control>
+                    <include content="Part_Button_Grouplist">
+                        <param name="onleft">61</param>
+                        <param name="items">$PARAM[items]</param>
+                    </include>
+                    <control type="group">
+                        <include>Size_Group_Panel_Right</include>
+                        <include condition="Window.IsDialogTopMost(gamesaves)">DialogSelect_GameSaves_Details</include>
+                    </control>
+                </control>
+            </control>
+            <include content="DialogSelect_ArtworkPreview">
+                <param name="listid">$PARAM[id]</param>
+                <param name="image">Art(screenshot)</param>
             </include>
-            <control type="group" id="8000">
-                <include>Size_Dialog_Pad</include>
-                <control type="group">
-                    <include>Size_LeftGroup_Main</include>
-                    <control type="group">
-                        <include>Size_Group_Head</include>
-                        <include content="Part_HeadText">
-                            <param name="id">10820</param>
-                            <param name="label">$LOCALIZE[35260]</param>
-                            <param name="right">constant_dialog_pad</param>
-                        </include>
-                        <include content="Part_ItemPage">
-                            <param name="id">3</param>
-                        </include>
-                        <include>Part_Line</include>
-                    </control>
-                    <control type="group">
-                        <include>Size_Group_Body</include>
-                        <include content="List_DialogSelect">
-                            <param name="id">3</param>
-                            <param name="itemlayout_include">Layout_GameSave</param>
-                            <param name="item_height">128</param>
-                            <pagecontrol>61</pagecontrol>
-                            <onright>61</onright>
-                            <include>Size_Grouplist_Pad</include>
-                        </include>
-                        <include content="Part_Scrollbar_Max">
-                            <param name="id">61</param>
-                            <param name="inset">false</param>
-                            <onleft>3</onleft>
-                            <onright>9001</onright>
-                        </include>
-                    </control>
-                </control>
-                <control type="group">
-                    <include>Size_Group_Panel_Right</include>
-                    <include>Part_Panel</include>
-                    <control type="grouplist" id="9001">
-                        <onleft>3</onleft>
-                        <itemgap>20</itemgap>
-                        <orientation>vertical</orientation>
-                        <usecontrolcoords>true</usecontrolcoords>
-                        <include>Size_Grouplist_Pad</include>
-                        <include content="Button_Dialog">
-                            <param name="id">10825</param>
-                            <param name="groupid">10925</param>
-                            <param name="icon">special://skin/extras/icons/circle-plus.png</param>
-                            <label>$LOCALIZE[35261]</label>
-                        </include>
-                        <include content="Button_Dialog">
-                            <param name="id">10826</param>
-                            <param name="groupid">10926</param>
-                            <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
-                            <label>$LOCALIZE[222]</label>
-                        </include>
-                    </control>
-                    <control type="grouplist">
-                        <itemgap>20</itemgap>
-                        <orientation>vertical</orientation>
-                        <align>bottom</align>
-                        <include>Size_Grouplist_Pad</include>
-                        <control type="image" id="10824">
-                            <width>120</width>
-                            <height>120</height>
-                            <aspectratio align="left">keep</aspectratio>
-                        </control>
-                        <control type="label" id="10823">
-                            <height>40</height>
-                            <font>font_main_bold</font>
-                            <textcolor>dialog_fg_90</textcolor>
-                        </control>
-                        <control type="label" id="10828">
-                            <height>40</height>
-                            <font>font_tiny</font>
-                            <textcolor>dialog_fg_70</textcolor>
-                        </control>
-                        <control type="textbox" id="10822">
-                            <height min="40" max="240">auto</height>
-                            <font>font_tiny_plot</font>
-                            <textcolor>dialog_fg_70</textcolor>
-                        </control>
-                    </control>
-                </control>
+        </definition>
+    </include>
+
+    <include name="DialogSelect_InGameSaves">
+        <include content="DialogSelect_GameSaves">
+            <param name="header_id">1</param>
+            <param name="id">10811</param>
+            <param name="header">$VAR[Label_GameOSD_Heading]</param>
+            <param name="items">DialogSelect_InGameSaves_Items</param>
+        </include>
+    </include>
+
+    <include name="DialogSelect_InGameSaves_Items">
+        <include content="Button_Dialog">
+            <param name="id">9001</param>
+            <param name="groupid">9101</param>
+            <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+            <label>$LOCALIZE[222]</label>
+            <onclick>Close</onclick>
+        </include>
+        <include content="Button_Dialog">
+            <param name="id">9004</param>
+            <param name="groupid">9104</param>
+            <label>$LOCALIZE[1000]</label>
+            <param name="icon">special://skin/extras/icons/images.png</param>
+            <onclick>SetFocus(99001)</onclick>
+        </include>
+    </include>
+
+    <include name="DialogSelect_GameSaves_Items">
+        <include content="Button_Dialog">
+            <param name="id">10825</param>
+            <param name="groupid">10925</param>
+            <param name="icon">special://skin/extras/icons/circle-plus.png</param>
+            <label>$LOCALIZE[35261]</label>
+        </include>
+        <include content="Button_Dialog">
+            <param name="id">10826</param>
+            <param name="groupid">10926</param>
+            <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+            <label>$LOCALIZE[222]</label>
+        </include>
+        <include content="Button_Dialog">
+            <param name="id">9004</param>
+            <param name="groupid">9104</param>
+            <label>$LOCALIZE[1000]</label>
+            <param name="icon">special://skin/extras/icons/images.png</param>
+            <onclick>SetFocus(99001)</onclick>
+        </include>
+    </include>
+
+    <include name="DialogSelect_GameSaves_Details">
+        <control type="grouplist">
+            <itemgap>20</itemgap>
+            <orientation>vertical</orientation>
+            <align>bottom</align>
+            <include>Size_Grouplist_Pad</include>
+            <control type="image" id="10824">
+                <width>120</width>
+                <height>120</height>
+                <aspectratio align="left">keep</aspectratio>
+            </control>
+            <control type="label" id="10823">
+                <height>40</height>
+                <font>font_main_bold</font>
+                <textcolor>dialog_fg_90</textcolor>
+            </control>
+            <control type="label" id="10828">
+                <height>40</height>
+                <font>font_tiny</font>
+                <textcolor>dialog_fg_70</textcolor>
+            </control>
+            <control type="textbox" id="10822">
+                <height min="40" max="240">auto</height>
+                <font>font_tiny_plot</font>
+                <textcolor>dialog_fg_70</textcolor>
             </control>
         </control>
     </include>
 
-    <include name="DialogSelect_GameFilters">
-        <include>Part_Dim_Overlay</include>
-        <control type="group">
-            <include>Dimension_DialogMainMenu</include>
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogMainMenu</param>
-                <param name="topline">false</param>
-            </include>
-            <!-- Content -->
-            <control type="group" id="8000">
-                <include>Size_Dialog_Pad</include>
-                <control type="group">
-                    <width>480</width>
-                    <right>0</right>
-                    <include>Part_Panel</include>
-                    <control type="group">
-                        <include>Size_Group_Head</include>
-                        <include content="Part_HeadText">
-                            <param name="id">1</param>
-                            <param name="label">$VAR[Label_GameOSD_Heading]</param>
-                        </include>
-                        <include content="Part_ItemPage">
-                            <param name="id">3</param>
-                        </include>
-                        <include>Part_CloseButton</include>
-                    </control>
-                    <control type="group">
-                        <include>Size_Group_Body</include>
-                        <include content="List_Dialog">
-                            <param name="id">10811</param>
-                            <pagecontrol>61</pagecontrol>
-                            <onright>61</onright>
-                            <include>Size_Grouplist_Pad</include>
-                            <include>$PARAM[include_content]</include>
-                        </include>
-                    </control>
-                    <include content="Part_Scrollbar">
-                        <param name="id">61</param>
-                        <onleft>10811</onleft>
-                    </include>
-                </control>
-                <control type="group">
-                    <right>480</right>
-                    <control type="group">
-                        <include>Size_Dialog_Pad</include>
-                        <include content="Part_GameWindow">
-                            <param name="container">Container(10811).</param>
-                        </include>
-                    </control>
-                </control>
-            </control>
-        </control>
-    </include>
 
     <include name="DialogSelect_Versions">
         <param name="headerid">1</param>
@@ -680,7 +655,7 @@
         <include content="Button_Dialog">
             <param name="id">9004</param>
             <param name="groupid">9104</param>
-            <label>Preview</label>
+            <label>$LOCALIZE[1000]</label>
             <param name="icon">special://skin/extras/icons/images.png</param>
             <visible>Control.IsEnabled(6) + Control.IsVisible(6)</visible>
             <onclick>SetFocus(99001)</onclick>
