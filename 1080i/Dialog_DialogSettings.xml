@@ -15,51 +15,65 @@
         <include content="Part_Dim_Overlay">
             <param name="visible">!Window.IsVisible(DialogSlider.xml)</param>
         </include>
-        <control type="group">
-            <visible>!Window.IsVisible(DialogSlider.xml)</visible>
-            <include>Dimension_DialogHugeMenu</include>
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogHugeMenu</param>
-            </include>
+        <include>DialogSettings_Main</include>
+    </include>
+
+    <include name="DialogSettings_Main">
+        <param name="items">DialogSettings_Items</param>
+        <param name="visible">!Window.IsVisible(DialogSlider.xml)</param>
+        <param name="grouplist_id">5</param>
+        <param name="header_id">2</param>
+        <param name="has_itemline">false</param>
+        <definition>
             <control type="group">
-                <!-- Content -->
-                <control type="group" id="8000">
-                    <include>Size_Dialog_Pad</include>
-                    <!-- Left -->
-                    <control type="group">
-                        <include>Size_LeftGroup_Main</include>
+                <visible>$PARAM[visible]</visible>
+                <include>Dimension_DialogHugeMenu</include>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogHugeMenu</param>
+                </include>
+                <control type="group">
+                    <!-- Content -->
+                    <control type="group" id="8000">
+                        <include>Size_Dialog_Pad</include>
+                        <!-- Left -->
                         <control type="group">
-                            <include>Size_Group_Head</include>
-                            <include content="Part_HeadText">
-                                <param name="id">2</param>
-                            </include>
-                            <include>Part_Line</include>
-                            <include>Part_CloseButton</include>
-                        </control>
-                        <control type="group">
-                            <include>Size_Group_Body</include>
-                            <control type="grouplist" id="5">
-                                <onright>61</onright>
-                                <pagecontrol>61</pagecontrol>
-                                <include>Size_Grouplist_Pad</include>
+                            <include>Size_LeftGroup_Main</include>
+                            <control type="group">
+                                <include>Size_Group_Head</include>
+                                <include content="Part_HeadText">
+                                    <param name="id">$PARAM[header_id]</param>
+                                </include>
+                                <include condition="![$PARAM[has_itemline]]">Part_Line</include>
+                                <include content="Part_ItemLine" condition="$PARAM[has_itemline]">
+                                    <param name="label">$PARAM[itemline_label]</param>
+                                </include>
+                                <include>Part_CloseButton</include>
                             </control>
-                            <include content="Part_Scrollbar_Max">
-                                <param name="id">61</param>
-                                <param name="inset">false</param>
-                                <onleft>5</onleft>
-                                <onright>9000</onright>
-                            </include>
+                            <control type="group">
+                                <include>Size_Group_Body</include>
+                                <control type="grouplist" id="$PARAM[grouplist_id]">
+                                    <onright>61</onright>
+                                    <pagecontrol>61</pagecontrol>
+                                    <include>Size_Grouplist_Pad</include>
+                                </control>
+                                <include content="Part_Scrollbar_Max">
+                                    <param name="id">61</param>
+                                    <param name="inset">false</param>
+                                    <onleft>$PARAM[grouplist_id]</onleft>
+                                    <onright>9000</onright>
+                                </include>
+                            </control>
                         </control>
+                        <!-- Right -->
+                        <include content="Part_Button_Grouplist">
+                            <param name="onleft">61</param>
+                            <param name="items">$PARAM[items]</param>
+                        </include>
                     </control>
-                    <!-- Right -->
-                    <include content="Part_Button_Grouplist">
-                        <param name="onleft">61</param>
-                        <param name="items">DialogSettings_Items</param>
-                    </include>
                 </control>
             </control>
-        </control>
+        </definition>
     </include>
 
     <include name="DialogAddonSettings">

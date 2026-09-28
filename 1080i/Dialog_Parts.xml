@@ -41,6 +41,7 @@
         <param name="icon">$INFO[ListItem.Icon]</param>
         <param name="is_defaulticon">[String.StartsWith(ListItem.Icon,Default) | String.StartsWith(ListItem.Icon,special://skin/extras/icons/)]</param>
         <param name="colordiffuse">dialog_fg_90</param>
+        <param name="selected">false</param>
         <definition>
             <control type="group">
                 <width>$PARAM[item_h]</width>
@@ -53,7 +54,9 @@
                     </control>
                     <control type="image">
                         <aspectratio>keep</aspectratio>
-                        <texture background="true" fallback="$PARAM[fallback]" colordiffuse="$PARAM[colordiffuse]" diffuse="diffuse/square_w120_h120.png">$PARAM[icon]</texture>
+                        <texture background="true" fallback="$PARAM[fallback]" diffuse="diffuse/square_w120_h120.png">$PARAM[icon]</texture>
+                        <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                        <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
                         <visible>$PARAM[is_defaulticon]</visible>
                     </control>
                 </control>
@@ -150,11 +153,13 @@
         <param name="onleft">61</param>
         <param name="ondown">9000</param>
         <param name="id">9000</param>
+        <param name="has_panel">true</param>
+        <param name="include_extras">Object_Null</param>
         <definition>
             <control type="group">
                 <visible>$PARAM[visible]</visible>
                 <include>Size_Group_Panel_Right</include>
-                <include>Part_Panel</include>
+                <include condition="$PARAM[has_panel]">Part_Panel</include>
                 <control type="grouplist" id="$PARAM[id]">
                     <onleft>$PARAM[onleft]</onleft>
                     <ondown>$PARAM[ondown]</ondown>
@@ -163,6 +168,7 @@
                     <include>Size_Grouplist_Pad</include>
                     <include>$PARAM[items]</include>
                 </control>
+                <include>$PARAM[include_extras]</include>
             </control>
         </definition>
     </include>

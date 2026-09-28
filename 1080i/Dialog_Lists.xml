@@ -343,13 +343,9 @@
                 </control>
                 <control type="group">
                     <left>60</left>
-                    <include content="Part_List_Icon" condition="![$PARAM[selected]]">
+                    <include content="Part_List_Icon">
                         <param name="item_h">$PARAM[item_h]</param>
-                        <param name="fallback">DefaultUser.png</param>
-                    </include>
-                    <include content="Part_List_Icon" condition="$PARAM[selected]">
-                        <param name="item_h">$PARAM[item_h]</param>
-                        <param name="colordiffuse">$VAR[ColorSelected]</param>
+                        <param name="selected">$PARAM[selected]</param>
                         <param name="fallback">DefaultUser.png</param>
                     </include>
                     <include content="List_Layout_Dialog_FourLabels">
@@ -357,6 +353,77 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="label4">$INFO[ListItem.Property(Date)]</param>
                         <param name="label3">$INFO[ListItem.Property(DateRelative)]</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="List_Layout_GameAchievements">
+        <param name="selected">false</param>
+        <param name="detailed">false</param>
+        <definition>
+            <control type="group">
+                <animation effect="fade" start="100" end="70" condition="String.IsEmpty(ListItem.Property(achievement.earned))">Conditional</animation>
+                <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            </control>
+            <control type="progress">
+                <description>Progressbar</description>
+                <info>ListItem.Property(achievement.measuredpercent)</info>
+                <texturebg colordiffuse="00ffffff" border="40,0,40,0">common/menu.png</texturebg>
+                <midtexture colordiffuse="$VAR[ColorHighlight]" border="40,40,40,40">common/menu.png</midtexture>
+                <visible>Integer.IsGreater(ListItem.Property(achievement.measuredpercent),1)</visible>
+                <visible>!String.IsEmpty(ListItem.Property(achievement.measured))</visible>
+                <visible>$PARAM[selected]</visible>
+            </control>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <control type="group">
+                    <height>60</height>
+                    <width>60</width>
+                    <left>-20</left>
+                    <centertop>50%</centertop>
+                    <control type="group">
+                        <height>30</height>
+                        <top>1</top>
+                        <control type="image">
+                            <height>60</height>
+                            <centertop>50%</centertop>
+                            <texture>$VAR[Image_GameAchievementEarned]</texture>
+                            <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                            <colordiffuse>dialog_fg_70</colordiffuse>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <height>30</height>
+                        <bottom>-1</bottom>
+                        <control type="label">
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>dialog_fg_70</textcolor>
+                            <selectedcolor>dialog_fg_70</selectedcolor>
+                            <disabledcolor>dialog_fg_30</disabledcolor>
+                            <font>font_tiny</font>
+                            <label>$INFO[ListItem.Property(achievement.raritystars)]</label>
+                            <align>center</align>
+                            <left>-20</left>
+                            <right>-20</right>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>60</left>
+                    <include content="Part_List_Icon">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="fallback">DefaultPicture.png</param>
+                    </include>
+                    <include content="List_Layout_Dialog_FourLabels">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="label">$INFO[ListItem.Label]$INFO[ListItem.Property(achievement.measuredprogress), (,)]</param>
+                        <param name="label4">$INFO[ListItem.Property(achievement.unlockeddate),, - ]$INFO[ListItem.Property(achievement.raritycategory)]</param>
+                        <param name="label3">$INFO[ListItem.Property(achievement.points)]</param>
                     </include>
                 </control>
             </control>

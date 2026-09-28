@@ -406,9 +406,12 @@
         <param name="header">$LOCALIZE[35331]$INFO[Window.Property(Leaderboards.GameTitle), - ,]</param>
         <param name="itemlayout_include">List_Layout_Leaderboards</param>
         <param name="dialog_size">Dimension_DialogFullMenu</param>
+        <param name="has_button_grouplist">false</param>
+        <param name="visible">true</param>
         <definition>
             <include>Part_Dim_Overlay</include>
             <control type="group">
+                <visible>$PARAM[visible]</visible>
                 <include>$PARAM[dialog_size]</include>
                 <include>Animation_BounceIn_Dialog</include>
                 <include content="Part_Background_Panel">
@@ -417,7 +420,7 @@
                 <control type="group" id="8000">
                     <include>Size_Dialog_Pad</include>
                     <control type="group">
-                        <!-- <include>Size_LeftGroup_Main</include> -->
+                        <include condition="$PARAM[has_button_grouplist]">Size_LeftGroup_Main</include>
                         <include content="Part_HeaderBasic">
                             <param name="header_id">$PARAM[header_id]</param>
                             <param name="header">$PARAM[header]</param>
@@ -441,10 +444,11 @@
                             </include>
                         </control>
                     </control>
-                    <!-- <include content="Part_Button_Grouplist">
+                    <include content="Part_Button_Grouplist" condition="$PARAM[has_button_grouplist]">
                         <param name="onleft">61</param>
                         <param name="items">$PARAM[items]</param>
-                    </include> -->
+                        <param name="include_extras">$PARAM[include_extras]</param>
+                    </include>
                 </control>
             </control>
         </definition>
@@ -456,6 +460,253 @@
             <param name="itemlayout_include">List_Layout_LeaderboardEntries</param>
             <param name="dialog_size">Dimension_DialogWideMenu</param>
         </include>
+    </include>
+
+    <include name="DialogGameControllers_GameAchievements">
+        <include content="DialogGameControllers_GameLeaderBoards">
+            <param name="header">$INFO[Window.Property(Header)]</param>
+            <param name="itemlayout_include">List_Layout_GameAchievements</param>
+            <param name="has_button_grouplist">true</param>
+            <param name="items">DialogGameControllers_GameAchievements_Items</param>
+            <param name="include_extras">DialogGameControllers_GameAchievements_HelpText</param>
+            <param name="visible">RetroPlayer.AchievementsLoggedIn</param>
+        </include>
+        <include>DialogGameControllers_GameAchievements_QRCode</include>
+    </include>
+
+    <include name="DialogGameControllers_GameAchievements_Items">
+        <definition>
+            <include content="Button_Dialog">
+                <param name="id">108333</param>
+                <param name="groupid">108433</param>
+                <param name="icon">special://skin/extras/icons/trophy.png</param>
+                <label>$LOCALIZE[35331]</label>
+                <onclick>ActivateWindow(gameleaderboards)</onclick>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">108331</param>
+                <param name="groupid">108431</param>
+                <param name="control">radiobutton</param>
+                <param name="istext">true</param>
+                <param name="label">$LOCALIZE[35303]</param>
+                <selected>System.GetBool(gamesachievements.encore)</selected>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">108332</param>
+                <param name="groupid">108432</param>
+                <param name="control">radiobutton</param>
+                <param name="istext">true</param>
+                <param name="label">$LOCALIZE[35365]</param>
+                <selected>System.GetBool(gamesachievements.challengeindicator)</selected>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">9010</param>
+                <param name="groupid">9110</param>
+                <param name="icon">special://skin/extras/icons/circle-question.png</param>
+                <label>$LOCALIZE[10043]</label>
+                <onclick>RunScript(script.skinvariables,run_dialog=ok,heading=$LOCALIZE[10043],message=[B][COLOR=dialog_fg_90]$LOCALIZE[35365][/COLOR][/B][CR]$LOCALIZE[35366][CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[35303][/COLOR][/B][CR]$LOCALIZE[35304])</onclick>
+            </include>
+        </definition>
+
+    </include>
+
+    <include name="DialogGameControllers_GameAchievements_QRCode">
+        <control type="group">
+            <visible>!RetroPlayer.AchievementsLoggedIn</visible>
+            <include>Dimension_DialogConfirm</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogConfirm</param>
+                <param name="topline">false</param>
+            </include>
+
+            <!-- Content -->
+            <control type="group">
+                <include>Size_Dialog_Pad</include>
+
+                <!-- Left -->
+                <control type="group">
+                    <include>Size_LeftGroup_Main</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="id">9998</param>
+                            <param name="label">$LOCALIZE[35287]</param>
+                        </include>
+                        <include>Part_Line</include>
+                        <include>Part_CloseButton</include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <control type="group">
+                            <include>Size_Dialog_Pad</include>
+                            <control type="image">
+                                <width>320</width>
+                                <height>320</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture diffuse="diffuse/square_w460_h460.png">special://xbmc/media/qr/games/retroachievements.png</texture>
+                            </control>
+                            <control type="textbox">
+                                <left>360</left>
+                                <font>font_main_plot</font>
+                                <textcolor>dialog_fg_70</textcolor>
+                                <label>$LOCALIZE[35367][CR][CR]$LOCALIZE[35368]</label>
+                            </control>
+                        </control>
+                    </control>
+                </control>
+
+                <!-- Right -->
+                <include content="Part_Button_Grouplist">
+                    <param name="onleft">61</param>
+                    <param name="items">DialogGameControllers_GameAchievements_QRCode_Items</param>
+                </include>
+
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogGameControllers_GameAchievements_QRCode_Items">
+        <definition>
+            <include content="Button_Dialog">
+                <param name="id">9001</param>
+                <param name="groupid">9101</param>
+                <param name="icon">special://skin/extras/icons/circle-check.png</param>
+                <label>$LOCALIZE[186]</label>
+                <onclick>Close</onclick>
+            </include>
+        </definition>
+    </include>
+
+    <include name="DialogGameControllers_GameIndicators_Notification">
+        <param name="minilabel">RetroPlayer Achievements</param>
+        <param name="mainlabel">$INFO[RetroPlayer.AchievementsChallengeTitle]</param>
+        <param name="visible">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
+        <param name="icon">$INFO[RetroPlayer.AchievementsChallengeBadge]</param>
+        <param name="slide_1_condition">false</param>
+        <param name="slide_2_condition">false</param>
+        <param name="hasprogress">false</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+
+                <animation effect="slide" end="0,-80" time="300" tween="sine" easing="inout" condition="Window.IsVisible(DialogNotification.xml)">Conditional</animation>
+
+                <animation effect="slide" end="0,-80" time="300" tween="sine" easing="inout" condition="$PARAM[slide_1_condition]">Conditional</animation>
+
+                <animation effect="slide" end="0,-80" time="300" tween="sine" easing="inout" condition="$PARAM[slide_2_condition]">Conditional</animation>
+
+                <include content="Furniture_Busy_Main">
+                    <param name="minilabel">$PARAM[minilabel]</param>
+                    <param name="mainlabel">$PARAM[mainlabel]</param>
+                    <param name="visible_condition">$PARAM[visible]</param>
+                    <param name="windowopen_condition">$PARAM[visible]</param>
+                </include>
+
+                <include content="Furniture_ItemIcon">
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="icon_colordiffuse">white</param>
+                    <param name="bordersize">2</param>
+                    <param name="flipped">true</param>
+                    <param name="right">15</param>
+                    <param name="visible">true</param>
+                    <param name="size">50</param>
+                </include>
+
+                <include content="Object_Control" condition="$PARAM[hasprogress]">
+                    <param name="control">group</param>
+                    <width>50</width>
+                    <height>50</height>
+                    <right>15</right>
+                    <centertop>50%</centertop>
+                    <control type="group">
+                        <centerleft>50%</centerleft>
+                        <centertop>50%</centertop>
+                        <width>100</width>
+                        <height>100</height>
+                        <control type="image">
+                            <bordersize>-4</bordersize>
+                            <texture colordiffuse="$VAR[ColorHighlight]">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
+                            <aspectratio align="center" aligny="center">keep</aspectratio>
+                        </control>
+                    </control>
+                </include>
+
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogGameControllers_GameIndicators">
+        <include content="DialogGameControllers_GameIndicators_Notification">
+            <param name="minilabel">$LOCALIZE[15312]</param>
+            <param name="mainlabel">$INFO[RetroPlayer.AchievementsChallengeTitle]</param>
+            <param name="visible">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
+            <param name="icon">$INFO[RetroPlayer.AchievementsChallengeBadge]</param>
+        </include>
+        <include content="DialogGameControllers_GameIndicators_Notification">
+            <param name="minilabel">$INFO[RetroPlayer.AchievementsIndicatorProgress]</param>
+            <param name="mainlabel">$INFO[RetroPlayer.AchievementsIndicatorTitle]</param>
+            <param name="visible">!String.IsEmpty(RetroPlayer.AchievementsIndicatorTitle)</param>
+            <param name="icon">$INFO[RetroPlayer.AchievementsIndicatorBadge]</param>
+            <param name="progress">RetroPlayer.AchievementsIndicatorPercent</param>
+            <param name="hasprogress">true</param>
+            <param name="slide_1_condition">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
+        </include>
+        <include content="DialogGameControllers_GameIndicators_Notification">
+            <param name="minilabel">$LOCALIZE[35331]</param>
+            <param name="mainlabel">$INFO[RetroPlayer.LeaderboardTracker]</param>
+            <param name="visible">!String.IsEmpty(RetroPlayer.LeaderboardTracker)</param>
+            <param name="icon" />
+            <param name="slide_1_condition">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
+            <param name="slide_2_condition">!String.IsEmpty(RetroPlayer.AchievementsIndicatorTitle)</param>
+        </include>
+    </include>
+
+    <include name="DialogGameControllers_GameCheats">
+        <include content="Object_Hidden_Button">
+            <param name="control">label</param>
+            <param name="id">1083898</param>
+        </include>
+        <include content="Object_Hidden_Button">
+            <param name="control">label</param>
+            <param name="id">1083902</param>
+        </include>
+        <include content="Settings_Button">
+            <param name="id">1083903</param>
+            <param name="control">button</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Button</description>
+        </include>
+        <include content="Settings_Button">
+            <param name="id">1083904</param>
+            <param name="control">radiobutton</param>
+            <param name="dialog">true</param>
+            <description>Default Setting Button</description>
+        </include>
+        <include>Part_Dim_Overlay</include>
+        <include content="DialogSettings_Main">
+            <param name="items">DialogGameControllers_GameCheats_Items</param>
+            <param name="visible">true</param>
+            <param name="grouplist_id">1083901</param>
+            <param name="header_id">1083900</param>
+            <param name="has_itemline">true</param>
+            <param name="itemline_label">$INFO[Control.GetLabel(1083898)]$INFO[Control.GetLabel(1083902),  •  ,]$INFO[Container(1083901).NumItems, (, $LOCALIZE[31178])]</param>
+        </include>
+    </include>
+
+    <include name="DialogGameControllers_GameCheats_Items">
+        <definition>
+            <include content="Button_Dialog">
+                <param name="id">1083907</param>
+                <param name="groupid">1084907</param>
+                <param name="icon">special://skin/extras/icons/boxes-stacked.png</param>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">1083905</param>
+                <param name="groupid">1084905</param>
+                <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+            </include>
+        </definition>
     </include>
 
 </includes>
