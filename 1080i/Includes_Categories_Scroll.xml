@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+
+    <include name="Categories_Selector_Fake_Button">
+        <control type="button">
+            <width max="260">auto</width>
+            <height>70</height>
+            <centertop>50%</centertop>
+            <aligny>center</aligny>
+            <texturenofocus />
+            <texturefocus />
+            <font>font_main_bold</font>
+            <textcolor>00ffffff</textcolor>
+            <focusedcolor>00ffffff</focusedcolor>
+            <selectedcolor>00ffffff</selectedcolor>
+            <label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).Label]</label>
+            <textoffsetx>0</textoffsetx>
+            <onclick>SetFocus($PARAM[id],$PARAM[pos])</onclick>
+            <onclick>Action(Select)</onclick>
+            <hitrect x="0" y="0" w="0" h="0" />
+            <include content="Categories_Selector_Fake_Item_Visible">
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">$PARAM[pos]</param>
+                <param name="mod">!</param>
+            </include>
+            <visible>$PARAM[visible]</visible>
+            <include>Texture_Highlight_Underline_H</include>
+        </control>
+        <control type="button">
+            <width max="260">auto</width>
+            <height>70</height>
+            <centertop>50%</centertop>
+            <aligny>center</aligny>
+            <include>Texture_Highlight_Underline_FakeFocus_H</include>
+            <font>font_main_bold</font>
+            <textcolor>00ffffff</textcolor>
+            <focusedcolor>00ffffff</focusedcolor>
+            <selectedcolor>00ffffff</selectedcolor>
+            <label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).Label]</label>
+            <textoffsetx>0</textoffsetx>
+            <onclick>SetFocus($PARAM[id],$PARAM[pos])</onclick>
+            <onclick>Action(Select)</onclick>
+            <hitrect x="0" y="0" w="0" h="0" />
+            <include content="Categories_Selector_Fake_Item_Visible">
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">$PARAM[pos]</param>
+                <param name="mod" />
+            </include>
+            <visible>$PARAM[visible]</visible>
+        </control>
+    </include>
+
+    <include name="Categories_Selector_Fake_Label">
+        <control type="label">
+            <width max="260">auto</width>
+            <height>80</height>
+            <centertop>50%</centertop>
+            <aligny>center</aligny>
+            <font>font_main_bold</font>
+            <textcolor>$PARAM[color_nf]</textcolor>
+            <label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).Label]</label>
+            <include content="Categories_Selector_Fake_Item_Visible">
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">$PARAM[pos]</param>
+                <param name="mod">!</param>
+            </include>
+            <visible>$PARAM[visible]</visible>
+            <visible>!Integer.IsEqual(Container($PARAM[id]).ListItem.CurrentItem,Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).CurrentItem)</visible>
+        </control>
+        <control type="label">
+            <width max="260">auto</width>
+            <height>80</height>
+            <centertop>50%</centertop>
+            <aligny>center</aligny>
+            <font>font_main_bold</font>
+            <textcolor>main_fg_90</textcolor>
+            <label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).Label]</label>
+            <include content="Categories_Selector_Fake_Item_Visible">
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">$PARAM[pos]</param>
+                <param name="mod">!</param>
+            </include>
+            <visible>$PARAM[visible]</visible>
+            <visible>Integer.IsEqual(Container($PARAM[id]).ListItem.CurrentItem,Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).CurrentItem)</visible>
+        </control>
+        <control type="label">
+            <width max="260">auto</width>
+            <height>80</height>
+            <centertop>50%</centertop>
+            <aligny>center</aligny>
+            <font>font_main_bold</font>
+            <textcolor>main_fg_100</textcolor>
+            <label>$INFO[Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).Label]</label>
+            <include content="Categories_Selector_Fake_Item_Visible">
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">$PARAM[pos]</param>
+                <param name="mod" />
+            </include>
+            <visible>$PARAM[visible]</visible>
+        </control>
+    </include>
+
+    <include name="Categories_Selector_Fake_Item_Visible">
+        <usealttexture>Integer.IsEqual(Container($PARAM[id]).ListItem.CurrentItem,Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).CurrentItem)</usealttexture>
+        <visible>$PARAM[mod][Integer.IsEqual(Container($PARAM[id]).ListItem.CurrentItem,Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).CurrentItem) + [Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[altfocusid])]]</visible>
+        <visible>!String.IsEmpty(Container($PARAM[id]).ListItemNoWrap($PARAM[pos]).CurrentItem)</visible>
+    </include>
+
+    <include name="Categories_Selector_FakeList_Items">
+        <param name="extended">false</param>
+        <definition>
+            <include content="$PARAM[include]" condition="$PARAM[extended]">
+                <param name="visible">String.IsEmpty(Container($PARAM[id]).ListItemNoWrap(1).CurrentItem)</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">-4</param>
+            </include>
+            <include content="$PARAM[include]" condition="$PARAM[extended]">
+                <param name="visible">String.IsEmpty(Container($PARAM[id]).ListItemNoWrap(2).CurrentItem)</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">-3</param>
+            </include>
+            <include content="$PARAM[include]" condition="$PARAM[extended]">
+                <param name="visible">String.IsEmpty(Container($PARAM[id]).ListItemNoWrap(3).CurrentItem)</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">-2</param>
+            </include>
+            <include content="$PARAM[include]" condition="$PARAM[extended]">
+                <param name="visible">String.IsEmpty(Container($PARAM[id]).ListItemNoWrap(4).CurrentItem)</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">-1</param>
+            </include>
+            <include content="$PARAM[include]" condition="![$PARAM[extended]]">
+                <param name="visible">String.IsEmpty(Container($PARAM[id]).ListItemNoWrap(1).CurrentItem)</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">-3</param>
+            </include>
+            <include content="$PARAM[include]" condition="![$PARAM[extended]]">
+                <param name="visible">String.IsEmpty(Container($PARAM[id]).ListItemNoWrap(2).CurrentItem)</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">-2</param>
+            </include>
+            <include content="$PARAM[include]" condition="![$PARAM[extended]]">
+                <param name="visible">String.IsEmpty(Container($PARAM[id]).ListItemNoWrap(3).CurrentItem)</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">-1</param>
+            </include>
+            <include content="$PARAM[include]">
+                <param name="visible">true</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">0</param>
+            </include>
+            <include content="$PARAM[include]">
+                <param name="visible">true</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">1</param>
+            </include>
+            <include content="$PARAM[include]">
+                <param name="visible">true</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">2</param>
+            </include>
+            <include content="$PARAM[include]">
+                <param name="visible">true</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">3</param>
+            </include>
+            <include content="$PARAM[include]" condition="$PARAM[extended]">
+                <param name="visible">true</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="pos">4</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Categories_Selector_FakeList">
+        <param name="id">302</param>
+        <param name="color_fo">main_fg_30</param>
+        <param name="color_nf">main_fg_30</param>
+        <definition>
+            <control type="group">
+
+                <nested />
+
+                <control type="group">
+                    <left>40</left>
+                    <height>80</height>
+                    <centertop>50%</centertop>
+
+                    <control type="group">
+                        <top>view_line_top</top>
+                        <height>80</height>
+                        <animation effect="slide" start="0" end="-60" time="400" tween="quadratic" easing="out" condition="!Container($PARAM[id]).OnScrollNext" reversible="false">Conditional</animation>
+                        <animation effect="slide" start="0" end="60" time="400" tween="quadratic" easing="out" condition="!Container($PARAM[id]).OnScrollPrevious" reversible="false">Conditional</animation>
+
+                        <control type="grouplist">
+                            <hitrect x="0" y="0" w="0" h="0" />
+                            <height>80</height>
+                            <orientation>horizontal</orientation>
+                            <itemgap>40</itemgap>
+                            <include content="Categories_Selector_FakeList_Items">
+                                <param name="include">Categories_Selector_Fake_Button</param>
+                                <param name="color_fo">$PARAM[color_fo]</param>
+                                <param name="color_nf">$PARAM[color_nf]</param>
+                                <param name="id">$PARAM[id]</param>
+                                <param name="altfocusid">$PARAM[altfocusid]</param>
+                                <param name="extended">$PARAM[extended]</param>
+                            </include>
+                        </control>
+
+                        <control type="grouplist">
+                            <hitrect x="0" y="0" w="0" h="0" />
+                            <height>80</height>
+                            <orientation>horizontal</orientation>
+                            <itemgap>40</itemgap>
+                            <include content="Categories_Selector_FakeList_Items">
+                                <param name="include">Categories_Selector_Fake_Label</param>
+                                <param name="color_fo">$PARAM[color_fo]</param>
+                                <param name="color_nf">$PARAM[color_nf]</param>
+                                <param name="id">$PARAM[id]</param>
+                                <param name="altfocusid">$PARAM[altfocusid]</param>
+                                <param name="extended">$PARAM[extended]</param>
+                            </include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Categories_Selector">
+        <param name="id">300</param>
+        <param name="slide_id">300</param>
+        <param name="slide">False</param>
+        <param name="font">font_main_bold</param>
+        <param name="color_fo">main_fg_30</param>
+        <param name="color_nf">main_fg_30</param>
+        <param name="hidden_button" />
+        <param name="hidden_button_enabled">false</param>
+        <param name="preitem_fade">True</param>
+        <param name="itemlayout_w">240</param>
+        <param name="scrolltime">400</param>
+        <param name="extended">false</param>
+        <definition>
+            <include content="List_ButtonMenu_Row">
+                <param name="id">$PARAM[id]</param>
+                <param name="color_fo">$PARAM[color_fo]</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="itemlayout_w">200</param>
+                <param name="offset_x">view_button_offset_x</param>
+                <param name="control">fixedlist</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="backing">true</param>
+                <param name="hidden_button">$PARAM[hidden_button]</param>
+                <param name="hidden_button_prefix">$PARAM[hidden_button_prefix]</param>
+                <param name="hidden_button_enabled">$PARAM[hidden_button_enabled]</param>
+                <height>120</height>
+
+                <hitrect x="0" y="0" w="0" h="0" />
+
+                <nested />
+
+                <preloaditems>0</preloaditems>
+                <scrolltime tween="quadratic">0</scrolltime>
+
+                <include content="Animation_ConditionalFade">
+                    <param name="condition">true</param>
+                </include>
+
+                <focusposition>0</focusposition>
+                <include content="Object_Movement" condition="$PARAM[extended]">
+                    <param name="movement">4</param>
+                </include>
+                <movement>3</movement>
+
+                <include content="Object_Width" condition="$PARAM[extended]">
+                    <param name="width">1000</param>
+                </include>
+                <width>800</width>
+            </include>
+
+            <include content="Categories_Selector_FakeList">
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
+                <param name="color_fo">$PARAM[color_fo]</param>
+                <param name="color_nf">$PARAM[color_nf]</param>
+                <param name="extended">$PARAM[extended]</param>
+                <nested />
+            </include>
+
+        </definition>
+    </include>
+</includes>
