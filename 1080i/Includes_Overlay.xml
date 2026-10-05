@@ -41,14 +41,18 @@
     </variable>
 
     <variable name="Overlay_IsUpdating">
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating)) | !String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings)) | !String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingDetails))">$VAR[_Overlay_IsUpdating]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating))">$VAR[_Overlay_IsUpdating_Details,,  ]$VAR[_Overlay_IsUpdating_Ratings,,  ]$VAR[_Overlay_IsUpdating_Artwork,,  ]</value>
         <value>DONE</value>
     </variable>
-    <variable name="_Overlay_IsUpdating">
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings)) + !String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingDetails))">Both</value>
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings))">Ratings</value>
+
+    <variable name="_Overlay_IsUpdating_Details">
         <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingDetails))">Details</value>
-        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdating))">Basic</value>
+    </variable>
+    <variable name="_Overlay_IsUpdating_Ratings">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingRatings))">Ratings</value>
+    </variable>
+    <variable name="_Overlay_IsUpdating_Artwork">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.IsUpdatingArtwork))">Artwork</value>
     </variable>
 
     <include name="Overlay_InfoLabel">
@@ -298,6 +302,15 @@
                     <include content="Overlay_InfoLabel">
                         <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.base_title),title: , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.base_year),year: , ]</label>
                         <textcolor>magenta</textcolor>
+                    </include>
+                </control>
+                <control type="grouplist">
+                    <height>40</height>
+                    <align>right</align>
+                    <orientation>horizontal</orientation>
+                    <include content="Overlay_InfoLabel">
+                        <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.Title),title: , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.Year),year: , ]</label>
+                        <textcolor>cyan</textcolor>
                     </include>
                 </control>
                 <control type="grouplist">

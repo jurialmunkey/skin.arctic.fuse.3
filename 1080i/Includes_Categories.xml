@@ -1,253 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <include name="Categories_Selector_Fake_Button">
-        <param name="hidden_button_enabled">false</param>
+    <include name="Categories_Selector_Button_List">
+        <param name="onfocus_condition">true</param>
         <definition>
-            <control type="button">
-                <width max="600">auto</width>
-                <height>70</height>
-                <centertop>50%</centertop>
-                <aligny>center</aligny>
-                <texturenofocus />
-                <texturefocus />
-                <font>font_main_bold</font>
-                <textcolor>00ffffff</textcolor>
-                <focusedcolor>00ffffff</focusedcolor>
-                <selectedcolor>00ffffff</selectedcolor>
-                <label>$INFO[Container($PARAM[id]).ListItem.Label,, ⌄ ]</label>
-                <textoffsetx>0</textoffsetx>
-                <hitrect x="0" y="0" w="0" h="0" />
-                <visible>![Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[altfocusid])]</visible>
-                <visible>$PARAM[visible]</visible>
-                <include>Texture_Highlight_Underline_H</include>
+            <control type="wraplist" id="$PARAM[id]">
+                <onfocus condition="$PARAM[onfocus_condition]">SetFocus($PARAM[altfocusid])</onfocus>
+                <include>Object_Hidden_List_Definition</include>
+                <nested />
             </control>
+        </definition>
+    </include>
+
+    <include name="Categories_Selector_Button_Control">
+        <param name="hidden_button" />
+        <param name="hidden_button_enabled">false</param>
+        <param name="onclick_condition">true</param>
+        <definition>
             <control type="button" id="$PARAM[altfocusid]">
-                <width max="600">auto</width>
+                <width max="640">auto</width>
                 <height>70</height>
-                <centertop>50%</centertop>
                 <aligny>center</aligny>
-                <include>Texture_Highlight_Underline_FakeFocus_H</include>
+                <include>Texture_Highlight_Underline_H</include>
                 <font>font_main_bold</font>
                 <textcolor>00ffffff</textcolor>
                 <focusedcolor>00ffffff</focusedcolor>
                 <selectedcolor>00ffffff</selectedcolor>
-                <label>$INFO[Container($PARAM[id]).ListItem.Label,, ⌄ ]</label>
                 <textoffsetx>0</textoffsetx>
-
-                <onclick>RunScript(script.skinvariables,run_selectfocusdialog=$PARAM[id],"header=$VAR[Label_CategorySelectList]")</onclick>
-
-                <onup>SetProperty(CategoryListControl$PARAM[id],Action(Up),Home)</onup>
-                <onup>SetFocus($PARAM[id])</onup>
-                <ondown>SetProperty(CategoryListControl$PARAM[id],Action(Down),Home)</ondown>
-                <ondown>SetFocus($PARAM[id])</ondown>
-                <oninfo>SetProperty(CategoryListControl$PARAM[id],Action(Info),Home)</oninfo>
-                <oninfo>SetFocus($PARAM[id])</oninfo>
-                <onback>SetProperty(CategoryListControl$PARAM[id],Action(Back),Home)</onback>
-                <onback>$PARAM[id]</onback>
-
-                <onleft>Control.Move($PARAM[id],-1)</onleft>
-                <onleft>AlarmClock(refocus,SetFocus($PARAM[altfocusid]),00:00,silent)</onleft>  <!-- Retrigger button focus -->
-                <onright>Control.Move($PARAM[id],1)</onright>
-                <onright>AlarmClock(refocus,SetFocus($PARAM[altfocusid]),00:00,silent)</onright>  <!-- Retrigger button focus -->
-
+                <onclick condition="$PARAM[onclick_condition]">RunScript(script.skinvariables,run_selectfocusdialog=$PARAM[id],"header=$VAR[Label_CategorySelectList]")</onclick>
                 <include content="$PARAM[hidden_button]_OnFocus" condition="$PARAM[hidden_button_enabled]">
                     <param name="id">$PARAM[id]</param>
                     <param name="container">Container($PARAM[id]).</param>
                     <param name="prefix">$PARAM[hidden_button_prefix]</param>
                 </include>
-
-                <hitrect x="0" y="0" w="0" h="0" />
-                <visible allowhiddenfocus="true">[Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[altfocusid])]</visible>
-                <visible allowhiddenfocus="true">$PARAM[visible]</visible>
+                <nested />
+                <label>$INFO[Container($PARAM[id]).ListItem.Label,, ⌄ ]</label>
             </control>
         </definition>
     </include>
 
-    <include name="Categories_Selector_Fake_Label">
+    <include name="Categories_Selector_Button_Label">
         <definition>
             <control type="label">
-                <width max="600">auto</width>
                 <height>80</height>
-                <centertop>50%</centertop>
-                <aligny>center</aligny>
-                <font>font_main_bold</font>
-                <textcolor>main_fg_90</textcolor>
-                <textcolor>$PARAM[color_nf]</textcolor>
-                <label>$INFO[Container($PARAM[id]).ListItem.Label,, ⌄ ]</label>
-                <visible>![Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[altfocusid])]</visible>
-                <visible>$PARAM[visible]</visible>
-            </control>
-            <control type="label">
-                <width max="600">auto</width>
-                <height>80</height>
-                <centertop>50%</centertop>
-                <aligny>center</aligny>
+                <width max="640">auto</width>
                 <font>font_main_bold</font>
                 <textcolor>main_fg_100</textcolor>
+                <visible>Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[altfocusid])</visible>
+                <nested />
                 <label>$INFO[Container($PARAM[id]).ListItem.Label,, ⌄ ]</label>
-                <visible>[Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[altfocusid])]</visible>
-                <visible>$PARAM[visible]</visible>
-            </control>
-        </definition>
-    </include>
-    <include name="Categories_Selector_Fake_Unfocused_Labels">
-        <definition>
-            <control type="label">
-                <width max="200">auto</width>
-                <height>80</height>
-                <centertop>50%</centertop>
-                <aligny>center</aligny>
-                <font>font_main_bold</font>
-                <textcolor>$PARAM[color_nf]</textcolor>
-                <label>$INFO[Container($PARAM[id]).ListItem(1).Label]</label>
-                <visible>$PARAM[visible]</visible>
-                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
             </control>
             <control type="label">
-                <width max="200">auto</width>
                 <height>80</height>
-                <centertop>50%</centertop>
-                <aligny>center</aligny>
+                <width max="640">auto</width>
                 <font>font_main_bold</font>
-                <textcolor>$PARAM[color_nf]</textcolor>
-                <label>$INFO[Container($PARAM[id]).ListItem(2).Label]</label>
-                <visible>$PARAM[visible]</visible>
-                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,2)</visible>
-                <animation effect="fade" start="100" end="66" condition="true">Conditional</animation>
-            </control>
-            <control type="label">
-                <width max="200">auto</width>
-                <height>80</height>
-                <centertop>50%</centertop>
-                <aligny>center</aligny>
-                <font>font_main_bold</font>
-                <textcolor>$PARAM[color_nf]</textcolor>
-                <label>$INFO[Container($PARAM[id]).ListItem(3).Label]</label>
-                <visible>$PARAM[visible]</visible>
-                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,3)</visible>
-                <animation effect="fade" start="100" end="33" condition="true">Conditional</animation>
+                <textcolor>main_fg_30</textcolor>
+                <visible>![Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[altfocusid])]</visible>
+                <nested />
+                <label>$INFO[Container($PARAM[id]).ListItem.Label,, ⌄ ]</label>
             </control>
         </definition>
     </include>
 
-    <include name="Categories_Selector_FakeList_Items">
-        <definition>
-            <include content="$PARAM[include]">
-                <param name="visible">true</param>
-                <param name="color_nf">$PARAM[color_nf]</param>
-                <param name="id">$PARAM[id]</param>
-                <param name="altfocusid">$PARAM[altfocusid]</param>
-                <param name="hidden_button">$PARAM[hidden_button]</param>
-                <param name="hidden_button_prefix">$PARAM[hidden_button_prefix]</param>
-                <param name="hidden_button_enabled">$PARAM[hidden_button_enabled]</param>
-            </include>
-        </definition>
-    </include>
-
-    <include name="Categories_Selector_FakeList">
+    <include name="Categories_Selector_OverlayList">
         <param name="id">302</param>
-        <param name="color_fo">main_fg_30</param>
-        <param name="color_nf">main_fg_30</param>
         <definition>
             <control type="group">
-
                 <nested />
-
                 <control type="group">
                     <left>40</left>
                     <height>80</height>
                     <centertop>50%</centertop>
-
                     <control type="group">
-                        <top>view_line_top</top>
-                        <height>80</height>
-
-                        <control type="group">
+                        <animation effect="slide" start="0" end="-60" time="400" tween="quadratic" easing="out" condition="!Container($PARAM[id]).OnScrollNext" reversible="false">Conditional</animation>
+                        <animation effect="slide" start="0" end="60" time="400" tween="quadratic" easing="out" condition="!Container($PARAM[id]).OnScrollPrevious" reversible="false">Conditional</animation>
+                        <!-- <control type="label">
                             <height>80</height>
-                            <include content="Categories_Selector_FakeList_Items">
-                                <param name="include">Categories_Selector_Fake_Button</param>
-                                <param name="color_fo">$PARAM[color_fo]</param>
-                                <param name="color_nf">$PARAM[color_nf]</param>
-                                <param name="id">$PARAM[id]</param>
-                                <param name="altfocusid">$PARAM[altfocusid]</param>
-                                <param name="hidden_button">$PARAM[hidden_button]</param>
-                                <param name="hidden_button_prefix">$PARAM[hidden_button_prefix]</param>
-                                <param name="hidden_button_enabled">$PARAM[hidden_button_enabled]</param>
-                            </include>
-                        </control>
-
+                            <align>right</align>
+                            <left>-670</left>
+                            <width>640</width>
+                            <centertop>50%</centertop>
+                            <font>font_main</font>
+                            <textcolor>main_fg_30</textcolor>
+                            <label>$INFO[Container($PARAM[id]).ListItem(-1).Label]</label>
+                            <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
+                            <animation effect="fade" start="100" end="0" delay="200" time="300" condition="!Container($PARAM[id]).OnScrollNext + !Container($PARAM[id]).OnScrollPrevious" reversible="false">Conditional</animation>
+                        </control> -->
                         <control type="grouplist">
-                            <height>80</height>
+
                             <orientation>horizontal</orientation>
                             <itemgap>30</itemgap>
-                            <include content="Categories_Selector_FakeList_Items">
-                                <param name="include">Categories_Selector_Fake_Label</param>
-                                <param name="color_fo">$PARAM[color_fo]</param>
-                                <param name="color_nf">$PARAM[color_nf]</param>
-                                <param name="id">$PARAM[id]</param>
-                                <param name="altfocusid">$PARAM[altfocusid]</param>
-                                <param name="hidden_button">$PARAM[hidden_button]</param>
-                                <param name="hidden_button_prefix">$PARAM[hidden_button_prefix]</param>
-                                <param name="hidden_button_enabled">$PARAM[hidden_button_enabled]</param>
-                            </include>
+                            <width>800</width>
+                            <control type="label">
+                                <height>80</height>
+                                <width max="640">auto</width>
+                                <centertop>50%</centertop>
+                                <font>font_main_bold</font>
+                                <textcolor>main_fg_30</textcolor>
+                                <textcolor>main_fg_100</textcolor>
+                                <label>$INFO[Container($PARAM[id]).ListItem.Label]</label>
+                                <!-- <animation effect="fade" start="100" end="0" delay="200" time="300" condition="!Container($PARAM[id]).OnScrollNext + !Container($PARAM[id]).OnScrollPrevious" reversible="false">Conditional</animation> -->
+                                <animation effect="fade" start="100" end="0" delay="100" time="200" condition="!Container($PARAM[id]).OnScrollNext" reversible="false">Conditional</animation>
+                            </control>
+                            <control type="label">
+                                <height>80</height>
+                                <width max="640">auto</width>
+                                <centertop>50%</centertop>
+                                <font>font_main</font>
+                                <textcolor>main_fg_30</textcolor>
+                                <label>$INFO[Container($PARAM[id]).ListItem(1).Label]</label>
+                                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
+                            </control>
+                            <control type="label">
+                                <height>80</height>
+                                <width max="640">auto</width>
+                                <centertop>50%</centertop>
+                                <font>font_main</font>
+                                <textcolor>main_fg_30</textcolor>
+                                <label>$INFO[Container($PARAM[id]).ListItem(2).Label]</label>
+                                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,2)</visible>
+                            </control>
+                            <control type="label">
+                                <height>80</height>
+                                <width max="640">auto</width>
+                                <centertop>50%</centertop>
+                                <font>font_main</font>
+                                <textcolor>main_fg_30</textcolor>
+                                <label>$INFO[Container($PARAM[id]).ListItem(3).Label]</label>
+                                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,3)</visible>
+                            </control>
                         </control>
+                    </control>
+                    <control type="label">
+                        <height>80</height>
+                        <width max="640">auto</width>
+                        <centertop>50%</centertop>
+                        <font>font_main_bold</font>
+                        <textcolor>main_fg_100</textcolor>
+                        <label>$INFO[Container($PARAM[id]).ListItem.Label]</label>
                     </control>
                 </control>
             </control>
         </definition>
     </include>
 
-    <include name="Categories_Selector">
-        <param name="id">300</param>
-        <param name="font">font_main_bold</param>
-        <param name="color_fo">main_fg_30</param>
-        <param name="color_nf">main_fg_30</param>
+    <include name="Categories_Selector_ControlList">
         <param name="hidden_button" />
         <param name="hidden_button_enabled">false</param>
         <definition>
-            <include content="List_ButtonMenu_Row">
-                <param name="id">$PARAM[id]</param>
-                <param name="color_fo">$PARAM[color_fo]</param>
-                <param name="color_nf">$PARAM[color_nf]</param>
-                <param name="itemlayout_w">600</param>
-                <param name="offset_x">view_button_offset_x</param>
-                <param name="control">fixedlist</param>
-                <param name="font">$PARAM[font]</param>
-                <param name="backing">true</param>
-                <param name="hidden_button" />
-                <param name="hidden_button_enabled">false</param>
-                <height>120</height>
-
-                <hitrect x="0" y="0" w="0" h="0" />
-
-                <onfocus condition="String.IsEmpty(Window(Home).Property(CategoryListControl$PARAM[id]))">SetFocus($PARAM[altfocusid])</onfocus>
-                <onfocus condition="!String.IsEmpty(Window(Home).Property(CategoryListControl$PARAM[id]))">$INFO[Window(Home).Property(CategoryListControl$PARAM[id])]</onfocus>
-                <onfocus condition="!String.IsEmpty(Window(Home).Property(CategoryListControl$PARAM[id]))">ClearProperty(CategoryListControl$PARAM[id],Home)</onfocus>
-
-                <nested />
-
-                <preloaditems>0</preloaditems>
-                <scrolltime tween="quadratic">0</scrolltime>
-
-                <include content="Animation_ConditionalFade">
-                    <param name="condition">true</param>
-                </include>
-
+            <control type="wraplist" id="$PARAM[id]">
+                <!-- <animation effect="slide" start="0" end="-60" time="400" tween="quadratic" easing="out" condition="!Container($PARAM[id]).OnScrollNext" reversible="false">Conditional</animation>
+                <animation effect="slide" start="0" end="60" time="400" tween="quadratic" easing="out" condition="!Container($PARAM[id]).OnScrollPrevious" reversible="false">Conditional</animation> -->
+                <orientation>horizontal</orientation>
+                <height>80</height>
                 <focusposition>0</focusposition>
                 <movement>0</movement>
+                <preloaditems>2</preloaditems>
+                <width>720</width>
+                <!-- <onclick>RunScript(script.skinvariables,run_selectfocusdialog=$PARAM[id],"header=$VAR[Label_CategorySelectList]")</onclick> -->
+                <scrolltime tween="quadratic">0</scrolltime>
+                <itemlayout width="0" height="80">
+                </itemlayout>
+                <focusedlayout width="640" height="80">
+                    <control type="button">
+                        <left>40</left>
+                        <right>-40</right>
+                        <width max="640">auto</width>
+                        <height>70</height>
+                        <centertop>50%</centertop>
+                        <aligny>center</aligny>
+                        <include>Texture_Highlight_Underline_FakeFocus_H</include>
+                        <font>font_main_bold</font>
+                        <textcolor>00ffffff</textcolor>
+                        <focusedcolor>00ffffff</focusedcolor>
+                        <selectedcolor>00ffffff</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <textoffsetx>0</textoffsetx>
+                        <visible>Control.HasFocus($PARAM[id]) | Control.HasFocus($PARAM[altfocusid])</visible>
+                        <hitrect x="0" y="0" w="0" h="0" />
+                        <include content="$PARAM[hidden_button]_OnFocus" condition="$PARAM[hidden_button_enabled]">
+                            <param name="id">$PARAM[id]</param>
+                            <param name="container">Container($PARAM[id]).</param>
+                            <param name="prefix">$PARAM[hidden_button_prefix]</param>
+                        </include>
+                    </control>
+                </focusedlayout>
+                <nested />
+            </control>
+        </definition>
+    </include>
 
-                <width>600</width>
-            </include>
-
-            <include content="Categories_Selector_FakeList">
+    <include name="Categories_Selector">
+        <param name="id">300</param>
+        <param name="hidden_button" />
+        <param name="hidden_button_enabled">false</param>
+        <definition>
+            <include content="Categories_Selector_ControlList">
                 <param name="id">$PARAM[id]</param>
                 <param name="altfocusid">$PARAM[altfocusid]</param>
-                <param name="color_fo">$PARAM[color_fo]</param>
-                <param name="color_nf">$PARAM[color_nf]</param>
                 <param name="hidden_button">$PARAM[hidden_button]</param>
                 <param name="hidden_button_prefix">$PARAM[hidden_button_prefix]</param>
                 <param name="hidden_button_enabled">$PARAM[hidden_button_enabled]</param>
+                <hitrect x="0" y="0" w="0" h="0" />
+                <nested />
+            </include>
+
+            <include content="Categories_Selector_OverlayList">
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[altfocusid]</param>
                 <nested />
             </include>
 

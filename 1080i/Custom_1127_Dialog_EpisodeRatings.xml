@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog" id="1127">
+
+    <defaultcontrol always="true">61</defaultcontrol>
+    <onload>SetProperty(TMDbHelper.ContextMenu,True)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_ID)) | !String.IsEqual(Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_Type),tv)">Dialog.Close(1127,true)</onload>
+    <controls>
+
+        <include content="DialogPlot">
+            <param name="include_textarea">DialogPlot_Ratings</param>
+        </include>
+
+        <include content="Furniture_Busy">
+            <param name="hasspinner">true</param>
+            <param name="spinspinner">true</param>
+            <param name="icon">special://skin/extras/icons/kodi.png</param>
+            <param name="spinnervisible">[!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
+            <param name="haslabel">false</param>
+            <param name="visible_delay">800</param>
+            <param name="windowopen_delay">800</param>
+            <param name="visible">[Integer.IsEqual(Container(8001).NumItems,0) | Container(8001).IsUpdating]</param>
+        </include>
+
+    </controls>
+</window>

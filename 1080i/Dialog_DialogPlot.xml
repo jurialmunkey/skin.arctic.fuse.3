@@ -22,6 +22,7 @@
 
     <include name="DialogPlot">
         <param name="include_movement">DialogPlot_OnMove</param>
+        <param name="include_textarea">DialogPlot_Plotbox</param>
         <definition>
             <include>Part_Dim_Overlay</include>
 
@@ -34,8 +35,6 @@
 
                     <!-- Left -->
                     <control type="group">
-                        <!-- <right>0</right>
-                        <include>Part_Panel</include> -->
                         <include>Size_LeftGroup_Large</include>
                         <include content="DialogPlot_Artwork">
                             <param name="poster_icon">$PARAM[poster_icon]</param>
@@ -47,11 +46,9 @@
                     <control type="group">
                         <include>Part_Panel</include>
                         <include>Size_RightGroup_Large</include>
-                        <!-- <include>Size_RightGroup_Flipped_Large</include> -->
-                        <include content="DialogPlot_Textbox">
+                        <include content="$PARAM[include_textarea]">
                             <param name="head_id">9999</param>
                             <param name="header">$VAR[Label_Overlay_Title]</param>
-                            <param name="textbox">$VAR[Label_Overlay_PlotBox]</param>
                             <param name="include_movement">$PARAM[include_movement]</param>
                         </include>
                     </control>
@@ -301,6 +298,259 @@
         </definition>
     </include>
 
+    <include name="DialogPlot_Plotbox_Object">
+        <control type="label">
+            <font>font_midi_bold</font>
+            <textcolor>dialog_fg_90</textcolor>
+            <label>$PARAM[head]</label>
+            <height>60</height>
+            <visible>$PARAM[visible]</visible>
+        </control>
+        <control type="textbox">
+            <top>-60</top>
+            <font>font_midi_plot</font>
+            <textcolor>dialog_fg_70</textcolor>
+            <label>$PARAM[text]</label>
+            <visible>$PARAM[visible]</visible>
+            <height min="40">auto</height>
+            <autoscroll>false</autoscroll>
+        </control>
+    </include>
+
+    <include name="DialogPlot_Plotbox_Quick_Object">
+        <include content="DialogPlot_Plotbox_Object">
+            <param name="head">$PARAM[head]</param>
+            <param name="text">$INFO[$PARAM[text]]</param>
+            <param name="visible">!String.IsEmpty($PARAM[text])</param>
+        </include>
+    </include>
+
+    <include name="DialogPlot_Plotbox_Person_Image_Object">
+        <control type="group">
+            <top>-60</top>
+            <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].$PARAM[indx].Name))</visible>
+            <height>60</height>
+            <control type="group">
+                <centertop>50%</centertop>
+                <height>50</height>
+                <width>50</width>
+                <control type="image">
+                    <texture colordiffuse="dialog_fg_90">diffuse/circle/circle_50.png</texture>
+                </control>
+                <control type="image">
+                    <bordersize>2</bordersize>
+                    <texture colordiffuse="dialog_bg_90">diffuse/circle/circle_50.png</texture>
+                </control>
+                <control type="image">
+                    <aspectratio scalediffuse="false">scale</aspectratio>
+                    <texture diffuse="diffuse/circle/circle_50.png" background="true" colordiffuse="dialog_fg_90">DefaultActor.png</texture>
+                </control>
+                <control type="image">
+                    <bordersize>2</bordersize>
+                    <aspectratio scalediffuse="false">scale</aspectratio>
+                    <texture diffuse="diffuse/circle/circle_50.png" background="true">$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].$PARAM[indx].Thumb)]</texture>
+                </control>
+            </control>
+            <control type="label">
+                <left>60</left>
+                <font>font_midi</font>
+                <textcolor>dialog_fg_90</textcolor>
+                <label>$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].$PARAM[indx].Name)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].$PARAM[indx].Role), (,)]</label>
+                <height>60</height>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogPlot_Plotbox_Person_Object">
+        <!-- <control type="label">
+            <font>font_midi_bold</font>
+            <textcolor>dialog_fg_90</textcolor>
+            <label>$PARAM[head]</label>
+            <height>60</height>
+            <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].1.Name))</visible>
+        </control>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">1</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">2</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">3</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">4</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">5</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">6</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">7</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">8</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Image_Object">
+            <param name="role">$PARAM[role]</param>
+            <param name="indx">9</param>
+        </include> -->
+        <include content="DialogPlot_Plotbox_Object">
+            <param name="head">$PARAM[head]</param>
+            <param name="text">$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].1.Name)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].1.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].2.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].2.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].3.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].3.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].4.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].4.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].5.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].5.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].6.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].6.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].7.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].7.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].8.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].8.Role), (,)]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].9.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].9.Role), (,)]</param>
+            <param name="visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.$PARAM[role].1.Name))</param>
+        </include>
+    </include>
+
+    <include name="DialogPlot_Plotbox_TMDbHelper">
+        <include content="DialogPlot_Plotbox_Quick_Object">
+            <param name="head">$LOCALIZE[202]</param>
+            <param name="text">Window(Home).Property(TMDbHelper.ListItem.Tagline)</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Object">
+            <param name="head">$LOCALIZE[31028]</param>
+            <param name="text">$VAR[Label_Plot_TMDbHelper]</param>
+            <param name="visible">!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.base_plot)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Plot)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.biography))</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Object">
+            <param name="head">$LOCALIZE[31024]</param>
+            <param name="text">$INFO[Window(Home).Property(TMDbHelper.ListItem.rottentomatoes_consensus),, ]$INFO[Window(Home).Property(TMDbHelper.ListItem.rottentomatoes_reviewsfresh),$LOCALIZE[31054] , ]$INFO[Window(Home).Property(TMDbHelper.ListItem.rottentomatoes_reviewstotal),$LOCALIZE[31055] , $LOCALIZE[31056] ]</param>
+            <param name="visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.rottentomatoes_consensus))</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Object">
+            <param name="head">$LOCALIZE[31038]</param>
+            <param name="role">Director</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Object">
+            <param name="head">$LOCALIZE[31039]</param>
+            <param name="role">Writer</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Object">
+            <param name="head">$LOCALIZE[31076]</param>
+            <param name="role">Cast</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Object">
+            <param name="head">$LOCALIZE[31383]</param>
+            <param name="role">Producer</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Object">
+            <param name="head">$LOCALIZE[31052]</param>
+            <param name="role">Sound_Department</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Object">
+            <param name="head">$LOCALIZE[31072]</param>
+            <param name="role">Art_Department</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Object">
+            <param name="head">$LOCALIZE[31067]</param>
+            <param name="role">Photography</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Person_Object">
+            <param name="head">$LOCALIZE[31075]</param>
+            <param name="role">Editor</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Quick_Object">
+            <param name="head">$LOCALIZE[31064]</param>
+            <param name="text">Window(Home).Property(TMDbHelper.ListItem.Awards)</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Object">
+            <param name="head">$LOCALIZE[31286]$INFO[Window(Home).Property(TMDbHelper.ListItem.Total_Awards_Won), ,] $LOCALIZE[31064]</param>
+            <param name="text">$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards_Won_CR)]</param>
+            <param name="visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Total_Awards_Won))</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Object">
+            <param name="head">$LOCALIZE[31287]$INFO[Window(Home).Property(TMDbHelper.ListItem.Total_Awards_Nominated), ,] $LOCALIZE[31064]</param>
+            <param name="text">$INFO[Window(Home).Property(TMDbHelper.ListItem.Awards_Nominated_CR)]</param>
+            <param name="visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Total_Awards_Nominated))</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Object">
+            <param name="head">JustWatch</param>
+            <param name="text">$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.1.Name)]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.2.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.3.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.4.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.5.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.6.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.7.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.8.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.9.Name),[CR],]$INFO[Window(Home).Property(TMDbHelper.ListItem.Provider.10.Name),[CR],]</param>
+            <param name="visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Provider.1.Name))</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Object">
+            <param name="head">$INFO[Window(Home).Property(TMDbHelper.ListItem.PlayCount),$LOCALIZE[16102] , $LOCALIZE[31183]]</param>
+            <param name="text">$INFO[Window(Home).Property(TMDbHelper.ListItem.LastPlayed),$LOCALIZE[568] ,]</param>
+            <param name="visible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.PlayCount))</param>
+        </include>
+    </include>
+
+    <include name="DialogPlot_Plotbox_Local">
+        <include content="DialogPlot_Plotbox_Quick_Object">
+            <param name="head">$LOCALIZE[202]</param>
+            <param name="text">ListItem.Tagline</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Quick_Object">
+            <param name="head">$LOCALIZE[31028]</param>
+            <param name="text">ListItem.Plot</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Quick_Object">
+            <param name="head">$LOCALIZE[20339]</param>
+            <param name="text">ListItem.Director</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Quick_Object">
+            <param name="head">$LOCALIZE[20417]</param>
+            <param name="text">ListItem.Writer</param>
+        </include>
+        <include content="DialogPlot_Plotbox_Quick_Object">
+            <param name="head">$LOCALIZE[206]</param>
+            <param name="text">ListItem.Cast</param>
+        </include>
+    </include>
+
+    <include name="DialogPlot_Plotbox">
+        <param name="textbox_visible">true</param>
+        <param name="include_divider">true</param>
+        <param name="include_top">false</param>
+        <param name="include_closebutton">true</param>
+        <definition>
+            <control type="group">
+                <include>Size_Group_Head</include>
+                <include content="Part_HeadText">
+                    <param name="id">$PARAM[head_id]</param>
+                    <param name="label">$PARAM[header]</param>
+                </include>
+                <include condition="$PARAM[include_divider]">Part_Line</include>
+                <include condition="$PARAM[include_closebutton]">Part_CloseButton</include>
+            </control>
+            <control type="group">
+                <include>Size_Group_Body</include>
+                <control type="group">
+                    <include content="Object_Top" condition="$PARAM[include_top]">
+                        <param name="top">60</param>
+                    </include>
+                    <control type="grouplist" id="$PARAM[text_id]">
+                        <visible>$PARAM[textbox_visible]</visible>
+                        <itemgap>60</itemgap>
+                        <pagecontrol>61</pagecontrol>
+                        <orientation>vertical</orientation>
+                        <include>Size_Group_PlotText</include>
+                        <include condition="$EXP[Exp_TMDbHelper_IsData]">DialogPlot_Plotbox_TMDbHelper</include>
+                        <include condition="!$EXP[Exp_TMDbHelper_IsData]">DialogPlot_Plotbox_Local</include>
+                    </control>
+                    <include content="Part_Scrollbar_Max">
+                        <param name="id">61</param>
+                        <param name="inset">false</param>
+                        <include>$PARAM[include_movement]</include>
+                        <visible>$PARAM[textbox_visible]</visible>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+
+
     <include name="DialogPlot_Artwork">
         <param name="poster_icon">$VAR[Image_Overlay_Poster]</param>
         <param name="square_icon">$INFO[Window(Home).Property(TMDbHelper.ListItem.Base_Icon)]</param>
@@ -371,5 +621,323 @@
         <showonepage>false</showonepage>
     </include>
 
+    <include name="DialogPlot_Ratings_Label">
+        <control type="group">
+            <visible>$PARAM[visible]</visible>
+            <control type="label">
+                <font>font_hint_bold</font>
+                <textcolor>$PARAM[colordiffuse]</textcolor>
+                <label>$INFO[ListItem.Property(Season),S,]$INFO[ListItem.Property(Episode),E,]</label>
+                <align>left</align>
+                <top>10</top>
+                <left>10</left>
+                <height>10</height>
+            </control>
 
+            <control type="group">
+                <left>10</left>
+                <height>20</height>
+                <bottom>10</bottom>
+                <right>10</right>
+                <control type="label">
+                    <font>font_midi_bold</font>
+                    <textcolor>$PARAM[colordiffuse]</textcolor>
+                    <label fallback="‒.‒">$INFO[$PARAM[property]]</label>
+                    <align>right</align>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogPlot_Ratings_Layout">
+        <param name="selected">false</param>
+        <param name="property">ListItem.Property(Rating)</param>
+        <definition>
+            <control type="group">
+                <visible>!String.IsEmpty(ListItem.Label)</visible>
+                <right>10</right>
+                <bottom>10</bottom>
+
+                <control type="group">
+                    <width>40</width>
+                    <visible>!String.IsEmpty(ListItem.Property(group_start))</visible>
+                    <control type="label">
+                        <font>font_tiny_bold</font>
+                        <align>center</align>
+                        <textcolor>dialog_fg_90</textcolor>
+                        <label>$INFO[ListItem.Property(Season)]</label>
+                    </control>
+                </control>
+
+                <control type="group">
+                    <left>40</left>
+                    <right>-40</right>
+                    <control type="image">
+                        <colordiffuse>rating_9</colordiffuse>
+                        <texture border="20">common/box.png</texture>
+                        <visible>!Integer.IsLess($PARAM[property],9)</visible>
+                    </control>
+                    <control type="image">
+                        <colordiffuse>rating_8</colordiffuse>
+                        <texture border="20">common/box.png</texture>
+                        <visible>Integer.IsLess($PARAM[property],9)</visible>
+                        <visible>!Integer.IsLess($PARAM[property],8)</visible>
+                    </control>
+                    <control type="image">
+                        <colordiffuse>rating_7</colordiffuse>
+                        <texture border="20">common/box.png</texture>
+                        <visible>Integer.IsLess($PARAM[property],8)</visible>
+                        <visible>!Integer.IsLess($PARAM[property],7)</visible>
+                    </control>
+                    <control type="image">
+                        <colordiffuse>rating_6</colordiffuse>
+                        <texture border="20">common/box.png</texture>
+                        <visible>Integer.IsLess($PARAM[property],7)</visible>
+                        <visible>!Integer.IsLess($PARAM[property],6)</visible>
+                    </control>
+                    <control type="image">
+                        <colordiffuse>rating_5</colordiffuse>
+                        <texture border="20">common/box.png</texture>
+                        <visible>Integer.IsLess($PARAM[property],6)</visible>
+                        <visible>!Integer.IsLess($PARAM[property],5)</visible>
+                    </control>
+                    <control type="image">
+                        <colordiffuse>rating_4</colordiffuse>
+                        <texture border="20">common/box.png</texture>
+                        <visible>Integer.IsLess($PARAM[property],5)</visible>
+                        <visible>!Integer.IsLess($PARAM[property],4)</visible>
+                    </control>
+                    <control type="image">
+                        <colordiffuse>rating_3</colordiffuse>
+                        <texture border="20">common/box.png</texture>
+                        <visible>Integer.IsLess($PARAM[property],4)</visible>
+                        <visible>!String.IsEmpty($PARAM[property])</visible>
+                    </control>
+                    <control type="image">
+                        <colordiffuse>dialog_fg_12</colordiffuse>
+                        <texture border="20">common/box.png</texture>
+                        <visible>String.IsEmpty($PARAM[property])</visible>
+                    </control>
+
+                    <include content="DialogPlot_Ratings_Label">
+                        <param name="visible">!String.IsEmpty($PARAM[property])</param>
+                        <param name="colordiffuse">panel_bg_90</param>
+                        <param name="property">$PARAM[property]</param>
+                    </include>
+
+                    <include content="DialogPlot_Ratings_Label">
+                        <param name="visible">String.IsEmpty($PARAM[property])</param>
+                        <param name="colordiffuse">dialog_fg_90</param>
+                        <param name="property">$PARAM[property]</param>
+                    </include>
+
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <variable name="DialogPlot_Ratings_Path">
+        <value condition="!Integer.IsEqual(Container(8001).NumItems,0) + !Container(8001).IsUpdating">plugin://script.skinvariables/?info=get_panel_labels&amp;containers=8001&amp;infolabel=Season&amp;length=8&amp;infoproperties=Season;Season;;Episode;Episode;;Rating;Rating&amp;reload=$INFO[Container(8001).NumItems]$INFO[Container(8001).ListItem.UniqueID(tmdb)]</value>
+    </variable>
+
+    <include name="DialogPlot_Ratings_Legend">
+        <control type="image">
+            <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
+            <texture>common/box.png</texture>
+            <width>30</width>
+            <height>30</height>
+        </control>
+        <control type="label">
+            <font>font_hint</font>
+            <textcolor>dialog_fg_90</textcolor>
+            <label>$PARAM[label]</label>
+            <width>auto</width>
+            <height>30</height>
+            <aligny>center</aligny>
+        </control>
+        <control type="group">
+            <width>10</width>
+        </control>
+    </include>
+
+    <variable name="DialogPlot_Ratings_8001">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_ID)) + !String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.Monitor.Season))">plugin://plugin.video.themoviedb.helper/?info=episodes&amp;tmdb_id=$INFO[Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_ID)]&amp;tmdb_type=tv&amp;season=$INFO[Window(Home).Property(TMDBHelper.ListItem.Monitor.Season)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_ID))">plugin://plugin.video.themoviedb.helper/?info=flatseasons&amp;tmdb_id=$INFO[Window(Home).Property(TMDBHelper.ListItem.Monitor.TMDb_ID)]&amp;tmdb_type=tv&amp;exclude_key=Season&amp;exclude_value=0</value>
+    </variable>
+
+
+    <include name="DialogPlot_Ratings">
+        <param name="textbox_visible">true</param>
+        <param name="include_divider">true</param>
+        <param name="include_top">false</param>
+        <param name="include_closebutton">true</param>
+        <definition>
+            <control type="group">
+                <include>Size_Group_Head</include>
+                <include content="Part_HeadText">
+                    <param name="id">$PARAM[head_id]</param>
+                    <param name="label">$PARAM[header]</param>
+                </include>
+                <include condition="$PARAM[include_divider]">Part_Line</include>
+                <include condition="$PARAM[include_closebutton]">Part_CloseButton</include>
+            </control>
+            <control type="group">
+                <include>Size_Group_Body</include>
+                <control type="group">
+                    <include content="Object_Top" condition="$PARAM[include_top]">
+                        <param name="top">60</param>
+                    </include>
+                    <control type="group">
+                        <include>Size_Dialog_Pad</include>
+
+                        <!-- Hidden list with data -->
+                        <control type="list" id="8001">
+                            <include>Object_Hidden_List_Definition</include>
+                            <content>$VAR[DialogPlot_Ratings_8001]</content>
+                        </control>
+
+                        <!-- While loading show panel placeholders -->
+                        <control type="panel">
+                            <orientation>vertical</orientation>
+                            <right>-10</right>
+                            <bottom>40</bottom>
+                            <itemlayout width="111.25" height="80">
+                                <control type="image">
+                                    <visible>!String.IsEmpty(ListItem.Label)</visible>
+                                    <right>10</right>
+                                    <bottom>10</bottom>
+                                    <colordiffuse>dialog_fg_12</colordiffuse>
+                                    <texture border="20">common/box.png</texture>
+                                </control>
+                            </itemlayout>
+                            <focusedlayout width="111.25" height="80">
+                                <control type="image">
+                                    <visible>!String.IsEmpty(ListItem.Label)</visible>
+                                    <right>10</right>
+                                    <bottom>10</bottom>
+                                    <colordiffuse>dialog_fg_12</colordiffuse>
+                                    <texture border="20">common/box.png</texture>
+                                </control>
+                            </focusedlayout>
+                            <content>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label></label></item>
+                                <item><label></label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label></label></item>
+                                <item><label></label></item>
+                                <item><label></label></item>
+                                <item><label></label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label></label></item>
+                                <item><label></label></item>
+                                <item><label></label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                                <item><label>-</label></item>
+                            </content>
+                            <visible>Integer.IsEqual(Container(8001).NumItems,0) | Container(8001).IsUpdating</visible>
+                        </control>
+
+                        <!-- Padded panel -->
+                        <control type="panel">
+                            <orientation>vertical</orientation>
+                            <left>-40</left>
+                            <right>-10</right>
+                            <bottom>40</bottom>
+                            <itemlayout width="111.25" height="80">
+                                <include content="DialogPlot_Ratings_Layout">
+                                </include>
+                            </itemlayout>
+                            <focusedlayout width="111.25" height="80">
+                                <include content="DialogPlot_Ratings_Layout">
+                                </include>
+                            </focusedlayout>
+                            <content>$VAR[DialogPlot_Ratings_Path]</content>
+                            <pagecontrol>61</pagecontrol>
+                            <visible>![Integer.IsEqual(Container(8001).NumItems,0) | Container(8001).IsUpdating]</visible>
+                        </control>
+
+                        <control type="grouplist">
+                            <orientation>horizontal</orientation>
+                            <bottom>0</bottom>
+                            <height>30</height>
+                            <itemgap>10</itemgap>
+                            <align>center</align>
+                            <include content="DialogPlot_Ratings_Legend">
+                                <param name="colordiffuse">rating_9</param>
+                                <param name="label">$LOCALIZE[31201]</param>
+                            </include>
+                            <include content="DialogPlot_Ratings_Legend">
+                                <param name="colordiffuse">rating_8</param>
+                                <param name="label">$LOCALIZE[31193]</param>
+                            </include>
+                            <include content="DialogPlot_Ratings_Legend">
+                                <param name="colordiffuse">rating_7</param>
+                                <param name="label">$LOCALIZE[31192]</param>
+                            </include>
+                            <include content="DialogPlot_Ratings_Legend">
+                                <param name="colordiffuse">rating_6</param>
+                                <param name="label">$LOCALIZE[31191]</param>
+                            </include>
+                            <include content="DialogPlot_Ratings_Legend">
+                                <param name="colordiffuse">rating_5</param>
+                                <param name="label">$LOCALIZE[31190]</param>
+                            </include>
+                            <include content="DialogPlot_Ratings_Legend">
+                                <param name="colordiffuse">rating_4</param>
+                                <param name="label">$LOCALIZE[31182]</param>
+                            </include>
+                            <include content="DialogPlot_Ratings_Legend">
+                                <param name="colordiffuse">rating_3</param>
+                                <param name="label">$LOCALIZE[31180]</param>
+                            </include>
+                        </control>
+
+
+                    </control>
+                    <include content="Part_Scrollbar_Max">
+                        <param name="id">61</param>
+                        <param name="inset">false</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
 </includes>
