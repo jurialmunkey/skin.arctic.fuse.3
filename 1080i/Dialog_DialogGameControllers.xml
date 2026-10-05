@@ -662,6 +662,81 @@
         </include>
     </include>
 
+    <!-- Kodi fills the menu (3) from the items below and the disc list (108321)
+         from the game's discs, and shows one at a time -->
+    <include name="DialogGameControllers_GameDiscManager">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Animation_BounceIn_Dialog</include>
+            <control type="group">
+                <include>Dimension_DialogWideMenu</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogWideMenu</param>
+                    <param name="topline">false</param>
+                    <param name="subline">false</param>
+                </include>
+            </control>
+            <control type="group">
+                <include>Dimension_DialogWideMenu</include>
+                <control type="group">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="label">$LOCALIZE[35272]</param>
+                        </include>
+                        <include>Part_CloseButton</include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <include content="List_Dialog">
+                            <param name="id">3</param>
+                            <param name="item_height">128</param>
+                            <param name="itemlayout_include">List_Layout_Dialog_GameDiscs</param>
+                            <param name="detailed">true</param>
+                            <include>Size_Grouplist_Pad</include>
+                            <visible>String.IsEqual(Window.Property(GameDiscManager.ShowMenu),true)</visible>
+                            <content>
+                                <item id="108323">
+                                    <label>$LOCALIZE[35273]</label>
+                                    <label2>$LOCALIZE[35274]</label2>
+                                    <icon>special://skin/extras/icons/compact-disc.png</icon>
+                                    <property name="EnableOnEject">true</property>
+                                </item>
+                                <item id="108324">
+                                    <label>$LOCALIZE[35275]</label>
+                                    <icon>special://skin/extras/icons/eject.png</icon>
+                                </item>
+                                <item id="108325">
+                                    <label>$LOCALIZE[15019]</label>
+                                    <icon>special://skin/extras/icons/circle-plus.png</icon>
+                                    <property name="EnableOnEject">true</property>
+                                </item>
+                                <item id="108326">
+                                    <label>$LOCALIZE[117]</label>
+                                    <icon>special://skin/extras/icons/circle-xmark.png</icon>
+                                    <property name="EnableOnEject">true</property>
+                                </item>
+                                <item id="108327">
+                                    <label>$LOCALIZE[35277]</label>
+                                    <icon>special://skin/extras/icons/circle-play.png</icon>
+                                </item>
+                            </content>
+                        </include>
+                        <include content="List_Dialog">
+                            <param name="id">108321</param>
+                            <param name="item_height">128</param>
+                            <param name="itemlayout_include">List_Layout_Dialog_GameDiscs</param>
+                            <param name="detailed">true</param>
+                            <include>Size_Grouplist_Pad</include>
+                            <visible>String.IsEqual(Window.Property(GameDiscManager.ShowDiscList),true)</visible>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </include>
+
     <include name="DialogGameControllers_GameCheats">
         <include content="Object_Hidden_Button">
             <param name="control">label</param>
