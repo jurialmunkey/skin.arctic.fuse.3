@@ -23,6 +23,10 @@
                                     <label>$LOCALIZE[31444]</label>
                                     <onclick>ActivateWindow(skinsettings)</onclick>
                                 </item>
+                                <item id="5">
+                                    <label>$LOCALIZE[31251]</label>
+                                    <onclick>ActivateWindow(videos)</onclick>
+                                </item>
                                 <item id="2">
                                     <label>$LOCALIZE[14116]</label>
                                     <onclick>ActivateWindow(systeminfo)</onclick>
@@ -42,7 +46,7 @@
                         <control type="group">
                             <visible>Container(3).HasFocus(1)</visible>
                             <include content="List_DialogSelect">
-                                <param name="id">8000</param>
+                                <param name="id">8100</param>
                                 <param name="detailed">True</param>
                                 <param name="variation">True</param>
                                 <param name="item_height">120</param>
@@ -170,7 +174,7 @@
                         <control type="group">
                             <visible>Container(3).HasFocus(3)</visible>
                             <include content="List_DialogSelect">
-                                <param name="id">8001</param>
+                                <param name="id">8300</param>
                                 <param name="detailed">True</param>
                                 <param name="variation">True</param>
                                 <param name="item_height">120</param>
@@ -285,7 +289,7 @@
                                 <param name="detailed">True</param>
                                 <param name="item_height">120</param>
                                 <param name="control">panel</param>
-                                <param name="id">8004</param>
+                                <param name="id">8400</param>
                                 <param name="item_w">view_addonbrowser_item_w</param>
                                 <param name="itemlayout_w">view_addonbrowser_itemlayout_w</param>
                                 <param name="variation">true</param>
@@ -301,6 +305,58 @@
                                 <onclick>Action(Info)</onclick>
                                 <content sortby="label">addons://user/all</content>
                             </include>
+                        </control>
+
+                        <control type="group">
+                            <visible>Container(3).HasFocus(5)</visible>
+
+                            <control type="scrollbar" id="65">
+                                <centerright>0</centerright>
+                                <width>scrollbar_w</width>
+                                <orientation>vertical</orientation>
+                                <texturesliderbackground />
+                                <texturesliderbar colordiffuse="main_logo" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+                                <include>Texture_Scrollbar_V</include>
+                                <onleft>3</onleft>
+                                <onback>3</onback>
+                                <top>20</top>
+                                <bottom>20</bottom>
+                                <showonepage>true</showonepage>
+                            </control>
+
+                            <control type="list" id="8501">
+                                <include>Object_Hidden_List_Definition</include>
+                                <content>videodb://movies/titles</content>
+                            </control>
+                            <control type="list" id="8502">
+                                <include>Object_Hidden_List_Definition</include>
+                                <content>videodb://tvshows/titles</content>
+                            </control>
+                            <control type="list" id="8503">
+                                <include>Object_Hidden_List_Definition</include>
+                                <content>plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=movie&amp;nextpage=false&amp;length=3</content>
+                            </control>
+                            <control type="list" id="8504">
+                                <include>Object_Hidden_List_Definition</include>
+                                <content>plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=episode&amp;nextpage=false&amp;length=3</content>
+                            </control>
+
+                            <control type="grouplist">
+                                <pagecontrol>65</pagecontrol>
+                                <orientation>vertical</orientation>
+                                <itemgap>0</itemgap>
+                                <include content="Settings_Statistics">
+                                    <param name="source">TMDbHelper $LOCALIZE[31219]</param>
+                                    <param name="id1">8503</param>
+                                    <param name="id2">8504</param>
+                                </include>
+                                <include content="Settings_Statistics">
+                                    <param name="source">Kodi $LOCALIZE[14022]</param>
+                                    <param name="id1">8501</param>
+                                    <param name="id2">8502</param>
+                                </include>
+                            </control>
+
                         </control>
 
                     </control>

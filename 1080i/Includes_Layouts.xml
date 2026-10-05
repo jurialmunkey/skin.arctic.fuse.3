@@ -3,6 +3,7 @@
 
     <include name="Layout_BasicMeta">
         <param name="selected">false</param>
+        <param name="label2">ListItem.Label2</param>
         <definition>
             <control type="group">
                 <left>40</left>
@@ -30,13 +31,75 @@
                         <height>20</height>
                         <font>font_mini</font>
                         <textcolor>dialog_fg_70</textcolor>
-                        <label>$INFO[ListItem.Label2]</label>
+                        <label>$INFO[$PARAM[label2]]</label>
                         <haspath>true</haspath>
                     </control>
                 </control>
                 <control type="group">
                     <left>-40</left>
                     <right>-40</right>
+                    <include>Part_Line</include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_StatisticMeta">
+        <param name="selected">false</param>
+        <param name="count">ListItem.Property(count)</param>
+        <param name="total">ListItem.Property(total)</param>
+        <param name="progress">ListItem.Property(percent)</param>
+        <param name="label2">ListItem.Label2</param>
+        <definition>
+            <control type="group">
+                <left>20</left>
+                <right>20</right>
+                <control type="group">
+                    <bottom>10</bottom>
+                    <height>12</height>
+                    <control type="group">
+                        <!-- <left>300</left>
+                        <right>100</right> -->
+                        <centertop>50%</centertop>
+                        <height>12</height>
+                        <control type="image">
+                            <texture colordiffuse="main_fg_12" border="12,0,12,0">progress/progress-nib.png</texture>
+                        </control>
+                        <control type="progress">
+                            <info>$PARAM[progress]</info>
+                            <animation effect="fadediffuse" start="ffffffff" end="ff4abe7b" condition="Integer.IsLess($PARAM[progress],20)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ff399f8b" condition="Integer.IsLess($PARAM[progress],40) + !Integer.IsLess($PARAM[progress],20)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="fff9c637" condition="Integer.IsLess($PARAM[progress],60) + !Integer.IsLess($PARAM[progress],40)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="fff47455" condition="Integer.IsLess($PARAM[progress],80) + !Integer.IsLess($PARAM[progress],60)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ffd33d54" condition="!Integer.IsLess($PARAM[progress],80)">Conditional</animation>
+                            <texturebg colordiffuse="00ffffff" border="12,0,12,0">progress/progress-nib.png</texturebg>
+                            <midtexture colordiffuse="white" border="12,0,12,0">progress/progress-nib.png</midtexture>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <top>0</top>
+                    <bottom>20</bottom>
+                    <!-- <left>10</left> -->
+                    <!-- <right>10</right> -->
+                    <control type="label">
+                        <font>font_hint_bold</font>
+                        <label fallback="13205">$INFO[ListItem.Label]</label>
+                        <textcolor>main_fg_90</textcolor>
+                        <align>left</align>
+                    </control>
+
+                    <control type="label">
+                        <font>font_hint</font>
+                        <label>$INFO[$PARAM[count]]</label>
+                        <textcolor>main_fg_90</textcolor>
+                        <align>right</align>
+                        <right>0</right>
+                    </control>
+                </control>
+                <control type="group">
+                    <left>-20</left>
+                    <right>-20</right>
                     <include>Part_Line</include>
                 </control>
             </control>
