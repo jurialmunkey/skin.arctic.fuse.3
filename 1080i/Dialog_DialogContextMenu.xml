@@ -32,81 +32,92 @@
     </variable>
 
     <!-- Rows the menu is drawn at: as many as it has entries, or as the options tray needs if more -->
-    <expression name="DialogContextMenu_Rows7">[!$EXP[DialogContextMenu_HasArtwork] + [Integer.IsEqual(Container(996).NumItems,7) + Integer.IsLessOrEqual(Container(6000).NumItems,5)]]</expression>
-    <expression name="DialogContextMenu_Rows6">[!$EXP[DialogContextMenu_HasArtwork] + [[Integer.IsEqual(Container(996).NumItems,6) + Integer.IsLessOrEqual(Container(6000).NumItems,5)] | [Integer.IsLess(Container(996).NumItems,6) + Integer.IsEqual(Container(6000).NumItems,5)]]]</expression>
-    <expression name="DialogContextMenu_Rows5">[!$EXP[DialogContextMenu_HasArtwork] + [[Integer.IsEqual(Container(996).NumItems,5) + Integer.IsLessOrEqual(Container(6000).NumItems,4)] | [Integer.IsLess(Container(996).NumItems,5) + Integer.IsEqual(Container(6000).NumItems,4)]]]</expression>
-    <expression name="DialogContextMenu_Rows4">[!$EXP[DialogContextMenu_HasArtwork] + [[Integer.IsEqual(Container(996).NumItems,4) + Integer.IsLessOrEqual(Container(6000).NumItems,3)] | [Integer.IsLess(Container(996).NumItems,4) + Integer.IsEqual(Container(6000).NumItems,3)]]]</expression>
-    <expression name="DialogContextMenu_Rows3">[!$EXP[DialogContextMenu_HasArtwork] + [[Integer.IsEqual(Container(996).NumItems,3) + Integer.IsLessOrEqual(Container(6000).NumItems,2)] | [Integer.IsLess(Container(996).NumItems,3) + Integer.IsEqual(Container(6000).NumItems,2)]]]</expression>
-    <expression name="DialogContextMenu_Rows2">[!$EXP[DialogContextMenu_HasArtwork] + [Integer.IsEqual(Container(996).NumItems,2) + Integer.IsLessOrEqual(Container(6000).NumItems,1)]]</expression>
-    <expression name="DialogContextMenu_Rows1">[!$EXP[DialogContextMenu_HasArtwork] + [Integer.IsEqual(Container(996).NumItems,1) + Integer.IsLessOrEqual(Container(6000).NumItems,1)]]</expression>
+    <expression name="DialogContextMenu_Rows7">[Integer.IsEqual(Container(996).NumItems,7) + Integer.IsLessOrEqual(Container(6000).NumItems,5)]</expression>
+    <expression name="DialogContextMenu_Rows6">[[Integer.IsEqual(Container(996).NumItems,6) + Integer.IsLessOrEqual(Container(6000).NumItems,5)] | [Integer.IsLess(Container(996).NumItems,6) + Integer.IsEqual(Container(6000).NumItems,5)]]</expression>
+    <expression name="DialogContextMenu_Rows5">[[Integer.IsEqual(Container(996).NumItems,5) + Integer.IsLessOrEqual(Container(6000).NumItems,4)] | [Integer.IsLess(Container(996).NumItems,5) + Integer.IsEqual(Container(6000).NumItems,4)]]</expression>
+    <expression name="DialogContextMenu_Rows4">[[Integer.IsEqual(Container(996).NumItems,4) + Integer.IsLessOrEqual(Container(6000).NumItems,3)] | [Integer.IsLess(Container(996).NumItems,4) + Integer.IsEqual(Container(6000).NumItems,3)]]</expression>
+    <expression name="DialogContextMenu_Rows3">[[Integer.IsEqual(Container(996).NumItems,3) + Integer.IsLessOrEqual(Container(6000).NumItems,2)] | [Integer.IsLess(Container(996).NumItems,3) + Integer.IsEqual(Container(6000).NumItems,2)]]</expression>
+    <expression name="DialogContextMenu_Rows2">[Integer.IsEqual(Container(996).NumItems,2) + Integer.IsLessOrEqual(Container(6000).NumItems,1)]</expression>
+    <expression name="DialogContextMenu_Rows1">[Integer.IsEqual(Container(996).NumItems,1) + Integer.IsLessOrEqual(Container(6000).NumItems,1)]</expression>
     <expression name="DialogContextMenu_RowsAll">[!$EXP[DialogContextMenu_Rows7] + !$EXP[DialogContextMenu_Rows6] + !$EXP[DialogContextMenu_Rows5] + !$EXP[DialogContextMenu_Rows4] + !$EXP[DialogContextMenu_Rows3] + !$EXP[DialogContextMenu_Rows2] + !$EXP[DialogContextMenu_Rows1]]</expression>
+
+    <constant name="constant_contextmenu_pad_All">0</constant>
+    <constant name="constant_contextmenu_pad_7">40</constant>
+    <constant name="constant_contextmenu_pad_6">80</constant>
+    <constant name="constant_contextmenu_pad_5">120</constant>
+    <constant name="constant_contextmenu_pad_4">160</constant>
+    <constant name="constant_contextmenu_pad_3">200</constant>
+    <constant name="constant_contextmenu_pad_2">240</constant>
+    <constant name="constant_contextmenu_pad_1">280</constant>
+
+    <include name="DialogContextMenu_Backing_Panel">
+        <definition>
+            <control type="group">
+                <visible>$EXP[DialogContextMenu_Rows$PARAM[count]]</visible>
+                <top>constant_contextmenu_pad_$PARAM[count]</top>
+                <bottom>constant_contextmenu_pad_$PARAM[count]</bottom>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">$PARAM[dialog_size]</param>
+                </include>
+                <include content="Object_Control" condition="$PARAM[has_menu]">
+                    <param name="control">group</param>
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <control type="group">
+                            <right>120</right>
+                            <include>Part_Line_Vert</include>
+                        </control>
+                    </control>
+                </include>
+            </control>
+        </definition>
+    </include>
 
     <include name="DialogContextMenu_Backing">
         <definition>
             <include>$PARAM[dialog_size]</include>
             <include>Animation_BounceIn_Dialog</include>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_RowsAll]</visible>
-                <include content="Part_Background_Panel">
-                    <param name="dialog_size">$PARAM[dialog_size]</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows7]</visible>
-                <top>40</top>
-                <bottom>40</bottom>
-                <include content="Part_Background_Panel">
-                    <param name="dialog_size">$PARAM[dialog_size]</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows6]</visible>
-                <top>80</top>
-                <bottom>80</bottom>
-                <include content="Part_Background_Panel">
-                    <param name="dialog_size">$PARAM[dialog_size]</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows5]</visible>
-                <top>120</top>
-                <bottom>120</bottom>
-                <include content="Part_Background_Panel">
-                    <param name="dialog_size">$PARAM[dialog_size]</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows4]</visible>
-                <top>160</top>
-                <bottom>160</bottom>
-                <include content="Part_Background_Panel">
-                    <param name="dialog_size">$PARAM[dialog_size]</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows3]</visible>
-                <top>200</top>
-                <bottom>200</bottom>
-                <include content="Part_Background_Panel">
-                    <param name="dialog_size">$PARAM[dialog_size]</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows2]</visible>
-                <top>240</top>
-                <bottom>240</bottom>
-                <include content="Part_Background_Panel">
-                    <param name="dialog_size">$PARAM[dialog_size]</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows1]</visible>
-                <top>280</top>
-                <bottom>280</bottom>
-                <include content="Part_Background_Panel">
-                    <param name="dialog_size">$PARAM[dialog_size]</param>
-                </include>
-            </control>
+            <include content="DialogContextMenu_Backing_Panel">
+                <param name="count">All</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="has_menu">$PARAM[has_menu]</param>
+            </include>
+            <include content="DialogContextMenu_Backing_Panel">
+                <param name="count">7</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="has_menu">$PARAM[has_menu]</param>
+            </include>
+            <include content="DialogContextMenu_Backing_Panel">
+                <param name="count">6</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="has_menu">$PARAM[has_menu]</param>
+            </include>
+            <include content="DialogContextMenu_Backing_Panel">
+                <param name="count">5</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="has_menu">$PARAM[has_menu]</param>
+            </include>
+            <include content="DialogContextMenu_Backing_Panel">
+                <param name="count">4</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="has_menu">$PARAM[has_menu]</param>
+            </include>
+            <include content="DialogContextMenu_Backing_Panel">
+                <param name="count">3</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="has_menu">$PARAM[has_menu]</param>
+            </include>
+            <include content="DialogContextMenu_Backing_Panel">
+                <param name="count">2</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="has_menu">$PARAM[has_menu]</param>
+            </include>
+            <include content="DialogContextMenu_Backing_Panel">
+                <param name="count">1</param>
+                <param name="dialog_size">$PARAM[dialog_size]</param>
+                <param name="has_menu">$PARAM[has_menu]</param>
+            </include>
         </definition>
     </include>
 
@@ -118,50 +129,6 @@
         <animation effect="slide" start="0" end="0,200" condition="$EXP[DialogContextMenu_Rows3]">Conditional</animation>
         <animation effect="slide" start="0" end="0,240" condition="$EXP[DialogContextMenu_Rows2]">Conditional</animation>
         <animation effect="slide" start="0" end="0,280" condition="$EXP[DialogContextMenu_Rows1]">Conditional</animation>
-    </include>
-
-    <include name="DialogContextMenu_LineVert">
-        <definition>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_RowsAll]</visible>
-                <include>Part_Line_Vert</include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows7]</visible>
-                <bottom>80</bottom>
-                <include>Part_Line_Vert</include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows6]</visible>
-                <bottom>160</bottom>
-                <include>Part_Line_Vert</include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows5]</visible>
-                <bottom>240</bottom>
-                <include>Part_Line_Vert</include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows4]</visible>
-                <bottom>320</bottom>
-                <include>Part_Line_Vert</include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows3]</visible>
-                <bottom>400</bottom>
-                <include>Part_Line_Vert</include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows2]</visible>
-                <bottom>480</bottom>
-                <include>Part_Line_Vert</include>
-            </control>
-            <control type="group">
-                <visible>$EXP[DialogContextMenu_Rows1]</visible>
-                <bottom>560</bottom>
-                <include>Part_Line_Vert</include>
-            </control>
-        </definition>
     </include>
 
 	<include name="DialogContextMenu">
@@ -183,11 +150,12 @@
                 </include>
                 <include content="DialogContextMenu_Backing" condition="!$PARAM[has_artwork]">
                     <param name="dialog_size">Dimension_DialogMiniMenu</param>
+                    <param name="has_menu">$PARAM[has_menu]</param>
                 </include>
                 <!-- Content -->
                 <control type="group" id="8000">
                     <include>Size_Dialog_Pad</include>
-                    <include>DialogContextMenu_Slide</include>
+                    <include condition="!$PARAM[has_artwork]">DialogContextMenu_Slide</include>
 
                     <!-- Left -->
                     <control type="group">
@@ -236,10 +204,11 @@
                                         <include>$PARAM[include_tray]</include>
                                     </content>
                                 </control>
-                                <control type="group">
+                                <include content="Object_Control" condition="$PARAM[has_artwork]">
+                                    <param name="control">group</param>
                                     <right>120</right>
-                                    <include>DialogContextMenu_LineVert</include>
-                                </control>
+                                    <include>Part_Line_Vert</include>
+                                </include>
                             </include>
                             <control type="group">
                                 <control type="group">
