@@ -4,6 +4,7 @@
     <controls>
 
         <control type="group">
+            <visible>!Player.HasGame</visible>
 
             <include content="Furniture_Busy_Main">
                 <param name="minilabel">$INFO[Control.GetLabel(402)]</param>
@@ -33,6 +34,64 @@
                 <param name="visible">!String.StartsWith(Control.GetLabel(400),Default)</param>
                 <param name="size">50</param>
             </include>
+        </control>
+
+        <!-- Over a game the text needs a panel to read against, and an achievement's badge is square -->
+        <control type="group">
+            <visible>Player.HasGame</visible>
+            <right>60</right>
+            <bottom>60</bottom>
+            <width>600</width>
+            <height>120</height>
+            <include content="Animation_SlideIn_Dialog">
+                <param name="posy">48</param>
+            </include>
+
+            <include content="Part_Box">
+                <param name="colordiffuse">main_bg_90</param>
+            </include>
+            <include>Part_Background_Glass_Border</include>
+
+            <control type="image">
+                <left>20</left>
+                <centertop>50%</centertop>
+                <width>80</width>
+                <height>80</height>
+                <aspectratio>keep</aspectratio>
+                <texture background="true" diffuse="diffuse/square_w120_h120.png">$INFO[Control.GetLabel(400)]</texture>
+                <visible>!String.StartsWith(Control.GetLabel(400),Default)</visible>
+            </control>
+            <control type="image">
+                <left>40</left>
+                <centertop>50%</centertop>
+                <width>40</width>
+                <height>40</height>
+                <texture colordiffuse="main_fg_70">special://skin/extras/icons/comment-dots.png</texture>
+                <visible>String.StartsWith(Control.GetLabel(400),Default)</visible>
+            </control>
+
+            <control type="label">
+                <left>120</left>
+                <right>20</right>
+                <top>20</top>
+                <height>40</height>
+                <font>font_main_bold</font>
+                <textcolor>main_fg_100</textcolor>
+                <label>$INFO[Control.GetLabel(401)]</label>
+                <scroll>true</scroll>
+                <scrollsuffix>   </scrollsuffix>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <right>20</right>
+                <top>60</top>
+                <height>40</height>
+                <font>font_mini</font>
+                <textcolor>main_fg_70</textcolor>
+                <label>$INFO[Control.GetLabel(402)]</label>
+                <scroll>true</scroll>
+                <scrollsuffix>   </scrollsuffix>
+            </control>
         </control>
 
         <control type="image" id="400">
