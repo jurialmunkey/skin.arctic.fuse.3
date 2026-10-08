@@ -50,29 +50,52 @@
                             <control type="group" id="500">
 
                                 <!-- Combined -->
-                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">Search_Widgets_Combined</include>
+                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)" content="Search_Widgets">
+                                    <param name="include_widget">Hub_Combined_Widget</param>
+                                    <param name="include_search">skinvariables-searchwidgets-combined</param>
+                                </include>
 
                                 <!-- Wall -->
-                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">skinvariables-searchwidgets-wall</include>
+                                <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)" content="Search_Widgets">
+                                    <param name="include_widget">Hub_Wall_Widget</param>
+                                    <param name="include_search">skinvariables-searchwidgets-wall</param>
+                                </include>
 
                                 <!-- Standard -->
                                 <include condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">skinvariables-searchwidgets-standard</include>
                             </control>
 
                             <control type="group" id="600">
-                                <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">
-                                    <param name="include_content">Search_Switcher_Wall_Items</param>
-                                    <param name="onup">302</param>
-                                    <param name="extended">true</param>
-                                </include>
+
                                 <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
-                                    <param name="include_content">Search_Switcher_Wall_Items</param>
+                                    <param name="include_content">Search_Switcher_Standard_Items</param>
                                     <param name="top">-520</param>
                                     <param name="wall">false</param>
                                     <param name="onup">302</param>
                                 </include>
-                                <include content="Search_Widget_Selector" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
-                                    <param name="include_content">Search_Switcher_Items</param>
+
+
+                                <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall) + Skin.HasSetting(Search.DisableDiscover)">
+                                    <param name="include_content">Search_Switcher_Standard_Items</param>
+                                    <param name="onup">302</param>
+                                    <param name="extended">true</param>
+                                </include>
+                                <include content="Search_Widget_Selector" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall) + !Skin.HasSetting(Search.DisableDiscover)">
+                                    <param name="include_content">Search_Switcher_Discover_Items</param>
+                                    <param name="onup">302</param>
+                                    <param name="extended">true</param>
+                                </include>
+
+
+                                <include content="Hub_Widget_Switcher" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + Skin.HasSetting(Search.DisableDiscover)">
+                                    <param name="include_content">Search_Switcher_Standard_Items</param>
+                                    <param name="top">520</param>
+                                    <param name="wall">false</param>
+                                    <param name="onup">302</param>
+                                    <param name="extended">true</param>
+                                </include>
+                                <include content="Search_Widget_Selector" condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)">
+                                    <param name="include_content">Search_Switcher_Discover_Items</param>
                                     <param name="top">520</param>
                                     <param name="wall">false</param>
                                     <param name="onup">302</param>
@@ -149,7 +172,6 @@
                             <label2>$INFO[Window(Home).Property(TMDbHelper.UserDiscover.FolderPath.Name), ,]</label2>
                             <icon>special://skin/extras/icons/binoculars.png</icon>
                             <property name="mode">discover</property>
-                            <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)</visible>
                         </item>
                         <item>
                             <label>$LOCALIZE[137]</label>
@@ -162,7 +184,6 @@
                             <label2>$VAR[Search_Label_Results]</label2>
                             <icon>special://skin/extras/icons/calendar.png</icon>
                             <property name="mode">moviedecades</property>
-                            <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)</visible>
                             <visible>!Skin.HasSetting(Search.DisableDiscover-moviedecades)</visible>
                         </item>
                         <item>
@@ -170,7 +191,6 @@
                             <label2>$VAR[Search_Label_Results]</label2>
                             <icon>special://skin/extras/icons/key.png</icon>
                             <property name="mode">moviekeywords</property>
-                            <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)</visible>
                             <visible>!Skin.HasSetting(Search.DisableDiscover-moviekeywords)</visible>
                         </item>
                         <item>
@@ -178,7 +198,6 @@
                             <label2>$VAR[Search_Label_Results]</label2>
                             <icon>special://skin/extras/icons/list-ul.png</icon>
                             <property name="mode">mdblists</property>
-                            <visible>String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined) + !Skin.HasSetting(Search.DisableDiscover)</visible>
                             <visible>!Skin.HasSetting(Search.DisableDiscover-mdblists)</visible>
                         </item>
                     </content>
@@ -307,24 +326,24 @@
             <visible>!$EXP[Exp_Hubs_Searchbar_IsVisible]</visible>
             <include>Info_Panel_Dimensions</include>
             <include>Home_Info_Animation</include>
-            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + !String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
                 <param name="id">501</param>
             </include>
             <include>skinvariables-searchwidgets-info</include>
 
-            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + !String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
                 <param name="id">550</param>
             </include>
-            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + !String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
                 <param name="id">551</param>
             </include>
-            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + !String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
                 <param name="id">552</param>
             </include>
-            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + !String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
                 <param name="id">553</param>
             </include>
-            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">
+            <include content="Search_Info" condition="!Skin.HasSetting(Search.DisableDiscover) + !String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">
                 <param name="id">554</param>
             </include>
 
@@ -332,44 +351,62 @@
         </control>
     </include>
 
-    <include name="Search_Widgets_Combined">
-        <include content="Hub_Combined_Widget" condition="!Skin.HasSetting(Search.DisableDiscover)">
-            <param name="id">501</param>
-            <param name="content">$INFO[window(home).property(tmdbhelper.userdiscover.folderpath)]$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</param>
-            <param name="include">List_Poster_Row</param>
-            <param name="target">videos</param>
-            <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),discover)</param>
-            <param name="allowhiddenfocus">true</param>
-        </include>
-        <include>skinvariables-searchwidgets-combined</include>
+    <include name="Search_Widgets">
+        <param name="include">List_Poster_Row</param>
+        <param name="include_widget">Hub_Combined_Widget</param>
+        <param name="include_search">skinvariables-searchwidgets-combined</param>
+        <definition>
+            <include content="$PARAM[include_widget]" condition="!Skin.HasSetting(Search.DisableDiscover)">
+                <param name="id">501</param>
+                <param name="content">$INFO[window(home).property(tmdbhelper.userdiscover.folderpath)]$INFO[Control.GetLabel(3000).index(1),&amp;with_text_query=,]</param>
+                <param name="include">$PARAM[include]</param>
+                <param name="target">videos</param>
+                <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),discover)</param>
+                <param name="allowhiddenfocus">true</param>
+            </include>
+            <include>$PARAM[include_search]</include>
 
-        <!-- Extended Discover -->
-        <include content="Search_Widget_Extended_Discover">
-            <param name="id">550</param>
-        </include>
-        <include content="Search_Widget_Extended_Discover">
-            <param name="id">551</param>
-        </include>
-        <include content="Search_Widget_Extended_Discover">
-            <param name="id">552</param>
-        </include>
-        <include content="Search_Widget_Extended_Discover">
-            <param name="id">553</param>
-        </include>
-        <include content="Search_Widget_Extended_Discover">
-            <param name="id">554</param>
-        </include>
-    </include>
-
-    <include name="Search_Widget_Extended_Discover">
-        <include content="Hub_Combined_Widget" condition="!Skin.HasSetting(Search.DisableDiscover)">
-            <param name="id">$PARAM[id]</param>
-            <param name="content">$VAR[Search_Path_Extended_Discover_$PARAM[id]]</param>
-            <param name="include">List_Poster_Row</param>
-            <param name="target">videos</param>
-            <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),extended-$PARAM[id])</param>
-            <param name="allowhiddenfocus">true</param>
-        </include>
+            <include content="$PARAM[include_widget]" condition="!Skin.HasSetting(Search.DisableDiscover)">
+                <param name="id">550</param>
+                <param name="content">$VAR[Search_Path_Extended_Discover_550]</param>
+                <param name="include">$PARAM[include]</param>
+                <param name="target">videos</param>
+                <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),extended-550)</param>
+                <param name="allowhiddenfocus">true</param>
+            </include>
+            <include content="$PARAM[include_widget]" condition="!Skin.HasSetting(Search.DisableDiscover)">
+                <param name="id">551</param>
+                <param name="content">$VAR[Search_Path_Extended_Discover_551]</param>
+                <param name="include">$PARAM[include]</param>
+                <param name="target">videos</param>
+                <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),extended-551)</param>
+                <param name="allowhiddenfocus">true</param>
+            </include>
+            <include content="$PARAM[include_widget]" condition="!Skin.HasSetting(Search.DisableDiscover)">
+                <param name="id">552</param>
+                <param name="content">$VAR[Search_Path_Extended_Discover_552]</param>
+                <param name="include">$PARAM[include]</param>
+                <param name="target">videos</param>
+                <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),extended-552)</param>
+                <param name="allowhiddenfocus">true</param>
+            </include>
+            <include content="$PARAM[include_widget]" condition="!Skin.HasSetting(Search.DisableDiscover)">
+                <param name="id">553</param>
+                <param name="content">$VAR[Search_Path_Extended_Discover_553]</param>
+                <param name="include">$PARAM[include]</param>
+                <param name="target">videos</param>
+                <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),extended-553)</param>
+                <param name="allowhiddenfocus">true</param>
+            </include>
+            <include content="$PARAM[include_widget]" condition="!Skin.HasSetting(Search.DisableDiscover)">
+                <param name="id">554</param>
+                <param name="content">$VAR[Search_Path_Extended_Discover_554]</param>
+                <param name="include">$PARAM[include]</param>
+                <param name="target">videos</param>
+                <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),extended-554)</param>
+                <param name="allowhiddenfocus">true</param>
+            </include>
+        </definition>
     </include>
 
     <variable name="Search_Path_Extended_Discover_550">
@@ -434,7 +471,7 @@
         <value>-</value>
     </variable>
 
-    <include name="Search_Switcher_Items">
+    <include name="Search_Switcher_Discover_Items">
         <item>
             <label>$LOCALIZE[587]</label>
             <label2>$INFO[Container(501).NumItems, (,)]</label2>
@@ -457,25 +494,25 @@
             <visible>String.IsEqual(Container(3003).ListItem.Property(mode),discover)</visible>
             <visible>Container(501).IsUpdating</visible>
         </item>
-        <include>skinvariables-searchwidgets-selector</include>
-        <include content="Search_Switcher_Items_Extended">
+        <include>skinvariables-searchwidgets-combined-selector</include>
+        <include content="Search_Switcher_Discover_Items_Extended">
             <param name="id">0</param>
         </include>
-        <include content="Search_Switcher_Items_Extended">
+        <include content="Search_Switcher_Discover_Items_Extended">
             <param name="id">1</param>
         </include>
-        <include content="Search_Switcher_Items_Extended">
+        <include content="Search_Switcher_Discover_Items_Extended">
             <param name="id">2</param>
         </include>
-        <include content="Search_Switcher_Items_Extended">
+        <include content="Search_Switcher_Discover_Items_Extended">
             <param name="id">3</param>
         </include>
-        <include content="Search_Switcher_Items_Extended">
+        <include content="Search_Switcher_Discover_Items_Extended">
             <param name="id">4</param>
         </include>
     </include>
 
-    <include name="Search_Switcher_Items_Extended">
+    <include name="Search_Switcher_Discover_Items_Extended">
         <item>
             <label>$VAR[Search_Label_Extended_Discover_55$PARAM[id]]</label>
             <label2>$INFO[Container(55$PARAM[id]).NumItems, (,)]</label2>
@@ -508,8 +545,8 @@
         </item>
     </include>
 
-    <include name="Search_Switcher_Wall_Items">
-        <include>skinvariables-searchwidgets-wall-selector</include>
+    <include name="Search_Switcher_Standard_Items">
+        <include>skinvariables-searchwidgets-standard-selector</include>
     </include>
 
     <include name="Search_Footer_Left">
@@ -724,6 +761,12 @@
     </include>
 
 
+    <variable name="Search_Bar_Keys_OnDown">
+        <value condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">SetFocus($INFO[Container(601).ListItemAbsolute(0).Property(widget_id)])</value>
+        <value condition="Skin.HasSetting(Search.DisableDiscover)">SetFocus(601)</value>
+        <value>SetFocus(3003)</value>
+    </variable>
+
     <include name="Search_Bar_Keys">
         <control type="button" id="301">
             <include>Object_Hidden_Button_Definition</include>
@@ -741,9 +784,7 @@
             <onup>3001</onup>
             <onback>SetProperty(RefocusMenu,True)</onback>
             <onback>3001</onback>
-            <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Combined)">3003</ondown>
-            <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Wall)">601</ondown>
-            <ondown condition="String.IsEqual(Skin.String(HomeSwitcher.Search.Mode),Standard)">SetFocus($INFO[Container(601).ListItemAbsolute(0).Property(widget_id)])</ondown>
+            <ondown>$VAR[Search_Bar_Keys_OnDown]</ondown>
             <width>700</width>
             <!-- <width>750</width>
             <focusposition>7</focusposition> -->

@@ -44,12 +44,43 @@
         </definition>
     </include>
 
+    <include name="Layout_StatisticDots">
+        <param name="selected">false</param>
+        <param name="progress">ListItem.Property(percentile)</param>
+        <definition>
+            <control type="group">
+                <left>5</left>
+                <right>5</right>
+                <top>5</top>
+                <bottom>5</bottom>
+                <control type="image">
+                    <texture colordiffuse="dialog_fg_12">common/circle.png</texture>
+                </control>
+                <control type="image">
+                    <animation effect="fadediffuse" start="ffffffff" end="ff4abe7b" condition="Integer.IsLess($PARAM[progress],10)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ff74c47b" condition="Integer.IsLess($PARAM[progress],20) + !Integer.IsLess($PARAM[progress],10)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ff98c977" condition="Integer.IsLess($PARAM[progress],30) + !Integer.IsLess($PARAM[progress],20)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ffbacd70" condition="Integer.IsLess($PARAM[progress],40) + !Integer.IsLess($PARAM[progress],30)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ffdacc63" condition="Integer.IsLess($PARAM[progress],50) + !Integer.IsLess($PARAM[progress],40)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="fff9c637" condition="Integer.IsLess($PARAM[progress],60) + !Integer.IsLess($PARAM[progress],50)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="fff6ab41" condition="Integer.IsLess($PARAM[progress],70) + !Integer.IsLess($PARAM[progress],60)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="fff48d4b" condition="Integer.IsLess($PARAM[progress],80) + !Integer.IsLess($PARAM[progress],70)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ffe96651" condition="Integer.IsLess($PARAM[progress],90) + !Integer.IsLess($PARAM[progress],80)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ffd33d54" condition="!Integer.IsLess($PARAM[progress],90)">Conditional</animation>
+                    <texture>common/circle.png</texture>
+                    <visible>Integer.IsGreater($PARAM[progress],0)</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Layout_StatisticMeta">
         <param name="selected">false</param>
         <param name="count">ListItem.Property(count)</param>
         <param name="total">ListItem.Property(total)</param>
         <param name="progress">ListItem.Property(percent)</param>
         <param name="label2">ListItem.Label2</param>
+        <param name="label">ListItem.Label</param>
         <definition>
             <control type="group">
                 <left>20</left>
@@ -67,11 +98,16 @@
                         </control>
                         <control type="progress">
                             <info>$PARAM[progress]</info>
-                            <animation effect="fadediffuse" start="ffffffff" end="ff4abe7b" condition="Integer.IsLess($PARAM[progress],20)">Conditional</animation>
-                            <animation effect="fadediffuse" start="ffffffff" end="ff399f8b" condition="Integer.IsLess($PARAM[progress],40) + !Integer.IsLess($PARAM[progress],20)">Conditional</animation>
-                            <animation effect="fadediffuse" start="ffffffff" end="fff9c637" condition="Integer.IsLess($PARAM[progress],60) + !Integer.IsLess($PARAM[progress],40)">Conditional</animation>
-                            <animation effect="fadediffuse" start="ffffffff" end="fff47455" condition="Integer.IsLess($PARAM[progress],80) + !Integer.IsLess($PARAM[progress],60)">Conditional</animation>
-                            <animation effect="fadediffuse" start="ffffffff" end="ffd33d54" condition="!Integer.IsLess($PARAM[progress],80)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ff4abe7b" condition="Integer.IsLess($PARAM[progress],10)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ff74c47b" condition="Integer.IsLess($PARAM[progress],20) + !Integer.IsLess($PARAM[progress],10)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ff98c977" condition="Integer.IsLess($PARAM[progress],30) + !Integer.IsLess($PARAM[progress],20)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ffbacd70" condition="Integer.IsLess($PARAM[progress],40) + !Integer.IsLess($PARAM[progress],30)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ffdacc63" condition="Integer.IsLess($PARAM[progress],50) + !Integer.IsLess($PARAM[progress],40)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="fff9c637" condition="Integer.IsLess($PARAM[progress],60) + !Integer.IsLess($PARAM[progress],50)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="fff6ab41" condition="Integer.IsLess($PARAM[progress],70) + !Integer.IsLess($PARAM[progress],60)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="fff48d4b" condition="Integer.IsLess($PARAM[progress],80) + !Integer.IsLess($PARAM[progress],70)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ffe96651" condition="Integer.IsLess($PARAM[progress],90) + !Integer.IsLess($PARAM[progress],80)">Conditional</animation>
+                            <animation effect="fadediffuse" start="ffffffff" end="ffd33d54" condition="!Integer.IsLess($PARAM[progress],90)">Conditional</animation>
                             <texturebg colordiffuse="00ffffff" border="12,0,12,0">progress/progress-nib.png</texturebg>
                             <midtexture colordiffuse="white" border="12,0,12,0">progress/progress-nib.png</midtexture>
                         </control>
@@ -84,7 +120,7 @@
                     <!-- <right>10</right> -->
                     <control type="label">
                         <font>font_hint_bold</font>
-                        <label fallback="13205">$INFO[ListItem.Label]</label>
+                        <label fallback="13205">$INFO[$PARAM[label]]</label>
                         <textcolor>main_fg_90</textcolor>
                         <align>left</align>
                     </control>
