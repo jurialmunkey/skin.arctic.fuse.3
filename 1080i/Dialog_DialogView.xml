@@ -91,11 +91,44 @@
     </include>
 
     <variable name="DialogViewCrew_Header">
+        <value condition="!String.IsEmpty(Window.Property(crew_type))">$INFO[Window.Property(crew_label)]</value>
         <value condition="String.IsEqual(Window.Property(type),Writer)">$LOCALIZE[20417]</value>
         <value condition="String.IsEqual(Window.Property(type),Director)">$LOCALIZE[20339]</value>
     </variable>
 
     <include name="DialogViewCrew_Items">
+        <include condition="!String.IsEmpty(Window.Property(crew_type))">DialogViewCrew_CategoryItems</include>
+        <include condition="String.IsEmpty(Window.Property(crew_type))">DialogViewCrew_DetailsItems</include>
+    </include>
+
+    <include name="DialogViewCrew_CategoryItems">
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(crew_type),Director)">
+            <param name="type">Director</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(crew_type),Writer)">
+            <param name="type">Writer</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(crew_type),Creator)">
+            <param name="type">Creator</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(crew_type),Producer)">
+            <param name="type">Producer</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(crew_type),Sound_Department)">
+            <param name="type">Sound_Department</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(crew_type),Art_Department)">
+            <param name="type">Art_Department</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(crew_type),Photography)">
+            <param name="type">Photography</param>
+        </include>
+        <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(crew_type),Editor)">
+            <param name="type">Editor</param>
+        </include>
+    </include>
+
+    <include name="DialogViewCrew_DetailsItems">
         <!-- Writer / Composer -->
         <include content="DialogInfo_CrewItems" condition="String.IsEqual(Window.Property(type),Writer)">
             <param name="type">Writer</param>

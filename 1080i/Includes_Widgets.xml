@@ -48,6 +48,7 @@
     <!-- Use as labelinclude with categoryid and categorycontent or
          categorycontentinclude; the widget can read the selected category. -->
     <include name="Widget_Categories">
+        <param name="categorytarget" />
         <param name="labeltop">widget_label_t</param>
         <param name="labelheight">widget_label_h</param>
         <param name="widgettop">widget_items_t</param>
@@ -56,6 +57,7 @@
         <param name="categoryonfocus">noop</param>
         <param name="categorycontentinclude">Widget_Categories_Content</param>
         <param name="categoryonclickinclude">Object_Null</param>
+        <param name="categorynavigationinclude">Widget_Categories_Navigation</param>
         <definition>
             <include content="Widget_Label">
                 <param name="groupid">$PARAM[groupid]</param>
@@ -97,7 +99,9 @@
                 <hitrect x="0" y="0" w="0" h="0" />
                 <onleft>$PARAM[categoryid]</onleft>
                 <onright>$PARAM[categoryid]</onright>
-                <ondown>$PARAM[id]</ondown>
+                <include content="$PARAM[categorynavigationinclude]">
+                    <param name="id">$PARAM[id]</param>
+                </include>
                 <onback>$PARAM[categoryonback]</onback>
                 <include content="$PARAM[categoryonclickinclude]" />
                 <onfocus>$PARAM[categoryonfocus]</onfocus>
@@ -107,6 +111,7 @@
                 </include>
                 <include content="$PARAM[categorycontentinclude]">
                     <param name="categorycontent">$PARAM[categorycontent]</param>
+                    <param name="categorytarget">$PARAM[categorytarget]</param>
                 </include>
             </include>
 
@@ -121,7 +126,20 @@
     </include>
 
     <include name="Widget_Categories_Content">
-        <content>$PARAM[categorycontent]</content>
+        <param name="categorytarget" />
+        <definition>
+            <content target="$PARAM[categorytarget]">$PARAM[categorycontent]</content>
+        </definition>
+    </include>
+
+    <include name="Widget_Categories_Navigation">
+        <ondown>$PARAM[id]</ondown>
+    </include>
+
+    <include name="Widget_Combined_Categories_Navigation">
+        <ondown>$PARAM[id]</ondown>
+        <onfocus>ClearProperty(HomeSwitcher.IsVisible,Home)</onfocus>
+        <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
     </include>
 
     <include name="Widget_OnFocus">
@@ -136,6 +154,7 @@
     </include>
 
     <include name="Widget_Content">
+        <param name="categorytarget" />
         <param name="visible">true</param>
         <param name="altvisible">false</param>
         <param name="include">List_Poster_Row</param>
@@ -167,10 +186,12 @@
                 <param name="include">$PARAM[include]</param>
                 <param name="categoryid">$PARAM[categoryid]</param>
                 <param name="categorycontent">$PARAM[categorycontent]</param>
+                <param name="categorytarget">$PARAM[categorytarget]</param>
                 <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
                 <param name="categoryonback">$PARAM[categoryonback]</param>
                 <param name="categoryonfocus">$PARAM[categoryonfocus]</param>
                 <param name="categoryonclickinclude">$PARAM[categoryonclickinclude]</param>
+                <param name="categorynavigationinclude">$PARAM[categorynavigationinclude]</param>
                 <param name="widget_hideartwork">$PARAM[widget_hideartwork]</param>
                 <param name="widget_showoverlay">$PARAM[widget_showoverlay]</param>
                 <include content="Animation_ConditionalFade">
@@ -636,6 +657,8 @@
     </include>
 
     <include name="_Widget_Row">
+        <param name="categorytarget" />
+        <param name="categorynavigationinclude">Widget_Categories_Navigation</param>
         <param name="labeltop">widget_label_t</param>
         <param name="labelheight">widget_label_h</param>
         <param name="widgettop">widget_items_t</param>
@@ -648,10 +671,12 @@
                 <param name="labelinclude">$PARAM[labelinclude]</param>
                 <param name="categoryid">$PARAM[categoryid]</param>
                 <param name="categorycontent">$PARAM[categorycontent]</param>
+                <param name="categorytarget">$PARAM[categorytarget]</param>
                 <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
                 <param name="categoryonback">$PARAM[categoryonback]</param>
                 <param name="categoryonfocus">$PARAM[categoryonfocus]</param>
                 <param name="categoryonclickinclude">$PARAM[categoryonclickinclude]</param>
+                <param name="categorynavigationinclude">$PARAM[categorynavigationinclude]</param>
                 <param name="usewidgetlabel">$PARAM[usewidgetlabel]</param>
                 <param name="labelvisible">true</param>
                 <param name="infowidget">true</param>
@@ -676,6 +701,7 @@
     </include>
 
     <include name="Widget_Row">
+        <param name="categorytarget" />
         <param name="grouplistid">5000</param>
         <param name="widgetconstants_affix" />
         <definition>
@@ -686,6 +712,7 @@
                 <param name="labelinclude">$PARAM[labelinclude]</param>
                 <param name="categoryid">$PARAM[categoryid]</param>
                 <param name="categorycontent">$PARAM[categorycontent]</param>
+                <param name="categorytarget">$PARAM[categorytarget]</param>
                 <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
                 <param name="categoryonback">$PARAM[grouplistid]</param>
                 <param name="categoryonfocus">$PARAM[categoryonfocus]</param>
@@ -719,6 +746,9 @@
     </include>
 
     <include name="Widget_Info_Row">
+        <param name="categorytarget" />
+        <param name="categorynavigationinclude">Widget_Categories_Navigation</param>
+        <param name="busy_visible">true</param>
         <param name="set_widgetcontainer">true</param>
         <param name="baseid">50</param>
         <param name="basegroupid">51</param>
@@ -732,15 +762,18 @@
                 <param name="labelinclude">$PARAM[labelinclude]</param>
                 <param name="categoryid">$PARAM[categoryid]</param>
                 <param name="categorycontent">$PARAM[categorycontent]</param>
+                <param name="categorytarget">$PARAM[categorytarget]</param>
                 <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
                 <param name="categoryonback">$PARAM[menuid]</param>
                 <param name="categoryonfocus">$PARAM[categoryonfocus]</param>
                 <param name="categoryonclickinclude">$PARAM[categoryonclickinclude]</param>
+                <param name="categorynavigationinclude">$PARAM[categorynavigationinclude]</param>
                 <param name="include">$PARAM[include]</param>
                 <param name="visible">$PARAM[visible]</param>
                 <param name="altvisible">$PARAM[altvisible]</param>
                 <param name="detailed">$PARAM[detailed]</param>
                 <param name="busy_isupdating">$PARAM[busy_isupdating]</param>
+                <param name="busy_visible">$PARAM[busy_visible]</param>
                 <param name="labeltop">$PARAM[labeltop]</param>
                 <param name="labelheight">$PARAM[labelheight]</param>
                 <param name="widgettop">$PARAM[widgettop]</param>

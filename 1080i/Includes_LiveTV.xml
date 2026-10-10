@@ -48,13 +48,27 @@
     <include name="LiveTV_Wall_Widgets">
         <param name="include">Hub_Wall_Widget</param>
         <definition>
+            <include content="LiveTV_Wall_Widgets_Content" condition="!Skin.HasSetting(Hub.1107.SquareChannels)">
+                <param name="include">$PARAM[include]</param>
+            </include>
+            <include content="LiveTV_Wall_Widgets_Content" condition="Skin.HasSetting(Hub.1107.SquareChannels)">
+                <param name="include">$PARAM[include]</param>
+                <param name="channel_include">List_Square_Row</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="LiveTV_Wall_Widgets_Content">
+        <param name="include">Hub_Wall_Widget</param>
+        <param name="channel_include">List_Landscape_Row</param>
+        <definition>
             <include content="$PARAM[include]" condition="!Skin.HasSetting(Hub.1107.DisableSearch)">
                 <param name="id">501</param>
                 <param name="target">tvsearch</param>
                 <param name="content">pvr://channels/tv/*?view=lastplayed</param>
                 <param name="sortby">lastplayed</param>
                 <param name="sortorder">descending</param>
-                <param name="include">List_Landscape_Row</param>
+                <param name="include">$PARAM[channel_include]</param>
                 <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),pvr-501)</param>
                 <param name="home_switcher">false</param>
             </include>
@@ -62,13 +76,14 @@
                 <param name="id">502</param>
                 <param name="target">tvchannels</param>
                 <param name="content">$INFO[Container(509).ListItemAbsolute(0).FolderPath]</param>
-                <param name="include">List_Landscape_Row</param>
+                <param name="include">$PARAM[channel_include]</param>
                 <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),pvr-502)</param>
                 <param name="home_switcher">false</param>
             </include>
             <include content="$PARAM[include]" condition="!Skin.HasSetting(Hub.1107.DisableGroups)">
                 <param name="id">503</param>
                 <param name="target">tvchannels</param>
+                <param name="include">$PARAM[channel_include]</param>
                 <param name="content">pvr://channels/tv/</param>
                 <param name="include">List_Landscape_Row</param>
                 <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),pvr-503)</param>
@@ -78,6 +93,7 @@
                 <param name="id">504</param>
                 <param name="target">tvrecordings</param>
                 <param name="content">pvr://recordings/tv/active?view=flat</param>
+                <param name="include">$PARAM[channel_include]</param>
                 <param name="sortby">date</param>
                 <param name="sortorder">descending</param>
                 <param name="include">List_Landscape_Row</param>
@@ -94,30 +110,44 @@
     </include>
 
     <include name="LiveTV_Widgets">
-        <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.1107.DisableSearch)">
-            <param name="id">01</param>
-            <param name="label">$LOCALIZE[568]</param>
-            <param name="visible">true</param>
-            <content target="tvchannels">pvr://channels/tv/*?view=lastplayed</content>
+        <include content="LiveTV_Widgets_Content" condition="!Skin.HasSetting(Hub.1107.SquareChannels)" />
+        <include content="LiveTV_Widgets_Content" condition="Skin.HasSetting(Hub.1107.SquareChannels)">
+            <param name="channel_include">List_Square_Row</param>
         </include>
-        <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.1107.DisableChannels)">
-            <param name="id">02</param>
-            <param name="label">$VAR[LiveTV_Switcher_Items_GroupName]</param>
-            <param name="altvisible">[Integer.IsEqual(Container(509).NumItems,0) + Container(509).IsUpdating]</param>
-            <content target="tvchannels">$INFO[Container(509).ListItemAbsolute(0).FolderPath]</content>
-        </include>
-        <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.1107.DisableGroups)">
-            <param name="id">03</param>
-            <param name="label">$LOCALIZE[19146]</param>
-            <param name="visible">true</param>
-            <content target="tvchannels">pvr://channels/tv/</content>
-        </include>
-        <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.1107.DisableRecordings)">
-            <param name="id">04</param>
-            <param name="label">$LOCALIZE[19017]</param>
-            <param name="visible">true</param>
-            <content target="tvrecordings">pvr://recordings/tv/active?view=flat</content>
-        </include>
+    </include>
+
+    <include name="LiveTV_Widgets_Content">
+        <param name="channel_include">List_Landscape_Row</param>
+        <definition>
+            <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.1107.DisableSearch)">
+                <param name="id">01</param>
+                <param name="include">$PARAM[channel_include]</param>
+                <param name="label">$LOCALIZE[568]</param>
+                <param name="visible">true</param>
+                <content target="tvchannels">pvr://channels/tv/*?view=lastplayed</content>
+            </include>
+            <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.1107.DisableChannels)">
+                <param name="id">02</param>
+                <param name="include">$PARAM[channel_include]</param>
+                <param name="label">$VAR[LiveTV_Switcher_Items_GroupName]</param>
+                <param name="altvisible">[Integer.IsEqual(Container(509).NumItems,0) + Container(509).IsUpdating]</param>
+                <content target="tvchannels">$INFO[Container(509).ListItemAbsolute(0).FolderPath]</content>
+            </include>
+            <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.1107.DisableGroups)">
+                <param name="id">03</param>
+                <param name="include">$PARAM[channel_include]</param>
+                <param name="label">$LOCALIZE[19146]</param>
+                <param name="visible">true</param>
+                <content target="tvchannels">pvr://channels/tv/</content>
+            </include>
+            <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.1107.DisableRecordings)">
+                <param name="id">04</param>
+                <param name="include">$PARAM[channel_include]</param>
+                <param name="label">$LOCALIZE[19017]</param>
+                <param name="visible">true</param>
+                <content target="tvrecordings">pvr://recordings/tv/active?view=flat</content>
+            </include>
+        </definition>
     </include>
 
     <include name="LiveTV_Content">

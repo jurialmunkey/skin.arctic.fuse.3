@@ -448,6 +448,20 @@
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
 
+        <!-- Widgets: Combined categories -->
+        <include content="Settings_Button">
+            <param name="dialog">true</param>
+            <param name="id">23012</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31083]</label>
+            <selected>$EXP[DialogShortcuts_IsCombinedWidget_Expression]</selected>
+            <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_combined&amp;&amp;]$VAR[Value_Shortcut_CombinedWidget_Toggle])</onclick>
+            <visible>$EXP[DialogShortcuts_IsStandardHubWidgets_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <onback>22904</onback>
+            <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
+        </include>
+
         <!-- Widgets: Sort by -->
         <include content="Settings_Button">
             <param name="dialog">true</param>
@@ -552,6 +566,10 @@
     <expression name="DialogShortcuts_IsSubGrouping_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homesubmenu)]</expression>
 
     <expression name="DialogShortcuts_IsWidgetMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=widgets)]</expression>
+
+    <expression name="DialogShortcuts_IsCombinedWidget_Expression">String.IsEqual(Container(22001).ListItem.Property(widget_combined),True)</expression>
+
+    <expression name="DialogShortcuts_IsStandardHubWidgets_Expression">[[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homewidgets) + String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101widgets) + String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102widgets) + String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103widgets) + String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104widgets) + String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Standard)]]</expression>
 
     <expression name="DialogShortcuts_HasCustomSubmenu_Expression">[String.IsEqual(Container(22001).ListItem.Property(path),Custom_Submenu)]</expression>
 
@@ -892,6 +910,15 @@
                 <onclick>ActivateWindow(1125)</onclick>
                 <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
                 <visible>$PARAM[visible]</visible>
+                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</visible>
+            </include>
+            <include content="Settings_Button" description="Style">
+                <param name="id">9617</param>
+                <label>$LOCALIZE[736]</label>
+                <label2>$VAR[Label_Setting_LiveTV_Style]</label2>
+                <onclick>Skin.ToggleSetting(Hub.1107.SquareChannels)</onclick>
+                <visible>$PARAM[visible]</visible>
+                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
                 <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</visible>
             </include>
             <include content="Settings_Button" description="Search">
