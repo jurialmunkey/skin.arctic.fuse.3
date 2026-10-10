@@ -45,6 +45,96 @@
         </definition>
     </include>
 
+    <!-- Use as labelinclude with categoryid and categorycontent or
+         categorycontentinclude; the widget can read the selected category. -->
+    <include name="Widget_Categories">
+        <param name="labeltop">widget_label_t</param>
+        <param name="labelheight">widget_label_h</param>
+        <param name="widgettop">widget_items_t</param>
+        <param name="widgetheight">widget_items_h</param>
+        <param name="categoryonback">5000</param>
+        <param name="categoryonfocus">noop</param>
+        <param name="categorycontentinclude">Widget_Categories_Content</param>
+        <param name="categoryonclickinclude">Object_Null</param>
+        <definition>
+            <include content="Widget_Label">
+                <param name="groupid">$PARAM[groupid]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="busy_visible">$PARAM[busy_visible]</param>
+                <param name="labelvisible">false</param>
+                <param name="labeltop">$PARAM[labeltop]</param>
+                <param name="labelheight">$PARAM[labelheight]</param>
+                <param name="include">$PARAM[include]</param>
+                <nested />
+
+                <control type="group">
+                    <top>20</top>
+                    <height>40</height>
+                    <include>View_Line_Divider</include>
+                    <include content="Categories_Selector_OverlayList">
+                        <param name="id">$PARAM[categoryid]</param>
+                        <param name="altfocusid">$PARAM[categoryid]</param>
+                        <left>-40</left>
+                        <centertop>0</centertop>
+                        <height>80</height>
+                    </include>
+                </control>
+            </include>
+
+            <!-- Match the widget's focus area so the grouplist scrolls the
+                 selector to the same position when navigating from either side. -->
+            <include content="Categories_Selector_ControlList">
+                <param name="id">$PARAM[categoryid]</param>
+                <param name="altfocusid">$PARAM[categoryid]</param>
+                <param name="focuscentertop">10</param>
+                <param name="height">$PARAM[widgetheight]</param>
+                <nested />
+                <top>$PARAM[widgettop]</top>
+                <left>40</left>
+                <visible>$PARAM[visible]</visible>
+                <hitrect x="0" y="0" w="0" h="0" />
+                <onleft>$PARAM[categoryid]</onleft>
+                <onright>$PARAM[categoryid]</onright>
+                <ondown>$PARAM[id]</ondown>
+                <onback>$PARAM[categoryonback]</onback>
+                <include content="$PARAM[categoryonclickinclude]" />
+                <onfocus>$PARAM[categoryonfocus]</onfocus>
+                <include content="Widget_OnFocus">
+                    <param name="widget_hideartwork">$PARAM[widget_hideartwork]</param>
+                    <param name="widget_showoverlay">$PARAM[widget_showoverlay]</param>
+                </include>
+                <include content="$PARAM[categorycontentinclude]">
+                    <param name="categorycontent">$PARAM[categorycontent]</param>
+                </include>
+            </include>
+
+            <!-- Reclaim the selector's focus area so the content widget has
+                 the same scroll offset and the following rows keep their spacing. -->
+            <control type="group" id="59$PARAM[categoryid]">
+                <top>-$PARAM[widgettop]</top>
+                <height>-$PARAM[widgetheight]</height>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Widget_Categories_Content">
+        <content>$PARAM[categorycontent]</content>
+    </include>
+
+    <include name="Widget_OnFocus">
+        <onfocus condition="!$EXP[Exp_InfoDialogs] + $PARAM[widget_hideartwork]">SetProperty(Background.HideArtwork,True)</onfocus>
+        <onfocus condition="$EXP[Exp_InfoDialogs] + $PARAM[widget_hideartwork]">SetProperty(Background.DialogInfo.HideArtwork,True,Home)</onfocus>
+
+        <onfocus condition="!$EXP[Exp_InfoDialogs] + ![$PARAM[widget_hideartwork]]">ClearProperty(Background.HideArtwork)</onfocus>
+        <onfocus condition="$EXP[Exp_InfoDialogs] + ![$PARAM[widget_hideartwork]]">ClearProperty(Background.DialogInfo.HideArtwork,Home)</onfocus>
+
+        <onfocus condition="!$EXP[Exp_InfoDialogs] + ![$PARAM[widget_showoverlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
+        <onfocus condition="!$EXP[Exp_InfoDialogs] + $PARAM[widget_showoverlay]">SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+    </include>
+
     <include name="Widget_Content">
         <param name="visible">true</param>
         <param name="altvisible">false</param>
@@ -59,8 +149,10 @@
         <param name="widgetfade_disable">false</param>
         <param name="widget_hideartwork">false</param>
         <param name="widget_showoverlay">false</param>
+        <param name="labelinclude">Widget_Label</param>
+        <param name="categoryid">0</param>
         <definition>
-            <include content="Widget_Label">
+            <include content="$PARAM[labelinclude]">
                 <param name="groupid">$PARAM[groupid]</param>
                 <param name="label">$PARAM[label]</param>
                 <param name="id">$PARAM[id]</param>
@@ -70,12 +162,22 @@
                 <param name="labelvisible">$PARAM[labelvisible]</param>
                 <param name="labeltop">$PARAM[labeltop]</param>
                 <param name="labelheight">$PARAM[labelheight]</param>
+                <param name="widgettop">$PARAM[widgettop]</param>
+                <param name="widgetheight">$PARAM[widgetheight]</param>
                 <param name="include">$PARAM[include]</param>
+                <param name="categoryid">$PARAM[categoryid]</param>
+                <param name="categorycontent">$PARAM[categorycontent]</param>
+                <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
+                <param name="categoryonback">$PARAM[categoryonback]</param>
+                <param name="categoryonfocus">$PARAM[categoryonfocus]</param>
+                <param name="categoryonclickinclude">$PARAM[categoryonclickinclude]</param>
+                <param name="widget_hideartwork">$PARAM[widget_hideartwork]</param>
+                <param name="widget_showoverlay">$PARAM[widget_showoverlay]</param>
                 <include content="Animation_ConditionalFade">
                     <param name="condition">$PARAM[conditional_fade]</param>
                 </include>
                 <include content="Animation_Widget_FadeOut" condition="$PARAM[widgetfade_include]">
-                    <param name="condition">!Control.HasFocus($PARAM[id]) + !Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id]) + ![$PARAM[widgetfade_disable]]</param>
+                    <param name="condition">!Control.HasFocus($PARAM[id]) + !Control.HasFocus($PARAM[categoryid]) + !Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id]) + ![$PARAM[widgetfade_disable]]</param>
                 </include>
 
             </include>
@@ -100,17 +202,13 @@
                 <animation effect="fade" start="100" end="0" time="0" condition="[Container($PARAM[id]).IsUpdating | $PARAM[busy_isupdating]] + $PARAM[busy_visible]">Conditional</animation>
                 <visible>$PARAM[visible] + [Container($PARAM[id]).IsUpdating | !Integer.IsEqual(Container($PARAM[id]).NumItems,0) | $PARAM[altvisible]]</visible>
 
-                <onfocus condition="!$EXP[Exp_InfoDialogs] + $PARAM[widget_hideartwork]">SetProperty(Background.HideArtwork,True)</onfocus>
-                <onfocus condition="$EXP[Exp_InfoDialogs] + $PARAM[widget_hideartwork]">SetProperty(Background.DialogInfo.HideArtwork,True,Home)</onfocus>
-
-                <onfocus condition="!$EXP[Exp_InfoDialogs] + ![$PARAM[widget_hideartwork]]">ClearProperty(Background.HideArtwork)</onfocus>
-                <onfocus condition="$EXP[Exp_InfoDialogs] + ![$PARAM[widget_hideartwork]]">ClearProperty(Background.DialogInfo.HideArtwork,Home)</onfocus>
-
-                <onfocus condition="!$EXP[Exp_InfoDialogs] + ![$PARAM[widget_showoverlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
-                <onfocus condition="!$EXP[Exp_InfoDialogs] + $PARAM[widget_showoverlay]">SetProperty(Background.ShowOverlay,True,Home)</onfocus>
+                <include content="Widget_OnFocus">
+                    <param name="widget_hideartwork">$PARAM[widget_hideartwork]</param>
+                    <param name="widget_showoverlay">$PARAM[widget_showoverlay]</param>
+                </include>
 
                 <include content="Animation_Widget_FadeOut" condition="$PARAM[widgetfade_include]">
-                    <param name="condition">!Control.HasFocus($PARAM[id]) + !Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id]) + ![$PARAM[widgetfade_disable]]</param>
+                    <param name="condition">!Control.HasFocus($PARAM[id]) + !Control.HasFocus($PARAM[categoryid]) + !Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id]) + ![$PARAM[widgetfade_disable]]</param>
                 </include>
 
                 <include content="Animation_ConditionalFade">
@@ -547,6 +645,13 @@
                 <param name="id">$PARAM[id]</param>
                 <param name="groupid">$PARAM[groupid]</param>
                 <param name="label">$PARAM[label]</param>
+                <param name="labelinclude">$PARAM[labelinclude]</param>
+                <param name="categoryid">$PARAM[categoryid]</param>
+                <param name="categorycontent">$PARAM[categorycontent]</param>
+                <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
+                <param name="categoryonback">$PARAM[categoryonback]</param>
+                <param name="categoryonfocus">$PARAM[categoryonfocus]</param>
+                <param name="categoryonclickinclude">$PARAM[categoryonclickinclude]</param>
                 <param name="usewidgetlabel">$PARAM[usewidgetlabel]</param>
                 <param name="labelvisible">true</param>
                 <param name="infowidget">true</param>
@@ -578,6 +683,13 @@
                 <param name="id">$PARAM[id]</param>
                 <param name="groupid">$PARAM[groupid]</param>
                 <param name="label">$PARAM[label]</param>
+                <param name="labelinclude">$PARAM[labelinclude]</param>
+                <param name="categoryid">$PARAM[categoryid]</param>
+                <param name="categorycontent">$PARAM[categorycontent]</param>
+                <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
+                <param name="categoryonback">$PARAM[grouplistid]</param>
+                <param name="categoryonfocus">$PARAM[categoryonfocus]</param>
+                <param name="categoryonclickinclude">$PARAM[categoryonclickinclude]</param>
                 <param name="usewidgetlabel">$PARAM[usewidgetlabel]</param>
                 <param name="include">$PARAM[include]</param>
                 <param name="visible">$PARAM[visible]</param>
@@ -617,10 +729,18 @@
                 <param name="id">$PARAM[baseid]$PARAM[id]</param>
                 <param name="groupid">$PARAM[basegroupid]$PARAM[id]</param>
                 <param name="label">$PARAM[label]</param>
+                <param name="labelinclude">$PARAM[labelinclude]</param>
+                <param name="categoryid">$PARAM[categoryid]</param>
+                <param name="categorycontent">$PARAM[categorycontent]</param>
+                <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
+                <param name="categoryonback">$PARAM[menuid]</param>
+                <param name="categoryonfocus">$PARAM[categoryonfocus]</param>
+                <param name="categoryonclickinclude">$PARAM[categoryonclickinclude]</param>
                 <param name="include">$PARAM[include]</param>
                 <param name="visible">$PARAM[visible]</param>
                 <param name="altvisible">$PARAM[altvisible]</param>
                 <param name="detailed">$PARAM[detailed]</param>
+                <param name="busy_isupdating">$PARAM[busy_isupdating]</param>
                 <param name="labeltop">$PARAM[labeltop]</param>
                 <param name="labelheight">$PARAM[labelheight]</param>
                 <param name="widgettop">$PARAM[widgettop]</param>
