@@ -74,6 +74,98 @@
         </definition>
     </include>
 
+    <include name="Layout_StatisticBars">
+        <param name="rank">ListItem.Property(rank)</param>
+        <param name="progress">ListItem.Property(percent)</param>
+        <definition>
+            <control type="group">
+                <height>60</height>
+                <centertop>50%</centertop>
+                <control type="label">
+                    <top>-25</top>
+                    <height>20</height>
+                    <width>200</width>
+                    <font>font_hint_bold</font>
+                    <textcolor>dialog_fg_90</textcolor>
+                    <label>$INFO[ListItem.Label,| ,]</label>
+                    <visible>!String.IsEmpty(ListItem.Property(segment_start))</visible>
+                    <visible>Integer.IsOdd(ListItem.Property(segment_start))</visible>
+                </control>
+                <control type="label">
+                    <bottom>-25</bottom>
+                    <height>20</height>
+                    <width>200</width>
+                    <font>font_hint_bold</font>
+                    <textcolor>dialog_fg_90</textcolor>
+                    <label>$INFO[ListItem.Label,| ,]</label>
+                    <visible>!String.IsEmpty(ListItem.Property(segment_start))</visible>
+                    <visible>!Integer.IsOdd(ListItem.Property(segment_start))</visible>
+                </control>
+                <control type="group">
+                    <animation effect="fadediffuse" start="ffffffff" end="ffd33d54" condition="Integer.IsEqual($PARAM[rank],1)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ffe88945" condition="Integer.IsEqual($PARAM[rank],2)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ffe4c653" condition="Integer.IsEqual($PARAM[rank],3)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ff4abe7b" condition="Integer.IsEqual($PARAM[rank],4)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ff43bfc5" condition="Integer.IsEqual($PARAM[rank],5)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ff528cdb" condition="Integer.IsEqual($PARAM[rank],6)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ff9263cf" condition="Integer.IsEqual($PARAM[rank],7)">Conditional</animation>
+                    <animation effect="fadediffuse" start="ffffffff" end="ffd35ca4" condition="Integer.IsEqual($PARAM[rank],8)">Conditional</animation>
+
+                    <control type="image">
+                        <left>3</left>
+                        <right>0</right>
+                        <texture border="5,0,0,0">common/slice-end.png</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(segment_start))</visible>
+                    </control>
+
+                    <control type="image">
+                        <texture>common/white.png</texture>
+                        <visible>String.IsEmpty(ListItem.Property(segment_start))</visible>
+                        <visible>String.IsEmpty(ListItem.Property(segment_end))</visible>
+                    </control>
+
+                    <control type="image">
+                        <left>0</left>
+                        <right>3</right>
+                        <texture border="0,0,5,0" flipx="true">common/slice-end.png</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(segment_end))</visible>
+                    </control>
+                </control>
+
+                <control type="group">
+
+                    <animation effect="fadediffuse" start="ffffffff" end="panel_fg_30" condition="True">Conditional</animation>
+
+                    <control type="image">
+                        <left>3</left>
+                        <right>0</right>
+                        <texture border="5,0,0,0">common/slice-outline-end.png</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(segment_start))</visible>
+                    </control>
+                    <control type="image">
+                        <height>1</height>
+                        <texture>common/white.png</texture>
+                        <visible>String.IsEmpty(ListItem.Property(segment_start))</visible>
+                        <visible>String.IsEmpty(ListItem.Property(segment_end))</visible>
+                    </control>
+                    <control type="image">
+                        <height>1</height>
+                        <bottom>0</bottom>
+                        <texture>common/white.png</texture>
+                        <visible>String.IsEmpty(ListItem.Property(segment_start))</visible>
+                        <visible>String.IsEmpty(ListItem.Property(segment_end))</visible>
+                    </control>
+                    <control type="image">
+                        <left>0</left>
+                        <right>3</right>
+                        <texture border="0,0,5,0" flipx="true">common/slice-outline-end.png</texture>
+                        <visible>!String.IsEmpty(ListItem.Property(segment_end))</visible>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Layout_StatisticMeta">
         <param name="selected">false</param>
         <param name="count">ListItem.Property(count)</param>

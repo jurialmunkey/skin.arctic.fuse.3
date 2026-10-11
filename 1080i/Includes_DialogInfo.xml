@@ -655,6 +655,38 @@
 
     </include>
 
+    <variable name="DialogInfo_Combined_5013_Path">
+        <value condition="Integer.IsEqual(Container(5013).NumItems,0)" />
+        <value condition="!String.IsEmpty(Window.Property(WidgetCombined.5013.Path))">$INFO[Window.Property(WidgetCombined.5013.Path)]</value>
+        <value>$INFO[Container(5013).ListItem.Property(widget_path)]</value>
+    </variable>
+
+    <variable name="DialogInfo_Combined_5018_Path">
+        <value condition="Integer.IsEqual(Container(5018).NumItems,0)" />
+        <value condition="!String.IsEmpty(Window.Property(WidgetCombined.5018.Path))">$INFO[Window.Property(WidgetCombined.5018.Path)]</value>
+        <value>$INFO[Container(5018).ListItem.FolderPath]</value>
+    </variable>
+
+    <variable name="DialogInfo_Combined_5052_Path">
+        <value condition="Integer.IsEqual(Container(5052).NumItems,0)" />
+        <value condition="!String.IsEmpty(Window.Property(WidgetCombined.5052.Path))">$INFO[Window.Property(WidgetCombined.5052.Path)]</value>
+        <value>$INFO[Container(5052).ListItem.Property(widget_path)]</value>
+    </variable>
+
+    <include name="DialogInfo_Combined_Categories_HiddenButton_OnFocus">
+        <definition>
+            <!-- Keep the current row while the user scrolls through categories. -->
+            <animation effect="fade" start="100" end="100" time="400" reversible="false">Focus</animation>
+            <onfocus>SetProperty($PARAM[prefix]Path,$ESCINFO[$PARAM[container]ListItem.Property(widget_path)])</onfocus>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_Combined_Categories_Navigation">
+        <ondown condition="Integer.IsEqual($PARAM[categoryid],5018)">SetProperty(WidgetCombined.$PARAM[categoryid].Path,$ESCINFO[Container($PARAM[categoryid]).ListItem.FolderPath])</ondown>
+        <ondown condition="!Integer.IsEqual($PARAM[categoryid],5018)">SetProperty(WidgetCombined.$PARAM[categoryid].Path,$ESCINFO[Container($PARAM[categoryid]).ListItem.Property(widget_path)])</ondown>
+        <ondown>$PARAM[id]</ondown>
+    </include>
+
     <include name="DialogInfo_VideoWidgets">
 
         <!-- Cast / Crew -->
@@ -704,6 +736,9 @@
             <param name="label">$INFO[Container(5013).ListItem.Label]</param>
             <param name="labelinclude">Widget_Categories</param>
             <param name="categoryid">5013</param>
+            <param name="categorydebounce">true</param>
+            <param name="categoryhiddenbutton">DialogInfo_Combined_Categories_HiddenButton</param>
+            <param name="categorynavigationinclude">DialogInfo_Combined_Categories_Navigation</param>
             <param name="categorycontentinclude">DialogInfo_RelatedCategories</param>
             <param name="categoryonfocus">SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</param>
             <param name="include">List_Poster_Row</param>
@@ -717,7 +752,7 @@
             <param name="altvisible">$EXP[Exp_InfoDialogs_Related_HasCategories]</param>
             <onup>5013</onup>
             <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
-            <content>$INFO[Container(5013).ListItem.Property(widget_path)]</content>
+            <content>$VAR[DialogInfo_Combined_5013_Path]</content>
             <include>DialogInfo_Widgets_Action</include>
         </include>
 
@@ -748,6 +783,8 @@
             <param name="label">$INFO[Container(5018).ListItem.Label,$LOCALIZE[20360] (,)]</param>
             <param name="labelinclude">Widget_Categories</param>
             <param name="categoryid">5018</param>
+            <param name="categorydebounce">true</param>
+            <param name="categorynavigationinclude">DialogInfo_Combined_Categories_Navigation</param>
             <param name="categorycontent">$VAR[Path_VideoInfo_OnlineSeasons]</param>
             <param name="categoryonfocus">SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</param>
             <param name="categoryonclickinclude">DialogInfo_Widgets_Action</param>
@@ -763,7 +800,7 @@
             <param name="busy_isupdating">Container(5018).IsUpdating</param>
             <onup>5018</onup>
             <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
-            <content>$INFO[Container(5018).ListItem.FolderPath]</content>
+            <content>$VAR[DialogInfo_Combined_5018_Path]</content>
             <include>DialogInfo_Widgets_Action</include>
         </include>
         <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableEpisodes) + Skin.HasSetting(VideoInfo.Widgets.DisableSeasons) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)] + $EXP[Exp_TMDbHelper_IsData]">
@@ -793,6 +830,9 @@
             <param name="label">$INFO[Container(5052).ListItem.Label,$LOCALIZE[31076] (,)]</param>
             <param name="labelinclude">Widget_Categories</param>
             <param name="categoryid">5052</param>
+            <param name="categorydebounce">true</param>
+            <param name="categoryhiddenbutton">DialogInfo_Combined_Categories_HiddenButton</param>
+            <param name="categorynavigationinclude">DialogInfo_Combined_Categories_Navigation</param>
             <param name="categorycontentinclude">DialogInfo_StarringCategories</param>
             <param name="categoryonfocus">SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</param>
             <param name="categoryonclickinclude">DialogInfo_Widgets_Action</param>
@@ -807,7 +847,7 @@
             <param name="altvisible">!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.1.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.2.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.3.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.4.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.5.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.6.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.7.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.8.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.9.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Cast.10.TMDb_ID))</param>
             <onup>5052</onup>
             <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
-            <content>$INFO[Container(5052).ListItem.Property(widget_path)]</content>
+            <content>$VAR[DialogInfo_Combined_5052_Path]</content>
             <include>DialogInfo_Widgets_Action</include>
         </include>
 

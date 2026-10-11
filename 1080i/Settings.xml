@@ -340,6 +340,10 @@
                                 <include>Object_Hidden_List_Definition</include>
                                 <content>plugin://plugin.video.themoviedb.helper/?info=trakt_history&amp;tmdb_type=episode&amp;nextpage=false&amp;length=3</content>
                             </control>
+                            <control type="list" id="8505">
+                                <include>Object_Hidden_List_Definition</include>
+                                <content>plugin://plugin.video.themoviedb.helper/?info=trakt_history_stats&amp;tmdb_type=both&amp;period=month&amp;months=8&amp;sort_how=asc</content>
+                            </control>
 
                             <control type="grouplist">
                                 <pagecontrol>65</pagecontrol>
@@ -348,7 +352,7 @@
 
                                 <control type="group">
                                     <height>760</height>
-                                    <visible allowhiddenfocus="true">!Integer.IsEqual(Container(8503).NumItems,0) | !Integer.IsEqual(Container(8504).NumItems,0)</visible>
+                                    <visible>!Integer.IsEqual(Container(8505).NumItems,0)</visible>
                                     <control type="label">
                                         <left>40</left>
                                         <right>40</right>
@@ -365,7 +369,6 @@
                                         <left>40</left>
                                         <right>40</right>
                                         <control type="group">
-                                            <height>380</height>
                                             <control type="image">
                                                 <texture colordiffuse="main_fg_06" border="20">common/box.png</texture>
                                             </control>
@@ -383,25 +386,18 @@
                                                 <include>Part_Line</include>
                                             </control>
                                             <control type="group">
-                                                <top>70</top>
-                                                <left>10</left>
-                                                <include content="Settings_Statistics_Daily">
-                                                    <param name="id">8505</param>
-                                                </include>
+                                                <height>380</height>
+                                                <control type="group">
+                                                    <top>70</top>
+                                                    <left>10</left>
+                                                    <include content="Settings_Statistics_Daily">
+                                                        <param name="id">8506</param>
+                                                    </include>
+                                                </control>
                                             </control>
                                         </control>
                                         <control type="group">
-                                            <top>420</top>
-                                            <control type="image">
-                                                <texture colordiffuse="main_fg_06" border="20">common/box.png</texture>
-                                            </control>
-                                            <control type="label">
-                                                <height>60</height>
-                                                <font>font_mini_bold</font>
-                                                <textcolor>main_fg_90</textcolor>
-                                                <label>$LOCALIZE[31266]</label>
-                                                <align>center</align>
-                                            </control>
+                                            <top>320</top>
                                             <control type="group">
                                                 <left>-20</left>
                                                 <right>-20</right>
@@ -410,18 +406,48 @@
                                             </control>
                                             <control type="group">
                                                 <top>60</top>
-                                                <control type="panel" id="9000">
-                                                    <orientation>vertical</orientation>
-                                                    <content>plugin://plugin.video.themoviedb.helper/?info=trakt_history_stats&amp;tmdb_type=both&amp;period=month&amp;months=12&amp;sort_how=asc</content>
-                                                    <itemlayout width="325" height="60">
-                                                        <include content="Layout_StatisticMeta">
-                                                            <param name="progress">ListItem.Property(percentile)</param>
-                                                            <param name="label">ListItem.Property(month)</param>
-                                                        </include>
-                                                    </itemlayout>
-                                                    <focusedlayout width="325" height="60">
-                                                        <include>Layout_StatisticMeta</include>
-                                                    </focusedlayout>
+                                                <height>160</height>
+                                                <control type="group">
+                                                    <width>1200</width>
+                                                    <centerleft>50%</centerleft>
+                                                    <control type="list">
+                                                        <right>-100</right>
+                                                        <orientation>horizontal</orientation>
+
+                                                        <content>plugin://script.skinvariables/?info=get_stacked_bar_stats&amp;containers=8505&amp;infolabel=Property(month_short)&amp;infovalue=Property(count)&amp;sort_by=label&amp;limit=8&amp;other=false&amp;reload=$INFO[Container(8505).NumItems]</content>
+
+                                                        <!-- <content>plugin://script.skinvariables/?info=get_stacked_bar_stats&amp;containers=8505&amp;infolabel=Property(day)&amp;infovalue=Property(count)&amp;sort_by=Property(day_ordinal)&amp;limit=8&amp;other=false&amp;reload=$INFO[Container(8505).NumItems]</content> -->
+
+                                                        <itemlayout width="12">
+                                                            <include>Layout_StatisticBars</include>
+                                                        </itemlayout>
+                                                        <focusedlayout width="12">
+                                                            <include>Layout_StatisticBars</include>
+                                                        </focusedlayout>
+                                                    </control>
+                                                </control>
+                                            </control>
+                                            <control type="group">
+                                                <top>200</top>
+                                                <height>160</height>
+                                                <control type="group">
+                                                    <width>1200</width>
+                                                    <centerleft>50%</centerleft>
+                                                    <control type="list">
+                                                        <right>-100</right>
+                                                        <orientation>horizontal</orientation>
+
+                                                        <!-- <content>plugin://script.skinvariables/?info=get_stacked_bar_stats&amp;containers=8505&amp;infolabel=Property(month_short)&amp;infovalue=Property(count)&amp;sort_by=label&amp;limit=8&amp;other=false&amp;reload=$INFO[Container(8505).NumItems]</content> -->
+
+                                                        <content>plugin://script.skinvariables/?info=get_stacked_bar_stats&amp;containers=8505&amp;infolabel=Property(day)&amp;infovalue=Property(count)&amp;sort_by=Property(day_ordinal)&amp;limit=8&amp;other=false&amp;reload=$INFO[Container(8505).NumItems]</content>
+
+                                                        <itemlayout width="12">
+                                                            <include>Layout_StatisticBars</include>
+                                                        </itemlayout>
+                                                        <focusedlayout width="12">
+                                                            <include>Layout_StatisticBars</include>
+                                                        </focusedlayout>
+                                                    </control>
                                                 </control>
                                             </control>
                                         </control>

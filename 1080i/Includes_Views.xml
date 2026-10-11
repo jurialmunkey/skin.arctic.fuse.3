@@ -148,13 +148,15 @@
     <!-- Expressions -->
     <expression name="View_Mode_Rows_Expression">[$EXP[Exp_View_500] | $EXP[Exp_View_501] | $EXP[Exp_View_502] | $EXP[Exp_View_503] | $EXP[Exp_View_504] | $EXP[Exp_View_505] | $EXP[Exp_View_506] | $EXP[Exp_View_509]]</expression>
 
-    <expression name="View_Mode_Wall_Expression">[$EXP[Exp_View_510] | $EXP[Exp_View_511] | $EXP[Exp_View_512] | $EXP[Exp_View_513] | $EXP[Exp_View_514] | $EXP[Exp_View_516]]</expression>
+    <expression name="View_Mode_Wall_Expression">[$EXP[View_Mode_Comb_Wall_Expression] | $EXP[Exp_View_510] | $EXP[Exp_View_511] | $EXP[Exp_View_512] | $EXP[Exp_View_513] | $EXP[Exp_View_514] | $EXP[Exp_View_516]]</expression>
 
     <expression name="View_Mode_List_Expression">[$EXP[View_Mode_List_Full_Expression] | $EXP[View_Mode_List_Flix_Expression]]</expression>
     <expression name="View_Mode_List_Full_Expression">[$EXP[Exp_View_580] | $EXP[Exp_View_581] | $EXP[Exp_View_582]]</expression>
     <expression name="View_Mode_List_Flix_Expression">[$EXP[Exp_View_583] | $EXP[Exp_View_584]]</expression>
 
-    <expression name="View_Mode_Comb_Expression">[$EXP[View_Mode_Comb_Flix_Expression] | $EXP[View_Mode_Comb_Full_Expression]]</expression>
+    <expression name="View_Mode_Comb_Wall_Expression">[$EXP[Exp_View_550] | $EXP[Exp_View_551] | $EXP[Exp_View_552] | $EXP[Exp_View_553] | $EXP[Exp_View_554] | $EXP[Exp_View_556]]</expression>
+
+    <expression name="View_Mode_Comb_Expression">[$EXP[View_Mode_Comb_Wall_Expression] | $EXP[View_Mode_Comb_Flix_Expression] | $EXP[View_Mode_Comb_Full_Expression]]</expression>
     <expression name="View_Mode_Comb_Flix_Expression">[$EXP[Exp_View_520] | $EXP[Exp_View_521] | $EXP[Exp_View_522] | $EXP[Exp_View_523] | $EXP[Exp_View_524] | $EXP[Exp_View_526]]</expression>
     <expression name="View_Mode_Comb_Full_Expression">[$EXP[Exp_View_527]]</expression>
 
@@ -173,6 +175,7 @@
             <control type="group">
                 <visible>$EXP[View_Row_Info_Details_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Flix_Expression]</visible>
+                <visible>!$EXP[View_Mode_Comb_Wall_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Tall_Expression]</visible>
                 <include content="View_Line">
                     <param name="use_spinner">true</param>
@@ -182,12 +185,17 @@
             <control type="group">
                 <visible>!$EXP[View_Row_Info_Details_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Flix_Expression]</visible>
+                <visible>!$EXP[View_Mode_Comb_Wall_Expression]</visible>
                 <visible>!$EXP[View_Mode_Comb_Tall_Expression]</visible>
                 <include content="View_Line">
                     <param name="use_spinner">true</param>
                     <param name="run_spinner">[Container.IsUpdating]</param>
                     <param name="top">260</param>
                 </include>
+            </control>
+            <control type="group">
+                <visible allowhiddenfocus="true">$EXP[View_Mode_Comb_Wall_Expression]</visible>
+                <include>View_Combined_Wall_Horz_Selector</include>
             </control>
             <control type="group">
                 <visible allowhiddenfocus="true">$EXP[View_Mode_Comb_Tall_Expression]</visible>
@@ -211,11 +219,12 @@
                 <param name="visible_meta">$EXP[View_Row_Info_Details_Expression]</param>
             </include>
             <include>View_Combined_Info_Panel</include>
+            <include>View_Combined_Wall_Info_Panel</include>
         </control>
     </include>
 
     <include name="View_MediaWindows_ID">
-        <views>500,501,502,503,504,505,506,509,510,511,512,513,514,516,520,521,522,523,524,526,527,528,580,581,582,583,584</views>
+        <views>500,501,502,503,504,505,506,509,510,511,512,513,514,516,520,521,522,523,524,526,527,528,550,551,552,553,554,556,580,581,582,583,584</views>
     </include>
 
     <include name="View_Row_Items">
@@ -249,6 +258,14 @@
                 <include condition="$EXP[Exp_View_526_Include]">View_526_Flyer_Combined_Row</include>
                 <include condition="$EXP[Exp_View_527_Include]">View_527_List_Combined</include>
                 <include condition="$EXP[Exp_View_528_Include]">View_528_List_Combined</include>
+
+                <!-- Combined Wall Views -->
+                <include condition="$EXP[Exp_View_550_Include]">View_550_Square_Combined_Wall</include>
+                <include condition="$EXP[Exp_View_551_Include]">View_551_Landscape_Combined_Wall</include>
+                <include condition="$EXP[Exp_View_552_Include]">View_552_Poster_Combined_Wall</include>
+                <include condition="$EXP[Exp_View_553_Include]">View_553_Circle_Combined_Wall</include>
+                <include condition="$EXP[Exp_View_554_Include]">View_554_Board_Combined_Wall</include>
+                <include condition="$EXP[Exp_View_556_Include]">View_556_Flyer_Combined_Wall</include>
 
                 <!-- List Views -->
                 <include condition="$EXP[Exp_View_580_Include]">View_580_Basic_List</include>
@@ -310,6 +327,13 @@
         <value condition="Control.IsVisible(526)">536</value>
         <value condition="Control.IsVisible(527)">537</value>
         <value condition="Control.IsVisible(528)">538</value>
+
+        <value condition="Control.IsVisible(550)">560</value>
+        <value condition="Control.IsVisible(551)">561</value>
+        <value condition="Control.IsVisible(552)">562</value>
+        <value condition="Control.IsVisible(553)">563</value>
+        <value condition="Control.IsVisible(554)">564</value>
+        <value condition="Control.IsVisible(556)">566</value>
 
         <value condition="Control.IsVisible(580)">580</value>
         <value condition="Control.IsVisible(581)">581</value>
