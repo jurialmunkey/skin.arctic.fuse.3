@@ -1,5 +1,5 @@
 <contents>
-    <template>generator/data/parts/basic_include.xmltemplate</template>
+    <template>generator/data/parts/widgets_standard_include.xmltemplate</template>
     <value name="comments">Standard Widgets</value>
     <value name="includes_name">skinvariables-{item}-standard</value>
     <value name="includes_part">
@@ -25,5 +25,31 @@
                 </item>
             </items>
         </value>
+    </value>
+    <value name="combined_widget_paths">
+        <items menu="{item}">
+            <item>
+                <template>generator/data/parts/widgets_combined_path.xmltemplate</template>
+                <datafile>generator/data/setup/widgets_row.xml</datafile>
+                <datafile>generator/data/setup/widgets_include_combined_row.xml</datafile>
+                <condition>{item_disabled}!=True</condition>
+                <condition>{item_widget_combined}==True</condition>
+            </item>
+        </items>
+    </value>
+    <value name="combined_widget_unload">
+        <items menu="{item}">
+            <item>
+                <template>
+                    <![CDATA[
+                    <onunload>ClearProperty(WidgetCombined.{widget_category_id}.Path,{window_id})</onunload>
+                    ]]>
+                </template>
+                <datafile>generator/data/setup/widgets_row.xml</datafile>
+                <datafile>generator/data/setup/widgets_include_combined_row.xml</datafile>
+                <condition>{item_disabled}!=True</condition>
+                <condition>{item_widget_combined}==True</condition>
+            </item>
+        </items>
     </value>
 </contents>

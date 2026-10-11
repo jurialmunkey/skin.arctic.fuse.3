@@ -59,6 +59,22 @@
         </include>
     </include>
 
+    <include name="DialogInfo_Animation_ArtworkSlide">
+        <animation effect="slide" start="0" end="infodialog_poster_slide" time="400" tween="cubic" easing="inout" reversible="true" condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
+        <animation effect="slide" start="0" end="infodialog_artwork_reverse_slide" time="400" tween="cubic" easing="inout" reversible="true" condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
+    </include>
+
+    <!-- Wrap the hidden panel to the other side when continuing around the carousel. -->
+    <include name="DialogInfo_Animation_ArtworkReturn_Incoming">
+        <animation effect="slide" start="infodialog_artwork_wrap_offset" end="0" time="400" tween="cubic" easing="inout" reversible="false" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkWrapReturn)) + String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
+        <animation effect="slide" start="infodialog_artwork_reverse_offset" end="0" time="400" tween="cubic" easing="inout" reversible="false" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkWrapReturn)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
+    </include>
+
+    <include name="DialogInfo_Animation_ArtworkReturn_Outgoing">
+        <animation effect="slide" start="0" end="infodialog_artwork_reverse_offset" time="400" tween="cubic" easing="inout" reversible="false" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkWrapReturn)) + String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
+        <animation effect="slide" start="0" end="infodialog_artwork_wrap_offset" time="400" tween="cubic" easing="inout" reversible="false" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkWrapReturn)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
+    </include>
+
     <include name="DialogInfo_Main_Group">
         <visible>!ControlGroup(5000).HasFocus()</visible>
         <include content="Animation_Zoom_Out">
@@ -72,10 +88,12 @@
 
     <include name="DialogInfo_Body_Group">
         <param name="icon">$VAR[Image_Poster]</param>
+        <param name="showposter">true</param>
         <definition>
             <top>view_pad</top>
             <include>Dimension_Info</include>
-            <control type="group">
+            <include content="Object_Control" condition="$PARAM[showposter]">
+                <param name="control">group</param>
                 <right>0</right>
                 <width>infodialog_poster_w</width>
                 <height>infodialog_poster_h</height>
@@ -99,7 +117,7 @@
                     <height>infodialog_poster_w</height>
                     <top>0</top>
                 </include>
-            </control>
+            </include>
         </definition>
     </include>
 
@@ -1587,6 +1605,10 @@
                     <height>57</height>
                     <itemgap>40</itemgap>
                     <ondown>90001</ondown>
+                    <onleft>SetProperty(DialogInfo.ArtworkReverse,true)</onleft>
+                    <onleft>8100</onleft>
+                    <onright>ClearProperty(DialogInfo.ArtworkReverse)</onright>
+                    <onright>8100</onright>
                     <onup condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1113)</onup>
 
                     <!-- Play/Browse -->
@@ -1594,6 +1616,7 @@
                         <param name="id">4001</param>
                         <param name="control">button</param>
                         <label>$VAR[Label_DialogInfo_PlayButton]</label>
+                        <onfocus>ClearProperty(DialogInfo.ArtworkView)</onfocus>
                         <onclick>$VAR[Action_DialogInfo_PlayMedia]</onclick>
                     </include>
 
@@ -1635,6 +1658,7 @@
                         <param name="id">4005</param>
                         <param name="control">button</param>
                         <label>$LOCALIZE[33063]</label>
+                        <onfocus>ClearProperty(DialogInfo.ArtworkView)</onfocus>
                         <onclick>SetProperty(Dialog.1172.DBTYPE,$INFO[ListITem.DBTYpe],Home)</onclick>
                         <onclick>ActivateWindow(1172)</onclick>
                     </include>

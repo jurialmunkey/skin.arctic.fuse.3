@@ -48,6 +48,7 @@
     <!-- Use as labelinclude with categoryid and categorycontent or
          categorycontentinclude; the widget can read the selected category. -->
     <include name="Widget_Categories">
+        <param name="categorydebounce">false</param>
         <param name="categorytarget" />
         <param name="labeltop">widget_label_t</param>
         <param name="labelheight">widget_label_h</param>
@@ -71,9 +72,20 @@
                 <param name="include">$PARAM[include]</param>
                 <nested />
 
+                <include content="View_Line">
+                    <param name="label">$PARAM[label]</param>
+                    <param name="label_fallback">31282</param>
+                    <param name="top">20</param>
+                    <param name="left">0</param>
+                    <param name="visible">Integer.IsEqual(Container($PARAM[categoryid]).NumItems,0) + [Container($PARAM[categoryid]).IsUpdating | Container($PARAM[id]).IsUpdating]</param>
+                    <param name="use_spinner">true</param>
+                    <param name="run_spinner">Container($PARAM[categoryid]).IsUpdating | Container($PARAM[id]).IsUpdating</param>
+                </include>
+
                 <control type="group">
                     <top>20</top>
                     <height>40</height>
+                    <visible>Integer.IsGreater(Container($PARAM[categoryid]).NumItems,0)</visible>
                     <include>View_Line_Divider</include>
                     <include content="Categories_Selector_OverlayList">
                         <param name="id">$PARAM[categoryid]</param>
@@ -90,6 +102,9 @@
             <include content="Categories_Selector_ControlList">
                 <param name="id">$PARAM[categoryid]</param>
                 <param name="altfocusid">$PARAM[categoryid]</param>
+                <param name="hidden_button">Widget_Combined_Categories_HiddenButton</param>
+                <param name="hidden_button_enabled">$PARAM[categorydebounce]</param>
+                <param name="hidden_button_prefix">WidgetCombined.$PARAM[categoryid].</param>
                 <param name="focuscentertop">10</param>
                 <param name="height">$PARAM[widgetheight]</param>
                 <nested />
@@ -101,6 +116,7 @@
                 <onright>$PARAM[categoryid]</onright>
                 <include content="$PARAM[categorynavigationinclude]">
                     <param name="id">$PARAM[id]</param>
+                    <param name="categoryid">$PARAM[categoryid]</param>
                 </include>
                 <onback>$PARAM[categoryonback]</onback>
                 <include content="$PARAM[categoryonclickinclude]" />
@@ -137,9 +153,18 @@
     </include>
 
     <include name="Widget_Combined_Categories_Navigation">
+        <ondown>SetProperty(WidgetCombined.$PARAM[categoryid].Path,$ESCINFO[Container($PARAM[categoryid]).ListItem.FolderPath])</ondown>
         <ondown>$PARAM[id]</ondown>
         <onfocus>ClearProperty(HomeSwitcher.IsVisible,Home)</onfocus>
         <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
+    </include>
+
+    <include name="Widget_Combined_Categories_HiddenButton_OnFocus">
+        <definition>
+            <!-- Kodi executes onfocus only after the focus animation finishes. -->
+            <animation effect="fade" start="100" end="100" time="400" reversible="false">Focus</animation>
+            <onfocus>SetProperty($PARAM[prefix]Path,$ESCINFO[$PARAM[container]ListItem.FolderPath])</onfocus>
+        </definition>
     </include>
 
     <include name="Widget_OnFocus">
@@ -154,6 +179,7 @@
     </include>
 
     <include name="Widget_Content">
+        <param name="categorydebounce">false</param>
         <param name="categorytarget" />
         <param name="visible">true</param>
         <param name="altvisible">false</param>
@@ -185,6 +211,7 @@
                 <param name="widgetheight">$PARAM[widgetheight]</param>
                 <param name="include">$PARAM[include]</param>
                 <param name="categoryid">$PARAM[categoryid]</param>
+                <param name="categorydebounce">$PARAM[categorydebounce]</param>
                 <param name="categorycontent">$PARAM[categorycontent]</param>
                 <param name="categorytarget">$PARAM[categorytarget]</param>
                 <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
@@ -220,7 +247,9 @@
                 </include>
                 <top>$PARAM[widgettop]</top>
                 <height>$PARAM[widgetheight]</height>
-                <animation effect="fade" start="100" end="0" time="0" condition="[Container($PARAM[id]).IsUpdating | $PARAM[busy_isupdating]] + $PARAM[busy_visible]">Conditional</animation>
+                <animation effect="fade" start="100" end="0" time="0" condition="[Container($PARAM[id]).IsUpdating | $PARAM[busy_isupdating]] + $PARAM[busy_visible] + ![$PARAM[categorydebounce]]">Conditional</animation>
+                <!-- Allow Widget_Busy's 200 ms delay and 200 ms fade-in to finish before fading out combined content. -->
+                <animation effect="fade" start="100" end="0" time="200" delay="400" reversible="false" condition="[Container($PARAM[id]).IsUpdating | $PARAM[busy_isupdating]] + $PARAM[busy_visible] + $PARAM[categorydebounce]">Conditional</animation>
                 <visible>$PARAM[visible] + [Container($PARAM[id]).IsUpdating | !Integer.IsEqual(Container($PARAM[id]).NumItems,0) | $PARAM[altvisible]]</visible>
 
                 <include content="Widget_OnFocus">
@@ -657,6 +686,7 @@
     </include>
 
     <include name="_Widget_Row">
+        <param name="categorydebounce">false</param>
         <param name="categorytarget" />
         <param name="categorynavigationinclude">Widget_Categories_Navigation</param>
         <param name="labeltop">widget_label_t</param>
@@ -670,6 +700,7 @@
                 <param name="label">$PARAM[label]</param>
                 <param name="labelinclude">$PARAM[labelinclude]</param>
                 <param name="categoryid">$PARAM[categoryid]</param>
+                <param name="categorydebounce">$PARAM[categorydebounce]</param>
                 <param name="categorycontent">$PARAM[categorycontent]</param>
                 <param name="categorytarget">$PARAM[categorytarget]</param>
                 <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>
@@ -746,6 +777,7 @@
     </include>
 
     <include name="Widget_Info_Row">
+        <param name="categorydebounce">false</param>
         <param name="categorytarget" />
         <param name="categorynavigationinclude">Widget_Categories_Navigation</param>
         <param name="busy_visible">true</param>
@@ -761,6 +793,7 @@
                 <param name="label">$PARAM[label]</param>
                 <param name="labelinclude">$PARAM[labelinclude]</param>
                 <param name="categoryid">$PARAM[categoryid]</param>
+                <param name="categorydebounce">$PARAM[categorydebounce]</param>
                 <param name="categorycontent">$PARAM[categorycontent]</param>
                 <param name="categorytarget">$PARAM[categorytarget]</param>
                 <param name="categorycontentinclude">$PARAM[categorycontentinclude]</param>

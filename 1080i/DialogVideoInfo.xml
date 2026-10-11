@@ -8,6 +8,9 @@
     <include>DialogInfo_Onload</include>
     <onload>SetProperty(TMDbHelper.EnableExtendedProperties,True)</onload>
     <onload>SetProperty(BaseID,$INFO[ListItem.Label]$INFO[ListItem.FolderPath])</onload>
+    <onload>ClearProperty(DialogInfo.ArtworkView)</onload>
+    <onload>ClearProperty(DialogInfo.ArtworkReverse)</onload>
+    <onload>ClearProperty(DialogInfo.ArtworkWrapReturn)</onload>
 
     <controls>
 
@@ -19,7 +22,8 @@
             <font />
             <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">SetFocus(5029)</ondown>
             <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person)">5000</ondown>
-            <onfocus condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">SetFocus(4001)</onfocus>
+            <onfocus condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">SetFocus(8100)</onfocus>
+            <onfocus condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">SetFocus(4001)</onfocus>
             <onright condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">4001</onright>
             <onleft condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">4001</onleft>
             <onleft condition="String.IsEqual(ListItem.Property(tmdb_type),person) + $EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1113)</onleft>
@@ -38,7 +42,12 @@
         <control type="group">
             <include>DialogInfo_Main_Group</include>
             <control type="group">
-                <include>DialogInfo_Body_Group</include>
+                <include>DialogInfo_Animation_ArtworkSlide</include>
+                <include>DialogInfo_Animation_ArtworkReturn_Incoming</include>
+                <animation effect="fade" start="100" end="0" time="400" tween="cubic" easing="inout" reversible="true" condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">Conditional</animation>
+                <include content="DialogInfo_Body_Group">
+                    <param name="showposter">false</param>
+                </include>
                 <control type="group">
                     <include content="DialogInfo_Info_Group">
                         <param name="extended_include">DialogInfo_VideoDetails</param>
@@ -65,6 +74,89 @@
 
 
                 <include>Widget_End_Bumper</include>
+            </control>
+        </control>
+
+        <!-- Preserve the selected panel while browsing widgets. -->
+        <include content="Object_Hidden_Button">
+            <param name="id">8100</param>
+            <visible>!String.IsEqual(ListItem.Property(tmdb_type),person)</visible>
+            <onfocus condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onfocus>
+            <onfocus>SetProperty(DialogInfo.ArtworkView,true)</onfocus>
+            <onleft condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">SetProperty(DialogInfo.ArtworkWrapReturn,true)</onleft>
+            <onleft condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onleft>
+            <onleft>9000</onleft>
+            <onright condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">SetProperty(DialogInfo.ArtworkWrapReturn,true)</onright>
+            <onright condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onright>
+            <onright>9000</onright>
+            <onup>8100</onup>
+            <ondown>SetFocus(5029)</ondown>
+            <onback>9000</onback>
+            <onclick>SetFocus(9000)</onclick>
+        </include>
+
+        <control type="group">
+            <top>view_pad</top>
+            <include>Dimension_Info</include>
+            <include>DialogInfo_Main_Group</include>
+            <control type="group">
+                <right>0</right>
+                <width>infodialog_poster_w</width>
+                <height>infodialog_poster_h</height>
+                <include>DialogInfo_Animation_Right</include>
+                <include>DialogInfo_Animation_ArtworkSlide</include>
+                <include>DialogInfo_Animation_ArtworkReturn_Incoming</include>
+                <animation effect="fade" start="100" end="0" time="400" tween="cubic" easing="inout" reversible="true" condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
+                <include content="Object_BigPoster">
+                    <param name="icon">$VAR[Image_Poster]</param>
+                    <param name="diffuse">diffuse/poster_w560_h820.png</param>
+                </include>
+            </control>
+            <!-- The wrapped poster enters from the left on a reverse carousel step. -->
+            <control type="group">
+                <left>infodialog_poster_slide</left>
+                <width>infodialog_poster_w</width>
+                <height>infodialog_poster_h</height>
+                <visible>!String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))</visible>
+                <include>DialogInfo_Animation_ArtworkSlide</include>
+                <include>DialogInfo_Animation_ArtworkReturn_Outgoing</include>
+                <animation effect="fade" start="100" end="0" time="400" tween="cubic" easing="inout" reversible="true" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">Conditional</animation>
+                <include content="Object_BigPoster">
+                    <param name="icon">$VAR[Image_Poster]</param>
+                    <param name="diffuse">diffuse/poster_w560_h820.png</param>
+                </include>
+            </control>
+            <control type="group">
+                <left>0</left>
+                <width>infodialog_poster_w</width>
+                <height>infodialog_poster_h</height>
+                <visible>String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkWrapReturn))</visible>
+                <animation effect="slide" start="0" end="infodialog_poster_slide" time="400" tween="cubic" easing="inout" reversible="false" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">Conditional</animation>
+                <animation effect="fade" start="100" end="0" time="400" tween="cubic" easing="inout" reversible="false" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">Conditional</animation>
+                <include content="Object_BigPoster">
+                    <param name="icon">$VAR[Image_Poster]</param>
+                    <param name="diffuse">diffuse/poster_w560_h820.png</param>
+                </include>
+            </control>
+            <control type="group">
+                <left>infodialog_artwork_start</left>
+                <right>infodialog_poster_slide</right>
+                <height>infodialog_poster_h</height>
+                <animation effect="slide" start="0" end="infodialog_artwork_reverse_offset" time="0" condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
+                <include>DialogInfo_Animation_ArtworkSlide</include>
+                <include>DialogInfo_Animation_ArtworkReturn_Outgoing</include>
+                <animation effect="fade" start="100" end="0" time="400" tween="cubic" easing="inout" reversible="true" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">Conditional</animation>
+                <include content="Object_BigPoster">
+                    <param name="icon">$VAR[Image_DialogInfo_Fanart]</param>
+                    <param name="diffuse">diffuse/landscape_w1160_h820.png</param>
+                    <param name="aspectratio">keep</param>
+                    <param name="posterback_colordiffuse">black</param>
+                </include>
+                <!-- <control type="image">
+                    <include content="Dimension_Padding"><param name="pad">-3</param></include>
+                    <include>Texture_SelectBox_Thin</include>
+                    <visible>Control.HasFocus(8100)</visible>
+                </control> -->
             </control>
         </control>
 

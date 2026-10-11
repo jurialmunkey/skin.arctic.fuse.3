@@ -889,23 +889,75 @@
             <height>$PARAM[height]</height>
             <control type="group">
                 <visible>[!String.IsEmpty($PARAM[container]$PARAM[listitem].Season) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Episode) | !String.IsEmpty($PARAM[container]$PARAM[listitem].Title)]</visible>
-                <control type="label">
-                    <textcolor>$PARAM[colordiffuse]_90</textcolor>
-                    <label>$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode,0,. ]$INFO[$PARAM[container]$PARAM[listitem].Title,,]</label>
+                <control type="grouplist">
                     <left>40</left>
                     <height>40</height>
-                    <font>font_main_bold</font>
-                    <width>$PARAM[width]</width>
-                    <visible>!Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</visible>
-                </control>
-                <control type="label">
-                    <textcolor>$PARAM[colordiffuse]_90</textcolor>
-                    <label>$INFO[$PARAM[container]$PARAM[listitem].Season,,x]$INFO[$PARAM[container]$PARAM[listitem].Episode,,. ]$INFO[$PARAM[container]$PARAM[listitem].Title,,]</label>
-                    <left>40</left>
-                    <height>40</height>
-                    <font>font_main_bold</font>
-                    <width>$PARAM[width]</width>
-                    <visible>Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</visible>
+                    <orientation>horizontal</orientation>
+                    <!-- Season -->
+                    <control type="label">
+                        <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                        <label>$INFO[$PARAM[container]$PARAM[listitem].Property(group_season),,x]</label>
+                        <height>40</height>
+                        <font>font_main_bold</font>
+                        <width>auto</width>
+                        <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Property(group_season))</visible>
+                    </control>
+                    <control type="label">
+                        <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                        <label>$INFO[$PARAM[container]$PARAM[listitem].Season,,x]</label>
+                        <height>40</height>
+                        <font>font_main_bold</font>
+                        <width>auto</width>
+                        <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Property(group_season))</visible>
+                        <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Season)</visible>
+                    </control>
+
+                    <!-- Episode -->
+                    <control type="label">
+                        <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                        <label>$INFO[$PARAM[container]$PARAM[listitem].Property(group_episode),0,. ]</label>
+                        <height>40</height>
+                        <font>font_main_bold</font>
+                        <width>auto</width>
+                        <visible>!Integer.IsGreater($PARAM[container]$PARAM[listitem].Property(group_episode),9)</visible>
+                        <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Property(group_episode))</visible>
+                    </control>
+                    <control type="label">
+                        <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                        <label>$INFO[$PARAM[container]$PARAM[listitem].Property(group_episode),,. ]</label>
+                        <height>40</height>
+                        <font>font_main_bold</font>
+                        <width>auto</width>
+                        <visible>Integer.IsGreater($PARAM[container]$PARAM[listitem].Property(group_episode),9)</visible>
+                        <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Property(group_episode))</visible>
+                    </control>
+                    <control type="label">
+                        <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                        <label>$INFO[$PARAM[container]$PARAM[listitem].Episode,0,. ]</label>
+                        <height>40</height>
+                        <font>font_main_bold</font>
+                        <width>auto</width>
+                        <visible>!Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</visible>
+                        <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Episode)</visible>
+                        <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Property(group_episode))</visible>
+                    </control>
+                    <control type="label">
+                        <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                        <label>$INFO[$PARAM[container]$PARAM[listitem].Episode,,. ]</label>
+                        <height>40</height>
+                        <font>font_main_bold</font>
+                        <width>auto</width>
+                        <visible>Integer.IsGreater($PARAM[container]$PARAM[listitem].Episode,9)</visible>
+                        <visible>!String.IsEmpty($PARAM[container]$PARAM[listitem].Episode)</visible>
+                        <visible>String.IsEmpty($PARAM[container]$PARAM[listitem].Property(group_episode))</visible>
+                    </control>
+                    <control type="label">
+                        <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                        <label>$INFO[$PARAM[container]$PARAM[listitem].Title]</label>
+                        <height>40</height>
+                        <font>font_main_bold</font>
+                        <width>$PARAM[width]</width>
+                    </control>
                 </control>
                 <include content="Info_Plot_TextBox">
                     <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Plot]</param>
