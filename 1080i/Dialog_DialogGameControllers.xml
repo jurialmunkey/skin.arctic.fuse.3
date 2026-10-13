@@ -424,6 +424,7 @@
                         <include content="Part_HeaderBasic">
                             <param name="header_id">$PARAM[header_id]</param>
                             <param name="header">$PARAM[header]</param>
+                            <param name="header_details">$PARAM[header_details]</param>
                             <param name="id">$PARAM[id]</param>
                         </include>
                         <control type="group">
@@ -484,7 +485,8 @@
 
     <include name="DialogGameControllers_GameAchievements">
         <include content="DialogGameControllers_GameLeaderBoards">
-            <param name="header">$INFO[Window.Property(Header)]</param>
+            <param name="header">$VAR[Label_GameAchievements_Header]</param>
+            <param name="header_details">$INFO[Window.Property(Achievements.Progress),  •  ,]$INFO[Window.Property(Achievements.Beaten),  •  ,]</param>
             <param name="itemlayout_include">List_Layout_GameAchievements</param>
             <param name="has_button_grouplist">true</param>
             <param name="items">DialogGameControllers_GameAchievements_Items</param>
@@ -496,6 +498,22 @@
 
     <include name="DialogGameControllers_GameAchievements_Items">
         <definition>
+            <include content="Button_Dialog">
+                <param name="id">108345</param>
+                <param name="groupid">108445</param>
+                <param name="icon">special://skin/extras/icons/boxes-stacked.png</param>
+                <label>$INFO[Window.Property(Achievements.SetTitle)]</label>
+                <visible>!String.IsEmpty(Window.Property(Achievements.HasSets))</visible>
+            </include>
+            <include content="Button_Dialog">
+                <param name="id">108346</param>
+                <param name="groupid">108446</param>
+                <param name="control">radiobutton</param>
+                <param name="istext">true</param>
+                <param name="label">$LOCALIZE[305]</param>
+                <selected>!String.IsEmpty(Window.Property(Achievements.SetEnabled))</selected>
+                <visible>!String.IsEmpty(Window.Property(Achievements.SetToggleable))</visible>
+            </include>
             <include content="Button_Dialog">
                 <param name="id">108333</param>
                 <param name="groupid">108433</param>
