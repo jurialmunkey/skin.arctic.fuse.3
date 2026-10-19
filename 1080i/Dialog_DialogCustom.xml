@@ -116,20 +116,49 @@
 
     <include name="DialogCustom_Trailers">
         <include content="DialogCustom_Favourites">
-            <param name="header">$LOCALIZE[10025]</param>
+            <param name="header">$LOCALIZE[31637]</param>
+            <param name="include_list">DialogCustom_Trailers_List</param>
             <param name="include_content">DialogCustom_Trailers_Content</param>
         </include>
     </include>
 
+    <include name="DialogCustom_Trailers_List">
+        <param name="scrollbarid">61</param>
+        <definition>
+            <include content="List_Dialog">
+                <param name="id">$PARAM[id]</param>
+                <param name="item_height">128</param>
+                <param name="itemlayout_include">List_Layout_Dialog_DetailedCheckmark</param>
+                <pagecontrol>$PARAM[scrollbarid]</pagecontrol>
+                <onright>$PARAM[scrollbarid]</onright>
+                <include>Size_Grouplist_Pad</include>
+                <include>$PARAM[include_content]</include>
+            </include>
+        </definition>
+    </include>
+
     <include name="DialogCustom_Trailers_Content">
-        <onclick>Close</onclick>
+        <onclick condition="String.IsEqual(Container(450).ListItem.Property(TrailerSource),Default)">SetProperty(PlayTrailer,$ESCINFO[Window(Home).Property(TrailerSource.Default)],Home)</onclick>
+        <onclick condition="String.IsEqual(Container(450).ListItem.Property(TrailerSource),IMDb)">SetProperty(PlayTrailer,$ESCINFO[Window(Home).Property(TrailerSource.IMDb)],Home)</onclick>
+        <onclick condition="String.IsEmpty(Container(450).ListItem.Property(TrailerSource))">SetProperty(PlayTrailer,$ESCINFO[Container(450).ListItem.FileNameAndPath],Home)</onclick>
+        <onclick condition="String.IsEmpty(Container(450).ListItem.Property(TrailerSource))">SetProperty(PlayTrailerTitle,$ESCINFO[Container(450).ListItem.Label],Home)</onclick>
         <onclick>Dialog.Close(1123,true)</onclick>
-        <include content="Action_PlayTrailer_OnClick">
-            <param name="trailer">Container(450).ListItem.FileNameAndPath</param>
-            <param name="trailer_fallback" />
-            <param name="title">$INFO[Container(450).ListItem.Label]</param>
-            <param name="items">$INFO[Window(Home).Property(PlayTrailerItems)]</param>
-        </include>
+        <onclick>Dialog.Close(1122,true)</onclick>
+        <onclick>ActivateWindow(1123)</onclick>
+        <content>
+            <item>
+                <label>$LOCALIZE[571]</label>
+                <icon>special://skin/extras/icons/kodi.png</icon>
+                <property name="TrailerSource">Default</property>
+                <visible>!String.IsEmpty(Window(Home).Property(TrailerSource.Default))</visible>
+            </item>
+            <item>
+                <label>IMDb Trailers</label>
+                <icon>special://home/addons/plugin.video.imdb.trailers/icon.png</icon>
+                <property name="TrailerSource">IMDb</property>
+                <visible>!String.IsEmpty(Window(Home).Property(TrailerSource.IMDb))</visible>
+            </item>
+        </content>
         <content>$INFO[Window(Home).Property(PlayTrailerItems)]</content>
     </include>
 

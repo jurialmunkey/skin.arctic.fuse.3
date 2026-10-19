@@ -292,10 +292,8 @@
         <item>
             <label>$LOCALIZE[31393]</label>
             <icon>special://skin/extras/icons/video.png</icon>
-            <visible>[!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer))]</visible>
-            <onclick>Dialog.Close(contextmenu,true)</onclick>
-            <onclick>SetProperty(PlayTrailerItems,$VAR[Path_VideoInfo_Trailers],Home)</onclick>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-playtrailer.json,use_rules)</onclick>
+            <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_trailer)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer)) | $EXP[Exp_Trailer_HasIMDb] | $EXP[Exp_Trailer_HasTMDbHelper]</visible>
+            <include>Action_SelectTrailerSource_OnClick</include>
             <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </item>
         <item>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <expression name="Exp_Trailer_HasIMDb">[System.AddonIsEnabled(plugin.video.imdb.trailers) + [String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),movie) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),tvshow)] + [String.StartsWith(Window(Home).Property(TMDbHelper.ListItem.base_imdb_id),tt) | String.StartsWith(Window(Home).Property(TMDbHelper.ListItem.imdb_id),tt) | String.StartsWith(Window(Home).Property(TMDbHelper.ListItem.IMDBNumber),tt)]]</expression>
+
+    <expression name="Exp_Trailer_HasTMDbHelper">[System.AddonIsEnabled(plugin.video.themoviedb.helper) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_ID)) + [String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_Type),movie) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_Type),tv)]]</expression>
+
     <!-- ========== -->
     <!-- TMDBHelper -->
     <!-- ========== -->
@@ -86,6 +90,7 @@
 
     <expression name="Exp_IsAlphabetStrip">[!Skin.HasSetting(Navigation.DisableAlphabetJump) + !Window.IsVisible(MyPlaylist.xml) + [String.IsEqual(Container.SortMethod,$LOCALIZE[20376]) | String.IsEqual(Container.SortMethod,$LOCALIZE[556]) | String.IsEqual(Container.SortMethod,$LOCALIZE[551]) | String.IsEqual(Container.SortMethod,$LOCALIZE[21899]) | String.IsEqual(Container.SortMethod,$LOCALIZE[557]) | String.IsEqual(Container.SortMethod,$LOCALIZE[558]) | String.IsEqual(Container.SortMethod,$LOCALIZE[578])]]</expression>
 
+    <expression name="Exp_PVRChannelGuide_OSD">[Window.IsVisible(fullscreenvideo) | Window.IsVisible(visualisation)]</expression>
     <expression name="Exp_PVRGuide_NoFocus">[Control.HasFocus(28) | Control.HasFocus(11)]</expression>
 
     <expression name="Exp_View_IsMedia">[Window.IsVisible(videos) | Window.IsVisible(music) | Window.IsVisible(programs) | Window.IsVisible(pictures) | Window.IsVisible(games) | $EXP[Exp_PVRWindows]]</expression>

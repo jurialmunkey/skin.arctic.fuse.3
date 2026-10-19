@@ -17,11 +17,11 @@
         </include>
     </include>
 
-    <!-- Media List -->
-    <include name="View_581_Media_List">
-        <include content="View_MediaList_Include" condition="Window.IsVisible(videos)">
+    <!-- Poster List -->
+    <include name="View_581_Poster_List">
+        <include content="View_MediaList_Include">
             <param name="id">581</param>
-            <param name="viewtype_label">$LOCALIZE[31479]</param>
+            <param name="viewtype_label">$LOCALIZE[31635]</param>
             <param name="visible">$EXP[Exp_View_581]</param>
             <param name="left">0</param>
             <param name="right">510</param>
@@ -32,10 +32,14 @@
             <param name="item_height">85</param>
             <include>View_Media_Poster</include>
         </include>
-        <include content="View_MediaList_Include" condition="!Window.IsVisible(videos)">
-            <param name="id">581</param>
-            <param name="viewtype_label">$LOCALIZE[31479]</param>
-            <param name="visible">$EXP[Exp_View_581]</param>
+    </include>
+
+    <!-- Square List -->
+    <include name="View_585_Square_List">
+        <include content="View_MediaList_Include">
+            <param name="id">585</param>
+            <param name="viewtype_label">$LOCALIZE[31636]</param>
+            <param name="visible">$EXP[Exp_View_585]</param>
             <param name="left">0</param>
             <param name="right">692</param>
             <param name="top">130</param>
@@ -133,6 +137,16 @@
                 <texture diffuse="diffuse/square_w585_h585.png" background="true">$INFO[ListItem.Icon]</texture>
                 <fadetime>background_fadetime</fadetime>
                 <aspectratio scalediffuse="false">scale</aspectratio>
+                <visible>![$EXP[Exp_IsGenre] | $EXP[Exp_IsStudio] | $EXP[Exp_IsCountry]]</visible>
+            </control>
+            <control type="group">
+                <visible>[$EXP[Exp_IsGenre] | $EXP[Exp_IsStudio] | $EXP[Exp_IsCountry]]</visible>
+                <include content="Object_Layout_Image_Icon">
+                    <param name="listitem">ListItem</param>
+                    <param name="icon_diffuse">diffuse/square_w585_h585.png</param>
+                    <param name="genre_bordersize">140</param>
+                    <param name="other_bordersize">56</param>
+                </include>
             </control>
         </control>
     </include>

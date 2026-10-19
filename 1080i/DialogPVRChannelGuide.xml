@@ -10,13 +10,13 @@
         <control type="group">
 
             <control type="group">
-                <include condition="!Window.IsMedia">Animation_OSD_Dialog_WindowChange</include>
+                <include condition="$EXP[Exp_PVRChannelGuide_OSD]">Animation_OSD_Dialog_WindowChange</include>
                 <control type="group">
                     <visible>!Window.IsActive(pvrosdchannels)</visible>
                     <visible>!Window.IsActive(1141)</visible>
-                    <include condition="!Window.IsMedia">Animation_OSD_Dialog_VisibleChange</include>
+                    <include condition="$EXP[Exp_PVRChannelGuide_OSD]">Animation_OSD_Dialog_VisibleChange</include>
 
-                    <include content="Object_Bottom" condition="Window.IsMedia">
+                    <include content="Object_Bottom" condition="!$EXP[Exp_PVRChannelGuide_OSD]">
                         <param name="bottom">20</param>
                     </include>
 
@@ -45,12 +45,12 @@
                         <param name="id">11</param>
                         <include>OSD_List_Dimensions</include>
                         <onup>Close</onup>
-                        <ondown condition="!Window.IsMedia">ActivateWindow($VAR[Action_OSD_PVROSDGuide_OnDown])</ondown>
-                        <ondown condition="Window.IsMedia">Close</ondown>
+                        <ondown condition="$EXP[Exp_PVRChannelGuide_OSD]">ActivateWindow($VAR[Action_OSD_PVROSDGuide_OnDown])</ondown>
+                        <ondown condition="!$EXP[Exp_PVRChannelGuide_OSD]">Close</ondown>
                     </include>
 
                     <!-- Playing Icon and Details -->
-                    <include content="OSD_Info_Tray" condition="!Window.IsMedia">
+                    <include content="OSD_Info_Tray" condition="$EXP[Exp_PVRChannelGuide_OSD]">
                         <param name="icon">$INFO[Window.Property(ChannelIcon)]</param>
                         <param name="role">$INFO[Container(11).ListItem.ChannelName]</param>
                         <param name="name">$INFO[Container(11).ListItem.ChannelNumberLabel,$LOCALIZE[19029] ,]</param>
@@ -66,10 +66,10 @@
             </control>
 
             <control type="group">
-                <visible>Window.IsMedia</visible>
+                <visible>!$EXP[Exp_PVRChannelGuide_OSD]</visible>
                 <control type="group">
                     <include>Info_Panel_Dimensions</include>
-                    <include content="Info_Panel" condition="Window.IsMedia">
+                    <include content="Info_Panel" condition="!$EXP[Exp_PVRChannelGuide_OSD]">
                         <param name="container">Container(11).</param>
                         <param name="affix">_C11</param>
                     </include>
@@ -89,6 +89,6 @@
                 </control>
             </control>
         </control>
-        <include condition="Window.IsMedia">DialogPlotFake</include>
+        <include condition="!$EXP[Exp_PVRChannelGuide_OSD]">DialogPlotFake</include>
     </controls>
 </window>

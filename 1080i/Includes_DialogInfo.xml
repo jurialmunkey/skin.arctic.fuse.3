@@ -1476,17 +1476,10 @@
         <item>
             <icon>special://skin/extras/icons/video.png</icon>
             <label>$LOCALIZE[31393]</label>
-            <onclick>Dialog.Close(1172,true)</onclick>
-            <include content="Action_PlayTrailer_OnClick">
-                <param name="trailer">ListItem.Trailer</param>
-                <param name="trailer_fallback">Window(Home).Property(TMDbHelper.ListItem.Trailer)</param>
-                <param name="title">$VAR[Label_Title]</param>
-                <param name="items">$VAR[Path_VideoInfo_Trailers]</param>
-            </include>
-            <visible>!String.IsEmpty(ListItem.Trailer) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer))</visible>
+            <include>Action_SelectTrailerSource_OnClick</include>
+            <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.base_trailer)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trailer)) | $EXP[Exp_Trailer_HasIMDb] | $EXP[Exp_Trailer_HasTMDbHelper]</visible>
         </item>
     </include>
-
     <include name="DialogInfo_VideoButtons_Trakt">
         <item>
             <label>Trakt</label>

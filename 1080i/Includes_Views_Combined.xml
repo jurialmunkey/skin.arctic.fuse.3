@@ -9,6 +9,12 @@
         </include>
     </include>
 
+    <variable name="View_Combined_SortBy">
+        <value condition="!String.IsEmpty(Container.PluginName)">none</value>
+        <value condition="Container.Content(seasons)">episode</value>
+        <value>title</value>
+    </variable>
+
     <variable name="View_530_Content">
         <value condition="String.IsEqual(Window.Property(ViewCombined.520.Directory),Container.FolderPath) + !String.IsEmpty(Window.Property(ViewCombined.520.Path))">$INFO[Window.Property(ViewCombined.520.Path)]</value>
         <value condition="Container(520).ListItem.IsFolder">$INFO[Container(520).ListItem.FolderPath]</value>
@@ -174,7 +180,7 @@
                         <onclick condition="Container(53$PARAM[id]).ListItem.IsFolder">Container.Update($INFO[Container(53$PARAM[id]).ListItem.FolderPath])</onclick>
                         <onclick condition="Container(53$PARAM[id]).ListItem.IsFolder">SetFocus(50)</onclick>
                         <onclick condition="!Container(53$PARAM[id]).ListItem.IsFolder">PlayMedia($ESCINFO[Container(53$PARAM[id]).ListItem.FileNameAndPath])</onclick>
-                        <content target="$VAR[Path_CollectionNode_Target]">$VAR[View_53$PARAM[id]_Content]</content>
+                        <content sortby="$VAR[View_Combined_SortBy]" target="$VAR[Path_CollectionNode_Target]">$VAR[View_53$PARAM[id]_Content]</content>
                         <onfocus>SetProperty(TMDbHelper.WidgetContainer,53$PARAM[id])</onfocus>
                         <onfocus>ClearProperty(Background.ShowOverlay,Home)</onfocus>
                         <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
@@ -457,7 +463,7 @@
                     <effect type="fade" start="100" end="0" time="200" delay="600" />
                 </animation>
 
-                <content target="$VAR[Path_CollectionNode_Target]">$VAR[View_53$PARAM[id]_Content]</content>
+                <content sortby="$VAR[View_Combined_SortBy]" target="$VAR[Path_CollectionNode_Target]">$VAR[View_53$PARAM[id]_Content]</content>
 
                 <nested />
 
