@@ -393,10 +393,20 @@
     <include name="Info_Title_Text">
         <param name="visible">true</param>
         <param name="wrapmultiline">true</param>
+        <param name="youtube_video">false</param>
         <definition>
+            <control type="textbox">
+                <height>info_title_h</height>
+                <font>font_head_bold</font>
+                <autoscroll>false</autoscroll>
+                <aligny>center</aligny>
+                <label>$INFO[$PARAM[title]]</label>
+                <visible>[$PARAM[visible]] + [$PARAM[youtube_video]]</visible>
+                <textcolor>$PARAM[colordiffuse]_100</textcolor>
+            </control>
             <include content="Info_Title_Text_Seeded" condition="Skin.HasSetting(Info.EnableStylisedTitles)">
                 <param name="title">$PARAM[title]</param>
-                <param name="visible">$PARAM[visible]</param>
+                <param name="visible">[$PARAM[visible]] + ![$PARAM[youtube_video]]</param>
                 <param name="wrapmultiline">$PARAM[wrapmultiline]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="mix_a">[[String.Contains($PARAM[title],a) + !String.Contains($PARAM[title],r)] | [!String.Contains($PARAM[title],a) + String.Contains($PARAM[title],r)]]</param>
@@ -422,7 +432,7 @@
             </include>
             <include content="Info_Title_Text_Plain" condition="!Skin.HasSetting(Info.EnableStylisedTitles)">
                 <param name="title">$PARAM[title]</param>
-                <param name="visible">$PARAM[visible]</param>
+                <param name="visible">[$PARAM[visible]] + ![$PARAM[youtube_video]]</param>
                 <param name="wrapmultiline">$PARAM[wrapmultiline]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
             </include>
@@ -547,6 +557,8 @@
         <param name="service">ListItem</param>
         <param name="wrapmultiline">true</param>
         <param name="croplogo">Window.Property(TMDbHelper.ListItem.CropImage)</param>
+        <param name="prefer_title">false</param>
+        <param name="youtube_video">false</param>
         <definition>
             <control type="group">
                 <left>$PARAM[left]</left>
@@ -600,19 +612,21 @@
                         <param name="title">$PARAM[container]$PARAM[listitem].Artist</param>
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
                         <param name="wrapmultiline">$PARAM[wrapmultiline]</param>
-                        <param name="visible">String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Artist)</param>
+                        <param name="visible">String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Artist) + ![$PARAM[prefer_title]]</param>
                     </include>
                     <include content="Info_Title_Text">
                         <param name="title">$PARAM[container]$PARAM[listitem].Title</param>
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
                         <param name="wrapmultiline">$PARAM[wrapmultiline]</param>
-                        <param name="visible">String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle) + String.IsEmpty($PARAM[container]$PARAM[listitem].Artist) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Title)</param>
+                        <param name="visible">String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle) + [$PARAM[prefer_title] | String.IsEmpty($PARAM[container]$PARAM[listitem].Artist)] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Title)</param>
+                        <param name="youtube_video">$PARAM[youtube_video]</param>
                     </include>
                     <include content="Info_Title_Text">
                         <param name="title">$PARAM[container]$PARAM[listitem].Label</param>
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
                         <param name="wrapmultiline">$PARAM[wrapmultiline]</param>
-                        <param name="visible">String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle) + String.IsEmpty($PARAM[container]$PARAM[listitem].Artist) + String.IsEmpty($PARAM[container]$PARAM[listitem].Title)</param>
+                        <param name="visible">String.IsEmpty($PARAM[container]$PARAM[listitem].TVShowTitle) + [$PARAM[prefer_title] | String.IsEmpty($PARAM[container]$PARAM[listitem].Artist)] + String.IsEmpty($PARAM[container]$PARAM[listitem].Title)</param>
+                        <param name="youtube_video">$PARAM[youtube_video]</param>
                     </include>
                 </control>
             </control>
@@ -1370,6 +1384,8 @@
                     <param name="listitem">$PARAM[listitem]</param>
                     <param name="service">$PARAM[service]</param>
                     <param name="croplogo">$PARAM[croplogo]</param>
+                    <param name="prefer_title">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video)</param>
+                    <param name="youtube_video">String.StartsWith($PARAM[container]$PARAM[listitem].FilenameAndPath,plugin://plugin.video.youtube/) + String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video)</param>
                 </include>
                 <include content="Object_Control" condition="![$PARAM[include_title]]">
                     <param name="control">group</param>
