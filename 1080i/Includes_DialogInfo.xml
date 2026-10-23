@@ -808,6 +808,24 @@
             <include>DialogInfo_Widgets_Action</include>
         </include>
 
+        <!-- Scenes (Pavan mod): your own scene selection from plugin.video.moviescenes -->
+        <include content="Widget_Info_Row" condition="String.IsEqual(ListItem.DBType,movie) + System.HasAddon(plugin.video.moviescenes)">
+            <param name="id">30</param>
+            <param name="baseid">50</param>
+            <param name="basegroupid">51</param>
+            <param name="label">Scenes</param>
+            <param name="include">List_Landscape_Row</param>
+            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
+            <param name="widgetfade_include">true</param>
+            <param name="set_widgetcontainer">false</param>
+            <param name="menuid">8000</param>
+            <param name="widget_showoverlay">false</param>
+            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
+            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+            <content>$INFO[ListItem.DBID,plugin://plugin.video.moviescenes/?action=list&amp;dbid=,]</content>
+            <onclick>RunPlugin("$INFO[Container(5030).ListItem.FileNameAndPath]")</onclick>
+        </include>
+
         <!-- Collection -->
         <include content="Widget_Info_Row" condition="!Skin.HasSetting(VideoInfo.Widgets.DisableCollection) + !Skin.HasSetting(VideoInfo.Widgets.EnableLocalCollection) + $EXP[Exp_TMDbHelper_IsData] + String.IsEqual(ListItem.DBType,movie)">
             <param name="id">11</param>
@@ -1673,15 +1691,14 @@
                         <onclick>$VAR[Action_DialogInfo_PlayMedia]</onclick>
                     </include>
 
-                    <!-- Scene Selection (Pavan mod): play the movie, then open the chapter picker -->
+                    <!-- Scenes (Pavan mod): jump to the Scenes row from plugin.video.moviescenes -->
                     <include content="Button_Underline_Switcher">
                         <param name="id">4020</param>
                         <param name="control">button</param>
                         <label>Scenes</label>
                         <onfocus>ClearProperty(DialogInfo.ArtworkView)</onfocus>
-                        <onclick>SetProperty(AF3.SceneSelect,1,Home)</onclick>
-                        <onclick>$VAR[Action_DialogInfo_PlayMedia]</onclick>
-                        <visible>String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.FileNameAndPath)</visible>
+                        <onclick>SetFocus(5030,0,absolute)</onclick>
+                        <visible>String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(Container(5030).NumItems,0)</visible>
                     </include>
 
                     <!-- Button 0 -->

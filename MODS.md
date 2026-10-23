@@ -5,28 +5,74 @@ All changes live on the `scene-selection` branch; `omega` tracks upstream untouc
 
 ## Scene Selection
 
-Adds a **Scenes** button next to **Play** on a movie's info screen. Pressing it starts the
-movie and, about 3 seconds after playback begins, opens Kodi's chapter picker. Choosing a
-chapter jumps straight to it.
+Your own scene list for each movie, chosen from the info screen **before** the movie starts.
 
-Files changed:
-- `1080i/Includes_DialogInfo.xml` — the Scenes button (movies with a file only)
-- `1080i/VideoFullScreen.xml` — opens the chapter picker when the movie starts after Scenes was pressed
+- **Scenes row** on a movie's info screen: a row of thumbnails, one per scene. Pick one and the
+  movie starts right at that moment. A **Scenes** button next to Play jumps down to the row.
+  The row and button only appear on movies that have scenes.
+- **Add scenes while watching:** in the playback controls there's a bookmark-star button.
+  Press it at the moment you want, type a name, and the scene is saved with a screenshot as its thumbnail.
+- **Edit scenes:** the last tile in the Scenes row (or **Movie scenes…** in any movie's context menu)
+  lets you rename, retime or delete scenes, or add one by typing a time.
 
-Requirements:
-- The movie file needs embedded chapters (MakeMKV Blu-ray rips almost always have them).
-- For thumbnails: Settings → Player → Videos → **Extract chapter thumbnails** (Advanced/Expert settings level).
-- If Kodi asks Resume / Start from beginning, answer that first; the picker opens once playback starts.
+It's made of three parts in this repo:
+
+| Part | What it does |
+|---|---|
+| `addons/plugin.video.moviescenes` | Kodi add-on that stores scenes, lists them and plays from a timestamp |
+| Skin changes in `1080i/` | Scenes row + button on the info screen (`Includes_DialogInfo.xml`), Add Scene button in the playback controls (`VideoOSD.xml`) |
+| `scripts/scene_thumbs.py` | Optional: makes missing thumbnails with ffmpeg and can import a movie's built-in chapters |
+
+### Where scenes are stored
+
+Next to each movie, so every Kodi device playing from the same share sees the same scenes:
+
+```
+Heat (1995)/Heat (1995).mkv
+Heat (1995)/Heat (1995).scenes/scenes.json
+Heat (1995)/Heat (1995).scenes/0000512300.png
+```
+
+```json
+{"version": 1, "title": "Heat",
+ "scenes": [{"title": "Opening heist", "start": 512.3, "thumb": "0000512300.png"}]}
+```
+
+`start` is seconds from the start of the file. The file is plain JSON, so other tools
+(Silo, scripts) can read and write the same scenes.
+
+Kodi needs **write access** to the movie share for this. If it can't write there, scenes are
+saved on that device only (the notification says "this device only"). To fix that, edit the
+share's source in Kodi and use an account that can write to it.
+
+### Thumbnails
+
+When you add a scene during playback, Kodi saves a screenshot. Some devices capture a black frame
+instead of the picture (the Nvidia Shield usually does), and scenes added by typing a time have no
+picture. `scripts/scene_thumbs.py` fills those in from the video file:
+
+```
+# Windows (needs Python and ffmpeg: winget install Python.Python.3.12 Gyan.FFmpeg)
+python scripts\scene_thumbs.py "\\TOWER\movies"
+
+# Create scenes from built-in chapters for movies that don't have any yet
+python scripts\scene_thumbs.py "\\TOWER\movies" --import-chapters
+```
+
+It only fills gaps; it never changes scenes you made. HDR movies are tone-mapped so thumbnails
+don't look washed out.
 
 ## Installing
 
-1. On GitHub, switch to the `scene-selection` branch → **Code → Download ZIP**.
-2. Rename the folder inside the zip to `skin.arctic.fuse.3` and re-zip it.
-3. In Kodi: Settings → Add-ons → Install from zip file → pick the zip.
-4. Open Add-ons → My add-ons → Look and feel → Skin → Arctic Fuse 3 and turn **Auto-update off**,
-   so the official repo doesn't overwrite these changes.
+Install both zips in Kodi (Settings → Add-ons → Install from zip file), on each device:
 
-The add-on ID is unchanged, so all existing skin settings and home-screen layout carry over.
+1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.0.0.zip` from this branch.
+2. **Skin:** on GitHub, switch to the `scene-selection` branch → **Code → Download ZIP**. Rename the
+   folder inside the zip to `skin.arctic.fuse.3`, re-zip it, and install that.
+3. Add-ons → My add-ons → Look and feel → Skin → Arctic Fuse 3 → turn **Auto-update off**, so the
+   official repo doesn't overwrite these changes.
+
+The skin's add-on ID is unchanged, so existing skin settings and home-screen layout carry over.
 
 ## Pulling in upstream updates
 
