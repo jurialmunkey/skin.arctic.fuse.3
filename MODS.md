@@ -45,6 +45,28 @@ Kodi needs **write access** to the movie share for this. If it can't write there
 saved on that device only (the notification says "this device only"). To fix that, edit the
 share's source in Kodi and use an account that can write to it.
 
+### Movies from Plex (PlexKodiConnect)
+
+PlexKodiConnect puts your Plex movies into Kodi's library in one of two ways, and scenes work with both:
+
+- **Direct Paths:** Kodi plays the real file over SMB, so scenes are saved beside the movie as above.
+- **Add-on paths** (PKC's default): Kodi only sees a `plugin://` link and a stream from Plex, so
+  there's no file to save beside. Scenes are saved by the movie's TMDb/IMDb ID in the add-on's
+  **shared scenes folder** instead.
+
+For add-on paths, open Add-ons → Video add-ons → Movie Scenes → **Configure** and set **Shared scenes
+folder** to a writable network folder, for example `smb://TOWER/appdata/moviescenes/`. Set the same
+folder on every device. Without it, scenes stay on the device where you added them. Scenes saved
+before you set the folder move into it automatically the next time you add or edit one for that movie.
+
+```
+moviescenes/tmdb-949/scenes.json
+moviescenes/tmdb-949/0000512300.png
+```
+
+Playing a scene goes through PlexKodiConnect as normal, so Plex still tracks watched status and
+resume points.
+
 ### Thumbnails
 
 When you add a scene during playback, Kodi saves a screenshot. Some devices capture a black frame
@@ -59,6 +81,13 @@ python scripts\scene_thumbs.py "\\TOWER\movies"
 python scripts\scene_thumbs.py "\\TOWER\movies" --import-chapters
 ```
 
+For PlexKodiConnect add-on paths, also point it at the shared scenes folder. It matches each
+movie to its file by a `{tmdb-949}`-style folder name, a `.nfo` file, or "Title (Year)":
+
+```
+python scripts\scene_thumbs.py "\\TOWER\movies" --scenes-folder "\\TOWER\appdata\moviescenes"
+```
+
 It only fills gaps; it never changes scenes you made. HDR movies are tone-mapped so thumbnails
 don't look washed out.
 
@@ -66,7 +95,7 @@ don't look washed out.
 
 Install both zips in Kodi (Settings → Add-ons → Install from zip file), on each device:
 
-1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.0.0.zip` from this branch.
+1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.1.0.zip` from this branch.
 2. **Skin:** on GitHub, switch to the `scene-selection` branch → **Code → Download ZIP**. Rename the
    folder inside the zip to `skin.arctic.fuse.3`, re-zip it, and install that.
 3. Add-ons → My add-ons → Look and feel → Skin → Arctic Fuse 3 → turn **Auto-update off**, so the

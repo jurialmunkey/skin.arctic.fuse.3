@@ -1,27 +1,35 @@
 # -*- coding: utf-8 -*-
 """Where scenes live and how they are read and written.
 
-Each movie gets a folder next to its video file:
+A movie is described by a "ref" dict: {'path', 'tmdb', 'imdb', 'title', 'year'}.
 
-    Movie (2001)/Movie (2001).mkv
-    Movie (2001)/Movie (2001).scenes/scenes.json
-    Movie (2001)/Movie (2001).scenes/0000512300.png   <- thumbnails
+1. Next to the video file (when Kodi plays a real file over SMB/NFS/local disk):
+
+       Movie (2001)/Movie (2001).mkv
+       Movie (2001)/Movie (2001).scenes/scenes.json
+       Movie (2001)/Movie (2001).scenes/0000512300.png   <- thumbnails
+
+2. In the shared scenes folder, keyed by the movie's TMDb/IMDb ID. This is what's used
+   when there is no real file to sit beside, e.g. PlexKodiConnect in add-on paths mode
+   (plugin:// paths, streamed over http). The folder is set in the add-on's settings;
+   point every device at the same network folder and they all share scenes:
+
+       <scenes folder>/tmdb-949/scenes.json
+
+   If it isn't set, this device's own add-on data folder is used.
 
 scenes.json:
-    {"version": 1, "title": "Movie (2001)",
+    {"version": 1, "title": "Heat", "year": 1995, "tmdb": "949", "imdb": "tt0113277",
      "scenes": [{"title": "Opening", "start": 512.3, "thumb": "0000512300.png"}]}
 
-`start` is seconds from the start of the file. `thumb` is a file name inside the
-.scenes folder and may be empty. Because the folder sits beside the movie,
-every Kodi box that plays from the same share sees the same scenes.
-
-If the movie's folder can't be written to (a read-only share, say), scenes are
-kept in this add-on's own data folder on the current device instead.
+`start` is seconds from the start of the movie. `thumb` is a file name inside the same
+folder and may be empty.
 """
 import hashlib
 import json
 
 import xbmc
+import xbmcaddon
 import xbmcvfs
 
 ADDON_ID = 'plugin.video.moviescenes'
@@ -34,7 +42,7 @@ def log(msg, level=xbmc.LOGINFO):
 
 
 def _split(path):
-    """Split a Kodi path (smb://, nfs://, C:\\...) into (folder, filename)."""
+    """Split a Kodi path (smb://, nfs://, C:\\...) into (folder, filename, separator)."""
     sep = '\\' if ('\\' in path and '://' not in path) else '/'
     folder, _, name = path.rpartition(sep)
     return folder + sep, name, sep
@@ -44,8 +52,38 @@ def _stem(name):
     return name.rsplit('.', 1)[0] if '.' in name else name
 
 
-def supported(path):
-    return bool(path) and not path.startswith(('stack://', 'plugin://', 'http://', 'https://', 'pvr://'))
+def is_file(path):
+    """True for a real file Kodi can write beside (not plugin://, http://, stack://...)."""
+    return bool(path) and not path.startswith(
+        ('stack://', 'plugin://', 'http://', 'https://', 'pvr://', 'upnp://', 'plex://'))
+
+
+def shared_root():
+    try:
+        root = xbmcaddon.Addon(ADDON_ID).getSetting('scenes_folder').strip()
+    except RuntimeError:
+        root = ''
+    if not root:
+        return LOCAL_ROOT
+    return root if root.endswith(('/', '\\')) else root + '/'
+
+
+def is_device_only(folder):
+    return bool(folder) and folder.startswith(LOCAL_ROOT)
+
+
+def id_key(ref):
+    tmdb = str(ref.get('tmdb') or '').strip()
+    imdb = str(ref.get('imdb') or '').strip()
+    if tmdb.isdigit():
+        return 'tmdb-' + tmdb
+    if imdb.startswith('tt'):
+        return 'imdb-' + imdb
+    return None
+
+
+def usable(ref):
+    return is_file(ref.get('path', '')) or bool(id_key(ref))
 
 
 def sidecar_dir(video_path):
@@ -53,11 +91,26 @@ def sidecar_dir(video_path):
     return '%s%s.scenes%s' % (folder, _stem(name), sep)
 
 
-def local_dir(video_path):
-    # Keyed by file name only, so it survives the share being mounted under a different path.
+def _hash_dir(video_path):
+    # Device-only fallback for files without IDs, keyed by file name.
     _, name, _ = _split(video_path)
-    key = hashlib.md5(name.lower().encode('utf-8')).hexdigest()
-    return '%s%s/' % (LOCAL_ROOT, key)
+    return '%s%s/' % (LOCAL_ROOT, hashlib.md5(name.lower().encode('utf-8')).hexdigest())
+
+
+def candidates(ref):
+    """Folders to look in, best first."""
+    out = []
+    path, key = ref.get('path', ''), id_key(ref)
+    if is_file(path):
+        out.append(sidecar_dir(path))
+    if key:
+        out.append(shared_root() + key + '/')
+        if shared_root() != LOCAL_ROOT:
+            out.append(LOCAL_ROOT + key + '/')
+    if is_file(path):
+        out.append(_hash_dir(path))
+    seen = []
+    return [f for f in out if not (f in seen or seen.append(f))]
 
 
 def _read_json(folder):
@@ -86,13 +139,13 @@ def _read_json(folder):
     return data
 
 
-def load(video_path):
+def load(ref):
     """Return (data, folder). folder is where the data was found (or None)."""
-    for folder in (sidecar_dir(video_path), local_dir(video_path)):
+    for folder in candidates(ref):
         data = _read_json(folder)
         if data is not None:
             return data, folder
-    return {'version': 1, 'title': '', 'scenes': []}, None
+    return {'version': 1, 'scenes': []}, None
 
 
 def _write(folder, data):
@@ -106,17 +159,27 @@ def _write(folder, data):
     return bool(ok) and xbmcvfs.exists(folder + JSON_NAME)
 
 
-def save(video_path, data, folder=None):
-    """Save scenes. Tries the given/sidecar folder first, then the local fallback.
-    Returns the folder written to, or None."""
+def save(ref, data, folder=None):
+    """Save scenes to the best folder that can be written (sidecar, then shared, then
+    this device). `folder` is where they were loaded from; if they end up somewhere
+    better, thumbnails are copied across so nothing is lost. Returns the folder written."""
     data['version'] = 1
+    for k in ('title', 'year', 'tmdb', 'imdb'):
+        if ref.get(k) and not data.get(k):
+            data[k] = ref[k]
     data['scenes'] = sorted(data.get('scenes') or [], key=lambda s: s['start'])
-    candidates = [folder] if folder else []
-    for f in (sidecar_dir(video_path), local_dir(video_path)):
-        if f not in candidates:
-            candidates.append(f)
-    for f in candidates:
+    for f in candidates(ref):
+        if f != folder and folder:
+            # Moving up (e.g. the shared folder was just set): bring thumbnails along first.
+            if not xbmcvfs.exists(f) and not xbmcvfs.mkdirs(f):
+                log('Could not write scenes to %s' % f, xbmc.LOGWARNING)
+                continue
+            for s in data['scenes']:
+                if s.get('thumb') and xbmcvfs.exists(folder + s['thumb']):
+                    xbmcvfs.copy(folder + s['thumb'], f + s['thumb'])
         if _write(f, data):
+            if folder and f != folder and xbmcvfs.exists(folder + JSON_NAME):
+                xbmcvfs.delete(folder + JSON_NAME)  # leave one copy only
             return f
         log('Could not write scenes to %s' % f, xbmc.LOGWARNING)
     return None
