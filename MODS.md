@@ -8,7 +8,7 @@ All changes live on the `scene-selection` branch; `omega` tracks upstream untouc
 Your own scene list for each movie, chosen from the info screen **before** the movie starts.
 
 - **Scenes row** on a movie's info screen: a row of thumbnails, one per scene. Pick one and the
-  movie starts right at that moment. A **Scenes** button next to Play jumps down to the row.
+  movie starts right at that moment. A **Scenes** button next to Play opens a scene picker.
   The row and button only appear on movies that have scenes.
 - **Add scenes while watching:** in the playback controls there's a bookmark-star button.
   Press it at the moment you want, type a name, and the scene is saved with a screenshot as its thumbnail.
@@ -95,7 +95,7 @@ don't look washed out.
 
 Install both zips in Kodi (Settings → Add-ons → Install from zip file), on each device:
 
-1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.1.0.zip` from this branch.
+1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.2.0.zip` from this branch.
 2. **Skin:** on GitHub, switch to the `scene-selection` branch → **Code → Download ZIP**. Rename the
    folder inside the zip to `skin.arctic.fuse.3`, re-zip it, and install that.
 3. Add-ons → My add-ons → Look and feel → Skin → Arctic Fuse 3 → turn **Auto-update off**, so the

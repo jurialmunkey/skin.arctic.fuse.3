@@ -321,6 +321,29 @@ def manage(params):
         xbmc.executebuiltin('Container.Refresh')
 
 
+# ---------- pick: the Scenes button on the info screen ----------
+
+def pick(params):
+    ref = resolve(params)
+    if not store.usable(ref):
+        notify("Can't tell which movie this is. Scenes work for library movies only", error=True)
+        return
+    data, folder = store.load(ref)
+    if not data['scenes']:
+        notify('No scenes yet. Add them with the bookmark-star button while watching')
+        return
+    items = _scene_items(data, folder, ref['fanart'])
+    edit = xbmcgui.ListItem('Edit scenes…', 'Rename, retime or delete')
+    edit.setArt({'thumb': ref['fanart'], 'icon': ref['fanart']})
+    choice = xbmcgui.Dialog().select('%s scenes' % (display_title(ref) or 'Movie'), items + [edit], useDetails=True)
+    if choice < 0:
+        return
+    if choice == len(items):
+        manage(params)
+        return
+    play(ref_params(ref, t='%.3f' % data['scenes'][choice]['start']))
+
+
 # ---------- entry point ----------
 
 def run(argv):
@@ -335,6 +358,8 @@ def run(argv):
         list_scenes(handle, params)
     elif action == 'play':
         play(params)
+    elif action == 'pick':
+        pick(params)
     elif action == 'manage':
         manage(params)
     elif action == 'add':
