@@ -295,23 +295,20 @@ def manage(params):
             continue
 
         scene = data['scenes'][choice - 1]
-        action = dlg.contextmenu(['Play from here', 'Rename', 'Change start time', 'Delete'])
+        action = dlg.contextmenu(['Rename', 'Change start time', 'Delete'])
         if action == 0:
-            play(ref_params(ref, t=scene['start']))
-            return
-        if action == 1:
             name = dlg.input('Scene name', defaultt=scene['title'])
             if name:
                 scene['title'] = name.strip()
                 changed = bool(store.save(ref, data, folder)) or changed
-        elif action == 2:
+        elif action == 1:
             text = dlg.input('Start time (h:mm:ss)', defaultt=store.fmt_time(scene['start']))
             start = store.parse_time(text) if text else None
             if start is not None and abs(start - scene['start']) > 0.01:
                 store.delete_thumb(folder, scene)  # thumbnail no longer matches
                 scene['start'], scene['thumb'] = start, ''
                 changed = bool(store.save(ref, data, folder)) or changed
-        elif action == 3:
+        elif action == 2:
             if dlg.yesno(HEADING, 'Delete "%s"?' % scene['title']):
                 store.delete_thumb(folder, scene)
                 data['scenes'].remove(scene)
@@ -330,7 +327,8 @@ def pick(params):
         return
     data, folder = store.load(ref)
     if not data['scenes']:
-        notify('No scenes yet. Add them with the bookmark-star button while watching')
+        # Nothing to play yet: go straight to the editor so a scene can be added by time.
+        manage(params)
         return
     items = _scene_items(data, folder, ref['fanart'])
     edit = xbmcgui.ListItem('Edit scenes…', 'Rename, retime or delete')

@@ -95,7 +95,7 @@ don't look washed out.
 
 Install both zips in Kodi (Settings → Add-ons → Install from zip file), on each device:
 
-1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.2.0.zip` from this branch.
+1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.2.1.zip` from this branch.
 2. **Skin:** on GitHub, switch to the `scene-selection` branch → **Code → Download ZIP**. Rename the
    folder inside the zip to `skin.arctic.fuse.3`, re-zip it, and install that.
 3. Add-ons → My add-ons → Look and feel → Skin → Arctic Fuse 3 → turn **Auto-update off**, so the
