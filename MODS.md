@@ -18,7 +18,8 @@ Your own scene list for each movie, chosen from the info screen **before** the m
   While watching, press the bookmark-star at the end of a scene and choose **End "…" here**,
   or set it in the editor. Scenes without an end keep playing as normal.
 - **Edit scenes:** the last tile in the Scenes row (or **Movie scenes…** in any movie's context menu)
-  lets you rename, retime or delete scenes, or add one by typing a time.
+  lets you rename, retime or delete scenes, add one by typing a time, or use **Keep only some
+  scenes…** to tick the ones to keep and delete the rest in one go.
 
 It's made of these parts in this repo:
 
@@ -122,7 +123,7 @@ don't look washed out.
 
 Install both zips in Kodi (Settings → Add-ons → Install from zip file), on each device:
 
-1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.3.1.zip` from this branch.
+1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.4.0.zip` from this branch.
 2. **Skin:** on GitHub, switch to the `scene-selection` branch → **Code → Download ZIP**. Rename the
    folder inside the zip to `skin.arctic.fuse.3`, re-zip it, and install that.
 3. Add-ons → My add-ons → Look and feel → Skin → Arctic Fuse 3 → turn **Auto-update off**, so the

@@ -408,10 +408,17 @@ def manage(params):
         data, folder = store.load(ref)
         add = xbmcgui.ListItem('Add a scene by time…',
                                'Or press the bookmark-star button while watching')
+        top = [add]
+        if len(data['scenes']) > 1:
+            top.append(xbmcgui.ListItem('Keep only some scenes…',
+                                        'Tick the scenes to keep; the rest are deleted'))
         choice = dlg.select('%s scenes' % (title or 'Movie'),
-                            [add] + _scene_items(data, folder, fanart), useDetails=True)
+                            top + _scene_items(data, folder, fanart), useDetails=True)
         if choice < 0:
             break
+        if choice == 1 and len(top) > 1:
+            changed = _keep_some(dlg, ref, data, folder, fanart) or changed
+            continue
         if choice == 0:
             text = dlg.input('Start time (h:mm:ss)', defaultt='0:00:00')
             start = store.parse_time(text) if text else None
@@ -428,7 +435,7 @@ def manage(params):
             changed = bool(store.save(ref, data, folder)) or changed
             continue
 
-        scene = data['scenes'][choice - 1]
+        scene = data['scenes'][choice - len(top)]
         options = [('rename', 'Rename'), ('start', 'Change start time'),
                    ('end', 'Change end time' if scene.get('end') else 'Set end time')]
         if scene.get('end'):
@@ -467,6 +474,32 @@ def manage(params):
     if changed:
         # Reload the info screen's Scenes row.
         xbmc.executebuiltin('Container.Refresh')
+
+
+def _keep_some(dlg, ref, data, folder, fanart):
+    """Checklist of all scenes, all ticked; unticked ones are deleted. Returns True if changed."""
+    scenes = data['scenes']
+    keep = dlg.multiselect('Tick the scenes to keep', _scene_items(data, folder, fanart),
+                           preselect=list(range(len(scenes))), useDetails=True)
+    if keep is None:
+        return False  # cancelled
+    remove = [s for i, s in enumerate(scenes) if i not in keep]
+    if not remove:
+        return False
+    if not keep:
+        question = 'Delete all %d scenes for this movie?' % len(scenes)
+    else:
+        question = 'Keep %d scene%s and delete %d?' % (len(keep), '' if len(keep) == 1 else 's', len(remove))
+    if not dlg.yesno(HEADING, question):
+        return False
+    for s in remove:
+        store.delete_thumb(folder, s)
+    data['scenes'] = [s for i, s in enumerate(scenes) if i in keep]
+    if store.save(ref, data, folder):
+        notify('Deleted %d scene%s' % (len(remove), '' if len(remove) == 1 else 's'))
+        return True
+    notify("Couldn't save the changes", error=True)
+    return False
 
 
 def _ask_end(dlg, scene):
