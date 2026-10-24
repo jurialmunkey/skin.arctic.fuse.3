@@ -9,7 +9,8 @@ Your own scene list for each movie, chosen from the info screen **before** the m
 
 - **Scenes row** on a movie's info screen: a row of thumbnails, one per scene. Pick one and the
   movie starts right at that moment. A **Scenes** button next to Play opens a scene picker.
-  The row and button only appear on movies that have scenes.
+  The button shows on every movie (for one with no scenes yet it opens the editor); the row only
+  appears once a movie has scenes.
 - **Add scenes while watching:** in the playback controls there's a bookmark-star button.
   Press it at the moment you want, type a name, and the scene is saved with a screenshot as its thumbnail.
 - **Edit scenes:** the last tile in the Scenes row (or **Movie scenes…** in any movie's context menu)

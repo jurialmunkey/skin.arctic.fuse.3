@@ -1623,12 +1623,6 @@
     </include>
 
     <include name="DialogInfo_VideoButtons">
-        <!-- Scenes (Pavan mod): always-loaded list so the Scenes button knows if this movie has scenes.
-             The Scenes row itself only loads once the rows below the buttons are focused. -->
-        <include content="Object_Hidden_List" condition="System.HasAddon(plugin.video.moviescenes)">
-            <param name="id">4901</param>
-            <content>$INFO[ListItem.DBID,plugin://plugin.video.moviescenes/?action=list&amp;dbid=,]</content>
-        </include>
         <include content="Object_Hidden_List">
             <param name="id">4900</param>
             <content>
@@ -1697,14 +1691,14 @@
                         <onclick>$VAR[Action_DialogInfo_PlayMedia]</onclick>
                     </include>
 
-                    <!-- Scenes (Pavan mod): pick a scene from plugin.video.moviescenes -->
+                    <!-- Scenes (Pavan mod): pick a scene, or add the first one, via plugin.video.moviescenes -->
                     <include content="Button_Underline_Switcher">
                         <param name="id">4020</param>
                         <param name="control">button</param>
                         <label>Scenes</label>
                         <onfocus>ClearProperty(DialogInfo.ArtworkView)</onfocus>
                         <onclick>RunPlugin("$INFO[ListItem.DBID,plugin://plugin.video.moviescenes/?action=pick&amp;dbid=,]")</onclick>
-                        <visible>String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(Container(4901).NumItems,0)</visible>
+                        <visible>String.IsEqual(ListItem.DBType,movie) + System.HasAddon(plugin.video.moviescenes)</visible>
                     </include>
 
                     <!-- Button 0 -->
