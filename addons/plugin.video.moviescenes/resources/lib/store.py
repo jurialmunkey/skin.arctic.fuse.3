@@ -83,6 +83,19 @@ def id_key(ref):
     return None
 
 
+def id_keys(ref):
+    """All ID-based folder names for a movie, TMDb first (scenes imported from Plex
+    may be filed under the IMDb ID when that's all Plex had)."""
+    keys = []
+    tmdb = str(ref.get('tmdb') or '').strip()
+    imdb = str(ref.get('imdb') or '').strip()
+    if tmdb.isdigit():
+        keys.append('tmdb-' + tmdb)
+    if imdb.startswith('tt'):
+        keys.append('imdb-' + imdb)
+    return keys
+
+
 def usable(ref):
     return is_file(ref.get('path', '')) or bool(id_key(ref))
 
@@ -101,12 +114,13 @@ def _hash_dir(video_path):
 def candidates(ref):
     """Folders to look in, best first."""
     out = []
-    path, key = ref.get('path', ''), id_key(ref)
+    path, keys = ref.get('path', ''), id_keys(ref)
     if is_file(path):
         out.append(sidecar_dir(path))
-    if key:
+    for key in keys:
         out.append(shared_root() + key + '/')
-        if shared_root() != LOCAL_ROOT:
+    if shared_root() != LOCAL_ROOT:
+        for key in keys:
             out.append(LOCAL_ROOT + key + '/')
     if is_file(path):
         out.append(_hash_dir(path))

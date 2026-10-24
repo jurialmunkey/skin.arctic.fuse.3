@@ -20,12 +20,13 @@ Your own scene list for each movie, chosen from the info screen **before** the m
 - **Edit scenes:** the last tile in the Scenes row (or **Movie scenes…** in any movie's context menu)
   lets you rename, retime or delete scenes, or add one by typing a time.
 
-It's made of three parts in this repo:
+It's made of these parts in this repo:
 
 | Part | What it does |
 |---|---|
 | `addons/plugin.video.moviescenes` | Kodi add-on that stores scenes, lists them and plays from a timestamp |
 | Skin changes in `1080i/` | Scenes row + button on the info screen (`Includes_DialogInfo.xml`), Add Scene button in the playback controls (`VideoOSD.xml`) |
+| `scripts/plex_import.py` | Optional: creates scenes for your whole Plex library from each movie's chapters |
 | `scripts/scene_thumbs.py` | Optional: makes missing thumbnails with ffmpeg and can import a movie's built-in chapters |
 
 ### Where scenes are stored
@@ -72,6 +73,27 @@ moviescenes/tmdb-949/0000512300.png
 Playing a scene goes through PlexKodiConnect as normal, so Plex still tracks watched status and
 resume points.
 
+### Adding scenes for the whole library at once (Plex)
+
+`scripts/plex_import.py` asks Plex for every movie's chapters and turns each chapter into a scene
+with a start and end time, named after the chapter, with Plex's chapter picture as the thumbnail.
+It writes them to the shared scenes folder by TMDb ID, so Kodi picks them up with PlexKodiConnect.
+Movies that already have scenes are skipped. On the PC with PlexKodiConnect it reads the Plex
+address and token from PlexKodiConnect's settings.
+
+```
+python scripts\plex_import.py --dry-run          # see what it would do
+python scripts\plex_import.py --movie "Heat"     # try one movie
+python scripts\plex_import.py                    # whole library
+```
+
+Options: `--no-ends` (scenes keep playing instead of returning to the info screen),
+`--min-chapters N` (skip movies with fewer chapters, default 3), `--no-thumbs`,
+`--scenes-folder`, `--server`, `--token`.
+
+Chapter pictures only exist if Plex's **Settings → Library → Generate chapter thumbnails** is on and
+has run. Without them, scenes fall back to the movie's fanart.
+
 ### Thumbnails
 
 When you add a scene during playback, Kodi saves a screenshot. Some devices capture a black frame
@@ -100,7 +122,7 @@ don't look washed out.
 
 Install both zips in Kodi (Settings → Add-ons → Install from zip file), on each device:
 
-1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.3.0.zip` from this branch.
+1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.3.1.zip` from this branch.
 2. **Skin:** on GitHub, switch to the `scene-selection` branch → **Code → Download ZIP**. Rename the
    folder inside the zip to `skin.arctic.fuse.3`, re-zip it, and install that.
 3. Add-ons → My add-ons → Look and feel → Skin → Arctic Fuse 3 → turn **Auto-update off**, so the
