@@ -20,9 +20,10 @@ A movie is described by a "ref" dict: {'path', 'tmdb', 'imdb', 'title', 'year'}.
 
 scenes.json:
     {"version": 1, "title": "Heat", "year": 1995, "tmdb": "949", "imdb": "tt0113277",
-     "scenes": [{"title": "Opening", "start": 512.3, "thumb": "0000512300.png"}]}
+     "scenes": [{"title": "Opening", "start": 512.3, "end": 731.0, "thumb": "0000512300.png"}]}
 
-`start` is seconds from the start of the movie. `thumb` is a file name inside the same
+`start` and the optional `end` are seconds from the start of the movie. With an end,
+the scene stops there and the movie's info screen comes back. `thumb` is a file name inside the same
 folder and may be empty.
 """
 import hashlib
@@ -130,11 +131,15 @@ def _read_json(folder):
     scenes = []
     for s in data.get('scenes') or []:
         try:
-            scenes.append({'title': str(s.get('title') or ''),
-                           'start': max(0.0, float(s.get('start') or 0)),
-                           'thumb': str(s.get('thumb') or '')})
+            scene = {'title': str(s.get('title') or ''),
+                     'start': max(0.0, float(s.get('start') or 0)),
+                     'thumb': str(s.get('thumb') or '')}
+            end = s.get('end')
+            if end not in (None, '') and float(end) > scene['start']:
+                scene['end'] = float(end)
         except (TypeError, ValueError):
             continue
+        scenes.append(scene)
     data['scenes'] = sorted(scenes, key=lambda s: s['start'])
     return data
 
@@ -168,6 +173,9 @@ def save(ref, data, folder=None):
         if ref.get(k) and not data.get(k):
             data[k] = ref[k]
     data['scenes'] = sorted(data.get('scenes') or [], key=lambda s: s['start'])
+    for s in data['scenes']:
+        if s.get('end') is None or s['end'] <= s['start']:
+            s.pop('end', None)  # no end time: the scene just keeps playing
     for f in candidates(ref):
         if f != folder and folder:
             # Moving up (e.g. the shared folder was just set): bring thumbnails along first.
@@ -207,6 +215,12 @@ def fmt_time(seconds):
     h, rem = divmod(seconds, 3600)
     m, s = divmod(rem, 60)
     return '%d:%02d:%02d' % (h, m, s) if h else '%d:%02d' % (m, s)
+
+
+def fmt_range(scene):
+    if scene.get('end'):
+        return '%s – %s' % (fmt_time(scene['start']), fmt_time(scene['end']))
+    return fmt_time(scene['start'])
 
 
 def parse_time(text):

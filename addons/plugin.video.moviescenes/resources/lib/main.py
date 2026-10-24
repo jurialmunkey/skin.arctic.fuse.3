@@ -31,7 +31,7 @@ def rpc(method, **params):
     return res.get('result') or {}
 
 
-def movie_details(dbid):
+def movie_details(dbid, props=None):
     try:
         dbid = int(dbid)
     except (TypeError, ValueError):
@@ -39,7 +39,7 @@ def movie_details(dbid):
     if dbid <= 0:
         return None
     res = rpc('VideoLibrary.GetMovieDetails', movieid=dbid,
-              properties=['file', 'title', 'year', 'art', 'uniqueid', 'imdbnumber'])
+              properties=props or ['file', 'title', 'year', 'art', 'uniqueid', 'imdbnumber'])
     return res.get('moviedetails')
 
 
@@ -133,15 +133,15 @@ def list_scenes(handle, params):
         for i, s in enumerate(scenes):
             thumb = store.thumb_path(folder, s) or fanart
             label = s['title'] or 'Scene %d' % (i + 1)
-            li = xbmcgui.ListItem(label, store.fmt_time(s['start']), offscreen=True)
+            li = xbmcgui.ListItem(label, store.fmt_range(s), offscreen=True)
             li.setArt({'thumb': thumb, 'landscape': thumb, 'fanart': fanart or thumb, 'icon': thumb})
             li.setProperty('override_landscape', thumb)
             li.setProperty('IsPlayable', 'false')
             tag = li.getVideoInfoTag()
             tag.setTitle(label)
             tag.setMediaType('video')
-            tag.setPlot('Scene %d of %d · starts at %s' % (i + 1, len(scenes), store.fmt_time(s['start'])))
-            items.append((url(**ref_params(ref, action='play', t='%.3f' % s['start'])), li, False))
+            tag.setPlot('Scene %d of %d · %s' % (i + 1, len(scenes), store.fmt_range(s)))
+            items.append((url(**ref_params(ref, action='play', **scene_params(s))), li, False))
         if scenes:
             li = xbmcgui.ListItem('Edit scenes', offscreen=True)
             li.setArt({'thumb': fanart, 'landscape': fanart, 'fanart': fanart})
@@ -156,16 +156,33 @@ def list_scenes(handle, params):
 
 # ---------- play from a scene ----------
 
+def scene_params(scene):
+    params = {'t': '%.3f' % scene['start']}
+    if scene.get('end'):
+        params['e'] = '%.3f' % scene['end']
+    return params
+
+
+def _float(value, default=0.0):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def play(params):
     ref = resolve(params)
     path, title, fanart, dbid = ref['path'], display_title(ref), ref['fanart'], ref['dbid']
-    try:
-        start = float(params.get('t', 0))
-    except ValueError:
-        start = 0.0
+    start = _float(params.get('t'))
+    end = _float(params.get('e'), None)
+    if end is not None and end <= start:
+        end = None
     if not path:
         notify('Movie not found in the library', error=True)
         return
+    # Remember where the movie was left off, so stopping at a scene's end doesn't move it.
+    resume = (movie_details(dbid, ['resume']) or {}).get('resume') if (dbid and end) else None
+
     xbmc.executebuiltin('Dialog.Close(all,true)')
     li = xbmcgui.ListItem(path=path, offscreen=True)
     li.setProperty('StartOffset', '%.3f' % start)
@@ -187,13 +204,96 @@ def play(params):
             return player.isPlayingVideo() and player.getTotalTime() > 0
         except RuntimeError:
             return False
-    if start > 0 and wait_for(started, 20000):
+    if not wait_for(started, 20000):
+        return
+    if start > 0:
         xbmc.sleep(500)
         try:
             if abs(player.getTime() - start) > 3:
                 player.seekTime(start)
         except RuntimeError:
             pass
+    if end is not None and watch_until(player, start, end):
+        finish_scene(player, ref, resume)
+
+
+def watch_until(player, start, end):
+    """Wait for playback to run past `end`. Returns True when it got there by playing,
+    False if the movie was stopped, changed, or skipped past the end on purpose."""
+    mon = xbmc.Monitor()
+    try:
+        playing = player.getPlayingFile()
+    except RuntimeError:
+        return False
+    prev = start
+    while not mon.abortRequested():
+        try:
+            if not player.isPlayingVideo() or player.getPlayingFile() != playing:
+                return False
+            now = player.getTime()
+        except RuntimeError:
+            return False
+        if prev < end <= now and now - prev < 5:
+            return True  # crossed the end marker by watching (a big jump means they skipped)
+        prev = now
+        if mon.waitForAbort(0.25):
+            return False
+    return False
+
+
+def finish_scene(player, ref, resume):
+    player.stop()
+    wait_for(lambda: not player.isPlaying(), 5000)
+    dbid = ref.get('dbid')
+    if dbid and resume is not None:
+        xbmc.sleep(1500)  # let Kodi (and PlexKodiConnect) finish saving the stop first
+        rpc('VideoLibrary.SetMovieDetails', movieid=dbid,
+            resume={'position': resume.get('position', 0), 'total': resume.get('total', 0)})
+    show_info(ref)
+
+
+INFO_PROPS = ['title', 'year', 'plot', 'tagline', 'art', 'file', 'uniqueid', 'imdbnumber', 'genre',
+              'runtime', 'rating', 'mpaa', 'studio', 'director', 'writer', 'country', 'premiered',
+              'set', 'userrating', 'playcount', 'resume']
+
+
+def show_info(ref):
+    """Reopen the movie's info screen."""
+    dbid = ref.get('dbid')
+    m = movie_details(dbid, INFO_PROPS) if dbid else None
+    if not m:
+        return
+    li = xbmcgui.ListItem(m.get('title', ''), path=m.get('file', ''), offscreen=True)
+    li.setArt(m.get('art') or {})
+    tag = li.getVideoInfoTag()
+    tag.setDbId(int(dbid))
+    tag.setMediaType('movie')
+    tag.setTitle(m.get('title', ''))
+    tag.setYear(int(m.get('year') or 0))
+    tag.setPlot(m.get('plot', ''))
+    tag.setTagLine(m.get('tagline', ''))
+    tag.setGenres(m.get('genre') or [])
+    tag.setDuration(int(m.get('runtime') or 0))
+    tag.setRating(float(m.get('rating') or 0))
+    tag.setMpaa(m.get('mpaa', ''))
+    tag.setStudios(m.get('studio') or [])
+    tag.setDirectors(m.get('director') or [])
+    tag.setWriters(m.get('writer') or [])
+    tag.setCountries(m.get('country') or [])
+    tag.setPremiered(m.get('premiered', ''))
+    tag.setSet(m.get('set', ''))
+    tag.setUserRating(int(m.get('userrating') or 0))
+    tag.setPlaycount(int(m.get('playcount') or 0))
+    ids = {k: str(v) for k, v in (m.get('uniqueid') or {}).items() if v}
+    if ids:
+        tag.setUniqueIDs(ids, 'tmdb' if 'tmdb' in ids else next(iter(ids)))
+    if m.get('imdbnumber'):
+        tag.setIMDBNumber(m['imdbnumber'])
+    resume = m.get('resume') or {}
+    if resume.get('position'):
+        tag.setResumePoint(float(resume['position']), float(resume.get('total') or 0))
+    xbmc.sleep(300)
+    xbmcgui.Dialog().info(li)
 
 
 # ---------- add a scene while watching ----------
@@ -209,12 +309,44 @@ def add_scene():
         return
     start = player.getTime()
     was_paused = xbmc.getCondVisibility('Player.Paused')
+    data, folder = store.load(ref)
+
+    def restore_pause():
+        if not was_paused and xbmc.getCondVisibility('Player.Paused'):
+            player.pause()
+
+    # If the latest scene before now has no end yet, offer to end it here.
+    open_scene = None
+    for s in data['scenes']:
+        if s['start'] < start - 1:
+            open_scene = s
+    if open_scene is not None and open_scene.get('end'):
+        open_scene = None
+    if open_scene is not None:
+        xbmc.executebuiltin('Dialog.Close(videoosd,true)')
+        if not was_paused:
+            player.pause()
+        choice = xbmcgui.Dialog().contextmenu(
+            ['New scene starting here (%s)' % store.fmt_time(start),
+             'End "%s" here (%s)' % (open_scene['title'], store.fmt_time(start))])
+        if choice < 0:
+            restore_pause()
+            return
+        if choice == 1:
+            open_scene['end'] = round(start, 3)
+            folder = store.save(ref, data, folder)
+            if folder:
+                notify('"%s" now plays %s' % (open_scene['title'], store.fmt_range(open_scene)))
+            else:
+                notify("Couldn't save the scene", error=True)
+            restore_pause()
+            return
 
     # Grab a clean frame: hide the playback controls and make sure video is moving
     # so the paused seek bar isn't in the picture.
     xbmc.executebuiltin('Dialog.Close(videoosd,true)')
     xbmc.executebuiltin('Dialog.Close(all,true)')
-    if was_paused:
+    if xbmc.getCondVisibility('Player.Paused'):
         player.pause()
     xbmc.sleep(600)
     capture = xbmcvfs.translatePath('special://temp/moviescenes_capture.png')
@@ -231,7 +363,6 @@ def add_scene():
     except RuntimeError:
         pass
 
-    data, folder = store.load(ref)
     count = len(data['scenes'])
     name = xbmcgui.Dialog().input('Name this scene (%s)' % store.fmt_time(start),
                                   defaultt='Scene %d' % (count + 1))
@@ -250,8 +381,7 @@ def add_scene():
             notify("Couldn't save the scene", error=True)
     if got_frame:
         xbmcvfs.delete(capture)
-    if not was_paused and xbmc.getCondVisibility('Player.Paused'):
-        player.pause()
+    restore_pause()
 
 
 # ---------- manage ----------
@@ -259,7 +389,7 @@ def add_scene():
 def _scene_items(data, folder, fanart):
     items = []
     for i, s in enumerate(data['scenes']):
-        li = xbmcgui.ListItem(s['title'] or 'Scene %d' % (i + 1), store.fmt_time(s['start']))
+        li = xbmcgui.ListItem(s['title'] or 'Scene %d' % (i + 1), store.fmt_range(s))
         thumb = store.thumb_path(folder, s) or fanart
         li.setArt({'thumb': thumb, 'icon': thumb})
         items.append(li)
@@ -290,25 +420,46 @@ def manage(params):
             name = dlg.input('Scene name', defaultt='Scene %d' % (len(data['scenes']) + 1))
             if not name:
                 continue
-            data['scenes'].append({'title': name.strip(), 'start': start, 'thumb': ''})
+            scene = {'title': name.strip(), 'start': start, 'thumb': ''}
+            end = _ask_end(dlg, scene)
+            if end:
+                scene['end'] = end
+            data['scenes'].append(scene)
             changed = bool(store.save(ref, data, folder)) or changed
             continue
 
         scene = data['scenes'][choice - 1]
-        action = dlg.contextmenu(['Rename', 'Change start time', 'Delete'])
-        if action == 0:
+        options = [('rename', 'Rename'), ('start', 'Change start time'),
+                   ('end', 'Change end time' if scene.get('end') else 'Set end time')]
+        if scene.get('end'):
+            options.append(('noend', 'Remove end time (keep playing)'))
+        options.append(('delete', 'Delete'))
+        picked = dlg.contextmenu([label for _, label in options])
+        action = options[picked][0] if picked >= 0 else None
+        if action == 'rename':
             name = dlg.input('Scene name', defaultt=scene['title'])
             if name:
                 scene['title'] = name.strip()
                 changed = bool(store.save(ref, data, folder)) or changed
-        elif action == 1:
+        elif action == 'start':
             text = dlg.input('Start time (h:mm:ss)', defaultt=store.fmt_time(scene['start']))
             start = store.parse_time(text) if text else None
             if start is not None and abs(start - scene['start']) > 0.01:
+                if scene.get('end') and start >= scene['end']:
+                    notify('The start has to be before the end (%s)' % store.fmt_time(scene['end']), error=True)
+                    continue
                 store.delete_thumb(folder, scene)  # thumbnail no longer matches
                 scene['start'], scene['thumb'] = start, ''
                 changed = bool(store.save(ref, data, folder)) or changed
-        elif action == 2:
+        elif action == 'end':
+            end = _ask_end(dlg, scene)
+            if end:
+                scene['end'] = end
+                changed = bool(store.save(ref, data, folder)) or changed
+        elif action == 'noend':
+            scene.pop('end', None)
+            changed = bool(store.save(ref, data, folder)) or changed
+        elif action == 'delete':
             if dlg.yesno(HEADING, 'Delete "%s"?' % scene['title']):
                 store.delete_thumb(folder, scene)
                 data['scenes'].remove(scene)
@@ -316,6 +467,19 @@ def manage(params):
     if changed:
         # Reload the info screen's Scenes row.
         xbmc.executebuiltin('Container.Refresh')
+
+
+def _ask_end(dlg, scene):
+    """Ask for an optional end time. Returns seconds, or None for no end."""
+    while True:
+        default = store.fmt_time(scene['end']) if scene.get('end') else ''
+        text = dlg.input('End time (h:mm:ss). Leave empty to keep playing', defaultt=default)
+        if not text:
+            return None
+        end = store.parse_time(text)
+        if end is not None and end > scene['start']:
+            return end
+        notify('The end has to be after the start (%s)' % store.fmt_time(scene['start']), error=True)
 
 
 # ---------- pick: the Scenes button on the info screen ----------
@@ -331,7 +495,7 @@ def pick(params):
         manage(params)
         return
     items = _scene_items(data, folder, ref['fanart'])
-    edit = xbmcgui.ListItem('Edit scenes…', 'Rename, retime or delete')
+    edit = xbmcgui.ListItem('Edit scenes…', 'Rename, set start and end times, or delete')
     edit.setArt({'thumb': ref['fanart'], 'icon': ref['fanart']})
     choice = xbmcgui.Dialog().select('%s scenes' % (display_title(ref) or 'Movie'), items + [edit], useDetails=True)
     if choice < 0:
@@ -339,7 +503,7 @@ def pick(params):
     if choice == len(items):
         manage(params)
         return
-    play(ref_params(ref, t='%.3f' % data['scenes'][choice]['start']))
+    play(ref_params(ref, **scene_params(data['scenes'][choice])))
 
 
 # ---------- entry point ----------

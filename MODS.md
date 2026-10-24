@@ -13,6 +13,10 @@ Your own scene list for each movie, chosen from the info screen **before** the m
   appears once a movie has scenes.
 - **Add scenes while watching:** in the playback controls there's a bookmark-star button.
   Press it at the moment you want, type a name, and the scene is saved with a screenshot as its thumbnail.
+- **End markers (optional):** give a scene an end time and it plays just that stretch, then
+  stops and brings back the movie's info screen. Your place in the movie isn't changed.
+  While watching, press the bookmark-star at the end of a scene and choose **End "…" here**,
+  or set it in the editor. Scenes without an end keep playing as normal.
 - **Edit scenes:** the last tile in the Scenes row (or **Movie scenes…** in any movie's context menu)
   lets you rename, retime or delete scenes, or add one by typing a time.
 
@@ -36,10 +40,10 @@ Heat (1995)/Heat (1995).scenes/0000512300.png
 
 ```json
 {"version": 1, "title": "Heat",
- "scenes": [{"title": "Opening heist", "start": 512.3, "thumb": "0000512300.png"}]}
+ "scenes": [{"title": "Opening heist", "start": 512.3, "end": 731.0, "thumb": "0000512300.png"}]}
 ```
 
-`start` is seconds from the start of the file. The file is plain JSON, so other tools
+`start` and the optional `end` are seconds from the start of the file. The file is plain JSON, so other tools
 (Silo, scripts) can read and write the same scenes.
 
 Kodi needs **write access** to the movie share for this. If it can't write there, scenes are
@@ -96,7 +100,7 @@ don't look washed out.
 
 Install both zips in Kodi (Settings → Add-ons → Install from zip file), on each device:
 
-1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.2.1.zip` from this branch.
+1. **Movie Scenes add-on:** `dist/plugin.video.moviescenes-1.3.0.zip` from this branch.
 2. **Skin:** on GitHub, switch to the `scene-selection` branch → **Code → Download ZIP**. Rename the
    folder inside the zip to `skin.arctic.fuse.3`, re-zip it, and install that.
 3. Add-ons → My add-ons → Look and feel → Skin → Arctic Fuse 3 → turn **Auto-update off**, so the
