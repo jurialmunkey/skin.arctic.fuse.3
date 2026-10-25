@@ -1781,6 +1781,24 @@
             <onclick>ActivateWindow(GameCheats)</onclick>
             <visible>RetroPlayer.SupportsCheats</visible>
         </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8007</param>
+            <param name="groupid">8107</param>
+            <param name="dialog">true</param>
+            <description>
+                Manual button. Opens the manual that came with the game, or offers to go
+                looking for one if there is none beside it. script.game.manuals reports
+                for itself when nothing can be found, so the button stays available
+                either way. Every condition is read before any action runs, so the
+                manual still opens in the same press once the add-on is installed or
+                enabled.
+            </description>
+            <param name="icon">special://skin/extras/icons/book-open-reader.png</param>
+            <label>$LOCALIZE[35310]</label>
+            <onclick condition="!System.HasAddon(script.game.manuals)">InstallAddon(script.game.manuals)</onclick>
+            <onclick condition="System.HasAddon(script.game.manuals) + !System.AddonIsEnabled(script.game.manuals)">EnableAddon(script.game.manuals)</onclick>
+            <onclick>RunScript(script.game.manuals,game=$ESCINFO[Player.FilenameAndPath],title=$ESCINFO[RetroPlayer.Title])</onclick>
+        </include>
 
         <include content="Settings_ButtonImage">
             <param name="id">8003</param>
