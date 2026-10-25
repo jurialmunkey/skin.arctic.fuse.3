@@ -44,7 +44,7 @@
 
                     <control type="group" id="5">
                         <control type="group">
-                            <visible>Container(3).HasFocus(1)</visible>
+                            <visible>Control.HasFocus(8100) | [!ControlGroup(5).HasFocus() + Container(3).HasFocus(1)]</visible>
                             <include content="List_DialogSelect">
                                 <param name="id">8100</param>
                                 <param name="detailed">True</param>
@@ -74,7 +74,7 @@
                             <bottom>20</bottom>
                             <left>20</left>
                             <right>20</right>
-                            <visible>Container(3).HasFocus(2)</visible>
+                            <visible>!ControlGroup(5).HasFocus() + Container(3).HasFocus(2)</visible>
                             <include content="Settings_Label">
                                 <param name="dialog">false</param>
                                 <param name="control">label</param>
@@ -172,7 +172,7 @@
 
 
                         <control type="group">
-                            <visible>Container(3).HasFocus(3)</visible>
+                            <visible>Control.HasFocus(8300) | [!ControlGroup(5).HasFocus() + Container(3).HasFocus(3)]</visible>
                             <include content="List_DialogSelect">
                                 <param name="id">8300</param>
                                 <param name="detailed">True</param>
@@ -190,11 +190,15 @@
                                 <pagecontrol>60</pagecontrol>
                                 <onleft>3</onleft>
                                 <onright>60</onright>
+                                <!-- Skin reload: Kodi refocuses this panel but resets list 3 and this panel to their first items -->
+                                <onfocus condition="Container(3).HasFocus(1)">Control.Move(3,1)</onfocus>
+                                <onfocus condition="Container(3).HasFocus(1)">SetFocus(8300,$INFO[Window(Home).Property(Settings.Customisation.Position)],absolute)</onfocus>
                                 <content>
                                     <item>
                                         <label>LibreELEC</label>
                                         <label2>service.libreelec.settings</label2>
                                         <icon>special://skin/extras/icons/libreelec.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>RunAddon(service.libreelec.settings)</onclick>
                                         <visible>System.AddonIsEnabled(service.libreelec.settings)</visible>
                                     </item>
@@ -202,6 +206,7 @@
                                         <label>CoreELEC</label>
                                         <label2>service.coreelec.settings</label2>
                                         <icon>special://skin/extras/icons/coreelec.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>RunAddon(service.coreelec.settings)</onclick>
                                         <visible>System.AddonIsEnabled(service.coreelec.settings)</visible>
                                     </item>
@@ -209,6 +214,7 @@
                                         <label>TMDbHelper</label>
                                         <label2>plugin.video.themoviedb.helper</label2>
                                         <icon>special://skin/extras/icons/tmdb.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>Addon.OpenSettings(plugin.video.themoviedb.helper)</onclick>
                                         <visible>System.AddonIsEnabled(plugin.video.themoviedb.helper)</visible>
                                     </item>
@@ -216,6 +222,7 @@
                                         <label>Artist Slideshow</label>
                                         <label2>script.artistslideshow</label2>
                                         <icon>special://skin/extras/icons/image.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>Addon.OpenSettings(script.artistslideshow)</onclick>
                                         <visible>System.AddonIsEnabled(script.artistslideshow)</visible>
                                     </item>
@@ -223,6 +230,7 @@
                                         <label>Up Next</label>
                                         <label2>service.upnext</label2>
                                         <icon>special://skin/extras/icons/arrows-turn-right.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>Addon.OpenSettings(service.upnext)</onclick>
                                         <visible>System.AddonIsEnabled(service.upnext)</visible>
                                     </item>
@@ -230,6 +238,7 @@
                                         <label>Arctic Mirage</label>
                                         <label2>screensaver.arctic.mirage</label2>
                                         <icon>special://skin/extras/icons/sun2.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>Addon.OpenSettings(screensaver.arctic.mirage)</onclick>
                                         <visible>System.AddonIsEnabled(screensaver.arctic.mirage)</visible>
                                     </item>
@@ -237,12 +246,14 @@
                                         <label>$LOCALIZE[31496]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/screwdriver-wrench.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>ActivateWindow(1115)</onclick>
                                     </item>
                                     <item>
                                         <label>$LOCALIZE[31275]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/search.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>SetProperty(Shortcuts.EditMenu,menu=searchwidgets,Home)</onclick>
                                         <onclick>ClearProperty(Shortcuts.EditMode,Home)</onclick>
                                         <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
@@ -252,6 +263,7 @@
                                         <label>$LOCALIZE[31434]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/gauge.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoOSD_Items,Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31434],Home)</onclick>
                                         <onclick>ActivateWindow(1118)</onclick>
@@ -260,6 +272,7 @@
                                         <label>$LOCALIZE[31151]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/circle-info.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoInfo_Items,Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[12003],Home)</onclick>
                                         <onclick>ActivateWindow(1118)</onclick>
@@ -268,12 +281,14 @@
                                         <label>$LOCALIZE[31321]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/table.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>runscript(script.skinvariables,action=buildviews,configure)</onclick>
                                     </item>
                                     <item>
                                         <label>$LOCALIZE[31234]</label>
                                         <label2>skin.arctic.fuse.3</label2>
                                         <icon>special://skin/extras/icons/cube.png</icon>
+                                        <onclick>SetProperty(Settings.Customisation.Position,$INFO[Container(8300).Position],Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_Indicators,Home)</onclick>
                                         <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31234],Home)</onclick>
                                         <onclick>ActivateWindow(1118)</onclick>
@@ -284,7 +299,7 @@
                         </control>
 
                         <control type="group">
-                            <visible>Container(3).HasFocus(4)</visible>
+                            <visible>Control.HasFocus(8400) | [!ControlGroup(5).HasFocus() + Container(3).HasFocus(4)]</visible>
                             <include content="List_DialogSelect">
                                 <param name="detailed">True</param>
                                 <param name="item_height">120</param>
@@ -303,12 +318,14 @@
                                 <right>0</right>
                                 <bottom>20</bottom>
                                 <onclick>Action(Info)</onclick>
+                                <!-- Skin reload: Kodi refocuses this panel but resets list 3 to its first item -->
+                                <onfocus condition="Container(3).HasFocus(1)">Control.Move(3,4)</onfocus>
                                 <content sortby="label">addons://user/all</content>
                             </include>
                         </control>
 
                         <control type="group">
-                            <visible>Container(3).HasFocus(5)</visible>
+                            <visible>Control.HasFocus(65) | [!ControlGroup(5).HasFocus() + Container(3).HasFocus(5)]</visible>
 
                             <control type="scrollbar" id="65">
                                 <centerright>0</centerright>
