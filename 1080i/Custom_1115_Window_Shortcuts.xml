@@ -10,6 +10,10 @@
     <onload>ClearProperty(widgetonly_menu)</onload>
     <onload>ClearProperty(show_all_hubs)</onload>
     <include>Action_Blur_Onload</include>
+    <include content="Hub_Onload_Window">
+        <param name="window">1109</param>
+        <param name="defaultname">$LOCALIZE[31639]</param>
+    </include>
     <onload>SetFocus(30000,0,absolute)</onload>
     <onload>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onload>
     <include>Action_BuildShortcuts_OnUnLoad</include>
@@ -31,63 +35,15 @@
                             <param name="altfocus">!Control.HasFocus(20)</param>
                             <param name="misc">!String.IsEmpty(ListItem.Property(enabled))</param>
                             <param name="variation">!String.IsEmpty(ListItem.Property(checkmark))</param>
+                            <param name="control">fixedlist</param>
+                            <focusposition>4</focusposition>
+                            <movement>4</movement>
                             <right>40</right>
                             <onright>340</onright>
+                            <bottom>80</bottom>
 
                             <content>
                                 <item id="0">
-                                    <label>$INFO[Skin.String(HomeSwitcher.home.Name)]</label>
-                                    <icon>$VAR[Home_Icon_home]</icon>
-                                    <property name="editmenu">menu=home</property>
-                                    <property name="rename">HomeSwitcher.Home</property>
-                                    <property name="enabled">true</property>
-                                    <property name="mode">$INFO[Skin.String(HomeSwitcher.Home.Mode)]</property>
-                                </item>
-                                <item id="1">
-                                    <label>$INFO[Skin.String(HomeSwitcher.1101.Name)]</label>
-                                    <icon>$VAR[Home_Icon_1101]</icon>
-                                    <property name="checkmark">true</property>
-                                    <property name="editmenu">menu=1101</property>
-                                    <property name="rename">HomeSwitcher.1101</property>
-                                    <property name="enabled">$INFO[Skin.String(HomeSwitcher.1101.Toggle)]</property>
-                                    <property name="mode">$INFO[Skin.String(HomeSwitcher.1101.Mode)]</property>
-                                    <onclick condition="String.IsEmpty(Container(30000).ListItem.Property(enabled))">Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.Toggle],true)</onclick>
-                                    <onclick condition="String.IsEqual(Container(30000).ListItem.Property(enabled),true)">Skin.Reset($INFO[Container(30000).ListItem.Property(rename),,.Toggle])</onclick>
-                                </item>
-                                <item id="2">
-                                    <label>$INFO[Skin.String(HomeSwitcher.1102.Name)]</label>
-                                    <icon>$VAR[Home_Icon_1102]</icon>
-                                    <property name="checkmark">true</property>
-                                    <property name="editmenu">menu=1102</property>
-                                    <property name="rename">HomeSwitcher.1102</property>
-                                    <property name="enabled">$INFO[Skin.String(HomeSwitcher.1102.Toggle)]</property>
-                                    <property name="mode">$INFO[Skin.String(HomeSwitcher.1102.Mode)]</property>
-                                    <onclick condition="String.IsEmpty(Container(30000).ListItem.Property(enabled))">Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.Toggle],true)</onclick>
-                                    <onclick condition="String.IsEqual(Container(30000).ListItem.Property(enabled),true)">Skin.Reset($INFO[Container(30000).ListItem.Property(rename),,.Toggle])</onclick>
-                                </item>
-                                <item id="3">
-                                    <label>$INFO[Skin.String(HomeSwitcher.1103.Name)]</label>
-                                    <icon>$VAR[Home_Icon_1103]</icon>
-                                    <property name="checkmark">true</property>
-                                    <property name="editmenu">menu=1103</property>
-                                    <property name="rename">HomeSwitcher.1103</property>
-                                    <property name="enabled">$INFO[Skin.String(HomeSwitcher.1103.Toggle)]</property>
-                                    <property name="mode">$INFO[Skin.String(HomeSwitcher.1103.Mode)]</property>
-                                    <onclick condition="String.IsEmpty(Container(30000).ListItem.Property(enabled))">Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.Toggle],true)</onclick>
-                                    <onclick condition="String.IsEqual(Container(30000).ListItem.Property(enabled),true)">Skin.Reset($INFO[Container(30000).ListItem.Property(rename),,.Toggle])</onclick>
-                                </item>
-                                <item id="4">
-                                    <label>$INFO[Skin.String(HomeSwitcher.1104.Name)]</label>
-                                    <icon>$VAR[Home_Icon_1104]</icon>
-                                    <property name="checkmark">true</property>
-                                    <property name="editmenu">menu=1104</property>
-                                    <property name="rename">HomeSwitcher.1104</property>
-                                    <property name="enabled">$INFO[Skin.String(HomeSwitcher.1104.Toggle)]</property>
-                                    <property name="mode">$INFO[Skin.String(HomeSwitcher.1104.Mode)]</property>
-                                    <onclick condition="String.IsEmpty(Container(30000).ListItem.Property(enabled))">Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.Toggle],true)</onclick>
-                                    <onclick condition="String.IsEqual(Container(30000).ListItem.Property(enabled),true)">Skin.Reset($INFO[Container(30000).ListItem.Property(rename),,.Toggle])</onclick>
-                                </item>
-                                <item id="5">
                                     <label>$LOCALIZE[137]</label>
                                     <icon>special://skin/extras/icons/search.png</icon>
                                     <property name="checkmark">true</property>
@@ -95,14 +51,59 @@
                                     <property name="enabled">$VAR[Action_SearchEnabled]</property>
                                     <onclick>Skin.ToggleSetting(HomeSwitcher.DisableSearch)</onclick>
                                 </item>
-                                <item id="8">
-                                    <label>$LOCALIZE[31604]</label>
-                                    <icon>special://skin/extras/icons/window-restore.png</icon>
-                                </item>
-                                <item id="9">
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">1</param>
+                                    <param name="window">home</param>
+                                    <param name="toggle">false</param>
+                                    <param name="enabled">true</param>
+                                </include>
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">2</param>
+                                    <param name="window">1101</param>
+                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1101.Toggle)]</param>
+                                </include>
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">3</param>
+                                    <param name="window">1102</param>
+                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1102.Toggle)]</param>
+                                </include>
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">4</param>
+                                    <param name="window">1103</param>
+                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1103.Toggle)]</param>
+                                </include>
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">5</param>
+                                    <param name="window">1104</param>
+                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1104.Toggle)]</param>
+                                </include>
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">6</param>
+                                    <param name="window">1106</param>
+                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1106.Toggle)]</param>
+                                </include>
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">7</param>
+                                    <param name="window">1107</param>
+                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1107.Toggle)]</param>
+                                </include>
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">8</param>
+                                    <param name="window">1108</param>
+                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1108.Toggle)]</param>
+                                </include>
+                                <include content="DialogShortcuts_Hub_Category">
+                                    <param name="id">9</param>
+                                    <param name="window">1109</param>
+                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1109.Toggle)]</param>
+                                </include>
+                                <item id="10">
                                     <label>$LOCALIZE[33060]</label>
                                     <icon>special://skin/extras/icons/power.png</icon>
                                     <property name="editmenu">menu=power</property>
+                                    <property name="checkmark">true</property>
+                                    <property name="enabled">$VAR[Action_PowerEnabled]</property>
+                                    <onclick>Skin.ToggleSetting(HomeSwitcher.LoopBack)</onclick>
                                 </item>
                             </content>
                         </include>
@@ -124,7 +125,6 @@
 
                                 <include>DialogShortcuts_Window_Settings_Search</include>
                                 <include>DialogShortcuts_Window_Settings_Hubs</include>
-                                <include>DialogShortcuts_Window_Settings_Additional</include>
                                 <include>DialogShortcuts_Window_Settings_Power</include>
 
                             </control>

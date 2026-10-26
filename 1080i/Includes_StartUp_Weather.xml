@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="Animation_StartUp_Selection">
+        <include content="Animation_Fade_In">
+            <param name="type">Visible</param>
+            <param name="time">background_fadetime</param>
+        </include>
+        <include content="Animation_Fade_Out">
+            <param name="type">Hidden</param>
+            <param name="time">background_fadetime</param>
+        </include>
+    </include>
+
+    <include name="Background_StartUp_LakeRipple">
+        <control type="image">
+            <description>Alternating horizontal lake ripples</description>
+            <aspectratio align="center" aligny="center">scale</aspectratio>
+            <texture diffuse="special://home/addons/resource.images.arctic.splash/resources/masks/fuji/lake-$PARAM[band].webp">$PARAM[texture]</texture>
+            <fadetime>background_fadetime</fadetime>
+            <animation effect="slide" start="$PARAM[start],0" end="$PARAM[end],0" time="2300" tween="sine" easing="inout" pulse="true" condition="true" reversible="false">Conditional</animation>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_Lake">
+        <control type="image">
+            <description>Lake</description>
+            <aspectratio align="center" aligny="center">scale</aspectratio>
+            <texture diffuse="special://home/addons/resource.images.arctic.splash/resources/masks/fuji/lake.webp">$PARAM[texture]</texture>
+            <fadetime>background_fadetime</fadetime>
+        </control>
+        <!-- Shared diffuse masks combine the shoreline matte with ripple bands.
+             Opposing horizontal slides ripple the reflection without moving the bank. -->
+        <include content="Background_StartUp_LakeRipple">
+            <param name="texture">$PARAM[texture]</param>
+            <param name="band">odd</param>
+            <param name="start">-3</param>
+            <param name="end">3</param>
+        </include>
+        <include content="Background_StartUp_LakeRipple">
+            <param name="texture">$PARAM[texture]</param>
+            <param name="band">even</param>
+            <param name="start">3</param>
+            <param name="end">-3</param>
+        </include>
+    </include>
+
+    <include name="Background_StartUp_DriftPair">
+        <control type="group">
+            <left>$PARAM[left]</left>
+            <!-- Mirroring the neighbour joins matching edges without changing the artwork. -->
+            <control type="image">
+                <width>1920</width>
+                <height>$PARAM[height]</height>
+                <aspectratio>stretch</aspectratio>
+                <texture flipy="$PARAM[flipy]" colordiffuse="$PARAM[colordiffuse]" diffuse="$PARAM[diffuse]">$PARAM[texture]</texture>
+                <fadetime>background_fadetime</fadetime>
+            </control>
+            <control type="image">
+                <left>1920</left>
+                <width>1920</width>
+                <height>$PARAM[height]</height>
+                <aspectratio>stretch</aspectratio>
+                <texture flipx="true" flipy="$PARAM[flipy]" colordiffuse="$PARAM[colordiffuse]" diffuse="$PARAM[diffuse]">$PARAM[texture]</texture>
+                <fadetime>background_fadetime</fadetime>
+            </control>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_TextureDrift">
+        <param name="diffuse"></param>
+        <param name="top">0</param>
+        <param name="height">1080</param>
+        <param name="flipy">false</param>
+        <param name="colordiffuse">ffffffff</param>
+        <param name="time">600000</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <top>$PARAM[top]</top>
+                <!-- Repeat a complete original/mirrored pair at constant speed.
+                     At reset the adjacent pair occupies exactly the same screen position.
+                     Shared timing keeps the clouds and their reflection together. -->
+                <animation effect="slide" start="0,0" end="3840,0" time="$PARAM[time]" condition="$PARAM[visible]" reversible="false" loop="true">Conditional</animation>
+                <include content="Background_StartUp_DriftPair">
+                    <param name="left">-3840</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="height">$PARAM[height]</param>
+                    <param name="flipy">$PARAM[flipy]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="texture">$PARAM[texture]</param>
+                </include>
+                <include content="Background_StartUp_DriftPair">
+                    <param name="left">0</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="height">$PARAM[height]</param>
+                    <param name="flipy">$PARAM[flipy]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="texture">$PARAM[texture]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Background_StartUp_PrecipitationStrip">
+        <param name="texture">special://home/addons/resource.images.arctic.splash/resources/effects/rain.png</param>
+        <param name="width">480</param>
+        <param name="height">1080</param>
+        <param name="colordiffuse">b3dce8ff</param>
+        <param name="flipx">false</param>
+        <definition>
+            <include content="Background_FallingTexture">
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">$PARAM[left]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
+                <param name="time">$PARAM[time]</param>
+                <param name="aspectratio">stretch</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="flipx">$PARAM[flipx]</param>
+                <param name="condition">$PARAM[visible]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Background_StartUp_Rain">
+        <control type="group">
+            <!-- Weather can arrive after window load and can change in the splash preview. -->
+            <visible>$PARAM[visible]</visible>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">0</param>
+                <param name="time">1050</param>
+            </include>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">480</param>
+                <param name="time">1250</param>
+                <param name="flipx">true</param>
+            </include>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">960</param>
+                <param name="time">1150</param>
+            </include>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">1440</param>
+                <param name="time">950</param>
+                <param name="flipx">true</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_HeavyRainBand">
+        <control type="group">
+            <left>$PARAM[left]</left>
+            <!-- Narrower copies increase drop density while the taller tile covers
+                 the rotated screen. Reuse the seamless precipitation renderer. -->
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">0</param>
+                <param name="width">240</param>
+                <param name="height">2280</param>
+                <param name="time">$PARAM[time]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">240</param>
+                <param name="width">240</param>
+                <param name="height">2280</param>
+                <param name="time">$PARAM[time]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">480</param>
+                <param name="width">240</param>
+                <param name="height">2280</param>
+                <param name="time">$PARAM[time]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">720</param>
+                <param name="width">240</param>
+                <param name="height">2280</param>
+                <param name="time">$PARAM[time]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">960</param>
+                <param name="width">240</param>
+                <param name="height">2280</param>
+                <param name="time">$PARAM[time]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+            <include content="Background_StartUp_PrecipitationStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">1200</param>
+                <param name="width">240</param>
+                <param name="height">2280</param>
+                <param name="time">$PARAM[time]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_HeavyRainLayer">
+        <control type="group">
+            <!-- Rotate the fall and the streaks together. Overscan covers every
+                 corner throughout the gust, with seamless vertical tile wraps. -->
+            <animation effect="rotate" start="$PARAM[angle]" end="$PARAM[angle]" center="960,540" time="0" condition="$PARAM[visible]" reversible="false">Conditional</animation>
+            <animation effect="slide" start="-70,0" end="70,0" time="$PARAM[gust_time]" tween="sine" easing="inout" pulse="true" condition="$PARAM[visible]" reversible="false">Conditional</animation>
+            <control type="group">
+                <top>-600</top>
+                <include content="Background_StartUp_HeavyRainBand">
+                    <param name="visible">$PARAM[visible]</param>
+                    <param name="left">-1200</param>
+                    <param name="time">$PARAM[time]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <include content="Background_StartUp_HeavyRainBand">
+                    <param name="visible">$PARAM[visible]</param>
+                    <param name="left">240</param>
+                    <param name="time">$PARAM[time]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <include content="Background_StartUp_HeavyRainBand">
+                    <param name="visible">$PARAM[visible]</param>
+                    <param name="left">1680</param>
+                    <param name="time">$PARAM[time]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_HeavyRain">
+        <control type="group">
+            <visible>$PARAM[visible]</visible>
+            <include content="Background_StartUp_HeavyRainLayer">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="angle">32</param>
+                <param name="time">1550</param>
+                <param name="gust_time">1400</param>
+                <param name="colordiffuse">a6c8dcf5</param>
+            </include>
+            <include content="Background_StartUp_HeavyRainLayer">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="angle">40</param>
+                <param name="time">1150</param>
+                <param name="gust_time">1050</param>
+                <param name="colordiffuse">cce3eeff</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_SnowStrip">
+        <param name="flipx">false</param>
+        <definition>
+            <control type="group">
+                <top>-20</top>
+                <!-- Sway independently of the seamless fall, so neither motion snaps at wrap. -->
+                <animation effect="slide" start="-36,-10" end="36,10" time="$PARAM[lilt_time]" tween="sine" easing="inout" pulse="true" condition="$PARAM[visible]" reversible="false">Conditional</animation>
+                <include content="Background_StartUp_PrecipitationStrip">
+                    <param name="visible">$PARAM[visible]</param>
+                    <param name="texture">special://home/addons/resource.images.arctic.splash/resources/effects/snow.png</param>
+                    <param name="left">$PARAM[left]</param>
+                    <param name="width">600</param>
+                    <param name="height">1120</param>
+                    <param name="time">$PARAM[time]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="flipx">$PARAM[flipx]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Background_StartUp_Snow">
+        <control type="group">
+            <visible>$PARAM[visible]</visible>
+            <!-- Overscan covers the sideways sway; different fall and lilt periods add depth. -->
+            <include content="Background_StartUp_SnowStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">-240</param>
+                <param name="time">18000</param>
+                <param name="lilt_time">4700</param>
+                <param name="colordiffuse">80e4edff</param>
+            </include>
+            <include content="Background_StartUp_SnowStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">360</param>
+                <param name="time">22000</param>
+                <param name="lilt_time">6100</param>
+                <param name="colordiffuse">66e4edff</param>
+                <param name="flipx">true</param>
+            </include>
+            <include content="Background_StartUp_SnowStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">960</param>
+                <param name="time">16000</param>
+                <param name="lilt_time">5300</param>
+                <param name="colordiffuse">99edf3ff</param>
+            </include>
+            <include content="Background_StartUp_SnowStrip">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="left">1560</param>
+                <param name="time">20000</param>
+                <param name="lilt_time">6900</param>
+                <param name="colordiffuse">80e4edff</param>
+                <param name="flipx">true</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_LightningFlash">
+        <param name="cycle_time">10000</param>
+        <param name="colordiffuse">ffffffff</param>
+        <param name="diffuse"></param>
+        <definition>
+            <control type="image">
+                <aspectratio align="center" aligny="center">scale</aspectratio>
+                <texture colordiffuse="$PARAM[colordiffuse]" diffuse="$PARAM[diffuse]">$PARAM[texture]</texture>
+                <fadetime>background_fadetime</fadetime>
+                <animation type="Conditional" condition="$PARAM[visible]" reversible="false" loop="true">
+                    <!-- Fade effects multiply: the first gates the attack, the second the decay. -->
+                    <effect type="fade" start="0" end="100" time="30" delay="$PARAM[attack]" />
+                    <effect type="fade" start="100" end="0" time="220" delay="$PARAM[decay]" />
+                    <!-- Identity effect holds the dark interval and aligns cloud/lake cycles. -->
+                    <effect type="fade" start="100" end="100" time="$PARAM[cycle_time]" />
+                </animation>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Background_StartUp_LightningBurst">
+        <param name="cycle_time">10000</param>
+        <param name="colordiffuse">ffffffff</param>
+        <param name="echo_colordiffuse">b3ffffff</param>
+        <param name="diffuse"></param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <!-- Reuse the authored bolts and their reflections; no full-screen animation frames. -->
+                <include content="Background_StartUp_LightningFlash">
+                    <param name="visible">$PARAM[visible]</param>
+                    <param name="cycle_time">$PARAM[cycle_time]</param>
+                    <param name="texture">$PARAM[texture]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="attack">1200</param>
+                    <param name="decay">1250</param>
+                </include>
+                <include content="Background_StartUp_LightningFlash">
+                    <param name="visible">$PARAM[visible]</param>
+                    <param name="cycle_time">$PARAM[cycle_time]</param>
+                    <param name="texture">$PARAM[texture]</param>
+                    <param name="colordiffuse">$PARAM[echo_colordiffuse]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="attack">1480</param>
+                    <param name="decay">1530</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+    <include name="Background_StartUp_Lightning">
+        <param name="diffuse"></param>
+        <param name="severe_visible">false</param>
+        <param name="colordiffuse">ffffffff</param>
+        <param name="echo_colordiffuse">b3ffffff</param>
+        <definition>
+            <!-- Fixed timing in each branch lets severity change while previewing;
+                 animation duration attributes are set when controls are loaded. -->
+            <include content="Background_StartUp_LightningBurst">
+                <param name="visible">[$PARAM[visible]] + ![$PARAM[severe_visible]]</param>
+                <param name="diffuse">$PARAM[diffuse]</param>
+                <param name="cycle_time">10000</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="echo_colordiffuse">$PARAM[echo_colordiffuse]</param>
+            </include>
+            <include content="Background_StartUp_LightningBurst">
+                <param name="visible">[$PARAM[visible]] + [$PARAM[severe_visible]]</param>
+                <param name="diffuse">$PARAM[diffuse]</param>
+                <param name="cycle_time">5000</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="echo_colordiffuse">$PARAM[echo_colordiffuse]</param>
+            </include>
+        </definition>
+    </include>
+</includes>

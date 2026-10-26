@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Shared live startup and interactive preview composition. -->
+    <variable name="Color_StartUp_Scene_Countryside_Ripples">
+        <value condition="$EXP[Exp_StartUp_Scene_Season_winter]">26ffffff</value>
+        <value>ffffffff</value>
+    </variable>
+    <include name="Background_StartUp_Scene_Countryside_Ripple">
+        <definition>
+            <control type="group">
+                <!-- Registered hourly ripple strips retain bright reflected details.
+                     Their shore guards cover the entire horizontal excursion. -->
+                <animation effect="slide" start="$PARAM[start],0" end="$PARAM[end],0" time="$PARAM[time]" tween="sine" easing="inout" pulse="true" condition="$EXP[Exp_StartUp_Scene_Selected_Countryside]" reversible="false">Conditional</animation>
+                <include content="Background_StartUp_Scene_Image">
+                    <param name="texture">special://home/addons/resource.images.arctic.splash/resources/scenes/countryside/effects/pond-v3/$PARAM[season]/$VAR[Image_StartUp_Scene_Layer_TimeHour]-$PARAM[band].webp</param>
+                    <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/countryside/pond/$PARAM[season]-$PARAM[band].webp</param>
+                    <param name="colordiffuse">$VAR[Color_StartUp_Scene_Countryside_Ripples]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+    <include name="Background_StartUp_Scene_Countryside_Stream">
+        <!-- The matte stays registered to the banks in every frame. Only water
+             pixels flow; there is no slide or fade of the stream control. -->
+        <control type="multiimage">
+            <left>480</left>
+            <top>660</top>
+            <width>760</width>
+            <height>420</height>
+            <aspectratio>stretch</aspectratio>
+            <imagepath background="true" diffuse="special://home/addons/resource.images.arctic.splash/resources/masks/countryside/stream/$PARAM[season].webp">special://home/addons/resource.images.arctic.splash/resources/scenes/countryside/effects/stream-frames/$PARAM[season]/$VAR[Image_StartUp_Scene_Layer_TimeHour]/</imagepath>
+            <timeperimage>80</timeperimage>
+            <fadetime>0</fadetime>
+            <pauseatend>0</pauseatend>
+            <randomize>false</randomize>
+            <loop>yes</loop>
+        </control>
+    </include>
+    <include name="Background_StartUp_Scene_Countryside_Water">
+        <include content="Background_StartUp_Scene_Image">
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/scenes/countryside/layers/06-water-v3/$PARAM[season]/$VAR[Image_StartUp_Scene_Layer_BaseWeather]/$VAR[Image_StartUp_Scene_Layer_TimeHour].webp</param>
+            <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/countryside/water/$PARAM[season].webp</param>
+        </include>
+        <!-- The registered water base carries hourly reflections beneath the loops. -->
+        <include content="Background_StartUp_Scene_Countryside_Ripple">
+            <param name="season">$PARAM[season]</param>
+            <param name="band">0</param>
+            <param name="start">-5</param>
+            <param name="end">5</param>
+            <param name="time">1400</param>
+        </include>
+        <include content="Background_StartUp_Scene_Countryside_Ripple">
+            <param name="season">$PARAM[season]</param>
+            <param name="band">1</param>
+            <param name="start">5</param>
+            <param name="end">-5</param>
+            <param name="time">1800</param>
+        </include>
+        <include content="Background_StartUp_Scene_Countryside_Stream">
+            <param name="season">$PARAM[season]</param>
+        </include>
+        <include content="Background_StartUp_Lightning">
+            <param name="visible">$EXP[Exp_StartUp_Scene_Weather_Thunderstorm]</param>
+            <param name="severe_visible">$EXP[Exp_StartUp_Scene_Weather_SevereThunderstorm]</param>
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/scenes/countryside/layers/06-water-v3/$PARAM[season]/thunderstorm/$VAR[Image_StartUp_Scene_Layer_TimeHour].webp</param>
+            <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/countryside/water/$PARAM[season].webp</param>
+        </include>
+    </include>
+    <include name="Background_StartUp_Scene_Countryside_Landscape">
+        <include content="Background_StartUp_Scene_Image">
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/scenes/countryside/layers/09-lighting-v3/$PARAM[season]/$VAR[Image_StartUp_Scene_Layer_TimeHour].webp</param>
+            <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/countryside/landscape/$PARAM[season].webp</param>
+        </include>
+        <include content="Background_StartUp_Scene_Countryside_Water">
+            <param name="season">$PARAM[season]</param>
+        </include>
+        <include content="Background_StartUp_Scene_Image">
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/scenes/countryside/layers/07-foreground-v3/$PARAM[season]/$VAR[Image_StartUp_Scene_Layer_TimeHour].webp</param>
+            <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/countryside/foreground/$PARAM[season].webp</param>
+        </include>
+        <include content="Background_StartUp_Scene_Image">
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/shared/conditions/$VAR[Image_StartUp_Scene_Conditions].webp</param>
+        </include>
+        <include content="Background_StartUp_TextureDrift">
+            <param name="visible">$EXP[Exp_StartUp_Scene_Weather_Hazy]</param>
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/layers/08-conditions/hazy/$VAR[Image_StartUp_Scene_Layer_ConditionsHour].webp</param>
+            <param name="time">1200000</param>
+            <param name="colordiffuse">38ffffff</param>
+        </include>
+    </include>
+    <include name="Background_StartUp_Scene_Countryside_Season">
+        <definition>
+            <control type="group">
+                <!-- Literal diffuse paths follow live season selection. -->
+                <visible>$EXP[Exp_StartUp_Scene_Season_$PARAM[season]]</visible>
+                <include>Animation_StartUp_Selection</include>
+                <include content="Background_StartUp_Scene_Countryside_Landscape">
+                    <param name="season">$PARAM[season]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+    <include name="Background_StartUp_Scene_Countryside">
+        <control type="group">
+            <!-- Preview scene changes remain live; startup includes only its selected scene. -->
+            <visible>$EXP[Exp_StartUp_Scene_Selected_Countryside]</visible>
+            <include content="Background_StartUp_Scene_Sky">
+                <param name="layers">special://home/addons/resource.images.arctic.splash/resources/scenes/countryside/layers</param>
+                <param name="sky_folder">01-sky-horizon</param>
+                <param name="sun_folder">02-sun-moon-horizon</param>
+                <param name="glow_folder">04-sunset-sunrise-directional</param>
+                <param name="cloud_top">-60</param>
+                <param name="cloud_height">702</param>
+            </include>
+            <include content="Background_StartUp_Scene_Countryside_Season">
+                <param name="season">spring</param>
+            </include>
+            <include content="Background_StartUp_Scene_Countryside_Season">
+                <param name="season">summer</param>
+            </include>
+            <include content="Background_StartUp_Scene_Countryside_Season">
+                <param name="season">autumn</param>
+            </include>
+            <include content="Background_StartUp_Scene_Countryside_Season">
+                <param name="season">winter</param>
+            </include>
+            <include>Background_StartUp_Scene_Overlays</include>
+            <include>Background_StartUp_Scene_Dimming</include>
+        </control>
+    </include>
+</includes>

@@ -2,7 +2,7 @@
 <includes>
 
     <variable name="Label_Setting_LiveTV_Style">
-        <value condition="Skin.HasSetting(Hub.1107.SquareChannels)">$LOCALIZE[31320]</value>
+        <value condition="$EXP[DialogShortcuts_Hub_SquareChannels]">$LOCALIZE[31320]</value>
         <value>$LOCALIZE[31045]</value>
     </variable>
 
@@ -51,6 +51,11 @@
         <value>$INFO[ListItem.FileName]</value>
     </variable>
 
+    <variable name="Label_GameAchievements_Header">
+        <value condition="!String.IsEmpty(Window.Property(Achievements.GameTitle))">$INFO[Window.Property(Achievements.GameTitle)]</value>
+        <value>$LOCALIZE[35287]</value>
+    </variable>
+
     <variable name="Label_GameSave_Sub">
         <value condition="!String.IsEmpty(ListItem.Label2)">$INFO[ListItem.Label2]</value>
         <value condition="String.IsEqual(ListItem.Label,$LOCALIZE[15314])">$LOCALIZE[31176]</value>
@@ -77,7 +82,7 @@
     </variable>
 
     <variable name="Label_Setting_Hub_LiveTV_Search">
-        <value condition="!Skin.String(HomeSwitcher.1107.Mode,Standard)">$LOCALIZE[137]</value>
+        <value condition="!String.IsEqual(Container(30000).ListItem.Property(mode),Standard)">$LOCALIZE[137]</value>
         <value>$LOCALIZE[568]</value>
     </variable>
 
@@ -96,10 +101,6 @@
 
     <variable name="Label_Setting_BackgroundStyle">
         <value condition="!Skin.HasSetting(Info.EnableStylisedBackgrounds)">$LOCALIZE[31438]</value>
-        <value>$LOCALIZE[31634]</value>
-    </variable>
-    <variable name="Label_Setting_TitleStyle">
-        <value condition="!Skin.HasSetting(Info.EnableStylisedTitles)">$LOCALIZE[31438]</value>
         <value>$LOCALIZE[31634]</value>
     </variable>
 
@@ -188,10 +189,28 @@
         <value>$INFO[Container(22001).ListItemNoWrap(-1).Label]</value>
     </variable>
 
+    <variable name="Label_SkinSettings_CategoryDescription">
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),0)">$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31103], $LOCALIZE[31177], $LOCALIZE[31487] $LOCALIZE[31150][/LOWERCASE].</value>
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),1)">$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[14078], $LOCALIZE[33068], $LOCALIZE[31487] $LOCALIZE[31486][/LOWERCASE].</value>
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),2)">$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[19033] $LOCALIZE[736], $LOCALIZE[31208], $LOCALIZE[31487] $LOCALIZE[31239][/LOWERCASE].</value>
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),3)">$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[19033] $LOCALIZE[20459], $LOCALIZE[126], $LOCALIZE[31202], $LOCALIZE[31487] $LOCALIZE[31235][/LOWERCASE].</value>
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),4)">$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31044], $LOCALIZE[31487] $LOCALIZE[31103][/LOWERCASE].</value>
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),5)">$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31174], $LOCALIZE[31185], $LOCALIZE[478], $LOCALIZE[31297], $LOCALIZE[31487] $LOCALIZE[31482][/LOWERCASE].</value>
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),6)">$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[14125], $LOCALIZE[12999], $LOCALIZE[31487] $LOCALIZE[13200][/LOWERCASE].</value>
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),7)">$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[39024] $LOCALIZE[31487] $LOCALIZE[14260][/LOWERCASE].</value>
+        <value condition="String.IsEqual(Window(Home).Property(Settings.Skin.Category),8)">$LOCALIZE[31550]</value>
+    </variable>
+
+    <variable name="Value_SkinSettings_NextLevel">
+        <value condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),1)">2</value>
+        <value condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),2)">3</value>
+        <value>1</value>
+    </variable>
+
     <variable name="Label_Settings_InfoText">
         <value condition="System.HasVisibleModalDialog | Control.HasFocus(60) | Control.HasFocus(20)">$INFO[System.BuildVersion,Kodi ,]$INFO[System.AddonVersion(skin.arctic.fuse.3), • AF3 v,]</value>
         <value condition="Window.IsVisible(SettingsCategory.xml) + [ControlGroup(3).HasFocus() | ControlGroup(5).HasFocus()]">$INFO[Control.GetLabel(6)]</value>
-        <value condition="Window.IsVisible(SkinSettings.xml) + [Control.HasFocus(10000) | String.IsEmpty(Window.Property(InfoText.Header))]">$INFO[Container(10000).ListItem.Label2]</value>
+        <value condition="Window.IsVisible(SkinSettings.xml) + [ControlGroup(10000).HasFocus() | String.IsEmpty(Window.Property(InfoText.Header))]">$VAR[Label_SkinSettings_CategoryDescription]</value>
         <value condition="Window.IsVisible(SkinSettings.xml) + !String.IsEmpty(Window.Property(InfoText.Header))">$INFO[Window.Property(InfoText.Message)]</value>
         <value condition="Window.IsVisible(addonbrowser) + Control.HasFocus(50)">$INFO[Container(50).ListItem.AddonName,, • ]$INFO[Container(50).ListItem.AddonVersion,v,]$INFO[Container(50).ListItem.AddonOrigin, • ,]</value>
         <value>$INFO[System.BuildVersion,Kodi ,]$INFO[System.AddonVersion(skin.arctic.fuse.3), • AF3 v,]</value>
@@ -289,8 +308,8 @@
     <variable name="Label_Setting_ColourBackground">
         <value condition="String.IsEmpty(Skin.String(Background.Image))">$LOCALIZE[571]</value>
         <value condition="Skin.String(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg)">$LOCALIZE[31220]</value>
-        <value condition="Skin.String(Background.Image,special://skin/extras/backgrounds/blur/blur_blur.jpg)">$LOCALIZE[762]</value>
-        <value condition="Skin.String(Background.Image,special://skin/extras/backgrounds/blur/pink_blur.jpg)">$LOCALIZE[31224]</value>
+        <value condition="Skin.String(Background.Image,special://skin/extras/backgrounds/blur/blue_blur.jpg)">$LOCALIZE[762]</value>
+        <value condition="[Skin.String(Background.Image,special://skin/extras/backgrounds/blur/pink_blur.jpg) | Skin.String(Background.Image,special://skin/extras/backgrounds/pink_blur.jpg)]">$LOCALIZE[31224]</value>
         <value condition="Skin.String(Background.Image,special://skin/extras/backgrounds/blur/orange_blur.jpg)">$LOCALIZE[13342]</value>
         <value condition="Skin.String(Background.Image,special://skin/extras/backgrounds/blur/slate_blur.jpg)">$LOCALIZE[31221]</value>
         <value condition="Skin.String(Background.Image,special://skin/extras/backgrounds/blur/coal_blur.jpg)">$LOCALIZE[31222]</value>
@@ -1257,6 +1276,27 @@
         <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.base_plot))">$INFO[Window(Home).Property(TMDBHelper.ListItem.base_plot)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Plot))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Plot)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDBHelper.ListItem.biography))">$INFO[Window(Home).Property(TMDBHelper.ListItem.biography)]</value>
+    </variable>
+
+    <variable name="Label_Setting_Hub_Type">
+        <value condition="String.IsEqual(Container(30000).ListItem.Property(hubtype),NextAired)">$LOCALIZE[31605]</value>
+        <value condition="String.IsEqual(Container(30000).ListItem.Property(hubtype),LiveTV)">$LOCALIZE[31085] / PVR</value>
+        <value condition="String.IsEqual(Container(30000).ListItem.Property(hubtype),Addons)">$LOCALIZE[24001]</value>
+        <value>$LOCALIZE[31639]</value>
+    </variable>
+    <variable name="Label_Setting_NextAired_Source">
+        <value condition="$EXP[DialogShortcuts_Hub_trakt_calendar]">Trakt</value>
+        <value>$LOCALIZE[14022]</value>
+    </variable>
+
+    <variable name="Label_GameManuals_Finder_Detail">
+        <value condition="String.IsEqual(Window.Property(state),results)">$INFO[Window.Property(game)]$INFO[Container(200).NumItems,  •  , $LOCALIZE[31022]]</value>
+        <value>$INFO[Window.Property(game)]</value>
+    </variable>
+
+    <variable name="Label_GameManual_Sub">
+        <value condition="!String.IsEmpty(ListItem.Property(manual.system))">$INFO[ListItem.Property(manual.system)]$INFO[ListItem.Property(manual.region),  •  ]$INFO[ListItem.Property(manual.year),  •  ]$INFO[ListItem.Property(manual.publisher),  •  ]</value>
+        <value>$INFO[ListItem.Property(manual.region)]$INFO[ListItem.Property(manual.year),  •  ]$INFO[ListItem.Property(manual.publisher),  •  ]</value>
     </variable>
 
 </includes>

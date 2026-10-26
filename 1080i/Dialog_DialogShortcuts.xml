@@ -563,13 +563,13 @@
         <onclick condition="!$EXP[DialogShortcuts_IsSubGrouping_Expression]">ClearProperty(Shortcuts.Groupings.Subgroup,Home)</onclick>
     </include>
 
-    <expression name="DialogShortcuts_IsSubGrouping_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homesubmenu)]</expression>
+    <expression name="DialogShortcuts_IsSubGrouping_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homesubmenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1106submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1107submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1108submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1109submenu)]</expression>
 
     <expression name="DialogShortcuts_IsWidgetMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=widgets)]</expression>
 
     <expression name="DialogShortcuts_IsCombinedWidget_Expression">String.IsEqual(Container(22001).ListItem.Property(widget_combined),True)</expression>
 
-    <expression name="DialogShortcuts_IsStandardHubWidgets_Expression">[[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homewidgets) + String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101widgets) + String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102widgets) + String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103widgets) + String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104widgets) + String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Standard)]]</expression>
+    <expression name="DialogShortcuts_IsStandardHubWidgets_Expression">[[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homewidgets) + String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101widgets) + String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102widgets) + String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103widgets) + String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104widgets) + String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1106widgets) + String.IsEqual(Skin.String(HomeSwitcher.1106.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1107widgets) + String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1108widgets) + String.IsEqual(Skin.String(HomeSwitcher.1108.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1109widgets) + String.IsEqual(Skin.String(HomeSwitcher.1109.Mode),Standard)]]</expression>
 
     <expression name="DialogShortcuts_HasCustomSubmenu_Expression">[String.IsEqual(Container(22001).ListItem.Property(path),Custom_Submenu)]</expression>
 
@@ -594,6 +594,18 @@
         <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1104)">
             <param name="window">1104</param>
         </include>
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1106)">
+            <param name="window">1106</param>
+        </include>
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1107)">
+            <param name="window">1107</param>
+        </include>
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1108)">
+            <param name="window">1108</param>
+        </include>
+        <include content="$PARAM[include]" condition="String.IsEqual(Window(Home).Property(Dialog.1124.Window),HomeSwitcher.1109)">
+            <param name="window">1109</param>
+        </include>
     </include>
 
     <include name="DialogCustom_Shortcuts_Items_ShortcutConfigure">
@@ -617,7 +629,7 @@
             <onclick>SetProperty(setting,HomeSwitcher.$PARAM[window].Icon,1117)</onclick>
             <onclick>ActivateWindow(1117)</onclick>
         </include>
-        <include content="Settings_Button" description="Path">
+        <include content="Settings_Button" description="Path" condition="Skin.String(HomeSwitcher.$PARAM[window].Type,Custom)">
             <param name="dialog">false</param>
             <param name="id">8003</param>
             <label>$LOCALIZE[573]</label>
@@ -779,7 +791,7 @@
     </include>
 
     <include name="DialogShortcuts_Window_Settings_Hubs">
-        <param name="visible">[String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=home) | String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=1101) | String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=1102) | String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=1103) | String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=1104)]</param>
+        <param name="visible">!String.IsEmpty(Container(30000).ListItem.Property(rename))</param>
         <param name="enabled">!String.IsEmpty(Container(30000).ListItem.Property(enabled))</param>
         <definition>
 
@@ -791,25 +803,18 @@
                 <label>$LOCALIZE[33063]</label>
                 <visible>$PARAM[enabled]</visible>
                 <visible>$PARAM[visible]</visible>
+                <visible>!String.IsEqual(Container(30000).ListItem.Property(window),home)</visible>
             </include>
-            <!-- <include content="Settings_Button" description="Enabled">
-                <param name="control">radiobutton</param>
+            <include content="Settings_Button" description="Hub type">
                 <param name="id">9002</param>
-                <label>$LOCALIZE[305]</label>
-                <selected>$PARAM[enabled]</selected>
-                <onclick condition="String.IsEmpty(Container(30000).ListItem.Property(enabled))">Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.Toggle],true)</onclick>
-                <onclick condition="String.IsEqual(Container(30000).ListItem.Property(enabled),true)">Skin.Reset($INFO[Container(30000).ListItem.Property(rename),,.Toggle])</onclick>
-                <visible>$PARAM[visible]</visible>
-                <visible>!String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=home)</visible>
-            </include> -->
-            <include content="Settings_Button" description="Layout">
-                <param name="id">9003</param>
-                <label>$LOCALIZE[31158]</label>
-                <label2>$VAR[Label_Setting_Hub_Mode]</label2>
-                <onclick>SetProperty(Dialog.1125.Value,$INFO[Container(30000).ListItem.Property(rename)],Home)</onclick>
-                <onclick>ActivateWindow(1125)</onclick>
+                <label>$LOCALIZE[31638]</label>
+                <label2>$VAR[Label_Setting_Hub_Type]</label2>
+                <onclick>SetProperty(Dialog.1128.Value,$INFO[Container(30000).ListItem.Property(rename)],Home)</onclick>
+                <onclick>SetProperty(Dialog.1128.Window,$INFO[Container(30000).ListItem.Property(window)],Home)</onclick>
+                <onclick>ActivateWindow(1128)</onclick>
                 <visible>$PARAM[enabled]</visible>
                 <visible>$PARAM[visible]</visible>
+                <visible>!String.IsEqual(Container(30000).ListItem.Property(window),home)</visible>
             </include>
             <include content="Settings_Label">
                 <param name="id">9004</param>
@@ -837,6 +842,23 @@
                 <visible>$PARAM[enabled]</visible>
                 <visible>$PARAM[visible]</visible>
             </include>
+            <include content="Settings_Label">
+                <param name="id">9009</param>
+                <param name="control">label</param>
+                <label>$LOCALIZE[31103]</label>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+            </include>
+            <include content="Settings_Button" description="Layout">
+                <param name="id">9003</param>
+                <label>$LOCALIZE[31158]</label>
+                <label2>$VAR[Label_Setting_Hub_Mode]</label2>
+                <onclick>SetProperty(Dialog.1125.Value,$INFO[Container(30000).ListItem.Property(rename)],Home)</onclick>
+                <onclick>ActivateWindow(1125)</onclick>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>!String.IsEqual(Container(30000).ListItem.Property(hubtype),NextAired)</visible>
+            </include>
             <include content="Settings_Button" description="Spotlight">
                 <param name="id">9007</param>
                 <label>$LOCALIZE[31105]</label>
@@ -845,6 +867,7 @@
                 <onclick>ActivateWindow(1124)</onclick>
                 <visible>$PARAM[enabled]</visible>
                 <visible>$PARAM[visible]</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),Custom)</visible>
             </include>
             <include content="Settings_Button" description="Widgets">
                 <param name="id">9008</param>
@@ -855,203 +878,11 @@
                 <onclick>ActivateWindow(1116)</onclick>
                 <visible>$PARAM[enabled]</visible>
                 <visible>$PARAM[visible]</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),Custom)</visible>
             </include>
-        </definition>
-    </include>
-
-    <include name="DialogShortcuts_Window_Settings_Additional">
-        <param name="visible">String.IsEmpty(Container(30000).ListItem.Property(editmenu))</param>
-        <definition>
-
-            <!-- Additional 9600 | 9700 -->
-
-            <!-- Next Aired -->
-            <include content="Settings_Label">
-                <param name="id">9601</param>
-                <param name="control">label</param>
-                <description>Default Setting Label</description>
-                <label>$LOCALIZE[31605]</label>
-                <visible>$PARAM[visible]</visible>
-            </include>
-            <include content="Settings_Button" description="Next Aired">
-                <param name="id">9602</param>
-                <param name="control">radiobutton</param>
-                <label>$LOCALIZE[449]</label>
-                <onclick condition="String.IsEmpty(Skin.String(HomeSwitcher.1106.Toggle))">Skin.SetString(HomeSwitcher.1106.Toggle,true)</onclick>
-                <onclick condition="!String.IsEmpty(Skin.String(HomeSwitcher.1106.Toggle))">Skin.Reset(HomeSwitcher.1106.Toggle)</onclick>
-                <selected>!String.IsEmpty(Skin.String(HomeSwitcher.1106.Toggle))</selected>
-                <visible>$PARAM[visible]</visible>
-            </include>
-
-            <!-- PVR -->
-            <include content="Settings_Label">
-                <param name="id">9610</param>
-                <param name="control">label</param>
-                <description>Default Setting Label</description>
-                <label>$LOCALIZE[31085] / PVR</label>
-                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
-                <visible>$PARAM[visible]</visible>
-            </include>
-            <include content="Settings_Button" description="Live TV">
-                <param name="id">9611</param>
-                <param name="control">radiobutton</param>
-                <label>$LOCALIZE[449]</label>
-                <onclick condition="String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))">Skin.SetString(HomeSwitcher.1107.Toggle,true)</onclick>
-                <onclick condition="!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))">Skin.Reset(HomeSwitcher.1107.Toggle)</onclick>
-                <selected>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</selected>
-                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
-                <visible>$PARAM[visible]</visible>
-            </include>
-            <include content="Settings_Button" description="Layout">
-                <param name="id">9616</param>
-                <label>$LOCALIZE[31158]</label>
-                <label2>$INFO[Skin.String(HomeSwitcher.1107.Mode)]</label2>
-                <onclick>SetProperty(Dialog.1125.Value,HomeSwitcher.1107,Home)</onclick>
-                <onclick>ActivateWindow(1125)</onclick>
-                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
-                <visible>$PARAM[visible]</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Style">
-                <param name="id">9617</param>
-                <label>$LOCALIZE[736]</label>
-                <label2>$VAR[Label_Setting_LiveTV_Style]</label2>
-                <onclick>Skin.ToggleSetting(Hub.1107.SquareChannels)</onclick>
-                <visible>$PARAM[visible]</visible>
-                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Search">
-                <param name="id">9612</param>
-                <param name="control">radiobutton</param>
-                <label> - $VAR[Label_Setting_Hub_LiveTV_Search]</label>
-                <onclick>Skin.ToggleSetting(Hub.1107.DisableSearch)</onclick>
-                <selected>!Skin.HasSetting(Hub.1107.DisableSearch)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Channels">
-                <param name="id">9613</param>
-                <param name="control">radiobutton</param>
-                <label> - $LOCALIZE[14301]</label>
-                <onclick>Skin.ToggleSetting(Hub.1107.DisableChannels)</onclick>
-                <selected>!Skin.HasSetting(Hub.1107.DisableChannels)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Groups">
-                <param name="id">9614</param>
-                <param name="control">radiobutton</param>
-                <label> - $LOCALIZE[19146]</label>
-                <onclick>Skin.ToggleSetting(Hub.1107.DisableGroups)</onclick>
-                <selected>!Skin.HasSetting(Hub.1107.DisableGroups)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Recordings">
-                <param name="id">9615</param>
-                <param name="control">radiobutton</param>
-                <label> - $LOCALIZE[19017]</label>
-                <onclick>Skin.ToggleSetting(Hub.1107.DisableRecordings)</onclick>
-                <selected>!Skin.HasSetting(Hub.1107.DisableRecordings)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>System.HasPVRAddon + PVR.HasTVChannels</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))</visible>
-            </include>
-
-            <!-- ADDONS -->
-            <include content="Settings_Label">
-                <param name="id">9620</param>
-                <param name="control">label</param>
-                <description>Default Setting Label</description>
-                <label>$LOCALIZE[24001]</label>
-                <visible>$PARAM[visible]</visible>
-            </include>
-            <include content="Settings_Button" description="Addons">
-                <param name="id">9621</param>
-                <param name="control">radiobutton</param>
-                <label>$LOCALIZE[449]</label>
-                <onclick condition="String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))">Skin.SetString(HomeSwitcher.1108.Toggle,true)</onclick>
-                <onclick condition="!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))">Skin.Reset(HomeSwitcher.1108.Toggle)</onclick>
-                <selected>!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))</selected>
-                <visible>$PARAM[visible]</visible>
-            </include>
-            <include content="Settings_Button" description="Layout">
-                <param name="id">9627</param>
-                <label>$LOCALIZE[31158]</label>
-                <label2>$INFO[Skin.String(HomeSwitcher.1108.Mode)]</label2>
-                <onclick>SetProperty(Dialog.1125.Value,HomeSwitcher.1108,Home)</onclick>
-                <onclick>ActivateWindow(1125)</onclick>
-                <visible>$PARAM[visible]</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Video Addons">
-                <param name="id">9622</param>
-                <param name="control">radiobutton</param>
-                <label> - $LOCALIZE[157]</label>
-                <onclick>Skin.ToggleSetting(Hub.1108.DisableVideo)</onclick>
-                <selected>!Skin.HasSetting(Hub.1108.DisableVideo)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Music Addons">
-                <param name="id">9623</param>
-                <param name="control">radiobutton</param>
-                <label> - $LOCALIZE[249]</label>
-                <onclick>Skin.ToggleSetting(Hub.1108.DisableMusic)</onclick>
-                <selected>!Skin.HasSetting(Hub.1108.DisableMusic)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Picture Addons">
-                <param name="id">9624</param>
-                <param name="control">radiobutton</param>
-                <label> - $LOCALIZE[31011]</label>
-                <onclick>Skin.ToggleSetting(Hub.1108.DisablePicture)</onclick>
-                <selected>!Skin.HasSetting(Hub.1108.DisablePicture)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Program Addons">
-                <param name="id">9625</param>
-                <param name="control">radiobutton</param>
-                <label> - $LOCALIZE[350]</label>
-                <onclick>Skin.ToggleSetting(Hub.1108.DisableProgram)</onclick>
-                <selected>!Skin.HasSetting(Hub.1108.DisableProgram)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))</visible>
-            </include>
-            <include content="Settings_Button" description="Game Addons">
-                <param name="id">9626</param>
-                <param name="control">radiobutton</param>
-                <label> - $LOCALIZE[10821]</label>
-                <onclick>Skin.ToggleSetting(Hub.1108.DisableGame)</onclick>
-                <selected>!Skin.HasSetting(Hub.1108.DisableGame)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>!String.IsEmpty(Skin.String(HomeSwitcher.1108.Toggle))</visible>
-            </include>
-
-            <!-- Settings -->
-            <include content="Settings_Label">
-                <param name="id">9630</param>
-                <param name="control">label</param>
-                <description>Default Setting Label</description>
-                <label>$LOCALIZE[5]</label>
-                <visible>$PARAM[visible]</visible>
-                <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
-            </include>
-            <include content="Settings_Button" description="Loopback">
-                <param name="id">9631</param>
-                <param name="control">radiobutton</param>
-                <label>$LOCALIZE[449]</label>
-                <onclick>Skin.ToggleSetting(HomeSwitcher.LoopBack)</onclick>
-                <selected>!Skin.HasSetting(HomeSwitcher.LoopBack)</selected>
-                <visible>$PARAM[visible]</visible>
-                <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
-            </include>
+            <include>DialogShortcuts_Window_Settings_NextAired</include>
+            <include>DialogShortcuts_Window_Settings_LiveTV</include>
+            <include>DialogShortcuts_Window_Settings_Addons</include>
         </definition>
     </include>
 
@@ -1183,4 +1014,145 @@
             </include>
         </definition>
     </include>
+    <include name="DialogShortcuts_Hub_Category">
+        <param name="toggle">true</param>
+        <param name="enabled">true</param>
+        <definition>
+            <item id="$PARAM[id]">
+                <label>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Name)]</label>
+                <icon>$VAR[Home_Icon_$PARAM[window]]</icon>
+                <property name="editmenu">menu=$PARAM[window]</property>
+                <property name="rename">HomeSwitcher.$PARAM[window]</property>
+                <property name="window">$PARAM[window]</property>
+                <property name="enabled">$PARAM[enabled]</property>
+                <property name="mode">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Mode)]</property>
+                <property name="hubtype">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Type)]</property>
+                <include content="DialogShortcuts_Hub_Category_Toggle" condition="$PARAM[toggle]">
+                    <param name="window">$PARAM[window]</param>
+                </include>
+            </item>
+        </definition>
+    </include>
+
+    <include name="DialogShortcuts_Hub_Category_Toggle">
+        <definition>
+            <property name="checkmark">true</property>
+            <onclick condition="String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Toggle))">Skin.SetString(HomeSwitcher.$PARAM[window].Toggle,true)</onclick>
+            <onclick condition="!String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Toggle))">Skin.Reset(HomeSwitcher.$PARAM[window].Toggle)</onclick>
+        </definition>
+    </include>
+
+    <include name="DialogShortcuts_Window_Settings_NextAired">
+        <definition>
+            <include content="Settings_Button">
+                <param name="id">9602</param>
+                <label>$LOCALIZE[31640]</label>
+                <label2>$VAR[Label_Setting_NextAired_Source]</label2>
+                <onclick condition="$EXP[DialogShortcuts_Hub_trakt_calendar]">Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.UpNextMode],library_nextaired)</onclick>
+                <onclick condition="!$EXP[DialogShortcuts_Hub_trakt_calendar]">Skin.SetString($INFO[Container(30000).ListItem.Property(rename),,.UpNextMode],trakt_calendar)</onclick>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),NextAired)</visible>
+            </include>
+        </definition>
+    </include>
+
+    <include name="DialogShortcuts_Window_Settings_LiveTV">
+        <definition>
+            <include content="Settings_Button">
+                <param name="id">9617</param>
+                <label>$LOCALIZE[736]</label>
+                <label2>$VAR[Label_Setting_LiveTV_Style]</label2>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].SquareChannels)</onclick>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),LiveTV)</visible>
+            </include>
+            <include content="Settings_Button">
+                <param name="id">9612</param>
+                <param name="control">radiobutton</param>
+                <label>$VAR[Label_Setting_Hub_LiveTV_Search]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableSearch)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisableSearch]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),LiveTV)</visible>
+            </include>
+            <include content="Settings_Button">
+                <param name="id">9613</param>
+                <param name="control">radiobutton</param>
+                <label>$LOCALIZE[14301]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableChannels)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisableChannels]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),LiveTV)</visible>
+            </include>
+            <include content="Settings_Button">
+                <param name="id">9614</param>
+                <param name="control">radiobutton</param>
+                <label>$LOCALIZE[19146]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableGroups)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisableGroups]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),LiveTV)</visible>
+            </include>
+            <include content="Settings_Button">
+                <param name="id">9615</param>
+                <param name="control">radiobutton</param>
+                <label>$LOCALIZE[19017]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableRecordings)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisableRecordings]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),LiveTV)</visible>
+            </include>
+        </definition>
+    </include>
+
+    <include name="DialogShortcuts_Window_Settings_Addons">
+        <definition>
+            <include content="Settings_Button">
+                <param name="id">9622</param>
+                <param name="control">radiobutton</param>
+                <label>$LOCALIZE[157]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableVideo)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisableVideo]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),Addons)</visible>
+            </include>
+            <include content="Settings_Button">
+                <param name="id">9623</param>
+                <param name="control">radiobutton</param>
+                <label>$LOCALIZE[249]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableMusic)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisableMusic]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),Addons)</visible>
+            </include>
+            <include content="Settings_Button">
+                <param name="id">9624</param>
+                <param name="control">radiobutton</param>
+                <label>$LOCALIZE[31011]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisablePicture)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisablePicture]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),Addons)</visible>
+            </include>
+            <include content="Settings_Button">
+                <param name="id">9625</param>
+                <param name="control">radiobutton</param>
+                <label>$LOCALIZE[31010]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableProgram)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisableProgram]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),Addons)</visible>
+            </include>
+            <include content="Settings_Button">
+                <param name="id">9626</param>
+                <param name="control">radiobutton</param>
+                <label>$LOCALIZE[10821]</label>
+                <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableGame)</onclick>
+                <selected>!$EXP[DialogShortcuts_Hub_DisableGame]</selected>
+                <visible>!String.IsEmpty(Container(30000).ListItem.Property(enabled))</visible>
+                <visible>String.IsEqual(Container(30000).ListItem.Property(hubtype),Addons)</visible>
+            </include>
+        </definition>
+    </include>
+
 </includes>

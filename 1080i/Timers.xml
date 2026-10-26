@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<timers>
+    <timer>
+        <name>splashtest_autotime</name>
+        <description>Advance the splash preview by one hour every three seconds.</description>
+        <!-- Timers are loaded directly, without the includes expression expansion pass. -->
+        <start reset="true">Window.IsVisible(1191) + String.IsEqual(Window(1191).Property(SplashTest.AutoTime),true)</start>
+        <stop>!Window.IsVisible(1191) | !String.IsEqual(Window(1191).Property(SplashTest.AutoTime),true) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(splashtest_autotime),3)</stop>
+        <onstop condition="Window.IsVisible(1191) + String.IsEqual(Window(1191).Property(SplashTest.AutoTime),true)">SetProperty(SplashTest.Hour,$VAR[Value_StartUp_Test_NextHour],1191)</onstop>
+    </timer>
+</timers>

@@ -1,0 +1,298 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<includes>
+    <!-- Local 24-hour ranges shared by the startup layer selectors. -->
+    <expression name="Exp_StartUp_Time_BeforeDawn">System.Time(00:00,05:00)</expression>
+    <expression name="Exp_StartUp_Time_DawnToDusk">System.Time(06:00,18:00)</expression>
+    <expression name="Exp_StartUp_Time_Daytime">System.Time(08:00,17:00)</expression>
+    <expression name="Exp_StartUp_Time_0500_0600">System.Time(05:00,06:00)</expression>
+    <expression name="Exp_StartUp_Time_0600_0700">System.Time(06:00,07:00)</expression>
+    <expression name="Exp_StartUp_Time_0700_0800">System.Time(07:00,08:00)</expression>
+    <expression name="Exp_StartUp_Time_1700_1800">System.Time(17:00,18:00)</expression>
+    <expression name="Exp_StartUp_Time_1800_1900">System.Time(18:00,19:00)</expression>
+    <expression name="Exp_StartUp_Time_1900_2000">System.Time(19:00,20:00)</expression>
+    <!-- Registered 1920x1080 image layers with separate animated weather overlays. -->
+    <!-- Kodi weather codes: https://kodi.wiki/view/Weather_addons#Weather_Codes -->
+    <expression name="Exp_StartUp_CustomImage">!String.IsEmpty(Skin.String(Startup.ImageFolder)) + !Skin.String(Startup.ImageFolder,special://skin/extras/backgrounds/launch/)</expression>
+    <!-- Severe thunderstorms share lightning with storms and precipitation with heavy rain. -->
+    <expression name="Exp_StartUp_Weather_SevereThunderstorm">String.IsEqual(Weather.FanartCode,3) | String.IsEqual(Weather.FanartCode,03)</expression>
+    <expression name="Exp_StartUp_Weather_Thunderstorm">String.IsEqual(Weather.FanartCode,0) | String.IsEqual(Weather.FanartCode,00) | String.IsEqual(Weather.FanartCode,1) | String.IsEqual(Weather.FanartCode,01) | String.IsEqual(Weather.FanartCode,2) | String.IsEqual(Weather.FanartCode,02) | String.IsEqual(Weather.FanartCode,3) | String.IsEqual(Weather.FanartCode,03) | String.IsEqual(Weather.FanartCode,4) | String.IsEqual(Weather.FanartCode,04) | String.IsEqual(Weather.FanartCode,37) | String.IsEqual(Weather.FanartCode,38) | String.IsEqual(Weather.FanartCode,39) | String.IsEqual(Weather.FanartCode,45) | String.IsEqual(Weather.FanartCode,47)</expression>
+    <expression name="Exp_StartUp_Weather_Hazy">String.IsEqual(Weather.FanartCode,19) | String.IsEqual(Weather.FanartCode,20) | String.IsEqual(Weather.FanartCode,21) | String.IsEqual(Weather.FanartCode,22)</expression>
+    <!-- Strong showers and severe storms use heavy rain; storm visibility also gates foliage. -->
+    <expression name="Exp_StartUp_Weather_HeavyRain">String.IsEqual(Weather.FanartCode,12) | $EXP[Exp_StartUp_Weather_SevereThunderstorm]</expression>
+    <expression name="Exp_StartUp_Weather_Rain">String.IsEqual(Weather.FanartCode,6) | String.IsEqual(Weather.FanartCode,06) | String.IsEqual(Weather.FanartCode,8) | String.IsEqual(Weather.FanartCode,08) | String.IsEqual(Weather.FanartCode,9) | String.IsEqual(Weather.FanartCode,09) | String.IsEqual(Weather.FanartCode,10) | String.IsEqual(Weather.FanartCode,11) | String.IsEqual(Weather.FanartCode,12) | String.IsEqual(Weather.FanartCode,17) | String.IsEqual(Weather.FanartCode,18) | String.IsEqual(Weather.FanartCode,35) | String.IsEqual(Weather.FanartCode,40)</expression>
+    <expression name="Exp_StartUp_Weather_Windy">String.IsEqual(Weather.FanartCode,23) | String.IsEqual(Weather.FanartCode,24)</expression>
+    <expression name="Exp_StartUp_Weather_Cloud">String.IsEqual(Weather.FanartCode,26) | String.IsEqual(Weather.FanartCode,27) | String.IsEqual(Weather.FanartCode,28)</expression>
+    <expression name="Exp_StartUp_Weather_PartlyCloudy">String.IsEqual(Weather.FanartCode,29) | String.IsEqual(Weather.FanartCode,30) | String.IsEqual(Weather.FanartCode,44)</expression>
+    <expression name="Exp_StartUp_Weather_Snow">String.IsEqual(Weather.FanartCode,5) | String.IsEqual(Weather.FanartCode,05) | String.IsEqual(Weather.FanartCode,7) | String.IsEqual(Weather.FanartCode,07) | String.IsEqual(Weather.FanartCode,13) | String.IsEqual(Weather.FanartCode,14) | String.IsEqual(Weather.FanartCode,15) | String.IsEqual(Weather.FanartCode,16) | String.IsEqual(Weather.FanartCode,41) | String.IsEqual(Weather.FanartCode,42) | String.IsEqual(Weather.FanartCode,43) | String.IsEqual(Weather.FanartCode,46)</expression>
+    <!-- Exact string matches keep missing, na and malformed codes out of numeric code 0 (tornado). -->
+    <expression name="Exp_StartUp_Weather_Clear">![$EXP[Exp_StartUp_Weather_Thunderstorm] | $EXP[Exp_StartUp_Weather_Hazy] | $EXP[Exp_StartUp_Weather_Rain] | $EXP[Exp_StartUp_Weather_Snow] | $EXP[Exp_StartUp_Weather_Cloud] | $EXP[Exp_StartUp_Weather_PartlyCloudy] | $EXP[Exp_StartUp_Weather_Windy]]</expression>
+    <expression name="Exp_StartUp_BaseWeather_Clear">$EXP[Exp_StartUp_Weather_Clear] | $EXP[Exp_StartUp_Weather_PartlyCloudy]</expression>
+    <expression name="Exp_StartUp_BaseWeather_Cloud">$EXP[Exp_StartUp_Weather_Cloud] | $EXP[Exp_StartUp_Weather_Windy]</expression>
+    <expression name="Exp_StartUp_BaseWeather_Rain">$EXP[Exp_StartUp_Weather_Rain] | $EXP[Exp_StartUp_Weather_Snow] | $EXP[Exp_StartUp_Weather_Thunderstorm]</expression>
+    <variable name="Image_StartUp_Weather">
+        <value condition="$EXP[Exp_StartUp_Weather_SevereThunderstorm]">severethunderstorm</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Windy]">windy</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Thunderstorm]">thunderstorm</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Hazy]">hazy</value>
+        <value condition="$EXP[Exp_StartUp_Weather_HeavyRain]">heavyrain</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Rain]">rain</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Snow]">snow</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Cloud]">cloud</value>
+        <value condition="$EXP[Exp_StartUp_Weather_PartlyCloudy]">partlycloudy</value>
+        <value>clear</value>
+    </variable>
+    <!-- Wind reuses cloud plates; snow reuses overcast rain plates; storm bolts appear only during flashes. -->
+    <variable name="Image_StartUp_Layer_BaseWeather">
+        <value condition="$EXP[Exp_StartUp_BaseWeather_Cloud]">cloud</value>
+        <value condition="$EXP[Exp_StartUp_BaseWeather_Rain]">rain</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Hazy]">hazy</value>
+        <value>clear</value>
+    </variable>
+    <!-- Scale the original cloud plates; hazy retains its baked-in 40% opacity. -->
+    <variable name="Color_StartUp_Clouds">
+        <value condition="$EXP[Exp_StartUp_Weather_Clear]">1affffff</value>
+        <value condition="$EXP[Exp_StartUp_Weather_PartlyCloudy]">99ffffff</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Cloud] | $EXP[Exp_StartUp_Weather_Windy]">e6ffffff</value>
+        <value>ffffffff</value>
+    </variable>
+    <variable name="Color_StartUp_CloudReflection">
+        <value condition="$EXP[Exp_StartUp_Weather_Clear]">04ffffff</value>
+        <value condition="$EXP[Exp_StartUp_Weather_PartlyCloudy]">17ffffff</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Cloud] | $EXP[Exp_StartUp_Weather_Windy]">22ffffff</value>
+        <value>26ffffff</value>
+    </variable>
+    <!-- Hour aliases reuse identical plates through the shared local-time ranges. -->
+    <variable name="Image_StartUp_Layer_Sky">
+        <value condition="$EXP[Exp_StartUp_Time_0500_0600] | $EXP[Exp_StartUp_Time_1900_2000]">special://home/addons/resource.images.arctic.splash/resources/layers/01-sky/0500.jpg</value>
+        <value condition="$EXP[Exp_StartUp_Time_0600_0700] | $EXP[Exp_StartUp_Time_1800_1900]">special://home/addons/resource.images.arctic.splash/resources/layers/01-sky/0600.jpg</value>
+        <value condition="$EXP[Exp_StartUp_Time_0700_0800] | $EXP[Exp_StartUp_Time_1700_1800]">special://home/addons/resource.images.arctic.splash/resources/layers/01-sky/0700.jpg</value>
+        <value condition="$EXP[Exp_StartUp_Time_Daytime]">special://home/addons/resource.images.arctic.splash/resources/layers/01-sky/0800.jpg</value>
+        <value>special://home/addons/resource.images.arctic.splash/resources/layers/01-sky/0000.jpg</value>
+    </variable>
+    <variable name="Image_StartUp_Layer_CloudHour">
+        <value condition="$EXP[Exp_StartUp_Time_0500_0600]">0500</value>
+        <value condition="$EXP[Exp_StartUp_Time_0600_0700]">0600</value>
+        <value condition="$EXP[Exp_StartUp_Time_0700_0800]">0700</value>
+        <value condition="$EXP[Exp_StartUp_Time_Daytime]">0800</value>
+        <value condition="$EXP[Exp_StartUp_Time_1700_1800]">1700</value>
+        <value condition="$EXP[Exp_StartUp_Time_1800_1900]">1800</value>
+        <value condition="$EXP[Exp_StartUp_Time_1900_2000]">1900</value>
+        <value>0000</value>
+    </variable>
+    <variable name="Image_StartUp_Layer_GlowHour">
+        <value condition="$EXP[Exp_StartUp_Time_0500_0600] | $EXP[Exp_StartUp_Time_0700_0800]">0500</value>
+        <value condition="$EXP[Exp_StartUp_Time_0600_0700]">0600</value>
+        <value condition="$EXP[Exp_StartUp_Time_1700_1800] | $EXP[Exp_StartUp_Time_1900_2000]">1700</value>
+        <value condition="$EXP[Exp_StartUp_Time_1800_1900]">1800</value>
+        <value>0000</value>
+    </variable>
+    <variable name="Image_StartUp_Layer_ConditionsHour">
+        <value condition="$EXP[Exp_StartUp_Weather_Clear] | $EXP[Exp_StartUp_Weather_PartlyCloudy]">0000</value>
+        <value condition="$EXP[Exp_StartUp_Time_0500_0600] | $EXP[Exp_StartUp_Time_1900_2000]">0500</value>
+        <value condition="$EXP[Exp_StartUp_Time_0600_0700] | $EXP[Exp_StartUp_Time_1800_1900]">0600</value>
+        <value condition="$EXP[Exp_StartUp_Time_0700_0800] | $EXP[Exp_StartUp_Time_1700_1800]">0700</value>
+        <value condition="$EXP[Exp_StartUp_Time_Daytime]">0800</value>
+        <value>0000</value>
+    </variable>
+    <variable name="Image_StartUp_Layer_TimeHour">
+        <value condition="$EXP[Exp_StartUp_Time_BeforeDawn]">0000</value>
+        <value condition="$EXP[Exp_StartUp_Time_0500_0600]">0500</value>
+        <value condition="$EXP[Exp_StartUp_Time_0600_0700]">0600</value>
+        <value condition="$EXP[Exp_StartUp_Time_0700_0800]">0700</value>
+        <value condition="$EXP[Exp_StartUp_Time_Daytime]">0800</value>
+        <value condition="$EXP[Exp_StartUp_Time_1700_1800]">1700</value>
+        <value condition="$EXP[Exp_StartUp_Time_1800_1900]">1800</value>
+        <value condition="$EXP[Exp_StartUp_Time_1900_2000]">1900</value>
+        <value>2000</value>
+    </variable>
+    <variable name="Image_StartUp_Layer_Time">
+        <value condition="$EXP[Exp_StartUp_Time_Daytime]">special://home/addons/resource.images.arctic.splash/resources/layers/09-time/autumn/0800.webp</value>
+        <value>special://home/addons/resource.images.arctic.splash/resources/layers/09-time/$VAR[Image_StartUp_Season]/$VAR[Image_StartUp_Layer_TimeHour].webp</value>
+    </variable>
+    <include name="Background_StartUp_Overlays">
+        <param name="wind_visible">$EXP[Exp_StartUp_Weather_Windy]</param>
+        <param name="foliage_visible">true</param>
+        <param name="rain_visible">$EXP[Exp_StartUp_Weather_Rain] | $EXP[Exp_StartUp_Weather_Thunderstorm]</param>
+        <param name="heavy_rain_visible">$EXP[Exp_StartUp_Weather_HeavyRain]</param>
+        <param name="snow_visible">$EXP[Exp_StartUp_Weather_Snow]</param>
+        <param name="lightning_visible">$EXP[Exp_StartUp_Weather_Thunderstorm]</param>
+        <param name="severe_lightning_visible">$EXP[Exp_StartUp_Weather_SevereThunderstorm]</param>
+        <param name="season">$VAR[Image_StartUp_Season]</param>
+        <param name="cloud_hour">$VAR[Image_StartUp_Layer_CloudHour]</param>
+        <definition>
+            <!-- Foliage carries the same hourly grade as the trees; the static time
+                 plate only grades the registered scenery beneath these moving pieces. -->
+            <include content="Background_StartUp_Foliage">
+                <param name="visible">[$PARAM[foliage_visible]] + ![$PARAM[rain_visible]] + ![$PARAM[snow_visible]] + ![$PARAM[wind_visible]]</param>
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[cloud_hour]</param>
+            </include>
+            <include content="Background_StartUp_Wind">
+                <param name="visible">[$PARAM[foliage_visible]] + [$PARAM[wind_visible]] + ![$PARAM[rain_visible]] + ![$PARAM[snow_visible]]</param>
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[cloud_hour]</param>
+            </include>
+            <include content="Background_StartUp_Lightning">
+                <param name="severe_visible">$PARAM[severe_lightning_visible]</param>
+                <param name="visible">$PARAM[lightning_visible]</param>
+                <param name="texture">common/white.png</param>
+                <param name="colordiffuse">33cadfff</param>
+                <param name="echo_colordiffuse">22cadfff</param>
+            </include>
+            <include content="Background_StartUp_Rain">
+                <param name="visible">[$PARAM[rain_visible]] + ![$PARAM[heavy_rain_visible]]</param>
+            </include>
+            <include content="Background_StartUp_HeavyRain">
+                <param name="visible">$PARAM[heavy_rain_visible]</param>
+            </include>
+            <include content="Background_StartUp_Snow">
+                <param name="visible">$PARAM[snow_visible]</param>
+            </include>
+        </definition>
+    </include>
+    <include name="Background_StartUp_Layered">
+        <!-- Pass all hour aliases together when overriding hour; the resource shares identical plates. -->
+        <!-- The time texture also contains season; override it when selecting a different season. -->
+        <param name="season">$VAR[Image_StartUp_Season]</param>
+        <param name="weather">$VAR[Image_StartUp_Weather]</param>
+        <param name="base_weather">$VAR[Image_StartUp_Layer_BaseWeather]</param>
+        <param name="cloud_colordiffuse">$VAR[Color_StartUp_Clouds]</param>
+        <param name="cloud_reflection_colordiffuse">$VAR[Color_StartUp_CloudReflection]</param>
+        <param name="rain_visible">$EXP[Exp_StartUp_Weather_Rain] | $EXP[Exp_StartUp_Weather_Thunderstorm]</param>
+        <param name="heavy_rain_visible">$EXP[Exp_StartUp_Weather_HeavyRain]</param>
+        <param name="snow_visible">$EXP[Exp_StartUp_Weather_Snow]</param>
+        <param name="lightning_visible">$EXP[Exp_StartUp_Weather_Thunderstorm]</param>
+        <param name="severe_lightning_visible">$EXP[Exp_StartUp_Weather_SevereThunderstorm]</param>
+        <param name="cloud_visible">true</param>
+        <param name="cloud_clear_visible">$EXP[Exp_StartUp_BaseWeather_Clear]</param>
+        <param name="cloud_cloud_visible">$EXP[Exp_StartUp_BaseWeather_Cloud]</param>
+        <param name="cloud_rain_visible">$EXP[Exp_StartUp_BaseWeather_Rain]</param>
+        <param name="haze_visible">$EXP[Exp_StartUp_Weather_Hazy]</param>
+        <param name="wind_visible">$EXP[Exp_StartUp_Weather_Windy]</param>
+        <param name="foliage_visible">true</param>
+        <param name="dimming_visible">$EXP[Exp_StartUp_Time_DawnToDusk]</param>
+        <param name="hour">$VAR[Image_StartUp_Hour]</param>
+        <param name="sky">$VAR[Image_StartUp_Layer_Sky]</param>
+        <param name="cloud_hour">$VAR[Image_StartUp_Layer_CloudHour]</param>
+        <param name="glow_hour">$VAR[Image_StartUp_Layer_GlowHour]</param>
+        <param name="conditions_hour">$VAR[Image_StartUp_Layer_ConditionsHour]</param>
+        <param name="time">$VAR[Image_StartUp_Layer_Time]</param>
+        <param name="overlays">true</param>
+        <definition>
+            <control type="group">
+                <description>Seasonal hourly weather splash with animated wind, clouds, rain, snow and lightning</description>
+                <left>0</left>
+                <top>0</top>
+                <width>100%</width>
+                <height>100%</height>
+                <control type="image">
+                    <description>Sky</description>
+                    <aspectratio align="center" aligny="center">scale</aspectratio>
+                    <texture colordiffuse="ffffffff">$PARAM[sky]</texture>
+                    <fadetime>background_fadetime</fadetime>
+                </control>
+                <control type="image">
+                    <description>Sun/Moon</description>
+                    <aspectratio align="center" aligny="center">scale</aspectratio>
+                    <texture colordiffuse="ffffffff">special://home/addons/resource.images.arctic.splash/resources/layers/02-sun-moon/$PARAM[hour].webp</texture>
+                    <fadetime>background_fadetime</fadetime>
+                </control>
+                <include content="Background_StartUp_Clouds">
+                    <param name="moving_visible">$PARAM[cloud_visible]</param>
+                    <param name="clear_visible">$PARAM[cloud_clear_visible]</param>
+                    <param name="cloud_visible">$PARAM[cloud_cloud_visible]</param>
+                    <param name="rain_visible">$PARAM[cloud_rain_visible]</param>
+                    <param name="hazy_visible">$PARAM[haze_visible]</param>
+                    <param name="hour">$PARAM[cloud_hour]</param>
+                    <param name="colordiffuse">$PARAM[cloud_colordiffuse]</param>
+                </include>
+                <include content="Background_StartUp_Lightning">
+                    <param name="severe_visible">$PARAM[severe_lightning_visible]</param>
+                    <param name="visible">$PARAM[lightning_visible]</param>
+                    <param name="texture">special://home/addons/resource.images.arctic.splash/resources/layers/03-clouds/thunderstorm/$PARAM[cloud_hour].webp</param>
+                    <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/shared/clouds/thunderstorm.webp</param>
+                </include>
+                <control type="image">
+                    <description>Sunset/Sunrise</description>
+                    <aspectratio align="center" aligny="center">scale</aspectratio>
+                    <texture colordiffuse="ffffffff">special://home/addons/resource.images.arctic.splash/resources/layers/04-sunset-sunrise/$PARAM[glow_hour].webp</texture>
+                    <fadetime>background_fadetime</fadetime>
+                </control>
+                <control type="image">
+                    <description>Mountains</description>
+                    <aspectratio align="center" aligny="center">scale</aspectratio>
+                    <texture colordiffuse="ffffffff">special://home/addons/resource.images.arctic.splash/resources/layers/05-mountains/$PARAM[season].webp</texture>
+                    <fadetime>background_fadetime</fadetime>
+                </control>
+                <include content="Background_StartUp_Lake">
+                    <param name="texture">special://home/addons/resource.images.arctic.splash/resources/layers/06-lake/$PARAM[season]/$PARAM[base_weather]/$PARAM[hour].webp</param>
+                </include>
+                <!-- Cloud reflections drift independently over the rippling lake. -->
+                <include content="Background_StartUp_Clouds">
+                    <param name="visible">$PARAM[cloud_visible]</param>
+                    <param name="clear_visible">$PARAM[cloud_clear_visible]</param>
+                    <param name="cloud_visible">$PARAM[cloud_cloud_visible]</param>
+                    <param name="rain_visible">$PARAM[cloud_rain_visible]</param>
+                    <param name="hazy_visible">$PARAM[haze_visible]</param>
+                    <param name="hour">$PARAM[cloud_hour]</param>
+                    <param name="top">706</param>
+                    <param name="height">374</param>
+                    <param name="flipy">true</param>
+                    <param name="colordiffuse">$PARAM[cloud_reflection_colordiffuse]</param>
+                </include>
+                <include content="Background_StartUp_Lightning">
+                    <param name="severe_visible">$PARAM[severe_lightning_visible]</param>
+                    <param name="visible">$PARAM[lightning_visible]</param>
+                    <param name="texture">special://home/addons/resource.images.arctic.splash/resources/layers/06-lake/$PARAM[season]/thunderstorm/$PARAM[hour].webp</param>
+                    <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/fuji/lake.webp</param>
+                </include>
+
+                <control type="image">
+
+                    <description>Trees</description>
+                    <aspectratio align="center" aligny="center">scale</aspectratio>
+                    <texture colordiffuse="ffffffff">special://home/addons/resource.images.arctic.splash/resources/layers/07-trees/$PARAM[season].webp</texture>
+                    <fadetime>background_fadetime</fadetime>
+                </control>
+                <control type="image">
+                    <description>Conditions</description>
+                    <visible>![$PARAM[rain_visible]] + ![$PARAM[snow_visible]] + ![$PARAM[haze_visible]]</visible>
+                    <aspectratio align="center" aligny="center">scale</aspectratio>
+                    <texture colordiffuse="ffffffff">special://home/addons/resource.images.arctic.splash/resources/layers/08-conditions/$PARAM[base_weather]/$PARAM[conditions_hour].webp</texture>
+                    <fadetime>background_fadetime</fadetime>
+                </control>
+
+                <include content="Background_StartUp_TextureDrift">
+                    <param name="visible">$PARAM[haze_visible]</param>
+                    <param name="texture">special://home/addons/resource.images.arctic.splash/resources/layers/08-conditions/hazy/$PARAM[conditions_hour].webp</param>
+                    <param name="time">1200000</param>
+                </include>
+                <control type="image">
+                    <description>Time</description>
+                    <aspectratio align="center" aligny="center">scale</aspectratio>
+                    <texture colordiffuse="ffffffff">$PARAM[time]</texture>
+                    <fadetime>background_fadetime</fadetime>
+                </control>
+
+                <include content="Background_StartUp_Overlays" condition="$PARAM[overlays]">
+                    <param name="wind_visible">$PARAM[wind_visible]</param>
+                    <param name="foliage_visible">$PARAM[foliage_visible]</param>
+                    <param name="rain_visible">$PARAM[rain_visible]</param>
+                    <param name="heavy_rain_visible">$PARAM[heavy_rain_visible]</param>
+                    <param name="snow_visible">$PARAM[snow_visible]</param>
+                    <param name="lightning_visible">$PARAM[lightning_visible]</param>
+                    <param name="severe_lightning_visible">$PARAM[severe_lightning_visible]</param>
+                    <param name="season">$PARAM[season]</param>
+                    <param name="cloud_hour">$PARAM[cloud_hour]</param>
+                </include>
+
+                <control type="image">
+
+                    <texture colordiffuse="7f000000">common/white.png</texture>
+                    <visible>$PARAM[dimming_visible]</visible>
+                </control>
+
+            </control>
+        </definition>
+    </include>
+</includes>

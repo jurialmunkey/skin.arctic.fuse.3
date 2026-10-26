@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <variable name="Image_FlixArt_MaskPath">
+        <value condition="Skin.String(Skin.FlixArt.Size,Large)">special://skin/extras/diffuse/flixart/1440x810/</value>
+        <value condition="Skin.String(Skin.FlixArt.Size,ExtraLarge)">special://skin/extras/diffuse/flixart/1600x900/</value>
+        <value>special://skin/extras/diffuse/flixart/1280x720/</value>
+    </variable>
+
+    <variable name="Image_FlixArt_Inverse">
+        <value condition="$EXP[Exp_TMDbHelper_IsBlur]">$VAR[Image_FlixArt_MaskPath,,flixart_invert.png]</value>
+        <value>$VAR[Image_FlixArt_MaskPath,,flixart_new_invert.png]</value>
+    </variable>
+
+    <variable name="Image_FlixArt_FullscreenInverse">
+        <value condition="$EXP[Exp_TMDbHelper_IsBlur]">special://skin/extras/diffuse/flixart/1920x1080/flixart_invert.png</value>
+        <value>special://skin/extras/diffuse/flixart/1920x1080/flixart_new_invert.png</value>
+    </variable>
+
+    <variable name="Image_GameAchievementType">
+        <value condition="!String.IsEmpty(ListItem.Property(achievement.win))">special://skin/extras/icons/trophy.png</value>
+        <value condition="!String.IsEmpty(ListItem.Property(achievement.progression))">special://skin/extras/icons/flag.png</value>
+    </variable>
+
     <variable name="Image_GameAchievementEarned">
         <value condition="!String.IsEmpty(ListItem.Property(achievement.earned))">special://skin/extras/icons/award.png</value>
         <value>special://skin/extras/icons/lock.png</value>
@@ -63,8 +84,7 @@
         <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyPrograms.xml)">special://skin/extras/backgrounds/content/fanart-arctic-plugins.jpg</value>
         <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyGames.xml)">special://skin/extras/backgrounds/content/fanart-arctic-games.jpg</value>
         <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyPlaylist.xml)">special://skin/extras/backgrounds/content/fanart-arctic-playlists.jpg</value>
-        <value condition="!String.IsEmpty(Skin.String(Background.Image))">$INFO[Skin.String(Background.Image)]</value>
-        <value>special://skin/extras/backgrounds/blur/purple_blur.jpg</value>
+        <value>$VAR[Image_SimpleBackground]</value>
     </variable>
 
     <variable name="Image_BasicList_Landscape">
@@ -286,8 +306,9 @@
     </variable>
 
     <variable name="Image_SimpleBackground">
+        <value condition="Skin.String(Background.Image,special://skin/extras/backgrounds/pink_blur.jpg)">special://skin/extras/backgrounds/blur/pink_blur.jpg</value>
         <value condition="!String.IsEmpty(Skin.String(Background.Image))">$INFO[Skin.String(Background.Image)]</value>
-        <value>special://skin/extras/backgrounds/blur/purle_blur.jpg</value>
+        <value>special://skin/extras/backgrounds/blur/purple_blur.jpg</value>
     </variable>
 
     <variable name="Image_OSD_Poster">
@@ -414,9 +435,45 @@
     </variable>
 
     <variable name="Image_StartUp">
-        <value condition="Weather.IsFetched + !String.IsEmpty(Weather.FanartCode) + System.HasAddon(resource.images.weatherfanart.multi) + [String.IsEmpty(Skin.String(Startup.ImageFolder)) | Skin.String(Startup.ImageFolder,special://skin/extras/backgrounds/launch/)]">resource://resource.images.weatherfanart.multi/$INFO[Weather.FanartCode]/</value>
-        <value condition="!String.IsEmpty(Skin.String(Startup.ImageFolder))">$INFO[Skin.String(Startup.ImageFolder)]</value>
-        <value>special://skin/extras/backgrounds/launch/</value>
+        <value condition="$EXP[Exp_StartUp_CustomImage]">$INFO[Skin.String(Startup.ImageFolder)]</value>
+        <!-- The built-in splash is composited by Background_StartUp_Layered. -->
+        <value>$VAR[Image_StartUp_Layer_Sky]</value>
+    </variable>
+
+    <!-- Calendar-month seasons; the selected Kodi region determines the hemisphere. -->
+    <variable name="Image_StartUp_Season">
+        <value condition="$EXP[Exp_StartUp_Season_spring]">spring</value>
+        <value condition="$EXP[Exp_StartUp_Season_summer]">summer</value>
+        <value condition="$EXP[Exp_StartUp_Season_autumn]">autumn</value>
+        <value>winter</value>
+    </variable>
+
+    <!-- System.Time conditions use local 24-hour time regardless of the clock display format. -->
+    <variable name="Image_StartUp_Hour">
+        <value condition="System.Time(00:00,01:00)">0000</value>
+        <value condition="System.Time(01:00,02:00)">0100</value>
+        <value condition="System.Time(02:00,03:00)">0200</value>
+        <value condition="System.Time(03:00,04:00)">0300</value>
+        <value condition="System.Time(04:00,05:00)">0400</value>
+        <value condition="System.Time(05:00,06:00)">0500</value>
+        <value condition="System.Time(06:00,07:00)">0600</value>
+        <value condition="System.Time(07:00,08:00)">0700</value>
+        <value condition="System.Time(08:00,09:00)">0800</value>
+        <value condition="System.Time(09:00,10:00)">0900</value>
+        <value condition="System.Time(10:00,11:00)">1000</value>
+        <value condition="System.Time(11:00,12:00)">1100</value>
+        <value condition="System.Time(12:00,13:00)">1200</value>
+        <value condition="System.Time(13:00,14:00)">1300</value>
+        <value condition="System.Time(14:00,15:00)">1400</value>
+        <value condition="System.Time(15:00,16:00)">1500</value>
+        <value condition="System.Time(16:00,17:00)">1600</value>
+        <value condition="System.Time(17:00,18:00)">1700</value>
+        <value condition="System.Time(18:00,19:00)">1800</value>
+        <value condition="System.Time(19:00,20:00)">1900</value>
+        <value condition="System.Time(20:00,21:00)">2000</value>
+        <value condition="System.Time(21:00,22:00)">2100</value>
+        <value condition="System.Time(22:00,23:00)">2200</value>
+        <value>2300</value>
     </variable>
 
     <variable name="Image_PVRPoster">
@@ -802,4 +859,11 @@
         <value condition="String.IsEqual(Control.GetLabel(12),$LOCALIZE[31032])">special://skin/extras/icons/circle-plus.png</value>
         <value>special://skin/extras/icons/circle-dot.png</value>
     </variable>
+
+    <variable name="Image_GameManuals_Finder_State">
+        <value condition="String.IsEqual(Window.Property(state),noproviders)">special://skin/extras/icons/puzzle-piece.png</value>
+        <value condition="String.IsEqual(Window.Property(state),failed)">special://skin/extras/icons/triangle-exclamation.png</value>
+        <value>special://skin/extras/icons/magnifying-glass.png</value>
+    </variable>
+
 </includes>

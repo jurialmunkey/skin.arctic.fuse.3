@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Shared preview layers; all selectors are local to window 1191. -->
+    <expression name="Exp_StartUp_Test_Weather_Rain">String.IsEqual(Window(1191).Property(SplashTest.Weather),rain) | $EXP[Exp_StartUp_Test_Weather_HeavyRain] | $EXP[Exp_StartUp_Test_Weather_Thunderstorm]</expression>
+    <expression name="Exp_StartUp_Test_Weather_Snow">String.IsEqual(Window(1191).Property(SplashTest.Weather),snow)</expression>
+    <expression name="Exp_StartUp_Test_Weather_Hazy">String.IsEqual(Window(1191).Property(SplashTest.Weather),hazy)</expression>
+    <expression name="Exp_StartUp_Test_Weather_Overcast">String.IsEqual(Window(1191).Property(SplashTest.Weather),cloud) | $EXP[Exp_StartUp_Test_Weather_Windy]</expression>
+    <expression name="Exp_StartUp_Test_Weather_Precipitation">$EXP[Exp_StartUp_Test_Weather_Rain] | $EXP[Exp_StartUp_Test_Weather_Snow]</expression>
+    <expression name="Exp_StartUp_Test_BaseWeather_Clear">String.IsEqual(Window(1191).Property(SplashTest.Weather),clear) | String.IsEqual(Window(1191).Property(SplashTest.Weather),partlycloudy)</expression>
+    <variable name="Image_StartUp_Test_Conditions">
+        <value condition="$EXP[Exp_StartUp_Test_Weather_Thunderstorm]">storm</value>
+        <value condition="$EXP[Exp_StartUp_Test_Weather_Rain]">rain</value>
+        <value condition="$EXP[Exp_StartUp_Test_Weather_Snow]">snow</value>
+        <value condition="$EXP[Exp_StartUp_Test_Weather_Hazy]">hazy</value>
+        <value condition="$EXP[Exp_StartUp_Test_Weather_Overcast]">cloud</value>
+        <value>none</value>
+    </variable>
+</includes>

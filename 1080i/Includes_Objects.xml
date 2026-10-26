@@ -715,94 +715,242 @@
         </definition>
     </include>
 
-    <include name="Object_StartUp_Logo">
-        <control type="grouplist">
-            <height>128</height>
-            <centertop>400</centertop>
-            <orientation>vertical</orientation>
-            <align>center</align>
-            <control type="image">
-                <width>96</width>
-                <height>96</height>
-                <centerleft>50%</centerleft>
-                <aspectratio>keep</aspectratio>
-                <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
-            </control>
-            <control type="label">
-                <height>32</height>
-                <textcolor>main_fg_100</textcolor>
-                <label>KODI</label>
-                <font>font_logo_large</font>
-                <align>center</align>
-            </control>
-        </control>
-        <control type="grouplist">
-            <height>80</height>
-            <centertop>50%</centertop>
-            <orientation>horizontal</orientation>
-            <itemgap>10</itemgap>
-            <align>center</align>
-            <control type="label">
-                <aligny>center</aligny>
-                <align>center</align>
-                <width>auto</width>
-                <font>font_title_huge</font>
-                <textcolor>$VAR[ColorHighlight]</textcolor>
-                <label>[COLOR=main_logo]Arctic[/COLOR] Fuse</label>
-            </control>
-            <control type="label">
-                <aligny>center</aligny>
-                <height>50</height>
-                <align>center</align>
-                <width>auto</width>
-                <font>font_head_bold</font>
-                <textcolor>$VAR[ColorHighlight]</textcolor>
-                <label>$NUMBER[3]</label>
-            </control>
-        </control>
-        <control type="group">
-            <bottom>80</bottom>
-            <height>140</height>
-            <centerleft>50%</centerleft>
-            <width>600</width>
-            <visible>Weather.IsFetched</visible>
-            <animation effect="fade" reversible="false" start="0" end="100" time="300" delay="0">Visible</animation>
-            <control type="grouplist">
-                <orientation>horizontal</orientation>
-                <align>center</align>
-                <height>100</height>
-                <top>0</top>
+    <include name="Object_StartUp_Selector">
+        <param name="icon">$VAR[Image_ProfileIcon]</param>
+        <param name="icon_border">4</param>
+        <param name="icon_aspect">scale</param>
+        <param name="icon_color">ffffffff</param>
+        <param name="onup">ActivateWindow(shutdownmenu)</param>
+        <param name="ondown">ActivateWindow(shutdownmenu)</param>
+        <param name="static_content">false</param>
+        <param name="content_include"></param>
+        <definition>
+            <control type="group">
+                <top>570</top>
+                <height>360</height>
+                <control type="group">
+                    <top>0</top>
+                    <control type="label">
+                        <top>20</top>
+                        <align>center</align>
+                        <height>40</height>
+                        <font>font_main_bold</font>
+                        <textcolor>main_fg_100</textcolor>
+                        <label>$INFO[Container(52).ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <top>50</top>
+                        <align>center</align>
+                        <height>40</height>
+                        <textcolor>main_fg_70</textcolor>
+                        <label>$INFO[Container(52).ListItem.Label2]</label>
+                        <animation effect="fade" reversible="false" start="0" end="100" time="300" delay="200">Visible</animation>
+                        <visible>!Container(52).OnNext + !Container(52).OnPrevious</visible>
+                    </control>
+                </control>
                 <control type="image">
-                    <centertop>50%</centertop>
-                    <width>90</width>
-                    <height>90</height>
+                    <left>240</left>
+                    <top>40</top>
+                    <width>80</width>
                     <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="main_fg_90">$INFO[Window(Weather).Property(Current.FanartCode),resource://resource.images.weathericons.white/,.png]</texture>
-                    <visible>!String.IsEmpty(Window(Weather).Property(Current.FanartCode))</visible>
+                    <height>120</height>
+                    <texture colordiffuse="panel_fg_70" flipx="true">arrows/arrow-240.png</texture>
+                    <visible>Container(52).HasPrevious</visible>
+                </control>
+                <control type="image">
+                    <right>240</right>
+                    <top>40</top>
+                    <width>80</width>
+                    <aspectratio>keep</aspectratio>
+                    <height>120</height>
+                    <texture colordiffuse="panel_fg_70" flipx="false">arrows/arrow-240.png</texture>
+                    <visible>Container(52).HasNext</visible>
+                </control>
+                <control type="fixedlist" id="52">
+                    <centerleft>50%</centerleft>
+                    <width>1440</width>
+                    <height>360</height>
+                    <orientation>horizontal</orientation>
+                    <focusposition>1</focusposition>
+                    <preloaditems>0</preloaditems>
+                    <onup>$PARAM[onup]</onup>
+                    <ondown>$PARAM[ondown]</ondown>
+                    <scrolltime tween="cubic" easing="out">500</scrolltime>
+                    <itemlayout width="480">
+                        <control type="group">
+                            <top>40</top>
+                            <centerleft>50%</centerleft>
+                            <height>120</height>
+                            <width>120</width>
+                            <control type="image">
+                                <include content="Dimension_Padding">
+                                    <param name="pad">-40</param>
+                                </include>
+                                <bordersize>40</bordersize>
+                                <bordertexture colordiffuse="shadow_hard">shadows/circle_120-shadow-40.png</bordertexture>
+                                <texture colordiffuse="main_fg_100">diffuse/circle/circle_120.png</texture>
+                            </control>
+                            <control type="image">
+                                <bordersize>$PARAM[icon_border]</bordersize>
+                                <aspectratio scalediffuse="false">$PARAM[icon_aspect]</aspectratio>
+                                <texture diffuse="diffuse/circle/circle_120.png" colordiffuse="$PARAM[icon_color]">$PARAM[icon]</texture>
+                            </control>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="480">
+                        <control type="group">
+                            <animation condition="Container(52).OnNext" effect="slide" start="0,-80" end="0" delay="0" time="500" tween="sine" easing="out" reversible="false">Focus</animation>
+
+                            <animation condition="Container(52).OnNext" effect="slide" start="0" end="0,-80" delay="0" time="500" tween="sine" easing="out" reversible="false">UnFocus</animation>
+
+                            <animation condition="Container(52).OnPrevious" effect="slide" start="0,-80" end="0" delay="0" time="500" tween="sine" easing="out" reversible="false">Focus</animation>
+
+                            <animation condition="Container(52).OnPrevious" effect="slide" start="0" end="0,-80" delay="0" time="500" tween="sine" easing="out" reversible="false">UnFocus</animation>
+
+                            <top>120</top>
+                            <centerleft>50%</centerleft>
+                            <height>120</height>
+                            <width>120</width>
+                            <control type="image">
+                                <include content="Dimension_Padding">
+                                    <param name="pad">-40</param>
+                                </include>
+                                <bordersize>40</bordersize>
+                                <bordertexture colordiffuse="shadow_hard">shadows/circle_120-shadow-40.png</bordertexture>
+                                <texture colordiffuse="main_fg_100">diffuse/circle/circle_120.png</texture>
+                            </control>
+                            <control type="image">
+                                <bordersize>-2</bordersize>
+                                <animation effect="fade" start="100" end="0" delay="0" time="300" reversible="false">UnFocus</animation>
+                                <animation effect="fade" start="0" end="100" delay="200" time="300" reversible="false">Focus</animation>
+                                <include>Texture_Circle_Highlight_V</include>
+                            </control>
+                            <control type="image">
+                                <bordersize>$PARAM[icon_border]</bordersize>
+                                <aspectratio scalediffuse="false">$PARAM[icon_aspect]</aspectratio>
+                                <texture diffuse="diffuse/circle/circle_120.png" colordiffuse="$PARAM[icon_color]">$PARAM[icon]</texture>
+                            </control>
+                        </control>
+                    </focusedlayout>
+                    <include content="Object_ContentInclude" condition="$PARAM[static_content]">
+                        <param name="include">$PARAM[content_include]</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Object_StartUp_Logo">
+        <param name="weather_visible">Weather.IsFetched</param>
+        <param name="weather_icon_visible">!String.IsEmpty(Window(Weather).Property(Current.FanartCode))</param>
+        <param name="weather_label_visible">!String.IsEmpty(Window(Weather).Property(Current.Temperature))</param>
+        <param name="weather_description_visible">!String.IsEmpty(Window(Weather).Property(Current.Condition))</param>
+        <param name="weather_icon">$INFO[Window(Weather).Property(Current.FanartCode),resource://resource.images.weathericons.white/,.png]</param>
+        <param name="weather_label">$INFO[Window(Weather).Property(Current.Temperature), [B],[/B]°]</param>
+        <param name="weather_description">$INFO[Window(Weather).Property(Current.Condition)]</param>
+        <definition>
+            <control type="grouplist">
+                <height>128</height>
+                <centertop>420</centertop>
+                <orientation>vertical</orientation>
+                <align>center</align>
+                <control type="image">
+                    <width>96</width>
+                    <height>96</height>
+                    <centerleft>50%</centerleft>
+                    <aspectratio>keep</aspectratio>
+                    <texture colordiffuse="$VAR[ColorHighlight]">special://skin/extras/icons/kodi.png</texture>
                 </control>
                 <control type="label">
-                    <left>-10</left>
-                    <label>$INFO[Window(Weather).Property(Current.Temperature), [B],[/B]°]</label>
-                    <width>auto</width>
-                    <height>90</height>
-                    <align>center</align>
-                    <aligny>center</aligny>
-                    <font>font_title_huge</font>
+                    <height>32</height>
                     <textcolor>main_fg_90</textcolor>
-                    <visible>!String.IsEmpty(Window(Weather).Property(Current.Temperature))</visible>
+                    <shadowcolor>main_bg_30</shadowcolor>
+                    <label>KODI</label>
+                    <font>font_logo_large</font>
+                    <align>center</align>
                 </control>
             </control>
-            <control type="label">
-                <label>$INFO[Window(Weather).Property(Current.Condition)]</label>
-                <height>20</height>
-                <centerbottom>20</centerbottom>
+            <control type="grouplist">
+                <height>80</height>
+                <centertop>540</centertop>
+                <orientation>horizontal</orientation>
+                <itemgap>10</itemgap>
                 <align>center</align>
-                <aligny>center</aligny>
-                <font>font_main</font>
-                <textcolor>main_fg_90</textcolor>
-                <visible>!String.IsEmpty(Window(Weather).Property(Current.Condition))</visible>
+                <control type="label">
+                    <aligny>center</aligny>
+                    <align>center</align>
+                    <width>auto</width>
+                    <font>font_title_huge</font>
+                    <textcolor>main_fg_90</textcolor>
+                    <shadowcolor>main_bg_30</shadowcolor>
+                    <label>Arctic</label>
+                </control>
+                <control type="label">
+                    <aligny>center</aligny>
+                    <align>center</align>
+                    <width>auto</width>
+                    <font>font_title_huge</font>
+                    <textcolor>$VAR[ColorHighlight]</textcolor>
+                    <shadowcolor>main_bg_30</shadowcolor>
+                    <label>Fuse</label>
+                </control>
+                <control type="label">
+                    <aligny>center</aligny>
+                    <height>50</height>
+                    <align>center</align>
+                    <width>auto</width>
+                    <font>font_head_bold</font>
+                    <textcolor>$VAR[ColorHighlight]</textcolor>
+                    <shadowcolor>main_bg_30</shadowcolor>
+                    <label>$NUMBER[3]</label>
+                </control>
             </control>
-        </control>
+            <control type="group">
+                <bottom>100</bottom>
+                <height>140</height>
+                <centerleft>50%</centerleft>
+                <width>600</width>
+                <visible>$PARAM[weather_visible]</visible>
+                <animation effect="fade" reversible="false" start="0" end="100" time="300" delay="0">Visible</animation>
+                <control type="grouplist">
+                    <orientation>horizontal</orientation>
+                    <align>center</align>
+                    <height>100</height>
+                    <top>0</top>
+                    <control type="image">
+                        <centertop>50%</centertop>
+                        <width>90</width>
+                        <height>90</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture colordiffuse="main_fg_90">$PARAM[weather_icon]</texture>
+                        <visible>$PARAM[weather_icon_visible]</visible>
+                    </control>
+                    <control type="label">
+                        <left>-10</left>
+                        <label>$PARAM[weather_label]</label>
+                        <width>auto</width>
+                        <height>90</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_title_huge</font>
+                        <textcolor>main_fg_90</textcolor>
+                        <shadowcolor>main_bg_30</shadowcolor>
+                        <visible>$PARAM[weather_label_visible]</visible>
+                    </control>
+                </control>
+                <control type="label">
+                    <label>$PARAM[weather_description]</label>
+                    <height>20</height>
+                    <centerbottom>20</centerbottom>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <font>font_main</font>
+                    <textcolor>main_fg_90</textcolor>
+                    <shadowcolor>main_bg_30</shadowcolor>
+                    <visible>$PARAM[weather_description_visible]</visible>
+                </control>
+            </control>
+        </definition>
     </include>
 
     <include name="Object_ProgressLine">

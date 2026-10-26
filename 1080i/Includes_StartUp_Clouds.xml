@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="Background_StartUp_CloudWeather">
+        <definition>
+            <control type="group">
+                <!-- Diffuse filenames are static; weather selection remains live. -->
+                <visible>$PARAM[visible]</visible>
+                <include>Animation_StartUp_Selection</include>
+                <control type="image">
+                    <visible>![$PARAM[moving_visible]]</visible>
+                    <width>1920</width>
+                    <height>$PARAM[height]</height>
+                    <aspectratio>stretch</aspectratio>
+                    <texture flipy="$PARAM[flipy]" colordiffuse="$PARAM[colordiffuse]" diffuse="special://home/addons/resource.images.arctic.splash/resources/masks/shared/clouds/$PARAM[weather].webp">special://home/addons/resource.images.arctic.splash/resources/layers/03-clouds/$PARAM[weather]/$PARAM[hour].webp</texture>
+                    <fadetime>background_fadetime</fadetime>
+                </control>
+                <include content="Background_StartUp_TextureDrift">
+                    <param name="visible">$PARAM[moving_visible]</param>
+                    <param name="texture">special://home/addons/resource.images.arctic.splash/resources/layers/03-clouds/$PARAM[weather]/$PARAM[hour].webp</param>
+                    <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/shared/clouds/$PARAM[weather].webp</param>
+                    <param name="height">$PARAM[height]</param>
+                    <param name="flipy">$PARAM[flipy]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+    <include name="Background_StartUp_Clouds">
+        <param name="visible">true</param>
+        <param name="moving_visible">true</param>
+        <param name="clear_visible">$EXP[Exp_StartUp_BaseWeather_Clear]</param>
+        <param name="cloud_visible">$EXP[Exp_StartUp_BaseWeather_Cloud]</param>
+        <param name="hazy_visible">$EXP[Exp_StartUp_Weather_Hazy]</param>
+        <param name="rain_visible">$EXP[Exp_StartUp_BaseWeather_Rain]</param>
+        <param name="hour">$VAR[Image_StartUp_Layer_CloudHour]</param>
+        <param name="top">0</param>
+        <param name="height">1080</param>
+        <param name="flipy">false</param>
+        <param name="colordiffuse">ffffffff</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <top>$PARAM[top]</top>
+                <include content="Background_StartUp_CloudWeather">
+                    <param name="weather">clear</param>
+                    <param name="visible">$PARAM[clear_visible]</param>
+                    <param name="hour">$PARAM[hour]</param>
+                    <param name="height">$PARAM[height]</param>
+                    <param name="flipy">$PARAM[flipy]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="moving_visible">$PARAM[moving_visible]</param>
+                </include>
+                <include content="Background_StartUp_CloudWeather">
+                    <param name="weather">cloud</param>
+                    <param name="visible">$PARAM[cloud_visible]</param>
+                    <param name="hour">$PARAM[hour]</param>
+                    <param name="height">$PARAM[height]</param>
+                    <param name="flipy">$PARAM[flipy]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="moving_visible">$PARAM[moving_visible]</param>
+                </include>
+                <include content="Background_StartUp_CloudWeather">
+                    <param name="weather">hazy</param>
+                    <param name="visible">$PARAM[hazy_visible]</param>
+                    <param name="hour">$PARAM[hour]</param>
+                    <param name="height">$PARAM[height]</param>
+                    <param name="flipy">$PARAM[flipy]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="moving_visible">$PARAM[moving_visible]</param>
+                </include>
+                <include content="Background_StartUp_CloudWeather">
+                    <param name="weather">rain</param>
+                    <param name="visible">$PARAM[rain_visible]</param>
+                    <param name="hour">$PARAM[hour]</param>
+                    <param name="height">$PARAM[height]</param>
+                    <param name="flipy">$PARAM[flipy]</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="moving_visible">$PARAM[moving_visible]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+</includes>

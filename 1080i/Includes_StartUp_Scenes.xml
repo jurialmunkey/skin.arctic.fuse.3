@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Snapshot one scene per session; remember it to avoid consecutive repeats. -->
+    <expression name="Exp_StartUp_AlternateSceneOrder">Integer.IsEven(System.Time(ss))</expression>
+    <variable name="Value_StartUp_InitialScene">
+        <value condition="Skin.String(Startup.LastScene,fuji) + $EXP[Exp_StartUp_AlternateSceneOrder]">tokyo</value>
+        <value condition="Skin.String(Startup.LastScene,fuji)">countryside</value>
+        <value condition="Skin.String(Startup.LastScene,tokyo) + $EXP[Exp_StartUp_AlternateSceneOrder]">countryside</value>
+        <value condition="Skin.String(Startup.LastScene,tokyo)">fuji</value>
+        <value condition="Skin.String(Startup.LastScene,countryside) + $EXP[Exp_StartUp_AlternateSceneOrder]">fuji</value>
+        <value condition="Skin.String(Startup.LastScene,countryside)">tokyo</value>
+        <value condition="Integer.IsLess(System.Time(ss),20)">fuji</value>
+        <value condition="Integer.IsLess(System.Time(ss),40)">tokyo</value>
+        <value>countryside</value>
+    </variable>
+    <expression name="Exp_StartUp_Scene_Preview">Window.IsVisible(1191)</expression>
+    <expression name="Exp_StartUp_Scene_BaseWeather_Clear">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_BaseWeather_Clear]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_BaseWeather_Clear]]]</expression>
+    <expression name="Exp_StartUp_Scene_Daytime">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Daytime]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_Time_DawnToDusk]]]</expression>
+    <expression name="Exp_StartUp_Scene_Selected_Countryside">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Scene_Countryside]] | [!$EXP[Exp_StartUp_Scene_Preview] + [String.IsEqual(Window(Home).Property(Startup.Scene),countryside)]]</expression>
+    <expression name="Exp_StartUp_Scene_Selected_Tokyo">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Scene_Tokyo]] | [!$EXP[Exp_StartUp_Scene_Preview] + [String.IsEqual(Window(Home).Property(Startup.Scene),tokyo)]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_Hazy">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_Hazy]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_Weather_Hazy]]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_HeavyRain">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_HeavyRain]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_Weather_HeavyRain]]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_Overcast">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_Overcast]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_BaseWeather_Cloud]]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_Precipitation">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_Precipitation]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_BaseWeather_Rain]]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_Rain">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_Rain]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_Weather_Rain] | $EXP[Exp_StartUp_Weather_Thunderstorm]]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_SevereThunderstorm">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_SevereThunderstorm]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_Weather_SevereThunderstorm]]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_Snow">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_Snow]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_Weather_Snow]]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_Thunderstorm">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_Thunderstorm]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_Weather_Thunderstorm]]]</expression>
+    <expression name="Exp_StartUp_Scene_Weather_Windy">[$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Test_Weather_Windy]] | [!$EXP[Exp_StartUp_Scene_Preview] + [$EXP[Exp_StartUp_Weather_Windy]]]</expression>
+    <expression name="Exp_StartUp_Season_spring">[$EXP[Exp_StartUp_SouthernHemisphere] + System.Date(09-01,12-01)] | [!$EXP[Exp_StartUp_SouthernHemisphere] + System.Date(03-01,06-01)]</expression>
+    <expression name="Exp_StartUp_Scene_Season_spring">[$EXP[Exp_StartUp_Scene_Preview] + String.IsEqual(Window(1191).Property(SplashTest.Season),spring)] | [!$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Season_spring]]</expression>
+    <expression name="Exp_StartUp_Season_summer">[$EXP[Exp_StartUp_SouthernHemisphere] + System.Date(12-01,03-01)] | [!$EXP[Exp_StartUp_SouthernHemisphere] + System.Date(06-01,09-01)]</expression>
+    <expression name="Exp_StartUp_Scene_Season_summer">[$EXP[Exp_StartUp_Scene_Preview] + String.IsEqual(Window(1191).Property(SplashTest.Season),summer)] | [!$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Season_summer]]</expression>
+    <expression name="Exp_StartUp_Season_autumn">[$EXP[Exp_StartUp_SouthernHemisphere] + System.Date(03-01,06-01)] | [!$EXP[Exp_StartUp_SouthernHemisphere] + System.Date(09-01,12-01)]</expression>
+    <expression name="Exp_StartUp_Scene_Season_autumn">[$EXP[Exp_StartUp_Scene_Preview] + String.IsEqual(Window(1191).Property(SplashTest.Season),autumn)] | [!$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Season_autumn]]</expression>
+    <expression name="Exp_StartUp_Season_winter">![$EXP[Exp_StartUp_Season_spring] | $EXP[Exp_StartUp_Season_summer] | $EXP[Exp_StartUp_Season_autumn]]</expression>
+    <expression name="Exp_StartUp_Scene_Season_winter">[$EXP[Exp_StartUp_Scene_Preview] + String.IsEqual(Window(1191).Property(SplashTest.Season),winter)] | [!$EXP[Exp_StartUp_Scene_Preview] + $EXP[Exp_StartUp_Season_winter]]</expression>
+    <variable name="Color_StartUp_Scene_Clouds">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$VAR[Color_StartUp_Test_Clouds]</value>
+        <value>$VAR[Color_StartUp_Clouds]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Conditions">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$VAR[Image_StartUp_Test_Conditions]</value>
+        <value>$VAR[Image_StartUp_Conditions]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Layer_BaseWeather">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$VAR[Image_StartUp_Test_Layer_BaseWeather]</value>
+        <value>$VAR[Image_StartUp_Layer_BaseWeather]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Layer_CloudHour">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$VAR[Image_StartUp_Test_Layer_CloudHour]</value>
+        <value>$VAR[Image_StartUp_Layer_CloudHour]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Layer_ConditionsHour">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$VAR[Image_StartUp_Test_Layer_ConditionsHour]</value>
+        <value>$VAR[Image_StartUp_Layer_ConditionsHour]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Layer_GlowHour">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$VAR[Image_StartUp_Test_Layer_GlowHour]</value>
+        <value>$VAR[Image_StartUp_Layer_GlowHour]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Layer_SkyHour">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$VAR[Image_StartUp_Test_Layer_SkyHour]</value>
+        <value>$VAR[Image_StartUp_Layer_SkyHour]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Layer_TimeHour">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$VAR[Image_StartUp_Test_Layer_TimeHour]</value>
+        <value>$VAR[Image_StartUp_Layer_TimeHour]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Hour">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$INFO[Window(1191).Property(SplashTest.Hour)]</value>
+        <value>$VAR[Image_StartUp_Hour]</value>
+    </variable>
+    <variable name="Image_StartUp_Scene_Season">
+        <value condition="$EXP[Exp_StartUp_Scene_Preview]">$INFO[Window(1191).Property(SplashTest.Season)]</value>
+        <value>$VAR[Image_StartUp_Season]</value>
+    </variable>
+    <variable name="Image_StartUp_Layer_SkyHour">
+        <value condition="$EXP[Exp_StartUp_Time_0500_0600] | $EXP[Exp_StartUp_Time_1900_2000]">0500</value>
+        <value condition="$EXP[Exp_StartUp_Time_0600_0700] | $EXP[Exp_StartUp_Time_1800_1900]">0600</value>
+        <value condition="$EXP[Exp_StartUp_Time_0700_0800] | $EXP[Exp_StartUp_Time_1700_1800]">0700</value>
+        <value condition="$EXP[Exp_StartUp_Time_Daytime]">0800</value>
+        <value>0000</value>
+    </variable>
+    <variable name="Image_StartUp_Conditions">
+        <value condition="$EXP[Exp_StartUp_Weather_Thunderstorm]">storm</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Rain]">rain</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Snow]">snow</value>
+        <value condition="$EXP[Exp_StartUp_Weather_Hazy]">hazy</value>
+        <value condition="$EXP[Exp_StartUp_BaseWeather_Cloud]">cloud</value>
+        <value>none</value>
+    </variable>
+    <include name="Background_StartUp_SelectedScene">
+        <definition>
+            <include condition="String.IsEqual(Window(Home).Property(Startup.Scene),tokyo)">Background_StartUp_Scene_Tokyo</include>
+            <include condition="String.IsEqual(Window(Home).Property(Startup.Scene),countryside)">Background_StartUp_Scene_Countryside</include>
+            <include condition="![String.IsEqual(Window(Home).Property(Startup.Scene),tokyo) | String.IsEqual(Window(Home).Property(Startup.Scene),countryside)]">Background_StartUp_Layered</include>
+        </definition>
+    </include>
+</includes>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
     <include>Action_BlurImage_SimpleBackground_Onload</include>
+    <onload condition="String.IsEmpty(Window(Home).Property(Settings.Main.Category))">SetProperty(Settings.Main.Category,Categories,Home)</onload>
     <defaultcontrol>5</defaultcontrol>
     <controls>
         <include>Background</include>
@@ -10,33 +11,48 @@
 
                 <include content="Settings_Left_Group">
                     <include content="Settings_Left_Content">
-                        <include content="Settings_Category_List">
-                            <param name="id">3</param>
+                        <control type="grouplist" id="3">
+                            <orientation>vertical</orientation>
+                            <onup>3</onup>
+                            <ondown>3</ondown>
                             <onright>5</onright>
                             <right>40</right>
-                            <content>
-                                <item id="1">
-                                    <label>$LOCALIZE[31150]</label>
-                                    <onclick>ActivateWindow(InterfaceSettings)</onclick>
-                                </item>
-                                <item id="3">
-                                    <label>$LOCALIZE[31444]</label>
-                                    <onclick>ActivateWindow(skinsettings)</onclick>
-                                </item>
-                                <item id="5">
-                                    <label>$LOCALIZE[31251]</label>
-                                    <onclick>ActivateWindow(videos)</onclick>
-                                </item>
-                                <item id="2">
-                                    <label>$LOCALIZE[14116]</label>
-                                    <onclick>ActivateWindow(systeminfo)</onclick>
-                                </item>
-                                <item id="4">
-                                    <label>$LOCALIZE[24001]</label>
-                                    <onclick>ActivateWindow(addonbrowser)</onclick>
-                                </item>
-                            </content>
-                        </include>
+                            <include content="Settings_Category_Button">
+                                <param name="id">31</param>
+                                <param name="property">Settings.Main.Category</param>
+                                <param name="category">Categories</param>
+                                <param name="label">$LOCALIZE[31150]</param>
+                                <param name="onclick">ActivateWindow(InterfaceSettings)</param>
+                            </include>
+                            <include content="Settings_Category_Button">
+                                <param name="id">32</param>
+                                <param name="property">Settings.Main.Category</param>
+                                <param name="category">Customisation</param>
+                                <param name="label">$LOCALIZE[31444]</param>
+                                <param name="onclick">ActivateWindow(skinsettings)</param>
+                            </include>
+                            <include content="Settings_Category_Button">
+                                <param name="id">33</param>
+                                <param name="property">Settings.Main.Category</param>
+                                <param name="category">Statistics</param>
+                                <param name="label">$LOCALIZE[31251]</param>
+                                <param name="onclick">ActivateWindow(videos)</param>
+                            </include>
+                            <include content="Settings_Category_Button">
+                                <param name="id">34</param>
+                                <param name="property">Settings.Main.Category</param>
+                                <param name="category">System</param>
+                                <param name="label">$LOCALIZE[14116]</param>
+                                <param name="onclick">ActivateWindow(systeminfo)</param>
+                            </include>
+                            <include content="Settings_Category_Button">
+                                <param name="id">35</param>
+                                <param name="property">Settings.Main.Category</param>
+                                <param name="category">Addons</param>
+                                <param name="label">$LOCALIZE[24001]</param>
+                                <param name="onclick">ActivateWindow(addonbrowser)</param>
+                            </include>
+                        </control>
                     </include>
                 </include>
 
@@ -44,7 +60,7 @@
 
                     <control type="group" id="5">
                         <control type="group">
-                            <visible>Container(3).HasFocus(1)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(Settings.Main.Category),Categories)</visible>
                             <include content="List_DialogSelect">
                                 <param name="id">8100</param>
                                 <param name="detailed">True</param>
@@ -60,7 +76,7 @@
                                 <right>20</right>
                                 <bottom>20</bottom>
                                 <pagecontrol>60</pagecontrol>
-                                <onleft>3</onleft>
+                                <onleft>31</onleft>
                                 <onright>60</onright>
                                 <content>
                                     <include>Settings_Landing_Items</include>
@@ -74,7 +90,7 @@
                             <bottom>20</bottom>
                             <left>20</left>
                             <right>20</right>
-                            <visible>Container(3).HasFocus(2)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(Settings.Main.Category),System)</visible>
                             <include content="Settings_Label">
                                 <param name="dialog">false</param>
                                 <param name="control">label</param>
@@ -172,7 +188,7 @@
 
 
                         <control type="group">
-                            <visible>Container(3).HasFocus(3)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(Settings.Main.Category),Customisation)</visible>
                             <include content="List_DialogSelect">
                                 <param name="id">8300</param>
                                 <param name="detailed">True</param>
@@ -188,7 +204,7 @@
                                 <right>20</right>
                                 <bottom>20</bottom>
                                 <pagecontrol>60</pagecontrol>
-                                <onleft>3</onleft>
+                                <onleft>32</onleft>
                                 <onright>60</onright>
                                 <content>
                                     <item>
@@ -284,7 +300,7 @@
                         </control>
 
                         <control type="group">
-                            <visible>Container(3).HasFocus(4)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(Settings.Main.Category),Addons)</visible>
                             <include content="List_DialogSelect">
                                 <param name="detailed">True</param>
                                 <param name="item_height">120</param>
@@ -295,7 +311,7 @@
                                 <param name="variation">true</param>
                                 <param name="icon">$VAR[Image_AddonStatus]</param>
                                 <param name="textcolor">main_fg</param>
-                                <onleft>3</onleft>
+                                <onleft>35</onleft>
                                 <onright>60</onright>
                                 <pagecontrol>60</pagecontrol>
                                 <top>20</top>
@@ -308,7 +324,7 @@
                         </control>
 
                         <control type="group">
-                            <visible>Container(3).HasFocus(5)</visible>
+                            <visible>String.IsEqual(Window(Home).Property(Settings.Main.Category),Statistics)</visible>
 
                             <control type="scrollbar" id="65">
                                 <centerright>0</centerright>
@@ -317,7 +333,7 @@
                                 <texturesliderbackground />
                                 <texturesliderbar colordiffuse="main_logo" border="4">scrollbar/scrollv_line.png</texturesliderbar>
                                 <include>Texture_Scrollbar_V</include>
-                                <onleft>3</onleft>
+                                <onleft>33</onleft>
                                 <onback>3</onback>
                                 <top>20</top>
                                 <bottom>20</bottom>

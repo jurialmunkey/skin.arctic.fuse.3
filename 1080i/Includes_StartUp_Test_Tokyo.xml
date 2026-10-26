@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Shared live startup and interactive preview composition. -->
+    <include name="Background_StartUp_Scene_Tokyo_Street">
+        <include content="Background_StartUp_Scene_Image">
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/scenes/tokyo/layers/05-scenery-v5/$PARAM[season]/$VAR[Image_StartUp_Scene_Layer_TimeHour].webp</param>
+            <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/tokyo/scenery/$PARAM[season].webp</param>
+        </include>
+        <include content="Background_StartUp_Scene_Image">
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/scenes/tokyo/layers/09-lights-v2/$PARAM[season]/$VAR[Image_StartUp_Scene_Hour].webp</param>
+        </include>
+        <include content="Background_StartUp_Scene_Image">
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/shared/conditions/$VAR[Image_StartUp_Scene_Conditions].webp</param>
+        </include>
+        <include content="Background_StartUp_TextureDrift">
+            <param name="visible">$EXP[Exp_StartUp_Scene_Weather_Hazy]</param>
+            <param name="texture">special://home/addons/resource.images.arctic.splash/resources/layers/08-conditions/hazy/$VAR[Image_StartUp_Scene_Layer_ConditionsHour].webp</param>
+            <param name="time">1200000</param>
+            <param name="colordiffuse">38ffffff</param>
+        </include>
+    </include>
+    <include name="Background_StartUp_Scene_Tokyo_Season">
+        <definition>
+            <control type="group">
+                <visible>$EXP[Exp_StartUp_Scene_Season_$PARAM[season]]</visible>
+                <include>Animation_StartUp_Selection</include>
+                <include content="Background_StartUp_Scene_Tokyo_Street">
+                    <param name="season">$PARAM[season]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+    <include name="Background_StartUp_Scene_Tokyo">
+        <control type="group">
+            <!-- Scene selection changes while this window is open. -->
+            <visible>$EXP[Exp_StartUp_Scene_Selected_Tokyo]</visible>
+            <include>Background_StartUp_Scene_Sky</include>
+            <include content="Background_StartUp_Scene_Tokyo_Season">
+                <param name="season">spring</param>
+            </include>
+            <include content="Background_StartUp_Scene_Tokyo_Season">
+                <param name="season">summer</param>
+            </include>
+            <include content="Background_StartUp_Scene_Tokyo_Season">
+                <param name="season">autumn</param>
+            </include>
+            <include content="Background_StartUp_Scene_Tokyo_Season">
+                <param name="season">winter</param>
+            </include>
+            <include>Background_StartUp_Scene_Overlays</include>
+            <include>Background_StartUp_Scene_Dimming</include>
+        </control>
+    </include>
+</includes>

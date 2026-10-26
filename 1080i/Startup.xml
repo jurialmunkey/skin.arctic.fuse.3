@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
     <previouswindow>Home</previouswindow>
+    <onload condition="String.IsEmpty(Window(Home).Property(Startup.Scene))">SetProperty(Startup.Scene,$VAR[Value_StartUp_InitialScene],Home)</onload>
+    <onload>Skin.SetString(Startup.LastScene,$INFO[Window(Home).Property(Startup.Scene)])</onload>
     <onload condition="!String.IsEmpty(Skin.String(Startup.VideoPath))">AlarmClock(playstartup,PlayMedia($ESCINFO[Skin.String(Startup.VideoPath)],1),00:00,silent)</onload>
     <onload condition="Skin.HasSetting(SkinUserLogin.StartupLoginScreen) + !Skin.HasSetting(SkinUserLogin.Disabled) + String.IsEmpty(Window(Home).Property(StartupReplaceWindow))">SetProperty(StartupReplaceWindow,1195,Home)</onload>
 

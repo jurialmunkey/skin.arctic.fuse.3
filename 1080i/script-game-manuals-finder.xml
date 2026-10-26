@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window type="dialog">
+    <!-- No default control: the results list is empty when the dialog opens, and
+         the add-on focuses it, or a button, once the search has answered -->
+    <controls>
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <description>
+                Offers a manual for a game that has none beside it, through
+                script.game.manuals. The add-on asks whichever add-on says it can
+                provide manuals; nothing here knows about any service.
+            </description>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Conditional_Backing">
+                <param name="visible">true</param>
+                <param name="onleft">200</param>
+                <param name="items">GameManuals_Finder_Buttons</param>
+            </include>
+            <control type="group">
+                <include>Dimension_DialogWideMenu</include>
+                <include content="Size_SlideOver_Conditional_Buttons">
+                    <param name="condition">true</param>
+                </include>
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="id">0</param>
+                            <param name="label">$ADDON[script.game.manuals 32002]</param>
+                        </include>
+                        <include>Part_CloseButton</include>
+                        <include content="Part_ItemLine">
+                            <param name="visible">true</param>
+                            <param name="label">$VAR[Label_GameManuals_Finder_Detail]</param>
+                        </include>
+                    </control>
+
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+
+
+                        <control type="group">
+                            <description>Searching, or why there is nothing to offer</description>
+                            <bottom>80</bottom>
+                            <visible>!String.IsEqual(Window.Property(state),results) + !String.IsEqual(Window.Property(state),downloading)</visible>
+                            <animation effect="fade" time="200">Visible</animation>
+                            <control type="group">
+                                <top>80</top>
+                                <height>100</height>
+                                <visible>String.IsEqual(Window.Property(state),searching)</visible>
+                                <include content="Object_BusySpinner">
+                                    <param name="colordiffuse">dialog_fg</param>
+                                    <param name="haslabel">false</param>
+                                    <param name="icon">special://skin/extras/icons/book-open.png</param>
+                                </include>
+                            </control>
+                            <control type="image">
+                                <centerleft>50%</centerleft>
+                                <top>80</top>
+                                <width>100</width>
+                                <height>100</height>
+                                <aspectratio>keep</aspectratio>
+                                <texture colordiffuse="dialog_fg_70">$VAR[Image_GameManuals_Finder_State]</texture>
+                                <visible>!String.IsEqual(Window.Property(state),searching)</visible>
+                            </control>
+                            <control type="label">
+                                <left>40</left>
+                                <right>40</right>
+                                <top>220</top>
+                                <height>40</height>
+                                <align>center</align>
+                                <font>font_main</font>
+                                <textcolor>dialog_fg_90</textcolor>
+                                <label>$INFO[Window.Property(status)]</label>
+                            </control>
+                            <control type="label">
+                                <left>40</left>
+                                <right>40</right>
+                                <top>260</top>
+                                <height>40</height>
+                                <align>center</align>
+                                <font>font_mini</font>
+                                <textcolor>dialog_fg_70</textcolor>
+                                <label>$INFO[Window.Property(hint)]</label>
+                            </control>
+                        </control>
+
+                        <control type="group">
+                            <description>
+                                The download. The add-on reads the track's width and resizes
+                                the fill, so both are given a fixed width here.
+                            </description>
+                            <bottom>80</bottom>
+                            <visible>String.IsEqual(Window.Property(state),downloading)</visible>
+                            <control type="label">
+                                <left>40</left>
+                                <right>40</right>
+                                <top>220</top>
+                                <height>40</height>
+                                <align>center</align>
+                                <font>font_main</font>
+                                <textcolor>dialog_fg_90</textcolor>
+                                <label>$ADDON[script.game.manuals 32007]$INFO[Window.Property(progress),  ]</label>
+                            </control>
+                            <control type="image" id="400">
+                                <left>40</left>
+                                <top>280</top>
+                                <width>800</width>
+                                <height>8</height>
+                                <texture colordiffuse="dialog_fg_12">common/white.png</texture>
+                            </control>
+                            <control type="image" id="410">
+                                <left>40</left>
+                                <top>280</top>
+                                <width>12</width>
+                                <height>8</height>
+                                <texture colordiffuse="$VAR[ColorHighlight]">common/white.png</texture>
+                            </control>
+                        </control>
+
+                        <control type="group">
+                            <bottom>80</bottom>
+                            <visible>String.IsEqual(Window.Property(state),results)</visible>
+                            <include content="List_Dialog">
+                                <param name="id">200</param>
+                                <param name="itemlayout_include">List_Layout_Dialog_GameManuals</param>
+                                <param name="item_height">140</param>
+                                <include>Size_Grouplist_Pad</include>
+                                <pagecontrol>61</pagecontrol>
+                                <onup>200</onup>
+                                <ondown>200</ondown>
+                                <onright>61</onright>
+                            </include>
+                            <include content="Part_Scrollbar_Max">
+                                <param name="id">61</param>
+                                <param name="inset">false</param>
+                                <onleft>200</onleft>
+                                <onright>9000</onright>
+                            </include>
+                        </control>
+                    </control>
+
+                    <control type="group">
+                        <description>Which add-on is being asked</description>
+                        <visible>!String.IsEmpty(Window.Property(provider))</visible>
+                        <include content="Part_InfoText">
+                            <param name="label">$ADDON[script.game.manuals 32009]: $INFO[Window.Property(provider)]</param>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>

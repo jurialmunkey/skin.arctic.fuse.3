@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window>
     <include content="Action_SettingsCategories_Onload">
-        <param name="defaultcontrol">10000</param>
+        <param name="defaultcontrol">10001</param>
     </include>
+
+    <onload condition="String.IsEmpty(Window(Home).Property(Settings.Skin.Category))">SetProperty(Settings.Skin.Category,0,Home)</onload>
+    <onload>SetFocus($INFO[Window(Home).Property(Settings.Skin.Category),1001,])</onload>
 
     <!-- Set Some Profile Settings -->
     <onload condition="String.IsEmpty(Skin.String(Skin.SettingsLevel))">Skin.SetString(Skin.SettingsLevel,$NUMBER[1])</onload>
@@ -18,53 +21,68 @@
             <include content="Settings_Main_Group">
                 <include content="Settings_Left_Group">
                     <include content="Settings_Left_Content">
-                        <include content="Settings_Category_List">
-                            <param name="id">10000</param>
+                        <control type="grouplist" id="10000">
+                            <orientation>vertical</orientation>
+                            <onup>10000</onup>
+                            <ondown>10000</ondown>
                             <onright>10001</onright>
-                            <pagecontrol>61</pagecontrol>
                             <right>40</right>
-                            <content>
-                                <item id="0" description="Customise">
-                                    <label>$LOCALIZE[31444]</label>
-                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31103], $LOCALIZE[31177], $LOCALIZE[31487] $LOCALIZE[31150][/LOWERCASE].</label2>
-                                </item>
-                                <item id="1" description="Appearance">
-                                    <label>$LOCALIZE[480]</label>
-                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[14078], $LOCALIZE[33068], $LOCALIZE[31487] $LOCALIZE[31486][/LOWERCASE].</label2>
-                                </item>
-                                <item id="2" description="Interface">
-                                    <label>$LOCALIZE[14206]</label>
-                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[19033] $LOCALIZE[736], $LOCALIZE[31208], $LOCALIZE[31487] $LOCALIZE[31239][/LOWERCASE].</label2>
-                                </item>
-                                <item id="3" description="Details">
-                                    <label>$LOCALIZE[33029]</label>
-                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[19033] $LOCALIZE[20459], $LOCALIZE[126], $LOCALIZE[31202], $LOCALIZE[31487] $LOCALIZE[31235][/LOWERCASE].</label2>
-                                </item>
-                                <item id="4" description="Layout">
-                                    <label>$LOCALIZE[31158]</label>
-                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31044], $LOCALIZE[31487] $LOCALIZE[31103][/LOWERCASE].</label2>
-                                </item>
-                                <item id="5" description="Behaviour">
-                                    <label>$LOCALIZE[31186]</label>
-                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[31174], $LOCALIZE[31185], $LOCALIZE[478], $LOCALIZE[31297], $LOCALIZE[31487] $LOCALIZE[31482][/LOWERCASE].</label2>
-                                </item>
-                                <item id="6" description="Other">
-                                    <label>$LOCALIZE[29921]</label>
-                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[14125], $LOCALIZE[12999], $LOCALIZE[31487] $LOCALIZE[13200][/LOWERCASE].</label2>
-                                </item>
-                                <item id="7" description="Dependencies">
-                                    <label>$LOCALIZE[39024]</label>
-                                    <label2>$LOCALIZE[31448] [LOWERCASE]$LOCALIZE[39024] $LOCALIZE[31487] $LOCALIZE[14260][/LOWERCASE].</label2>
-                                </item>
-                                <item id="8" description="Thanks">
-                                    <label>$VAR[Label_SkinSettings_Level]</label>
-                                    <label2>$LOCALIZE[31550]</label2>
-                                    <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),1)">Skin.SetString(Skin.SettingsLevel,$NUMBER[2])</onclick>
-                                    <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),2)">Skin.SetString(Skin.SettingsLevel,$NUMBER[3])</onclick>
-                                    <onclick condition="Integer.IsEqual(Skin.String(Skin.SettingsLevel),3)">Skin.SetString(Skin.SettingsLevel,$NUMBER[1])</onclick>
-                                </item>
-                            </content>
-                        </include>
+                            <include content="Settings_Category_Button" description="Customise">
+                                <param name="id">10010</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">0</param>
+                                <param name="label">$LOCALIZE[31444]</param>
+                            </include>
+                            <include content="Settings_Category_Button" description="Appearance">
+                                <param name="id">10011</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">1</param>
+                                <param name="label">$LOCALIZE[480]</param>
+                            </include>
+                            <include content="Settings_Category_Button" description="Interface">
+                                <param name="id">10012</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">2</param>
+                                <param name="label">$LOCALIZE[14206]</param>
+                            </include>
+                            <include content="Settings_Category_Button" description="Details">
+                                <param name="id">10013</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">3</param>
+                                <param name="label">$LOCALIZE[33029]</param>
+                            </include>
+                            <include content="Settings_Category_Button" description="Layout">
+                                <param name="id">10014</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">4</param>
+                                <param name="label">$LOCALIZE[31158]</param>
+                            </include>
+                            <include content="Settings_Category_Button" description="Behaviour">
+                                <param name="id">10015</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">5</param>
+                                <param name="label">$LOCALIZE[31186]</param>
+                            </include>
+                            <include content="Settings_Category_Button" description="Other">
+                                <param name="id">10016</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">6</param>
+                                <param name="label">$LOCALIZE[29921]</param>
+                            </include>
+                            <include content="Settings_Category_Button" description="Dependencies">
+                                <param name="id">10017</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">7</param>
+                                <param name="label">$LOCALIZE[39024]</param>
+                            </include>
+                            <include content="Settings_Category_Button" description="Thanks">
+                                <param name="id">10018</param>
+                                <param name="property">Settings.Skin.Category</param>
+                                <param name="category">8</param>
+                                <param name="label">$VAR[Label_SkinSettings_Level]</param>
+                                <param name="onclick">Skin.SetString(Skin.SettingsLevel,$VAR[Value_SkinSettings_NextLevel])</param>
+                            </include>
+                        </control>
                         <control type="group">
                             <height>80</height>
                             <width>80</width>
@@ -73,12 +91,12 @@
                             <control type="image">
                                 <texture colordiffuse="main_fg_70">$VAR[Image_SkinSettings_Level]</texture>
                                 <bordersize>10</bordersize>
-                                <visible>!Container(10000).HasFocus(8)</visible>
+                                <visible>!String.IsEqual(Window(Home).Property(Settings.Skin.Category),8)</visible>
                             </control>
                             <control type="image">
                                 <texture colordiffuse="$VAR[ColorSelected]">$VAR[Image_SkinSettings_Level]</texture>
                                 <bordersize>10</bordersize>
-                                <visible>Container(10000).HasFocus(8)</visible>
+                                <visible>String.IsEqual(Window(Home).Property(Settings.Skin.Category),8)</visible>
                             </control>
                         </control>
                     </include>
@@ -100,7 +118,7 @@
 
                     <include content="Settings_Right_Grouplist">
                         <param name="id">10001</param>
-                        <onleft>10000</onleft>
+                        <onleft>SetFocus($INFO[Window(Home).Property(Settings.Skin.Category),1001,])</onleft>
                         <include content="SkinSettings_Items_Menus">
                             <param name="baseid">0</param>
                         </include>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="Background_StartUp_FoliageParticle">
+        <param name="size">36</param>
+        <param name="travel">1640,440</param>
+        <param name="time">48000</param>
+        <param name="fadeout">45500</param>
+        <param name="lilt_time">4200</param>
+        <param name="flutter_time">2900</param>
+        <param name="fadein_time">1800</param>
+        <param name="fadeout_time">2500</param>
+        <param name="lilt_start">-22,-32</param>
+        <param name="lilt_end">22,32</param>
+        <param name="rotation_start">-38</param>
+        <param name="rotation_end">42</param>
+        <param name="flipx">false</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <!-- Independent of flutter: diagonal travel with a separate gust and tumble.
+                     Fade before wrapping so an on-screen starting point never jumps. -->
+                <animation type="Conditional" condition="true" reversible="false" loop="true">
+                    <effect type="slide" start="0,0" end="$PARAM[travel]" time="$PARAM[time]" />
+                    <effect type="fade" start="0" end="100" time="$PARAM[fadein_time]" />
+                    <effect type="fade" start="100" end="0" time="$PARAM[fadeout_time]" delay="$PARAM[fadeout]" />
+                </animation>
+                <control type="group">
+                    <!-- Lilt can lift the particle against its travel; unequal periods
+                         keep the broad sway and small flutter from moving in lockstep. -->
+                    <animation effect="slide" start="$PARAM[lilt_start]" end="$PARAM[lilt_end]" time="$PARAM[lilt_time]" tween="sine" easing="inout" pulse="true" condition="true" reversible="false">Conditional</animation>
+                    <control type="image">
+                        <width>$PARAM[size]</width>
+                        <height>$PARAM[size]</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture flipx="$PARAM[flipx]">special://home/addons/resource.images.arctic.splash/resources/effects/foliage/$PARAM[season]/$PARAM[hour].png</texture>
+                        <fadetime>background_fadetime</fadetime>
+                        <animation effect="rotate" start="$PARAM[rotation_start]" end="$PARAM[rotation_end]" center="auto" time="$PARAM[lilt_time]" tween="sine" easing="inout" pulse="true" condition="true" reversible="false">Conditional</animation>
+                        <animation effect="rotatey" start="-58" end="58" center="auto" time="$PARAM[flutter_time]" tween="sine" easing="inout" pulse="true" condition="true" reversible="false">Conditional</animation>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Background_StartUp_Foliage">
+        <control type="group">
+            <!-- Season can change while the splash preview remains open. -->
+            <visible>$PARAM[visible]</visible>
+            <include content="Background_StartUp_FoliageParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">380</param>
+                <param name="top">120</param>
+            </include>
+            <include content="Background_StartUp_FoliageParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">720</param>
+                <param name="top">310</param>
+                <param name="size">24</param>
+                <param name="time">57000</param>
+                <param name="fadeout">54500</param>
+                <param name="lilt_time">5700</param>
+                <param name="flutter_time">3400</param>
+                <param name="flipx">true</param>
+            </include>
+            <include content="Background_StartUp_FoliageParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">1250</param>
+                <param name="top">70</param>
+                <param name="size">42</param>
+                <param name="travel">920,570</param>
+                <param name="time">43000</param>
+                <param name="fadeout">40500</param>
+                <param name="lilt_time">3600</param>
+                <param name="flutter_time">2300</param>
+            </include>
+            <include content="Background_StartUp_FoliageParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">260</param>
+                <param name="top">540</param>
+                <param name="size">30</param>
+                <param name="travel">1800,370</param>
+                <param name="time">63000</param>
+                <param name="fadeout">60500</param>
+                <param name="lilt_time">4900</param>
+                <param name="flutter_time">3100</param>
+                <param name="flipx">true</param>
+            </include>
+            <include content="Background_StartUp_FoliageParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">830</param>
+                <param name="top">770</param>
+                <param name="size">48</param>
+                <param name="travel">1300,410</param>
+                <param name="time">51000</param>
+                <param name="fadeout">48500</param>
+                <param name="lilt_time">6100</param>
+                <param name="flutter_time">3800</param>
+            </include>
+            <include content="Background_StartUp_FoliageParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">1480</param>
+                <param name="top">530</param>
+                <param name="size">20</param>
+                <param name="travel">650,320</param>
+                <param name="time">38000</param>
+                <param name="fadeout">35500</param>
+                <param name="lilt_time">3900</param>
+                <param name="flutter_time">2600</param>
+                <param name="flipx">true</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_WindParticle">
+        <param name="flipx">false</param>
+        <definition>
+            <include content="Background_StartUp_FoliageParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">$PARAM[left]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="travel">$PARAM[travel]</param>
+                <param name="time">$PARAM[time]</param>
+                <param name="fadeout">$PARAM[fadeout]</param>
+                <param name="fadein_time">160</param>
+                <param name="fadeout_time">300</param>
+                <param name="lilt_start">-150,-160</param>
+                <param name="lilt_end">150,160</param>
+                <param name="lilt_time">$PARAM[lilt_time]</param>
+                <param name="flutter_time">$PARAM[flutter_time]</param>
+                <param name="rotation_start">-240</param>
+                <param name="rotation_end">300</param>
+                <param name="flipx">$PARAM[flipx]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Background_StartUp_WindBand">
+        <control type="group">
+            <left>$PARAM[left]</left>
+            <top>$PARAM[top]</top>
+            <!-- Spread starting positions and unequal periods keep the gusts populated
+                 immediately, with short fades hiding each particle's wrap. -->
+            <include content="Background_StartUp_WindParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">-200</param>
+                <param name="top">100</param>
+                <param name="size">34</param>
+                <param name="travel">2440,-240</param>
+                <param name="time">5167</param>
+                <param name="fadeout">4867</param>
+                <param name="lilt_time">1379</param>
+                <param name="flutter_time">639</param>
+                <param name="flipx">false</param>
+            </include>
+            <include content="Background_StartUp_WindParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">150</param>
+                <param name="top">190</param>
+                <param name="size">24</param>
+                <param name="travel">2280,180</param>
+                <param name="time">6750</param>
+                <param name="fadeout">6450</param>
+                <param name="lilt_time">1871</param>
+                <param name="flutter_time">886</param>
+                <param name="flipx">true</param>
+            </include>
+            <include content="Background_StartUp_WindParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">520</param>
+                <param name="top">10</param>
+                <param name="size">46</param>
+                <param name="travel">2400,-160</param>
+                <param name="time">4750</param>
+                <param name="fadeout">4450</param>
+                <param name="lilt_time">1083</param>
+                <param name="flutter_time">521</param>
+                <param name="flipx">false</param>
+            </include>
+            <include content="Background_StartUp_WindParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">880</param>
+                <param name="top">150</param>
+                <param name="size">30</param>
+                <param name="travel">2200,260</param>
+                <param name="time">6167</param>
+                <param name="fadeout">5867</param>
+                <param name="lilt_time">1576</param>
+                <param name="flutter_time">748</param>
+                <param name="flipx">true</param>
+            </include>
+            <include content="Background_StartUp_WindParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">1260</param>
+                <param name="top">60</param>
+                <param name="size">52</param>
+                <param name="travel">2380,-300</param>
+                <param name="time">5500</param>
+                <param name="fadeout">5200</param>
+                <param name="lilt_time">1280</param>
+                <param name="flutter_time">600</param>
+                <param name="flipx">false</param>
+            </include>
+            <include content="Background_StartUp_WindParticle">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">1570</param>
+                <param name="top">220</param>
+                <param name="size">20</param>
+                <param name="travel">2240,140</param>
+                <param name="time">7500</param>
+                <param name="fadeout">7200</param>
+                <param name="lilt_time">2068</param>
+                <param name="flutter_time">1033</param>
+                <param name="flipx">true</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Background_StartUp_Wind">
+        <control type="group">
+            <!-- Weather and season can change in the live preview. -->
+            <visible>$PARAM[visible]</visible>
+            <include content="Background_StartUp_WindBand">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">0</param>
+                <param name="top">-80</param>
+            </include>
+            <include content="Background_StartUp_WindBand">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">-170</param>
+                <param name="top">60</param>
+            </include>
+            <include content="Background_StartUp_WindBand">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">110</param>
+                <param name="top">200</param>
+            </include>
+            <include content="Background_StartUp_WindBand">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">-80</param>
+                <param name="top">340</param>
+            </include>
+            <include content="Background_StartUp_WindBand">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">170</param>
+                <param name="top">480</param>
+            </include>
+            <include content="Background_StartUp_WindBand">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">-140</param>
+                <param name="top">620</param>
+            </include>
+            <include content="Background_StartUp_WindBand">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">70</param>
+                <param name="top">760</param>
+            </include>
+            <include content="Background_StartUp_WindBand">
+                <param name="season">$PARAM[season]</param>
+                <param name="hour">$PARAM[hour]</param>
+                <param name="left">-30</param>
+                <param name="top">900</param>
+            </include>
+        </control>
+    </include>
+</includes>

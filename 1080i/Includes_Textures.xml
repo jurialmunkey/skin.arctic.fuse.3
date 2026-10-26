@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <include name="Texture_FlixArt_Foreground_Sized">
+        <param name="size">1280x720</param>
+        <param name="variant">flixart</param>
+        <definition>
+            <texture background="true" diffuse="special://skin/extras/diffuse/flixart/$PARAM[size]/$PARAM[variant].png">$VAR[Image_Foreground]</texture>
+        </definition>
+    </include>
+
+    <include name="Texture_FlixArt_Foreground">
+        <param name="variant">flixart</param>
+        <definition>
+            <include content="Texture_FlixArt_Foreground_Sized" condition="Skin.String(Skin.FlixArt.Size,Large)">
+                <param name="size">1440x810</param>
+                <param name="variant">$PARAM[variant]</param>
+            </include>
+            <include content="Texture_FlixArt_Foreground_Sized" condition="Skin.String(Skin.FlixArt.Size,ExtraLarge)">
+                <param name="size">1600x900</param>
+                <param name="variant">$PARAM[variant]</param>
+            </include>
+            <include content="Texture_FlixArt_Foreground_Sized" condition="!Skin.String(Skin.FlixArt.Size,Large) + !Skin.String(Skin.FlixArt.Size,ExtraLarge)">
+                <param name="variant">$PARAM[variant]</param>
+            </include>
+        </definition>
+    </include>
+
     <include name="Texture_Shadow_20">
         <param name="colordiffuse">shadow_hard</param>
         <definition>
@@ -99,15 +124,15 @@
     </include>
     <include name="Texture_MainMenu_Highlight_ToggleButton_FakeFocus">
         <texturenofocus />
-        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="80">common/menumain.png</texturefocus>
-        <alttexturefocus colordiffuse="$VAR[ColorHighlight]" border="80">common/menumain.png</alttexturefocus>
-        <alttexturenofocus colordiffuse="$VAR[ColorHighlight]" border="80">common/menumain.png</alttexturenofocus>
+        <texturefocus colordiffuse="$VAR[ColorHighlight]" border="40">common/menu.png</texturefocus>
+        <alttexturefocus colordiffuse="$VAR[ColorHighlight]" border="40">common/menu.png</alttexturefocus>
+        <alttexturenofocus colordiffuse="$VAR[ColorHighlight]" border="40">common/menu.png</alttexturenofocus>
     </include>
     <include name="Texture_MainMenu_Highlight_V">
-        <texture border="80" colordiffuse="$VAR[ColorHighlight]">common/menumain.png</texture>
+        <include>Texture_Menu_Highlight_V</include>
     </include>
     <include name="Texture_MainMenu_Highlight_H">
-        <texture border="80" colordiffuse="$VAR[ColorHighlight]">common/menumain.png</texture>
+        <include>Texture_Menu_Highlight_H</include>
     </include>
     <include name="Texture_Box_Highlight_H">
         <texture border="20" colordiffuse="$VAR[ColorHighlight]">common/box.png</texture>

@@ -86,6 +86,7 @@
                         </include>
                         <include content="Part_ItemPage">
                             <param name="id">$PARAM[id]</param>
+                            <param name="details">$PARAM[details]</param>
                         </include>
                         <include content="Part_CloseButton">
                             <param name="id">$PARAM[closebutton_id]</param>
@@ -167,7 +168,7 @@
         <param name="condition">true</param>
         <definition>
             <onclick condition="$PARAM[condition]">ReloadSkin()</onclick>
-            <onclick condition="$PARAM[condition]">AlarmClock(refocusblura,SetFocus(10000,1,absolute),00:00,silent)</onclick>
+            <onclick condition="$PARAM[condition]">AlarmClock(refocusblura,SetFocus(10011),00:00,silent)</onclick>
             <onclick condition="$PARAM[condition]">AlarmClock(refocusblurb,SetFocus(10001),00:00,silent)</onclick>
             <onclick condition="$PARAM[condition]">AlarmClock(refocusblurc,ActivateWindow(1118),00:00,silent)</onclick>
             <onclick condition="$PARAM[condition] + $PARAM[condition_service]">AlarmClock(refocusblurd,RunScript(plugin.video.themoviedb.helper,restart_service),00:01,silent)</onclick>
@@ -661,8 +662,8 @@
             <param name="control">radiobutton</param>
             <param name="istext">true</param>
             <param name="label">$LOCALIZE[31224]</param>
-            <selected>Skin.String(Background.Image,special://skin/extras/backgrounds/pink_blur.jpg)</selected>
-            <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/pink_blur.jpg)</onclick>
+            <selected>[Skin.String(Background.Image,special://skin/extras/backgrounds/blur/pink_blur.jpg) | Skin.String(Background.Image,special://skin/extras/backgrounds/pink_blur.jpg)]</selected>
+            <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/pink_blur.jpg)</onclick>
             <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
         </include>
         <include content="Button_Dialog_Setting">
@@ -716,7 +717,7 @@
             <param name="control">radiobutton</param>
             <param name="istext">true</param>
             <param name="label">$LOCALIZE[636]</param>
-            <selected>!String.StartsWith(Skin.String(Background.Image),special://skin/extras/backgrounds/blur/) + !String.IsEmpty(Skin.String(Background.Image))</selected>
+            <selected>!String.StartsWith(Skin.String(Background.Image),special://skin/extras/backgrounds/blur/) + !Skin.String(Background.Image,special://skin/extras/backgrounds/pink_blur.jpg) + !String.IsEmpty(Skin.String(Background.Image))</selected>
             <onclick>Skin.SetImage(Background.Image)</onclick>
             <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
         </include>
@@ -1137,33 +1138,6 @@
             <selected>$EXP[Exp_TMDbHelper_IsData]</selected>
         </include>
 
-        <include content="Settings_Button">
-            <param name="id">8031</param>
-            <param name="control">radiobutton</param>
-            <param name="dialog">true</param>
-            <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableDirector)</onclick>
-            <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableDirector)</selected>
-            <label>$LOCALIZE[20339]</label>
-            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
-        </include>
-        <include content="Settings_Button">
-            <param name="id">8032</param>
-            <param name="control">radiobutton</param>
-            <param name="dialog">true</param>
-            <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableWriter)</onclick>
-            <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableWriter)</selected>
-            <label>$LOCALIZE[20417]</label>
-            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
-        </include>
-        <include content="Settings_Button">
-            <param name="id">8033</param>
-            <param name="control">radiobutton</param>
-            <param name="dialog">true</param>
-            <onclick>Skin.ToggleSetting(VideoInfo.Widgets.DisableCreator)</onclick>
-            <selected>!Skin.HasSetting(VideoInfo.Widgets.DisableCreator)</selected>
-            <label>$LOCALIZE[31065]</label>
-            <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
-        </include>
         <include content="Settings_Button">
             <param name="id">8034</param>
             <param name="control">radiobutton</param>
@@ -1807,6 +1781,24 @@
             <label>$LOCALIZE[35320]</label>
             <onclick>ActivateWindow(GameCheats)</onclick>
             <visible>RetroPlayer.SupportsCheats</visible>
+        </include>
+        <include content="Settings_ButtonImage">
+            <param name="id">8007</param>
+            <param name="groupid">8107</param>
+            <param name="dialog">true</param>
+            <description>
+                Manual button. Opens the manual that came with the game, or offers to go
+                looking for one if there is none beside it. script.game.manuals reports
+                for itself when nothing can be found, so the button stays available
+                either way. Every condition is read before any action runs, so the
+                manual still opens in the same press once the add-on is installed or
+                enabled.
+            </description>
+            <param name="icon">special://skin/extras/icons/book-open-reader.png</param>
+            <label>$LOCALIZE[35310]</label>
+            <onclick condition="!System.HasAddon(script.game.manuals)">InstallAddon(script.game.manuals)</onclick>
+            <onclick condition="System.HasAddon(script.game.manuals) + !System.AddonIsEnabled(script.game.manuals)">EnableAddon(script.game.manuals)</onclick>
+            <onclick>RunScript(script.game.manuals,game=$ESCINFO[Player.FilenameAndPath],title=$ESCINFO[RetroPlayer.Title])</onclick>
         </include>
 
         <include content="Settings_ButtonImage">

@@ -1,40 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <!-- Two adjacent copies wrap a falling texture without a gap at the loop boundary. -->
+    <include name="Background_FallingTexture">
+        <param name="left">0</param>
+        <param name="width">2430</param>
+        <param name="height">1080</param>
+        <param name="time">16000</param>
+        <param name="aspectratio">keep</param>
+        <param name="colordiffuse">main_fg_70</param>
+        <param name="flipx">false</param>
+        <param name="flipy">false</param>
+        <param name="condition">true</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <control type="image">
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <aspectratio>$PARAM[aspectratio]</aspectratio>
+                    <texture flipx="$PARAM[flipx]" flipy="$PARAM[flipy]" colordiffuse="$PARAM[colordiffuse]">$PARAM[texture]</texture>
+                    <animation effect="slide" time="$PARAM[time]" start="0,0" end="0,$PARAM[height]" condition="$PARAM[condition]" reversible="false" loop="true">Conditional</animation>
+                </control>
+                <control type="image">
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <aspectratio>$PARAM[aspectratio]</aspectratio>
+                    <texture flipx="$PARAM[flipx]" flipy="$PARAM[flipy]" colordiffuse="$PARAM[colordiffuse]">$PARAM[texture]</texture>
+                    <animation effect="slide" time="$PARAM[time]" start="0,-$PARAM[height]" end="0,0" condition="$PARAM[condition]" reversible="false" loop="true">Conditional</animation>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="SeasonalTheme">
         <control type="group">
             <visible>!Skin.HasSetting(SeasonalTheme.DisableLoop)</visible>
             <control type="group">
                 <animation effect="slide" start="60,0" end="-60,0" time="10000" condition="true" reversible="false" pulse="true">Conditional</animation>
                 <animation effect="fade" end="20" condition="true">Conditional</animation>
-                <control type="image">
-                    <texture flipx="true" flipy="true" colordiffuse="main_fg_70">special://skin/extras/backgrounds/holiday/$PARAM[theme_dir]/$PARAM[loop_file]</texture>
-                    <width>2430</width>
-                    <aspectratio>keep</aspectratio>
-                    <animation effect="slide" time="30000" start="0,0" end="0,1080" condition="true" loop="true">Conditional</animation>
-                </control>
-                <control type="image">
-                    <texture flipx="true" flipy="true" colordiffuse="main_fg_70">special://skin/extras/backgrounds/holiday/$PARAM[theme_dir]/$PARAM[loop_file]</texture>
-                    <width>2430</width>
-                    <aspectratio>keep</aspectratio>
-                    <animation effect="slide" time="30000" start="0,-1080" end="0,0" condition="true" loop="true">Conditional</animation>
-                </control>
+                <include content="Background_FallingTexture">
+                    <param name="texture">special://skin/extras/backgrounds/holiday/$PARAM[theme_dir]/$PARAM[loop_file]</param>
+                    <param name="time">30000</param>
+                    <param name="flipx">true</param>
+                    <param name="flipy">true</param>
+                </include>
             </control>
 
             <control type="group">
                 <animation effect="slide" start="-60,0" end="60,0" time="10000" condition="true" reversible="false" pulse="true">Conditional</animation>
-                <control type="image">
-                    <texture colordiffuse="main_fg_70">special://skin/extras/backgrounds/holiday/$PARAM[theme_dir]/$PARAM[loop_file]</texture>
-                    <width>2430</width>
-                    <aspectratio>keep</aspectratio>
-                    <animation effect="slide" time="16000" start="0,0" end="0,1080" condition="true" loop="true">Conditional</animation>
-                </control>
-                <control type="image">
-                    <texture colordiffuse="main_fg_70">special://skin/extras/backgrounds/holiday/$PARAM[theme_dir]/$PARAM[loop_file]</texture>
-                    <width>2430</width>
-                    <aspectratio>keep</aspectratio>
-                    <animation effect="slide" time="16000" start="0,-1080" end="0,0" condition="true" loop="true">Conditional</animation>
-                </control>
+                <include content="Background_FallingTexture">
+                    <param name="texture">special://skin/extras/backgrounds/holiday/$PARAM[theme_dir]/$PARAM[loop_file]</param>
+                </include>
             </control>
         </control>
 

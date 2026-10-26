@@ -28,6 +28,7 @@
     "actions": [
         {
             "rules": [
+                "Window.IsActive(Home)",
                 "String.IsEmpty(Window(Home).Property(HasPreloadedHubs))",
                 "Skin.HasSetting(Startup.EnableHubPreloading)",
                 "!Skin.HasSetting(Startup.DisableWaitForLoad)"
@@ -73,7 +74,7 @@
                 ],
                 [
                     {
-                        "rules": ["!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle)) + System.HasPVRAddon + PVR.HasTVChannels"],
+                        "rules": ["!String.IsEmpty(Skin.String(HomeSwitcher.1107.Toggle))"],
                         "value": ["ActivateWindow(1107)", "sleep=0.3"]
 
                     }
@@ -85,13 +86,22 @@
 
                     }
                 ],
-                "ActivateWindow(Home)"
+                [
+                    {
+                        "rules": ["!String.IsEmpty(Skin.String(HomeSwitcher.1109.Toggle))"],
+                        "value": ["ActivateWindow(1109)", "sleep=0.3"]
+
+                    }
+                ],
+                "ActivateWindow(Home)",
+                "sleep=0.3",
+                "route=run_executebuiltin=special://skin/shortcuts/skinvariables-splash.json&use_rules=True"
             ]
         },
         {
             "rules": [
                 "!Skin.HasSetting(Startup.DisableWaitForLoad)",
-                "{301Updating}!=||{501Updating}!=",
+                "System.HasVisibleModalDialog||{301Updating}!=||{501Updating}!=",
                 "System.HasAlarm(SplashTimeOut)"
             ],
             "value": [

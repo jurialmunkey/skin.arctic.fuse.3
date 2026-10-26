@@ -1,41 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="window" id="1191">
-    <defaultcontrol>9001</defaultcontrol>
+    <defaultcontrol always="true">52</defaultcontrol>
+    <onload condition="String.IsEmpty(Window(1191).Property(SplashTest.Season))">SetProperty(SplashTest.Season,$VAR[Image_StartUp_Season],1191)</onload>
+    <onload condition="String.IsEmpty(Window(1191).Property(SplashTest.Weather))">SetProperty(SplashTest.Weather,$VAR[Image_StartUp_Weather],1191)</onload>
+    <onload condition="String.IsEmpty(Window(1191).Property(SplashTest.Hour))">SetProperty(SplashTest.Hour,$VAR[Image_StartUp_Hour],1191)</onload>
+    <onunload>ClearProperty(SplashTest.AutoTime,1191)</onunload>
+    <onunload>Skin.TimerStop(splashtest_autotime)</onunload>
     <controls>
-
-        <!-- <include content="Overlay_Test_Window_Fonts">
-            <param name="font">font_title_main</param>
-        </include> -->
-
-        <control type="grouplist">
-            <orientation>vertical</orientation>
-            <!-- <include content="Overlay_InfoLabel">
-                <label> -Container(9988).ListItem.Label: $INFO[Container(9988).ListItem.Label] </label>
-                <textcolor>magenta</textcolor>
-            </include>
-            <include content="Overlay_InfoLabel">
-                <label> -Container(9988).ListItem.Property(TotalEpisodes): $INFO[Container(9988).ListItem.Property(TotalEpisodes)] </label>
-                <textcolor>magenta</textcolor>
-            </include>
-            <include content="Overlay_InfoLabel">
-                <label> -Container(9988).ListItem.Property(WatchedEpisodes): $INFO[Container(9988).ListItem.Property(WatchedEpisodes)] </label>
-                <textcolor>magenta</textcolor>
-            </include>
-            <include content="Overlay_InfoLabel">
-                <label> -Container(9988).ListItem.Property(UnWatchedEpisodes): $INFO[Container(9988).ListItem.Property(UnWatchedEpisodes)] </label>
-                <textcolor>magenta</textcolor>
-            </include> -->
-            <include content="Overlay_InfoLabel">
-                <label> -Window(Home).Property(ReloadCounter): $INFO[Window(Home).Property(ReloadCounter)] </label>
-                <textcolor>magenta</textcolor>
-            </include>
-            <include content="List_Landscape_Row">
-                <param name="id">9988</param>
-                <height>560</height>
-                <!-- <content>plugin://script.skinvariables/?info=get_dbitem_tvshow_details&amp;dbid=200</content> -->
-                <content sortby="userpreference">plugin://script.skinvariables/?info=get_refresh_counter&amp;uid=9988&amp;window_id=Home&amp;window_prop=ReloadCounter</content>
+        <control type="group">
+            <visible>![$EXP[Exp_StartUp_Test_Scene_Tokyo] | $EXP[Exp_StartUp_Test_Scene_Countryside]]</visible>
+            <include content="Background_StartUp_Layered">
+                <param name="season">$INFO[Window(1191).Property(SplashTest.Season)]</param>
+                <param name="weather">$INFO[Window(1191).Property(SplashTest.Weather)]</param>
+                <param name="base_weather">$VAR[Image_StartUp_Test_Layer_BaseWeather]</param>
+                <param name="cloud_clear_visible">$EXP[Exp_StartUp_Test_BaseWeather_Clear]</param>
+                <param name="cloud_cloud_visible">$EXP[Exp_StartUp_Test_Weather_Overcast]</param>
+                <param name="cloud_rain_visible">$EXP[Exp_StartUp_Test_Weather_Precipitation]</param>
+                <param name="cloud_colordiffuse">$VAR[Color_StartUp_Test_Clouds]</param>
+                <param name="cloud_reflection_colordiffuse">$VAR[Color_StartUp_Test_CloudReflection]</param>
+                <param name="rain_visible">String.IsEqual(Window(1191).Property(SplashTest.Weather),rain) | $EXP[Exp_StartUp_Test_Weather_Thunderstorm] | $EXP[Exp_StartUp_Test_Weather_HeavyRain]</param>
+                <param name="wind_visible">$EXP[Exp_StartUp_Test_Weather_Windy]</param>
+                <param name="heavy_rain_visible">$EXP[Exp_StartUp_Test_Weather_HeavyRain]</param>
+                <param name="snow_visible">String.IsEqual(Window(1191).Property(SplashTest.Weather),snow)</param>
+                <param name="lightning_visible">$EXP[Exp_StartUp_Test_Weather_Thunderstorm]</param>
+                <param name="severe_lightning_visible">$EXP[Exp_StartUp_Test_Weather_SevereThunderstorm]</param>
+                <param name="haze_visible">String.IsEqual(Window(1191).Property(SplashTest.Weather),hazy)</param>
+                <param name="dimming_visible">$EXP[Exp_StartUp_Test_Daytime]</param>
+                <param name="hour">$INFO[Window(1191).Property(SplashTest.Hour)]</param>
+                <param name="sky">$VAR[Image_StartUp_Test_Layer_Sky]</param>
+                <param name="cloud_hour">$VAR[Image_StartUp_Test_Layer_CloudHour]</param>
+                <param name="glow_hour">$VAR[Image_StartUp_Test_Layer_GlowHour]</param>
+                <param name="conditions_hour">$VAR[Image_StartUp_Test_Layer_ConditionsHour]</param>
+                <param name="time">$VAR[Image_StartUp_Test_Layer_Time]</param>
             </include>
         </control>
+        <include>Background_StartUp_Scene_Tokyo</include>
+        <include>Background_StartUp_Scene_Countryside</include>
 
+        <control type="group">
+            <animation effect="fade" start="100" end="0" time="400" tween="sine" easing="inout" condition="System.IdleTime(3)">Conditional</animation>
+            <include content="Object_StartUp_Logo">
+                <param name="weather_visible">true</param>
+                <param name="weather_icon_visible">true</param>
+                <param name="weather_label_visible">true</param>
+                <param name="weather_description_visible">true</param>
+                <param name="weather_icon">resource://resource.images.weathericons.white/$VAR[Image_StartUp_Test_WeatherCode].png</param>
+                <param name="weather_label">[B]$VAR[Label_StartUp_Test_Clock][/B]</param>
+                <param name="weather_description">$VAR[Label_StartUp_Test_Weather]</param>
+            </include>
+            <include content="Object_StartUp_Selector">
+                <param name="icon">$INFO[ListItem.CurrentItem,special://skin/extras/profiles/Mountains (,).jpg]</param>
+                <param name="onup">52</param>
+                <param name="ondown">52</param>
+                <param name="static_content">true</param>
+                <param name="content_include">Object_StartUp_Test_Selector_Items</param>
+            </include>
+        </control>
     </controls>
 </window>

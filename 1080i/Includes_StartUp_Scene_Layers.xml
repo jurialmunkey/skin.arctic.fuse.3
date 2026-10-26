@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="Background_StartUp_Scene_Image">
+        <param name="colordiffuse">ffffffff</param>
+        <param name="diffuse"></param>
+        <param name="top">0</param>
+        <definition>
+            <control type="image">
+                <top>$PARAM[top]</top>
+                <width>1920</width>
+                <height>1080</height>
+                <aspectratio align="center" aligny="center">scale</aspectratio>
+                <texture colordiffuse="$PARAM[colordiffuse]" diffuse="$PARAM[diffuse]">$PARAM[texture]</texture>
+                <fadetime>background_fadetime</fadetime>
+            </control>
+        </definition>
+    </include>
+    <include name="Background_StartUp_Scene_Sky">
+        <param name="layers">special://home/addons/resource.images.arctic.splash/resources/layers</param>
+        <param name="sky_folder">01-sky</param>
+        <param name="sun_folder">02-sun-moon</param>
+        <param name="glow_folder">04-sunset-sunrise</param>
+        <param name="sun_top">0</param>
+        <param name="cloud_top">0</param>
+        <param name="cloud_height">1080</param>
+        <definition>
+            <!-- Resolve each scene's own registered horizon using common hour aliases. -->
+            <include content="Background_StartUp_Scene_Image">
+                <param name="texture">$PARAM[layers]/$PARAM[sky_folder]/$VAR[Image_StartUp_Scene_Layer_SkyHour].jpg</param>
+            </include>
+            <include content="Background_StartUp_Scene_Image">
+                <param name="texture">$PARAM[layers]/$PARAM[sun_folder]/$VAR[Image_StartUp_Scene_Hour].webp</param>
+                <param name="top">$PARAM[sun_top]</param>
+            </include>
+            <include content="Background_StartUp_Clouds">
+                <param name="clear_visible">$EXP[Exp_StartUp_Scene_BaseWeather_Clear]</param>
+                <param name="cloud_visible">$EXP[Exp_StartUp_Scene_Weather_Overcast]</param>
+                <param name="rain_visible">$EXP[Exp_StartUp_Scene_Weather_Precipitation]</param>
+                <param name="hazy_visible">$EXP[Exp_StartUp_Scene_Weather_Hazy]</param>
+                <param name="hour">$VAR[Image_StartUp_Scene_Layer_CloudHour]</param>
+                <param name="colordiffuse">$VAR[Color_StartUp_Scene_Clouds]</param>
+                <param name="top">$PARAM[cloud_top]</param>
+                <param name="height">$PARAM[cloud_height]</param>
+            </include>
+            <control type="group">
+                <top>-60</top>
+                <width>1920</width>
+                <height>1080</height>
+                <!-- Fit the shared bolts to the higher scene skyline, behind the scenery. -->
+                <animation effect="zoom" start="0,0,1920,702" end="0,0,1920,702" time="0" condition="true" reversible="false">Conditional</animation>
+                <include content="Background_StartUp_Lightning">
+                    <param name="visible">$EXP[Exp_StartUp_Scene_Weather_Thunderstorm]</param>
+                    <param name="severe_visible">$EXP[Exp_StartUp_Scene_Weather_SevereThunderstorm]</param>
+                    <param name="texture">special://home/addons/resource.images.arctic.splash/resources/layers/03-clouds/thunderstorm/$VAR[Image_StartUp_Scene_Layer_CloudHour].webp</param>
+                    <param name="diffuse">special://home/addons/resource.images.arctic.splash/resources/masks/shared/clouds/thunderstorm.webp</param>
+                </include>
+            </control>
+            <include content="Background_StartUp_Scene_Image">
+                <param name="texture">$PARAM[layers]/$PARAM[glow_folder]/$VAR[Image_StartUp_Scene_Layer_GlowHour].webp</param>
+            </include>
+        </definition>
+    </include>
+    <include name="Background_StartUp_Scene_Overlays">
+        <!-- The original resource remains the shared particle/precipitation source. -->
+        <include content="Background_StartUp_Overlays">
+            <param name="season">$VAR[Image_StartUp_Scene_Season]</param>
+            <param name="cloud_hour">$VAR[Image_StartUp_Scene_Layer_CloudHour]</param>
+            <param name="rain_visible">$EXP[Exp_StartUp_Scene_Weather_Rain]</param>
+            <param name="heavy_rain_visible">$EXP[Exp_StartUp_Scene_Weather_HeavyRain]</param>
+            <param name="snow_visible">$EXP[Exp_StartUp_Scene_Weather_Snow]</param>
+            <param name="wind_visible">$EXP[Exp_StartUp_Scene_Weather_Windy]</param>
+            <param name="lightning_visible">$EXP[Exp_StartUp_Scene_Weather_Thunderstorm]</param>
+            <param name="severe_lightning_visible">$EXP[Exp_StartUp_Scene_Weather_SevereThunderstorm]</param>
+        </include>
+    </include>
+    <include name="Background_StartUp_Scene_Dimming">
+        <control type="image">
+            <texture colordiffuse="7f000000">common/white.png</texture>
+            <visible>$EXP[Exp_StartUp_Scene_Daytime]</visible>
+        </control>
+    </include>
+</includes>

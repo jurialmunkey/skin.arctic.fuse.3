@@ -141,6 +141,23 @@
         </definition>
     </include>
 
+    <include name="Settings_Category_Button">
+        <param name="onclick">noop</param>
+        <definition>
+            <include content="Settings_Button">
+                <param name="id">$PARAM[id]</param>
+                <param name="control">togglebutton</param>
+                <include>Texture_MainMenu_Highlight_ToggleButton_FakeFocus</include>
+                <label>$PARAM[label]</label>
+                <altlabel>[COLOR=$VAR[ColorSelected]]$PARAM[label][/COLOR]</altlabel>
+                <usealttexture>String.IsEqual(Window(Home).Property($PARAM[property]),$PARAM[category])</usealttexture>
+                <onfocus>SetProperty($PARAM[property],$PARAM[category],Home)</onfocus>
+                <onclick>$PARAM[onclick]</onclick>
+                <nested />
+            </include>
+        </definition>
+    </include>
+
     <include name="Settings_Left_Grouplist">
         <control type="grouplist" id="$PARAM[id]">
             <nested />
@@ -197,10 +214,11 @@
         <param name="reload">false</param>
         <param name="slevel">0</param>
         <definition>
-            <visible>Container(10000).HasFocus($PARAM[baseid])</visible>
+            <visible>String.IsEqual(Window(Home).Property(Settings.Skin.Category),$PARAM[baseid])</visible>
+            <onleft>1001$PARAM[baseid]</onleft>
             <include content="Settings_Visible_Level"><param name="slevel">$PARAM[slevel]</param></include>
             <onclick condition="$PARAM[reload]">ReloadSkin()</onclick>
-            <onclick condition="$PARAM[reload]">AlarmClock(refocus1,SetFocus(10000,$PARAM[baseid]),00:00,silent)</onclick>
+            <onclick condition="$PARAM[reload]">AlarmClock(refocus1,SetFocus(1001$PARAM[baseid]),00:00,silent)</onclick>
             <onclick condition="$PARAM[reload]">AlarmClock(refocus2,SetFocus($PARAM[baseid]$PARAM[id]),00:00,silent)</onclick>
         </definition>
     </include>
