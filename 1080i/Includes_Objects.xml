@@ -41,6 +41,30 @@
     <include name="Object_AltTextureFocus">
         <alttexturefocus colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]" border="$PARAM[border]">$PARAM[texture]</alttexturefocus>
     </include>
+    <include name="Object_TextureNoFocus">
+        <texturenofocus colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]" border="$PARAM[border]">$PARAM[texture]</texturenofocus>
+    </include>
+    <include name="Object_AltTextureNoFocus">
+        <alttexturenofocus colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]" border="$PARAM[border]">$PARAM[texture]</alttexturenofocus>
+    </include>
+    <include name="Object_TextureSliderBar">
+        <texturesliderbar colordiffuse="$PARAM[colordiffuse]" border="$PARAM[border]">$PARAM[texture]</texturesliderbar>
+    </include>
+    <include name="Object_TextureSliderBarFocus">
+        <texturesliderbarfocus colordiffuse="$PARAM[colordiffuse]" border="$PARAM[border]">$PARAM[texture]</texturesliderbarfocus>
+    </include>
+    <include name="Object_TextureSliderNibFocus">
+        <textureslidernibfocus colordiffuse="$PARAM[colordiffuse]" border="$PARAM[border]">$PARAM[texture]</textureslidernibfocus>
+    </include>
+    <include name="Object_TextureProgressLeft">
+        <lefttexture colordiffuse="$PARAM[colordiffuse]" border="$PARAM[border]">$PARAM[texture]</lefttexture>
+    </include>
+    <include name="Object_TextureProgressMid">
+        <midtexture colordiffuse="$PARAM[colordiffuse]" border="$PARAM[border]">$PARAM[texture]</midtexture>
+    </include>
+    <include name="Object_TextureProgressRight">
+        <righttexture colordiffuse="$PARAM[colordiffuse]" border="$PARAM[border]">$PARAM[texture]</righttexture>
+    </include>
     <include name="Object_TextureSliderBackground">
         <texturesliderbackground colordiffuse="$PARAM[colordiffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]" border="$PARAM[border]">$PARAM[texture]</texturesliderbackground>
     </include>
@@ -351,7 +375,11 @@
                     <description>Busy animation</description>
                     <animation effect="rotate" condition="$PARAM[spinprogress]" start="0" end="360" loop="true" time="2000" center="auto">Conditional</animation>
                     <control type="image">
-                        <texture colordiffuse="$VAR[ColorHighlight]" flipx="true" flipy="true">$INFO[$PARAM[progress],progress/circle/p,.png]</texture>
+                        <include content="Texture_Progress_Circle">
+                            <param name="progress">$PARAM[progress]</param>
+                            <param name="flipx">true</param>
+                            <param name="flipy">true</param>
+                        </include>
                         <aspectratio align="center" aligny="center">keep</aspectratio>
                     </control>
                 </include>
@@ -962,7 +990,9 @@
                 <right>0</right>
                 <centerbottom>-15</centerbottom>
                 <texturebg colordiffuse="main_fg_12" border="12,0,12,0">progress/progress-nib.png</texturebg>
-                <midtexture colordiffuse="main_logo" border="12,0,12,0">progress/progress-nib.png</midtexture>
+                <include content="Texture_Progress_Mid">
+                    <param name="colordiffuse">main_logo</param>
+                </include>
                 <info>$PARAM[progress]</info>
                 <visible>!Integer.IsEqual($PARAM[progress],0)</visible>
             </control>
@@ -1144,6 +1174,7 @@
     </include>
 
     <include name="Object_Indicator_Selected">
+        <param name="variant" />
         <param name="shadow">true</param>
         <definition>
             <control type="group">
@@ -1155,7 +1186,9 @@
                     <include content="Dimension_Padding">
                         <param name="pad">-32</param>
                     </include>
-                    <texture colordiffuse="$VAR[ColorHighlight]">indicator/circle-fo.png</texture>
+                    <include content="Texture_Indicator_Highlight">
+                        <param name="variant">$PARAM[variant]</param>
+                    </include>
                     <bordertexture colordiffuse="shadow_hard">indicator/circle-fo-shadow.png</bordertexture>
                     <bordersize>32</bordersize>
                 </control>
@@ -1167,6 +1200,7 @@
         <param name="affix" />
         <param name="listitem">ListItem</param>
         <param name="selected">false</param>
+        <param name="variant" />
         <param name="shadow">true</param>
         <param name="backing">true</param>
         <definition>
@@ -1184,6 +1218,7 @@
 
                 <!-- Focused Item -->
                 <include content="Object_Indicator_Selected" condition="$PARAM[selected]">
+                    <param name="variant">$PARAM[variant]</param>
                     <param name="shadow">$PARAM[shadow]</param>
                     <param name="listitem">$PARAM[listitem]</param>
                 </include>
@@ -1443,12 +1478,14 @@
                     </control>
                     <control type="image">
                         <aspectratio>center</aspectratio>
-                        <texture colordiffuse="$VAR[ColorHighlight]">indicator/circle-fo.png</texture>
+                        <include>Texture_Indicator_Highlight</include>
                         <visible>!String.IsEqual(Window(Home).Property(ColorPicker_Type),Highlight) | !Control.HasFocus(3000)</visible>
                     </control>
                     <control type="image">
                         <aspectratio>center</aspectratio>
-                        <texture colordiffuse="$INFO[Container(3000).ListItem.Label]">indicator/circle-fo.png</texture>
+                        <include content="Texture_Indicator_Highlight">
+                            <param name="colordiffuse">$INFO[Container(3000).ListItem.Label]</param>
+                        </include>
                         <visible>String.IsEqual(Window(Home).Property(ColorPicker_Type),Highlight) + Control.HasFocus(3000)</visible>
                     </control>
                 </include>
@@ -2037,6 +2074,7 @@
                     </control>
                 </include>
                 <include content="Object_Indicator" condition="$PARAM[indicator]">
+                    <param name="variant">-joined</param>
                     <param name="selected">true</param>
                     <param name="affix">$PARAM[affix]</param>
                     <param name="listitem">$PARAM[listitem]</param>
