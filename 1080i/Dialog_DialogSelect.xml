@@ -141,6 +141,7 @@
         <param name="id">3</param>
         <param name="itemlayout_include">Layout_ViewType</param>
         <param name="windowopen_delay">200</param>
+        <param name="categories">false</param>
         <definition>
             <include>Part_Dim_Overlay</include>
             <control type="group">
@@ -162,7 +163,9 @@
                             <include content="Part_HeadText">
                                 <param name="id">1</param>
                                 <param name="label">$PARAM[header]</param>
+                                <param name="visible">!Integer.IsGreater(Container(10813).NumItems,1)</param>
                             </include>
+                            <include condition="$PARAM[categories]">DialogSelect_GamePreview_Categories</include>
                             <include content="Part_ItemPage">
                                 <param name="id">$PARAM[id]</param>
                             </include>
@@ -178,8 +181,19 @@
                                 <bottom>20</bottom>
 
                                 <control type="wraplist" id="$PARAM[id]">
+                                    <onup condition="$PARAM[categories]">10813</onup>
 
                                     <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
+                                    <animation effect="fade" start="100" end="0" condition="!Integer.IsGreater(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+                                    <!-- Kodi says which way the filters moved to another category -->
+                                    <animation type="Conditional" condition="String.IsEqual(Window.Property(categorymove),next)" reversible="false">
+                                        <effect type="slide" start="240,0" end="0,0" time="200" tween="cubic" easing="out" />
+                                        <effect type="fade" start="0" end="100" time="200" />
+                                    </animation>
+                                    <animation type="Conditional" condition="String.IsEqual(Window.Property(categorymove),previous)" reversible="false">
+                                        <effect type="slide" start="-240,0" end="0,0" time="200" tween="cubic" easing="out" />
+                                        <effect type="fade" start="0" end="100" time="200" />
+                                    </animation>
                                     <orientation>horizontal</orientation>
                                     <focusposition>1</focusposition>
                                     <preloaditems>2</preloaditems>
@@ -227,6 +241,7 @@
                                     <texturefocus />
                                     <width>400</width>
                                     <onclick>Control.Move($PARAM[id],-1)</onclick>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                                 <control type="label">
                                     <left>40</left>
@@ -234,6 +249,7 @@
                                     <align>left</align>
                                     <font>font_mini</font>
                                     <label>$INFO[Container($PARAM[id]).ListItem(-1).Label]</label>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                                 <control type="image">
                                     <centerleft>0</centerleft>
@@ -242,6 +258,7 @@
                                     <height>40</height>
                                     <bordersize>-12</bordersize>
                                     <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-left.png</texture>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
 
                                 <control type="label">
@@ -259,6 +276,7 @@
                                     <right>0</right>
                                     <width>400</width>
                                     <onclick>Control.Move($PARAM[id],1)</onclick>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                                 <control type="label">
                                     <right>40</right>
@@ -266,6 +284,7 @@
                                     <align>right</align>
                                     <font>font_mini</font>
                                     <label>$INFO[Container($PARAM[id]).ListItem(1).Label]</label>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                                 <control type="image">
                                     <centerright>0</centerright>
@@ -274,6 +293,7 @@
                                     <height>40</height>
                                     <bordersize>-12</bordersize>
                                     <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-right.png</texture>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                             </control>
                         </control>
@@ -297,6 +317,7 @@
             <param name="itemlayout_include">Layout_GameWindow</param>
             <param name="header">$VAR[Label_GameOSD_Heading]</param>
             <param name="windowopen_delay">400</param>  <!-- Delay to wait for blackout mask -->
+            <param name="categories">true</param>
         </include>
         <control type="group">
             <description>Mask gamewindow overlap in itemlayout due to wraplist not masking</description>
@@ -327,6 +348,54 @@
         </control>
     </include>
 
+
+    <!-- Every category on one row that scrolls, rather than the hub selector's
+         current category and the next three -->
+    <include name="DialogSelect_GamePreview_Categories">
+        <control type="group">
+            <left>constant_dialog_pad</left>
+            <top>constant_dialog_pad</top>
+            <right>constant_dialog_header_right</right>
+            <height>view_bar</height>
+            <visible>Integer.IsGreater(Container(10813).NumItems,1)</visible>
+            <control type="list" id="10813">
+                <left>0</left>
+                <right>0</right>
+                <centertop>50%</centertop>
+                <height>80</height>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="quadratic" easing="out">400</scrolltime>
+                <ondown>10811</ondown>
+                <itemlayout width="240" height="80">
+                    <control type="label">
+                        <right>30</right>
+                        <font>font_main</font>
+                        <textcolor>dialog_fg_30</textcolor>
+                        <aligny>center</aligny>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="240" height="80">
+                    <control type="label">
+                        <right>30</right>
+                        <font>font_main_bold</font>
+                        <textcolor>dialog_fg_100</textcolor>
+                        <aligny>center</aligny>
+                        <scroll>true</scroll>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="image">
+                        <description>Shows the row has focus</description>
+                        <bottom>20</bottom>
+                        <width>60</width>
+                        <height>4</height>
+                        <texture colordiffuse="$VAR[ColorHighlight]">common/white.png</texture>
+                        <visible>Control.HasFocus(10813)</visible>
+                    </control>
+                </focusedlayout>
+            </control>
+        </control>
+    </include>
 
     <include name="DialogSelect_GameSaves">
         <param name="id">3</param>
