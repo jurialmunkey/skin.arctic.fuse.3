@@ -511,16 +511,27 @@
         </include>
     </include>
 
-    <!-- Poster sits at the right of the 320 item: left = 40 gap + (view_ranked_item_w - view_poster_item_w) -->
+    <!-- Poster in a wide item (List_PosterWide_Row): at the left for Stack and Disc -->
+    <include name="Widget_Busy_BlankItem_PosterWide">
+        <param name="left">40</param>
+        <definition>
+            <include content="Widget_Busy_BlankItem">
+                <param name="item_w">view_poster_item_w</param>
+                <param name="item_h">view_poster_item_h</param>
+                <param name="itemlayout_w">view_circle_itemlayout_w</param>
+                <param name="itemlayout_h">view_poster_itemlayout_h</param>
+                <param name="left">$PARAM[left]</param>
+                <param name="second_row">false</param>
+                <param name="first_row">false</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Ranked poster sits at the right of the item: left = 40 gap + (view_ranked_item_w - view_poster_item_w) -->
     <include name="Widget_Busy_BlankItem_Ranked">
-        <include content="Widget_Busy_BlankItem">
-            <param name="item_w">view_poster_item_w</param>
-            <param name="item_h">view_poster_item_h</param>
-            <param name="itemlayout_w">view_circle_itemlayout_w</param>
-            <param name="itemlayout_h">view_poster_itemlayout_h</param>
+        <include content="Widget_Busy_BlankItem_PosterWide">
             <param name="left">142.86</param>
-            <param name="second_row">false</param>
-            <param name="first_row">false</param>
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
         </include>
     </include>
@@ -634,6 +645,17 @@
         <include>Widget_Busy_BlankItem_Ranked</include>
         <include>Widget_Busy_BlankItem_Ranked</include>
     </include>
+    <include name="Widget_Busy_BlankItems__List_Stack_Row">
+        <include>Widget_Busy_BlankItem_PosterWide</include>
+        <include>Widget_Busy_BlankItem_PosterWide</include>
+        <include>Widget_Busy_BlankItem_PosterWide</include>
+        <include>Widget_Busy_BlankItem_PosterWide</include>
+        <include>Widget_Busy_BlankItem_PosterWide</include>
+        <include>Widget_Busy_BlankItem_PosterWide</include>
+    </include>
+    <include name="Widget_Busy_BlankItems__List_Disc_Row">
+        <include>Widget_Busy_BlankItems__List_Stack_Row</include>
+    </include>
     <include name="Widget_Busy_BlankItems__List_Card_Row">
         <include>Widget_Busy_BlankItem_Card</include>
         <include>Widget_Busy_BlankItem_Poster</include>
@@ -677,6 +699,12 @@
         <height>view_poster_item_h</height>
     </include>
     <include name="Widget_Busy_Spinner_Height__List_Ranked_Row">
+        <height>view_poster_item_h</height>
+    </include>
+    <include name="Widget_Busy_Spinner_Height__List_Stack_Row">
+        <height>view_poster_item_h</height>
+    </include>
+    <include name="Widget_Busy_Spinner_Height__List_Disc_Row">
         <height>view_poster_item_h</height>
     </include>
     <include name="Widget_Busy_Spinner_Height__List_Landscape_Row">

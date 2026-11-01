@@ -2360,41 +2360,21 @@
         </definition>
     </include>
 
-    <!-- Single digit rank (widget limit is forced to 9) from 210px tall textures cropped to each digit's width -->
-    <!-- Left aligned to the item and bottom aligned to the poster, drawn 1:1 by keeping aspect in a box of the texture height -->
-    <include name="Layout_Ranked_Numeral">
-        <param name="style">solid</param>
-        <param name="colordiffuse">main_fg_100</param>
-        <param name="listitem">ListItem</param>
-        <definition>
-            <control type="image">
-                <left>0</left>
-                <right>0</right>
-                <bottom>0</bottom>
-                <height>210</height>
-                <aspectratio align="left" aligny="bottom">keep</aspectratio>
-                <texture colordiffuse="$PARAM[colordiffuse]">numerals/$PARAM[style]/$INFO[$PARAM[listitem].CurrentItem].png</texture>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Layout_Ranked">
+    <!-- Poster in a wide (view_ranked_item_w) item with a style layer drawn behind it: Ranked, Stack, Disc -->
+    <include name="Layout_PosterWide">
         <param name="selected">false</param>
         <param name="listitem">ListItem</param>
+        <param name="poster_left">0</param>
         <definition>
             <control type="group">
                 <width>$PARAM[item_w]</width>
                 <height>$PARAM[item_h]</height>
-                <include content="Layout_Ranked_Numeral" condition="$PARAM[selected]">
-                    <param name="listitem">$PARAM[listitem]</param>
-                </include>
-                <include content="Layout_Ranked_Numeral" condition="!$PARAM[selected]">
-                    <param name="style">outline</param>
-                    <param name="colordiffuse">main_fg_50</param>
+                <include content="$PARAM[behind]">
+                    <param name="selected">$PARAM[selected]</param>
                     <param name="listitem">$PARAM[listitem]</param>
                 </include>
                 <control type="group">
-                    <right>0</right>
+                    <left>$PARAM[poster_left]</left>
                     <width>view_poster_item_w</width>
                     <include content="Layout_Poster">
                         <param name="selected">$PARAM[selected]</param>
@@ -2409,6 +2389,72 @@
                         <param name="use_label2">$PARAM[use_label2]</param>
                     </include>
                 </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Ranked: single digit rank (widget limit is forced to 9) from 210px tall textures cropped to each digit's width -->
+    <!-- Left aligned to the item and bottom aligned to the poster, drawn 1:1 by keeping aspect in a box of the texture height -->
+    <include name="Layout_PosterWide_Ranked">
+        <param name="selected">false</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="image">
+                <left>0</left>
+                <right>0</right>
+                <bottom>0</bottom>
+                <height>210</height>
+                <aspectratio align="left" aligny="bottom">keep</aspectratio>
+                <include content="Object_Texture" condition="$PARAM[selected]">
+                    <param name="texture">numerals/solid/$INFO[$PARAM[listitem].CurrentItem].png</param>
+                    <param name="colordiffuse">main_fg_100</param>
+                </include>
+                <include content="Object_Texture" condition="!$PARAM[selected]">
+                    <param name="texture">numerals/outline/$INFO[$PARAM[listitem].CurrentItem].png</param>
+                    <param name="colordiffuse">main_fg_50</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Stack: two plain cards behind the poster, scaled to 90% and 95% from their right edge at 320 and 268.57 -->
+    <!-- The back card is a 1:1 texture of only the part past the middle card (left edge follows its rounded corners, no shadow) -->
+    <!-- so it doesn't show through the translucent middle card -->
+    <include name="Layout_PosterWide_Stack">
+        <control type="image">
+            <left>263</left>
+            <top>15</top>
+            <width>57</width>
+            <height>280</height>
+            <texture colordiffuse="main_fg_06">common/stack-back.png</texture>
+        </control>
+        <control type="group">
+            <left>62.29</left>
+            <top>7.75</top>
+            <width>206.28</width>
+            <height>294.5</height>
+            <include>Object_ItemBack</include>
+        </control>
+    </include>
+
+    <!-- Disc: discart (or the poster masked as a disc) peeking out from behind the poster -->
+    <include name="Layout_PosterWide_Disc">
+        <param name="selected">false</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="group">
+                <top>10</top>
+                <right>0</right>
+                <width>290</width>
+                <height>290</height>
+                <include content="Object_Layout_Image_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="diffuse">diffuse/circle/circle_200.png</param>
+                    <param name="include_discart">true</param>
+                    <param name="icon">$VAR[Image_Circle]</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                    <param name="aspectratio">scale</param>
+                </include>
             </control>
         </definition>
     </include>
