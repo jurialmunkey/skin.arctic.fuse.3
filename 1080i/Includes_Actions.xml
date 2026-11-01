@@ -196,6 +196,57 @@
         <onunload>AlarmClock(rebuild_shortcuts,runscript(script.skinvariables,"run_executebuiltin=special://skin/shortcuts/skinvariables-build-templates.json",use_rules),00:01,silent)</onunload>
     </include>
 
+    <include name="Action_Setting_Header_Onclick">
+        <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableDate)</onclick>
+        <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableHeader)</onclick>
+        <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableDate)</onclick>
+        <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableHeader) + Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableHeader)</onclick>
+    </include>
+
+    <include name="Action_DialogCustom_Settings_Open">
+        <param name="window">1118</param>
+        <definition>
+            <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$PARAM[title][/CAPITALIZE],Home)</onclick>
+            <onclick>SetProperty(CustomDialogSettingsItems,$PARAM[items],Home)</onclick>
+            <onclick>ActivateWindow($PARAM[window])</onclick>
+        </definition>
+    </include>
+
+    <include name="Action_SetupWizard_Open">
+        <onclick>SetProperty(SetupWizard.Index,0,Home)</onclick>
+        <onclick>ActivateWindow(1130)</onclick>
+    </include>
+
+    <!-- Copies a widget preset folder over the current profile's menu files. script.skinvariables asks before overwriting. -->
+    <include name="Action_SetupWizard_WidgetPreset">
+        <definition>
+            <onclick>Skin.SetString(SetupWizard.WidgetGroup,$PARAM[preset])</onclick>
+            <onclick>RunScript(script.skinvariables,copy_menufolder=special://skin/shortcuts/presets/$PARAM[preset]/,skin=$VAR[Path_SkinVariables_SkinFolder])</onclick>
+        </definition>
+    </include>
+
+    <!-- Recommended defaults: the first run settings for everything the wizard covers -->
+    <include name="Action_SetupWizard_Defaults">
+        <onclick>Skin.SetBool(TMDbHelper.EnableData)</onclick>
+        <onclick>Skin.SetBool(TMDbHelper.EnableCrop)</onclick>
+        <onclick>Skin.SetBool(TMDbHelper.EnableBlur)</onclick>
+        <onclick>Skin.SetBool(TMDbHelper.Service)</onclick>
+        <onclick>Skin.Reset(HomeSwitcher.Vertical)</onclick>
+        <onclick>Skin.Reset(HomeSwitcher.EnableIcons)</onclick>
+        <onclick>Skin.Reset(HomeSwitcher.DisableHeader)</onclick>
+        <onclick>Skin.Reset(HomeSwitcher.DisableDate)</onclick>
+        <onclick>Skin.Reset(HomeSwitcher.DisableFirstWidgetFocus)</onclick>
+        <onclick>Skin.SetString(HomeSwitcher.Home.Mode,Standard)</onclick>
+        <include>Action_Scheme_Onclick_Bright</include>
+        <onclick>Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+    </include>
+
+    <include name="Action_SetupWizard_Finish">
+        <onclick>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onclick>
+        <onclick>Dialog.Close(1130,true)</onclick>
+        <onclick>AlarmClock(setupwizardfinish,ReloadSkin(),00:00,silent)</onclick>
+    </include>
+
     <include name="Action_View_Movement_OnDown">
         <param name="condition">true</param>
         <definition>
@@ -407,7 +458,7 @@
         <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.Reset(Background.DialogImage)</onclick>
         <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg)</onclick>
-        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
     </include>
 
     <include name="Action_Scheme_Onclick_Miami">
@@ -416,7 +467,7 @@
         <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.Reset(Background.DialogImage)</onclick>
         <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg)</onclick>
-        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
     </include>
 
     <include name="Action_Scheme_Onclick_Aqua">
@@ -425,7 +476,7 @@
         <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Green)</onclick>
         <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/green_blur.jpg)</onclick>
-        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
     </include>
 
     <include name="Action_Scheme_Onclick_Sunset">
@@ -434,7 +485,7 @@
         <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Blush)</onclick>
         <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/pink_blur.jpg)</onclick>
-        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
     </include>
 
     <include name="Action_Scheme_Onclick_Slate">
@@ -443,7 +494,7 @@
         <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Slate)</onclick>
         <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/slate_blur.jpg)</onclick>
-        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
     </include>
 
     <include name="Action_Scheme_Onclick_Midnight">
@@ -452,7 +503,7 @@
         <onclick condition="!$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Coal)</onclick>
         <onclick condition="$EXP[Exp_TMDbHelper_IsBlur]">Skin.SetString(Background.DialogImage,Adaptive)</onclick>
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/coal_blur.jpg)</onclick>
-        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground])</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
     </include>
 
     <variable name="Action_Shortcut_SetWidgetStyle">

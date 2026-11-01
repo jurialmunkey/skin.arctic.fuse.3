@@ -2,11 +2,12 @@
 <includes>
     <include name="DialogCustom_Favourites_List">
         <param name="scrollbarid">61</param>
+        <param name="itemlayout_include">List_Layout_Dialog_DetailedCheckmark</param>
         <definition>
             <include content="List_Dialog">
                 <param name="id">$PARAM[id]</param>
                 <param name="item_height">128</param>
-                <param name="itemlayout_include">List_Layout_Dialog_DetailedCheckmark</param>
+                <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
                 <pagecontrol>$PARAM[scrollbarid]</pagecontrol>
                 <onright>$PARAM[scrollbarid]</onright>
                 <include>Size_Grouplist_Pad</include>
@@ -58,6 +59,7 @@
         <param name="groupid" />
         <param name="include_content">DialogCustom_Favourites_Content</param>
         <param name="include_list">DialogCustom_Favourites_List</param>
+        <param name="itemlayout_include">List_Layout_Dialog_DetailedCheckmark</param>
         <param name="dialog_size">Dimension_DialogWideMenu</param>
         <param name="resize">false</param>
         <param name="visible">true</param>
@@ -99,6 +101,7 @@
                         <include content="$PARAM[include_list]">
                             <param name="id">$PARAM[id]</param>
                             <param name="include_content">$PARAM[include_content]</param>
+                            <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
                         </include>
                     </control>
                     <include content="Part_Scrollbar">
@@ -113,6 +116,12 @@
     <include name="DialogCustom_Favourites_Content">
         <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-openfavourite.json,use_rules,folderpath=$INFO[Container(450).ListItem.FolderPath])</onclick>
         <content>favourites://</content>
+    </include>
+
+    <include name="DialogCustom_WatchedOn_Content">
+        <onclick condition="!String.IsEqual(Container(450).ListItem.Property(specialsort),bottom)">Action(Info)</onclick>
+        <onclick condition="String.IsEqual(Container(450).ListItem.Property(specialsort),bottom)">SetProperty(path,$INFO[Container(450).ListItem.FolderPath])</onclick>
+        <content>$INFO[Window.Property(path)]</content>
     </include>
 
     <include name="DialogCustom_Trailers">
@@ -163,15 +172,29 @@
         <content>$INFO[Window(Home).Property(PlayTrailerItems)]</content>
     </include>
 
+    <!-- Reopens the dialog (and the setup wizard behind it) so Kodi reloads them with changed conditional includes, without reloading the skin -->
+    <include name="DialogCustom_Reopen">
+        <param name="condition">true</param>
+        <definition>
+            <onclick condition="$PARAM[condition] + Window.IsVisible(1130)">AlarmClock(dialogreopena,ActivateWindow(1130),00:00,silent)</onclick>
+            <onclick condition="$PARAM[condition]">AlarmClock(dialogreopenb,ActivateWindow($PARAM[window]),00:00,silent)</onclick>
+            <onclick condition="$PARAM[condition]">Dialog.Close($PARAM[window],true)</onclick>
+            <onclick condition="$PARAM[condition] + Window.IsVisible(1130)">Dialog.Close(1130,true)</onclick>
+        </definition>
+    </include>
+
     <include name="DialogCustom_Reload_1118">
         <param name="condition_service">false</param>
         <param name="condition">true</param>
+        <param name="window">1118</param>
         <definition>
-            <onclick condition="$PARAM[condition]">ReloadSkin()</onclick>
+            <!-- Alarms are set before the reload: list items queue their actions, and the reload discards anything still queued behind it -->
             <onclick condition="$PARAM[condition]">AlarmClock(refocusblura,SetFocus(10011),00:00,silent)</onclick>
             <onclick condition="$PARAM[condition]">AlarmClock(refocusblurb,SetFocus(10001),00:00,silent)</onclick>
-            <onclick condition="$PARAM[condition]">AlarmClock(refocusblurc,ActivateWindow(1118),00:00,silent)</onclick>
+            <onclick condition="$PARAM[condition] + Window.IsVisible(1130)">AlarmClock(refocusblurbwizard,ActivateWindow(1130),00:00,silent)</onclick>
+            <onclick condition="$PARAM[condition]">AlarmClock(refocusblurc,ActivateWindow($PARAM[window]),00:00,silent)</onclick>
             <onclick condition="$PARAM[condition] + $PARAM[condition_service]">AlarmClock(refocusblurd,RunScript(plugin.video.themoviedb.helper,restart_service),00:01,silent)</onclick>
+            <onclick condition="$PARAM[condition]">ReloadSkin()</onclick>
         </definition>
     </include>
 
@@ -182,7 +205,6 @@
 
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Settings_Items_ColourPresets)">DialogCustom_Settings_Items_ColourPresets</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Settings_Items_ColourHighlights)">DialogCustom_Settings_Items_ColourHighlights</include>
-        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Settings_Items_BackgroundDialogImage)">DialogCustom_Settings_Items_BackgroundDialogImage</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Settings_Items_BackgroundStyle)">DialogCustom_Settings_Items_BackgroundStyle</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Settings_Items_BackgroundImage)">DialogCustom_Settings_Items_BackgroundImage</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Settings_Items_Startup)">DialogCustom_Settings_Items_Startup</include>
@@ -484,152 +506,120 @@
         </include>
     </include>
 
-    <include name="DialogCustom_Settings_Items_BackgroundDialogImage">
+    <!-- Tile dialog (1131): the same title and items properties as 1118, shown as a grid of image tiles -->
+    <include name="DialogCustom_Tiles_List">
+        <param name="scrollbarid">61</param>
+        <definition>
+            <include content="List_Core">
+                <param name="id">$PARAM[id]</param>
+                <param name="control">panel</param>
+                <param name="orientation">vertical</param>
+                <param name="item_w">205</param>
+                <param name="item_h">140</param>
+                <param name="itemlayout_w">205</param>
+                <param name="itemlayout_h">140</param>
+                <param name="itemlayout_include">List_Layout_Dialog_Tile</param>
+                <param name="offset_x">20</param>
+                <param name="offset_y">20</param>
+                <pagecontrol>$PARAM[scrollbarid]</pagecontrol>
+                <onright>$PARAM[scrollbarid]</onright>
+                <include>Size_Grouplist_Pad</include>
+                <include>$PARAM[include_content]</include>
+            </include>
+        </definition>
+    </include>
 
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8010</param>
-            <param name="groupid">8110</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31432]</param>
-            <selected>$EXP[Exp_DialogTheme_IsAdaptive]</selected>
-            <onclick>Skin.SetBool(TMDbHelper.EnableBlur)</onclick>
-            <onclick>Skin.SetBool(TMDbHelper.EnableCrop)</onclick>
-            <onclick>Skin.SetString(Background.DialogImage,Adaptive)</onclick>
-            <include>DialogCustom_Reload_1118</include>
-        </include>
+    <!-- Detailed select dialog (1132): the same title and items properties as 1118, shown as a detailed list -->
+    <include name="DialogCustom_Detailed_Items">
+        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogSetupWizard_Content_WidgetSets)">DialogSetupWizard_Content_WidgetSets</include>
+    </include>
 
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8001</param>
-            <param name="groupid">8101</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31143]</param>
-            <selected>String.IsEmpty(Skin.String(Background.DialogImage))</selected>
-            <onclick>Skin.Reset(Background.DialogImage)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+    <include name="DialogCustom_Tiles_Items">
+        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Tiles_BackgroundDialogImage)">DialogCustom_Tiles_BackgroundDialogImage</include>
+    </include>
+
+    <!-- Dialog background tile. Adaptive and static backgrounds are different includes, so switching between them reloads the skin. -->
+    <include name="DialogCustom_Tiles_BackgroundDialogImage_Item">
+        <definition>
+            <item>
+                <label>$PARAM[label]</label>
+                <icon>special://skin/extras/backgrounds/dialogs/$PARAM[image]_blur.png</icon>
+                <property name="current">$VAR[Label_Setting_ColourDialog]</property>
+                <onclick>$PARAM[action]</onclick>
+                <include content="DialogCustom_Reopen">
+                    <param name="condition">$EXP[Exp_DialogTheme_IsAdaptive]</param>
+                    <param name="window">1131</param>
+                </include>
+            </item>
+        </definition>
+    </include>
+
+    <include name="DialogCustom_Tiles_BackgroundDialogImage">
+        <content>
+            <item>
+                <label>$LOCALIZE[31432]</label>
+                <icon>special://skin/extras/icons/wand-magic-sparkles.png</icon>
+                <property name="isicon">true</property>
+                <property name="current">$VAR[Label_Setting_ColourDialog]</property>
+                <onclick>Skin.SetBool(TMDbHelper.EnableBlur)</onclick>
+                <onclick>Skin.SetBool(TMDbHelper.EnableCrop)</onclick>
+                <onclick>Skin.SetString(Background.DialogImage,Adaptive)</onclick>
+                <include content="DialogCustom_Reopen">
+                    <param name="condition">!$EXP[Exp_DialogTheme_IsAdaptive]</param>
+                    <param name="window">1131</param>
+                </include>
+            </item>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[571]</param>
+                <param name="action">Skin.Reset(Background.DialogImage)</param>
+                <param name="image">classic</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8002</param>
-            <param name="groupid">8102</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[762]</param>
-            <selected>Skin.String(Background.DialogImage,Blue)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Blue)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[762]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Blue)</param>
+                <param name="image">blue</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8003</param>
-            <param name="groupid">8103</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31220]</param>
-            <selected>Skin.String(Background.DialogImage,Purple)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Purple)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[31220]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Purple)</param>
+                <param name="image">purple</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8004</param>
-            <param name="groupid">8104</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31224]</param>
-            <selected>Skin.String(Background.DialogImage,Pink)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Pink)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[31224]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Pink)</param>
+                <param name="image">pink</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8005</param>
-            <param name="groupid">8105</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[13341]</param>
-            <selected>Skin.String(Background.DialogImage,Green)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Green)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[13341]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Green)</param>
+                <param name="image">green</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8006</param>
-            <param name="groupid">8106</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31221]</param>
-            <selected>Skin.String(Background.DialogImage,Slate)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Slate)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[31221]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Slate)</param>
+                <param name="image">slate</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8007</param>
-            <param name="groupid">8107</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31222]</param>
-            <selected>Skin.String(Background.DialogImage,Coal)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Coal)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[31222]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Coal)</param>
+                <param name="image">coal</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8008</param>
-            <param name="groupid">8108</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31225]</param>
-            <selected>Skin.String(Background.DialogImage,Chalk)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Chalk)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[31225]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Chalk)</param>
+                <param name="image">chalk</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8009</param>
-            <param name="groupid">8109</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31146]</param>
-            <selected>Skin.String(Background.DialogImage,Onyx)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Onyx)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[31226]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Blush)</param>
+                <param name="image">blush</param>
             </include>
-        </include>
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8010</param>
-            <param name="groupid">8110</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <param name="label">$LOCALIZE[31226]</param>
-            <selected>Skin.String(Background.DialogImage,Blush)</selected>
-            <onclick>Skin.SetString(Background.DialogImage,Blush)</onclick>
-            <include content="DialogCustom_Reload_1118">
-                <param name="condition">Skin.String(Background.DialogImage,Adapative)</param>
+            <include content="DialogCustom_Tiles_BackgroundDialogImage_Item">
+                <param name="label">$LOCALIZE[31146]</param>
+                <param name="action">Skin.SetString(Background.DialogImage,Onyx)</param>
+                <param name="image">onyx</param>
             </include>
-        </include>
+        </content>
     </include>
 
     <include name="DialogCustom_Settings_Items_BackgroundImage">
@@ -1036,7 +1026,6 @@
             <param name="dialog">true</param>
             <param name="id">8002</param>
             <param name="control">radiobutton</param>
-            <param name="slevel">2</param>
             <label>$LOCALIZE[31045] [LOWERCASE]$LOCALIZE[39123][/LOWERCASE]</label>
             <selected>!Skin.HasSetting(OSD.DisableLandscapeOnInfo)</selected>
             <onclick>Skin.ToggleSetting(OSD.DisableLandscapeOnInfo)</onclick>
@@ -1047,7 +1036,6 @@
             <param name="dialog">true</param>
             <param name="id">8003</param>
             <param name="control">radiobutton</param>
-            <param name="slevel">2</param>
             <label>$LOCALIZE[207]</label>
             <selected>!Skin.HasSetting(OSD.DisablePlotRatingsOnInfo)</selected>
             <onclick>Skin.ToggleSetting(OSD.DisablePlotRatingsOnInfo)</onclick>
@@ -1057,7 +1045,6 @@
         <include content="Settings_Label">
             <param name="id">8004</param>
             <param name="dialog">true</param>
-            <param name="slevel">2</param>
             <label>$LOCALIZE[31585]</label>
         </include>
 
@@ -1065,7 +1052,6 @@
             <param name="dialog">true</param>
             <param name="id">8005</param>
             <param name="control">radiobutton</param>
-            <param name="slevel">2</param>
             <label>$LOCALIZE[31045]</label>
             <selected>!Skin.HasSetting(OSD.InfoOverlay.DisableLandscapeOnInfo)</selected>
             <onclick>Skin.ToggleSetting(OSD.InfoOverlay.DisableLandscapeOnInfo)</onclick>
@@ -1075,7 +1061,6 @@
             <param name="dialog">true</param>
             <param name="id">8006</param>
             <param name="control">radiobutton</param>
-            <param name="slevel">2</param>
             <label>$LOCALIZE[207]</label>
             <selected>!Skin.HasSetting(OSD.InfoOverlay.DisablePlotRatingsOnInfo)</selected>
             <onclick>Skin.ToggleSetting(OSD.InfoOverlay.DisablePlotRatingsOnInfo)</onclick>

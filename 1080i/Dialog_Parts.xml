@@ -6,6 +6,12 @@
         </control>
     </include>
 
+    <include name="Part_Box_Highlight">
+        <control type="image">
+            <include>Texture_Box_Highlight_H</include>
+        </control>
+    </include>
+
     <include name="Part_List_Checkmark">
         <param name="colordiffuse_off">dialog_fg_30</param>
         <param name="colordiffuse_on">dialog_fg_70</param>
@@ -28,6 +34,24 @@
                 <visible>$PARAM[selected]</visible>
             </control>
         </definition>
+    </include>
+
+    <!-- Check badge for a static item whose label matches its "current" property -->
+    <include name="Part_List_Current_Check">
+        <control type="group">
+            <right>10</right>
+            <top>10</top>
+            <width>40</width>
+            <height>40</height>
+            <visible>String.IsEqual(ListItem.Label,ListItem.Property(current))</visible>
+            <control type="image">
+                <texture colordiffuse="$VAR[ColorHighlight]">common/circle.png</texture>
+            </control>
+            <control type="image">
+                <bordersize>9</bordersize>
+                <texture colordiffuse="$VAR[ColorSelected]">indicator/checkmark.png</texture>
+            </control>
+        </control>
     </include>
 
     <include name="Part_List_Icon_Padding">
@@ -175,6 +199,8 @@
 
     <include name="Part_ItemLine">
         <param name="haspath">false</param>
+        <param name="colordiffuse">dialog_fg</param>
+        <param name="visible">true</param>
         <definition>
             <control type="grouplist">
                 <height>20</height>
@@ -190,13 +216,13 @@
                     <aligny>center</aligny>
                     <align>left</align>
                     <font>font_hint_bold</font>
-                    <textcolor>dialog_fg_30</textcolor>
+                    <textcolor>$PARAM[colordiffuse]_30</textcolor>
                     <label>$PARAM[label]</label>
                     <haspath>$PARAM[haspath]</haspath>
                 </control>
                 <control type="image">
                     <height>1</height>
-                    <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                    <texture colordiffuse="$PARAM[colordiffuse]_06">common/white.png</texture>
                     <centertop>50%</centertop>
                     <width>2000</width>
                 </control>
@@ -258,7 +284,7 @@
     <include name="Part_Line">
         <control type="image">
             <height>1</height>
-            <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+            <texture colordiffuse="dialog_fg_06">common/white.png</texture>
             <centerbottom>0</centerbottom>
             <left>40</left>
             <right>40</right>
@@ -268,7 +294,7 @@
     <include name="Part_Line_Vert">
         <control type="image">
             <width>1</width>
-            <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+            <texture colordiffuse="dialog_fg_06">common/white.png</texture>
             <centerright>0</centerright>
             <top>40</top>
             <bottom>40</bottom>
@@ -281,7 +307,7 @@
             <control type="image">
                 <centertop>50%</centertop>
                 <height>1</height>
-                <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                <texture colordiffuse="dialog_fg_06">common/white.png</texture>
                 <left>20</left>
                 <right>20</right>
             </control>
@@ -369,7 +395,7 @@
     </include>
 
     <include name="Part_Scrollbar_Inset_Def">
-        <texturesliderbackground colordiffuse="$VAR[Color_DialogBorder]" border="4">scrollbar/scrollv_line.png</texturesliderbackground>
+        <texturesliderbackground colordiffuse="dialog_fg_06" border="4">scrollbar/scrollv_line.png</texturesliderbackground>
         <centerright>20</centerright>
     </include>
 
@@ -382,7 +408,7 @@
             <width>1</width>
             <top>1</top>
             <bottom>1</bottom>
-            <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+            <texture colordiffuse="dialog_fg_06">common/white.png</texture>
         </control>
     </include>
 
@@ -448,11 +474,12 @@
         <param name="left">20</param>
         <param name="right">20</param>
         <param name="centerbottom">40</param>
+        <param name="height">40</param>
         <param name="subline">false</param>
         <param name="scroll">false</param>
         <definition>
             <control type="group">
-                <height>40</height>
+                <height>$PARAM[height]</height>
                 <centerbottom>$PARAM[centerbottom]</centerbottom>
                 <left>$PARAM[left]</left>
                 <right>$PARAM[right]</right>
@@ -461,11 +488,13 @@
                     <height>1</height>
                     <left>20</left>
                     <right>20</right>
-                    <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                    <texture colordiffuse="dialog_fg_06">common/white.png</texture>
                 </control>
                 <control type="image">
                     <centerleft>50</centerleft>
                     <width>40</width>
+                    <height>40</height>
+                    <centertop>50%</centertop>
                     <bordersize>-12</bordersize>
                     <texture colordiffuse="$PARAM[colordiffuse]">special://skin/extras/icons/info2.png</texture>
                 </control>
@@ -572,14 +601,14 @@
                 </include>
                 <nested />
                 <control type="image">
-                    <texture colordiffuse="$VAR[Color_DialogBorder]" border="20">common/dialog-outline.png</texture>
+                    <texture colordiffuse="dialog_fg_06" border="20">common/dialog-outline.png</texture>
                 </control>
             </control>
         </definition>
     </include>
 
     <include name="Part_Box">
-        <param name="colordiffuse">$VAR[Color_DialogBorder]</param>
+        <param name="colordiffuse">dialog_fg_06</param>
         <definition>
             <control type="image">
                 <texture colordiffuse="$PARAM[colordiffuse]" border="20">common/dialog.png</texture>
@@ -594,7 +623,7 @@
 
     <include name="Part_Background_Glass_Border">
         <control type="image">
-            <texture colordiffuse="$VAR[Color_DialogBorder]" border="20">common/dialog-outline.png</texture>
+            <texture colordiffuse="dialog_fg_06" border="20">common/dialog-outline.png</texture>
         </control>
     </include>
 
@@ -696,14 +725,14 @@
                         <param name="control">image</param>
                         <top>160</top>
                         <height>1</height>
-                        <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                        <texture colordiffuse="dialog_fg_06">common/white.png</texture>
                         <right>$PARAM[lines_right]</right>
                     </include>
                     <include content="Object_Control" condition="$PARAM[subline]">
                         <param name="control">image</param>
                         <bottom>80</bottom>
                         <height>1</height>
-                        <texture colordiffuse="$VAR[Color_DialogBorder]">common/white.png</texture>
+                        <texture colordiffuse="dialog_fg_06">common/white.png</texture>
                         <right>$PARAM[lines_right]</right>
                     </include>
                 </control>

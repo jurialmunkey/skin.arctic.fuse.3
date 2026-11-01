@@ -1,35 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <!-- Menus -->
-    <include name="SkinSettings_Items_Menus">
+    <!-- Home -->
+    <include name="SkinSettings_Items_Home">
         <include content="Settings_Label" description="Configure">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">001</param>
             <label>$LOCALIZE[24020]</label>
         </include>
-
-        <include content="Settings_Button" description="Customise Widgets">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Edit menu">
+            <param name="help">$LOCALIZE[31653]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">002</param>
-            <param name="dialog">false</param>
             <label>$LOCALIZE[31049]</label>
             <onclick>ActivateWindow(1115)</onclick>
         </include>
-
-        <include content="Settings_Button" description="Startup">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Setup wizard">
+            <param name="help">$LOCALIZE[31753]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">003</param>
-            <param name="dialog">false</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31027]</label>
-            <onclick>Skin.ToggleSetting(HomeSwitcher.DisableFirstWidgetFocus)</onclick>
-            <selected>!Skin.HasSetting(HomeSwitcher.DisableFirstWidgetFocus)</selected>
+            <label>$LOCALIZE[31752]</label>
+            <include>Action_SetupWizard_Open</include>
         </include>
 
         <include content="Settings_Label" description="Menu">
@@ -39,108 +33,186 @@
             <label>$LOCALIZE[33061]</label>
         </include>
         <include content="Settings_Button" description="Position">
-            <param name="dialog">false</param>
+            <param name="help">$LOCALIZE[31655]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">007</param>
-            <param name="dialog">false</param>
-            <param name="control">button</param>
+            <param name="id">005</param>
             <label>$LOCALIZE[31104]</label>
             <label2>$VAR[Label_Setting_Sidemenu]</label2>
             <onclick>Skin.ToggleSetting(HomeSwitcher.Vertical)</onclick>
         </include>
-        <include content="Settings_Button" description="Icon Mode">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Style">
+            <param name="help">$LOCALIZE[31656]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">005</param>
-            <param name="dialog">false</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[480]</label>
+            <param name="id">006</param>
+            <label>$LOCALIZE[31811]</label>
             <label2>$VAR[Label_Setting_HomeIcons]</label2>
             <onclick>Skin.ToggleSetting(HomeSwitcher.EnableIcons)</onclick>
             <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
         </include>
         <include content="Settings_Button" description="Header">
-            <param name="dialog">false</param>
+            <param name="help">$LOCALIZE[31657]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">011</param>
-            <param name="dialog">false</param>
-            <param name="control">button</param>
+            <param name="id">007</param>
             <label>$LOCALIZE[31208]</label>
             <label2>$VAR[Label_SkinSettings_Header]</label2>
             <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
-
-            <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableDate)</onclick>
-            <onclick condition="Skin.HasSetting(HomeSwitcher.DisableHeader)">Skin.Reset(HomeSwitcher.DisableHeader)</onclick>
-
-            <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableDate)</onclick>
-
-            <onclick condition="!Skin.HasSetting(HomeSwitcher.DisableHeader) + Skin.HasSetting(HomeSwitcher.DisableDate)">Skin.SetBool(HomeSwitcher.DisableHeader)</onclick>
+            <include>Action_Setting_Header_Onclick</include>
         </include>
-
-
-        <include content="Settings_Label" description="Layout">
+        <include content="Settings_Button" description="Up action">
+            <param name="help">$LOCALIZE[31658]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">008</param>
-            <label>$LOCALIZE[31105]</label>
+            <label>$LOCALIZE[31349]</label>
+            <label2>$VAR[Label_Setting_TopMenuUpAction]</label2>
+            <onclick condition="String.IsEmpty(Skin.String(HomeSwitcher.OnUp))">Skin.SetString(HomeSwitcher.OnUp,options)</onclick>
+            <onclick condition="Skin.String(HomeSwitcher.OnUp,options)">Skin.Reset(HomeSwitcher.OnUp)</onclick>
+            <visible>!Skin.HasSetting(HomeSwitcher.Vertical)</visible>
         </include>
-        <include content="Settings_Button" description="Slide">
-            <param name="dialog">false</param>
+
+        <include content="Settings_Label" description="Spotlight">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">009</param>
+            <label>$LOCALIZE[31105]</label>
+        </include>
+        <include content="Settings_Button" description="Slide">
+            <param name="help">$LOCALIZE[31659]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">010</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[31060]</label>
             <selected>Skin.HasSetting(Spotlight.EnableSlide)</selected>
             <onclick>Skin.ToggleSetting(Spotlight.EnableSlide)</onclick>
         </include>
-        <include content="Settings_Button" description="Spotlight">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Button action">
+            <param name="help">$LOCALIZE[31660]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">010</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31080]</label>
+            <param name="id">011</param>
+            <label>$LOCALIZE[31814]</label>
             <label2>$VAR[Label_Setting_Spotlight_UseMenuButton]</label2>
             <onclick>Skin.ToggleSetting(Spotlight.UseMenuButton)</onclick>
+        </include>
+
+        <include content="Settings_Label" description="Startup">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">012</param>
+            <label>$LOCALIZE[12999]</label>
+        </include>
+        <include content="Settings_Button" description="Focus widgets">
+            <param name="help">$LOCALIZE[31654]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">013</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31821]</label>
+            <onclick>Skin.ToggleSetting(HomeSwitcher.DisableFirstWidgetFocus)</onclick>
+            <selected>!Skin.HasSetting(HomeSwitcher.DisableFirstWidgetFocus)</selected>
+        </include>
+        <include content="Settings_Button" description="Wait for widgets">
+            <param name="help">$LOCALIZE[31704]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">014</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31428]</label>
+            <onclick>Skin.ToggleSetting(Startup.DisableWaitForLoad)</onclick>
+            <selected>!Skin.HasSetting(Startup.DisableWaitForLoad)</selected>
+        </include>
+        <include content="Settings_Button" description="Preload hubs">
+            <param name="help">$LOCALIZE[31705]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">015</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31084]</label>
+            <onclick>Skin.ToggleSetting(Startup.EnableHubPreloading)</onclick>
+            <selected>Skin.HasSetting(Startup.EnableHubPreloading)</selected>
+            <visible>!Skin.HasSetting(Startup.DisableWaitForLoad)</visible>
+        </include>
+        <include content="Settings_Button" description="Startup image">
+            <param name="help">$LOCALIZE[31665]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">019</param>
+            <label>$LOCALIZE[31255]</label>
+            <label2>$VAR[Label_Setting_StartUpImage]</label2>
+            <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31255][/CAPITALIZE],Home)</onclick>
+            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_Startup,Home)</onclick>
+            <onclick>ActivateWindow(1118)</onclick>
+        </include>
+
+        <include content="Settings_Label" description="Users">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">016</param>
+            <label>$LOCALIZE[31813]</label>
+        </include>
+        <include content="Settings_Button" description="Skin users">
+            <param name="help">$LOCALIZE[31706]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">017</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31506]</label>
+            <onclick>Skin.Reset(SkinVariables.SkinUser.Name)</onclick>
+            <onclick>Skin.Reset(SkinVariables.SkinUser.Icon)</onclick>
+            <onclick>Skin.Reset(SkinVariables.SkinUser)</onclick>
+            <onclick>Skin.ToggleSetting(SkinUserLogin.Disabled)</onclick>
+            <selected>!Skin.HasSetting(SkinUserLogin.Disabled)</selected>
+        </include>
+        <include content="Settings_Button" description="Login screen">
+            <param name="help">$LOCALIZE[31707]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">018</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31505]</label>
+            <onclick>Skin.ToggleSetting(SkinUserLogin.StartupLoginScreen)</onclick>
+            <selected>Skin.HasSetting(SkinUserLogin.StartupLoginScreen)</selected>
+            <visible>!Skin.HasSetting(SkinUserLogin.Disabled)</visible>
         </include>
     </include>
 
     <!-- Appearance -->
     <include name="SkinSettings_Items_Appearance">
-        <include content="Settings_Label" description="LooknFeel Label">
+        <!-- Presets set the highlight colour and the window and dialog backgrounds -->
+        <include content="Settings_Label" description="Colour scheme">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">001</param>
-            <label>$LOCALIZE[24997]</label>
+            <label>$LOCALIZE[31241]</label>
         </include>
-        <include content="Settings_Button" description="Presets">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Preset">
+            <param name="help">$LOCALIZE[31661]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">002</param>
-            <label>$LOCALIZE[31241]</label>
+            <label>$LOCALIZE[31824]</label>
             <label2>$VAR[Label_Setting_ColourPreset]</label2>
             <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31241][/CAPITALIZE],Home)</onclick>
             <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_ColourPresets,Home)</onclick>
             <onclick>ActivateWindow(1118)</onclick>
         </include>
-        <include content="Settings_Button" description="Color Selector">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Highlight">
+            <param name="help">$LOCALIZE[31662]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">003</param>
-            <label> - $LOCALIZE[31231]</label>
+            <label> - $LOCALIZE[31250]</label>
             <label2>$VAR[Label_Setting_ColourScheme]</label2>
             <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[14078][/CAPITALIZE],Home)</onclick>
             <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_ColourHighlights,Home)</onclick>
             <onclick>ActivateWindow(1118)</onclick>
         </include>
-        <include content="Settings_Button" description="Customise Window Background">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Window">
+            <param name="help">$LOCALIZE[31663]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">004</param>
@@ -150,255 +222,146 @@
             <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_BackgroundImage,Home)</onclick>
             <onclick>ActivateWindow(1118)</onclick>
         </include>
-        <include content="Settings_Button" description="Customise Dialog Background">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Dialog">
+            <param name="help">$LOCALIZE[31664]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">005</param>
-            <label> - $LOCALIZE[31204]</label>
+            <label> - $LOCALIZE[31486]</label>
             <label2>$VAR[Label_Setting_ColourDialog]</label2>
-            <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31486][/CAPITALIZE],Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_BackgroundDialogImage,Home)</onclick>
-            <onclick>ActivateWindow(1118)</onclick>
+            <include content="Action_DialogCustom_Settings_Open">
+                <param name="title">$LOCALIZE[31486]</param>
+                <param name="items">DialogCustom_Tiles_BackgroundDialogImage</param>
+                <param name="window">1131</param>
+            </include>
         </include>
-        <include content="Settings_Button" description="Customise Startup">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Blur">
+            <param name="help">$LOCALIZE[31666]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">007</param>
-            <param name="slevel">2</param>
-            <label> - $LOCALIZE[31255]</label>
-            <label2>$VAR[Label_Setting_StartUpImage]</label2>
-            <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31255][/CAPITALIZE],Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_Startup,Home)</onclick>
-            <onclick>ActivateWindow(1118)</onclick>
-        </include>
-        <include content="Settings_Button" description="Background blur">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">008</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31331]</label>
+            <param name="id">006</param>
+            <label> - $LOCALIZE[31812]</label>
             <label2>$VAR[Label_Setting_BackgroundBlur]</label2>
-
             <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31331][/CAPITALIZE],Home)</onclick>
             <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_BackgroundStyle,Home)</onclick>
             <onclick>ActivateWindow(1118)</onclick>
         </include>
-        <include content="Settings_Button" description="Background style">
+        <include content="Settings_Button" description="Focus style">
+            <param name="help">$LOCALIZE[31668]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">007</param>
+            <param name="reload">true</param>
+            <label> - $LOCALIZE[31641]</label>
+            <label2>$VAR[Label_Setting_FocusStyle]</label2>
+            <onclick>Skin.ToggleSetting(OutlinedFocusedStyle)</onclick>
+        </include>
+        <include content="Settings_Button" description="Rating icons">
+            <param name="help">$LOCALIZE[31669]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">008</param>
+            <label> - $LOCALIZE[31202]</label>
+            <label2>$VAR[Label_Setting_Ratings]</label2>
+            <onclick>Skin.ToggleSetting(Ratings.EnableColor)</onclick>
+        </include>
+
+        <include content="Settings_Label" description="Backgrounds">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">009</param>
+            <label>$LOCALIZE[31769]</label>
+        </include>
+        <include content="Settings_Button" description="Fallback">
+            <param name="help">$LOCALIZE[31667]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">010</param>
-            <param name="control">button</param>
             <label>$LOCALIZE[31268]</label>
             <label2>$VAR[Label_Setting_BackgroundStyle]</label2>
             <onclick>Skin.ToggleSetting(Info.EnableStylisedBackgrounds)</onclick>
             <include>Action_Blur_ClearContentFallbacks_Onclick</include>
         </include>
-        <include content="Settings_Button" description="Focus style">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Extra fanart">
+            <param name="help">$LOCALIZE[31684]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">011</param>
-            <param name="control">button</param>
-            <param name="reload">true</param>
-            <label>$LOCALIZE[31641]</label>
-            <label2>$VAR[Label_Setting_FocusStyle]</label2>
-            <onclick>Skin.ToggleSetting(OutlinedFocusedStyle)</onclick>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31297]</label>
+            <onclick>Skin.ToggleSetting(Background.ExtraFanart)</onclick>
+            <selected>Skin.HasSetting(Background.ExtraFanart)</selected>
+            <visible>$EXP[Exp_TMDbHelper_IsBlur]</visible>
         </include>
-        <include content="Settings_Button" description="Ratings">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">009</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31082]</label>
-            <label2>$VAR[Label_Setting_Ratings]</label2>
-            <onclick>Skin.ToggleSetting(Ratings.EnableColor)</onclick>
-        </include>
-    </include>
-
-    <!-- Viewtypes -->
-    <include name="SkinSettings_Items_Viewtypes">
-        <include content="Settings_Label" description="Viewtypes">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">001</param>
-            <param name="slevel">1</param>
-            <label>$LOCALIZE[31044]</label>
-        </include>
-        <include content="Settings_Button" description="Configure Views">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">002</param>
-            <param name="control">button</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[31321]</label>
-            <onclick>runscript(script.skinvariables,action=buildviews,configure)</onclick>
-        </include>
-
-        <include content="Settings_Button" description="Use Simple Text">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">003</param>
-            <param name="slevel">1</param>
-            <label>$LOCALIZE[31292]</label>
-            <label2>$VAR[Label_Settings_TextViewMode]</label2>
-            <onclick>Skin.ToggleSetting(View.UseDetailedListLabels)</onclick>
-        </include>
-
-        <include content="Settings_Button" description="CustomDialog Indicators">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">004</param>
-            <param name="slevel">1</param>
-            <label>$LOCALIZE[31235]</label>
-            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_Indicators,Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31235],Home)</onclick>
-            <onclick>ActivateWindow(1118)</onclick>
-        </include>
-
-        <include content="Settings_Label" description="Widgets">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">005</param>
-            <label>$LOCALIZE[31103]</label>
-        </include>
-
-        <include content="Settings_Button" description="VideoOSD">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">006</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31434]</label>
-            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoOSD_Items,Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31434],Home)</onclick>
-            <onclick>ActivateWindow(1118)</onclick>
-        </include>
-
-
-
-        <include content="Settings_Label" description="Buttons">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">008</param>
-            <label>$LOCALIZE[19033]</label>
-        </include>
-
-        <include content="Settings_Button" description="Information">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">007</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31103]</label>
-            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoInfo_Items,Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31103],Home)</onclick>
-            <onclick>ActivateWindow(1118)</onclick>
-        </include>
-
-        <include content="Settings_Button" description="Information">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">009</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[35059]</label>
-            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Buttons_Items,Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[35059],Home)</onclick>
-            <onclick>ActivateWindow(1118)</onclick>
-        </include>
-
     </include>
 
     <!-- Interface -->
     <include name="SkinSettings_Items_Interface">
-        <include content="Settings_Label" description="Interface">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">001</param>
-            <label>$LOCALIZE[31239]</label>
-        </include>
-        <!-- <include content="Settings_Button" description="Codecs">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">002</param>
-            <param name="dialog">false</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31207]</label>
-            <onclick>Skin.ToggleSetting(Footer.EnableCodecs)</onclick>
-            <selected>Skin.HasSetting(Footer.EnableCodecs)</selected>
-        </include> -->
-        <include content="Settings_Button" description="Now Playing">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">003</param>
-            <param name="dialog">false</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31244]</label>
-            <onclick>Skin.ToggleSetting(Footer.DisableNowPlaying)</onclick>
-            <selected>!Skin.HasSetting(Footer.DisableNowPlaying)</selected>
-        </include>
-        <include content="Settings_Button" description="Studio">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">004</param>
-            <param name="dialog">false</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[572]</label>
-            <onclick>Skin.ToggleSetting(Footer.DisableStudio)</onclick>
-            <selected>!Skin.HasSetting(Footer.DisableStudio)</selected>
-        </include>
         <include content="Settings_Label" description="Header">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">005</param>
+            <param name="id">001</param>
             <label>$LOCALIZE[31208]</label>
         </include>
         <include content="Settings_Button" description="Weather">
-            <param name="dialog">false</param>
+            <param name="help">$LOCALIZE[31678]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">006</param>
-            <param name="dialog">false</param>
+            <param name="id">002</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[12600]</label>
             <onclick>Skin.ToggleSetting(Header.DisableWeather)</onclick>
             <selected>!Skin.HasSetting(Header.DisableWeather)</selected>
         </include>
 
-
-        <include content="Settings_Label" description="Context">
+        <include content="Settings_Label" description="Footer">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">008</param>
-            <label>$LOCALIZE[10106]</label>
+            <param name="id">003</param>
+            <label>$LOCALIZE[31239]</label>
+        </include>
+        <include content="Settings_Button" description="Now playing">
+            <param name="help">$LOCALIZE[31676]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">004</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31244]</label>
+            <onclick>Skin.ToggleSetting(Footer.DisableNowPlaying)</onclick>
+            <selected>!Skin.HasSetting(Footer.DisableNowPlaying)</selected>
+        </include>
+        <include content="Settings_Button" description="Studio">
+            <param name="help">$LOCALIZE[31677]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">005</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[572]</label>
+            <onclick>Skin.ToggleSetting(Footer.DisableStudio)</onclick>
+            <selected>!Skin.HasSetting(Footer.DisableStudio)</selected>
         </include>
 
-        <include content="Settings_Button" description="Tray Buttons">
-            <param name="dialog">false</param>
+        <include content="Settings_Label" description="Context menu">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">009</param>
+            <param name="id">006</param>
+            <label>$LOCALIZE[10106]</label>
+        </include>
+        <include content="Settings_Button" description="Options tray">
+            <param name="help">$LOCALIZE[31679]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">007</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[31372]</label>
             <onclick>Skin.ToggleSetting(ContextMenu.DisableOptionsTray)</onclick>
             <selected>!Skin.HasSetting(ContextMenu.DisableOptionsTray)</selected>
         </include>
-
         <include content="Settings_Button" description="Artwork">
-            <param name="dialog">false</param>
+            <param name="help">$LOCALIZE[31680]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">010</param>
+            <param name="id">008</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[39123]</label>
             <onclick>Skin.ToggleSetting(ContextMenu.DisableArtwork)</onclick>
@@ -406,244 +369,253 @@
             <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </include>
 
-    </include>
-
-    <!-- Behaviour -->
-    <include name="SkinSettings_Items_Behaviour">
-        <include content="Settings_Label" description="Widgets">
+        <include content="Settings_Label" description="Text">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">001</param>
-            <label>$LOCALIZE[31103]</label>
+            <param name="id">009</param>
+            <label>$LOCALIZE[31329]</label>
         </include>
-        <include content="Settings_Button" description="Autoscroll">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">002</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31187]</label>
-            <label2>$INFO[Skin.String(AutoScrollTime)]</label2>
-            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Autoscroll_Items,Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31185],Home)</onclick>
-            <onclick>ActivateWindow(1118)</onclick>
-        </include>
-        <include content="Settings_Button" description="More item">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">003</param>
-            <param name="dialog">false</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31036]</label>
-            <onclick>Skin.ToggleSetting(Widgets.EnableShowMore)</onclick>
-            <selected>Skin.HasSetting(Widgets.EnableShowMore)</selected>
-        </include>
-        <include content="Settings_Button" description="No Items Placeholder">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">004</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31519]</label>
-            <label2>$VAR[Label_Settings_WidgetNoResults]</label2>
-            <onclick condition="Skin.HasSetting(Widgets.DisableNoResultsItem)">Skin.Reset(Widgets.DisableNoResultsItem)</onclick>
-            <onclick condition="!Skin.HasSetting(Widgets.DisableNoResultsItem)">RunScript(script.skinvariables,run_dialog=yesno,"heading=$LOCALIZE[31519]","message=[B][COLOR=red][UPPERCASE]$LOCALIZE[14117][/UPPERCASE][/B][/COLOR] - $LOCALIZE[31522] $LOCALIZE[31524] $LOCALIZE[31523]",yeslabel=$LOCALIZE[31162],nolabel=$LOCALIZE[222],defaultbutton=10,"executebuiltin=Skin.SetBool(Widgets.DisableNoResultsItem)")</onclick>
-        </include>
-        <include content="Settings_Button" description="Extra fanart">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">042</param>
-            <param name="dialog">false</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31093]</label>
-            <onclick>Skin.ToggleSetting(Background.ExtraFanart)</onclick>
-            <selected>Skin.HasSetting(Background.ExtraFanart)</selected>
-            <visible>$EXP[Exp_TMDbHelper_IsBlur]</visible>
-        </include>
-
-        <include content="Settings_Label" description="Navigation">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">005</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[31174]</label>
-        </include>
-
-        <include content="Settings_Button" description="OnBack">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">006</param>
-            <param name="control">button</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[31324] > $LOCALIZE[31166]</label>
-            <label2>$VAR[Label_Settings_NavigationOnBack]</label2>
-            <onclick condition="$EXP[Exp_Navigation_OnPrevious]">Skin.SetString(Navigation.OnBack,Parent)</onclick>
-            <onclick condition="!$EXP[Exp_Navigation_OnPrevious]">Skin.SetString(Navigation.OnBack,Previous)</onclick>
-        </include>
-
-        <include content="Settings_Button" description="OnScroll">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">007</param>
-            <param name="control">button</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[31324] > $LOCALIZE[31457]</label>
-            <label2>$VAR[Label_Settings_NavigationOnScroll]</label2>
-            <onclick>Skin.ToggleSetting(Navigation.DisableAlphabetJump)</onclick>
-        </include>
-
-        <include content="Settings_Label" description="Labels">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">008</param>
-            <label>$LOCALIZE[31425]</label>
-        </include>
-        <include content="Settings_Button" description="Use fake textbox">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">020</param>
-            <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31078] ($LOCALIZE[31079])</label>
-            <onclick>Skin.ToggleSetting(Textboxes.DisableFakeBox)</onclick>
-            <selected>!Skin.HasSetting(Textboxes.DisableFakeBox)</selected>
-        </include>
-        <include content="Settings_Button" description="Textbox scrolling">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Static textboxes">
+            <param name="help">$LOCALIZE[31687]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">010</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31078]</label>
+            <onclick>Skin.ToggleSetting(Textboxes.DisableFakeBox)</onclick>
+            <selected>!Skin.HasSetting(Textboxes.DisableFakeBox)</selected>
+        </include>
+        <include content="Settings_Button" description="Scroll textboxes">
+            <param name="help">$LOCALIZE[31688]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">011</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[31246]</label>
             <onclick>Skin.ToggleSetting(Textboxes.DisableAutoscroll)</onclick>
             <selected>!Skin.HasSetting(Textboxes.DisableAutoscroll)</selected>
             <visible>Skin.HasSetting(Textboxes.DisableFakeBox)</visible>
         </include>
-        <include content="Settings_Button" description="Label scrolling">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Scroll labels">
+            <param name="help">$LOCALIZE[31689]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">009</param>
+            <param name="id">012</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[31245]</label>
             <onclick>Skin.ToggleSetting(Labels.Autoscroll)</onclick>
             <selected>Skin.HasSetting(Labels.Autoscroll)</selected>
         </include>
 
-        <!-- Playback -->
-        <include content="Settings_Label" description="Playback">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">011</param>
-            <label>$LOCALIZE[14086]</label>
-        </include>
-
-        <include content="Settings_Button" description="Autoclose OSD timeout">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">012</param>
-            <param name="control">button</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[31189]</label>
-            <label2>$INFO[Skin.String(OSD_Timeout),,s]</label2>
-            <onclick>Skin.SetNumeric(OSD_Timeout)</onclick>
-        </include>
-
-        <include content="Settings_Button" description="Autohide seekbar after pausing">
-            <param name="dialog">false</param>
+        <include content="Settings_Label" description="Mouse">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">013</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31165]</label>
-            <label2>$VAR[Label_Setting_SeekbarPauseBehaviour]</label2>
-
-            <onclick condition="Skin.String(OSD.AutoOnPause,Info)">Skin.SetString(OSD.AutoOnPause,Hide)</onclick>
-            <onclick condition="Skin.String(OSD.AutoOnPause,Hide)">Skin.Reset(OSD.AutoOnPause)</onclick>
-            <onclick condition="![Skin.String(OSD.AutoOnPause,Info) | Skin.String(OSD.AutoOnPause,Hide)]">Skin.SetString(OSD.AutoOnPause,Info)</onclick>
+            <label>$LOCALIZE[14125]</label>
         </include>
-        <include content="Settings_Button" description="Autohide seekbar timing">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Pointer size">
+            <param name="help">$LOCALIZE[31703]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">014</param>
-            <param name="control">button</param>
-            <label>$LOCALIZE[31576]</label>
-            <label2>$VAR[Label_Setting_SeekbarPauseDelay]</label2>
-
-            <onclick condition="Skin.String(OSD.AutoOnPause.Delay,0s)">Skin.SetString(OSD.AutoOnPause.Delay,1s)</onclick>
-            <onclick condition="Skin.String(OSD.AutoOnPause.Delay,1s)">Skin.SetString(OSD.AutoOnPause.Delay,2s)</onclick>
-            <onclick condition="Skin.String(OSD.AutoOnPause.Delay,2s)">Skin.SetString(OSD.AutoOnPause.Delay,3s)</onclick>
-            <onclick condition="![Skin.String(OSD.AutoOnPause.Delay,0s) | Skin.String(OSD.AutoOnPause.Delay,1s) | Skin.String(OSD.AutoOnPause.Delay,2s)]">Skin.SetString(OSD.AutoOnPause.Delay,0s)</onclick>
-
-            <visible>[Skin.String(OSD.AutoOnPause,Info) | Skin.String(OSD.AutoOnPause,Hide)]</visible>
+            <param name="reload">true</param>
+            <label>$LOCALIZE[31094]</label>
+            <label2>$INFO[Skin.String(Mouse.PointerSize)]</label2>
+            <onclick condition="Skin.String(Mouse.PointerSize,32px) | String.IsEmpty(Skin.String(Mouse.PointerSize))">Skin.SetString(Mouse.PointerSize,48px)</onclick>
+            <onclick condition="Skin.String(Mouse.PointerSize,48px)">Skin.SetString(Mouse.PointerSize,64px)</onclick>
+            <onclick condition="Skin.String(Mouse.PointerSize,64px)">Skin.SetString(Mouse.PointerSize,32px)</onclick>
         </include>
-        <include content="Settings_Button" description="Seekbar times">
-            <param name="dialog">false</param>
+    </include>
+
+    <!-- Views -->
+    <include name="SkinSettings_Items_Views">
+        <include content="Settings_Label" description="Viewtypes">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">015</param>
-            <param name="control">button</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[31355]</label>
-            <label2>$VAR[Label_Setting_SeekbarTimeDisplay]</label2>
-            <onclick condition="String.IsEmpty(Skin.String(Seekbar.TimeDisplay))">Skin.SetString(Seekbar.TimeDisplay,Remaining)</onclick>
-            <onclick condition="Skin.String(Seekbar.TimeDisplay,Remaining)">Skin.SetString(Seekbar.TimeDisplay,Combined)</onclick>
-            <onclick condition="Skin.String(Seekbar.TimeDisplay,Combined)">Skin.Reset(Seekbar.TimeDisplay)</onclick>
+            <param name="id">001</param>
+            <label>$LOCALIZE[31044]</label>
         </include>
-        <include content="Settings_Button" description="Background video">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Customise">
+            <param name="help">$LOCALIZE[31670]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">016</param>
+            <param name="id">002</param>
+            <label>$LOCALIZE[31203]</label>
+            <onclick>runscript(script.skinvariables,action=buildviews,configure)</onclick>
+        </include>
+        <include content="Settings_Button" description="Text labels">
+            <param name="help">$LOCALIZE[31671]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">003</param>
+            <label>$LOCALIZE[31292]</label>
+            <label2>$VAR[Label_Settings_TextViewMode]</label2>
+            <onclick>Skin.ToggleSetting(View.UseDetailedListLabels)</onclick>
+        </include>
+        <include content="Settings_Button" description="Indicators">
+            <param name="help">$LOCALIZE[31672]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">004</param>
+            <label>$LOCALIZE[31235]</label>
+            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Settings_Items_Indicators,Home)</onclick>
+            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31235],Home)</onclick>
+            <onclick>ActivateWindow(1118)</onclick>
+        </include>
+
+        <include content="Settings_Label" description="Navigation">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">005</param>
+            <label>$LOCALIZE[31174]</label>
+        </include>
+        <include content="Settings_Button" description="Back action">
+            <param name="help">$LOCALIZE[31685]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">006</param>
+            <label>$LOCALIZE[31166]</label>
+            <label2>$VAR[Label_Settings_NavigationOnBack]</label2>
+            <onclick condition="$EXP[Exp_Navigation_OnPrevious]">Skin.SetString(Navigation.OnBack,Parent)</onclick>
+            <onclick condition="!$EXP[Exp_Navigation_OnPrevious]">Skin.SetString(Navigation.OnBack,Previous)</onclick>
+        </include>
+        <include content="Settings_Button" description="Scrollbar">
+            <param name="help">$LOCALIZE[31686]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">007</param>
+            <label>$LOCALIZE[31457]</label>
+            <label2>$VAR[Label_Settings_NavigationOnScroll]</label2>
+            <onclick>Skin.ToggleSetting(Navigation.DisableAlphabetJump)</onclick>
+        </include>
+
+        <include content="Settings_Label" description="Live TV">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">008</param>
+            <label>$LOCALIZE[31085]</label>
+        </include>
+        <include content="Settings_Button" description="EPG genre colours">
+            <param name="help">$LOCALIZE[31708]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">009</param>
             <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31069]</label>
-            <selected>!Skin.HasSetting(Background.DisableVideo)</selected>
-            <onclick>Skin.ToggleSetting(Background.DisableVideo)</onclick>
+            <label>$LOCALIZE[31127]</label>
+            <onclick>Skin.ToggleSetting(PVR.DisableGenreColours)</onclick>
+            <selected>!Skin.HasSetting(PVR.DisableGenreColours)</selected>
+        </include>
+    </include>
+
+    <!-- Widgets -->
+    <include name="SkinSettings_Items_Widgets">
+        <include content="Settings_Label" description="Widgets">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">001</param>
+            <label>$LOCALIZE[31103]</label>
+        </include>
+        <include content="Settings_Button" description="Autoscroll interval">
+            <param name="help">$LOCALIZE[31681]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">002</param>
+            <label>$LOCALIZE[31187]</label>
+            <label2>$INFO[Skin.String(AutoScrollTime)]</label2>
+            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Autoscroll_Items,Home)</onclick>
+            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31185],Home)</onclick>
+            <onclick>ActivateWindow(1118)</onclick>
+        </include>
+        <include content="Settings_Button" description="Show more item">
+            <param name="help">$LOCALIZE[31682]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">003</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31036]</label>
+            <onclick>Skin.ToggleSetting(Widgets.EnableShowMore)</onclick>
+            <selected>Skin.HasSetting(Widgets.EnableShowMore)</selected>
+        </include>
+        <include content="Settings_Button" description="Empty widgets">
+            <param name="help">$LOCALIZE[31683]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">004</param>
+            <label>$LOCALIZE[31519]</label>
+            <label2>$VAR[Label_Settings_WidgetNoResults]</label2>
+            <onclick condition="Skin.HasSetting(Widgets.DisableNoResultsItem)">Skin.Reset(Widgets.DisableNoResultsItem)</onclick>
+            <onclick condition="!Skin.HasSetting(Widgets.DisableNoResultsItem)">RunScript(script.skinvariables,run_dialog=yesno,"heading=$LOCALIZE[31519]","message=[B][COLOR=red][UPPERCASE]$LOCALIZE[14117][/UPPERCASE][/B][/COLOR] - $LOCALIZE[31522] $LOCALIZE[31524] $LOCALIZE[31523]",yeslabel=$LOCALIZE[31162],nolabel=$LOCALIZE[222],defaultbutton=10,"executebuiltin=Skin.SetBool(Widgets.DisableNoResultsItem)")</onclick>
         </include>
 
-
+        <include content="Settings_Label" description="Information">
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">005</param>
+            <label>$LOCALIZE[19033]</label>
+        </include>
+        <include content="Settings_Button" description="Information widgets">
+            <param name="help">$LOCALIZE[31674]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">006</param>
+            <label>$LOCALIZE[31103]</label>
+            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoInfo_Items,Home)</onclick>
+            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31103],Home)</onclick>
+            <onclick>ActivateWindow(1118)</onclick>
+        </include>
+        <include content="Settings_Button" description="Information buttons">
+            <param name="help">$LOCALIZE[31675]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">007</param>
+            <label>$LOCALIZE[35059]</label>
+            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_Buttons_Items,Home)</onclick>
+            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[35059],Home)</onclick>
+            <onclick>ActivateWindow(1118)</onclick>
+        </include>
     </include>
 
     <!-- Details -->
     <include name="SkinSettings_Items_Details">
-
-        <include content="Settings_Label" description="TMDbHelper">
+        <include content="Settings_Label" description="Services">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">001</param>
-            <label>TMDbHelper</label>
+            <label>$LOCALIZE[31815]</label>
         </include>
-
-        <include content="Settings_Button" description="TMDbHelper Service">
-            <param name="control">radiobutton</param>
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="TMDbHelper">
+            <param name="help">$LOCALIZE[31695]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">002</param>
-            <label>TMDbHelper $LOCALIZE[19099]</label>
+            <param name="control">radiobutton</param>
+            <label>TMDbHelper</label>
             <include>Action_TMDbHelper_Toggle_Onclick</include>
             <selected>$EXP[Exp_TMDbHelper_IsData]</selected>
+        </include>
+        <include content="Settings_Button" description="PVR lookups">
+            <param name="help">$LOCALIZE[31709]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">003</param>
+            <param name="control">radiobutton</param>
+            <label>$LOCALIZE[31435]</label>
+            <onclick>Skin.ToggleSetting(TMDbHelper.DisablePVR)</onclick>
+            <selected>!Skin.HasSetting(TMDbHelper.DisablePVR)</selected>
         </include>
 
         <include content="Settings_Label" description="Ratings">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">003</param>
+            <param name="id">004</param>
             <label>$LOCALIZE[31202]</label>
             <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </include>
-
-        <include content="Settings_Button" description="CustomDialog Movie  Ratings">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Movie ratings">
+            <param name="help">$LOCALIZE[31696]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">004</param>
+            <param name="id">005</param>
             <label>$LOCALIZE[342]</label>
             <label2>$INFO[Skin.String(CustomRating.Movies.Item01)]$INFO[Skin.String(CustomRating.Movies.Item02), • ,]$INFO[Skin.String(CustomRating.Movies.Item03), • ,]</label2>
             <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31202]: $LOCALIZE[342][/CAPITALIZE],Home)</onclick>
@@ -651,12 +623,11 @@
             <onclick>ActivateWindow(1118)</onclick>
             <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </include>
-
-        <include content="Settings_Button" description="CustomDialog TV Ratings">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="TV show ratings">
+            <param name="help">$LOCALIZE[31697]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">005</param>
+            <param name="id">006</param>
             <label>$LOCALIZE[20343]</label>
             <label2>$INFO[Skin.String(CustomRating.TVShows.Item01)]$INFO[Skin.String(CustomRating.TVShows.Item02), • ,]$INFO[Skin.String(CustomRating.TVShows.Item03), • ,]</label2>
             <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31202]: $LOCALIZE[20343][/CAPITALIZE],Home)</onclick>
@@ -665,19 +636,17 @@
             <visible>$EXP[Exp_TMDbHelper_IsData]</visible>
         </include>
 
-        <include content="Settings_Label" description="Interface">
+        <include content="Settings_Label" description="Plotline">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">010</param>
+            <param name="id">007</param>
             <label>$LOCALIZE[31126]</label>
         </include>
         <include content="Settings_Button" description="Movie plotline">
-            <param name="dialog">false</param>
+            <param name="help">$LOCALIZE[31698]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">011</param>
-            <param name="dialog">false</param>
-            <param name="control">button</param>
+            <param name="id">008</param>
             <label>$LOCALIZE[342]</label>
             <label2>$VAR[Label_Setting_Plotline_Movies]</label2>
             <onclick condition="String.IsEmpty(Skin.String(Plotline.Movie))">Skin.SetString(Plotline.Movie,Genre)</onclick>
@@ -685,13 +654,11 @@
             <onclick condition="Skin.String(Plotline.Movie,Director)">Skin.SetString(Plotline.Movie,None)</onclick>
             <onclick condition="Skin.String(Plotline.Movie,None)">Skin.Reset(Plotline.Movie)</onclick>
         </include>
-        <include content="Settings_Button" description="TV plotline">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="TV show plotline">
+            <param name="help">$LOCALIZE[31699]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">012</param>
-            <param name="dialog">false</param>
-            <param name="control">button</param>
+            <param name="id">009</param>
             <label>$LOCALIZE[20343]</label>
             <label2>$VAR[Label_Setting_Plotline_TVShow]</label2>
             <onclick condition="String.IsEmpty(Skin.String(Plotline.TVShow))">Skin.SetString(Plotline.TVShow,Genre)</onclick>
@@ -700,252 +667,230 @@
             <onclick condition="Skin.String(Plotline.TVShow,None)">Skin.Reset(Plotline.TVShow)</onclick>
         </include>
 
-        <include content="Settings_Label" description="Interface">
+        <include content="Settings_Label" description="Information">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">006</param>
+            <param name="id">010</param>
             <label>$LOCALIZE[19033]</label>
         </include>
-        <include content="Settings_Button" description="Star Rating">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Star rating">
+            <param name="help">$LOCALIZE[31700]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">009</param>
-            <param name="dialog">false</param>
+            <param name="id">011</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[33067]</label>
             <onclick>Skin.ToggleSetting(InfoTags.DisableStarRating)</onclick>
             <selected>!Skin.HasSetting(InfoTags.DisableStarRating)</selected>
         </include>
-        <include content="Settings_Button" description="Audio Channels">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Audio channels">
+            <param name="help">$LOCALIZE[31701]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">007</param>
-            <param name="dialog">false</param>
+            <param name="id">012</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[21444]</label>
             <onclick>Skin.ToggleSetting(InfoTags.EnableAudioChannels)</onclick>
             <selected>Skin.HasSetting(InfoTags.EnableAudioChannels)</selected>
         </include>
-        <include content="Settings_Button" description="HDR">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="HDR type">
+            <param name="help">$LOCALIZE[31702]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">008</param>
-            <param name="dialog">false</param>
+            <param name="id">013</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[31031]</label>
             <onclick>Skin.ToggleSetting(InfoTags.EnableHDR)</onclick>
             <selected>Skin.HasSetting(InfoTags.EnableHDR)</selected>
         </include>
-
-
     </include>
 
-    <!-- Other -->
-    <include name="SkinSettings_Items_Other">
-        <include content="Settings_Label" description="Mouse and Keyboard">
+    <!-- Playback -->
+    <include name="SkinSettings_Items_Playback">
+        <include content="Settings_Label" description="OSD">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">001</param>
-            <label>$LOCALIZE[14125]</label>
+            <label>$LOCALIZE[31816]</label>
         </include>
-        <include content="Settings_Button" description="">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Timeout">
+            <param name="help">$LOCALIZE[31690]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">002</param>
+            <label>$LOCALIZE[31189]</label>
+            <label2>$INFO[Skin.String(OSD_Timeout),,s]</label2>
+            <onclick>Skin.SetNumeric(OSD_Timeout)</onclick>
+        </include>
+        <include content="Settings_Button" description="OSD widgets">
+            <param name="help">$LOCALIZE[31673]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">003</param>
-            <param name="control">button</param>
-            <param name="reload">true</param>
-            <label>$LOCALIZE[31094]</label>
-            <label2>$INFO[Skin.String(Mouse.PointerSize)]</label2>
-            <onclick condition="Skin.String(Mouse.PointerSize,32px) | String.IsEmpty(Skin.String(Mouse.PointerSize))">Skin.SetString(Mouse.PointerSize,48px)</onclick>
-            <onclick condition="Skin.String(Mouse.PointerSize,48px)">Skin.SetString(Mouse.PointerSize,64px)</onclick>
-            <onclick condition="Skin.String(Mouse.PointerSize,64px)">Skin.SetString(Mouse.PointerSize,32px)</onclick>
+            <label>$LOCALIZE[31103]</label>
+            <onclick>SetProperty(CustomDialogSettingsItems,DialogCustom_VideoOSD_Items,Home)</onclick>
+            <onclick>SetProperty(CustomDialogSettingsTitle,$LOCALIZE[31434],Home)</onclick>
+            <onclick>ActivateWindow(1118)</onclick>
         </include>
 
-        <include content="Settings_Label" description="Startup">
+        <include content="Settings_Label" description="Seekbar">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">004</param>
-            <param name="slevel">1</param>
-            <label>$LOCALIZE[12999]</label>
+            <label>$LOCALIZE[31817]</label>
         </include>
-        <include content="Settings_Button" description="Startup Init Screen">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Time display">
+            <param name="help">$LOCALIZE[31693]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">005</param>
-            <param name="control">radiobutton</param>
-            <param name="slevel">1</param>
-            <label>$LOCALIZE[31428]</label>
-            <onclick>Skin.ToggleSetting(Startup.DisableWaitForLoad)</onclick>
-            <selected>!Skin.HasSetting(Startup.DisableWaitForLoad)</selected>
+            <label>$LOCALIZE[31355]</label>
+            <label2>$VAR[Label_Setting_SeekbarTimeDisplay]</label2>
+            <onclick condition="String.IsEmpty(Skin.String(Seekbar.TimeDisplay))">Skin.SetString(Seekbar.TimeDisplay,Remaining)</onclick>
+            <onclick condition="Skin.String(Seekbar.TimeDisplay,Remaining)">Skin.SetString(Seekbar.TimeDisplay,Combined)</onclick>
+            <onclick condition="Skin.String(Seekbar.TimeDisplay,Combined)">Skin.Reset(Seekbar.TimeDisplay)</onclick>
         </include>
-        <include content="Settings_Button" description="Hub preloading">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="On pause">
+            <param name="help">$LOCALIZE[31691]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">006</param>
-            <param name="control">radiobutton</param>
-            <param name="slevel">1</param>
-            <label>$LOCALIZE[31084]</label>
-            <onclick>Skin.ToggleSetting(Startup.EnableHubPreloading)</onclick>
-            <selected>Skin.HasSetting(Startup.EnableHubPreloading)</selected>
-            <visible>!Skin.HasSetting(Startup.DisableWaitForLoad)</visible>
+            <label>$LOCALIZE[31165]</label>
+            <label2>$VAR[Label_Setting_SeekbarPauseBehaviour]</label2>
+            <onclick condition="Skin.String(OSD.AutoOnPause,Info)">Skin.SetString(OSD.AutoOnPause,Hide)</onclick>
+            <onclick condition="Skin.String(OSD.AutoOnPause,Hide)">Skin.Reset(OSD.AutoOnPause)</onclick>
+            <onclick condition="![Skin.String(OSD.AutoOnPause,Info) | Skin.String(OSD.AutoOnPause,Hide)]">Skin.SetString(OSD.AutoOnPause,Info)</onclick>
         </include>
-        <include content="Settings_Button" description="Widget profiles">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Pause delay">
+            <param name="help">$LOCALIZE[31692]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">007</param>
+            <label>$LOCALIZE[31576]</label>
+            <label2>$VAR[Label_Setting_SeekbarPauseDelay]</label2>
+            <onclick condition="Skin.String(OSD.AutoOnPause.Delay,0s)">Skin.SetString(OSD.AutoOnPause.Delay,1s)</onclick>
+            <onclick condition="Skin.String(OSD.AutoOnPause.Delay,1s)">Skin.SetString(OSD.AutoOnPause.Delay,2s)</onclick>
+            <onclick condition="Skin.String(OSD.AutoOnPause.Delay,2s)">Skin.SetString(OSD.AutoOnPause.Delay,3s)</onclick>
+            <onclick condition="![Skin.String(OSD.AutoOnPause.Delay,0s) | Skin.String(OSD.AutoOnPause.Delay,1s) | Skin.String(OSD.AutoOnPause.Delay,2s)]">Skin.SetString(OSD.AutoOnPause.Delay,0s)</onclick>
+            <visible>[Skin.String(OSD.AutoOnPause,Info) | Skin.String(OSD.AutoOnPause,Hide)]</visible>
+        </include>
+
+        <include content="Settings_Label" description="Backgrounds">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">008</param>
-            <param name="control">radiobutton</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[31506] ($LOCALIZE[31507])</label>
-            <onclick>Skin.Reset(SkinVariables.SkinUser.Name)</onclick>
-            <onclick>Skin.Reset(SkinVariables.SkinUser.Icon)</onclick>
-            <onclick>Skin.Reset(SkinVariables.SkinUser)</onclick>
-            <onclick>Skin.ToggleSetting(SkinUserLogin.Disabled)</onclick>
-            <selected>!Skin.HasSetting(SkinUserLogin.Disabled)</selected>
+            <label>$LOCALIZE[31769]</label>
         </include>
-        <include content="Settings_Button" description="Widget profiles">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Background video">
+            <param name="help">$LOCALIZE[31694]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">009</param>
             <param name="control">radiobutton</param>
-            <param name="slevel">2</param>
-            <label>$LOCALIZE[31505]</label>
-            <onclick>Skin.ToggleSetting(SkinUserLogin.StartupLoginScreen)</onclick>
-            <selected>Skin.HasSetting(SkinUserLogin.StartupLoginScreen)</selected>
-            <visible>!Skin.HasSetting(SkinUserLogin.Disabled)</visible>
+            <label>$LOCALIZE[31069]</label>
+            <selected>!Skin.HasSetting(Background.DisableVideo)</selected>
+            <onclick>Skin.ToggleSetting(Background.DisableVideo)</onclick>
         </include>
+    </include>
 
-        <include content="Settings_Label" description="Expert">
+    <!-- Seasonal -->
+    <include name="SkinSettings_Items_Seasonal">
+        <include content="Settings_Label" description="Seasonal themes">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">020</param>
-            <param name="slevel">1</param>
-            <label>PVR / $LOCALIZE[31085]</label>
-        </include>
-        <include content="Settings_Button" description="EPG Grid Genre Colours">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">021</param>
-            <param name="control">radiobutton</param>
-            <param name="slevel">1</param>
-            <label>$LOCALIZE[31127]</label>
-            <onclick>Skin.ToggleSetting(PVR.DisableGenreColours)</onclick>
-            <selected>!Skin.HasSetting(PVR.DisableGenreColours)</selected>
-        </include>
-        <include content="Settings_Button" description="TMDbHelper for PVR">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">022</param>
-            <param name="control">radiobutton</param>
-            <param name="slevel">2</param>
-            <label>PVR $LOCALIZE[31435]</label>
-            <onclick>Skin.ToggleSetting(TMDbHelper.DisablePVR)</onclick>
-            <selected>!Skin.HasSetting(TMDbHelper.DisablePVR)</selected>
-        </include>
-
-        <include content="Settings_Label" description="Seasonal Themes">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">023</param>
+            <param name="id">001</param>
             <label>$LOCALIZE[31610]</label>
         </include>
-        <include content="Settings_Button" description="Seasonal Themes: Enabled">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Enabled">
+            <param name="help">$LOCALIZE[31710]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">024</param>
+            <param name="id">002</param>
             <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31610]</label>
+            <label>$LOCALIZE[31819]</label>
             <onclick>Skin.ToggleSetting(SeasonalTheme.Enable)</onclick>
             <selected>Skin.HasSetting(SeasonalTheme.Enable)</selected>
         </include>
-        <include content="Settings_Button" description="Seasonal Themes: Christmas">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Christmas">
+            <param name="help">$LOCALIZE[31711]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">025</param>
-            <param name="control">button</param>
-            <label> - $LOCALIZE[31611] ($LOCALIZE[31612])</label>
+            <param name="id">003</param>
+            <label> - $LOCALIZE[31611]</label>
             <label2>$VAR[Label_Setting_SeasonalThemesChristmas]</label2>
             <onclick condition="Skin.String(SeasonalTheme.ChristmasTheme,Aussie)">Skin.SetString(SeasonalTheme.ChristmasTheme,Off)</onclick>
             <onclick condition="Skin.String(SeasonalTheme.ChristmasTheme,Off)">Skin.Reset(SeasonalTheme.ChristmasTheme)</onclick>
             <onclick condition="String.IsEmpty(Skin.String(SeasonalTheme.ChristmasTheme))">Skin.SetString(SeasonalTheme.ChristmasTheme,Aussie)</onclick>
             <visible>Skin.HasSetting(SeasonalTheme.Enable)</visible>
         </include>
-        <include content="Settings_Button" description="Seasonal Theme: Summer Breeze">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Summer">
+            <param name="help">$LOCALIZE[31712]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">026</param>
+            <param name="id">004</param>
             <param name="control">radiobutton</param>
-            <label> - $LOCALIZE[31615] ($LOCALIZE[31616])</label>
+            <label> - $LOCALIZE[31615]</label>
             <onclick>Skin.ToggleSetting(SeasonalTheme.DisableSummer)</onclick>
             <selected>!Skin.HasSetting(SeasonalTheme.DisableSummer)</selected>
             <visible>Skin.HasSetting(SeasonalTheme.Enable)</visible>
         </include>
-        <include content="Settings_Button" description="Seasonal Theme: Halloween Spook">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Halloween">
+            <param name="help">$LOCALIZE[31713]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">027</param>
+            <param name="id">005</param>
             <param name="control">radiobutton</param>
-            <label> - $LOCALIZE[31617] ($LOCALIZE[31618])</label>
+            <label> - $LOCALIZE[31617]</label>
             <onclick>Skin.ToggleSetting(SeasonalTheme.DisableHalloween)</onclick>
             <selected>!Skin.HasSetting(SeasonalTheme.DisableHalloween)</selected>
             <visible>Skin.HasSetting(SeasonalTheme.Enable)</visible>
         </include>
-        <include content="Settings_Button" description="Seasonal Themes: Background Overlay">
-            <param name="dialog">false</param>
+
+        <include content="Settings_Label" description="Effects">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">028</param>
-            <param name="slevel">2</param>
+            <param name="id">006</param>
+            <label>$LOCALIZE[31818]</label>
+            <visible>Skin.HasSetting(SeasonalTheme.Enable)</visible>
+        </include>
+        <include content="Settings_Button" description="Overlay">
+            <param name="help">$LOCALIZE[31714]</param>
+            <param name="window">skinsettings</param>
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">007</param>
             <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31619]</label>
+            <label>$LOCALIZE[31585]</label>
             <onclick>Skin.ToggleSetting(SeasonalTheme.DisableOverlay)</onclick>
             <selected>!Skin.HasSetting(SeasonalTheme.DisableOverlay)</selected>
             <visible>Skin.HasSetting(SeasonalTheme.Enable)</visible>
         </include>
-        <include content="Settings_Button" description="Seasonal Themes: Background Atmosphere">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Atmosphere">
+            <param name="help">$LOCALIZE[31715]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">029</param>
-            <param name="slevel">2</param>
+            <param name="id">008</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[31620]</label>
             <onclick>Skin.ToggleSetting(SeasonalTheme.DisableLoop)</onclick>
             <selected>!Skin.HasSetting(SeasonalTheme.DisableLoop)</selected>
             <visible>Skin.HasSetting(SeasonalTheme.Enable)</visible>
         </include>
-        <include content="Settings_Button" description="Seasonal Themes: Fly-by Animations">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Fly-bys">
+            <param name="help">$LOCALIZE[31716]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">030</param>
-            <param name="slevel">2</param>
+            <param name="id">009</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[31621]</label>
             <onclick>Skin.ToggleSetting(SeasonalTheme.DisableFlyBy)</onclick>
             <selected>!Skin.HasSetting(SeasonalTheme.DisableFlyBy)</selected>
             <visible>Skin.HasSetting(SeasonalTheme.Enable)</visible>
         </include>
-        <include content="Settings_Button" description="Seasonal Themes: Falling Props Density">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Falling props">
+            <param name="help">$LOCALIZE[31717]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">031</param>
-            <param name="slevel">2</param>
-            <param name="control">button</param>
+            <param name="id">010</param>
             <label>$LOCALIZE[31622]</label>
             <label2>$VAR[Label_Setting_SeasonalThemesPropsDensity]</label2>
             <onclick condition="Skin.String(SeasonalTheme.PropsDensity,High)">Skin.SetString(SeasonalTheme.PropsDensity,Off)</onclick>
@@ -953,300 +898,170 @@
             <onclick condition="String.IsEmpty(Skin.String(SeasonalTheme.PropsDensity))">Skin.SetString(SeasonalTheme.PropsDensity,High)</onclick>
             <visible>Skin.HasSetting(SeasonalTheme.Enable)</visible>
         </include>
-
-        <include content="Settings_Label" description="Expert">
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">032</param>
-            <param name="slevel">3</param>
-            <label>$LOCALIZE[10039]</label>
-        </include>
-        <include content="Settings_Button" description="Nuke Everything">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">033</param>
-            <param name="slevel">3</param>
-            <label>$LOCALIZE[31374]</label>
-            <onclick>SetProperty(StartupReplaceWindow,skinsettings,Home)</onclick>
-            <onclick>Skin.ResetSettings</onclick>
-            <onclick>ActivateWindow(Startup)</onclick>
-        </include>
-
-
-
     </include>
 
-    <!-- Dependecies -->
-    <include name="SkinSettings_Items_Dependecies">
+    <!-- Tools -->
+    <include name="SkinSettings_Dependency">
+        <param name="addon" />
+        <definition>
+            <include content="Settings_Button">
+                <param name="help">$LOCALIZE[31823]</param>
+                <param name="window">skinsettings</param>
+                <param name="baseid">$PARAM[baseid]</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="control">radiobutton</param>
+                <label>$PARAM[addon]</label>
+                <label2>$INFO[System.AddonVersion($PARAM[addon]),v,       ]</label2>
+                <onclick condition="!System.HasAddon($PARAM[addon])">InstallAddon($PARAM[addon])</onclick>
+                <onclick condition="!System.AddonIsEnabled($PARAM[addon]) + System.HasAddon($PARAM[addon])">EnableAddon($PARAM[addon])</onclick>
+                <onclick condition="System.AddonIsEnabled($PARAM[addon]) + System.HasAddon($PARAM[addon])">Addon.OpenSettings($PARAM[addon])</onclick>
+                <selected>System.AddonIsEnabled($PARAM[addon]) + System.HasAddon($PARAM[addon])</selected>
+            </include>
+        </definition>
+    </include>
 
-
+    <include name="SkinSettings_Items_Tools">
         <include content="Settings_Label" description="Dependencies">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">008</param>
+            <param name="id">001</param>
             <label>$LOCALIZE[39024]</label>
         </include>
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
+        <include content="SkinSettings_Dependency">
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">002</param>
+            <param name="addon">plugin.video.themoviedb.helper</param>
+        </include>
+        <include content="SkinSettings_Dependency">
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">003</param>
+            <param name="addon">script.skinvariables</param>
+        </include>
+        <include content="SkinSettings_Dependency">
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">004</param>
+            <param name="addon">script.texturemaker</param>
+        </include>
+        <include content="SkinSettings_Dependency">
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">005</param>
+            <param name="addon">script.artistslideshow</param>
+        </include>
+        <include content="SkinSettings_Dependency">
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">006</param>
+            <param name="addon">resource.images.arctic.waves</param>
+        </include>
+        <include content="SkinSettings_Dependency">
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">007</param>
+            <param name="addon">resource.images.weatherfanart.multi</param>
+        </include>
+        <include content="SkinSettings_Dependency">
+            <param name="baseid">$PARAM[baseid]</param>
+            <param name="id">008</param>
+            <param name="addon">resource.images.moviecountryicons.maps</param>
+        </include>
+        <include content="SkinSettings_Dependency">
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">009</param>
-            <param name="control">radiobutton</param>
-            <label>plugin.video.themoviedb.helper</label>
-            <label2>$INFO[System.AddonVersion(plugin.video.themoviedb.helper),v,       ]</label2>
-            <onclick condition="!System.HasAddon(plugin.video.themoviedb.helper)">InstallAddon(plugin.video.themoviedb.helper)</onclick>
-            <onclick condition="!System.AddonIsEnabled(plugin.video.themoviedb.helper) + System.HasAddon(plugin.video.themoviedb.helper)">EnableAddon(plugin.video.themoviedb.helper)</onclick>
-            <onclick condition="System.AddonIsEnabled(plugin.video.themoviedb.helper) + System.HasAddon(plugin.video.themoviedb.helper)">Addon.OpenSettings(plugin.video.themoviedb.helper)</onclick>
-            <selected>System.AddonIsEnabled(plugin.video.themoviedb.helper) + System.HasAddon(plugin.video.themoviedb.helper)</selected>
+            <param name="addon">resource.images.studios.white</param>
         </include>
-
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
+        <include content="SkinSettings_Dependency">
             <param name="baseid">$PARAM[baseid]</param>
             <param name="id">010</param>
-            <param name="control">radiobutton</param>
-            <label>script.skinvariables</label>
-            <label2>$INFO[System.AddonVersion(script.skinvariables),v,       ]</label2>
-            <onclick condition="!System.HasAddon(script.skinvariables)">InstallAddon(script.skinvariables)</onclick>
-            <onclick condition="!System.AddonIsEnabled(script.skinvariables) + System.HasAddon(script.skinvariables)">EnableAddon(script.skinvariables)</onclick>
-            <onclick condition="System.AddonIsEnabled(script.skinvariables) + System.HasAddon(script.skinvariables)">Addon.OpenSettings(script.skinvariables)</onclick>
-            <selected>System.AddonIsEnabled(script.skinvariables) + System.HasAddon(script.skinvariables)</selected>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">011</param>
-            <param name="control">radiobutton</param>
-            <label>script.texturemaker</label>
-            <label2>$INFO[System.AddonVersion(script.texturemaker),v,       ]</label2>
-            <onclick condition="!System.HasAddon(script.texturemaker)">InstallAddon(script.texturemaker)</onclick>
-            <onclick condition="!System.AddonIsEnabled(script.texturemaker) + System.HasAddon(script.texturemaker)">EnableAddon(script.texturemaker)</onclick>
-            <onclick condition="System.AddonIsEnabled(script.texturemaker) + System.HasAddon(script.texturemaker)">Addon.OpenSettings(script.texturemaker)</onclick>
-            <selected>System.AddonIsEnabled(script.texturemaker) + System.HasAddon(script.texturemaker)</selected>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">012</param>
-            <param name="control">radiobutton</param>
-            <label>script.artistslideshow</label>
-            <label2>$INFO[System.AddonVersion(script.artistslideshow),v,       ]</label2>
-            <onclick condition="!System.HasAddon(script.artistslideshow)">InstallAddon(script.artistslideshow)</onclick>
-            <onclick condition="!System.AddonIsEnabled(script.artistslideshow) + System.HasAddon(script.artistslideshow)">EnableAddon(script.artistslideshow)</onclick>
-            <onclick condition="System.AddonIsEnabled(script.artistslideshow) + System.HasAddon(script.artistslideshow)">Addon.OpenSettings(script.artistslideshow)</onclick>
-            <selected>System.AddonIsEnabled(script.artistslideshow) + System.HasAddon(script.artistslideshow)</selected>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">013</param>
-            <param name="control">radiobutton</param>
-            <label>resource.images.arctic.waves</label>
-            <label2>$INFO[System.AddonVersion(resource.images.arctic.waves),v,       ]</label2>
-            <onclick condition="!System.HasAddon(resource.images.arctic.waves)">InstallAddon(resource.images.arctic.waves)</onclick>
-            <onclick condition="!System.AddonIsEnabled(resource.images.arctic.waves) + System.HasAddon(resource.images.arctic.waves)">EnableAddon(resource.images.arctic.waves)</onclick>
-            <onclick condition="System.AddonIsEnabled(resource.images.arctic.waves) + System.HasAddon(resource.images.arctic.waves)">Addon.OpenSettings(resource.images.arctic.waves)</onclick>
-            <selected>System.AddonIsEnabled(resource.images.arctic.waves) + System.HasAddon(resource.images.arctic.waves)</selected>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">014</param>
-            <param name="control">radiobutton</param>
-            <label>resource.images.weatherfanart.multi</label>
-            <label2>$INFO[System.AddonVersion(resource.images.weatherfanart.multi),v,       ]</label2>
-            <onclick condition="!System.HasAddon(resource.images.weatherfanart.multi)">InstallAddon(resource.images.weatherfanart.multi)</onclick>
-            <onclick condition="!System.AddonIsEnabled(resource.images.weatherfanart.multi) + System.HasAddon(resource.images.weatherfanart.multi)">EnableAddon(resource.images.weatherfanart.multi)</onclick>
-            <onclick condition="System.AddonIsEnabled(resource.images.weatherfanart.multi) + System.HasAddon(resource.images.weatherfanart.multi)">Addon.OpenSettings(resource.images.weatherfanart.multi)</onclick>
-            <selected>System.AddonIsEnabled(resource.images.weatherfanart.multi) + System.HasAddon(resource.images.weatherfanart.multi)</selected>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">015</param>
-            <param name="control">radiobutton</param>
-            <label>resource.images.moviecountryicons.maps</label>
-            <label2>$INFO[System.AddonVersion(resource.images.moviecountryicons.maps),v,       ]</label2>
-            <onclick condition="!System.HasAddon(resource.images.moviecountryicons.maps)">InstallAddon(resource.images.moviecountryicons.maps)</onclick>
-            <onclick condition="!System.AddonIsEnabled(resource.images.moviecountryicons.maps) + System.HasAddon(resource.images.moviecountryicons.maps)">EnableAddon(resource.images.moviecountryicons.maps)</onclick>
-            <onclick condition="System.AddonIsEnabled(resource.images.moviecountryicons.maps) + System.HasAddon(resource.images.moviecountryicons.maps)">Addon.OpenSettings(resource.images.moviecountryicons.maps)</onclick>
-            <selected>System.AddonIsEnabled(resource.images.moviecountryicons.maps) + System.HasAddon(resource.images.moviecountryicons.maps)</selected>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">016</param>
-            <param name="control">radiobutton</param>
-            <label>resource.images.studios.white</label>
-            <label2>$INFO[System.AddonVersion(resource.images.studios.white),v,       ]</label2>
-            <onclick condition="!System.HasAddon(resource.images.studios.white)">InstallAddon(resource.images.studios.white)</onclick>
-            <onclick condition="!System.AddonIsEnabled(resource.images.studios.white) + System.HasAddon(resource.images.studios.white)">EnableAddon(resource.images.studios.white)</onclick>
-            <onclick condition="System.AddonIsEnabled(resource.images.studios.white) + System.HasAddon(resource.images.studios.white)">Addon.OpenSettings(resource.images.studios.white)</onclick>
-            <selected>System.AddonIsEnabled(resource.images.studios.white) + System.HasAddon(resource.images.studios.white)</selected>
-        </include>
-
-        <include content="Settings_Button">
-            <param name="dialog">false</param>
-            <param name="window">skinsettings</param>
-            <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">017</param>
-            <param name="control">radiobutton</param>
-            <label>service.upnext</label>
-            <label2>$INFO[System.AddonVersion(service.upnext),v,       ]</label2>
-            <onclick condition="!System.HasAddon(service.upnext)">InstallAddon(service.upnext)</onclick>
-            <onclick condition="!System.AddonIsEnabled(service.upnext) + System.HasAddon(service.upnext)">EnableAddon(service.upnext)</onclick>
-            <onclick condition="System.AddonIsEnabled(service.upnext) + System.HasAddon(service.upnext)">Addon.OpenSettings(service.upnext)</onclick>
-            <selected>System.AddonIsEnabled(service.upnext) + System.HasAddon(service.upnext)</selected>
+            <param name="addon">service.upnext</param>
         </include>
 
         <include content="Settings_Label" description="Debug">
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">018</param>
+            <param name="id">011</param>
             <label>$LOCALIZE[14260]</label>
         </include>
-        <include content="Settings_Button" description="Debug Info">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Debug information">
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">019</param>
+            <param name="id">012</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[19033]</label>
             <onclick>Skin.ToggleSetting(DebugInfo)</onclick>
             <selected>Skin.HasSetting(DebugInfo)</selected>
         </include>
-        <include content="Settings_Button" description="Debug Grid">
-            <param name="dialog">false</param>
+        <include content="Settings_Button" description="Debug gridlines">
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">020</param>
+            <param name="id">013</param>
             <param name="control">radiobutton</param>
             <label>$LOCALIZE[31223]</label>
             <onclick>Skin.ToggleSetting(DebugGrid)</onclick>
             <selected>Skin.HasSetting(DebugGrid)</selected>
         </include>
-
         <include content="Settings_Button" description="Test DialogNumeric.xml">
-            <param name="dialog">false</param>
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">091</param>
-            <param name="control">button</param>
+            <param name="id">014</param>
             <label>DialogNumeric.xml</label>
             <onclick>Runscript(script.skinvariables,run_dialog=numeric,heading=Heading,type=3)</onclick>
         </include>
         <include content="Settings_Button" description="Test DialogKeyboard.xml">
-            <param name="dialog">false</param>
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">092</param>
-            <param name="control">button</param>
+            <param name="id">015</param>
             <label>DialogKeyboard.xml</label>
             <onclick>Runscript(script.skinvariables,run_dialog=input,heading=Heading)</onclick>
         </include>
         <include content="Settings_Button" description="Test DialogConfirm.xml">
-            <param name="dialog">false</param>
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">093</param>
-            <param name="control">button</param>
+            <param name="id">016</param>
             <label>DialogConfirm.xml</label>
             <label2>YesNoCustom</label2>
             <onclick>Runscript(script.skinvariables,run_dialog=yesnocustom,customlabel=A long custom label,heading=Heading,message=Message)</onclick>
         </include>
         <include content="Settings_Button" description="Test DialogConfirm.xml">
-            <param name="dialog">false</param>
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">094</param>
-            <param name="control">button</param>
+            <param name="id">017</param>
             <label>DialogConfirm.xml</label>
             <label2>Progress</label2>
             <onclick>Runscript(script.skinvariables,run_progressdialog,heading=Heading,message=Message,polling=0.025)</onclick>
         </include>
         <include content="Settings_Button" description="Test DialogExtendedProgress.xml">
-            <param name="dialog">false</param>
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">095</param>
-            <param name="control">button</param>
+            <param name="id">018</param>
             <label>DialogExtendedProgress.xml</label>
             <label2>Standard</label2>
             <onclick>Runscript(script.skinvariables,run_progressdialog,background,heading=Heading,message=Message,polling=0.025)</onclick>
         </include>
         <include content="Settings_Button" description="Test DialogExtendedProgress.xml">
-            <param name="dialog">false</param>
             <param name="window">skinsettings</param>
-            <param name="slevel">3</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">096</param>
-            <param name="control">button</param>
+            <param name="id">019</param>
             <label>DialogExtendedProgress.xml</label>
             <label2>Busy</label2>
             <onclick>ActivateWindow(busydialognocancel)</onclick>
             <onclick>Runscript(script.skinvariables,run_progressdialog,background,heading=Detailed Information Dialog,message=This message is a long notification to be truncated,polling=0.05)</onclick>
             <onclick>AlarmClock(closebusy,Dialog.Close(busydialognocancel),00:03,silent)</onclick>
         </include>
-    </include>
 
-    <!-- Thanks -->
-    <include name="SkinSettings_Items_Thanks">
-        <include content="Settings_Label" description="Settings Level">
+        <include content="Settings_Label" description="Reset">
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">001</param>
-            <label>$LOCALIZE[31552]</label>
+            <param name="id">020</param>
+            <label>$LOCALIZE[31820]</label>
         </include>
-        <control type="textbox" id="$PARAM[baseid]002">
-            <font>font_mini_plot</font>
-            <textcolor>main_fg_70</textcolor>
-            <top>10</top>
-            <height>auto</height>
-            <autoscroll>false</autoscroll>
-            <label>$LOCALIZE[31550][CR] - $LOCALIZE[10037]: $LOCALIZE[31564][CR] - $LOCALIZE[10038]: $LOCALIZE[31565][CR] - $LOCALIZE[10039]: $LOCALIZE[31566]</label>
-            <left>40</left>
-            <right>40</right>
-            <visible>String.IsEqual(Window(Home).Property(Settings.Skin.Category),$PARAM[baseid])</visible>
-        </control>
-        <include content="Settings_Label" description="Thanks">
+        <include content="Settings_Button" description="Reset settings">
+            <param name="help">$LOCALIZE[31718]</param>
             <param name="window">skinsettings</param>
             <param name="baseid">$PARAM[baseid]</param>
-            <param name="id">003</param>
-            <label>$LOCALIZE[31350]</label>
+            <param name="id">021</param>
+            <label>$LOCALIZE[31374]</label>
+            <onclick>SetProperty(StartupReplaceWindow,skinsettings,Home)</onclick>
+            <onclick>Skin.ResetSettings</onclick>
+            <onclick>ActivateWindow(Startup)</onclick>
         </include>
-        <control type="textbox" id="$PARAM[baseid]004">
-            <font>font_mini_plot</font>
-            <textcolor>main_fg_70</textcolor>
-            <top>10</top>
-            <height>auto</height>
-            <autoscroll>false</autoscroll>
-            <label>To all my amazing supporters on Ko-fi, thank-you! You're all legends. Cheers!</label>
-            <left>40</left>
-            <right>40</right>
-            <visible>String.IsEqual(Window(Home).Property(Settings.Skin.Category),$PARAM[baseid])</visible>
-        </control>
     </include>
 
 </includes>

@@ -147,7 +147,10 @@
             <include content="Settings_Button">
                 <param name="id">$PARAM[id]</param>
                 <param name="control">togglebutton</param>
-                <include>Texture_MainMenu_Highlight_ToggleButton_FakeFocus</include>
+                <!-- Mimic Kodi's hardcoded 50% alpha on the selected SettingsCategory button -->
+                <include content="Texture_Highlight_ToggleButton_FakeFocus_H">
+                    <param name="diffuse_nofocus">diffuse/alpha_50.png</param>
+                </include>
                 <label>$PARAM[label]</label>
                 <altlabel>[COLOR=$VAR[ColorSelected]]$PARAM[label][/COLOR]</altlabel>
                 <usealttexture>String.IsEqual(Window(Home).Property($PARAM[property]),$PARAM[category])</usealttexture>
@@ -175,9 +178,33 @@
     </include>
 
     <include name="Settings_Right_Group">
+        <param name="header">$VAR[Label_Settings_Category]</param>
+        <param name="subheader">$VAR[Label_Settings_SubCategory]</param>
+        <param name="visible_line">true</param>
+        <param name="visible_header">true</param>
         <definition>
             <control type="group">
                 <include>Settings_Box</include>
+                <control type="group">
+                    <visible>$PARAM[visible_header]</visible>
+                    <control type="label">
+                        <label>$PARAM[header]</label>
+                        <font>font_midi_bold</font>
+                        <textcolor>main_fg_90</textcolor>
+                        <height>40</height>
+                        <centertop>60</centertop>
+                        <left>40</left>
+                        <right>40</right>
+                    </control>
+                    <control type="group">
+                        <visible>$PARAM[visible_line]</visible>
+                        <include content="Part_ItemLine">
+                            <param name="label">$PARAM[subheader]</param>
+                            <param name="colordiffuse">main_fg</param>
+                        </include>
+                    </control>
+                </control>
+
                 <nested />
                 <left>460</left>
                 <right>80</right>
@@ -187,39 +214,89 @@
         </definition>
     </include>
 
+    <include name="Settings_Right_InfoText">
+        <param name="id" />
+        <definition>
+            <include content="Part_InfoText">
+                <param name="id">$PARAM[id]</param>
+                <param name="label">$VAR[Label_Settings_InfoText]</param>
+                <param name="fallback">$INFO[System.BuildVersion,Kodi ,]$INFO[System.AddonVersion(skin.arctic.fuse.3), • AF3 v,]</param>
+                <param name="colordiffuse">main_fg_70</param>
+                <param name="include_hintlabel">false</param>
+                <param name="centerbottom">60</param>
+                <param name="height">80</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Settings_Right_Scrollbar">
+        <control type="scrollbar" id="60">
+            <nested />
+            <centerright>0</centerright>
+            <top>140</top>
+            <bottom>140</bottom>
+            <width>scrollbar_w</width>
+            <orientation>vertical</orientation>
+            <texturesliderbackground />
+            <texturesliderbar colordiffuse="main_logo" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+            <include>Texture_Scrollbar_V</include>
+            <showonepage>false</showonepage>
+        </control>
+    </include>
+
     <include name="Settings_Right_Grouplist">
         <control type="grouplist" id="$PARAM[id]">
             <nested />
             <onright>60</onright>
             <pagecontrol>60</pagecontrol>
-            <top>20</top>
+            <top>140</top>
             <left>20</left>
             <right>20</right>
-            <bottom>20</bottom>
+            <bottom>140</bottom>
         </control>
     </include>
 
     <include name="Settings_Dialog">
         <definition>
             <control type="group">
+                <include>Animation_Group_Bumper</include>
                 <include>Animation_View_WindowChange</include>
                 <nested />
                 <include>Furniture_Footer_Left</include>
-                <include>Furniture_Footer_Right</include>
             </control>
+            <include>Furniture_Footer_Right</include>
         </definition>
     </include>
 
     <include name="Settings_Button_skinsettings">
         <param name="reload">false</param>
-        <param name="slevel">0</param>
+        <param name="help" />
         <definition>
             <visible>String.IsEqual(Window(Home).Property(Settings.Skin.Category),$PARAM[baseid])</visible>
             <onleft>1001$PARAM[baseid]</onleft>
-            <include content="Settings_Visible_Level"><param name="slevel">$PARAM[slevel]</param></include>
+            <include content="Settings_Button_Help">
+                <param name="help">$PARAM[help]</param>
+            </include>
             <onclick condition="$PARAM[reload]">ReloadSkin()</onclick>
             <onclick condition="$PARAM[reload]">AlarmClock(refocus1,SetFocus(1001$PARAM[baseid]),00:00,silent)</onclick>
             <onclick condition="$PARAM[reload]">AlarmClock(refocus2,SetFocus($PARAM[baseid]$PARAM[id]),00:00,silent)</onclick>
+        </definition>
+    </include>
+
+    <include name="Settings_Button_shortcuts">
+        <param name="help" />
+        <definition>
+            <include content="Settings_Button_Help">
+                <param name="help">$PARAM[help]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Stores the focused setting's help text for Settings_Right_InfoText -->
+    <include name="Settings_Button_Help">
+        <param name="help" />
+        <definition>
+            <onfocus>SetProperty(InfoText.Message,"$PARAM[help]")</onfocus>
         </definition>
     </include>
 
@@ -227,20 +304,12 @@
         <description>None</description>
     </include>
 
-    <include name="Settings_Visible_Level">
-        <param name="slevel">0</param>
-        <param name="altvisible">false</param>
-        <definition>
-            <visible>!Integer.IsLess(Skin.String(Skin.SettingsLevel),$PARAM[slevel]) | $PARAM[altvisible]</visible>
-        </definition>
-    </include>
-
     <include name="Settings_Button">
         <param name="control">button</param>
         <param name="dialog">false</param>
         <param name="window" />
         <param name="reload">false</param>
-        <param name="slevel">0</param>
+        <param name="help" />
         <definition>
             <control type="$PARAM[control]" id="$PARAM[baseid]$PARAM[id]">
                 <nested />
@@ -255,7 +324,7 @@
                     <param name="id">$PARAM[id]</param>
                     <param name="baseid">$PARAM[baseid]</param>
                     <param name="reload">$PARAM[reload]</param>
-                    <param name="slevel">$PARAM[slevel]</param>
+                    <param name="help">$PARAM[help]</param>
                 </include>
             </control>
         </definition>
@@ -308,7 +377,6 @@
         <param name="control">label</param>
         <param name="dialog">false</param>
         <param name="window" />
-        <param name="slevel">0</param>
         <definition>
             <control type="$PARAM[control]" id="$PARAM[baseid]$PARAM[id]">
                 <include content="Object_TextColor" condition="$PARAM[dialog]">
@@ -317,14 +385,13 @@
                 <nested />
                 <align>left</align>
                 <font>font_hint_bold</font>
-                <top>40</top>
-                <height>40</height>
+                <top>20</top>
+                <height>60</height>
                 <textoffsetx>40</textoffsetx>
                 <textcolor>main_fg_30</textcolor>
                 <include content="Settings_Button_$PARAM[window]">
                     <param name="id">$PARAM[id]</param>
                     <param name="baseid">$PARAM[baseid]</param>
-                    <param name="slevel">$PARAM[slevel]</param>
                 </include>
             </control>
         </definition>
@@ -466,20 +533,20 @@
     </include>
 
     <include name="Settings_Landing_Label">
-        <control type="label">
+        <!-- <control type="label">
             <top>20</top>
-            <textcolor>main_fg_70</textcolor>
+            <textcolor>main_fg_90</textcolor>
             <textoffsetx>40</textoffsetx>
             <height>40</height>
             <label>$PARAM[label]</label>
             <visible>$PARAM[visible]</visible>
             <font>font_main_bold</font>
-        </control>
+        </control> -->
         <control type="label">
             <textcolor>main_fg_70</textcolor>
             <textoffsetx>40</textoffsetx>
             <height>40</height>
-            <label>$PARAM[label2]</label>
+            <label>$PARAM[label]: $PARAM[label2]</label>
             <visible>$PARAM[visible]</visible>
         </control>
     </include>
@@ -593,10 +660,10 @@
 
     <include name="Settings_Statistics_WatchedOn">
         <control type="group">
-            <height>280</height>
+            <height>270</height>
             <control type="group">
-                <top>-79</top>
-                <left>-20</left>
+                <top>-80</top>
+                <left>-40</left>
                 <height>20</height>
                 <include content="Part_ItemLine">
                     <param name="visible">true</param>
@@ -613,8 +680,18 @@
                 <param name="item_h">160</param>
                 <param name="itemlayout_w">128</param>
                 <param name="itemlayout_h">200</param>
-                <content limit="10">plugin://plugin.video.themoviedb.helper?info=sync_watchedon&amp;type=both&amp;month=$PARAM[month]&amp;year=$PARAM[year]</content>
-                <top>-10</top>
+                <onleft>36</onleft>
+                <onback>36</onback>
+                <include content="Action_View_Movement_OnUp" condition="Integer.IsEqual($PARAM[id],$PARAM[onup])" />
+                <onup condition="!Integer.IsEqual($PARAM[id],$PARAM[onup])">SetFocus($PARAM[onup],$INFO[Container($PARAM[id]).Position])</onup>
+                <ondown condition="!Integer.IsEqual($PARAM[id],$PARAM[ondown])">SetFocus($PARAM[ondown],$INFO[Container($PARAM[id]).Position])</ondown>
+                <ondown condition="Integer.IsEqual($PARAM[id],$PARAM[ondown])">SetProperty(Bumper.Direction,Down,Home)</ondown>
+                <ondown condition="Integer.IsEqual($PARAM[id],$PARAM[ondown])">ActivateWindow(1180)</ondown>
+                <onright>SetProperty(Bumper.Direction,Right,Home)</onright>
+                <onright>ActivateWindow(1180)</onright>
+                <content limit="10" browse="never">plugin://plugin.video.themoviedb.helper?info=sync_watchedon&amp;type=both&amp;month=$PARAM[month]&amp;year=$PARAM[year]&amp;nextpage=false</content>
+                <onclick>Action(Info)</onclick>
+                <top>-20</top>
                 <left>-60</left>
                 <right>-60</right>
             </include>
@@ -851,6 +928,18 @@
             <top>40</top>
             <height>210</height>
             <orientation>horizontal</orientation>
+            <onleft>33</onleft>
+            <onback>33</onback>
+            <include>Action_View_Movement_OnUp</include>
+            <ondown>SetProperty(Bumper.Direction,Down,Home)</ondown>
+            <ondown>ActivateWindow(1180)</ondown>
+            <onright>SetProperty(Bumper.Direction,Right,Home)</onright>
+            <onright>ActivateWindow(1180)</onright>
+
+            <onclick>SetProperty(header,$ESCINFO[Container($PARAM[id]).ListItem.Property(long)],1129)</onclick>
+            <onclick>SetProperty(path,plugin://plugin.video.themoviedb.helper/?info=sync_watchedon&amp;type=both&amp;day=$INFO[Container($PARAM[id]).ListItem.Property(day_number)]&amp;month=$INFO[Container($PARAM[id]).ListItem.Property(month_number)]&amp;year=$INFO[Container($PARAM[id]).ListItem.Property(year)]&amp;episodes=true&amp;nextpage=true,1129)</onclick>
+            <onclick>ActivateWindow(1129)</onclick>
+            <oninfo>Action(Select)</oninfo>
 
             <content>plugin://plugin.video.themoviedb.helper/?info=trakt_history_stats&amp;tmdb_type=both&amp;days=287&amp;sort_how=asc</content>
 
@@ -863,6 +952,7 @@
             <focusedlayout width="30" height="30">
                 <include content="Layout_StatisticDots">
                     <param name="selected">true</param>
+                    <param name="containerid">$PARAM[id]</param>
                 </include>
             </focusedlayout>
         </control>
