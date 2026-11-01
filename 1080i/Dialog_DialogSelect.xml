@@ -141,6 +141,7 @@
         <param name="id">3</param>
         <param name="itemlayout_include">Layout_ViewType</param>
         <param name="windowopen_delay">200</param>
+        <param name="categories">false</param>
         <definition>
             <include>Part_Dim_Overlay</include>
             <control type="group">
@@ -163,23 +164,36 @@
                                 <param name="id">1</param>
                                 <param name="label">$PARAM[header]</param>
                             </include>
-                            <include content="Part_ItemPage">
+                            <include content="Part_ItemPage" condition="!$PARAM[categories]">
                                 <param name="id">$PARAM[id]</param>
                             </include>
                             <include>Part_CloseButton</include>
                         </control>
                         <control type="group">
                             <include>Size_Group_Body</include>
+                            <include condition="$PARAM[categories]">DialogSelect_GamePreview_Categories</include>
 
                             <control type="group">
                                 <left>0</left>
                                 <right>0</right>
                                 <top>20</top>
                                 <bottom>20</bottom>
+                                <include condition="$PARAM[categories]">DialogSelect_GamePreview_CategoryRoom</include>
 
                                 <control type="wraplist" id="$PARAM[id]">
+                                    <onup condition="$PARAM[categories]">10813</onup>
 
                                     <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
+                                    <animation effect="fade" start="100" end="0" condition="!Integer.IsGreater(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+                                    <!-- Kodi says which way the filters moved to another category -->
+                                    <animation type="Conditional" condition="String.IsEqual(Window.Property(categorymove),next)" reversible="false">
+                                        <effect type="slide" start="240,0" end="0,0" time="200" tween="cubic" easing="out" />
+                                        <effect type="fade" start="0" end="100" time="200" />
+                                    </animation>
+                                    <animation type="Conditional" condition="String.IsEqual(Window.Property(categorymove),previous)" reversible="false">
+                                        <effect type="slide" start="-240,0" end="0,0" time="200" tween="cubic" easing="out" />
+                                        <effect type="fade" start="0" end="100" time="200" />
+                                    </animation>
                                     <orientation>horizontal</orientation>
                                     <focusposition>1</focusposition>
                                     <preloaditems>2</preloaditems>
@@ -227,6 +241,7 @@
                                     <texturefocus />
                                     <width>400</width>
                                     <onclick>Control.Move($PARAM[id],-1)</onclick>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                                 <control type="label">
                                     <left>40</left>
@@ -234,6 +249,7 @@
                                     <align>left</align>
                                     <font>font_mini</font>
                                     <label>$INFO[Container($PARAM[id]).ListItem(-1).Label]</label>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                                 <control type="image">
                                     <centerleft>0</centerleft>
@@ -242,6 +258,7 @@
                                     <height>40</height>
                                     <bordersize>-12</bordersize>
                                     <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-left.png</texture>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
 
                                 <control type="label">
@@ -252,6 +269,9 @@
                                     <font>font_main_bold</font>
                                     <label>$INFO[Container($PARAM[id]).ListItem.Label]</label>
                                 </control>
+                                <include content="DialogSelect_GamePreview_Position" condition="$PARAM[categories]">
+                                    <param name="id">$PARAM[id]</param>
+                                </include>
 
                                 <control type="button">
                                     <texturenofocus />
@@ -259,6 +279,7 @@
                                     <right>0</right>
                                     <width>400</width>
                                     <onclick>Control.Move($PARAM[id],1)</onclick>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                                 <control type="label">
                                     <right>40</right>
@@ -266,6 +287,7 @@
                                     <align>right</align>
                                     <font>font_mini</font>
                                     <label>$INFO[Container($PARAM[id]).ListItem(1).Label]</label>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                                 <control type="image">
                                     <centerright>0</centerright>
@@ -274,6 +296,7 @@
                                     <height>40</height>
                                     <bordersize>-12</bordersize>
                                     <texture background="true" colordiffuse="dialog_fg_90">special://skin/extras/icons/circle-arrow-right.png</texture>
+                                    <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
                                 </control>
                             </control>
                         </control>
@@ -297,6 +320,7 @@
             <param name="itemlayout_include">Layout_GameWindow</param>
             <param name="header">$VAR[Label_GameOSD_Heading]</param>
             <param name="windowopen_delay">400</param>  <!-- Delay to wait for blackout mask -->
+            <param name="categories">true</param>
         </include>
         <control type="group">
             <description>Mask gamewindow overlap in itemlayout due to wraplist not masking</description>
@@ -327,6 +351,56 @@
         </control>
     </include>
 
+
+    <!-- The categories on a line below the heading, as a widget shows its own -->
+    <include name="DialogSelect_GamePreview_Categories">
+        <control type="group">
+            <height>80</height>
+            <visible>Integer.IsGreater(Container(10813).NumItems,1)</visible>
+            <include content="Categories_Selector_ControlList">
+                <param name="id">10813</param>
+                <param name="altfocusid">10813</param>
+                <ondown>10811</ondown>
+            </include>
+            <include content="Categories_Selector_OverlayList">
+                <param name="id">10813</param>
+            </include>
+            <control type="image">
+                <left>40</left>
+                <right>40</right>
+                <height>1</height>
+                <centerbottom>10</centerbottom>
+                <texture colordiffuse="dialog_fg_06">common/white.png</texture>
+            </control>
+        </control>
+    </include>
+
+    <!-- Which filter of how many, in place of the item and page line -->
+    <include name="DialogSelect_GamePreview_Position">
+        <definition>
+            <control type="label">
+                <left>400</left>
+                <right>400</right>
+                <top>60</top>
+                <height>40</height>
+                <align>center</align>
+                <aligny>center</aligny>
+                <font>font_hint_bold</font>
+                <textcolor>dialog_fg_30</textcolor>
+                <label>$INFO[Container($PARAM[id]).CurrentItem]$INFO[Container($PARAM[id]).NumItems, $LOCALIZE[20163] ,]</label>
+                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,1)</visible>
+            </control>
+        </definition>
+    </include>
+
+
+    <!-- The filters move down and shrink to fit below the categories, when Kodi lists them -->
+    <include name="DialogSelect_GamePreview_CategoryRoom">
+        <animation type="Conditional" condition="Integer.IsGreater(Container(10813).NumItems,1)">
+            <effect type="zoom" end="86" center="auto" time="0" />
+            <effect type="slide" end="0,36" time="0" />
+        </animation>
+    </include>
 
     <include name="DialogSelect_GameSaves">
         <param name="id">3</param>
