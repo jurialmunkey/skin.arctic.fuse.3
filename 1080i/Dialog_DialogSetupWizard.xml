@@ -33,11 +33,6 @@
                         <control type="group">
                             <bottom>80</bottom>
                             <include>DialogSetupWizard_Steps</include>
-                            <include content="Part_Scrollbar_Max">
-                                <param name="id">61</param>
-                                <param name="inset">false</param>
-                                <onleft>SetFocus(50$INFO[Container(3).CurrentItem])</onleft>
-                            </include>
                         </control>
                         <include content="Part_InfoText">
                             <param name="label">$VAR[Label_SetupWizard_Help]</param>
@@ -83,8 +78,7 @@
                 <onup>noop</onup>
                 <ondown>noop</ondown>
                 <onleft>3</onleft>
-                <onright>61</onright>
-                <pagecontrol>61</pagecontrol>
+                <onright>noop</onright>
                 <include>Size_Grouplist_Pad</include>
                 <include>$PARAM[items]</include>
             </control>
@@ -248,6 +242,8 @@
     <include name="DialogSetupWizard_Cards">
         <param name="control">list</param>
         <param name="orientation">horizontal</param>
+        <param name="offset_x">20</param>
+        <param name="offset_y">20</param>
         <definition>
             <include content="List_Core">
                 <param name="id">$PARAM[id]</param>
@@ -258,11 +254,12 @@
                 <param name="itemlayout_w">$PARAM[item_w]</param>
                 <param name="itemlayout_h">$PARAM[item_h]</param>
                 <param name="itemlayout_include">$PARAM[layout]</param>
-                <param name="offset_x">20</param>
-                <param name="offset_y">20</param>
+                <param name="offset_x">$PARAM[offset_x]</param>
+                <param name="offset_y">$PARAM[offset_y]</param>
                 <height>$PARAM[height]</height>
                 <onleft>3</onleft>
                 <include>$PARAM[content]</include>
+                <nested />
             </include>
         </definition>
     </include>
@@ -461,7 +458,7 @@
             <include content="List_Layout_Dialog_Tile">
                 <param name="selected">$PARAM[selected]</param>
                 <param name="include_overlay">DialogSetupWizard_Thumb_Colour</param>
-                <param name="diffuse">diffuse/landscape_w307_h135.png</param>
+                <param name="diffuse">diffuse/landscape_w307_h210.png</param>
             </include>
         </definition>
     </include>
@@ -471,7 +468,7 @@
         <definition>
             <include content="List_Layout_Dialog_Tile">
                 <param name="selected">$PARAM[selected]</param>
-                <param name="diffuse">diffuse/landscape_w225_h110.png</param>
+                <param name="diffuse">diffuse/landscape_w225_h130.png</param>
             </include>
         </definition>
     </include>
@@ -481,8 +478,6 @@
         <param name="selected">false</param>
         <definition>
             <control type="group">
-                <right>20</right>
-                <bottom>20</bottom>
                 <control type="image">
                     <visible>$PARAM[selected]</visible>
                     <include content="Object_Texture">
@@ -491,32 +486,32 @@
                     </include>
                 </control>
                 <control type="image">
-                    <include content="Dimension_Padding"><param name="pad">10%</param></include>
+                    <bordersize>7</bordersize>
                     <texture colordiffuse="dialog_bg_100">common/circle.png</texture>
                 </control>
                 <control type="image">
-                    <include content="Dimension_Padding"><param name="pad">14%</param></include>
+                    <bordersize>10</bordersize>
                     <texture colordiffuse="$INFO[ListItem.Property(colour)]">common/circle.png</texture>
                     <visible>!String.IsEmpty(ListItem.Property(colour))</visible>
                 </control>
                 <control type="image">
-                    <include content="Dimension_Padding"><param name="pad">14%</param></include>
+                    <bordersize>10</bordersize>
                     <texture colordiffuse="dialog_fg_12">common/circle.png</texture>
                     <visible>String.IsEmpty(ListItem.Property(colour))</visible>
                 </control>
                 <control type="image">
-                    <include content="Dimension_Padding"><param name="pad">31%</param></include>
+                    <bordersize>12</bordersize>
                     <texture colordiffuse="dialog_fg_70">special://skin/extras/icons/palette.png</texture>
                     <visible>String.IsEmpty(ListItem.Property(colour)) + !String.IsEqual(ListItem.Label,ListItem.Property(current))</visible>
                 </control>
                 <control type="group">
                     <visible>String.IsEqual(ListItem.Label,ListItem.Property(current))</visible>
                     <control type="image">
-                        <include content="Dimension_Padding"><param name="pad">29%</param></include>
+                        <bordersize>20</bordersize>
                         <texture colordiffuse="dialog_bg_70">common/circle.png</texture>
                     </control>
                     <control type="image">
-                        <include content="Dimension_Padding"><param name="pad">37%</param></include>
+                        <bordersize>30</bordersize>
                         <texture colordiffuse="dialog_fg_100">indicator/checkmark.png</texture>
                     </control>
                 </control>
@@ -586,8 +581,8 @@
         <include content="DialogSetupWizard_Cards">
             <param name="id">51</param>
             <param name="item_w">327</param>
-            <param name="item_h">260</param>
-            <param name="height">280</param>
+            <param name="item_h">300</param>
+            <param name="height">320</param>
             <param name="layout">DialogSetupWizard_Layout_Menu</param>
             <param name="content">DialogSetupWizard_Content_Menu</param>
         </include>
@@ -654,8 +649,8 @@
         <include content="DialogSetupWizard_Cards">
             <param name="id">52</param>
             <param name="item_w">327</param>
-            <param name="item_h">260</param>
-            <param name="height">280</param>
+            <param name="item_h">300</param>
+            <param name="height">320</param>
             <param name="layout">DialogSetupWizard_Layout_Widgets</param>
             <param name="content">DialogSetupWizard_Content_WidgetModes</param>
         </include>
@@ -760,25 +755,55 @@
             <param name="control">panel</param>
             <param name="orientation">vertical</param>
             <param name="item_w">327</param>
-            <param name="item_h">155</param>
-            <param name="height">330</param>
+            <param name="item_h">230</param>
+            <param name="height">480</param>
             <param name="layout">DialogSetupWizard_Layout_Colour</param>
             <param name="content">DialogSetupWizard_Content_Colours</param>
         </include>
-        <include content="Settings_Label">
-            <param name="dialog">true</param>
-            <param name="id">5411</param>
-            <label>$LOCALIZE[31792]</label>
-        </include>
-        <include content="DialogSetupWizard_Cards">
-            <param name="id">54</param>
-            <param name="item_w">100</param>
-            <param name="item_h">100</param>
-            <param name="height">120</param>
-            <param name="layout">DialogSetupWizard_Layout_Swatch</param>
-            <param name="content">DialogSetupWizard_Content_Highlights</param>
-        </include>
+
+        <control type="group" id="5414">
+            <height>80</height>
+            <include content="DialogSetupWizard_Cards">
+                <param name="id">54</param>
+                <param name="item_w">80</param>
+                <param name="item_h">80</param>
+                <param name="height">80</param>
+                <param name="offset_x">30</param>
+                <param name="offset_y">0</param>
+                <param name="layout">DialogSetupWizard_Layout_Swatch</param>
+                <param name="content">DialogSetupWizard_Content_Highlights</param>
+                <onright>5412</onright>
+                <onup>53</onup>
+            </include>
+            <control type="group">
+                <left>680</left>
+                <right>20</right>
+                <control type="image">
+                    <visible>!Control.HasFocus(5412)</visible>
+                    <texture border="40" colordiffuse="dialog_fg_12">common/menu$VAR[DialogSetupWizard_Outline_Button_Texture].png</texture>
+                </control>
+                <control type="image">
+                    <visible>Control.HasFocus(5412)</visible>
+                    <texture border="40" colordiffuse="$VAR[ColorHighlight]">common/menu$VAR[DialogSetupWizard_Outline_Button_Texture].png</texture>
+                </control>
+                <include content="Settings_Button">
+                    <param name="dialog">true</param>
+                    <param name="id">5412</param>
+                    <label>$VAR[Label_Setting_FocusStyle]</label>
+                    <onclick>Skin.ToggleSetting(OutlinedFocusedStyle)</onclick>
+                    <onleft>54</onleft>
+                    <onup>53</onup>
+                    <align>center</align>
+                    <texturenofocus />
+                    <texturefocus />
+                </include>
+            </control>
+        </control>
     </include>
+
+    <variable name="DialogSetupWizard_Outline_Button_Texture">
+        <value condition="Skin.HasSetting(OutlinedFocusedStyle)">-outlined</value>
+    </variable>
 
     <include name="DialogSetupWizard_Colour_Preset">
         <definition>
@@ -888,8 +913,8 @@
             <param name="control">panel</param>
             <param name="orientation">vertical</param>
             <param name="item_w">245</param>
-            <param name="item_h">130</param>
-            <param name="height">280</param>
+            <param name="item_h">150</param>
+            <param name="height">320</param>
             <param name="layout">DialogSetupWizard_Layout_Background</param>
             <param name="content">DialogSetupWizard_Content_Backgrounds</param>
         </include>
@@ -991,7 +1016,7 @@
             <param name="id">58</param>
             <param name="item_height">130</param>
             <param name="itemlayout_include">List_Layout_Dialog_DetailedCheckmark</param>
-            <height>700</height>
+            <height>520</height>
             <onleft>3</onleft>
             <include>DialogSetupWizard_Content_Review</include>
         </include>
@@ -1013,7 +1038,7 @@
             </include>
             <include content="DialogSetupWizard_Review_Item">
                 <param name="label">$LOCALIZE[31767]</param>
-                <param name="label2">$VAR[Label_Setting_ColourPreset] • $VAR[Label_Setting_ColourScheme]</param>
+                <param name="label2">$VAR[Label_Setting_ColourPreset] • $VAR[Label_Setting_ColourScheme] • $VAR[Label_Setting_FocusStyle]</param>
                 <param name="icon">palette</param>
                 <param name="index">3</param>
             </include>
