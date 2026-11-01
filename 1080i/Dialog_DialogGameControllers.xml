@@ -623,6 +623,8 @@
         <param name="icon">$INFO[RetroPlayer.AchievementsChallengeBadge]</param>
         <param name="slide_1_condition">false</param>
         <param name="slide_2_condition">false</param>
+        <param name="slide_3_condition">false</param>
+        <param name="slide_4_condition">false</param>
         <param name="hasprogress">false</param>
         <definition>
             <control type="group">
@@ -633,6 +635,10 @@
                 <animation effect="slide" end="0,-80" time="300" tween="sine" easing="inout" condition="$PARAM[slide_1_condition]">Conditional</animation>
 
                 <animation effect="slide" end="0,-80" time="300" tween="sine" easing="inout" condition="$PARAM[slide_2_condition]">Conditional</animation>
+
+                <animation effect="slide" end="0,-80" time="300" tween="sine" easing="inout" condition="$PARAM[slide_3_condition]">Conditional</animation>
+
+                <animation effect="slide" end="0,-80" time="300" tween="sine" easing="inout" condition="$PARAM[slide_4_condition]">Conditional</animation>
 
                 <include content="Furniture_Busy_Main">
                     <param name="minilabel">$PARAM[minilabel]</param>
@@ -676,12 +682,32 @@
         </definition>
     </include>
 
+    <!-- A Kodi without numbered attempts answers each place with the first one, so a
+         place that repeats the one before isn't shown again -->
+    <expression name="DialogGameControllers_GameIndicators_Challenge2_Expression">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle(2)) + ![String.IsEqual(RetroPlayer.AchievementsChallengeTitle(2),RetroPlayer.AchievementsChallengeTitle) + String.IsEqual(RetroPlayer.AchievementsChallengeBadge(2),RetroPlayer.AchievementsChallengeBadge)]</expression>
+    <expression name="DialogGameControllers_GameIndicators_Challenge3_Expression">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle(3)) + ![String.IsEqual(RetroPlayer.AchievementsChallengeTitle(3),RetroPlayer.AchievementsChallengeTitle(2)) + String.IsEqual(RetroPlayer.AchievementsChallengeBadge(3),RetroPlayer.AchievementsChallengeBadge(2))]</expression>
+
     <include name="DialogGameControllers_GameIndicators">
         <include content="DialogGameControllers_GameIndicators_Notification">
             <param name="minilabel">$LOCALIZE[15312]</param>
             <param name="mainlabel">$INFO[RetroPlayer.AchievementsChallengeTitle]</param>
             <param name="visible">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
             <param name="icon">$INFO[RetroPlayer.AchievementsChallengeBadge]</param>
+        </include>
+        <include content="DialogGameControllers_GameIndicators_Notification">
+            <param name="minilabel">$LOCALIZE[15312]</param>
+            <param name="mainlabel">$INFO[RetroPlayer.AchievementsChallengeTitle(2)]</param>
+            <param name="visible">$EXP[DialogGameControllers_GameIndicators_Challenge2_Expression]</param>
+            <param name="icon">$INFO[RetroPlayer.AchievementsChallengeBadge(2)]</param>
+            <param name="slide_1_condition">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
+        </include>
+        <include content="DialogGameControllers_GameIndicators_Notification">
+            <param name="minilabel">$LOCALIZE[15312]</param>
+            <param name="mainlabel">$INFO[RetroPlayer.AchievementsChallengeTitle(3)]</param>
+            <param name="visible">$EXP[DialogGameControllers_GameIndicators_Challenge3_Expression]</param>
+            <param name="icon">$INFO[RetroPlayer.AchievementsChallengeBadge(3)]</param>
+            <param name="slide_1_condition">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
+            <param name="slide_2_condition">$EXP[DialogGameControllers_GameIndicators_Challenge2_Expression]</param>
         </include>
         <include content="DialogGameControllers_GameIndicators_Notification">
             <param name="minilabel">$INFO[RetroPlayer.AchievementsIndicatorProgress]</param>
@@ -691,6 +717,8 @@
             <param name="progress">RetroPlayer.AchievementsIndicatorPercent</param>
             <param name="hasprogress">true</param>
             <param name="slide_1_condition">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
+            <param name="slide_2_condition">$EXP[DialogGameControllers_GameIndicators_Challenge2_Expression]</param>
+            <param name="slide_3_condition">$EXP[DialogGameControllers_GameIndicators_Challenge3_Expression]</param>
         </include>
         <include content="DialogGameControllers_GameIndicators_Notification">
             <param name="minilabel">$LOCALIZE[35331]</param>
@@ -699,6 +727,8 @@
             <param name="icon" />
             <param name="slide_1_condition">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
             <param name="slide_2_condition">!String.IsEmpty(RetroPlayer.AchievementsIndicatorTitle)</param>
+            <param name="slide_3_condition">$EXP[DialogGameControllers_GameIndicators_Challenge2_Expression]</param>
+            <param name="slide_4_condition">$EXP[DialogGameControllers_GameIndicators_Challenge3_Expression]</param>
         </include>
     </include>
 
