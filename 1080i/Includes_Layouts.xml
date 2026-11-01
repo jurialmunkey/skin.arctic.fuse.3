@@ -2360,6 +2360,59 @@
         </definition>
     </include>
 
+    <!-- Single digit rank (widget limit is forced to 9) from 210px tall textures cropped to each digit's width -->
+    <!-- Left aligned to the item and bottom aligned to the poster, drawn 1:1 by keeping aspect in a box of the texture height -->
+    <include name="Layout_Ranked_Numeral">
+        <param name="style">solid</param>
+        <param name="colordiffuse">main_fg_100</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="image">
+                <left>0</left>
+                <right>0</right>
+                <bottom>0</bottom>
+                <height>210</height>
+                <aspectratio align="left" aligny="bottom">keep</aspectratio>
+                <texture colordiffuse="$PARAM[colordiffuse]">numerals/$PARAM[style]/$INFO[$PARAM[listitem].CurrentItem].png</texture>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_Ranked">
+        <param name="selected">false</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <include content="Layout_Ranked_Numeral" condition="$PARAM[selected]">
+                    <param name="listitem">$PARAM[listitem]</param>
+                </include>
+                <include content="Layout_Ranked_Numeral" condition="!$PARAM[selected]">
+                    <param name="style">outline</param>
+                    <param name="colordiffuse">main_fg_50</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                </include>
+                <control type="group">
+                    <right>0</right>
+                    <width>view_poster_item_w</width>
+                    <include content="Layout_Poster">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="item_w">view_poster_item_w</param>
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="detailed">$PARAM[detailed]</param>
+                        <param name="indicator">$PARAM[indicator]</param>
+                        <param name="icon">$PARAM[icon]</param>
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                        <param name="use_label2">$PARAM[use_label2]</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Layout_Reviews">
         <param name="selected">false</param>
         <param name="detailed">false</param>
