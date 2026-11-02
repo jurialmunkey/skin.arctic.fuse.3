@@ -466,14 +466,14 @@
             </include>
             <control type="image">
                 <aspectratio>keep</aspectratio>
-                <texture>diffuse/circle/circle_200_overlay.png</texture>
+                <texture diffuse="$PARAM[overlay_diffuse]">diffuse/circle/circle_200_overlay.png</texture>
                 <visible>String.IsEqual($PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[listitem].DBType,artist) | String.IsEqual($PARAM[listitem].DBType,video) | String.IsEqual($PARAM[listitem].DBType,set)</visible>
             </control>
         </control>
         <control type="group">
             <visible>String.IsEmpty($PARAM[listitem].Art(discart)) + String.IsEmpty($PARAM[listitem].Art(album.discart)) + [String.IsEqual($PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[listitem].DBType,album) | String.IsEqual($PARAM[listitem].DBType,song) | String.IsEqual($PARAM[listitem].DBType,season)]</visible>
             <include content="Object_Layout_Image_Rectangle">
-                <param name="diffuse">diffuse/circle/discart.png</param>
+                <param name="diffuse">$PARAM[discart_diffuse]</param>
                 <param name="icon">$PARAM[icon]</param>
                 <param name="listitem">$PARAM[listitem]</param>
                 <param name="aspectratio">scale</param>
@@ -481,7 +481,7 @@
             </include>
             <control type="image">
                 <aspectratio>keep</aspectratio>
-                <texture>diffuse/circle/discart_overlay.png</texture>
+                <texture diffuse="$PARAM[overlay_diffuse]">diffuse/circle/discart_overlay.png</texture>
             </control>
         </control>
     </include>
@@ -490,6 +490,8 @@
         <param name="genre_bordersize">50</param>
         <param name="other_bordersize">20</param>
         <param name="include_discart">false</param>
+        <param name="discart_diffuse">diffuse/circle/discart.png</param>
+        <param name="overlay_diffuse" />
         <param name="selected">false</param>
         <definition>
             <control type="group">
@@ -499,6 +501,8 @@
 
                 <include content="Object_Layout_Image_Circle" condition="$PARAM[include_discart]">
                     <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="discart_diffuse">$PARAM[discart_diffuse]</param>
+                    <param name="overlay_diffuse">$PARAM[overlay_diffuse]</param>
                     <param name="icon">$PARAM[icon]</param>
                     <param name="listitem">$PARAM[listitem]</param>
                     <param name="aspectratio">$PARAM[aspectratio]</param>
