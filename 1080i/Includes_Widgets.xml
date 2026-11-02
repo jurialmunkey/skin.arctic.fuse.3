@@ -380,28 +380,16 @@
                             <top>20</top>
                             <height>24</height>
                             <width>85%</width>
-                            <include content="Object_Control" condition="$PARAM[first_row]">
-                                <param name="control">image</param>
-                                <include content="Dimension_Padding">
-                                    <param name="pad">-20</param>
-                                </include>
-                                <bordersize>20</bordersize>
-                                <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
-                                <texture colordiffuse="$PARAM[colordiffuse]" border="12">common/widget_text.png</texture>
+                            <include content="Widget_Busy_BlankItem_TextBar" condition="$PARAM[first_row]">
+                                <param name="colordiffuse">$PARAM[colordiffuse]</param>
                             </include>
                         </control>
                         <control type="group">
                             <bottom>0</bottom>
                             <height>24</height>
                             <width>70%</width>
-                            <include content="Object_Control" condition="$PARAM[second_row]">
-                                <param name="control">image</param>
-                                <include content="Dimension_Padding">
-                                    <param name="pad">-20</param>
-                                </include>
-                                <bordersize>20</bordersize>
-                                <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
-                                <texture colordiffuse="$PARAM[colordiffuse]" border="12">common/widget_text.png</texture>
+                            <include content="Widget_Busy_BlankItem_TextBar" condition="$PARAM[second_row]">
+                                <param name="colordiffuse">$PARAM[colordiffuse]</param>
                             </include>
                         </control>
                     </control>
@@ -474,6 +462,72 @@
             <param name="first_row">false</param>
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
         </include>
+    </include>
+
+    <!-- Rounded text placeholder bar with a soft shadow, sized by its parent group -->
+    <include name="Widget_Busy_BlankItem_TextBar">
+        <param name="colordiffuse">main_fg_12</param>
+        <definition>
+            <control type="image">
+                <include content="Dimension_Padding">
+                    <param name="pad">-20</param>
+                </include>
+                <bordersize>20</bordersize>
+                <bordertexture colordiffuse="shadow_soft" border="32">common/widget_text_shadow_20.png</bordertexture>
+                <texture colordiffuse="$PARAM[colordiffuse]" border="12">common/widget_text.png</texture>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Timeline: year bar, dot and date bar centred in the 110 date column (as Layout_Timeline_Track) -->
+    <!-- and the landscape after the date column and 40 gap: left = 40 + 150 -->
+    <include name="Widget_Busy_BlankItem_Timeline">
+        <param name="colordiffuse">main_fg_12</param>
+        <definition>
+            <control type="group">
+                <width>view_board_itemlayout_w</width>
+                <height>view_poster_itemlayout_h</height>
+                <include content="Widget_Busy_BlankItem">
+                    <param name="item_w">view_landscape_item_w</param>
+                    <param name="item_h">view_landscape_item_h</param>
+                    <param name="itemlayout_w">view_board_itemlayout_w</param>
+                    <param name="itemlayout_h">view_poster_itemlayout_h</param>
+                    <param name="left">190</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                </include>
+                <control type="group">
+                    <left>40</left>
+                    <top>40</top>
+                    <width>110</width>
+                    <height>view_landscape_item_h</height>
+                    <control type="group">
+                        <centerleft>50%</centerleft>
+                        <centertop>65</centertop>
+                        <width>80</width>
+                        <height>24</height>
+                        <include content="Widget_Busy_BlankItem_TextBar">
+                            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        </include>
+                    </control>
+                    <control type="image">
+                        <centerleft>50%</centerleft>
+                        <centertop>50%</centertop>
+                        <width>20</width>
+                        <height>20</height>
+                        <texture colordiffuse="$PARAM[colordiffuse]">common/circle.png</texture>
+                    </control>
+                    <control type="group">
+                        <centerleft>50%</centerleft>
+                        <centertop>160</centertop>
+                        <width>100</width>
+                        <height>24</height>
+                        <include content="Widget_Busy_BlankItem_TextBar">
+                            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </definition>
     </include>
 
     <include name="Widget_Busy_BlankItem_Banner">
@@ -682,6 +736,11 @@
         <include>Widget_Busy_BlankItem_Shelf</include>
         <include>Widget_Busy_BlankItem_Shelf</include>
     </include>
+    <include name="Widget_Busy_BlankItems__List_Timeline_Row">
+        <include>Widget_Busy_BlankItem_Timeline</include>
+        <include>Widget_Busy_BlankItem_Timeline</include>
+        <include>Widget_Busy_BlankItem_Timeline</include>
+    </include>
     <include name="Widget_Busy_BlankItems__List_Card_Row">
         <include>Widget_Busy_BlankItem_Card</include>
         <include>Widget_Busy_BlankItem_Poster</include>
@@ -735,6 +794,9 @@
     </include>
     <include name="Widget_Busy_Spinner_Height__List_Shelf_Row">
         <height>view_poster_item_h</height>
+    </include>
+    <include name="Widget_Busy_Spinner_Height__List_Timeline_Row">
+        <height>view_landscape_item_h</height>
     </include>
     <include name="Widget_Busy_Spinner_Height__List_Landscape_Row">
         <height>view_landscape_item_h</height>

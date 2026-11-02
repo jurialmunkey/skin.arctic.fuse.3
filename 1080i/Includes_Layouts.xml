@@ -2538,6 +2538,101 @@
         </definition>
     </include>
 
+    <!-- Timeline: a date column on a track line before an unchanged Layout_Landscape -->
+    <!-- The 110 date column + 40 gap + 410 landscape fill view_board_item_w -->
+    <include name="Layout_Timeline">
+        <param name="selected">false</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <include content="Layout_Timeline_Track" condition="$PARAM[selected]">
+                    <param name="listitem">$PARAM[listitem]</param>
+                    <param name="dot_texture">common/circle.png</param>
+                    <param name="dot_colordiffuse">$VAR[ColorHighlight]</param>
+                    <param name="year_textcolor">main_fg_100</param>
+                    <param name="date_textcolor">main_fg_70</param>
+                </include>
+                <include content="Layout_Timeline_Track" condition="!$PARAM[selected]">
+                    <param name="listitem">$PARAM[listitem]</param>
+                </include>
+                <control type="group">
+                    <left>150</left>
+                    <width>view_landscape_item_w</width>
+                    <include content="Layout_Landscape">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="item_w">view_landscape_item_w</param>
+                        <param name="item_h">view_landscape_item_h</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="detailed">$PARAM[detailed]</param>
+                        <param name="indicator">$PARAM[indicator]</param>
+                        <param name="icon">$PARAM[icon]</param>
+                        <param name="textcolor">$PARAM[textcolor]</param>
+                        <param name="affix">$PARAM[affix]</param>
+                        <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                        <param name="use_label2">$PARAM[use_label2]</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Track line through the landscape centre from the date column to the next item (gap around the dot) -->
+    <!-- with the premiered year above and date below an open dot (filled when focused), centred in the date column -->
+    <include name="Layout_Timeline_Track">
+        <param name="listitem">ListItem</param>
+        <param name="dot_texture">common/circle_ring.png</param>
+        <param name="dot_colordiffuse">main_fg_50</param>
+        <param name="year_textcolor">main_fg_70</param>
+        <param name="date_textcolor">main_fg_50</param>
+        <definition>
+            <control type="group">
+                <height>view_landscape_item_h</height>
+                <!-- 20 gap either side of the dot (45 to 65): from 85 to 25 into the next item's date column -->
+                <control type="image">
+                    <left>85</left>
+                    <right>-65</right>
+                    <centertop>50%</centertop>
+                    <height>2</height>
+                    <texture colordiffuse="main_fg_12">common/white.png</texture>
+                </control>
+                <control type="group">
+                    <width>110</width>
+                    <control type="label">
+                        <left>-20</left>
+                        <right>-20</right>
+                        <top>40</top>
+                        <height>50</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_head_bold</font>
+                        <textcolor>$PARAM[year_textcolor]</textcolor>
+                        <label>$INFO[$PARAM[listitem].Year]</label>
+                    </control>
+                    <control type="image">
+                        <centerleft>50%</centerleft>
+                        <centertop>50%</centertop>
+                        <width>20</width>
+                        <height>20</height>
+                        <texture colordiffuse="$PARAM[dot_colordiffuse]">$PARAM[dot_texture]</texture>
+                    </control>
+                    <control type="label">
+                        <left>-20</left>
+                        <right>-20</right>
+                        <top>140</top>
+                        <height>40</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny_bold</font>
+                        <textcolor>$PARAM[date_textcolor]</textcolor>
+                        <label>$INFO[$PARAM[listitem].Premiered]</label>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Layout_Reviews">
         <param name="selected">false</param>
         <param name="detailed">false</param>
