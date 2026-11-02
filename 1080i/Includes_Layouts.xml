@@ -2459,6 +2459,82 @@
         </definition>
     </include>
 
+    <!-- Shelf spine: textless fanart behind the clearlogo turned on its side (ListItem.Label without one) and the year -->
+    <!-- The focused item uses Layout_Poster (List_Shelf_Row), so the spine is never selected -->
+    <include name="Layout_Shelf">
+        <param name="indicator">true</param>
+        <param name="listitem">ListItem</param>
+        <param name="diffuse">diffuse/shelf_w100_h310.png</param>
+        <param name="affix" />
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <include content="Object_ItemBack">
+                    <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                </include>
+                <include content="Object_Layout_Image_Rectangle">
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="icon">$VAR[Image_Card_Fanart]</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                    <param name="aspectratio">scale</param>
+                </include>
+                <control type="image">
+                    <texture diffuse="$PARAM[diffuse]" colordiffuse="panel_bg_50">common/white.png</texture>
+                </control>
+                <include content="Layout_Shelf_Title">
+                    <param name="listitem">$PARAM[listitem]</param>
+                </include>
+                <control type="label">
+                    <bottom>28</bottom>
+                    <height>30</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <font>font_tiny_bold</font>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$INFO[$PARAM[listitem].Year]</label>
+                </control>
+                <!-- Spines centre the indicator as there is no room for the usual right indent -->
+                <include content="Object_Indicator" condition="$PARAM[indicator]">
+                    <param name="affix">$PARAM[affix]</param>
+                    <param name="listitem">$PARAM[listitem]</param>
+                    <param name="right">18.13</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Clearlogo turned a quarter turn clockwise to read down the spine -->
+    <!-- Without a clearlogo the title is shown upright and wrapped -->
+    <include name="Layout_Shelf_Title">
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="group">
+                <centerleft>50%</centerleft>
+                <centertop>125</centertop>
+                <width>210</width>
+                <height>60</height>
+                <animation effect="rotate" end="-90" center="auto" condition="true">Conditional</animation>
+                <control type="image">
+                    <texture background="true">$VAR[Image_Clearlogo]</texture>
+                    <aspectratio>keep</aspectratio>
+                </control>
+            </control>
+            <control type="textbox">
+                <left>10</left>
+                <right>10</right>
+                <top>20</top>
+                <height>210</height>
+                <align>center</align>
+                <aligny>center</aligny>
+                <font>font_tiny_bold</font>
+                <textcolor>main_fg_90</textcolor>
+                <label>$INFO[$PARAM[listitem].Label]</label>
+                <visible>String.IsEmpty($PARAM[listitem].Art(clearlogo)) + String.IsEmpty($PARAM[listitem].Art(tvshow.clearlogo)) + String.IsEmpty($PARAM[listitem].Art(artist.clearlogo))</visible>
+            </control>
+        </definition>
+    </include>
+
     <include name="Layout_Reviews">
         <param name="selected">false</param>
         <param name="detailed">false</param>
