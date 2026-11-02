@@ -503,9 +503,8 @@
 
     <include name="Layout_ShortcutCategories">
         <param name="selected">false</param>
-        <param name="detailed">false</param>
-        <param name="variation">false</param>
         <param name="textcolor">dialog_fg</param>
+        <param name="variation">false</param>
         <param name="misc">false</param>
         <definition>
 
@@ -517,22 +516,28 @@
             <control type="group">
                 <left>15</left>
 
-                <include content="Layout_MenuList_Labels">
-                    <param name="detailed">$PARAM[detailed]</param>
-                    <param name="selected">$PARAM[selected]</param>
-                    <param name="textcolor">$PARAM[textcolor]</param>
-                </include>
+                <control type="group">
+                    <include content="Object_Right" condition="$PARAM[variation]">
+                        <param name="right">70</param>
+                    </include>
+                    <include content="Layout_MenuList_Labels">
+                        <param name="detailed">false</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="textcolor">$PARAM[textcolor]</param>
+                    </include>
+                </control>
 
                 <include content="Layout_MenuList_Icon">
-                    <param name="detailed">$PARAM[detailed]</param>
+                    <param name="detailed">false</param>
                     <param name="selected">$PARAM[selected]</param>
                     <param name="textcolor">$PARAM[textcolor]</param>
                 </include>
 
-                <control type="group">
+                <!-- variation shows the misc state as a checkmark -->
+                <include content="Object_Control" condition="$PARAM[variation]">
+                    <param name="control">group</param>
                     <width>40</width>
                     <right>30</right>
-                    <visible>$PARAM[variation]</visible>
                     <include condition="!$PARAM[selected]" content="Object_IsSelected_Checkmark">
                         <param name="selected">$PARAM[misc]</param>
                         <param name="color_off">$PARAM[textcolor]_30</param>
@@ -541,8 +546,7 @@
                     <include condition="$PARAM[selected]" content="Object_IsSelected_Checkmark_Focus">
                         <param name="selected">$PARAM[misc]</param>
                     </include>
-                </control>
-
+                </include>
             </control>
 
         </definition>

@@ -9,12 +9,14 @@
     <onload>ClearProperty(list_id)</onload>
     <onload>ClearProperty(widgetonly_menu)</onload>
     <onload>ClearProperty(show_all_hubs)</onload>
+    <onload>ClearProperty(ManageHubsButton)</onload>
     <include>Action_Blur_Onload</include>
     <include content="Hub_Onload_Window">
         <param name="window">1109</param>
         <param name="defaultname">$LOCALIZE[31639]</param>
     </include>
-    <onload>SetFocus(30000,1,absolute)</onload>
+    <onload condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">SetFocus(30000,1,absolute)</onload>
+    <onload condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">SetFocus(30000,0,absolute)</onload>
     <onload>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onload>
     <include>Action_BuildShortcuts_OnUnLoad</include>
     <controls>
@@ -32,78 +34,35 @@
                             <param name="id">30000</param>
                             <param name="itemlayout_include">Layout_ShortcutCategories</param>
                             <param name="textcolor">main_fg</param>
-                            <param name="altfocus">!Control.HasFocus(20)</param>
-                            <param name="misc">!String.IsEmpty(ListItem.Property(enabled))</param>
-                            <param name="variation">!String.IsEmpty(ListItem.Property(checkmark))</param>
-                            <param name="control">fixedlist</param>
-                            <focusposition>4</focusposition>
-                            <movement>4</movement>
+                            <param name="altfocus">!Control.HasFocus(20) + !Control.HasFocus(30001) + !$EXP[DialogShortcuts_ManageHubs_FromButton]</param>
                             <right>40</right>
                             <onright>340</onright>
-                            <bottom>80</bottom>
+                            <ondown>30001</ondown>
+                            <onfocus>ClearProperty(ManageHubsButton)</onfocus>
+                            <onclick>ActivateWindow(1133)</onclick>
+                            <bottom>160</bottom>
 
                             <content>
-                                <item id="0">
-                                    <label>$LOCALIZE[137]</label>
-                                    <icon>special://skin/extras/icons/search.png</icon>
-                                    <property name="checkmark">true</property>
-                                    <property name="editmenu">menu=search</property>
-                                    <property name="enabled">$VAR[Action_SearchEnabled]</property>
-                                    <onclick>Skin.ToggleSetting(HomeSwitcher.DisableSearch)</onclick>
-                                </item>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">1</param>
-                                    <param name="window">home</param>
-                                    <param name="toggle">false</param>
-                                    <param name="enabled">true</param>
-                                </include>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">2</param>
-                                    <param name="window">1101</param>
-                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1101.Toggle)]</param>
-                                </include>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">3</param>
-                                    <param name="window">1102</param>
-                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1102.Toggle)]</param>
-                                </include>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">4</param>
-                                    <param name="window">1103</param>
-                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1103.Toggle)]</param>
-                                </include>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">5</param>
-                                    <param name="window">1104</param>
-                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1104.Toggle)]</param>
-                                </include>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">6</param>
-                                    <param name="window">1106</param>
-                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1106.Toggle)]</param>
-                                </include>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">7</param>
-                                    <param name="window">1107</param>
-                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1107.Toggle)]</param>
-                                </include>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">8</param>
-                                    <param name="window">1108</param>
-                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1108.Toggle)]</param>
-                                </include>
-                                <include content="DialogShortcuts_Hub_Category">
-                                    <param name="id">9</param>
-                                    <param name="window">1109</param>
-                                    <param name="enabled">$INFO[Skin.String(HomeSwitcher.1109.Toggle)]</param>
-                                </include>
-                                <item id="10">
-                                    <label>$LOCALIZE[33060]</label>
-                                    <icon>special://skin/extras/icons/power.png</icon>
-                                    <property name="editmenu">menu=power</property>
-                                    <property name="checkmark">true</property>
-                                    <property name="enabled">$VAR[Action_PowerEnabled]</property>
-                                    <onclick>Skin.ToggleSetting(HomeSwitcher.LoopBack)</onclick>
+                                <include>DialogShortcuts_Hub_Categories</include>
+                            </content>
+                        </include>
+
+                        <include content="List_DialogSelect">
+                            <param name="id">30001</param>
+                            <param name="itemlayout_include">Layout_ShortcutCategories</param>
+                            <param name="textcolor">main_fg</param>
+                            <param name="altfocus">$EXP[DialogShortcuts_ManageHubs_FromButton]</param>
+                            <right>40</right>
+                            <bottom>80</bottom>
+                            <height>80</height>
+                            <onup>30000</onup>
+                            <onfocus>SetProperty(ManageHubsButton,True)</onfocus>
+                            <onright>340</onright>
+                            <content>
+                                <item>
+                                    <label>$LOCALIZE[31833]</label>
+                                    <icon>special://skin/extras/icons/list-check.png</icon>
+                                    <onclick>ActivateWindow(1133)</onclick>
                                 </item>
                             </content>
                         </include>
