@@ -43,22 +43,30 @@
         </definition>
     </include>
 
+    <!-- radioposx: radio graphic position (-2 at the left, 0 aligns it right).
+         getlabel false shows the label param next to the icon instead of the button's label (radiobuttons add their state to it) -->
     <include name="Button_Dialog">
         <param name="control">button</param>
         <param name="dialog">true</param>
         <param name="istext">false</param>
+        <param name="radioposx">-2</param>
+        <param name="getlabel">true</param>
         <definition>
             <include content="Button_Control">
                 <param name="id">$PARAM[id]</param>
                 <param name="control">$PARAM[control]</param>
                 <param name="dialog">$PARAM[dialog]</param>
-                <radioposx>-2</radioposx>
+                <param name="window">$PARAM[window]</param>
+                <param name="help">$PARAM[help]</param>
+                <radioposx>$PARAM[radioposx]</radioposx>
                 <font />
                 <nested />
             </include>
             <include content="Button_Image" condition="![$PARAM[istext]]">
                 <param name="id">$PARAM[groupid]</param>
                 <param name="buttonid">$PARAM[id]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="getlabel">$PARAM[getlabel]</param>
                 <param name="icon">$PARAM[icon]</param>
                 <param name="font">$PARAM[font]</param>
                 <param name="top">$PARAM[top]</param>
@@ -84,6 +92,7 @@
         <param name="dialog">false</param>
         <param name="window" />
         <param name="reload">false</param>
+        <param name="help" />
         <definition>
             <control type="$PARAM[control]" id="$PARAM[baseid]$PARAM[id]">
                 <nested />
@@ -96,13 +105,16 @@
                     <param name="id">$PARAM[id]</param>
                     <param name="baseid">$PARAM[baseid]</param>
                     <param name="reload">$PARAM[reload]</param>
+                    <param name="help">$PARAM[help]</param>
                 </include>
             </control>
         </definition>
     </include>
 
+    <!-- left: start of the label within the text area (label2 keeps to the right half so it can't run over the label) -->
     <include name="Button_Label_Controls_Objects">
         <control type="$PARAM[control]">
+            <left>$PARAM[left]</left>
             <aligny>center</aligny>
             <align>$PARAM[align]</align>
             <font>$PARAM[font]</font>
@@ -111,6 +123,7 @@
             <visible>!Control.HasFocus($PARAM[buttonid])</visible>
         </control>
         <control type="$PARAM[control]">
+            <left>$PARAM[left]</left>
             <aligny>center</aligny>
             <align>$PARAM[align]</align>
             <font>$PARAM[font]</font>
@@ -138,6 +151,7 @@
                         <param name="font">$PARAM[font]</param>
                         <param name="label">$PARAM[label]</param>
                         <param name="buttonid">$PARAM[buttonid]</param>
+                        <param name="left">0</param>
                         <param name="align">left</param>
                     </include>
                     <include content="Button_Label_Controls_Objects" condition="$PARAM[has_label2]">
@@ -145,6 +159,7 @@
                         <param name="font">$PARAM[font]</param>
                         <param name="label">$PARAM[label]</param>
                         <param name="buttonid">$PARAM[buttonid]</param>
+                        <param name="left">0</param>
                         <param name="align">left</param>
                     </include>
                     <include content="Button_Label_Controls_Objects" condition="$PARAM[has_label2]">
@@ -152,6 +167,7 @@
                         <param name="font">$PARAM[font]</param>
                         <param name="label">$PARAM[label2]</param>
                         <param name="buttonid">$PARAM[buttonid]</param>
+                        <param name="left">50%</param>
                         <param name="align">right</param>
                     </include>
                 </control>
@@ -162,6 +178,7 @@
     <include name="Button_Image">
         <param name="top">-100</param>
         <param name="left">20</param>
+        <param name="getlabel">true</param>
         <definition>
             <control type="group" id="$PARAM[id]">
                 <top>$PARAM[top]</top>
@@ -183,8 +200,17 @@
                         <visible>Control.HasFocus($PARAM[buttonid])</visible>
                     </control>
                 </control>
-                <include content="Button_Label_Controls">
+                <include content="Button_Label_Controls" condition="$PARAM[getlabel]">
                     <param name="label">$INFO[Control.GetLabel($PARAM[buttonid])]</param>
+                    <param name="buttonid">$PARAM[buttonid]</param>
+                    <param name="font">$PARAM[font]</param>
+                    <param name="top">$PARAM[top]</param>
+                    <param name="left">$PARAM[left]</param>
+                    <param name="has_label2">$PARAM[has_label2]</param>
+                    <param name="label2">$PARAM[label2]</param>
+                </include>
+                <include content="Button_Label_Controls" condition="![$PARAM[getlabel]]">
+                    <param name="label">$PARAM[label]</param>
                     <param name="buttonid">$PARAM[buttonid]</param>
                     <param name="font">$PARAM[font]</param>
                     <param name="top">$PARAM[top]</param>

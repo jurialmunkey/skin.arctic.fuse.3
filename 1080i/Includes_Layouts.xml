@@ -501,25 +501,25 @@
         </definition>
     </include>
 
+    <!-- Hubs window (1115) list row. Disabled items are dimmed; the right side is left free for the move arrows -->
     <include name="Layout_ShortcutCategories">
         <param name="selected">false</param>
         <param name="textcolor">dialog_fg</param>
-        <param name="variation">false</param>
-        <param name="misc">false</param>
         <definition>
 
             <include content="Object_Control" condition="$PARAM[selected]">
                 <param name="control">image</param>
                 <include>Texture_Menu_Highlight_H</include>
+                <!-- Half opacity while the row button (30910) is unfocused, like the settings categories -->
+                <animation effect="fade" start="100" end="50" condition="!Control.HasFocus(30910)">Conditional</animation>
             </include>
 
             <control type="group">
                 <left>15</left>
+                <animation effect="fade" start="100" end="40" condition="String.IsEqual(ListItem.Property(disabled),True)">Conditional</animation>
 
                 <control type="group">
-                    <include content="Object_Right" condition="$PARAM[variation]">
-                        <param name="right">70</param>
-                    </include>
+                    <right>50</right>
                     <include content="Layout_MenuList_Labels">
                         <param name="detailed">false</param>
                         <param name="selected">$PARAM[selected]</param>
@@ -533,22 +533,49 @@
                     <param name="textcolor">$PARAM[textcolor]</param>
                 </include>
 
-                <!-- variation shows the misc state as a checkmark -->
-                <include content="Object_Control" condition="$PARAM[variation]">
-                    <param name="control">group</param>
-                    <width>40</width>
-                    <right>30</right>
-                    <include condition="!$PARAM[selected]" content="Object_IsSelected_Checkmark">
-                        <param name="selected">$PARAM[misc]</param>
-                        <param name="color_off">$PARAM[textcolor]_30</param>
-                        <param name="color_on">$PARAM[textcolor]_70</param>
-                    </include>
-                    <include condition="$PARAM[selected]" content="Object_IsSelected_Checkmark_Focus">
-                        <param name="selected">$PARAM[misc]</param>
-                    </include>
-                </include>
             </control>
 
+        </definition>
+    </include>
+
+    <!-- Hubs window (1115) move arrows like a spin control, shown on the focused row with the row button (30910).
+         Outside the list layout so the neighbouring items are read from the list rather than the drawn item -->
+    <include name="HubsWindow_Move_Arrows">
+        <control type="group">
+            <right>70</right>
+            <width>60</width>
+            <height>30</height>
+            <centertop>40</centertop>
+            <include>HubsWindow_Row_Positions</include>
+            <visible>Control.HasFocus(30910)</visible>
+            <include content="HubsWindow_Move_Arrow">
+                <param name="left">0</param>
+                <param name="flipy">false</param>
+                <param name="shift">!$EXP[Exp_HubsWindow_CanMoveUp]</param>
+                <param name="available">$EXP[Exp_HubsWindow_CanMoveDown]</param>
+                <param name="selected">$EXP[Exp_HubsWindow_MoveDown_Selected]</param>
+            </include>
+            <include content="HubsWindow_Move_Arrow">
+                <param name="left">30</param>
+                <param name="flipy">true</param>
+                <param name="available">$EXP[Exp_HubsWindow_CanMoveUp]</param>
+                <param name="selected">$EXP[Exp_HubsWindow_MoveUp_Selected]</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- shift moves the arrow over to the right edge when the arrow to its right is not shown -->
+    <include name="HubsWindow_Move_Arrow">
+        <param name="shift">false</param>
+        <definition>
+            <control type="image">
+                <left>$PARAM[left]</left>
+                <width>30</width>
+                <texture flipy="$PARAM[flipy]" colordiffuse="$VAR[ColorSelected]">buttons/triangle-down.png</texture>
+                <visible>$PARAM[available]</visible>
+                <animation effect="fade" start="100" end="30" condition="![$PARAM[selected]]">Conditional</animation>
+                <animation effect="slide" start="0" end="30,0" condition="$PARAM[shift]">Conditional</animation>
+            </control>
         </definition>
     </include>
 

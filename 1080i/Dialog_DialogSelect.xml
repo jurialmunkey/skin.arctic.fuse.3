@@ -139,6 +139,7 @@
 
     <include name="DialogSelect_Viewtype">
         <param name="id">3</param>
+        <param name="current">Container(3).ListItem.IsSelected</param>
         <param name="itemlayout_include">Layout_ViewType</param>
         <param name="windowopen_delay">200</param>
         <param name="categories">false</param>
@@ -224,7 +225,7 @@
                                         <include content="$PARAM[itemlayout_include]">
                                             <param name="selected">true</param>
                                             <param name="icon">$INFO[Container($PARAM[id]).ListItem.Icon]</param>
-                                            <param name="current">Container($PARAM[id]).ListItem.IsSelected</param>
+                                            <param name="current">$PARAM[current]</param>
                                         </include>
                                     </control>
                                 </control>
@@ -317,6 +318,7 @@
         </control>
         <include content="DialogSelect_Viewtype">
             <param name="id">10811</param>
+            <param name="current">Container(10811).ListItem.IsSelected</param>
             <param name="itemlayout_include">Layout_GameWindow</param>
             <param name="header">$VAR[Label_GameOSD_Heading]</param>
             <param name="windowopen_delay">400</param>  <!-- Delay to wait for blackout mask -->
@@ -821,11 +823,23 @@
         </definition>
     </include>
 
+    <!-- Opens the layout select dialog (1125) for a setting prefix, noting its current mode (combined/wall conditions, otherwise Standard) -->
+    <include name="DialogSelect_WidgetMode_Onclick">
+        <definition>
+            <onclick>SetProperty(Dialog.1125.Value,$PARAM[setting],Home)</onclick>
+            <onclick>SetProperty(Dialog.1125.Mode,Standard,Home)</onclick>
+            <onclick condition="$PARAM[combined]">SetProperty(Dialog.1125.Mode,Combined,Home)</onclick>
+            <onclick condition="$PARAM[wall]">SetProperty(Dialog.1125.Mode,Wall,Home)</onclick>
+            <onclick>ActivateWindow(1125)</onclick>
+        </definition>
+    </include>
+
     <include name="DialogSelect_WidgetMode_Items">
         <content>
             <item>
                 <label>$LOCALIZE[10037]</label>
                 <icon>special://skin/extras/modes/standard.jpg</icon>
+                <property name="mode">Standard</property>
                 <onclick>Close</onclick>
                 <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Standard)</onclick>
             </item>
@@ -833,6 +847,7 @@
             <item>
                 <label>$LOCALIZE[31083]</label>
                 <icon>special://skin/extras/modes/combined.jpg</icon>
+                <property name="mode">Combined</property>
                 <onclick>Close</onclick>
                 <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Combined)</onclick>
             </item>
@@ -840,6 +855,7 @@
             <item>
                 <label>$LOCALIZE[31008]</label>
                 <icon>special://skin/extras/modes/wall.jpg</icon>
+                <property name="mode">Wall</property>
                 <onclick>Close</onclick>
                 <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Wall)</onclick>
             </item>

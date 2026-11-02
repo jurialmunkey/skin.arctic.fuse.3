@@ -191,9 +191,12 @@
     <include name="Action_BuildShortcuts_OnLoad">
         <onload>runscript(script.skinvariables,"run_executebuiltin=special://skin/shortcuts/skinvariables-build-templates.json",use_rules)</onload>
     </include>
+    <!-- Rebuild the shortcut templates when leaving the window, only if a menu was saved while it was open -->
     <include name="Action_BuildShortcuts_OnUnLoad">
         <onload>CancelAlarm(rebuild_shortcuts,true)</onload>
-        <onunload>AlarmClock(rebuild_shortcuts,runscript(script.skinvariables,"run_executebuiltin=special://skin/shortcuts/skinvariables-build-templates.json",use_rules),00:01,silent)</onunload>
+        <onload>SetProperty(Shortcuts.WindowReloadOnOpen,$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload)],Home)</onload>
+        <onunload condition="$EXP[Exp_Shortcuts_WindowEditedSinceOpen]">Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onunload>
+        <onunload condition="$EXP[Exp_Shortcuts_WindowEditedSinceOpen]">AlarmClock(rebuild_shortcuts,runscript(script.skinvariables,"run_executebuiltin=special://skin/shortcuts/skinvariables-build-templates.json",use_rules),00:01,silent)</onunload>
     </include>
 
     <include name="Action_Setting_Header_Onclick">

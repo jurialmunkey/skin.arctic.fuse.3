@@ -177,8 +177,10 @@
         </control>
     </include>
 
+    <!-- header_include: the header's label row (Settings_Right_Header by default), given the header param -->
     <include name="Settings_Right_Group">
         <param name="header">$VAR[Label_Settings_Category]</param>
+        <param name="header_include">Settings_Right_Header</param>
         <param name="subheader">$VAR[Label_Settings_SubCategory]</param>
         <param name="visible_line">true</param>
         <param name="visible_header">true</param>
@@ -187,15 +189,9 @@
                 <include>Settings_Box</include>
                 <control type="group">
                     <visible>$PARAM[visible_header]</visible>
-                    <control type="label">
-                        <label>$PARAM[header]</label>
-                        <font>font_midi_bold</font>
-                        <textcolor>main_fg_90</textcolor>
-                        <height>40</height>
-                        <centertop>60</centertop>
-                        <left>40</left>
-                        <right>40</right>
-                    </control>
+                    <include content="$PARAM[header_include]">
+                        <param name="header">$PARAM[header]</param>
+                    </include>
                     <control type="group">
                         <visible>$PARAM[visible_line]</visible>
                         <include content="Part_ItemLine">
@@ -226,6 +222,20 @@
                 <param name="centerbottom">60</param>
                 <param name="height">80</param>
             </include>
+        </definition>
+    </include>
+
+    <include name="Settings_Right_Header">
+        <definition>
+            <control type="label">
+                <label>$PARAM[header]</label>
+                <font>font_midi_bold</font>
+                <textcolor>main_fg_90</textcolor>
+                <height>40</height>
+                <centertop>60</centertop>
+                <left>40</left>
+                <right>40</right>
+            </control>
         </definition>
     </include>
 
@@ -466,9 +476,18 @@
         <param name="control">button</param>
         <param name="dialog">false</param>
         <param name="left">30</param>
+        <param name="window" />
+        <param name="help" />
+        <param name="radioposx">0</param>
+        <param name="getlabel">true</param>
         <definition>
             <include content="Button_Dialog">
                 <param name="id">$PARAM[id]</param>
+                <param name="radioposx">$PARAM[radioposx]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="getlabel">$PARAM[getlabel]</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="help">$PARAM[help]</param>
                 <param name="groupid">$PARAM[groupid]</param>
                 <param name="control">$PARAM[control]</param>
                 <param name="dialog">$PARAM[dialog]</param>

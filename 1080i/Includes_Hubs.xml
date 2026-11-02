@@ -2,11 +2,9 @@
 <includes>
 
     <include name="Hub_Onload_Window">
-        <param name="defaultname">$LOCALIZE[636]</param>
         <definition>
             <onload condition="String.IsEmpty(Window($PARAM[window]).Property(TMDbHelper.WidgetContainer)) + Skin.String(HomeSwitcher.$PARAM[window].Type,Custom) + !String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Target))">SetProperty(TMDbHelper.WidgetContainer,301,$PARAM[window])</onload>
             <onload condition="String.IsEmpty(Window($PARAM[window]).Property(TMDbHelper.WidgetContainer)) + [!Skin.String(HomeSwitcher.$PARAM[window].Type,Custom) | String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Target))]">SetProperty(TMDbHelper.WidgetContainer,501,$PARAM[window])</onload>
-            <onload condition="String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Name))">Skin.SetString(HomeSwitcher.$PARAM[window].Name,$PARAM[defaultname])</onload>
         </definition>
     </include>
 
@@ -29,7 +27,6 @@
 
             <include content="Hub_Onload_Window">
                 <param name="window">Home</param>
-                <param name="defaultname">$LOCALIZE[10000]</param>
             </include>
             <include content="Hub_Onload_Window">
                 <param name="window">1101</param>
@@ -47,29 +44,25 @@
             <onload condition="String.IsEmpty(Window(1105).Property(TMDbHelper.WidgetContainer))">SetProperty(TMDbHelper.WidgetContainer,501,1105)</onload>
             <include content="Hub_Onload_Window">
                 <param name="window">1106</param>
-                <param name="defaultname">$LOCALIZE[31605]</param>
             </include>
             <include content="Hub_Onload_Window">
                 <param name="window">1107</param>
-                <param name="defaultname">$LOCALIZE[31085] / PVR</param>
             </include>
             <include content="Hub_Onload_Window">
                 <param name="window">1108</param>
-                <param name="defaultname">$LOCALIZE[24001]</param>
             </include>
             <include content="Hub_Onload_Window">
                 <param name="window">1109</param>
-                <param name="defaultname">$LOCALIZE[31639]</param>
             </include>
             <onload condition="String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window_id].UpNextMode))">Skin.SetString(HomeSwitcher.$PARAM[window_id].UpNextMode,library_nextaired)</onload>
 
             <menucontrol>300</menucontrol>
 
-            <include content="Object_DefaultControl" condition="!String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window_id].Toggle))">
+            <include content="Object_DefaultControl" condition="$EXP[Exp_Hub_Enabled_$PARAM[window_id]]">
                 <param name="defaultcontrol">300</param>
                 <param name="always">false</param>
             </include>
-            <include content="Object_DefaultControl" condition="String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window_id].Toggle))">
+            <include content="Object_DefaultControl" condition="!$EXP[Exp_Hub_Enabled_$PARAM[window_id]]">
                 <param name="defaultcontrol">400</param>
                 <param name="always">false</param>
             </include>
@@ -841,7 +834,7 @@
         <definition>
             <include>Hub_Window_Background</include>
 
-            <include content="Home_Control" condition="!String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Toggle))">
+            <include content="Home_Control" condition="$EXP[Exp_Hub_Enabled_$PARAM[window]]">
                 <param name="window">$PARAM[window]</param>
                 <param name="overlay">[String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window].Mode),Wall) + !$PARAM[standard_only]]</param>
 
@@ -1161,8 +1154,7 @@
     <include name="Hub_ClickActions">
         <param name="condition">true</param>
         <definition>
-            <onclick condition="$PARAM[condition] + Skin.String(HomeSwitcher.$PARAM[window].Type,Custom) + !String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Shortcut.Target))">ActivateWindow($INFO[Skin.String(HomeSwitcher.$PARAM[window].Shortcut.Target)],$INFO[Skin.String(HomeSwitcher.$PARAM[window].Shortcut.Path)],return)</onclick>
-            <onclick condition="$PARAM[condition] + Skin.String(HomeSwitcher.$PARAM[window].Type,Custom) + String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Shortcut.Target))">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Shortcut.Path)]</onclick>
+            <onclick condition="$PARAM[condition] + Skin.String(HomeSwitcher.$PARAM[window].Type,Custom)">$VAR[Hub_Shortcut_$PARAM[window]]</onclick>
             <onclick condition="$PARAM[condition] + Skin.String(HomeSwitcher.$PARAM[window].Type,LiveTV)">ActivateWindow(tvchannels)</onclick>
             <onclick condition="$PARAM[condition] + Skin.String(HomeSwitcher.$PARAM[window].Type,Addons)">ActivateWindow(addonbrowser)</onclick>
             <onclick condition="$PARAM[condition] + Skin.String(HomeSwitcher.$PARAM[window].Type,NextAired) + Skin.String(HomeSwitcher.$PARAM[window].UpNextMode,library_nextaired)">Skin.SetString(HomeSwitcher.$PARAM[window].UpNextMode,trakt_calendar)</onclick>

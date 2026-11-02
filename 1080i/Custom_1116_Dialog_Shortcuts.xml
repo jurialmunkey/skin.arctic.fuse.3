@@ -2,9 +2,12 @@
 <window type="dialog" id="1116">
 
     <defaultcontrol always="true">22001</defaultcontrol>
+    <!-- Menu saves change the skinvariables reload property: note it so closing only rebuilds after edits -->
+    <onload>SetProperty(Shortcuts.ReloadOnOpen,$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload)],Home)</onload>
     <onload condition="!String.IsEmpty(Window(Home).Property(Shortcuts.Position))">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-refocuscustomwidgets.json,use_rules=True,attempts=5)</onload>
     <onunload>ClearProperty(Shortcuts.Position,Home)</onunload>
-    <onunload>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onunload>
+    <onunload condition="$EXP[Exp_Shortcuts_EditedSinceOpen]">Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onunload>
+    <onunload condition="$EXP[Exp_Shortcuts_EditedSinceOpen]">AlarmClock(rebuild_editor,runscript(script.skinvariables,"run_executebuiltin=special://skin/shortcuts/skinvariables-build-templates.json",use_rules),00:00,silent)</onunload>
     <onunload>Skin.Reset(SetupWizard.WidgetGroup)</onunload>
     <controls>
         <include>DialogShortcuts</include>

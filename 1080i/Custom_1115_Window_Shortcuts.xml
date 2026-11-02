@@ -2,6 +2,7 @@
 <window type="window" id="1115">
     <defaultcontrol always="true">30000</defaultcontrol>
     <onload>ClearProperty(url)</onload>
+    <onload>ClearProperty(HubsMoveDown)</onload>
     <onload>ClearProperty(forced)</onload>
     <onload>ClearProperty(menu)</onload>
     <onload>ClearProperty(mode)</onload>
@@ -9,15 +10,13 @@
     <onload>ClearProperty(list_id)</onload>
     <onload>ClearProperty(widgetonly_menu)</onload>
     <onload>ClearProperty(show_all_hubs)</onload>
-    <onload>ClearProperty(ManageHubsButton)</onload>
+    <!-- Migrate existing hub settings into the hubs menu before the hubs list can create it from the defaults -->
+    <onload>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/skinvariables-migrate.json,use_rules=True)</onload>
     <include>Action_Blur_Onload</include>
     <include content="Hub_Onload_Window">
         <param name="window">1109</param>
-        <param name="defaultname">$LOCALIZE[31639]</param>
     </include>
-    <onload condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">SetFocus(30000,1,absolute)</onload>
-    <onload condition="Skin.HasSetting(HomeSwitcher.DisableSearch)">SetFocus(30000,0,absolute)</onload>
-    <onload>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onload>
+    <onload>SetFocus(30000,1,absolute)</onload>
     <include>Action_BuildShortcuts_OnUnLoad</include>
     <controls>
 
@@ -30,61 +29,112 @@
                 <include content="Settings_Left_Group">
                     <include content="Settings_Left_Content">
 
+                        <!-- Search, Home, the hubs menu (listed once any migration has run) and Power. Focus goes to the row button 30910 -->
                         <include content="List_DialogSelect">
                             <param name="id">30000</param>
                             <param name="itemlayout_include">Layout_ShortcutCategories</param>
                             <param name="textcolor">main_fg</param>
-                            <param name="altfocus">!Control.HasFocus(20) + !Control.HasFocus(30001) + !$EXP[DialogShortcuts_ManageHubs_FromButton]</param>
-                            <right>40</right>
-                            <onright>340</onright>
-                            <ondown>30001</ondown>
-                            <onfocus>ClearProperty(ManageHubsButton)</onfocus>
-                            <onclick>ActivateWindow(1133)</onclick>
-                            <bottom>160</bottom>
-
-                            <content>
-                                <include>DialogShortcuts_Hub_Categories</include>
-                            </content>
-                        </include>
-
-                        <include content="List_DialogSelect">
-                            <param name="id">30001</param>
-                            <param name="itemlayout_include">Layout_ShortcutCategories</param>
-                            <param name="textcolor">main_fg</param>
-                            <param name="altfocus">$EXP[DialogShortcuts_ManageHubs_FromButton]</param>
+                            <param name="altfocus">!Control.HasFocus(20)</param>
                             <right>40</right>
                             <bottom>80</bottom>
-                            <height>80</height>
-                            <onup>30000</onup>
-                            <onfocus>SetProperty(ManageHubsButton,True)</onfocus>
-                            <onright>340</onright>
-                            <content>
-                                <item>
-                                    <label>$LOCALIZE[31833]</label>
-                                    <icon>special://skin/extras/icons/list-check.png</icon>
-                                    <onclick>ActivateWindow(1133)</onclick>
-                                </item>
-                            </content>
+                            <onfocus>SetFocus(30910)</onfocus>
+                            <include>DialogShortcuts_Hubs_StaticTop</include>
+                            <content>plugin://script.skinvariables/?info=get_shortcuts_node&amp;edit=true&amp;skin=$VAR[Path_SkinVariables_SkinFolder]$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload),&amp;reload=,]$INFO[Window(Home).Property(HubsMigrated),&amp;menu=hubs&amp;migrated=,]</content>
+                            <include>DialogShortcuts_Hubs_StaticBottom</include>
                         </include>
+
+                        <include>HubsWindow_Move_Arrows</include>
+
+                        <include content="HubsWindow_Menu_Counter">
+                            <param name="id">30920</param>
+                            <param name="suffix">submenu</param>
+                        </include>
+                        <include content="HubsWindow_Menu_Counter">
+                            <param name="id">30921</param>
+                            <param name="suffix">widgets</param>
+                        </include>
+
+                        <!-- Row button: the focus of the hubs list, placed over the focused row (also for the mouse).
+                             Up/down moves through the list. The focused row shows the move arrows: left selects down (HubsMoveDown),
+                             right selects up and then moves on to the settings. Clicking moves the item with the selected arrow; a single arrow is always selected -->
+                        <control type="button" id="30910">
+                            <right>40</right>
+                            <height>80</height>
+                            <texturefocus />
+                            <texturenofocus />
+                            <font />
+                            <include>HubsWindow_Row_Positions</include>
+                            <onup condition="!String.IsEmpty(Container(30000).ListItemNoWrap(-1).Label)">Control.Move(30000,-1)</onup>
+                            <onup condition="String.IsEmpty(Container(30000).ListItemNoWrap(-1).Label)">SetFocus(30000,99999,absolute)</onup>
+                            <ondown condition="!String.IsEmpty(Container(30000).ListItemNoWrap(1).Label)">Control.Move(30000,1)</ondown>
+                            <ondown condition="String.IsEmpty(Container(30000).ListItemNoWrap(1).Label)">SetFocus(30000,0,absolute)</ondown>
+                            <onleft>SetProperty(HubsMoveDown,True)</onleft>
+                            <onright condition="String.IsEmpty(Window(1115).Property(HubsMoveDown)) | !$EXP[Exp_HubsWindow_CanMoveUp] | !$EXP[Exp_HubsWindow_CanMoveDown]">ClearProperty(HubsMoveDown)</onright>
+                            <onright condition="String.IsEmpty(Window(1115).Property(HubsMoveDown)) | !$EXP[Exp_HubsWindow_CanMoveUp] | !$EXP[Exp_HubsWindow_CanMoveDown]">SetFocus(340)</onright>
+                            <onright condition="!String.IsEmpty(Window(1115).Property(HubsMoveDown)) + $EXP[Exp_HubsWindow_CanMoveUp] + $EXP[Exp_HubsWindow_CanMoveDown]">ClearProperty(HubsMoveDown)</onright>
+                            <include content="DialogShortcuts_Move_Onclick">
+                                <param name="container">30000</param>
+                                <param name="move">1</param>
+                                <param name="condition">$EXP[Exp_HubsWindow_MoveDown_Selected]</param>
+                            </include>
+                            <include content="DialogShortcuts_Move_Onclick">
+                                <param name="container">30000</param>
+                                <param name="move">-1</param>
+                                <param name="condition">$EXP[Exp_HubsWindow_MoveUp_Selected]</param>
+                            </include>
+                            <!-- Keep the arrow that was used selected, also after a row where it was the only one -->
+                            <onclick condition="$EXP[Exp_HubsWindow_MoveDown_Selected]">SetProperty(HubsMoveDown,True)</onclick>
+                            <onclick condition="$EXP[Exp_HubsWindow_MoveUp_Selected]">ClearProperty(HubsMoveDown)</onclick>
+                        </control>
                     </include>
                 </include>
 
 
                 <include content="Settings_Right_Group">
+                    <param name="header_include">HubsWindow_Header</param>
+                    <!-- Settings in the left half, the preview in the right half -->
                     <include content="Settings_Right_Scrollbar">
+                        <centerright>50%</centerright>
                         <onleft>3000</onleft>
                     </include>
 
                     <control type="group" id="340">
+                        <right>50%</right>
                         <include content="Settings_Right_Grouplist">
                             <param name="id">3000</param>
-                            <onleft>30000</onleft>
+                            <onleft>30910</onleft>
 
+                            <include content="DialogShortcuts_Items_Basic">
+                                <param name="container">30000</param>
+                                <param name="enabled">$EXP[Exp_HubsWindow_Item_Enabled]</param>
+                                <param name="toggle_icon">$VAR[Image_HubsWindow_EnableDisable]</param>
+                                <param name="toggle_label">$VAR[Label_HubsWindow_EnableDisable]</param>
+                                <param name="static">$EXP[Exp_HubsWindow_Item_Static]</param>
+                                <param name="static_home">$EXP[Exp_HubsWindow_Item_Home]</param>
+                                <param name="widgets">false</param>
+                                <param name="subgroups">false</param>
+                                <param name="onback">30000</param>
+                                <param name="window">shortcuts</param>
+                                <param name="include_after_toggle">DialogShortcuts_Window_Settings_Hubs_Main</param>
+                                <param name="shortcut_label">true</param>
+                                <param name="item_label2">true</param>
+                            </include>
+
+                            <!-- Options label when the item has its own options: Search, Power, Next Aired, Live TV and Add-ons -->
+                            <include content="Settings_Label">
+                                <param name="id">9001</param>
+                                <param name="window">shortcuts</param>
+                                <label>$LOCALIZE[33063]</label>
+                                <visible>$EXP[Exp_HubsWindow_Item_Enabled] | String.IsEqual(Container(30000).ListItem.Property(static),power)</visible>
+                                <visible>String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) | String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=power) | $EXP[Exp_HubsWindow_Type_NextAired] | $EXP[Exp_HubsWindow_Type_LiveTV] | $EXP[Exp_HubsWindow_Type_Addons]</visible>
+                            </include>
                             <include>DialogShortcuts_Window_Settings_Search</include>
                             <include>DialogShortcuts_Window_Settings_Hubs</include>
                             <include>DialogShortcuts_Window_Settings_Power</include>
                         </include>
                     </control>
+
+                    <include>HubsWindow_Preview</include>
 
                     <include>Settings_Right_InfoText</include>
                 </include>

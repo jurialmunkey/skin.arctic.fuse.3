@@ -1,0 +1,53 @@
+<contents>
+    <value name="comments">Hub label, click action, enabled state and icon for each hub window</value>
+    <template>generator/data/parts/hub_variables_group.xmltemplate</template>
+    <value name="includes_part">
+        <items menu="hubs">
+            <item>
+                <template>generator/data/parts/hub_variables.xmltemplate</template>
+                <rules name="parts_enabled">
+                    <rule>
+                        <condition>{item_disabled}==True</condition>
+                        <value>false</value>
+                    </rule>
+                    <rule>
+                        <condition>True</condition>
+                        <value>true</value>
+                    </rule>
+                </rules>
+                <rules name="parts_action">
+                    <rule>
+                        <condition>{item_path}==</condition>
+                        <value>noop</value>
+                    </rule>
+                    <rule>
+                        <condition>{item_target}!=</condition>
+                        <value>ActivateWindow({item_target},{item_path},return)</value>
+                    </rule>
+                    <rule>
+                        <condition>True</condition>
+                        <value>{item_path}</value>
+                    </rule>
+                </rules>
+                <rules name="parts_icon">
+                    <rule>
+                        <condition>{item_icon}!=</condition>
+                        <value><![CDATA[<value>{item_icon}</value>]]></value>
+                    </rule>
+                    <rule>
+                        <condition>True</condition>
+                        <value>
+                            <![CDATA[
+                            <value condition="Skin.String(HomeSwitcher.{item_window}.Type,NextAired) + Skin.String(HomeSwitcher.{item_window}.UpNextMode,trakt_calendar)">special://skin/extras/icons/trakt.png</value>
+                            <value condition="Skin.String(HomeSwitcher.{item_window}.Type,NextAired)">special://skin/extras/icons/calendar.png</value>
+                            <value condition="Skin.String(HomeSwitcher.{item_window}.Type,LiveTV)">special://skin/extras/icons/livetv.png</value>
+                            <value condition="Skin.String(HomeSwitcher.{item_window}.Type,Addons)">special://skin/extras/icons/addon.png</value>
+                            <value>special://skin/extras/icons/shapes.png</value>
+                            ]]>
+                        </value>
+                    </rule>
+                </rules>
+            </item>
+        </items>
+    </value>
+</contents>
