@@ -267,8 +267,12 @@
     <expression name="Exp_Hubs_Search_Enabled">!Skin.HasSetting(HomeSwitcher.DisableSearch)</expression>
     <expression name="Exp_HubsWindow_Item_Static">!String.IsEmpty(Container(30000).ListItem.Property(static))</expression>
     <expression name="Exp_HubsWindow_Item_Home">String.IsEqual(Container(30000).ListItem.Property(static),home)</expression>
-    <expression name="Exp_HubsWindow_CanMoveUp">!String.IsEmpty(Container(30000).ListItem.Property(url)) + !String.IsEmpty(Container(30000).ListItemNoWrap(-1).Property(url))</expression>
-    <expression name="Exp_HubsWindow_CanMoveDown">!String.IsEmpty(Container(30000).ListItem.Property(url)) + !String.IsEmpty(Container(30000).ListItemNoWrap(1).Property(url))</expression>
+    <!-- The divider between the two sides of the horizontal hubs menu is directly above/below the focused row of the hubs window (1115) -->
+    <expression name="Exp_HubsWindow_DividerAbove">String.IsEqual(Container(30000).ListItemNoWrap(-1).Property(divider),True)</expression>
+    <expression name="Exp_HubsWindow_DividerBelow">String.IsEqual(Container(30000).ListItemNoWrap(1).Property(divider),True)</expression>
+    <!-- A hub can move past its neighbour hub, or across the divider to the other side -->
+    <expression name="Exp_HubsWindow_CanMoveUp">!String.IsEmpty(Container(30000).ListItem.Property(url)) + [!String.IsEmpty(Container(30000).ListItemNoWrap(-1).Property(url)) | $EXP[Exp_HubsWindow_DividerAbove]]</expression>
+    <expression name="Exp_HubsWindow_CanMoveDown">!String.IsEmpty(Container(30000).ListItem.Property(url)) + [!String.IsEmpty(Container(30000).ListItemNoWrap(1).Property(url)) | $EXP[Exp_HubsWindow_DividerBelow]]</expression>
     <!-- A menu was saved since the shortcuts editor (1116) opened -->
     <expression name="Exp_Shortcuts_EditedSinceOpen">!String.IsEqual(Window(Home).Property(SkinVariables.ShortcutsNode.Reload),Window(Home).Property(Shortcuts.ReloadOnOpen))</expression>
     <!-- A menu was saved since the window with Action_BuildShortcuts_OnUnLoad opened (separate from 1116, which opens on top of it) -->

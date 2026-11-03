@@ -27,7 +27,8 @@
                 <include content="Settings_Left_Group">
                     <include content="Settings_Left_Content">
 
-                        <!-- Search, Home, the enabled hubs and Power, then Add hub (opens 1133 to enable a disabled item). Focus goes to the row buttons 30910.
+                        <!-- Search, Home, the enabled hubs with a divider between the two sides of the horizontal hubs menu (menu slots 0-3 left, 4-7 right) and Power,
+                             then Add hub (opens 1133 to enable a disabled item). Focus goes to the row buttons 30910, moved off the divider when a refresh leaves it selected.
                              Moves still work with disabled hubs left out as they offset to the neighbour's menu index -->
                         <include content="List_DialogSelect">
                             <param name="id">30000</param>
@@ -36,9 +37,16 @@
                             <param name="altfocus">!Control.HasFocus(20)</param>
                             <right>40</right>
                             <bottom>80</bottom>
+                            <onfocus condition="String.IsEqual(Container(30000).ListItem.Property(divider),True)">Control.Move(30000,1)</onfocus>
                             <onfocus>SetFocus(30910)</onfocus>
                             <include>DialogShortcuts_Hubs_StaticTop</include>
-                            <content>$VAR[Path_HubsWindow_Menu]&amp;exclude_key=disabled&amp;exclude_value=True</content>
+                            <include content="HubsWindow_Hubs_Side">
+                                <param name="operator">lt</param>
+                            </include>
+                            <include>HubsWindow_Hubs_Divider</include>
+                            <include content="HubsWindow_Hubs_Side">
+                                <param name="operator">ge</param>
+                            </include>
                             <include>DialogShortcuts_Hubs_StaticBottom</include>
                         </include>
 
@@ -55,7 +63,8 @@
                         </include>
 
                         <!-- Row buttons: the focus of the hubs list, placed over the focused row like the shortcuts editor (1116).
-                             Up/down moves through the list and the buttons move the item. Rows that cannot move have a blank button instead, which opens 1133 on Add hub -->
+                             Up/down moves through the list, skipping the divider, and the buttons move the item.
+                             Rows that cannot move have a blank button instead, which opens 1133 on Add hub -->
                         <control type="grouplist" id="30910">
                             <orientation>horizontal</orientation>
                             <itemgap>-20</itemgap>
@@ -64,26 +73,36 @@
                             <height>72</height>
                             <centertop>40</centertop>
                             <include>HubsWindow_Row_Positions</include>
-                            <onup condition="!String.IsEmpty(Container(30000).ListItemNoWrap(-1).Label)">Control.Move(30000,-1)</onup>
+                            <onup condition="!String.IsEmpty(Container(30000).ListItemNoWrap(-1).Label) + !$EXP[Exp_HubsWindow_DividerAbove]">Control.Move(30000,-1)</onup>
+                            <onup condition="$EXP[Exp_HubsWindow_DividerAbove]">Control.Move(30000,-2)</onup>
                             <onup condition="String.IsEmpty(Container(30000).ListItemNoWrap(-1).Label)">SetFocus(30000,99999,absolute)</onup>
-                            <ondown condition="!String.IsEmpty(Container(30000).ListItemNoWrap(1).Label)">Control.Move(30000,1)</ondown>
+                            <ondown condition="!String.IsEmpty(Container(30000).ListItemNoWrap(1).Label) + !$EXP[Exp_HubsWindow_DividerBelow]">Control.Move(30000,1)</ondown>
+                            <ondown condition="$EXP[Exp_HubsWindow_DividerBelow]">Control.Move(30000,2)</ondown>
                             <ondown condition="String.IsEmpty(Container(30000).ListItemNoWrap(1).Label)">SetFocus(30000,0,absolute)</ondown>
                             <onright>340</onright>
                             <include content="DialogShortcuts_MoveButton">
                                 <param name="id">30911</param>
                                 <param name="move">-1</param>
+                                <param name="target">$VAR[Path_HubsWindow_Move_Up]</param>
                                 <param name="texture">special://skin/extras/icons/circle-arrow-up.png</param>
                                 <param name="container">30000</param>
                                 <param name="onback" />
                                 <param name="visible">$EXP[Exp_HubsWindow_CanMoveUp]</param>
+                                <include content="HubsWindow_Move_Refocus_Onclick">
+                                    <param name="condition">$EXP[Exp_HubsWindow_DividerAbove]</param>
+                                </include>
                             </include>
                             <include content="DialogShortcuts_MoveButton">
                                 <param name="id">30912</param>
                                 <param name="move">1</param>
+                                <param name="target">$VAR[Path_HubsWindow_Move_Down]</param>
                                 <param name="texture">special://skin/extras/icons/circle-arrow-down.png</param>
                                 <param name="container">30000</param>
                                 <param name="onback" />
                                 <param name="visible">$EXP[Exp_HubsWindow_CanMoveDown]</param>
+                                <include content="HubsWindow_Move_Refocus_Onclick">
+                                    <param name="condition">$EXP[Exp_HubsWindow_DividerBelow]</param>
+                                </include>
                             </include>
                             <control type="button" id="30913">
                                 <width>1</width>
@@ -111,7 +130,7 @@
                         <right>50%</right>
                         <include content="Settings_Right_Grouplist">
                             <param name="id">3000</param>
-                            <onleft>30910</onleft>
+                            <onleft>30000</onleft>
 
                             <include content="DialogShortcuts_Items_Basic">
                                 <param name="container">30000</param>

@@ -18,6 +18,17 @@
     <variable name="Path_HubsWindow_Menu_Disabled">
         <value>$VAR[Path_HubsWindow_Menu]&amp;filter_key=disabled&amp;filter_value=True</value>
     </variable>
+    <!-- Hubs window (1115) move buttons: where do_move puts the focused hub. Usually the neighbour's menu slot (offset), skipping the disabled hubs between them.
+         A move across the divider uses the side boundary (slot 4) instead: the hub joins the near end of the other side
+         and a disabled hub from that side makes room, so the other hubs keep their side unless that side is full -->
+    <variable name="Path_HubsWindow_Move_Up">
+        <value condition="$EXP[Exp_HubsWindow_DividerAbove]">&amp;&amp;boundary::4</value>
+        <value>$INFO[Container(30000).ListItemNoWrap(-1).Property(item),&amp;&amp;offset::,]</value>
+    </variable>
+    <variable name="Path_HubsWindow_Move_Down">
+        <value condition="$EXP[Exp_HubsWindow_DividerBelow]">&amp;&amp;boundary::4</value>
+        <value>$INFO[Container(30000).ListItemNoWrap(1).Property(item),&amp;&amp;offset::,]</value>
+    </variable>
 
     <variable name="Path_Shortcut_UseRawPath">
         <value condition="String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=searchwidgets)">&amp;&amp;grouping::grouping://shortcuts/search/&amp;&amp;use_rawpath::True</value>
