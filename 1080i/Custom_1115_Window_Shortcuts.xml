@@ -2,14 +2,12 @@
 <window type="window" id="1115">
     <defaultcontrol always="true">30000</defaultcontrol>
     <onload>ClearProperty(url)</onload>
-    <onload>ClearProperty(HubsMoveDown)</onload>
     <onload>ClearProperty(forced)</onload>
     <onload>ClearProperty(menu)</onload>
     <onload>ClearProperty(mode)</onload>
     <onload>ClearProperty(guid)</onload>
     <onload>ClearProperty(list_id)</onload>
     <onload>ClearProperty(widgetonly_menu)</onload>
-    <onload>ClearProperty(show_all_hubs)</onload>
     <!-- Migrate existing hub settings into the hubs menu before the hubs list can create it from the defaults -->
     <onload>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/skinvariables-migrate.json,use_rules=True)</onload>
     <include>Action_Blur_Onload</include>
@@ -29,7 +27,8 @@
                 <include content="Settings_Left_Group">
                     <include content="Settings_Left_Content">
 
-                        <!-- Search, Home, the hubs menu (listed once any migration has run) and Power. Focus goes to the row button 30910 -->
+                        <!-- Search, Home, the enabled hubs and Power, then Add hub (opens 1133 to enable a disabled item). Focus goes to the row buttons 30910.
+                             Moves still work with disabled hubs left out as they offset to the neighbour's menu index -->
                         <include content="List_DialogSelect">
                             <param name="id">30000</param>
                             <param name="itemlayout_include">Layout_ShortcutCategories</param>
@@ -39,11 +38,11 @@
                             <bottom>80</bottom>
                             <onfocus>SetFocus(30910)</onfocus>
                             <include>DialogShortcuts_Hubs_StaticTop</include>
-                            <content>plugin://script.skinvariables/?info=get_shortcuts_node&amp;edit=true&amp;skin=$VAR[Path_SkinVariables_SkinFolder]$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload),&amp;reload=,]$INFO[Window(Home).Property(HubsMigrated),&amp;menu=hubs&amp;migrated=,]</content>
+                            <content>$VAR[Path_HubsWindow_Menu]&amp;exclude_key=disabled&amp;exclude_value=True</content>
                             <include>DialogShortcuts_Hubs_StaticBottom</include>
                         </include>
 
-                        <include>HubsWindow_Move_Arrows</include>
+                        <include>HubsWindow_Disabled_Counter</include>
 
                         <include content="HubsWindow_Menu_Counter">
                             <param name="id">30920</param>
@@ -54,37 +53,46 @@
                             <param name="suffix">widgets</param>
                         </include>
 
-                        <!-- Row button: the focus of the hubs list, placed over the focused row (also for the mouse).
-                             Up/down moves through the list. The focused row shows the move arrows: left selects down (HubsMoveDown),
-                             right selects up and then moves on to the settings. Clicking moves the item with the selected arrow; a single arrow is always selected -->
-                        <control type="button" id="30910">
-                            <right>40</right>
-                            <height>80</height>
-                            <texturefocus />
-                            <texturenofocus />
-                            <font />
+                        <!-- Row buttons: the focus of the hubs list, placed over the focused row like the shortcuts editor (1116).
+                             Up/down moves through the list and the buttons move the item. Rows that cannot move have a blank button instead, which opens 1133 on Add hub -->
+                        <control type="grouplist" id="30910">
+                            <orientation>horizontal</orientation>
+                            <itemgap>-20</itemgap>
+                            <align>right</align>
+                            <right>50</right>
+                            <height>72</height>
+                            <centertop>40</centertop>
                             <include>HubsWindow_Row_Positions</include>
                             <onup condition="!String.IsEmpty(Container(30000).ListItemNoWrap(-1).Label)">Control.Move(30000,-1)</onup>
                             <onup condition="String.IsEmpty(Container(30000).ListItemNoWrap(-1).Label)">SetFocus(30000,99999,absolute)</onup>
                             <ondown condition="!String.IsEmpty(Container(30000).ListItemNoWrap(1).Label)">Control.Move(30000,1)</ondown>
                             <ondown condition="String.IsEmpty(Container(30000).ListItemNoWrap(1).Label)">SetFocus(30000,0,absolute)</ondown>
-                            <onleft>SetProperty(HubsMoveDown,True)</onleft>
-                            <onright condition="String.IsEmpty(Window(1115).Property(HubsMoveDown)) | !$EXP[Exp_HubsWindow_CanMoveUp] | !$EXP[Exp_HubsWindow_CanMoveDown]">ClearProperty(HubsMoveDown)</onright>
-                            <onright condition="String.IsEmpty(Window(1115).Property(HubsMoveDown)) | !$EXP[Exp_HubsWindow_CanMoveUp] | !$EXP[Exp_HubsWindow_CanMoveDown]">SetFocus(340)</onright>
-                            <onright condition="!String.IsEmpty(Window(1115).Property(HubsMoveDown)) + $EXP[Exp_HubsWindow_CanMoveUp] + $EXP[Exp_HubsWindow_CanMoveDown]">ClearProperty(HubsMoveDown)</onright>
-                            <include content="DialogShortcuts_Move_Onclick">
-                                <param name="container">30000</param>
-                                <param name="move">1</param>
-                                <param name="condition">$EXP[Exp_HubsWindow_MoveDown_Selected]</param>
-                            </include>
-                            <include content="DialogShortcuts_Move_Onclick">
-                                <param name="container">30000</param>
+                            <onright>340</onright>
+                            <include content="DialogShortcuts_MoveButton">
+                                <param name="id">30911</param>
                                 <param name="move">-1</param>
-                                <param name="condition">$EXP[Exp_HubsWindow_MoveUp_Selected]</param>
+                                <param name="texture">special://skin/extras/icons/circle-arrow-up.png</param>
+                                <param name="container">30000</param>
+                                <param name="onback" />
+                                <param name="visible">$EXP[Exp_HubsWindow_CanMoveUp]</param>
                             </include>
-                            <!-- Keep the arrow that was used selected, also after a row where it was the only one -->
-                            <onclick condition="$EXP[Exp_HubsWindow_MoveDown_Selected]">SetProperty(HubsMoveDown,True)</onclick>
-                            <onclick condition="$EXP[Exp_HubsWindow_MoveUp_Selected]">ClearProperty(HubsMoveDown)</onclick>
+                            <include content="DialogShortcuts_MoveButton">
+                                <param name="id">30912</param>
+                                <param name="move">1</param>
+                                <param name="texture">special://skin/extras/icons/circle-arrow-down.png</param>
+                                <param name="container">30000</param>
+                                <param name="onback" />
+                                <param name="visible">$EXP[Exp_HubsWindow_CanMoveDown]</param>
+                            </include>
+                            <control type="button" id="30913">
+                                <width>1</width>
+                                <height>72</height>
+                                <texturefocus />
+                                <texturenofocus />
+                                <font />
+                                <onclick condition="$EXP[Exp_HubsWindow_Item_Add]">ActivateWindow(1133)</onclick>
+                                <visible>!$EXP[Exp_HubsWindow_CanMoveUp] + !$EXP[Exp_HubsWindow_CanMoveDown]</visible>
+                            </control>
                         </control>
                     </include>
                 </include>

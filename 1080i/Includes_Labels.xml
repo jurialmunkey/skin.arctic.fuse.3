@@ -285,7 +285,7 @@
         <value condition="Window.IsVisible(Settings.xml) + String.IsEqual(Window(Home).Property(Settings.Main.Category),Addons)">$LOCALIZE[24001]</value>
         <value condition="Window.IsVisible(FileManager.xml)">$INFO[Container(3).ListItem.Label]</value>
         <value condition="Window.IsVisible(AddonBrowser.xml)">$INFO[Container.FolderName]</value>
-        <value condition="Window.IsVisible(Custom_1115_Window_Shortcuts.xml)">$INFO[Container(30000).ListItem.Label]</value>
+        <value condition="Window.IsVisible(Custom_1115_Window_Shortcuts.xml)">$VAR[Label_HubsWindow_Header]</value>
         <value condition="Window.IsVisible(SettingsSystemInfo.xml)">$INFO[Control.GetLabel(40)]</value>
         <value condition="Window.IsVisible(SkinSettings.xml) + String.IsEqual(Window(Home).Property(Settings.Skin.Category),0)">$LOCALIZE[31807]</value>
         <value condition="Window.IsVisible(SkinSettings.xml) + String.IsEqual(Window(Home).Property(Settings.Skin.Category),1)">$LOCALIZE[480]</value>
@@ -382,6 +382,16 @@
         <value condition="String.IsEqual(Container(30000).ListItem.Property(window),1108) + !String.IsEmpty(Skin.String(HomeSwitcher.1108.Spotlight.Label))">$INFO[Skin.String(HomeSwitcher.1108.Spotlight.Label)]</value>
         <value condition="String.IsEqual(Container(30000).ListItem.Property(window),1109) + !String.IsEmpty(Skin.String(HomeSwitcher.1109.Spotlight.Label))">$INFO[Skin.String(HomeSwitcher.1109.Spotlight.Label)]</value>
         <value>$LOCALIZE[16018]</value>
+    </variable>
+
+    <!-- Hubs window (1115) settings header: Add hub shows the Power entry listed just above it -->
+    <variable name="Label_HubsWindow_Header">
+        <value condition="$EXP[Exp_HubsWindow_Item_Add]">$INFO[Container(30000).ListItem(-1).Label]</value>
+        <value>$INFO[Container(30000).ListItem.Label]</value>
+    </variable>
+    <variable name="Image_HubsWindow_Header">
+        <value condition="$EXP[Exp_HubsWindow_Item_Add]">$INFO[Container(30000).ListItem(-1).Icon]</value>
+        <value>$INFO[Container(30000).ListItem.Icon]</value>
     </variable>
 
     <!-- Disabled state of the fixed Search and Power entries of the hubs window (1115) -->
@@ -1462,7 +1472,7 @@
          Search, Home and the first four hubs (list items 1-6) are on the left, as text or with EnableIcons as icons (Search is always an icon);
          the other hubs and Power are icons on the right -->
     <variable name="Label_HubsWindow_Placement">
-        <value condition="Integer.IsGreater(Container(30000).CurrentItem,6)">$LOCALIZE[31844] · $LOCALIZE[31274]</value>
+        <value condition="Integer.IsGreater(Container(30000).CurrentItem,6) | String.IsEqual(Container(30000).ListItem.Property(static),power)">$LOCALIZE[31844] · $LOCALIZE[31274]</value>
         <value condition="String.IsEqual(Container(30000).ListItem.Property(static),search) | Skin.HasSetting(HomeSwitcher.EnableIcons)">$LOCALIZE[31843] · $LOCALIZE[31274]</value>
         <value>$LOCALIZE[31843] · $LOCALIZE[31329]</value>
     </variable>

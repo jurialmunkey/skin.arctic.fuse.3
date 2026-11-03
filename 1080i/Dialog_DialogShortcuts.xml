@@ -321,18 +321,23 @@
         </control>
     </include>
 
-    <!-- Move button of the shortcuts editor (1116): moves the focused item up (move -1) or down (move 1) -->
+    <!-- Move button of the shortcuts editor (1116) and hubs window (1115): moves the focused item of the container up (move -1) or down (move 1) -->
     <include name="DialogShortcuts_MoveButton">
+        <param name="container">22001</param>
+        <param name="onback">29999</param>
+        <param name="visible">true</param>
         <definition>
             <control type="button" id="$PARAM[id]">
                 <texturenofocus colordiffuse="$VAR[ColorSelected_30]">$PARAM[texture]</texturenofocus>
                 <texturefocus colordiffuse="$VAR[ColorSelected]">$PARAM[texture]</texturefocus>
                 <include content="DialogShortcuts_Move_Onclick">
+                    <param name="container">$PARAM[container]</param>
                     <param name="move">$PARAM[move]</param>
                 </include>
-                <onback>29999</onback>
+                <onback>$PARAM[onback]</onback>
                 <width>72</width>
                 <height>72</height>
+                <visible>$PARAM[visible]</visible>
             </control>
         </definition>
     </include>
@@ -343,6 +348,16 @@
         <param name="condition">true</param>
         <definition>
             <onclick condition="$PARAM[condition]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_move&amp;&amp;move::$PARAM[move]&amp;&amp;window_prop::url]$INFO[Container($PARAM[container]).ListItem($PARAM[move]).Property(item),&amp;&amp;offset::,])</onclick>
+        </definition>
+    </include>
+
+    <!-- Enables/disables the focused item of the container. static marks the fixed Search/Power entries of the hubs window (1115), which toggle their skin settings -->
+    <include name="DialogShortcuts_Toggle_Onclick">
+        <param name="static">false</param>
+        <definition>
+            <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_toggle])</onclick>
+            <onclick condition="String.IsEqual(Container($PARAM[container]).ListItem.Property(static),search)">Skin.ToggleSetting(HomeSwitcher.DisableSearch)</onclick>
+            <onclick condition="String.IsEqual(Container($PARAM[container]).ListItem.Property(static),power)">Skin.ToggleSetting(HomeSwitcher.LoopBack)</onclick>
         </definition>
     </include>
 
@@ -378,9 +393,10 @@
             <param name="control">button</param>
             <param name="icon">$PARAM[toggle_icon]</param>
             <label>$PARAM[toggle_label]</label>
-            <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_toggle])</onclick>
-            <onclick condition="String.IsEqual(Container($PARAM[container]).ListItem.Property(static),search)">Skin.ToggleSetting(HomeSwitcher.DisableSearch)</onclick>
-            <onclick condition="String.IsEqual(Container($PARAM[container]).ListItem.Property(static),power)">Skin.ToggleSetting(HomeSwitcher.LoopBack)</onclick>
+            <include content="DialogShortcuts_Toggle_Onclick">
+                <param name="container">$PARAM[container]</param>
+                <param name="static">$PARAM[static]</param>
+            </include>
             <onback>$PARAM[onback]</onback>
             <visible>![$PARAM[static_home]]</visible>
         </include>
@@ -1090,6 +1106,14 @@
         </include>
     </include>
 
+    <!-- Hubs window (1115) and add hub dialog (1133): the disabled hubs, read by Exp_HubsWindow_HasDisabledHubs -->
+    <include name="HubsWindow_Disabled_Counter">
+        <include content="Object_Hidden_List">
+            <param name="id">30922</param>
+            <content>$VAR[Path_HubsWindow_Menu_Disabled]</content>
+        </include>
+    </include>
+
     <!-- Hubs window (1115): wireframe preview of the focused item in the right half of the settings pane.
          Items with a layout show a mini home screen (info panel and widgets placed as the layout does), Power the options dialog,
          with the layout name and description in one line. Others show their icon and name -->
@@ -1610,7 +1634,7 @@
             <control type="image">
                 <width>60</width>
                 <height>60</height>
-                <texture colordiffuse="main_fg_90">$INFO[Container(30000).ListItem.Icon]</texture>
+                <texture colordiffuse="main_fg_90">$VAR[Image_HubsWindow_Header]</texture>
             </control>
             <control type="label">
                 <width>auto</width>
@@ -1648,7 +1672,7 @@
         </control>
     </include>
 
-    <!-- Hubs window (1115): the row button follows the focused row of the hubs list -->
+    <!-- Hubs window (1115): the row buttons follow the focused row of the hubs list -->
     <include name="HubsWindow_Row_Positions">
         <animation effect="slide" start="0" end="0,80" condition="Container(30000).Position(1)">Conditional</animation>
         <animation effect="slide" start="0" end="0,160" condition="Container(30000).Position(2)">Conditional</animation>
@@ -1660,16 +1684,14 @@
         <animation effect="slide" start="0" end="0,640" condition="Container(30000).Position(8)">Conditional</animation>
     </include>
 
-    <!-- Hubs window (1115) list: Search and Home before the hubs menu, Power after it. Fixed in place, their options act on their skin settings -->
+    <!-- Hubs window (1115) list: Search and Home before the hubs menu, Power and Add hub after it. Fixed in place, their options act on their skin settings.
+         Search is listed while enabled, and in the add hub dialog (1133) while disabled. Power is always listed so its options stay reachable.
+         Add hub carries the Power properties so its settings panel is the same as Power's -->
     <include name="DialogShortcuts_Hubs_StaticTop">
         <content>
-            <item>
-                <label>$LOCALIZE[137]</label>
-                <icon>special://skin/extras/icons/search.png</icon>
-                <property name="static">search</property>
-                <property name="editmenu">menu=search</property>
-                <property name="disabled">$VAR[Label_Hubs_Search_Disabled]</property>
-            </item>
+            <include content="DialogShortcuts_Hubs_Item_Search">
+                <param name="visible">$EXP[Exp_Hubs_Search_Enabled]</param>
+            </include>
             <item>
                 <label>$VAR[Hub_Label_home]</label>
                 <icon>$VAR[Home_Icon_home]</icon>
@@ -1688,7 +1710,57 @@
                 <property name="editmenu">menu=power</property>
                 <property name="disabled">$VAR[Label_Hubs_Power_Disabled]</property>
             </item>
+            <item>
+                <label>$LOCALIZE[31846]</label>
+                <icon>special://skin/extras/icons/plus.png</icon>
+                <property name="add">True</property>
+                <property name="static">power</property>
+                <property name="editmenu">menu=power</property>
+                <property name="disabled">$VAR[Label_Hubs_Power_Disabled]</property>
+                <visible>!$EXP[Exp_Hubs_Search_Enabled] | $EXP[Exp_HubsWindow_HasDisabledHubs]</visible>
+            </item>
         </content>
+    </include>
+    <include name="DialogShortcuts_Hubs_Item_Search">
+        <item>
+            <label>$LOCALIZE[137]</label>
+            <icon>special://skin/extras/icons/search.png</icon>
+            <property name="static">search</property>
+            <property name="editmenu">menu=search</property>
+            <property name="disabled">$VAR[Label_Hubs_Search_Disabled]</property>
+            <visible>$PARAM[visible]</visible>
+        </item>
+    </include>
+    <!-- Add hub dialog (1133) list: the disabled Search and hubs. Choosing one enables it.
+         The hubs mirror the disabled hubs counter (30922) so its "Add item" placeholder, listed when no hub is disabled, is never shown.
+         One slot for each of the eight hub windows -->
+    <include name="DialogShortcuts_Hubs_Add_Onclick">
+        <include content="DialogShortcuts_Toggle_Onclick">
+            <param name="container">7000</param>
+            <param name="static">!String.IsEmpty(Container(7000).ListItem.Property(static))</param>
+        </include>
+        <onclick>Close</onclick>
+    </include>
+    <include name="DialogShortcuts_Hubs_Add_Items">
+        <include content="DialogShortcuts_Hubs_Item_Search">
+            <param name="visible">!$EXP[Exp_Hubs_Search_Enabled]</param>
+        </include>
+        <include content="DialogShortcuts_Hubs_Item_Disabled"><param name="index">0</param></include>
+        <include content="DialogShortcuts_Hubs_Item_Disabled"><param name="index">1</param></include>
+        <include content="DialogShortcuts_Hubs_Item_Disabled"><param name="index">2</param></include>
+        <include content="DialogShortcuts_Hubs_Item_Disabled"><param name="index">3</param></include>
+        <include content="DialogShortcuts_Hubs_Item_Disabled"><param name="index">4</param></include>
+        <include content="DialogShortcuts_Hubs_Item_Disabled"><param name="index">5</param></include>
+        <include content="DialogShortcuts_Hubs_Item_Disabled"><param name="index">6</param></include>
+        <include content="DialogShortcuts_Hubs_Item_Disabled"><param name="index">7</param></include>
+    </include>
+    <include name="DialogShortcuts_Hubs_Item_Disabled">
+        <item>
+            <label>$INFO[Container(30922).ListItemAbsolute($PARAM[index]).Label]</label>
+            <icon>$INFO[Container(30922).ListItemAbsolute($PARAM[index]).Icon]</icon>
+            <property name="url">$INFO[Container(30922).ListItemAbsolute($PARAM[index]).Property(url)]</property>
+            <visible>String.IsEqual(Container(30922).ListItemAbsolute($PARAM[index]).Property(disabled),True)</visible>
+        </item>
     </include>
 
     <include name="DialogShortcuts_Window_Settings_NextAired">

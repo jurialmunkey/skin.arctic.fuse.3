@@ -261,13 +261,14 @@
     <expression name="Exp_HubsWindow_Preview_Combined">[String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) + Skin.String(HomeSwitcher.Search.Mode,Combined)] | [$EXP[Exp_HubsWindow_Mode_Combined] + !$EXP[Exp_HubsWindow_Type_NextAired]]</expression>
     <expression name="Exp_HubsWindow_Preview_Wall">[String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) + Skin.String(HomeSwitcher.Search.Mode,Wall)] | [$EXP[Exp_HubsWindow_Mode_Wall] + !$EXP[Exp_HubsWindow_Type_NextAired]]</expression>
     <expression name="Exp_HubsWindow_Item_Enabled">!String.IsEqual(Container(30000).ListItem.Property(disabled),True)</expression>
+    <expression name="Exp_HubsWindow_Item_Add">String.IsEqual(Container(30000).ListItem.Property(add),True)</expression>
+    <!-- The counter lists an "Add item" placeholder when no hub is disabled, so check its first item -->
+    <expression name="Exp_HubsWindow_HasDisabledHubs">String.IsEqual(Container(30922).ListItemAbsolute(0).Property(disabled),True)</expression>
+    <expression name="Exp_Hubs_Search_Enabled">!Skin.HasSetting(HomeSwitcher.DisableSearch)</expression>
     <expression name="Exp_HubsWindow_Item_Static">!String.IsEmpty(Container(30000).ListItem.Property(static))</expression>
     <expression name="Exp_HubsWindow_Item_Home">String.IsEqual(Container(30000).ListItem.Property(static),home)</expression>
     <expression name="Exp_HubsWindow_CanMoveUp">!String.IsEmpty(Container(30000).ListItem.Property(url)) + !String.IsEmpty(Container(30000).ListItemNoWrap(-1).Property(url))</expression>
     <expression name="Exp_HubsWindow_CanMoveDown">!String.IsEmpty(Container(30000).ListItem.Property(url)) + !String.IsEmpty(Container(30000).ListItemNoWrap(1).Property(url))</expression>
-    <!-- Selected move arrow: chosen with left/right (HubsMoveDown) when both are available, otherwise the only one -->
-    <expression name="Exp_HubsWindow_MoveDown_Selected">$EXP[Exp_HubsWindow_CanMoveDown] + [!$EXP[Exp_HubsWindow_CanMoveUp] | !String.IsEmpty(Window(1115).Property(HubsMoveDown))]</expression>
-    <expression name="Exp_HubsWindow_MoveUp_Selected">$EXP[Exp_HubsWindow_CanMoveUp] + [!$EXP[Exp_HubsWindow_CanMoveDown] | String.IsEmpty(Window(1115).Property(HubsMoveDown))]</expression>
     <!-- A menu was saved since the shortcuts editor (1116) opened -->
     <expression name="Exp_Shortcuts_EditedSinceOpen">!String.IsEqual(Window(Home).Property(SkinVariables.ShortcutsNode.Reload),Window(Home).Property(Shortcuts.ReloadOnOpen))</expression>
     <!-- A menu was saved since the window with Action_BuildShortcuts_OnUnLoad opened (separate from 1116, which opens on top of it) -->
