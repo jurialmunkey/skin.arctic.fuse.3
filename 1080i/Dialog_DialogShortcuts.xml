@@ -1114,9 +1114,132 @@
         </include>
     </include>
 
+    <!-- Hubs window (1115) and its list rows: the full hubs menu with disabled hubs, so each menu slot is at its own index -->
+    <include name="HubsWindow_Slots_List">
+        <include content="Object_Hidden_List">
+            <param name="id">30923</param>
+            <content>$VAR[Path_HubsWindow_Menu]</content>
+        </include>
+    </include>
+
+    <!-- Hubs window (1115) list rows with the horizontal hubs menu: a line above the first hub on the right side and,
+         except on the focused row where the row buttons are, the side the row shows on.
+         Hubs keep their menu slot (0-3 left, 4-7 right) when the hubs before them are disabled -->
+    <include name="HubsWindow_Row_Side">
+        <param name="selected">false</param>
+        <param name="textcolor">dialog_fg</param>
+        <definition>
+            <control type="image">
+                <left>15</left>
+                <right>15</right>
+                <height>2</height>
+                <texture colordiffuse="$PARAM[textcolor]_30">common/white.png</texture>
+                <visible>String.IsEqual(ListItem.Property(item),4) | [String.IsEqual(Container(30923).ListItemAbsolute(4).Property(disabled),True) + [String.IsEqual(ListItem.Property(item),5) | [String.IsEqual(Container(30923).ListItemAbsolute(5).Property(disabled),True) + [String.IsEqual(ListItem.Property(item),6) | [String.IsEqual(Container(30923).ListItemAbsolute(6).Property(disabled),True) + String.IsEqual(ListItem.Property(item),7)]]]]]</visible>
+            </control>
+            <include content="Object_Control" condition="!$PARAM[selected]">
+                <param name="control">label</param>
+                <right>40</right>
+                <align>right</align>
+                <aligny>center</aligny>
+                <font>font_tiny</font>
+                <textcolor>$PARAM[textcolor]_30</textcolor>
+                <label>$VAR[Label_HubsWindow_Row_Side]</label>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Hubs window (1115) preview: the horizontal hubs menu as the home screen shows it, with the focused item highlighted.
+         Search, Home and the hubs in slots 0-3 on the left; the hubs in slots 4-7 and Power on the right -->
+    <include name="HubsWindow_Preview_HomeBar">
+        <control type="group">
+            <height>77</height>
+            <control type="image">
+                <texture border="20" colordiffuse="main_fg_06">common/dialog.png</texture>
+            </control>
+            <control type="grouplist">
+                <left>16</left>
+                <right>16</right>
+                <orientation>horizontal</orientation>
+                <itemgap>0</itemgap>
+                <include content="HubsWindow_Preview_HomeBar_Icon">
+                    <param name="icon">special://skin/extras/icons/search.png</param>
+                    <param name="focused">String.IsEqual(Container(30000).ListItem.Property(static),search)</param>
+                    <param name="visible">$EXP[Exp_Hubs_Search_Enabled]</param>
+                </include>
+                <include content="HubsWindow_Preview_HomeBar_Icon">
+                    <param name="icon">$VAR[Home_Icon_home]</param>
+                    <param name="focused">$EXP[Exp_HubsWindow_Item_Home]</param>
+                </include>
+                <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">0</param></include>
+                <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">1</param></include>
+                <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">2</param></include>
+                <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">3</param></include>
+            </control>
+            <control type="grouplist">
+                <left>16</left>
+                <right>16</right>
+                <orientation>horizontal</orientation>
+                <align>right</align>
+                <itemgap>0</itemgap>
+                <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">4</param></include>
+                <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">5</param></include>
+                <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">6</param></include>
+                <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">7</param></include>
+                <include content="HubsWindow_Preview_HomeBar_Icon">
+                    <param name="icon">special://skin/extras/icons/power.png</param>
+                    <param name="focused">$EXP[Exp_HubsWindow_Item_PowerPreview] + !$EXP[Exp_HubsWindow_Item_Add]</param>
+                    <param name="visible">!Skin.HasSetting(HomeSwitcher.LoopBack)</param>
+                </include>
+            </control>
+        </control>
+    </include>
+    <include name="HubsWindow_Preview_HomeBar_Slot">
+        <include content="HubsWindow_Preview_HomeBar_Icon">
+            <param name="icon">$INFO[Container(30923).ListItemAbsolute($PARAM[slot]).Icon]</param>
+            <param name="focused">String.IsEqual(Container(30000).ListItem.Property(item),$PARAM[slot])</param>
+            <param name="visible">!String.IsEmpty(Container(30923).ListItemAbsolute($PARAM[slot]).Property(url)) + !String.IsEqual(Container(30923).ListItemAbsolute($PARAM[slot]).Property(disabled),True)</param>
+        </include>
+    </include>
+    <include name="HubsWindow_Preview_HomeBar_Icon">
+        <param name="visible">true</param>
+        <definition>
+            <control type="group">
+                <width>52</width>
+                <height>77</height>
+                <visible>$PARAM[visible]</visible>
+                <control type="image">
+                    <centerleft>50%</centerleft>
+                    <bottom>8</bottom>
+                    <width>20</width>
+                    <height>4</height>
+                    <texture colordiffuse="$VAR[ColorSelected]">common/white.png</texture>
+                    <visible>$PARAM[focused]</visible>
+                </control>
+                <control type="image">
+                    <centerleft>50%</centerleft>
+                    <centertop>50%</centertop>
+                    <width>60</width>
+                    <height>60</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture colordiffuse="main_fg_30">$PARAM[icon]</texture>
+                    <visible>!$PARAM[focused]</visible>
+                </control>
+                <control type="image">
+                    <centerleft>50%</centerleft>
+                    <centertop>50%</centertop>
+                    <width>60</width>
+                    <height>60</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture colordiffuse="$VAR[ColorSelected]">$PARAM[icon]</texture>
+                    <visible>$PARAM[focused]</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <!-- Hubs window (1115): wireframe preview of the focused item in the right half of the settings pane.
-         Items with a layout show a mini home screen (info panel and widgets placed as the layout does), Power the options dialog,
-         with the layout name and description in one line. Others show their icon and name -->
+         Items with a layout show a mini home screen (info panel and widgets placed as the layout does), Power the options dialog.
+         Others show their icon and name -->
     <include name="HubsWindow_Preview">
         <control type="group">
             <left>50%</left>
@@ -1131,7 +1254,13 @@
                 <right>40</right>
                 <top>20</top>
 
+                <include condition="!Skin.HasSetting(HomeSwitcher.Vertical)">HubsWindow_Preview_HomeBar</include>
+
                 <control type="group">
+                    <include content="Object_Top" condition="!Skin.HasSetting(HomeSwitcher.Vertical)">
+                        <param name="top">97</param>
+                    </include>
+                    <top>17</top>
                     <visible>$EXP[Exp_HubsWindow_Item_HasLayout] | $EXP[Exp_HubsWindow_Item_PowerPreview]</visible>
                     <control type="group">
                         <height>343</height>
@@ -1147,16 +1276,13 @@
                             <include>HubsWindow_Preview_Power</include>
                         </control>
                     </control>
-                    <control type="textbox">
-                        <top>363</top>
-                        <height>120</height>
-                        <font>font_mini</font>
-                        <textcolor>main_fg_70</textcolor>
-                        <label>[B]$VAR[Label_HubsWindow_Preview_Name]:[/B] $VAR[Label_HubsWindow_Preview_Help]</label>
-                    </control>
                 </control>
 
                 <control type="group">
+                    <include content="Object_Top" condition="!Skin.HasSetting(HomeSwitcher.Vertical)">
+                        <param name="top">97</param>
+                    </include>
+                    <top>17</top>
                     <visible>!$EXP[Exp_HubsWindow_Item_HasLayout] + !$EXP[Exp_HubsWindow_Item_PowerPreview]</visible>
                     <control type="image">
                         <centerleft>50%</centerleft>

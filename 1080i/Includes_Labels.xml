@@ -173,20 +173,6 @@
         <value>$LOCALIZE[31786]</value>
     </variable>
 
-    <!-- Hubs window (1115) preview: name and description of the focused item's layout -->
-    <variable name="Label_HubsWindow_Preview_Name">
-        <value condition="String.IsEqual(Container(30000).ListItem.Property(static),power)">$LOCALIZE[31158]$INFO[Skin.String(OptionsTiles.Layout), (, $LOCALIZE[31048])]</value>
-        <value condition="String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search)">$VAR[Label_Setting_Search_Mode]</value>
-        <value condition="$EXP[Exp_HubsWindow_Type_NextAired]">$LOCALIZE[602]</value>
-        <value>$VAR[Label_Setting_Hub_Mode]</value>
-    </variable>
-    <variable name="Label_HubsWindow_Preview_Help">
-        <value condition="String.IsEqual(Container(30000).ListItem.Property(static),power)">$LOCALIZE[31842]</value>
-        <value condition="$EXP[Exp_HubsWindow_Preview_Combined]">$LOCALIZE[31840]</value>
-        <value condition="$EXP[Exp_HubsWindow_Preview_Wall]">$LOCALIZE[31841]</value>
-        <value>$LOCALIZE[31839]</value>
-    </variable>
-
     <variable name="Label_Setting_Hub_Mode">
         <value condition="$EXP[Exp_HubsWindow_Mode_Combined]">$LOCALIZE[31845]</value>
         <value condition="$EXP[Exp_HubsWindow_Mode_Wall]">$LOCALIZE[31008]</value>
@@ -1469,12 +1455,19 @@
     </variable>
 
     <!-- Hubs window (1115) header tag: where the focused item shows in the horizontal hubs menu.
-         Search, Home and the first four hubs (list items 1-6) are on the left, as text or with EnableIcons as icons (Search is always an icon);
-         the other hubs and Power are icons on the right -->
+         Search, Home and the hubs in menu slots 0-3 are on the left, as text or with EnableIcons as icons (Search is always an icon);
+         the hubs in slots 4-7 and Power are icons on the right. Disabled hubs keep their slot -->
     <variable name="Label_HubsWindow_Placement">
-        <value condition="Integer.IsGreater(Container(30000).CurrentItem,6) | String.IsEqual(Container(30000).ListItem.Property(static),power)">$LOCALIZE[31844] · $LOCALIZE[31274]</value>
+        <value condition="Integer.IsGreater(Container(30000).ListItem.Property(item),3) | String.IsEqual(Container(30000).ListItem.Property(static),power)">$LOCALIZE[31844] · $LOCALIZE[31274]</value>
         <value condition="String.IsEqual(Container(30000).ListItem.Property(static),search) | Skin.HasSetting(HomeSwitcher.EnableIcons)">$LOCALIZE[31843] · $LOCALIZE[31274]</value>
         <value>$LOCALIZE[31843] · $LOCALIZE[31329]</value>
+    </variable>
+
+    <!-- Hubs window (1115) list rows: the side of the horizontal hubs menu the row shows on, as the header tag above.
+         Add hub and Power with LoopBack are not in the menu -->
+    <variable name="Label_HubsWindow_Row_Side">
+        <value condition="[!String.IsEmpty(ListItem.Property(url)) + Integer.IsLess(ListItem.Property(item),4)] | String.IsEqual(ListItem.Property(static),search) | String.IsEqual(ListItem.Property(static),home)">$LOCALIZE[31843]</value>
+        <value condition="Integer.IsGreater(ListItem.Property(item),3) | [String.IsEqual(ListItem.Property(static),power) + String.IsEmpty(ListItem.Property(add)) + !Skin.HasSetting(HomeSwitcher.LoopBack)]">$LOCALIZE[31844]</value>
     </variable>
 
     <variable name="Label_Setting_Hub_Type">
