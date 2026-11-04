@@ -149,6 +149,12 @@
         </definition>
     </include>
 
+    <!-- Run custom submenu shortcuts from either the widget row or a combined category selector. -->
+    <include name="Widget_Submenu_OnClick">
+        <onclick condition="String.IsEmpty(ListItem.Property(target))">$INFO[ListItem.FolderPath]</onclick>
+        <onclick condition="!String.IsEmpty(ListItem.Property(target))">ActivateWindow($INFO[ListItem.Property(target)],$INFO[ListItem.FolderPath],return)</onclick>
+    </include>
+
     <include name="Widget_Categories_Navigation">
         <ondown>$PARAM[id]</ondown>
     </include>
