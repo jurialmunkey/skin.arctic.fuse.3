@@ -1,46 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
+    <!-- The full wizard: the rail picks the step -->
+    <include name="DialogSetupWizard_Window_Steps">
+        <defaultcontrol always="true">3</defaultcontrol>
+        <onload>SetFocus(3,$INFO[Window(Home).Property(SetupWizard.Index)],absolute)</onload>
+        <onunload>SetProperty(SetupWizard.Index,$INFO[Container(3).ListItem.Property(index)],Home)</onunload>
+        <controls>
+            <include>DialogSetupWizard</include>
+        </controls>
+    </include>
+
+    <!-- A single step on its own, opened from skin settings without the rail -->
+    <include name="DialogSetupWizard_Window_Page">
+        <definition>
+            <defaultcontrol always="true">$PARAM[focus]</defaultcontrol>
+            <controls>
+                <include content="DialogSetupWizard">
+                    <param name="rail">false</param>
+                    <param name="dialog_size">Dimension_DialogStepMenu</param>
+                    <param name="title">$PARAM[title]</param>
+                    <param name="subline">$PARAM[subline]</param>
+                    <param name="help">$PARAM[help]</param>
+                    <param name="step">$PARAM[step]</param>
+                    <param name="items">$PARAM[items]</param>
+                </include>
+            </controls>
+        </definition>
+    </include>
+
     <!-- All steps live in one dialog. The current rail item picks the visible step, so the dialog never reopens. -->
     <include name="DialogSetupWizard">
-        <include>Part_Dim_Overlay</include>
-        <control type="group">
-            <include>Dimension_DialogFullMenu</include>
-            <include>Animation_BounceIn_Dialog</include>
-            <include content="Part_Background_Panel">
-                <param name="dialog_size">Dimension_DialogFullMenu</param>
-                <param name="topline">false</param>
-            </include>
-            <control type="group" id="8000">
-                <include>Size_Dialog_Pad</include>
-                <include>DialogSetupWizard_Rail</include>
-                <control type="group">
-                    <include>Size_RightGroup_Medium</include>
-                    <include>Part_Panel</include>
+        <param name="rail">true</param>
+        <param name="dialog_size">Dimension_DialogFullMenu</param>
+        <param name="title">$VAR[Label_SetupWizard_Title]</param>
+        <param name="subline">$VAR[Label_SetupWizard_Subline]</param>
+        <param name="help">$VAR[Label_SetupWizard_Help]</param>
+        <definition>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>$PARAM[dialog_size]</include>
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">$PARAM[dialog_size]</param>
+                    <param name="topline">false</param>
+                </include>
+                <control type="group" id="8000">
+                    <include>Size_Dialog_Pad</include>
+                    <include condition="$PARAM[rail]">DialogSetupWizard_Rail</include>
                     <control type="group">
-                        <include>Size_Group_Head</include>
-                        <include content="Part_HeadText">
-                            <param name="id">2</param>
-                            <param name="label">$VAR[Label_SetupWizard_Title]</param>
-                        </include>
-                        <include content="Part_ItemLine">
-                            <param name="label">[UPPERCASE]$VAR[Label_SetupWizard_Subline][/UPPERCASE]</param>
-                        </include>
-                        <include>Part_CloseButton</include>
-                    </control>
-                    <control type="group">
-                        <include>Size_Group_Body</include>
+                        <include condition="$PARAM[rail]">Size_RightGroup_Medium</include>
+                        <include>Part_Panel</include>
                         <control type="group">
-                            <bottom>80</bottom>
-                            <include>DialogSetupWizard_Steps</include>
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="id">2</param>
+                                <param name="label">$PARAM[title]</param>
+                            </include>
+                            <include content="Part_ItemLine">
+                                <param name="label">[UPPERCASE]$PARAM[subline][/UPPERCASE]</param>
+                            </include>
+                            <include>Part_CloseButton</include>
                         </control>
-                        <include content="Part_InfoText">
-                            <param name="label">$VAR[Label_SetupWizard_Help]</param>
-                        </include>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <control type="group">
+                                <bottom>80</bottom>
+                                <include condition="$PARAM[rail]">DialogSetupWizard_Steps</include>
+                                <include content="DialogSetupWizard_Step" condition="![$PARAM[rail]]">
+                                    <param name="step">$PARAM[step]</param>
+                                    <param name="items">$PARAM[items]</param>
+                                    <param name="rail">false</param>
+                                </include>
+                            </control>
+                            <include content="Part_InfoText">
+                                <param name="label">$PARAM[help]</param>
+                            </include>
+                        </control>
                     </control>
                 </control>
             </control>
-        </control>
+        </definition>
     </include>
 
     <include name="DialogSetupWizard_Steps">
@@ -70,11 +110,12 @@
         </include>
     </include>
 
-    <!-- A step's settings: grouplist 50N, shown while the rail is on step N -->
+    <!-- A step's settings: grouplist 50N, shown while the rail is on step N, or always without the rail -->
     <include name="DialogSetupWizard_Step">
+        <param name="rail">true</param>
         <definition>
             <control type="grouplist" id="50$PARAM[step]">
-                <visible>Integer.IsEqual(Container(3).CurrentItem,$PARAM[step])</visible>
+                <visible>![$PARAM[rail]] | Integer.IsEqual(Container(3).CurrentItem,$PARAM[step])</visible>
                 <onup>noop</onup>
                 <ondown>noop</ondown>
                 <onleft>3</onleft>
@@ -799,6 +840,11 @@
                     <param name="id">5412</param>
                     <label>$VAR[Label_Setting_FocusStyle]</label>
                     <onclick>Skin.ToggleSetting(OutlinedFocusedStyle)</onclick>
+                    <!-- Focus textures are conditional includes, so reload the skin and reopen the wizard on this button -->
+                    <onclick>SetProperty(SetupWizard.Index,$INFO[Container(3).ListItem.Property(index)],Home)</onclick>
+                    <onclick>AlarmClock(focusstylewizard,ActivateWindow(1130),00:00,silent)</onclick>
+                    <onclick>AlarmClock(focusstylebutton,SetFocus(5412),00:00,silent)</onclick>
+                    <onclick>ReloadSkin()</onclick>
                     <onleft>54</onleft>
                     <onup>53</onup>
                     <align>center</align>
