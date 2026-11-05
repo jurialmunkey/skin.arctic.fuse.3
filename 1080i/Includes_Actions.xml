@@ -229,12 +229,188 @@
         </definition>
     </include>
 
-    <!-- Copies a widget preset folder over the current profile's menu files. script.skinvariables asks before overwriting. -->
+    <!-- Applies a full home screen preset: hub types, layouts and spotlights, then copies the preset folder
+         (home, search and hub menus and widgets) over the current profile's menu files and flags a template rebuild.
+         script.skinvariables asks before overwriting the menu files. -->
     <include name="Action_SetupWizard_WidgetPreset">
         <definition>
             <onclick>Skin.SetString(SetupWizard.WidgetGroup,$PARAM[preset])</onclick>
+            <include>Action_SetupWizard_Preset_$PARAM[preset]</include>
             <onclick>RunScript(script.skinvariables,copy_menufolder=special://skin/shortcuts/presets/$PARAM[preset]/,skin=$VAR[Path_SkinVariables_SkinFolder])</onclick>
+            <include>Action_Shortcuts_Rebuild</include>
         </definition>
+    </include>
+
+    <!-- Flags the shortcut templates for a rebuild the next time they are built -->
+    <include name="Action_Shortcuts_Rebuild">
+        <onclick>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onclick>
+    </include>
+
+    <!-- Hub type and layout, with a spotlight when spotlight is true -->
+    <include name="Action_SetupWizard_Hub">
+        <param name="type">Custom</param>
+        <param name="mode">Standard</param>
+        <param name="spotlight">false</param>
+        <param name="target">videos</param>
+        <definition>
+            <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Type,$PARAM[type])</onclick>
+            <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Mode,$PARAM[mode])</onclick>
+            <include content="Action_SetupWizard_Spotlight" condition="$PARAM[spotlight]">
+                <param name="window">$PARAM[window]</param>
+                <param name="path">$PARAM[path]</param>
+                <param name="target">$PARAM[target]</param>
+                <param name="label">$PARAM[label]</param>
+            </include>
+            <include content="Action_SetupWizard_Spotlight_Reset" condition="![$PARAM[spotlight]]">
+                <param name="window">$PARAM[window]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Action_SetupWizard_Spotlight">
+        <param name="target">videos</param>
+        <definition>
+            <include content="Action_SetupWizard_Spotlight_Reset">
+                <param name="window">$PARAM[window]</param>
+            </include>
+            <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.Path,$PARAM[path])</onclick>
+            <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.Target,$PARAM[target])</onclick>
+            <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.Label,$PARAM[label])</onclick>
+        </definition>
+    </include>
+
+    <include name="Action_SetupWizard_Spotlight_Reset">
+        <definition>
+            <onclick>Skin.Reset(HomeSwitcher.$PARAM[window].Spotlight.Path)</onclick>
+            <onclick>Skin.Reset(HomeSwitcher.$PARAM[window].Spotlight.Target)</onclick>
+            <onclick>Skin.Reset(HomeSwitcher.$PARAM[window].Spotlight.Label)</onclick>
+            <onclick>Skin.Reset(HomeSwitcher.$PARAM[window].Spotlight.SortMethod)</onclick>
+            <onclick>Skin.Reset(HomeSwitcher.$PARAM[window].Spotlight.SortOrder)</onclick>
+            <onclick>Skin.Reset(HomeSwitcher.$PARAM[window].Spotlight.Limit)</onclick>
+        </definition>
+    </include>
+
+    <!-- The fixed hubs keep their type and layout in every preset -->
+    <include name="Action_SetupWizard_Hubs_Fixed">
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1104</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1106</param>
+            <param name="type">NextAired</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1107</param>
+            <param name="type">LiveTV</param>
+            <param name="mode">Wall</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1108</param>
+            <param name="type">Addons</param>
+            <param name="mode">Wall</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1109</param>
+        </include>
+    </include>
+
+    <!-- Preset hub settings. Hub menus and widgets live in shortcuts/presets/{preset}/ -->
+    <include name="Action_SetupWizard_Preset_library">
+        <include content="Action_SetupWizard_Spotlight">
+            <param name="window">Home</param>
+            <param name="path">special://skin/extras/playlists/RandomMovies.xsp</param>
+            <param name="label">Random Movies</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1101</param>
+            <param name="spotlight">true</param>
+            <param name="path">special://skin/extras/playlists/NewMovies.xsp</param>
+            <param name="label">New Movies</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1102</param>
+            <param name="spotlight">true</param>
+            <param name="path">special://skin/extras/playlists/RandomTvShows.xsp</param>
+            <param name="label">Random Shows</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1103</param>
+            <param name="spotlight">true</param>
+            <param name="path">special://skin/extras/playlists/RandomArtists.xsp</param>
+            <param name="target">music</param>
+            <param name="label">Random Artists</param>
+        </include>
+        <include>Action_SetupWizard_Hubs_Fixed</include>
+    </include>
+
+    <include name="Action_SetupWizard_Preset_discover">
+        <include content="Action_SetupWizard_Spotlight">
+            <param name="window">Home</param>
+            <param name="path">special://skin/extras/playlists/RandomMovies.xsp</param>
+            <param name="label">Random Movies</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1101</param>
+            <param name="spotlight">true</param>
+            <param name="path">plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type=movie&amp;widget=true</param>
+            <param name="label">Trending Movies</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1102</param>
+            <param name="spotlight">true</param>
+            <param name="path">plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type=tv&amp;widget=true</param>
+            <param name="label">Trending Shows</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1103</param>
+            <param name="spotlight">true</param>
+            <param name="path">special://skin/extras/playlists/RandomArtists.xsp</param>
+            <param name="target">music</param>
+            <param name="label">Random Artists</param>
+        </include>
+        <include>Action_SetupWizard_Hubs_Fixed</include>
+    </include>
+
+    <include name="Action_SetupWizard_Preset_tmdbhelper">
+        <include content="Action_SetupWizard_Spotlight">
+            <param name="window">Home</param>
+            <param name="path">plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type=movie&amp;widget=true</param>
+            <param name="label">Trending Movies</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1101</param>
+            <param name="spotlight">true</param>
+            <param name="path">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=movie&amp;widget=true</param>
+            <param name="label">Popular Movies</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1102</param>
+            <param name="spotlight">true</param>
+            <param name="path">plugin://plugin.video.themoviedb.helper/?info=popular&amp;tmdb_type=tv&amp;widget=true</param>
+            <param name="label">Popular Shows</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1103</param>
+        </include>
+        <include>Action_SetupWizard_Hubs_Fixed</include>
+    </include>
+
+    <include name="Action_SetupWizard_Preset_minimal">
+        <include content="Action_SetupWizard_Spotlight">
+            <param name="window">Home</param>
+            <param name="path">special://skin/extras/playlists/RandomMovies.xsp</param>
+            <param name="label">Random Movies</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1101</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1102</param>
+        </include>
+        <include content="Action_SetupWizard_Hub">
+            <param name="window">1103</param>
+        </include>
+        <include>Action_SetupWizard_Hubs_Fixed</include>
     </include>
 
     <!-- Recommended defaults: the first run settings for everything the wizard covers -->
@@ -254,7 +430,7 @@
     </include>
 
     <include name="Action_SetupWizard_Finish">
-        <onclick>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onclick>
+        <include>Action_Shortcuts_Rebuild</include>
         <onclick>Dialog.Close(1130,true)</onclick>
         <onclick>AlarmClock(setupwizardfinish,ReloadSkin(),00:00,silent)</onclick>
     </include>
