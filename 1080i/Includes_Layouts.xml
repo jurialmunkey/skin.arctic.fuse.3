@@ -2504,7 +2504,7 @@
         </definition>
     </include>
 
-    <!-- Shelf spine: textless fanart behind the clearlogo turned on its side (ListItem.Label without one) and the year -->
+    <!-- Shelf spine: spine art as is, otherwise keyart or textless fanart behind the clearlogo turned on its side (ListItem.Label without one) and the year -->
     <!-- The focused item uses Layout_Poster (List_Shelf_Row), so the spine is never selected -->
     <include name="Layout_Shelf">
         <param name="indicator">true</param>
@@ -2520,16 +2520,20 @@
                 </include>
                 <include content="Object_Layout_Image_Rectangle">
                     <param name="diffuse">$PARAM[diffuse]</param>
-                    <param name="icon">$VAR[Image_Card_Fanart]</param>
+                    <param name="icon">$VAR[Image_Shelf_Spine]</param>
                     <param name="listitem">$PARAM[listitem]</param>
                     <param name="aspectratio">scale</param>
                 </include>
-                <control type="image">
-                    <texture diffuse="$PARAM[diffuse]" colordiffuse="panel_bg_50">common/white.png</texture>
+                <!-- Spine art has its own title so skip the dim and title overlay -->
+                <control type="group">
+                    <visible>String.IsEmpty($PARAM[listitem].Art(spine))</visible>
+                    <control type="image">
+                        <texture diffuse="$PARAM[diffuse]" colordiffuse="panel_bg_50">common/white.png</texture>
+                    </control>
+                    <include content="Layout_Shelf_Title">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
                 </control>
-                <include content="Layout_Shelf_Title">
-                    <param name="listitem">$PARAM[listitem]</param>
-                </include>
                 <control type="label">
                     <bottom>28</bottom>
                     <height>30</height>
