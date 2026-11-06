@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog" id="1130">
-    <defaultcontrol always="true">3</defaultcontrol>
     <onload>Skin.Reset(SetupWizard.Pending)</onload>
-    <onload>SetFocus(3,$INFO[Window(Home).Property(SetupWizard.Index)],absolute)</onload>
-    <onunload>SetProperty(SetupWizard.Index,$INFO[Container(3).ListItem.Property(index)],Home)</onunload>
-    <controls>
-        <include>DialogSetupWizard</include>
-    </controls>
+    <include condition="String.IsEmpty(Window(Home).Property(SetupWizard.Page))">DialogSetupWizard_Window_Steps</include>
+    <include content="DialogSetupWizard_Window_Page" condition="String.IsEqual(Window(Home).Property(SetupWizard.Page),colours)">
+        <param name="step">4</param>
+        <param name="items">DialogSetupWizard_Items_Colours</param>
+        <param name="focus">53</param>
+        <param name="title">$LOCALIZE[31767]</param>
+        <param name="subline">$LOCALIZE[31783]</param>
+        <param name="help">$LOCALIZE[31768]</param>
+    </include>
+    <include content="DialogSetupWizard_Window_Page" condition="String.IsEqual(Window(Home).Property(SetupWizard.Page),backgrounds)">
+        <param name="step">5</param>
+        <param name="items">DialogSetupWizard_Items_Backgrounds</param>
+        <param name="focus">55</param>
+        <param name="title">$LOCALIZE[31769]</param>
+        <param name="subline">$LOCALIZE[31784]</param>
+        <param name="help">$LOCALIZE[31770]</param>
+    </include>
 </window>

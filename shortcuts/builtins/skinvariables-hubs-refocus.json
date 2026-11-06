@@ -1,0 +1,66 @@
+{
+    "infolabels": {
+        "focused_window": "Container(30000).ListItem.Property(window)",
+        "focused_position": "Container(30000).CurrentItem",
+        "divider_above": "Container(30000).ListItemNoWrap(-1).Property(divider)"
+    },
+    "values": {
+        "move": [
+            {
+                "rules": ["{divider_above}==True"],
+                "value": "-1"
+            },
+            "1"
+        ]
+    },
+    "sums": {
+        "first_position": ["{focused_position}", "-1", "{move}"],
+        "attempts": ["{attempts}", "-1"]
+    },
+    "operations": [
+        {
+            "values": {
+                "target_window": [
+                    {
+                        "rules": ["{window}!="],
+                        "value": "{window}"
+                    },
+                    "{focused_window}"
+                ],
+                "target_position": [
+                    {
+                        "rules": ["{position}!="],
+                        "value": "{position}"
+                    },
+                    "{first_position}"
+                ]
+            }
+        },
+        {
+            "infolabels": {
+                "target_item_window": "Container(30000).ListItemAbsolute({target_position}).Property(window)"
+            }
+        }
+    ],
+    "actions": [
+        {
+            "rules": [
+                "{target_window}!=",
+                "{target_item_window}=={target_window}"
+            ],
+            "value": [
+                "SetFocus(30000,{target_position},absolute)"
+            ]
+        },
+        {
+            "rules": [
+                "{target_window}!=",
+                "{attempts}!=0"
+            ],
+            "value": [
+                "sleep=0.1",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-refocus.json&use_rules=True&attempts={attempts}&window={target_window}&position={target_position}"
+            ]
+        }
+    ]
+}

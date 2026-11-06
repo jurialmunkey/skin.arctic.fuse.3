@@ -501,7 +501,7 @@
         </definition>
     </include>
 
-    <!-- Hubs window (1115) list row. Disabled items are dimmed; the right side is left free for the move arrows -->
+    <!-- Hubs window (1115) list row. The right side is left free for the move buttons -->
     <include name="Layout_ShortcutCategories">
         <param name="selected">false</param>
         <param name="textcolor">dialog_fg</param>
@@ -510,13 +510,17 @@
             <include content="Object_Control" condition="$PARAM[selected]">
                 <param name="control">image</param>
                 <include>Texture_Menu_Highlight_H</include>
-                <!-- Half opacity while the row button (30910) is unfocused, like the settings categories -->
-                <animation effect="fade" start="100" end="50" condition="!Control.HasFocus(30910)">Conditional</animation>
+                <!-- Half opacity while the row buttons (30910) are unfocused, like the settings categories -->
+                <animation effect="fade" start="100" end="50" condition="!ControlGroup(30910).HasFocus()">Conditional</animation>
+            </include>
+
+            <include content="HubsWindow_Row_Divider" condition="!Skin.HasSetting(HomeSwitcher.Vertical)">
+                <param name="textcolor">$PARAM[textcolor]</param>
             </include>
 
             <control type="group">
                 <left>15</left>
-                <animation effect="fade" start="100" end="40" condition="String.IsEqual(ListItem.Property(disabled),True)">Conditional</animation>
+                <visible>!String.IsEqual(ListItem.Property(divider),True)</visible>
 
                 <control type="group">
                     <right>50</right>
@@ -535,47 +539,6 @@
 
             </control>
 
-        </definition>
-    </include>
-
-    <!-- Hubs window (1115) move arrows like a spin control, shown on the focused row with the row button (30910).
-         Outside the list layout so the neighbouring items are read from the list rather than the drawn item -->
-    <include name="HubsWindow_Move_Arrows">
-        <control type="group">
-            <right>70</right>
-            <width>60</width>
-            <height>30</height>
-            <centertop>40</centertop>
-            <include>HubsWindow_Row_Positions</include>
-            <visible>Control.HasFocus(30910)</visible>
-            <include content="HubsWindow_Move_Arrow">
-                <param name="left">0</param>
-                <param name="flipy">false</param>
-                <param name="shift">!$EXP[Exp_HubsWindow_CanMoveUp]</param>
-                <param name="available">$EXP[Exp_HubsWindow_CanMoveDown]</param>
-                <param name="selected">$EXP[Exp_HubsWindow_MoveDown_Selected]</param>
-            </include>
-            <include content="HubsWindow_Move_Arrow">
-                <param name="left">30</param>
-                <param name="flipy">true</param>
-                <param name="available">$EXP[Exp_HubsWindow_CanMoveUp]</param>
-                <param name="selected">$EXP[Exp_HubsWindow_MoveUp_Selected]</param>
-            </include>
-        </control>
-    </include>
-
-    <!-- shift moves the arrow over to the right edge when the arrow to its right is not shown -->
-    <include name="HubsWindow_Move_Arrow">
-        <param name="shift">false</param>
-        <definition>
-            <control type="image">
-                <left>$PARAM[left]</left>
-                <width>30</width>
-                <texture flipy="$PARAM[flipy]" colordiffuse="$VAR[ColorSelected]">buttons/triangle-down.png</texture>
-                <visible>$PARAM[available]</visible>
-                <animation effect="fade" start="100" end="30" condition="![$PARAM[selected]]">Conditional</animation>
-                <animation effect="slide" start="0" end="30,0" condition="$PARAM[shift]">Conditional</animation>
-            </control>
         </definition>
     </include>
 
@@ -2541,7 +2504,7 @@
         </definition>
     </include>
 
-    <!-- Shelf spine: textless fanart behind the clearlogo turned on its side (ListItem.Label without one) and the year -->
+    <!-- Shelf spine: spine art as is, otherwise keyart or textless fanart behind the clearlogo turned on its side (ListItem.Label without one) and the year -->
     <!-- The focused item uses Layout_Poster (List_Shelf_Row), so the spine is never selected -->
     <include name="Layout_Shelf">
         <param name="indicator">true</param>
@@ -2557,16 +2520,20 @@
                 </include>
                 <include content="Object_Layout_Image_Rectangle">
                     <param name="diffuse">$PARAM[diffuse]</param>
-                    <param name="icon">$VAR[Image_Card_Fanart]</param>
+                    <param name="icon">$VAR[Image_Shelf_Spine]</param>
                     <param name="listitem">$PARAM[listitem]</param>
                     <param name="aspectratio">scale</param>
                 </include>
-                <control type="image">
-                    <texture diffuse="$PARAM[diffuse]" colordiffuse="panel_bg_50">common/white.png</texture>
+                <!-- Spine art has its own title so skip the dim and title overlay -->
+                <control type="group">
+                    <visible>String.IsEmpty($PARAM[listitem].Art(spine))</visible>
+                    <control type="image">
+                        <texture diffuse="$PARAM[diffuse]" colordiffuse="panel_bg_50">common/white.png</texture>
+                    </control>
+                    <include content="Layout_Shelf_Title">
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
                 </control>
-                <include content="Layout_Shelf_Title">
-                    <param name="listitem">$PARAM[listitem]</param>
-                </include>
                 <control type="label">
                     <bottom>28</bottom>
                     <height>30</height>

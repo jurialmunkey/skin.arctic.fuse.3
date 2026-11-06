@@ -216,16 +216,32 @@
     </include>
 
     <include name="Action_SetupWizard_Open">
+        <onclick>ClearProperty(SetupWizard.Page,Home)</onclick>
         <onclick>SetProperty(SetupWizard.Index,0,Home)</onclick>
         <onclick>ActivateWindow(1130)</onclick>
     </include>
 
-    <!-- Copies a widget preset folder over the current profile's menu files. script.skinvariables asks before overwriting. -->
-    <include name="Action_SetupWizard_WidgetPreset">
+    <!-- Opens a single wizard step without the rail -->
+    <include name="Action_SetupWizard_Page_Open">
         <definition>
-            <onclick>Skin.SetString(SetupWizard.WidgetGroup,$PARAM[preset])</onclick>
-            <onclick>RunScript(script.skinvariables,copy_menufolder=special://skin/shortcuts/presets/$PARAM[preset]/,skin=$VAR[Path_SkinVariables_SkinFolder])</onclick>
+            <onclick>SetProperty(SetupWizard.Page,$PARAM[page],Home)</onclick>
+            <onclick>ActivateWindow(1130)</onclick>
         </definition>
+    </include>
+
+    <!-- Asks before applying a full home screen preset. On yes, skinvariables-setupwizard-preset.json sets the hub types,
+         layouts and spotlights, copies the preset folder (home, search and hub menus and widgets) over the current
+         profile's menu files without asking again, and flags a template rebuild. Optional onconfirm runs after it. -->
+    <include name="Action_SetupWizard_WidgetPreset">
+        <param name="onconfirm">noop</param>
+        <definition>
+            <onclick>RunScript(script.skinvariables,run_dialog=yesno,"heading=$PARAM[label]","message=$LOCALIZE[31848]",yeslabel=$LOCALIZE[186],nolabel=$LOCALIZE[222],"executebuiltin=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-setupwizard-preset.json&amp;use_rules=True&amp;preset=$PARAM[preset]||$PARAM[onconfirm]")</onclick>
+        </definition>
+    </include>
+
+    <!-- Flags the shortcut templates for a rebuild the next time they are built -->
+    <include name="Action_Shortcuts_Rebuild">
+        <onclick>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onclick>
     </include>
 
     <!-- Recommended defaults: the first run settings for everything the wizard covers -->
@@ -245,7 +261,7 @@
     </include>
 
     <include name="Action_SetupWizard_Finish">
-        <onclick>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onclick>
+        <include>Action_Shortcuts_Rebuild</include>
         <onclick>Dialog.Close(1130,true)</onclick>
         <onclick>AlarmClock(setupwizardfinish,ReloadSkin(),00:00,silent)</onclick>
     </include>
