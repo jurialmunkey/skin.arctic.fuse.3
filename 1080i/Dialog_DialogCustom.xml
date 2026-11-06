@@ -372,6 +372,33 @@
         </definition>
     </include>
 
+    <!-- Card dialog (1134): the same title and items properties as 1118, shown as a grid of setup wizard cards -->
+    <!-- Five cards by three rows with the wizard's 20 gutters, padded 40 from the line, sides and bottom of the visible panel -->
+    <include name="DialogCustom_Cards_List">
+        <param name="scrollbarid">61</param>
+        <definition>
+            <include content="List_Core">
+                <param name="id">$PARAM[id]</param>
+                <param name="control">panel</param>
+                <param name="orientation">vertical</param>
+                <param name="item_w">292</param>
+                <param name="item_h">206.67</param>
+                <param name="itemlayout_w">292</param>
+                <param name="itemlayout_h">206.67</param>
+                <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
+                <param name="offset_x">20</param>
+                <param name="offset_y">20</param>
+                <pagecontrol>$PARAM[scrollbarid]</pagecontrol>
+                <onright>$PARAM[scrollbarid]</onright>
+                <left>constant_grouplist_pad</left>
+                <right>constant_grouplist_pad</right>
+                <top>constant_grouplist_pad</top>
+                <bottom>0</bottom>
+                <include>$PARAM[include_content]</include>
+            </include>
+        </definition>
+    </include>
+
     <!-- Detailed select dialog (1132): the same title and items properties as 1118, shown as a detailed list -->
     <include name="DialogCustom_Detailed_Items">
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogSetupWizard_Content_WidgetSets)">DialogSetupWizard_Content_WidgetSets</include>
@@ -379,6 +406,255 @@
 
     <include name="DialogCustom_Tiles_Items">
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Tiles_BackgroundDialogImage)">DialogCustom_Tiles_BackgroundDialogImage</include>
+    </include>
+
+    <include name="DialogCustom_Cards_Items">
+        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Cards_WidgetStyle)">DialogCustom_Cards_WidgetStyle</include>
+    </include>
+
+    <!-- Widget style card: the style's wireframe on a setup wizard card, setting the edited shortcut's widget_style -->
+    <!-- The opener stores the shortcut url and current style label, as the shortcut list isn't visible from 1134 -->
+    <include name="DialogCustom_Cards_WidgetStyle_Item">
+        <definition>
+            <item>
+                <label>$PARAM[label]</label>
+                <property name="value">$PARAM[style]</property>
+                <property name="current">$INFO[Window(Home).Property(Dialog.1134.Current)]</property>
+                <onclick>Close</onclick>
+                <onclick>RunPlugin($INFO[Window(Home).Property(Dialog.1134.Value)]&amp;func=do_edit&amp;&amp;widget_style&amp;&amp;$PARAM[style])</onclick>
+            </item>
+        </definition>
+    </include>
+
+    <include name="DialogCustom_Cards_WidgetStyle">
+        <content>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[20021]</param>
+                <param name="style">Poster</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31045]</param>
+                <param name="style">Landscape</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31320]</param>
+                <param name="style">Square</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31431]</param>
+                <param name="style">Circle</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31424]</param>
+                <param name="style">Board</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31161]</param>
+                <param name="style">Flyer</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31172]</param>
+                <param name="style">Placard</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31423]</param>
+                <param name="style">Card</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31827]</param>
+                <param name="style">Ranked</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31828]</param>
+                <param name="style">Stack</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31829]</param>
+                <param name="style">Disc</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31830]</param>
+                <param name="style">Shelf</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31831]</param>
+                <param name="style">Timeline</param>
+            </include>
+            <include content="DialogCustom_Cards_WidgetStyle_Item">
+                <param name="label">$LOCALIZE[31832]</param>
+                <param name="style">Gatefold</param>
+            </include>
+        </content>
+    </include>
+
+    <include name="DialogCustom_Layout_WidgetStyle">
+        <param name="selected">false</param>
+        <definition>
+            <include content="DialogSetupWizard_Card">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="thumb">DialogCustom_Thumb_WidgetStyle</param>
+                <param name="labels_h">40</param>
+                <param name="thumb_bottom">60</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Widget style wireframes: each style's row at its real proportions with the first item focused, on the wizard card -->
+    <include name="DialogCustom_Thumb_WidgetStyle">
+        <param name="selected">false</param>
+        <definition>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Poster)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">23.28%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">46.55%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">69.83%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">93.1%</param><param name="top">12.44%</param><param name="width">6.9%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Landscape)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">16.85%</param><param name="width">37.11%</param><param name="height">55.88%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">76.85%</param><param name="width">23.01%</param><param name="height">6.3%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">40.73%</param><param name="top">16.85%</param><param name="width">37.11%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">40.73%</param><param name="top">76.85%</param><param name="width">23.01%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">81.47%</param><param name="top">16.85%</param><param name="width">18.53%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">81.47%</param><param name="top">76.85%</param><param name="width">18.53%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Square)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">18.48%</param><param name="width">19.65%</param><param name="height">52.61%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">75.22%</param><param name="width">12.19%</param><param name="height">6.3%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">23.28%</param><param name="top">18.48%</param><param name="width">19.65%</param><param name="height">52.61%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">23.28%</param><param name="top">75.22%</param><param name="width">12.19%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">46.55%</param><param name="top">18.48%</param><param name="width">19.65%</param><param name="height">52.61%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">46.55%</param><param name="top">75.22%</param><param name="width">12.19%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">69.83%</param><param name="top">18.48%</param><param name="width">19.65%</param><param name="height">52.61%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">69.83%</param><param name="top">75.22%</param><param name="width">12.19%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">93.1%</param><param name="top">18.48%</param><param name="width">6.9%</param><param name="height">52.61%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">93.1%</param><param name="top">75.22%</param><param name="width">6.9%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Circle)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">12.44%</param><param name="width">28.06%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="texture">common/circle.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">32.59%</param><param name="top">12.44%</param><param name="width">28.06%</param><param name="height">75.11%</param><param name="texture">common/circle.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">65.17%</param><param name="top">12.44%</param><param name="width">28.06%</param><param name="height">75.11%</param><param name="texture">common/circle.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Board)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">12.44%</param><param name="width">50.69%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">54.31%</param><param name="top">12.44%</param><param name="width">45.69%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Flyer)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">16.85%</param><param name="width">14.48%</param><param name="height">55.88%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">18.1%</param><param name="top">16.85%</param><param name="width">14.48%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">18.1%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">36.21%</param><param name="top">16.85%</param><param name="width">14.48%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">36.21%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">54.31%</param><param name="top">16.85%</param><param name="width">14.48%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">54.31%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">72.41%</param><param name="top">16.85%</param><param name="width">14.48%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">72.41%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">90.52%</param><param name="top">16.85%</param><param name="width">9.48%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">90.52%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Placard)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">16.85%</param><param name="width">50.69%</param><param name="height">55.88%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">30.85%</param><param name="top">54.1%</param><param name="width">16.22%</param><param name="height">8.94%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">76.85%</param><param name="width">31.43%</param><param name="height">6.3%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">54.31%</param><param name="top">16.85%</param><param name="width">14.48%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">54.31%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">72.41%</param><param name="top">16.85%</param><param name="width">14.48%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">72.41%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">90.52%</param><param name="top">16.85%</param><param name="width">9.48%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">90.52%</param><param name="top">76.85%</param><param name="width">8.98%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Card)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">12.44%</param><param name="width">66.21%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">41.4%</param><param name="top">65.85%</param><param name="width">21.19%</param><param name="height">12.02%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">69.83%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">93.1%</param><param name="top">12.44%</param><param name="width">6.9%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Ranked)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">36.67%</param><param name="width">9.31%</param><param name="height">50.88%</param><param name="colour">dialog_fg_50</param><param name="texture">numerals/solid/1.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">9.31%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">32.59%</param><param name="top">36.67%</param><param name="width">9.31%</param><param name="height">50.88%</param><param name="colour">dialog_fg_30</param><param name="texture">numerals/outline/2.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">41.9%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">65.17%</param><param name="top">36.67%</param><param name="width">9.31%</param><param name="height">50.88%</param><param name="colour">dialog_fg_30</param><param name="texture">numerals/outline/3.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">74.48%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Stack)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">19.65%</param><param name="top">14.32%</param><param name="width">4.66%</param><param name="height">71.36%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">24.31%</param><param name="top">16.08%</param><param name="width">4.66%</param><param name="height">67.84%</param><param name="colour">dialog_fg_06</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">52.24%</param><param name="top">14.32%</param><param name="width">4.66%</param><param name="height">71.36%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">56.9%</param><param name="top">16.08%</param><param name="width">4.66%</param><param name="height">67.84%</param><param name="colour">dialog_fg_06</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">32.59%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">84.83%</param><param name="top">14.32%</param><param name="width">4.66%</param><param name="height">71.36%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">89.48%</param><param name="top">16.08%</param><param name="width">4.66%</param><param name="height">67.84%</param><param name="colour">dialog_fg_06</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">65.17%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Disc)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">2.72%</param><param name="top">14.87%</param><param name="width">26.25%</param><param name="height">70.27%</param><param name="texture">diffuse/circle/circle_200_poster_cut.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">35.3%</param><param name="top">14.87%</param><param name="width">26.25%</param><param name="height">70.27%</param><param name="texture">diffuse/circle/circle_200_poster_cut.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">32.59%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">67.89%</param><param name="top">14.87%</param><param name="width">26.25%</param><param name="height">70.27%</param><param name="texture">diffuse/circle/circle_200_poster_cut.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">65.17%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Shelf)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">12.44%</param><param name="width">19.65%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">23.28%</param><param name="top">12.44%</param><param name="width">9.08%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">26.73%</param><param name="top">22.14%</param><param name="width">2.17%</param><param name="height">41.19%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">25.55%</param><param name="top">75.44%</param><param name="width">4.53%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">35.97%</param><param name="top">12.44%</param><param name="width">9.08%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">39.42%</param><param name="top">22.14%</param><param name="width">2.17%</param><param name="height">41.19%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">38.25%</param><param name="top">75.44%</param><param name="width">4.53%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">48.67%</param><param name="top">12.44%</param><param name="width">9.08%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">52.12%</param><param name="top">22.14%</param><param name="width">2.17%</param><param name="height">41.19%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">50.94%</param><param name="top">75.44%</param><param name="width">4.53%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">61.36%</param><param name="top">12.44%</param><param name="width">9.08%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">64.81%</param><param name="top">22.14%</param><param name="width">2.17%</param><param name="height">41.19%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">63.64%</param><param name="top">75.44%</param><param name="width">4.53%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">74.06%</param><param name="top">12.44%</param><param name="width">9.08%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">77.51%</param><param name="top">22.14%</param><param name="width">2.17%</param><param name="height">41.19%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">76.33%</param><param name="top">75.44%</param><param name="width">4.53%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">86.76%</param><param name="top">12.44%</param><param name="width">9.08%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">90.21%</param><param name="top">22.14%</param><param name="width">2.17%</param><param name="height">41.19%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">89.03%</param><param name="top">75.44%</param><param name="width">4.53%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Timeline)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">1.36%</param><param name="top">28.97%</param><param name="width">7.24%</param><param name="height">7.27%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">4.07%</param><param name="top">42.37%</param><param name="width">1.81%</param><param name="height">4.85%</param><param name="colour">dialog_fg_50</param><param name="texture">common/circle.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">0.91%</param><param name="top">53.2%</param><param name="width">8.15%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">7.69%</param><param name="top">44.06%</param><param name="width">5.88%</param><param name="height">1.45%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">13.58%</param><param name="top">16.85%</param><param name="width">37.11%</param><param name="height">55.88%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">13.58%</param><param name="top">76.85%</param><param name="width">23.01%</param><param name="height">6.3%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">50.69%</param><param name="top">44.06%</param><param name="width">5.88%</param><param name="height">1.45%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">55.67%</param><param name="top">28.97%</param><param name="width">7.24%</param><param name="height">7.27%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">58.38%</param><param name="top">42.37%</param><param name="width">1.81%</param><param name="height">4.85%</param><param name="colour">dialog_fg_50</param><param name="texture">common/circle_ring.png</param><param name="aspectratio">keep</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">55.22%</param><param name="top">53.2%</param><param name="width">8.15%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">62%</param><param name="top">44.06%</param><param name="width">5.88%</param><param name="height">1.45%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">67.89%</param><param name="top">16.85%</param><param name="width">32.11%</param><param name="height">55.88%</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">67.89%</param><param name="top">76.85%</param><param name="width">23.01%</param><param name="height">6.3%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),Gatefold)</visible>
+                <include content="DialogSetupWizard_Block"><param name="left">0%</param><param name="top">12.44%</param><param name="width">19.29%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">20.02%</param><param name="top">12.44%</param><param name="width">57.83%</param><param name="height">75.11%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">21.83%</param><param name="top">68.66%</param><param name="width">23.53%</param><param name="height">6.3%</param><param name="colour">dialog_fg_50</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">21.83%</param><param name="top">76.65%</param><param name="width">15.39%</param><param name="height">4.36%</param><param name="colour">dialog_fg_30</param><param name="opaque">$PARAM[selected]</param></include>
+                <include content="DialogSetupWizard_Block"><param name="left">81.47%</param><param name="top">12.44%</param><param name="width">18.53%</param><param name="height">75.11%</param><param name="opaque">$PARAM[selected]</param></include>
+            </control>
+        </definition>
     </include>
 
     <!-- Dialog background tile. Adaptive and static backgrounds are different includes, so switching between them reloads the skin. -->
