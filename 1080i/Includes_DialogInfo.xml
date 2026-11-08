@@ -96,6 +96,19 @@
         </definition>
     </include>
 
+    <!-- Slide across to the fanart from the info buttons and details -->
+    <include name="DialogInfo_ArtworkSlideOpen">
+        <param name="returncontrol">9000</param>
+        <definition>
+            <onleft>SetProperty(DialogInfo.ArtworkReturn,$PARAM[returncontrol])</onleft>
+            <onleft>SetProperty(DialogInfo.ArtworkReverse,true)</onleft>
+            <onleft>8100</onleft>
+            <onright>SetProperty(DialogInfo.ArtworkReturn,$PARAM[returncontrol])</onright>
+            <onright>ClearProperty(DialogInfo.ArtworkReverse)</onright>
+            <onright>8100</onright>
+        </definition>
+    </include>
+
     <include name="DialogInfo_ArtworkPoster">
         <control type="group">
             <width>infodialog_poster_w</width>
@@ -1748,10 +1761,7 @@
                     <height>57</height>
                     <itemgap>40</itemgap>
                     <ondown>90001</ondown>
-                    <onleft>SetProperty(DialogInfo.ArtworkReverse,true)</onleft>
-                    <onleft>8100</onleft>
-                    <onright>ClearProperty(DialogInfo.ArtworkReverse)</onright>
-                    <onright>8100</onright>
+                    <include>DialogInfo_ArtworkSlideOpen</include>
                     <onup condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1113)</onup>
 
                     <!-- Play/Browse -->
@@ -1823,9 +1833,9 @@
                     <onup>9000</onup>
                     <ondown>SetFocus(90001)</ondown>
                     <ondown>SetFocus(5029)</ondown>
-                    <!-- <onleft>61</onleft> -->
-                    <onright>61</onright>
-                    <!-- <onright>9200</onright> -->
+                    <include content="DialogInfo_ArtworkSlideOpen">
+                        <param name="returncontrol">9100</param>
+                    </include>
 
                     <!-- Director -->
                     <include content="Object_InfoCircle_Button">

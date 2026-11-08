@@ -19,6 +19,7 @@
     <onload>ClearProperty(DialogInfo.ArtworkView)</onload>
     <onload>ClearProperty(DialogInfo.ArtworkReverse)</onload>
     <onload>ClearProperty(DialogInfo.ArtworkWrapReturn)</onload>
+    <onload>SetProperty(DialogInfo.ArtworkReturn,9000)</onload>
     <onload>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-person-artwork.json,use_rules=True)</onload>
     <onunload>ClearProperty(DialogInfo.PersonArtwork.Path,12003)</onunload>
 
@@ -93,7 +94,9 @@
         <!-- Preserve the selected panel while browsing widgets. -->
         <include content="Object_Hidden_Button" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
             <param name="id">8100</param>
-            <include>DialogInfo_ArtworkNavigation</include>
+            <include content="DialogInfo_ArtworkNavigation">
+                <param name="returncontrol">SetFocus($INFO[Window.Property(DialogInfo.ArtworkReturn)])</param>
+            </include>
             <onclick>SetFocus(9000)</onclick>
         </include>
 
