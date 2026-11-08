@@ -112,7 +112,8 @@
                                 <param name="include_movement">DialogCustomPlot_OnMove</param>
                                 <param name="include_divider">String.IsEmpty(Window.Property(path))</param>
                                 <param name="include_top">!String.IsEmpty(Window.Property(path))</param>
-                                <param name="include_closebutton">true</param>
+                                <!-- The switcher header supplies its own close and info buttons. -->
+                                <param name="include_closebutton">String.IsEmpty(Window.Property(path))</param>
                                 <param name="closebutton_onmove">9002</param>
                             </include>
                             <include condition="$PARAM[include_artwork] + !String.IsEmpty(Window.Property(tmdb_type)) + !String.IsEmpty(Window.Property(tmdb_id))">DialogCustomPlot_Lists</include>
@@ -146,6 +147,7 @@
     <include name="DialogCustomPlot_Switcher">
         <control type="group">
             <include>Size_Group_Head</include>
+            <include>DialogCustomPlot_HeadButtons</include>
             <control type="group">
                 <bottom>-60</bottom>
                 <include>Part_Line</include>
@@ -168,6 +170,37 @@
                 </control>
             </control>
         </control>
+    </include>
+
+    <include name="DialogCustomPlot_HeadButtons">
+        <include content="Part_CloseButton">
+            <param name="onleft">90002</param>
+            <param name="onright">9002</param>
+            <param name="onup">9002</param>
+            <param name="ondown">9002</param>
+        </include>
+        <include content="Part_CloseButton">
+            <param name="id">90002</param>
+            <param name="groupid">90102</param>
+            <param name="right">140</param>
+            <param name="icon">special://skin/extras/icons/info3.png</param>
+            <param name="onclick">noop</param>
+            <param name="action_include">DialogCustomPlot_Info_Action</param>
+            <param name="onleft">9002</param>
+            <param name="onright">90001</param>
+            <param name="onup">9002</param>
+            <param name="ondown">9002</param>
+        </include>
+    </include>
+
+    <include name="DialogCustomPlot_Info_Action">
+        <onclick>Skin.SetString(InfoPanel.FullSwitch,Full,Home)</onclick>
+        <onclick>RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Window.Property(path)],call_auto=1190,origin_tmdb_type=$INFO[Window.Property(origin_tmdb_type)],origin_tmdb_id=$INFO[Window.Property(origin_tmdb_id)],origin_season=$INFO[Window.Property(origin_season)],origin_episode=$INFO[Window.Property(origin_episode)],return)</onclick>
+        <onclick>Dialog.Close(1114,true)</onclick>
+        <onclick>Dialog.Close(videoosd,true)</onclick>
+        <onclick>Dialog.Close(1140,true)</onclick>
+        <onclick>Dialog.Close(1141,true)</onclick>
+        <onclick>Dialog.Close(videobookmarks,true)</onclick>
     </include>
 
     <include name="DialogCustomPlot_Lists">
@@ -263,13 +296,7 @@
             <visible>$EXP[Exp_DialogCustomPlot_Info_HasContent]</visible>
             <usealttexture>$EXP[Exp_DialogCustomPlot_Info_IsSelected]</usealttexture>
             <onfocus>ClearProperty(ModeList)</onfocus>
-            <onclick>Skin.SetString(InfoPanel.FullSwitch,Full,Home)</onclick>
-            <onclick>RunScript(plugin.video.themoviedb.helper,add_path=$INFO[Window.Property(path)],call_auto=1190,origin_tmdb_type=$INFO[Window.Property(origin_tmdb_type)],origin_tmdb_id=$INFO[Window.Property(origin_tmdb_id)],origin_season=$INFO[Window.Property(origin_season)],origin_episode=$INFO[Window.Property(origin_episode)],return)</onclick>
-            <onclick>Dialog.Close(1114,true)</onclick>
-            <onclick>Dialog.Close(videoosd,true)</onclick>
-            <onclick>Dialog.Close(1140,true)</onclick>
-            <onclick>Dialog.Close(1141,true)</onclick>
-            <onclick>Dialog.Close(videobookmarks,true)</onclick>
+            <include>DialogCustomPlot_Info_Action</include>
         </include>
         <!-- Movies -->
         <include content="DialogCustomPlot_Tab" condition="!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)">
@@ -344,7 +371,10 @@
                 </include>
                 <include condition="$PARAM[include_divider]">Part_Line</include>
                 <include content="Part_CloseButton" condition="$PARAM[include_closebutton]">
-                    <param name="onmove">$PARAM[closebutton_onmove]</param>
+                    <param name="onleft">$PARAM[closebutton_onmove]</param>
+                    <param name="onright">$PARAM[closebutton_onmove]</param>
+                    <param name="onup">$PARAM[closebutton_onmove]</param>
+                    <param name="ondown">$PARAM[closebutton_onmove]</param>
                 </include>
             </control>
             <control type="group">
