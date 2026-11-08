@@ -145,6 +145,11 @@
     <expression name="Exp_DialogCustomPlot_Info_HasContent">[!Container(7000).IsUpdating + !String.IsEmpty(Control.GetLabel(7006))]</expression>
     <expression name="Exp_DialogCustomPlot_Info_IsSelected">[Integer.IsEqual(Control.GetLabel(7007),9001)]</expression>
     <expression name="Exp_DialogCustomPlot_List_HasFocus">[Control.HasFocus(7001) | Control.HasFocus(7002) | Control.HasFocus(7003) | Control.HasFocus(7004) | Control.HasFocus(7005)]</expression>
+    <expression name="Exp_DialogCustomPlot_IsPerson">[!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)]</expression>
+    <expression name="Exp_DialogCustomPlot_IsVideo">[!String.IsEmpty(Window.Property(tmdb_id)) + [String.IsEqual(Window.Property(tmdb_type),movie) | String.IsEqual(Window.Property(tmdb_type),tv)]]</expression>
+
+    <!-- The crew dialog is showing the person details view instead of the crew list -->
+    <expression name="Exp_DialogViewCrew_IsPerson">[!String.IsEmpty(Window.Property(person))]</expression>
 
     <expression name="Exp_InfoDialogs_WidgetsGroup_HasFocus">[ControlGroup(5000).HasFocus()]</expression>
     <expression name="Exp_InfoDialogs_UsePersonArtwork">[String.IsEqual(ListItem.Property(tmdb_type),person) + !Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) + $EXP[Exp_TMDbHelper_IsData]]</expression>

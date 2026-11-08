@@ -581,7 +581,7 @@
         <onclick condition="$EXP[Exp_InfoDialogs_CastCrew_IsCast] + !$EXP[Exp_InfoDialogs_UseOnlineCast]">SetFocus(50)</onclick>
         <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">SetProperty(crew_type,$INFO[Container(5029).ListItem.Property(crew_type)],1120)</onclick>
         <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">SetProperty(crew_label,$INFO[Container(5029).ListItem.Label],1120)</onclick>
-        <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">SetProperty(poster,$VAR[Image_Poster],1120)</onclick>
+        <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">SetProperty(crew_poster,$VAR[Image_Poster],1120)</onclick>
         <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">ActivateWindow(1120)</onclick>
     </include>
 
@@ -1203,21 +1203,24 @@
         <value>$INFO[Container.ListItem.Property(folderpath)]</value>
     </variable>
 
+    <!-- Fill the details view of 1114 and open it, or fill another window hosting the same view (activate false) -->
     <include name="DialogInfo_Details_Action">
         <param name="set_path">true</param>
+        <param name="window">1114</param>
+        <param name="activate">true</param>
         <definition>
-            <onclick condition="$PARAM[set_path]">SetProperty(path,$PARAM[path],1114)</onclick>
-            <onclick condition="![$PARAM[set_path]]">ClearProperty(path,1114)</onclick>
-            <onclick>SetProperty(header,$PARAM[header],1114)</onclick>
-            <onclick>SetProperty(poster,$PARAM[poster],1114)</onclick>
-            <onclick>SetProperty(tmdb_id,$PARAM[tmdb_id],1114)</onclick>
-            <onclick>SetProperty(tmdb_type,$PARAM[tmdb_type],1114)</onclick>
-            <onclick>SetProperty(dbtype,$PARAM[dbtype],1114)</onclick>
-            <onclick>SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],1114)</onclick>
-            <onclick>SetProperty(origin_tmdb_type,$VAR[Path_InfoParams_TMDbType],1114)</onclick>
-            <onclick>SetProperty(origin_season,$VAR[Path_InfoParams_Season],1114)</onclick>
-            <onclick>SetProperty(origin_episode,$VAR[Path_InfoParams_Episode],1114)</onclick>
-            <onclick>ActivateWindow(1114)</onclick>
+            <onclick condition="$PARAM[set_path]">SetProperty(path,$PARAM[path],$PARAM[window])</onclick>
+            <onclick condition="![$PARAM[set_path]]">ClearProperty(path,$PARAM[window])</onclick>
+            <onclick>SetProperty(header,$PARAM[header],$PARAM[window])</onclick>
+            <onclick>SetProperty(poster,$PARAM[poster],$PARAM[window])</onclick>
+            <onclick>SetProperty(tmdb_id,$PARAM[tmdb_id],$PARAM[window])</onclick>
+            <onclick>SetProperty(tmdb_type,$PARAM[tmdb_type],$PARAM[window])</onclick>
+            <onclick>SetProperty(dbtype,$PARAM[dbtype],$PARAM[window])</onclick>
+            <onclick>SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],$PARAM[window])</onclick>
+            <onclick>SetProperty(origin_tmdb_type,$VAR[Path_InfoParams_TMDbType],$PARAM[window])</onclick>
+            <onclick>SetProperty(origin_season,$VAR[Path_InfoParams_Season],$PARAM[window])</onclick>
+            <onclick>SetProperty(origin_episode,$VAR[Path_InfoParams_Episode],$PARAM[window])</onclick>
+            <onclick condition="$PARAM[activate]">ActivateWindow($PARAM[window])</onclick>
         </definition>
     </include>
 
@@ -1834,7 +1837,7 @@
                         <param name="tmdb_type">person</param>
                         <param name="tmdb_id">$VAR[Path_FromDirector]</param>
                         <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(type,Director,1120)</onclick>
-                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(poster,$VAR[Image_Poster],1120)</onclick>
+                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(crew_poster,$VAR[Image_Poster],1120)</onclick>
                         <onclick condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1120)</onclick>
                         <onclick condition="!$EXP[Exp_TMDbHelper_IsData]">SendClick(13)</onclick>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director)) | !String.IsEmpty(ListItem.Director)</visible>
@@ -1850,7 +1853,7 @@
                         <param name="tmdb_type">person</param>
                         <param name="tmdb_id">$VAR[Path_FromWriter]</param>
                         <onclick>SetProperty(type,Writer,1120)</onclick>
-                        <onclick>SetProperty(poster,$VAR[Image_Poster],1120)</onclick>
+                        <onclick>SetProperty(crew_poster,$VAR[Image_Poster],1120)</onclick>
                         <onclick>ActivateWindow(1120)</onclick>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer)) | !String.IsEmpty(ListItem.Writer)</visible>
                     </include>

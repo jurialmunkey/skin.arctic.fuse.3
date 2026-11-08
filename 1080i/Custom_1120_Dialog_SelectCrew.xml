@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog" id="1120">
 
-    <defaultcontrol always="true">7000</defaultcontrol>
+    <defaultcontrol always="true">7100</defaultcontrol>
     <onload>SetProperty(TMDbHelper.ServicePause,True)</onload>
-    <onunload>ClearProperty(type)</onunload>
-    <onunload>ClearProperty(crew_type)</onunload>
-    <onunload>ClearProperty(crew_label)</onunload>
+    <!-- Crew list -->
+    <onunload>ClearProperty(type,1120)</onunload>
+    <onunload>ClearProperty(crew_type,1120)</onunload>
+    <onunload>ClearProperty(crew_label,1120)</onunload>
+    <onunload>ClearProperty(crew_poster,1120)</onunload>
+    <!-- Person details view -->
+    <onunload>ClearProperty(person,1120)</onunload>
+    <onunload>ClearProperty(ModeList,1120)</onunload>
+    <onunload>ClearProperty(header,1120)</onunload>
     <onunload>ClearProperty(poster,1120)</onunload>
+    <onunload>ClearProperty(path,1120)</onunload>
+    <onunload>ClearProperty(tmdb_id,1120)</onunload>
+    <onunload>ClearProperty(tmdb_type,1120)</onunload>
+    <onunload>ClearProperty(dbtype,1120)</onunload>
+    <onunload>ClearProperty(origin_tmdb_id,1120)</onunload>
+    <onunload>ClearProperty(origin_tmdb_type,1120)</onunload>
+    <onunload>ClearProperty(origin_season,1120)</onunload>
+    <onunload>ClearProperty(origin_episode,1120)</onunload>
     <controls>
 
+        <include>DialogCustomPlot_FocusButton</include>
+        <include>DialogCustomPlot_DetailsList</include>
+        <include>DialogCustomPlot_Labels</include>
+
         <include>DialogViewCrew</include>
+
+        <include content="DialogCustomPlot_Busy">
+            <param name="visible">$EXP[Exp_DialogViewCrew_IsPerson]</param>
+        </include>
 
     </controls>
 </window>
