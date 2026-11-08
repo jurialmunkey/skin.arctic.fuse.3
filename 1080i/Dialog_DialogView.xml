@@ -68,13 +68,69 @@
     <include name="DialogViewCrew">
         <param name="header">$VAR[DialogViewCrew_Header]</param>
         <param name="include_listitems">DialogViewCrew_Items</param>
+        <param name="onback">PreviousMenu</param>
         <definition>
-            <include content="DialogViewInfo">
-                <param name="header">$PARAM[header]</param>
-                <param name="include_listitems">$PARAM[include_listitems]</param>
-                <param name="include_definition">DialogViewCrew_Definition</param>
-                <param name="itemlayout_include">Layout_MediaList</param>
-            </include>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include content="Part_Dialog_Backing">
+                    <param name="dialog_size">Dimension_DialogFlipMenu</param>
+                </include>
+
+                <!-- Content -->
+                <control type="group">
+                    <include>Size_Dialog_Pad</include>
+
+                    <!-- Left -->
+                    <control type="group">
+                        <include>Size_LeftGroup_Large</include>
+                        <include content="DialogPlot_Artwork">
+                            <param name="poster_icon">$VAR[Image_1120_Poster]</param>
+                        </include>
+                    </control>
+
+                    <!-- Right -->
+                    <control type="group">
+                        <include>Part_Panel</include>
+                        <include>Size_RightGroup_Large</include>
+                        <control type="group">
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="label">$PARAM[header]</param>
+                            </include>
+                            <include content="Part_ItemPage">
+                                <param name="id">7000</param>
+                            </include>
+                            <include>Part_CloseButton</include>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <control type="group">
+                                <include>Size_Grouplist_Pad</include>
+                                <include content="List_DialogSelect">
+                                    <param name="id">7000</param>
+                                    <param name="itemlayout_include">Layout_MediaList</param>
+                                    <param name="textcolor">dialog_fg</param>
+                                    <param name="include_detailed_labels">true</param>
+                                    <include>DialogViewCrew_Definition</include>
+                                    <orientation>vertical</orientation>
+                                    <pagecontrol>61</pagecontrol>
+                                    <onleft>$PARAM[onback]</onleft>
+                                    <onright>61</onright>
+                                    <onback>$PARAM[onback]</onback>
+                                    <content>
+                                        <include>$PARAM[include_listitems]</include>
+                                    </content>
+                                </include>
+                            </control>
+                        </control>
+                        <include content="Part_Scrollbar">
+                            <param name="id">61</param>
+                            <onleft>7000</onleft>
+                            <onright>$PARAM[onback]</onright>
+                        </include>
+                    </control>
+                </control>
+            </control>
         </definition>
     </include>
 
