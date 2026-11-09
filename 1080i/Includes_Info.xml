@@ -118,6 +118,39 @@
         </control>
     </include>
 
+    <!-- Window level controls only: inside an item layout Kodi resolves Player.FileNameAndPath and VideoPlayer.* against the list item itself, so every item would match -->
+    <include name="Info_Meta_EndTime">
+        <param name="override">false</param>
+        <definition>
+            <include content="Info_Meta_EndTime_Objects">
+                <param name="item">$PARAM[item]</param>
+                <param name="override">$PARAM[override]</param>
+                <param name="is_endtime_type">[[String.IsEqual($PARAM[item].DBType,movie) | String.IsEqual($PARAM[item].DBType,episode) | String.IsEqual($PARAM[item].DBType,video)] + !String.IsEqual($PARAM[item].Property(tmdb_type),person)]</param>
+                <!-- An item with its own file only matches that file, another version of the same title can have another runtime -->
+                <!-- ListItem.FileNameAndPath drops user:pass@ from the path and Player.FileNameAndPath does not, so library items also match by DBID and file name -->
+                <param name="is_playing_file">[[!String.IsEmpty($PARAM[item].FileNameAndPath) + String.IsEqual($PARAM[item].FileNameAndPath,Player.FileNameAndPath)] | [Integer.IsGreater($PARAM[item].DBID,0) + Integer.IsEqual($PARAM[item].DBID,VideoPlayer.DBID) + [[String.IsEqual($PARAM[item].DBType,movie) + VideoPlayer.Content(movies)] | [String.IsEqual($PARAM[item].DBType,episode) + VideoPlayer.Content(episodes)]] + !String.IsEmpty($PARAM[item].FileName) + String.IsEqual($PARAM[item].FileName,Player.Filename)]]</param>
+                <!-- A TMDb Helper item (e.g. from the OSD info button) stands for no file, so it matches the playing title by id -->
+                <param name="is_playing_tmdb">[String.StartsWith($PARAM[item].FileNameAndPath,plugin://plugin.video.themoviedb.helper/) + [[String.IsEqual($PARAM[item].DBType,movie) + VideoPlayer.Content(movies) + [[!String.IsEmpty($PARAM[item].IMDBNumber) + String.IsEqual($PARAM[item].IMDBNumber,VideoPlayer.IMDBNumber)] | [!String.IsEmpty($PARAM[item].UniqueID(tmdb)) + String.IsEqual($PARAM[item].UniqueID(tmdb),Window(Home).Property(TMDbHelper.Player.TMDb_ID))]]] | [String.IsEqual($PARAM[item].DBType,episode) + VideoPlayer.Content(episodes) + !String.IsEmpty($PARAM[item].UniqueID(tvshow.tmdb)) + String.IsEqual($PARAM[item].UniqueID(tvshow.tmdb),Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID)) + Integer.IsEqual($PARAM[item].Season,VideoPlayer.Season) + Integer.IsEqual($PARAM[item].Episode,VideoPlayer.Episode)]]]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Info_Meta_EndTime_Objects">
+        <definition>
+            <!-- EndTimeResume counts from the stored resume point, so the item that is playing gets Player.FinishTime -->
+            <include content="Info_Meta_Object">
+                <param name="icon">flags/$VAR[Color_Directory]/ratings/ends.png</param>
+                <param name="label">$INFO[$PARAM[item].EndTimeResume,$LOCALIZE[31600] ,]</param>
+                <param name="visible">$PARAM[is_endtime_type] + !String.IsEmpty($PARAM[item].EndTimeResume) + ![$PARAM[override] | [Player.HasVideo + !VideoPlayer.Content(livetv) + [$PARAM[is_playing_file] | $PARAM[is_playing_tmdb]]]]</param>
+            </include>
+            <include content="Info_Meta_Object">
+                <param name="icon">flags/$VAR[Color_Directory]/ratings/ends.png</param>
+                <param name="label">$INFO[Player.FinishTime,$LOCALIZE[31600] ,]</param>
+                <param name="visible">$PARAM[is_endtime_type] + ![$PARAM[override]] + Player.HasVideo + !VideoPlayer.Content(livetv) + [$PARAM[is_playing_file] | $PARAM[is_playing_tmdb]] + !String.IsEmpty(Player.FinishTime)</param>
+            </include>
+        </definition>
+    </include>
+
     <include name="Info_Meta">
         <param name="visible">true</param>
         <param name="listitem">ListItem</param>
@@ -247,10 +280,9 @@
                     </include>
 
                     <!-- EndTime -->
-                    <include content="Info_Meta_Object">
-                        <param name="icon">flags/$VAR[Color_Directory]/ratings/ends.png</param>
-                        <param name="label">$INFO[$PARAM[container]$PARAM[listitem].EndTimeResume,$LOCALIZE[31600] ,]</param>
-                        <param name="visible">[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video)] + !String.IsEqual($PARAM[container]$PARAM[listitem].Property(tmdb_type),person) + !String.IsEmpty($PARAM[container]$PARAM[listitem].EndTimeResume)</param>
+                    <include content="Info_Meta_EndTime">
+                        <param name="item">$PARAM[container]$PARAM[listitem]</param>
+                        <param name="override">[$PARAM[override_tvshow] | $PARAM[override_movie]]</param>
                     </include>
                     <include content="Info_Meta_Object">
                         <param name="icon">flags/$VAR[Color_Directory]/ratings/ends.png</param>
