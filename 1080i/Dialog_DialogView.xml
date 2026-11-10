@@ -65,29 +65,215 @@
         </definition>
     </include>
 
+    <!-- Crew list that stretches into the person details view (the same view as 1114) and back again -->
     <include name="DialogViewCrew">
         <param name="header">$VAR[DialogViewCrew_Header]</param>
         <param name="include_listitems">DialogViewCrew_Items</param>
+        <param name="onback">PreviousMenu</param>
         <definition>
-            <include content="DialogViewInfo">
-                <param name="header">$PARAM[header]</param>
-                <param name="include_listitems">$PARAM[include_listitems]</param>
-                <param name="include_definition">DialogViewCrew_Definition</param>
-                <param name="itemlayout_include">Layout_MediaList</param>
-            </include>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Animation_BounceIn_Dialog</include>
+                <include content="DialogViewCrew_CrewView">
+                    <param name="header">$PARAM[header]</param>
+                    <param name="include_listitems">$PARAM[include_listitems]</param>
+                    <param name="onback">$PARAM[onback]</param>
+                </include>
+                <include>DialogViewCrew_PersonView</include>
+            </control>
         </definition>
+    </include>
+
+    <include name="DialogViewCrew_CrewView">
+        <definition>
+            <control type="group">
+                <include>Dimension_DialogFlipMenu</include>
+                <!-- Hide once stretched into the person view -->
+                <include content="Animation_DialogStretch">
+                    <param name="condition">$EXP[Exp_DialogViewCrew_IsPerson]</param>
+                    <param name="delay">300</param>
+                    <param name="time">1</param>
+                </include>
+
+                <!-- Stretch the panel (1200 less 40 padding each side) into the person view panel (1600 less padding): 1520 / 1120 -->
+                <control type="group">
+                    <include content="Animation_DialogStretch">
+                        <param name="condition">$EXP[Exp_DialogViewCrew_IsPerson]</param>
+                        <param name="effect">zoom</param>
+                        <param name="start">100,100</param>
+                        <param name="end">135.71,100</param>
+                    </include>
+                    <include content="Part_Background_Panel">
+                        <param name="dialog_size">Dimension_DialogFlipMenu</param>
+                    </include>
+                </control>
+
+                <!-- Content -->
+                <control type="group">
+                    <include>Size_Dialog_Pad</include>
+
+                    <!-- Left: slide the poster to the person view poster position -->
+                    <control type="group">
+                        <include>Size_LeftGroup_Large</include>
+                        <include content="Animation_DialogStretch">
+                            <param name="condition">$EXP[Exp_DialogViewCrew_IsPerson]</param>
+                            <param name="effect">slide</param>
+                            <param name="start">0,0</param>
+                            <param name="end">-200,0</param>
+                        </include>
+                        <include content="DialogPlot_Artwork">
+                            <param name="poster_icon">$VAR[Image_1120_Poster]</param>
+                            <param name="poster_id">99983</param>
+                            <param name="square_id">99984</param>
+                        </include>
+                    </control>
+
+                    <!-- Right -->
+                    <control type="group">
+                        <include>Size_RightGroup_Large</include>
+                        <!-- Stretch the panel (560) into the person view panel (960) around the same center -->
+                        <control type="group">
+                            <include content="Animation_DialogStretch">
+                                <param name="condition">$EXP[Exp_DialogViewCrew_IsPerson]</param>
+                                <param name="effect">zoom</param>
+                                <param name="start">100,100</param>
+                                <param name="end">171.43,100</param>
+                            </include>
+                            <include>Part_Panel</include>
+                        </control>
+                        <control type="group">
+                            <include content="Animation_DialogStretch">
+                                <param name="condition">$EXP[Exp_DialogViewCrew_IsPerson]</param>
+                                <param name="time">150</param>
+                            </include>
+                            <control type="group">
+                                <include>Size_Group_Head</include>
+                                <include content="Part_HeadText">
+                                    <param name="label">$PARAM[header]</param>
+                                </include>
+                                <include content="Part_ItemPage">
+                                    <param name="id">7100</param>
+                                </include>
+                                <include content="Part_CloseButton">
+                                    <param name="id">90011</param>
+                                    <param name="groupid">90111</param>
+                                </include>
+                            </control>
+                            <control type="group">
+                                <include>Size_Group_Body</include>
+                                <control type="group">
+                                    <include>Size_Grouplist_Pad</include>
+                                    <include content="List_DialogSelect">
+                                        <param name="id">7100</param>
+                                        <param name="itemlayout_include">Layout_MediaList</param>
+                                        <param name="textcolor">dialog_fg</param>
+                                        <param name="include_detailed_labels">true</param>
+                                        <include>DialogViewCrew_Definition</include>
+                                        <orientation>vertical</orientation>
+                                        <pagecontrol>7110</pagecontrol>
+                                        <onleft>$PARAM[onback]</onleft>
+                                        <onright>7110</onright>
+                                        <onback>$PARAM[onback]</onback>
+                                        <content>
+                                            <include>$PARAM[include_listitems]</include>
+                                        </content>
+                                    </include>
+                                </control>
+                            </control>
+                            <include content="Part_Scrollbar">
+                                <param name="id">7110</param>
+                                <onleft>7100</onleft>
+                                <onright>$PARAM[onback]</onright>
+                            </include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The 1114 details view with a person always loaded: back and the header close button return to the crew list -->
+    <include name="DialogViewCrew_PersonView">
+        <control type="group">
+            <include>Dimension_DialogFullMenu</include>
+            <!-- Mirrored timeline, since it plays forward on back: hidden from 150, so shown from 300 as the crew view stretches into it -->
+            <include content="Animation_DialogStretch">
+                <param name="condition">!$EXP[Exp_DialogViewCrew_IsPerson]</param>
+                <param name="delay">150</param>
+                <param name="time">1</param>
+            </include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogFullMenu</param>
+            </include>
+
+            <!-- Content -->
+            <control type="group">
+                <include>Size_Dialog_Pad</include>
+
+                <!-- Left -->
+                <control type="group">
+                    <include>Size_LeftGroup_Large</include>
+                    <include content="DialogPlot_Artwork">
+                        <param name="poster_icon">$VAR[Image_1114_Poster]</param>
+                        <param name="square_icon">$VAR[Image_1114_Icon]</param>
+                        <param name="c_logo_icon">$VAR[Image_1114_Clearlogo]</param>
+                    </include>
+                </control>
+
+                <!-- Right -->
+                <control type="group">
+                    <include>Part_Panel</include>
+                    <include>Size_RightGroup_Large</include>
+                    <control type="group">
+                        <!-- Fades in over the last 150 of the stretch, and out over the first 150 on back -->
+                        <include content="Animation_DialogStretch">
+                            <param name="condition">!$EXP[Exp_DialogViewCrew_IsPerson]</param>
+                            <param name="time">150</param>
+                        </include>
+                        <include content="DialogPlot_Textbox">
+                            <param name="head_id">9999</param>
+                            <param name="header">$VAR[Label_Overlay_Header_1114_PlotBox]</param>
+                            <param name="textbox">$INFO[Control.GetLabel(7006)]</param>
+                            <param name="textbox_visible">$EXP[Exp_DialogCustomPlot_Info_IsSelected]</param>
+                            <param name="include_movement">DialogCustomPlot_OnMove</param>
+                            <param name="include_divider">false</param>
+                            <param name="include_top">true</param>
+                            <param name="include_closebutton">false</param>
+                            <param name="onback">7100</param>
+                        </include>
+                        <include content="DialogCustomPlot_Lists">
+                            <param name="onback">7100</param>
+                            <param name="include_person">true</param>
+                            <param name="include_video">false</param>
+                        </include>
+                        <include content="DialogCustomPlot_Switcher">
+                            <param name="onback">7100</param>
+                            <param name="close_onclick">SetFocus(7100)</param>
+                            <param name="include_person">true</param>
+                            <param name="include_video">false</param>
+                        </include>
+                    </control>
+                </control>
+            </control>
+        </control>
     </include>
 
     <include name="DialogViewCrew_Definition">
         <right>-20</right>
-        <onclick>Close</onclick>
+        <!-- Returning to the crew list leaves the person view -->
+        <onfocus>ClearProperty(person)</onfocus>
         <include content="DialogInfo_Details_Action">
-            <param name="header">$INFO[Container(7000).ListItem.Label]</param>
-            <param name="poster">$INFO[Container(7000).ListItem.Icon]</param>
-            <param name="path">plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=$INFO[Container(7000).ListItem.Property(tmdb_type)]&amp;tmdb_id=$INFO[Container(7000).ListItem.Property(tmdb_id)]</param>
-            <param name="tmdb_id">$INFO[Container(7000).ListItem.Property(tmdb_id)]</param>
-            <param name="tmdb_type">$INFO[Container(7000).ListItem.Property(tmdb_type)]</param>
+            <param name="header">$INFO[Container(7100).ListItem.Label]</param>
+            <param name="poster">$VAR[Image_1120_Poster]</param>
+            <param name="path">plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=$INFO[Container(7100).ListItem.Property(tmdb_type)]&amp;tmdb_id=$INFO[Container(7100).ListItem.Property(tmdb_id)]</param>
+            <param name="tmdb_id">$INFO[Container(7100).ListItem.Property(tmdb_id)]</param>
+            <param name="tmdb_type">$INFO[Container(7100).ListItem.Property(tmdb_type)]</param>
+            <param name="window">1120</param>
+            <param name="activate">false</param>
         </include>
+        <onclick>ClearProperty(ModeList)</onclick>
+        <onclick>SetProperty(person,True)</onclick>
+        <onclick>SetFocus(90002)</onclick>
     </include>
 
     <variable name="DialogViewCrew_Header">

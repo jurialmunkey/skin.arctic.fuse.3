@@ -91,7 +91,6 @@
 
     <expression name="Exp_ColourHighlight_IsBlue">[String.IsEqual(Skin.String(focuscolor.name),ff0091ea) + Skin.HasSetting(RevertSelectedText)]</expression>
     <expression name="Exp_ColourHighlight_IsPurple">[String.IsEqual(Skin.String(focuscolor.name),ff5528a8) + Skin.HasSetting(RevertSelectedText)]</expression>
-    <expression name="Exp_ColourHighlight_IsCustom">[![$EXP[Exp_ColourHighlight_IsAqua] | $EXP[Exp_ColourHighlight_IsTropical] | $EXP[Exp_ColourHighlight_IsMiami] | $EXP[Exp_ColourHighlight_IsWhite] | $EXP[Exp_ColourHighlight_IsBlue] | $EXP[Exp_ColourHighlight_IsPurple]]]</expression>
 
     <expression name="Exp_ColourPreset_BrightWhite">[$EXP[Exp_ColourHighlight_IsWhite] + [String.IsEmpty(Skin.String(Background.DialogImage)) | Skin.String(Background.DialogImage,Adaptive)] + [Skin.String(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg) | String.IsEmpty(Skin.String(Background.Image))]]</expression>
     <expression name="Exp_ColourPreset_MiamiVaporwave">[$EXP[Exp_ColourHighlight_IsMiami] + [String.IsEmpty(Skin.String(Background.DialogImage)) | Skin.String(Background.DialogImage,Adaptive)] + [Skin.String(Background.Image,special://skin/extras/backgrounds/blur/purple_blur.jpg) | String.IsEmpty(Skin.String(Background.Image))]]</expression>
@@ -143,7 +142,17 @@
     <!-- Standard Views -->
     <!-- ============== -->
 
+    <expression name="Exp_DialogCustomPlot_Info_HasContent">[!Container(7000).IsUpdating + !String.IsEmpty(Control.GetLabel(7006))]</expression>
+    <expression name="Exp_DialogCustomPlot_Info_IsSelected">[Integer.IsEqual(Control.GetLabel(7007),9001)]</expression>
+    <expression name="Exp_DialogCustomPlot_List_HasFocus">[Control.HasFocus(7001) | Control.HasFocus(7002) | Control.HasFocus(7003) | Control.HasFocus(7004) | Control.HasFocus(7005)]</expression>
+    <expression name="Exp_DialogCustomPlot_IsPerson">[!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)]</expression>
+    <expression name="Exp_DialogCustomPlot_IsVideo">[!String.IsEmpty(Window.Property(tmdb_id)) + [String.IsEqual(Window.Property(tmdb_type),movie) | String.IsEqual(Window.Property(tmdb_type),tv)]]</expression>
+
+    <!-- The crew dialog is showing the person details view instead of the crew list -->
+    <expression name="Exp_DialogViewCrew_IsPerson">[!String.IsEmpty(Window.Property(person))]</expression>
+
     <expression name="Exp_InfoDialogs_WidgetsGroup_HasFocus">[ControlGroup(5000).HasFocus()]</expression>
+    <expression name="Exp_InfoDialogs_UsePersonArtwork">[String.IsEqual(ListItem.Property(tmdb_type),person) + !Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) + $EXP[Exp_TMDbHelper_IsData]]</expression>
     <expression name="Exp_InfoDialogs_CastCrew_IsCast">[String.IsEqual(Container(5029).ListItem.Property(crew_type),Cast)]</expression>
     <expression name="Exp_InfoDialogs_UseOnlineCast">[!Skin.HasSetting(Info.UseLocalCast) + $EXP[Exp_TMDbHelper_IsData]]</expression>
     <expression name="Exp_InfoDialogs_Related_Year">[!Skin.HasSetting(VideoInfo.Widgets.DisableYear) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Year)) + [String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_Type),movie) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Monitor.TMDb_Type),tv)]]</expression>
@@ -182,7 +191,7 @@
 
     <expression name="Exp_AllowExpandedContextMenu">[!$EXP[Exp_InfoDialogs] + !Window.IsVisible(1160)]</expression>
 
-    <expression name="Exp_PlainBackgroundWindows">[Window.IsVisible(SettingsCategory.xml) | Window.IsVisible(SkinSettings.xml) | Window.IsVisible(SettingsProfile.xml) | Window.IsVisible(SettingsSystemInfo.xml) | Window.IsVisible(addonbrowser) | Window.IsVisible(filemanager) | Window.IsVisible(1115) | Window.IsVisible(Settings.xml) | Window.IsVisible(eventlog) | Window.IsVisible(SettingsScreenCalibration.xml) | Window.IsVisible(MyMusicPlaylistEditor.xml)]</expression>
+    <expression name="Exp_PlainBackgroundWindows">[Window.IsVisible(SettingsCategory.xml) | Window.IsVisible(script-skinvariables-skinsettings-generated.xml) | Window.IsVisible(SettingsProfile.xml) | Window.IsVisible(SettingsSystemInfo.xml) | Window.IsVisible(addonbrowser) | Window.IsVisible(filemanager) | Window.IsVisible(1115) | Window.IsVisible(Settings.xml) | Window.IsVisible(eventlog) | Window.IsVisible(SettingsScreenCalibration.xml) | Window.IsVisible(MyMusicPlaylistEditor.xml)]</expression>
 
     <!-- =============== -->
     <!-- ListItem Status -->

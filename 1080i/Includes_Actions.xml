@@ -208,24 +208,41 @@
 
     <include name="Action_DialogCustom_Settings_Open">
         <param name="window">1118</param>
+        <param name="condition">true</param>
         <definition>
-            <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$PARAM[title][/CAPITALIZE],Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsItems,$PARAM[items],Home)</onclick>
-            <onclick>ActivateWindow($PARAM[window])</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$PARAM[title][/CAPITALIZE],Home)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(CustomDialogSettingsItems,$PARAM[items],Home)</onclick>
+            <onclick condition="$PARAM[condition]">ActivateWindow($PARAM[window])</onclick>
         </definition>
     </include>
 
     <include name="Action_SetupWizard_Open">
+        <onclick>ClearProperty(SetupWizard.Page,Home)</onclick>
         <onclick>SetProperty(SetupWizard.Index,0,Home)</onclick>
         <onclick>ActivateWindow(1130)</onclick>
     </include>
 
-    <!-- Copies a widget preset folder over the current profile's menu files. script.skinvariables asks before overwriting. -->
-    <include name="Action_SetupWizard_WidgetPreset">
+    <!-- Opens a single wizard step without the rail -->
+    <include name="Action_SetupWizard_Page_Open">
         <definition>
-            <onclick>Skin.SetString(SetupWizard.WidgetGroup,$PARAM[preset])</onclick>
-            <onclick>RunScript(script.skinvariables,copy_menufolder=special://skin/shortcuts/presets/$PARAM[preset]/,skin=$VAR[Path_SkinVariables_SkinFolder])</onclick>
+            <onclick>SetProperty(SetupWizard.Page,$PARAM[page],Home)</onclick>
+            <onclick>ActivateWindow(1130)</onclick>
         </definition>
+    </include>
+
+    <!-- Asks before applying a full home screen preset. On yes, skinvariables-setupwizard-preset.json sets the hub types,
+         layouts and spotlights, copies the preset folder (home, search and hub menus and widgets) over the current
+         profile's menu files without asking again, and flags a template rebuild. Optional onconfirm runs after it. -->
+    <include name="Action_SetupWizard_WidgetPreset">
+        <param name="onconfirm">noop</param>
+        <definition>
+            <onclick>RunScript(script.skinvariables,run_dialog=yesno,"heading=$PARAM[label]","message=$LOCALIZE[31848]",yeslabel=$LOCALIZE[186],nolabel=$LOCALIZE[222],"executebuiltin=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-setupwizard-preset.json&amp;use_rules=True&amp;preset=$PARAM[preset]||$PARAM[onconfirm]")</onclick>
+        </definition>
+    </include>
+
+    <!-- Flags the shortcut templates for a rebuild the next time they are built -->
+    <include name="Action_Shortcuts_Rebuild">
+        <onclick>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onclick>
     </include>
 
     <!-- Recommended defaults: the first run settings for everything the wizard covers -->
@@ -245,7 +262,7 @@
     </include>
 
     <include name="Action_SetupWizard_Finish">
-        <onclick>Skin.SetString(Shortcuts.RebuildDateTime,$INFO[System.Date(yyyy-mm-dd)]_$INFO[System.Time(hh:mm:ss)])</onclick>
+        <include>Action_Shortcuts_Rebuild</include>
         <onclick>Dialog.Close(1130,true)</onclick>
         <onclick>AlarmClock(setupwizardfinish,ReloadSkin(),00:00,silent)</onclick>
     </include>
@@ -508,11 +525,6 @@
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/coal_blur.jpg)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
     </include>
-
-    <variable name="Action_Shortcut_SetWidgetStyle">
-        <value condition="String.IsEmpty(Container(22001).ListItem.Property(url))" />
-        <value>RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_edit&amp;&amp;widget_style&amp;&amp;$LOCALIZE[20021]=Poster&amp;$LOCALIZE[31045]=Landscape&amp;$LOCALIZE[31320]=Square&amp;$LOCALIZE[31424]=Board&amp;$LOCALIZE[31161]=Flyer&amp;$LOCALIZE[31431]=Circle&amp;$LOCALIZE[31423]=Card&amp;$LOCALIZE[31172]=Placard&amp;$LOCALIZE[31827]=Ranked&amp;$LOCALIZE[31828]=Stack&amp;$LOCALIZE[31829]=Disc&amp;$LOCALIZE[31830]=Shelf&amp;$LOCALIZE[31831]=Timeline&amp;$LOCALIZE[31832]=Gatefold&amp;&amp;$LOCALIZE[736]&amp;&amp;True)</value>
-    </variable>
 
     <variable name="Value_Shortcut_CombinedWidget_Toggle">
         <value condition="$EXP[DialogShortcuts_IsCombinedWidget_Expression]">False</value>

@@ -538,11 +538,19 @@
                 <selected>System.GetBool(gamesachievements.challengeindicator)</selected>
             </include>
             <include content="Button_Dialog">
+                <param name="id">108340</param>
+                <param name="groupid">108440</param>
+                <param name="control">radiobutton</param>
+                <param name="istext">true</param>
+                <param name="label">$LOCALIZE[35700]</param>
+                <selected>System.GetBool(gamesachievements.hardcore)</selected>
+            </include>
+            <include content="Button_Dialog">
                 <param name="id">9010</param>
                 <param name="groupid">9110</param>
                 <param name="icon">special://skin/extras/icons/circle-question.png</param>
                 <label>$LOCALIZE[10043]</label>
-                <onclick>RunScript(script.skinvariables,run_dialog=ok,heading=$LOCALIZE[10043],message=[B][COLOR=dialog_fg_90]$LOCALIZE[35365][/COLOR][/B][CR]$LOCALIZE[35366][CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[35303][/COLOR][/B][CR]$LOCALIZE[35304])</onclick>
+                <onclick>RunScript(script.skinvariables,run_dialog=ok,heading=$LOCALIZE[10043],message=[B][COLOR=dialog_fg_90]$LOCALIZE[35365][/COLOR][/B][CR]$LOCALIZE[35366][CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[35303][/COLOR][/B][CR]$LOCALIZE[35304][CR][CR][B][COLOR=dialog_fg_90]$LOCALIZE[35700][/COLOR][/B][CR]$LOCALIZE[35302])</onclick>
             </include>
         </definition>
 
@@ -687,6 +695,11 @@
     <expression name="DialogGameControllers_GameIndicators_Challenge2_Expression">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle(2)) + ![String.IsEqual(RetroPlayer.AchievementsChallengeTitle(2),RetroPlayer.AchievementsChallengeTitle) + String.IsEqual(RetroPlayer.AchievementsChallengeBadge(2),RetroPlayer.AchievementsChallengeBadge)]</expression>
     <expression name="DialogGameControllers_GameIndicators_Challenge3_Expression">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle(3)) + ![String.IsEqual(RetroPlayer.AchievementsChallengeTitle(3),RetroPlayer.AchievementsChallengeTitle(2)) + String.IsEqual(RetroPlayer.AchievementsChallengeBadge(3),RetroPlayer.AchievementsChallengeBadge(2))]</expression>
 
+    <variable name="DialogGameControllers_GameIndicators_Leaderboard_Label">
+        <value condition="!String.IsEmpty(RetroPlayer.LeaderboardTrackerTitle)">$INFO[RetroPlayer.LeaderboardTrackerTitle]</value>
+        <value>$LOCALIZE[35331]</value>
+    </variable>
+
     <include name="DialogGameControllers_GameIndicators">
         <include content="DialogGameControllers_GameIndicators_Notification">
             <param name="minilabel">$LOCALIZE[15312]</param>
@@ -721,10 +734,10 @@
             <param name="slide_3_condition">$EXP[DialogGameControllers_GameIndicators_Challenge3_Expression]</param>
         </include>
         <include content="DialogGameControllers_GameIndicators_Notification">
-            <param name="minilabel">$LOCALIZE[35331]</param>
+            <param name="minilabel">$VAR[DialogGameControllers_GameIndicators_Leaderboard_Label]</param>
             <param name="mainlabel">$INFO[RetroPlayer.LeaderboardTracker]</param>
             <param name="visible">!String.IsEmpty(RetroPlayer.LeaderboardTracker)</param>
-            <param name="icon" />
+            <param name="icon">$INFO[Player.Icon]</param>
             <param name="slide_1_condition">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle)</param>
             <param name="slide_2_condition">!String.IsEmpty(RetroPlayer.AchievementsIndicatorTitle)</param>
             <param name="slide_3_condition">$EXP[DialogGameControllers_GameIndicators_Challenge2_Expression]</param>
