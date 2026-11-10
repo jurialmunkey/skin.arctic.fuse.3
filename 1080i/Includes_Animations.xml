@@ -368,6 +368,25 @@
         </definition>
     </include>
 
+    <!-- Dialog stretch: a dialog switches between two views of different sizes by stretching one into the other -->
+    <!-- Timeline (450): stretch 0-300, views swap at 300, new view content fades in 300-450 -->
+    <!-- The padding effect makes every animation span the whole timeline, so reversing mirrors it exactly -->
+    <!-- Delayed times must be above zero: Kodi treats a zero length delayed effect as already finished -->
+    <include name="Animation_DialogStretch">
+        <param name="condition">false</param>
+        <param name="effect">fade</param>
+        <param name="start">100</param>
+        <param name="end">0</param>
+        <param name="delay">0</param>
+        <param name="time">300</param>
+        <definition>
+            <animation type="Conditional" reversible="true" condition="$PARAM[condition]">
+                <effect type="fade" start="100" end="100" time="450" />
+                <effect type="$PARAM[effect]" start="$PARAM[start]" end="$PARAM[end]" center="auto" tween="cubic" easing="inout" delay="$PARAM[delay]" time="$PARAM[time]" />
+            </animation>
+        </definition>
+    </include>
+
     <include name="Animation_SlideIn_Dialog">
         <param name="visible_delay">150</param>
         <param name="visible_condition">true</param>

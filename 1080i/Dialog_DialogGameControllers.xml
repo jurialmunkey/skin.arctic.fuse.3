@@ -695,6 +695,11 @@
     <expression name="DialogGameControllers_GameIndicators_Challenge2_Expression">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle(2)) + ![String.IsEqual(RetroPlayer.AchievementsChallengeTitle(2),RetroPlayer.AchievementsChallengeTitle) + String.IsEqual(RetroPlayer.AchievementsChallengeBadge(2),RetroPlayer.AchievementsChallengeBadge)]</expression>
     <expression name="DialogGameControllers_GameIndicators_Challenge3_Expression">!String.IsEmpty(RetroPlayer.AchievementsChallengeTitle(3)) + ![String.IsEqual(RetroPlayer.AchievementsChallengeTitle(3),RetroPlayer.AchievementsChallengeTitle(2)) + String.IsEqual(RetroPlayer.AchievementsChallengeBadge(3),RetroPlayer.AchievementsChallengeBadge(2))]</expression>
 
+    <variable name="DialogGameControllers_GameIndicators_Leaderboard_Label">
+        <value condition="!String.IsEmpty(RetroPlayer.LeaderboardTrackerTitle)">$INFO[RetroPlayer.LeaderboardTrackerTitle]</value>
+        <value>$LOCALIZE[35331]</value>
+    </variable>
+
     <include name="DialogGameControllers_GameIndicators">
         <include content="DialogGameControllers_GameIndicators_Notification">
             <param name="minilabel">$LOCALIZE[15312]</param>
@@ -729,7 +734,7 @@
             <param name="slide_3_condition">$EXP[DialogGameControllers_GameIndicators_Challenge3_Expression]</param>
         </include>
         <include content="DialogGameControllers_GameIndicators_Notification">
-            <param name="minilabel">$LOCALIZE[35331]</param>
+            <param name="minilabel">$VAR[DialogGameControllers_GameIndicators_Leaderboard_Label]</param>
             <param name="mainlabel">$INFO[RetroPlayer.LeaderboardTracker]</param>
             <param name="visible">!String.IsEmpty(RetroPlayer.LeaderboardTracker)</param>
             <param name="icon">$INFO[Player.Icon]</param>

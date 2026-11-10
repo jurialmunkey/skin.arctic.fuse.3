@@ -1,0 +1,39 @@
+{
+    "infolabels": {
+        "tmdb_id": "ListItem.UniqueID(tmdb)",
+        "profile_image": "$VAR[Image_Poster]"
+    },
+    "operations": [
+        {
+            "decode": {
+                "profile_image": "{profile_image}"
+            }
+        },
+        {
+            "regex": {
+                "profile_filename": {
+                    "input": "{profile_image}",
+                    "regex": "^(?:.*[/\\\\])?([^/?\\\\]+)(?:\\?.*)?/?$",
+                    "value": "/\\1"
+                }
+            }
+        },
+        {
+            "encode": {
+                "profile_filename": "{profile_filename}"
+            }
+        }
+    ],
+    "actions": [
+        "ClearProperty(DialogInfo.PersonArtwork.Path,12003)",
+        {
+            "rules": [
+                "String.IsEqual(ListItem.Property(tmdb_type),person)",
+                "Skin.HasSetting(TMDbHelper.EnableData)",
+                "!Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery)",
+                "{tmdb_id}!="
+            ],
+            "value": "SetProperty(DialogInfo.PersonArtwork.Path,plugin://plugin.video.themoviedb.helper/?info=images&tmdb_type=person&tmdb_id={tmdb_id}&limit=100&nextpage=false&cacheonly=true&length=1&exclude_key=title&exclude_value={profile_filename}&exclude_operator=eq,12003)"
+        }
+    ]
+}
