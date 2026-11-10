@@ -75,6 +75,104 @@
         <animation effect="slide" start="0" end="infodialog_artwork_wrap_offset" time="400" tween="cubic" easing="inout" reversible="false" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkWrapReturn)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
     </include>
 
+    <include name="DialogInfo_ArtworkNavigation">
+        <param name="returncontrol">9000</param>
+        <param name="widgetcontrol">5029</param>
+        <definition>
+            <onfocus condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onfocus>
+            <onfocus>SetProperty(DialogInfo.ArtworkView,true)</onfocus>
+            <onleft condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">SetProperty(DialogInfo.ArtworkWrapReturn,true)</onleft>
+            <onleft condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onleft>
+            <onleft>ClearProperty(DialogInfo.ArtworkView)</onleft>
+            <onleft>$PARAM[returncontrol]</onleft>
+            <onright condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">SetProperty(DialogInfo.ArtworkWrapReturn,true)</onright>
+            <onright condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onright>
+            <onright>ClearProperty(DialogInfo.ArtworkView)</onright>
+            <onright>$PARAM[returncontrol]</onright>
+            <onup>8100</onup>
+            <ondown>SetFocus($PARAM[widgetcontrol])</ondown>
+            <onback>ClearProperty(DialogInfo.ArtworkView)</onback>
+            <onback>$PARAM[returncontrol]</onback>
+        </definition>
+    </include>
+
+    <!-- Slide across to the fanart from the info buttons and details -->
+    <include name="DialogInfo_ArtworkSlideOpen">
+        <param name="returncontrol">9000</param>
+        <definition>
+            <onleft>SetProperty(DialogInfo.ArtworkReturn,$PARAM[returncontrol])</onleft>
+            <onleft>SetProperty(DialogInfo.ArtworkReverse,true)</onleft>
+            <onleft>8100</onleft>
+            <onright>SetProperty(DialogInfo.ArtworkReturn,$PARAM[returncontrol])</onright>
+            <onright>ClearProperty(DialogInfo.ArtworkReverse)</onright>
+            <onright>8100</onright>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_ArtworkPoster">
+        <control type="group">
+            <width>infodialog_poster_w</width>
+            <height>infodialog_poster_h</height>
+            <include content="Object_BigPoster">
+                <param name="icon">$INFO[ListItem.Icon]</param>
+                <param name="diffuse">diffuse/poster_w560_h820.png</param>
+                <param name="fadetime">0</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="DialogInfo_PersonArtwork">
+        <control type="fixedlist" id="8100">
+            <!-- Start at the current portrait, one 600px slot before the additional images. -->
+            <!-- account for offset of 80px -->
+            <left>-680</left>
+            <right>-80</right>
+            <top>-80</top>
+            <bottom>-80</bottom>
+            <orientation>horizontal</orientation>
+            <focusposition>0</focusposition>
+            <movement>2</movement>
+            <preloaditems>2</preloaditems>
+            <scrolltime tween="quadratic">400</scrolltime>
+            <include content="DialogInfo_ArtworkNavigation">
+                <param name="returncontrol">8000</param>
+                <param name="widgetcontrol">5000</param>
+            </include>
+            <itemlayout width="infodialog_poster_item_w" height="infodialog_poster_h">
+                <control type="group">
+                    <top>80</top>
+                    <bottom>-80</bottom>
+                    <left>80</left>
+                    <right>-80</right>
+                    <include>DialogInfo_ArtworkPoster</include>
+                </control>
+            </itemlayout>
+            <focusedlayout width="infodialog_poster_item_w" height="infodialog_poster_h">
+                <control type="group">
+                    <top>80</top>
+                    <bottom>-80</bottom>
+                    <left>80</left>
+                    <right>-80</right>
+                    <include>DialogInfo_ArtworkPoster</include>
+                    <include content="Object_SelectBox">
+                        <width>infodialog_poster_w</width>
+                        <height>infodialog_poster_h</height>
+                    </include>
+                </control>
+            </focusedlayout>
+            <content>
+                <item>
+                    <label>$INFO[ListItem.Label]</label>
+                    <icon>$VAR[Image_Poster]</icon>
+                    <onclick>ShowPicture($VAR[Image_Poster])</onclick>
+                </item>
+            </content>
+            <include content="DialogInfo_PersonImageContent">
+                <param name="path">$INFO[Window.Property(DialogInfo.PersonArtwork.Path)]</param>
+            </include>
+        </control>
+    </include>
+
     <include name="DialogInfo_Main_Group">
         <visible>!ControlGroup(5000).HasFocus()</visible>
         <include content="Animation_Zoom_Out">
@@ -496,6 +594,7 @@
         <onclick condition="$EXP[Exp_InfoDialogs_CastCrew_IsCast] + !$EXP[Exp_InfoDialogs_UseOnlineCast]">SetFocus(50)</onclick>
         <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">SetProperty(crew_type,$INFO[Container(5029).ListItem.Property(crew_type)],1120)</onclick>
         <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">SetProperty(crew_label,$INFO[Container(5029).ListItem.Label],1120)</onclick>
+        <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">SetProperty(crew_poster,$VAR[Image_Poster],1120)</onclick>
         <onclick condition="!$EXP[Exp_InfoDialogs_CastCrew_IsCast]">ActivateWindow(1120)</onclick>
     </include>
 
@@ -1117,21 +1216,24 @@
         <value>$INFO[Container.ListItem.Property(folderpath)]</value>
     </variable>
 
+    <!-- Fill the details view of 1114 and open it, or fill another window hosting the same view (activate false) -->
     <include name="DialogInfo_Details_Action">
         <param name="set_path">true</param>
+        <param name="window">1114</param>
+        <param name="activate">true</param>
         <definition>
-            <onclick condition="$PARAM[set_path]">SetProperty(path,$PARAM[path],1114)</onclick>
-            <onclick condition="![$PARAM[set_path]]">ClearProperty(path,1114)</onclick>
-            <onclick>SetProperty(header,$PARAM[header],1114)</onclick>
-            <onclick>SetProperty(poster,$PARAM[poster],1114)</onclick>
-            <onclick>SetProperty(tmdb_id,$PARAM[tmdb_id],1114)</onclick>
-            <onclick>SetProperty(tmdb_type,$PARAM[tmdb_type],1114)</onclick>
-            <onclick>SetProperty(dbtype,$PARAM[dbtype],1114)</onclick>
-            <onclick>SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],1114)</onclick>
-            <onclick>SetProperty(origin_tmdb_type,$VAR[Path_InfoParams_TMDbType],1114)</onclick>
-            <onclick>SetProperty(origin_season,$VAR[Path_InfoParams_Season],1114)</onclick>
-            <onclick>SetProperty(origin_episode,$VAR[Path_InfoParams_Episode],1114)</onclick>
-            <onclick>ActivateWindow(1114)</onclick>
+            <onclick condition="$PARAM[set_path]">SetProperty(path,$PARAM[path],$PARAM[window])</onclick>
+            <onclick condition="![$PARAM[set_path]]">ClearProperty(path,$PARAM[window])</onclick>
+            <onclick>SetProperty(header,$PARAM[header],$PARAM[window])</onclick>
+            <onclick>SetProperty(poster,$PARAM[poster],$PARAM[window])</onclick>
+            <onclick>SetProperty(tmdb_id,$PARAM[tmdb_id],$PARAM[window])</onclick>
+            <onclick>SetProperty(tmdb_type,$PARAM[tmdb_type],$PARAM[window])</onclick>
+            <onclick>SetProperty(dbtype,$PARAM[dbtype],$PARAM[window])</onclick>
+            <onclick>SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],$PARAM[window])</onclick>
+            <onclick>SetProperty(origin_tmdb_type,$VAR[Path_InfoParams_TMDbType],$PARAM[window])</onclick>
+            <onclick>SetProperty(origin_season,$VAR[Path_InfoParams_Season],$PARAM[window])</onclick>
+            <onclick>SetProperty(origin_episode,$VAR[Path_InfoParams_Episode],$PARAM[window])</onclick>
+            <onclick condition="$PARAM[activate]">ActivateWindow($PARAM[window])</onclick>
         </definition>
     </include>
 
@@ -1659,10 +1761,7 @@
                     <height>57</height>
                     <itemgap>40</itemgap>
                     <ondown>90001</ondown>
-                    <onleft>SetProperty(DialogInfo.ArtworkReverse,true)</onleft>
-                    <onleft>8100</onleft>
-                    <onright>ClearProperty(DialogInfo.ArtworkReverse)</onright>
-                    <onright>8100</onright>
+                    <include>DialogInfo_ArtworkSlideOpen</include>
                     <onup condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1113)</onup>
 
                     <!-- Play/Browse -->
@@ -1734,9 +1833,9 @@
                     <onup>9000</onup>
                     <ondown>SetFocus(90001)</ondown>
                     <ondown>SetFocus(5029)</ondown>
-                    <!-- <onleft>61</onleft> -->
-                    <onright>61</onright>
-                    <!-- <onright>9200</onright> -->
+                    <include content="DialogInfo_ArtworkSlideOpen">
+                        <param name="returncontrol">9100</param>
+                    </include>
 
                     <!-- Director -->
                     <include content="Object_InfoCircle_Button">
@@ -1748,6 +1847,7 @@
                         <param name="tmdb_type">person</param>
                         <param name="tmdb_id">$VAR[Path_FromDirector]</param>
                         <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(type,Director,1120)</onclick>
+                        <onclick condition="$EXP[Exp_TMDbHelper_IsData]">SetProperty(crew_poster,$VAR[Image_Poster],1120)</onclick>
                         <onclick condition="$EXP[Exp_TMDbHelper_IsData]">ActivateWindow(1120)</onclick>
                         <onclick condition="!$EXP[Exp_TMDbHelper_IsData]">SendClick(13)</onclick>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Director)) | !String.IsEmpty(ListItem.Director)</visible>
@@ -1763,6 +1863,7 @@
                         <param name="tmdb_type">person</param>
                         <param name="tmdb_id">$VAR[Path_FromWriter]</param>
                         <onclick>SetProperty(type,Writer,1120)</onclick>
+                        <onclick>SetProperty(crew_poster,$VAR[Image_Poster],1120)</onclick>
                         <onclick>ActivateWindow(1120)</onclick>
                         <visible>!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Writer)) | !String.IsEmpty(ListItem.Writer)</visible>
                     </include>
@@ -2067,7 +2168,10 @@
     </include>
 
     <include name="DialogInfo_PersonImageContent">
-        <content target="images" limit="20" browse="never">$INFO[ListItem.UniqueID(tmdb),plugin://plugin.video.themoviedb.helper/?info=images&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=100&amp;nextpage=false&amp;cacheonly=true&amp;length=1]</content>
+        <param name="path">$INFO[ListItem.UniqueID(tmdb),plugin://plugin.video.themoviedb.helper/?info=images&amp;tmdb_type=person&amp;tmdb_id=,&amp;limit=100&amp;nextpage=false&amp;cacheonly=true&amp;length=1]</param>
+        <definition>
+            <content target="images" limit="20" browse="never">$PARAM[path]</content>
+        </definition>
     </include>
 
 

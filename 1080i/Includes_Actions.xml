@@ -208,10 +208,11 @@
 
     <include name="Action_DialogCustom_Settings_Open">
         <param name="window">1118</param>
+        <param name="condition">true</param>
         <definition>
-            <onclick>SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$PARAM[title][/CAPITALIZE],Home)</onclick>
-            <onclick>SetProperty(CustomDialogSettingsItems,$PARAM[items],Home)</onclick>
-            <onclick>ActivateWindow($PARAM[window])</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$PARAM[title][/CAPITALIZE],Home)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(CustomDialogSettingsItems,$PARAM[items],Home)</onclick>
+            <onclick condition="$PARAM[condition]">ActivateWindow($PARAM[window])</onclick>
         </definition>
     </include>
 
@@ -524,11 +525,6 @@
         <onclick>Skin.SetString(Background.Image,special://skin/extras/backgrounds/blur/coal_blur.jpg)</onclick>
         <onclick>RunScript(plugin.video.themoviedb.helper,blur_image=$VAR[Image_SimpleBackground],prefix=SimpleBackground)</onclick>
     </include>
-
-    <variable name="Action_Shortcut_SetWidgetStyle">
-        <value condition="String.IsEmpty(Container(22001).ListItem.Property(url))" />
-        <value>RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_edit&amp;&amp;widget_style&amp;&amp;$LOCALIZE[20021]=Poster&amp;$LOCALIZE[31045]=Landscape&amp;$LOCALIZE[31320]=Square&amp;$LOCALIZE[31424]=Board&amp;$LOCALIZE[31161]=Flyer&amp;$LOCALIZE[31431]=Circle&amp;$LOCALIZE[31423]=Card&amp;$LOCALIZE[31172]=Placard&amp;$LOCALIZE[31827]=Ranked&amp;$LOCALIZE[31828]=Stack&amp;$LOCALIZE[31829]=Disc&amp;$LOCALIZE[31830]=Shelf&amp;$LOCALIZE[31831]=Timeline&amp;$LOCALIZE[31832]=Gatefold&amp;&amp;$LOCALIZE[736]&amp;&amp;True)</value>
-    </variable>
 
     <variable name="Value_Shortcut_CombinedWidget_Toggle">
         <value condition="$EXP[DialogShortcuts_IsCombinedWidget_Expression]">False</value>

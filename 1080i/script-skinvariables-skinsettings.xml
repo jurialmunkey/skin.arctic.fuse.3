@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Template for SkinVariables run_skinsettings. The script fills grouplists 3 and 5 from shortcuts/skinvariables-skinsettings.json
+     using the template controls below, configures the search box in place, sets the description in textbox 6, and removes the
+     template controls from the generated window. -->
+<window>
+    <include content="Action_SettingsCategories_Onload">
+        <param name="defaultcontrol">3</param>
+    </include>
+
+    <onload condition="!String.IsEmpty(Window(Home).Property(Settings.Skin.CategoryId))">SetFocus($INFO[Window(Home).Property(Settings.Skin.CategoryId)])</onload>
+
+    <onunload>$VAR[Action_RatingsMonitor]</onunload>
+
+    <controls>
+
+        <include>Background</include>
+
+        <include content="Settings_Dialog">
+            <include content="Settings_Main_Group">
+                <param name="label">$LOCALIZE[166] $LOCALIZE[5]</param>
+                <include content="Settings_Left_Group">
+                    <include content="Settings_Left_Content">
+                        <control type="grouplist" id="3">
+                            <orientation>vertical</orientation>
+                            <onup>3</onup>
+                            <ondown>3</ondown>
+                            <onright>5</onright>
+                            <right>40</right>
+                        </control>
+                    </include>
+                </include>
+                <include content="Settings_Right_Group">
+                    <param name="header">$INFO[Window.Property(Settings.Skin.CategoryLabel)]</param>
+
+                    <include content="Settings_Right_Scrollbar">
+                        <onleft>5</onleft>
+                    </include>
+
+                    <!-- The first and last settings move to the search box -->
+                    <include content="Settings_Right_Grouplist">
+                        <param name="id">5</param>
+                        <onleft>3</onleft>
+                        <onup>12</onup>
+                        <ondown>12</ondown>
+                    </include>
+
+                    <!-- Global search box. The script keeps it in place and sets the first and last settings in view as window properties -->
+                    <control type="group">
+                        <right>20</right>
+                        <width>560</width>
+                        <height>80</height>
+                        <centertop>60</centertop>
+                        <include content="Settings_Button">
+                            <param name="id">12</param>
+                            <param name="control">edit</param>
+                            <description>Search Edit</description>
+                            <textoffsetx>80</textoffsetx>
+                            <texturenofocus colordiffuse="main_fg_06" border="40">common/menu.png</texturenofocus>
+                            <onleft>3</onleft>
+                            <onup condition="!String.IsEmpty(Window.Property(SkinVariables.SkinSettings.BottomControlID))">SetFocus($INFO[Window.Property(SkinVariables.SkinSettings.BottomControlID)])</onup>
+                            <ondown condition="!String.IsEmpty(Window.Property(SkinVariables.SkinSettings.TopControlID))">SetFocus($INFO[Window.Property(SkinVariables.SkinSettings.TopControlID)])</ondown>
+                        </include>
+                        <include content="Button_Image">
+                            <param name="buttonid">12</param>
+                            <param name="icon">special://skin/extras/icons/search.png</param>
+                            <param name="getlabel">false</param>
+                            <param name="top">0</param>
+                        </include>
+                    </control>
+
+                    <include content="Settings_Right_InfoText">
+                        <param name="id">6</param>
+                    </include>
+                </include>
+            </include>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="id">10</param>
+            <param name="control">togglebutton</param>
+            <!-- The script sets usealttexture on the selected category. Mimic Kodi's hardcoded 50% alpha on the selected SettingsCategory button -->
+            <include content="Texture_Highlight_ToggleButton_FakeFocus_H">
+                <param name="diffuse_nofocus">diffuse/alpha_50.png</param>
+            </include>
+            <!-- The selected category is the last focused one so its label is the stored category label -->
+            <altlabel>[COLOR=$VAR[ColorSelected]]$INFO[Window.Property(Settings.Skin.CategoryLabel)][/COLOR]</altlabel>
+            <width>settings_category_w</width>
+            <onfocus>SetProperty(Settings.Skin.CategoryId,$INFO[System.CurrentControlId],Home)</onfocus>
+            <onfocus>SetProperty(Settings.Skin.CategoryLabel,$INFO[System.CurrentControl])</onfocus>
+            <description>Category Button</description>
+        </include>
+
+        <include content="Settings_Label">
+            <param name="id">14</param>
+            <description>Group Label</description>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="id">7</param>
+            <param name="control">button</param>
+            <description>Setting Button</description>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="id">8</param>
+            <param name="control">radiobutton</param>
+            <description>Setting Radiobutton</description>
+        </include>
+
+    </controls>
+
+</window>
