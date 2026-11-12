@@ -156,16 +156,19 @@
         <param name="visible">true</param>
         <param name="allowhiddenfocus">false</param>
         <param name="autoscroll">false</param>
+        <param name="onup">601</param>
+        <!-- Without content the window script fills the list -->
+        <param name="dynamic">true</param>
         <definition>
             <include content="$PARAM[include]">
                 <param name="id">$PARAM[id]</param>
                 <top>510</top>
                 <bottom>-40</bottom>
-                <onup>601</onup>
+                <onup>$PARAM[onup]</onup>
                 <include content="Action_Widget_OnBack">
                     <param name="id">$PARAM[id]</param>
                     <param name="grouplistid">500</param>
-                    <param name="refocus">SetFocus(601)</param>
+                    <param name="refocus">SetFocus($PARAM[onup])</param>
                     <param name="enable">!Player.HasMedia</param>
                 </include>
                 <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus($PARAM[id]))</onback>
@@ -177,7 +180,14 @@
                 <onfocus>ClearProperty(Background.ShowOverlay,Home)</onfocus>
                 <onfocus>ClearProperty(HomeSwitcher.IsVisible,Home)</onfocus>
                 <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
-                <content sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" target="$PARAM[target]" limit="$PARAM[limit]" browse="$VAR[Defs_BrowseLimitedLists]">$PARAM[content]</content>
+                <include content="Object_ContentDynamic" condition="$PARAM[dynamic]">
+                    <param name="content">$PARAM[content]</param>
+                    <param name="sortby">$PARAM[sortby]</param>
+                    <param name="sortorder">$PARAM[sortorder]</param>
+                    <param name="target">$PARAM[target]</param>
+                    <param name="limit">$PARAM[limit]</param>
+                    <param name="browse">$VAR[Defs_BrowseLimitedLists]</param>
+                </include>
                 <visible allowhiddenfocus="$PARAM[allowhiddenfocus]">$PARAM[visible]</visible>
 
                 <include content="Defs_AutoScroll" condition="$PARAM[autoscroll]">

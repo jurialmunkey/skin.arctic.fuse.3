@@ -46,13 +46,24 @@
         </include>
     </include>
 
+    <include name="Home_ControlList_Item_MultiSearch">
+        <include content="Home_ControlList_Item">
+            <param name="label">$LOCALIZE[137]</param>
+            <param name="icon">special://skin/extras/icons/search.png</param>
+            <param name="action">RunScript(script.skinvariables,run_multisearch)</param>
+            <param name="enabled">[!Skin.HasSetting(HomeSwitcher.DisableSearch)]</param>
+            <param name="visible">$EXP[Exp_Hubs_Window_IsSearch]</param>
+            <param name="mod">$PARAM[mod]</param>
+        </include>
+    </include>
+
     <include name="Home_ControlList_Item_Home">
         <include content="Home_ControlList_Item">
             <param name="label">$VAR[Hub_Label_home]</param>
             <param name="icon">$VAR[Home_Icon_home]</param>
             <param name="action">ReplaceWindow(Home)</param>
             <param name="enabled">true</param>
-            <param name="visible">Window.IsVisible(1105) | Window.IsVisible(Home)</param>
+            <param name="visible">$EXP[Exp_Hubs_Window_IsSearch] | Window.IsVisible(Home)</param>
             <param name="mod">$PARAM[mod]</param>
         </include>
     </include>
@@ -60,6 +71,9 @@
     <include name="Home_ControlList_Items">
         <definition>
             <include content="Home_ControlList_Item_1105">
+                <param name="mod">$PARAM[mod]</param>
+            </include>
+            <include content="Home_ControlList_Item_MultiSearch">
                 <param name="mod">$PARAM[mod]</param>
             </include>
             <include content="Home_ControlList_Item_Home">
@@ -154,12 +168,12 @@
                 <onfocus condition="![$PARAM[overlay]]">ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
                 <onfocus condition="$PARAM[overlay]">SetProperty(Background.ShowOverlay,True,Home)</onfocus>
                 <onfocus condition="![$PARAM[overlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
-                <include content="Hub_ClickActions" condition="!Window.IsVisible(1105)">
+                <include content="Hub_ClickActions" condition="!$EXP[Exp_Hubs_Window_IsSearch]">
                     <param name="window">$PARAM[window]</param>
                     <param name="condition">$PARAM[onclick_condition]</param>
                 </include>
-                <onclick condition="Window.IsVisible(1105)">SetFocus(3001)</onclick>
-                <onclick condition="Window.IsVisible(1105)">AlarmClock(reclick,Action(Select),00:00,silent)</onclick>
+                <onclick condition="$EXP[Exp_Hubs_Window_IsSearch]">SetFocus(3001)</onclick>
+                <onclick condition="$EXP[Exp_Hubs_Window_IsSearch]">AlarmClock(reclick,Action(Select),00:00,silent)</onclick>
 
                 <include content="Home_Movement">
                     <param name="window">$PARAM[window]</param>
@@ -220,7 +234,7 @@
         <control type="group">
             <visible>!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
             <include content="Animation_ConditionalFade">
-                <param name="condition">Window.IsVisible(1105)</param>
+                <param name="condition">$EXP[Exp_Hubs_Window_IsSearch]</param>
             </include>
             <include>Home_Animation</include>
             <include content="Furniture_Header" condition="!Skin.HasSetting(HomeSwitcher.DisableHeader)">
