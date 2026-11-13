@@ -172,8 +172,8 @@
         </definition>
     </include>
 
-    <!-- SkinVariables multisearch window. The script searches the text of edit 100, fills keys 101 and results 50
-         and opens the source and sort selections from buttons 102 and 103 -->
+    <!-- SkinVariables multisearch window. The script searches the text of edit 100, fills keys 101 and the results
+         container of group 49 and opens the source and sort selections from buttons 102 and 103 -->
     <include name="MultiSearch">
         <include>Hub_Window_Background</include>
         <include content="Home_Control">
@@ -198,7 +198,35 @@
                         <include>Home_Animation</include>
                         <include>MultiSearch_Buttons</include>
                     </include>
-                    <include>MultiSearch_Results</include>
+                    <include>MultiSearch_Results_Line</include>
+                    <!-- Results container for each widget style in shortcuts/skinvariables-multisearch-containers.json.
+                         Focusing the group focuses the shown container -->
+                    <control type="group" id="49">
+                        <include content="MultiSearch_Results_Container">
+                            <param name="id">50</param>
+                            <param name="include">List_Landscape_Row</param>
+                        </include>
+                        <include content="MultiSearch_Results_Container">
+                            <param name="id">51</param>
+                            <param name="include">List_Poster_Row</param>
+                        </include>
+                        <include content="MultiSearch_Results_Container">
+                            <param name="id">52</param>
+                            <param name="include">List_Board_Row</param>
+                        </include>
+                        <include content="MultiSearch_Results_Container">
+                            <param name="id">53</param>
+                            <param name="include">List_Square_Row</param>
+                        </include>
+                        <include content="MultiSearch_Results_Container">
+                            <param name="id">54</param>
+                            <param name="include">List_Circle_Row</param>
+                        </include>
+                        <include content="MultiSearch_Results_Container">
+                            <param name="id">55</param>
+                            <param name="include">List_Flyer_Row</param>
+                        </include>
+                    </control>
                 </control>
 
                 <include>MultiSearch_Info</include>
@@ -215,8 +243,8 @@
             <include>Info_Panel_Dimensions</include>
             <include>Home_Info_Animation</include>
             <include content="Info_Panel">
+                <!-- Without a container the panel reads the focused results container -->
                 <param name="visible">!$EXP[Exp_InfoDialogs]</param>
-                <param name="container">Container(50).</param>
             </include>
         </control>
     </include>
@@ -304,7 +332,7 @@
             <include>Object_Hidden_Item_Definition</include>
             <orientation>horizontal</orientation>
             <onup>104</onup>
-            <ondown>50</ondown>
+            <ondown>49</ondown>
             <include>Hub_Grouplist_OnLeftRight</include>
             <nested />
         </control>
@@ -410,10 +438,14 @@
         </control>
     </include>
 
-    <include name="MultiSearch_Results">
-        <include>MultiSearch_Results_Line</include>
+    <!-- Results list for one widget style. The script fills the container of the results' most common style, set in
+         shortcuts/skinvariables-multisearch-containers.json, and shows it by its id in the container property.
+         The visible param also hides the loading placeholders of the other containers -->
+    <include name="MultiSearch_Results_Container">
         <include content="Hub_Combined_Widget">
-            <param name="id">50</param>
+            <param name="id">$PARAM[id]</param>
+            <param name="include">$PARAM[include]</param>
+            <param name="visible">String.IsEqual(Window.Property(SkinVariables.MultiSearch.Container),$PARAM[id])</param>
             <param name="onup">200</param>
             <param name="dynamic">false</param>
             <param name="onback_enable">false</param>
@@ -421,6 +453,7 @@
             <!-- Back returns to the search edit like the keyboard does -->
             <onback condition="!Player.HasMedia">ClearProperty(RefocusMenu)</onback>
             <onback condition="!Player.HasMedia">3001</onback>
+            <nested />
         </include>
     </include>
 
