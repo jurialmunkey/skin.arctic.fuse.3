@@ -160,6 +160,8 @@
         <param name="dynamic">true</param>
         <!-- Disable to give the widget its own onback as nested content -->
         <param name="onback_enable">!Player.HasMedia</param>
+        <!-- Shows the loading placeholders for a list that a window script fills, which never reports IsUpdating -->
+        <param name="busy_isupdating">false</param>
         <definition>
             <include content="$PARAM[include]">
                 <param name="id">$PARAM[id]</param>
@@ -198,7 +200,7 @@
 
             </include>
             <include content="Widget_Busy">
-                <param name="visible">Container($PARAM[id]).IsUpdating + Integer.IsEqual(Container($PARAM[id]).NumItems,0)</param>
+                <param name="visible">[Container($PARAM[id]).IsUpdating | $PARAM[busy_isupdating]] + Integer.IsEqual(Container($PARAM[id]).NumItems,0)</param>
                 <param name="include">$PARAM[include]</param>
                 <top>510</top>
                 <left>view_pad</left>

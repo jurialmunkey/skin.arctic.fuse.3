@@ -227,14 +227,14 @@
         <value>$LOCALIZE[31851]: $INFO[Window.Property(SkinVariables.MultiSearch.Sources.Enabled)] $LOCALIZE[20163] $INFO[Window.Property(SkinVariables.MultiSearch.Sources.Total)]</value>
     </variable>
 
-    <!-- Chosen genre and decade filters, or All when the script has not set one -->
+    <!-- Chosen genre and decade filters, or the script's Any label when no filter is set -->
     <variable name="MultiSearch_Genre_Label">
         <value condition="!String.IsEmpty(Window.Property(SkinVariables.MultiSearch.Genre))">$INFO[Window.Property(SkinVariables.MultiSearch.Genre)]</value>
-        <value>$LOCALIZE[593]</value>
+        <value>$ADDON[script.skinvariables 32100]</value>
     </variable>
     <variable name="MultiSearch_Decade_Label">
         <value condition="!String.IsEmpty(Window.Property(SkinVariables.MultiSearch.Decade))">$INFO[Window.Property(SkinVariables.MultiSearch.Decade)]</value>
-        <value>$LOCALIZE[593]</value>
+        <value>$ADDON[script.skinvariables 32100]</value>
     </variable>
 
     <!-- Row of search option buttons below the keyboard -->
@@ -292,6 +292,10 @@
          The window file passes the id and the button template so the script can find them -->
     <include name="MultiSearch_Sources">
         <control type="grouplist" id="$PARAM[id]">
+            <!-- Wide enough to hold every 1px source button. Moving into a grouplist only returns to the last focused
+                 button when it is within the grouplist's width -->
+            <width>1920</width>
+            <itemgap>0</itemgap>
             <include>Object_Hidden_Item_Definition</include>
             <orientation>horizontal</orientation>
             <onup>104</onup>
@@ -301,10 +305,14 @@
         </control>
     </include>
 
-    <!-- The script adds the source label and visibility as nested tags -->
+    <!-- The script adds the source label and visibility as nested tags. The buttons sit at 0,0 because the grouplist
+         measures each button from its own position: the hidden item offsets made every button look off the page,
+         so moving into the grouplist always focused the first button (All) -->
     <include name="MultiSearch_Source_Button">
         <include content="Object_Hidden_Button">
             <param name="id">$PARAM[id]</param>
+            <left>0</left>
+            <top>0</top>
             <nested />
         </include>
     </include>
@@ -404,6 +412,7 @@
             <param name="onup">200</param>
             <param name="dynamic">false</param>
             <param name="onback_enable">false</param>
+            <param name="busy_isupdating">!String.IsEmpty(Window.Property(SkinVariables.MultiSearch.Busy))</param>
             <!-- Back returns to the search edit like the keyboard does -->
             <onback condition="!Player.HasMedia">ClearProperty(RefocusMenu)</onback>
             <onback condition="!Player.HasMedia">3001</onback>
