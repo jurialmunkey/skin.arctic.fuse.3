@@ -131,14 +131,16 @@
     <expression name="Exp_Hubs_Spotlight_SlideDown">[Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301)]</expression>
     <expression name="Exp_Hubs_Spotlight_ShowButtons">[ControlGroup(310).HasFocus()]</expression>
 
-    <expression name="Exp_Hubs_Menu_Loopback">[Skin.HasSetting(HomeSwitcher.LoopBack) | Skin.HasSetting(HomeSwitcher.Vertical)]</expression>
+    <!-- Hub navigation wraps around only when neither the Search entry nor the Power button ends the menu -->
+    <expression name="Exp_Hubs_Menu_Loopback">[[Skin.HasSetting(HomeSwitcher.DisableSearch) + Skin.HasSetting(HomeSwitcher.LoopBack)] | Skin.HasSetting(HomeSwitcher.Vertical)]</expression>
+    <!-- LoopBack disables the Power button -->
+    <expression name="Exp_Hubs_Power_IsEnabled">[!Skin.HasSetting(HomeSwitcher.LoopBack) + !Skin.HasSetting(HomeSwitcher.Vertical)]</expression>
 
     <expression name="Exp_Hubs_SlideInfo">[!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible)) + !Skin.HasSetting(HomeSwitcher.Vertical)]</expression>
 
-    <!-- Search hub or the SkinVariables multisearch window -->
-    <expression name="Exp_Hubs_Window_IsSearch">[Window.IsVisible(1105) | Window.IsVisible(script-skinvariables-multisearch.xml)]</expression>
+    <!-- SkinVariables multisearch window, which the script loads from the window file it generates -->
+    <expression name="Exp_Hubs_Window_IsMultiSearch">Window.IsVisible(script-skinvariables-multisearch-generated.xml)</expression>
 
-    <expression name="Exp_Hubs_Searchbar_IsVisible">[Control.HasFocus(3000) | Control.HasFocus(3001) | Control.HasFocus(3002) | Control.HasFocus(3003) | Control.HasFocus(3103) | Control.HasFocus(301) | Control.HasFocus(601) | Control.HasFocus(691)]</expression>
 
 
     <!-- ============== -->
@@ -269,9 +271,9 @@
     <expression name="Exp_HubsWindow_Item_HasLayout">$EXP[Exp_HubsWindow_Item_Enabled] + [String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) | !String.IsEmpty(Container(30000).ListItem.Property(window))]</expression>
     <!-- Focused item of the hubs window (1115) is the Power entry (also when disabled), previewed as the options dialog (1170) -->
     <expression name="Exp_HubsWindow_Item_PowerPreview">String.IsEqual(Container(30000).ListItem.Property(static),power)</expression>
-    <!-- Layout of the focused Search or hub item in the hubs window (1115) preview; Standard otherwise -->
-    <expression name="Exp_HubsWindow_Preview_Combined">[String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) + Skin.String(HomeSwitcher.Search.Mode,Combined)] | [$EXP[Exp_HubsWindow_Mode_Combined] + !$EXP[Exp_HubsWindow_Type_NextAired]]</expression>
-    <expression name="Exp_HubsWindow_Preview_Wall">[String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) + Skin.String(HomeSwitcher.Search.Mode,Wall)] | [$EXP[Exp_HubsWindow_Mode_Wall] + !$EXP[Exp_HubsWindow_Type_NextAired]]</expression>
+    <!-- Layout of the focused Search or hub item in the hubs window (1115) preview; Standard otherwise. Search previews as Combined like the multisearch window -->
+    <expression name="Exp_HubsWindow_Preview_Combined">String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) | [$EXP[Exp_HubsWindow_Mode_Combined] + !$EXP[Exp_HubsWindow_Type_NextAired]]</expression>
+    <expression name="Exp_HubsWindow_Preview_Wall">$EXP[Exp_HubsWindow_Mode_Wall] + !$EXP[Exp_HubsWindow_Type_NextAired]</expression>
     <expression name="Exp_HubsWindow_Item_Enabled">!String.IsEqual(Container(30000).ListItem.Property(disabled),True)</expression>
     <expression name="Exp_HubsWindow_Item_Add">String.IsEqual(Container(30000).ListItem.Property(add),True)</expression>
     <!-- The counter lists an "Add item" placeholder when no hub is disabled, so check its first item -->
