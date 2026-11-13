@@ -158,9 +158,12 @@
         <param name="onup">601</param>
         <!-- Without content the window script fills the list -->
         <param name="dynamic">true</param>
+        <!-- Disable to give the widget its own onback as nested content -->
+        <param name="onback_enable">!Player.HasMedia</param>
         <definition>
             <include content="$PARAM[include]">
                 <param name="id">$PARAM[id]</param>
+                <nested />
                 <top>510</top>
                 <bottom>-40</bottom>
                 <onup>$PARAM[onup]</onup>
@@ -168,7 +171,7 @@
                     <param name="id">$PARAM[id]</param>
                     <param name="grouplistid">500</param>
                     <param name="refocus">SetFocus($PARAM[onup])</param>
-                    <param name="enable">!Player.HasMedia</param>
+                    <param name="enable">$PARAM[onback_enable]</param>
                 </include>
                 <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus($PARAM[id]))</onback>
                 <onback condition="Player.HasMedia">309</onback>
