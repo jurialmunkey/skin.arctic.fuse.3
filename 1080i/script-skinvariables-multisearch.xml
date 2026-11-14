@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Window for SkinVariables run_multisearch. The script searches the shortcuts searchwidgets menu with the text of edit 100
-     using the paths in shortcuts/skinvariables-multisearch-paths.json and lists the combined results in the container
-     for their most common widget style from shortcuts/skinvariables-multisearch-containers.json. Landscape 50 is the
-     fallback for other styles. -->
+<!-- Window for SkinVariables run_multisearch with the mediatype_lists and tmdbhelper_container params. The script searches the shortcuts
+     searchwidgets menu with the text of edit 100 using the paths in shortcuts/skinvariables-multisearch-paths.json.
+     It lists all results in the container for their most common widget style from
+     shortcuts/skinvariables-multisearch-containers.json, with landscape 50 as the fallback for other styles, and the
+     results of each content type in lists 501 to 510. Results count towards the style of their content type from
+     shortcuts/skinvariables-multisearch-styles.json, or the style of their source when the type has none. The script
+     sets the local TMDbHelper.WidgetContainer to the shown all results container. -->
 <window>
     <onload>ClearProperty(Background.ShowOverlay,Home)</onload>
     <include>Action_Blur_Onload</include>
@@ -16,13 +19,5 @@
     <controls>
         <!-- Kodi only fills a nested tag at the top of an include, so the results containers are in MultiSearch -->
         <include>MultiSearch</include>
-
-        <!-- The script reads grouplist 200 and button template 201 from this file, so they are not in an include -->
-        <include content="MultiSearch_Sources">
-            <param name="id">200</param>
-            <include content="MultiSearch_Source_Button">
-                <param name="id">201</param>
-            </include>
-        </include>
     </controls>
 </window>

@@ -546,7 +546,7 @@
                 <param name="window">1134</param>
                 <param name="condition">!String.IsEmpty(Container(22001).ListItem.Property(url))</param>
             </include>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsConfigurableWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -573,7 +573,7 @@
             <label>$LOCALIZE[31016]</label>
             <label2>[CAPITALIZE]$INFO[Container(22001).ListItem.Property(widget_sortby)][/CAPITALIZE]</label2>
             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_sortby&amp;&amp;default&amp;label&amp;userpreference&amp;random&amp;dateadded&amp;lastplayed&amp;playcount&amp;year&amp;rating&amp;userrating&amp;votes&amp;genre&amp;country&amp;studio&amp;playlist&amp;episodenumber&amp;season&amp;totalepisodes&amp;watchedepisodes&amp;tvshowstatus&amp;tvshowtitle&amp;file&amp;title&amp;track&amp;time&amp;artist&amp;album&amp;lastupdated&amp;lastused&amp;date&amp;&amp;Sort by&amp;&amp;True])</onclick>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsConfigurableWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -588,7 +588,7 @@
             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_toggle&amp;&amp;widget_sortorder])</onclick>
             <visible>!String.IsEmpty(Container(22001).ListItem.Property(widget_sortby))</visible>
             <visible>!String.IsEqual(Container(22001).ListItem.Property(widget_sortby),random)</visible>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsConfigurableWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -601,7 +601,7 @@
             <label>$LOCALIZE[31188]</label>
             <label2>$INFO[Container(22001).ListItem.Property(widget_limit)]</label2>
             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_numeric&amp;&amp;widget_limit&amp;&amp;heading::Limit])</onclick>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsConfigurableWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -632,7 +632,7 @@
             <label>$LOCALIZE[31185]</label>
             <selected>!String.IsEmpty(Container(22001).ListItem.Property(widget_autoscroll))</selected>
             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_toggle&amp;&amp;widget_autoscroll])</onclick>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsConfigurableWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -647,7 +647,7 @@
             <onclick condition="!String.IsEqual(Container(22001).ListItem.Property(widget_sortby),userpreference)">RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_sortby&amp;&amp;userpreference])</onclick>
             <onclick condition="String.IsEqual(Container(22001).ListItem.Property(widget_sortby),userpreference)">RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_sortby&amp;&amp;default])</onclick>
             <visible>String.IsEqual(Container(22001).ListItem.Property(widget_sortby),userpreference) | String.IsEqual(Container(22001).ListItem.Property(widget_sortby),default) | String.IsEmpty(Container(22001).ListItem.Property(widget_sortby))</visible>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsConfigurableWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -672,6 +672,10 @@
     <expression name="DialogShortcuts_IsSubGrouping_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homesubmenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1106submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1107submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1108submenu) | String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1109submenu)]</expression>
 
     <expression name="DialogShortcuts_IsWidgetMode_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMode),mode=widgets)]</expression>
+
+    <!-- Search widgets only supply multisearch sources, so options for how a widget shows its items do not apply to them -->
+    <expression name="DialogShortcuts_IsSearchWidgets_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=searchwidgets)]</expression>
+    <expression name="DialogShortcuts_IsConfigurableWidgetMode_Expression">[$EXP[DialogShortcuts_IsWidgetMode_Expression] + !$EXP[DialogShortcuts_IsSearchWidgets_Expression]]</expression>
 
     <expression name="DialogShortcuts_IsCombinedWidget_Expression">String.IsEqual(Container(22001).ListItem.Property(widget_combined),True)</expression>
 
@@ -787,6 +791,20 @@
                 <onclick>SetProperty(Shortcuts.EditMode,mode=widgets,Home)</onclick>
                 <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
                 <onclick>ActivateWindow(1116)</onclick>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+            </include>
+            <include content="Settings_ButtonImage" description="Discover">
+                <param name="id">9407</param>
+                <param name="groupid">9507</param>
+                <param name="icon">special://skin/extras/icons/compass.png</param>
+                <param name="window">shortcuts</param>
+                <param name="help">$LOCALIZE[31858]</param>
+                <param name="control">radiobutton</param>
+                <param name="label">$LOCALIZE[31066]</param>
+                <param name="getlabel">false</param>
+                <onclick>Skin.ToggleSetting(HomeSwitcher.Search.DisableDiscover)</onclick>
+                <selected>!Skin.HasSetting(HomeSwitcher.Search.DisableDiscover)</selected>
                 <visible>$PARAM[enabled]</visible>
                 <visible>$PARAM[visible]</visible>
             </include>

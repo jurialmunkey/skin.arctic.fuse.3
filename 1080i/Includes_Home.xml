@@ -38,12 +38,17 @@
         <include content="Home_ControlList_Item">
             <param name="label">$LOCALIZE[137]</param>
             <param name="icon">special://skin/extras/icons/search.png</param>
-            <param name="action">RunScript(script.skinvariables,run_multisearch)</param>
+            <param name="action">RunScript(script.skinvariables,run_multisearch,mediatype_lists,tmdbhelper_container$VAR[Value_MultiSearch_Discover_Param])</param>
             <param name="enabled">[!Skin.HasSetting(HomeSwitcher.DisableSearch)]</param>
             <param name="visible">$EXP[Exp_Hubs_Window_IsMultiSearch]</param>
             <param name="mod">$PARAM[mod]</param>
         </include>
     </include>
+
+    <!-- Discover sources from TMDbHelper follow the search widgets unless they are turned off in the search hub settings -->
+    <variable name="Value_MultiSearch_Discover_Param">
+        <value condition="Skin.HasSetting(HomeSwitcher.Search.DisableDiscover)">,no_discover</value>
+    </variable>
 
     <include name="Home_ControlList_Item_Home">
         <include content="Home_ControlList_Item">

@@ -6,6 +6,8 @@
         <param name="labelvisible">true</param>
         <param name="labeltop">widget_label_t</param>
         <param name="labelheight">widget_label_h</param>
+        <!-- Runs the spinner for a list that a window script fills, which never reports IsUpdating -->
+        <param name="busy_spinner">false</param>
         <definition>
             <control type="group" id="$PARAM[groupid]">
                 <nested />
@@ -22,7 +24,7 @@
                     <param name="left">0</param>
                     <param name="visible">!Integer.IsEqual(Container($PARAM[id]).NumItems,0) | Container($PARAM[id]).IsUpdating | $PARAM[busy_visible]</param>
                     <param name="use_spinner">true</param>
-                    <param name="run_spinner">Container($PARAM[id]).IsUpdating</param>
+                    <param name="run_spinner">Container($PARAM[id]).IsUpdating | $PARAM[busy_spinner]</param>
                 </include>
                 <include content="View_Line" condition="$PARAM[labelvisible] + [$PARAM[usewidgetlabel]]">
                     <param name="label">$INFO[Container($PARAM[id]).ListItem.Property(widget)]</param>
@@ -31,7 +33,7 @@
                     <param name="left">0</param>
                     <param name="visible">!Integer.IsEqual(Container($PARAM[id]).NumItems,0) | Container($PARAM[id]).IsUpdating | $PARAM[busy_visible]</param>
                     <param name="use_spinner">true</param>
-                    <param name="run_spinner">Container($PARAM[id]).IsUpdating</param>
+                    <param name="run_spinner">Container($PARAM[id]).IsUpdating | $PARAM[busy_spinner]</param>
                 </include>
 
                 <include content="Widget_Busy">
@@ -195,6 +197,7 @@
         <param name="include">List_Poster_Row</param>
         <param name="busy_visible">true</param>
         <param name="busy_isupdating">false</param>
+        <param name="busy_spinner">false</param>
         <param name="usewidgetlabel">false</param>
         <param name="widgettop">widget_items_t</param>
         <param name="widgetheight">widget_items_h</param>
@@ -212,6 +215,7 @@
                 <param name="id">$PARAM[id]</param>
                 <param name="visible">[Container($PARAM[id]).IsUpdating | !Integer.IsEqual(Container($PARAM[id]).NumItems,0) | $PARAM[altvisible]] + $PARAM[visible]</param>
                 <param name="busy_visible">[Container($PARAM[id]).IsUpdating | $PARAM[busy_isupdating]] + $PARAM[busy_visible]</param>
+                <param name="busy_spinner">$PARAM[busy_spinner]</param>
                 <param name="usewidgetlabel">$PARAM[usewidgetlabel]</param>
                 <param name="labelvisible">$PARAM[labelvisible]</param>
                 <param name="labeltop">$PARAM[labeltop]</param>
@@ -893,6 +897,7 @@
         <param name="categorynavigationinclude">Widget_Categories_Navigation</param>
         <param name="labeltop">widget_label_t</param>
         <param name="labelheight">widget_label_h</param>
+        <param name="busy_spinner">false</param>
         <param name="widgettop">widget_items_t</param>
         <param name="widgetheight">widget_items_h</param>
         <definition>
@@ -920,6 +925,7 @@
                 <param name="altvisible">$PARAM[altvisible]</param>
                 <param name="detailed">$PARAM[detailed]</param>
                 <param name="busy_isupdating">$PARAM[busy_isupdating]</param>
+                <param name="busy_spinner">$PARAM[busy_spinner]</param>
                 <param name="busy_visible">$PARAM[busy_visible]</param>
                 <param name="labeltop">$PARAM[labeltop]</param>
                 <param name="labelheight">$PARAM[labelheight]</param>
@@ -939,6 +945,7 @@
         <param name="categorytarget" />
         <param name="grouplistid">5000</param>
         <param name="widgetconstants_affix" />
+        <param name="busy_spinner">false</param>
         <definition>
             <include content="_Widget_Row">
                 <param name="id">$PARAM[id]</param>
@@ -958,6 +965,7 @@
                 <param name="altvisible">$PARAM[altvisible]</param>
                 <param name="detailed">$PARAM[detailed]</param>
                 <param name="busy_isupdating">$PARAM[busy_isupdating]</param>
+                <param name="busy_spinner">$PARAM[busy_spinner]</param>
                 <param name="busy_visible">[Integer.IsEqual(Container($PARAM[id]).NumItems,0) | [Integer.IsEqual(Container($PARAM[id]).NumItems,1) + String.IsEqual(Container($PARAM[id]).ListItemAbsolute(0).Label,$LOCALIZE[31046]) + Container($PARAM[id]).IsUpdating]]</param>
                 <param name="widgetfade_include">$PARAM[widgetfade_include]</param>
                 <param name="widgetfade_disable">$PARAM[widgetfade_disable]</param>
