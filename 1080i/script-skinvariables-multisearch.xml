@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Window for SkinVariables run_multisearch with the mediatype_lists and tmdbhelper_container params. The script searches the shortcuts
+<!-- Window for SkinVariables run_multisearch with the tmdbhelper_container and progress_dialog params. The standard
+     layout adds the mediatype_lists and no_all_list params and the combined layout fills source list 200 instead.
+     The script searches the shortcuts
      searchwidgets menu with the text of edit 100 using the paths in shortcuts/skinvariables-multisearch-paths.json.
      It lists all results in the container for their most common widget style from
      shortcuts/skinvariables-multisearch-containers.json, with landscape 50 as the fallback for other styles, and the
      results of each content type in lists 501 to 510. Results count towards the style of their content type from
      shortcuts/skinvariables-multisearch-styles.json, or the style of their source when the type has none. The script
-     sets the local TMDbHelper.WidgetContainer to the shown all results container. -->
+     sets the local TMDbHelper.WidgetContainer to the shown all results container. In the combined layout the selected
+     item of source list 200 decides the results of the all results container and the content type lists are left out. -->
 <window>
     <onload>ClearProperty(Background.ShowOverlay,Home)</onload>
     <include>Action_Blur_Onload</include>
@@ -17,7 +20,11 @@
     </include>
 
     <controls>
-        <!-- Kodi only fills a nested tag at the top of an include, so the results containers are in MultiSearch -->
-        <include>MultiSearch</include>
+        <!-- Kodi only fills a nested tag at the top of an include, so the results containers are in MultiSearch.
+             The id param is the source list id. The script only fills the source list when it finds an include in this
+             file with id 200, and only the combined layout includes the list -->
+        <include content="MultiSearch">
+            <param name="id">200</param>
+        </include>
     </controls>
 </window>

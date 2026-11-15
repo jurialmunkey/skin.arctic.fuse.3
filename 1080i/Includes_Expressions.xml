@@ -140,9 +140,13 @@
 
     <!-- SkinVariables multisearch window, which the script loads from the window file it generates -->
     <expression name="Exp_Hubs_Window_IsMultiSearch">Window.IsVisible(script-skinvariables-multisearch-generated.xml)</expression>
-    <!-- The multisearch results list shows the info panel in place of the search bar -->
-    <expression name="Exp_MultiSearch_Searchbar_IsVisible">!ControlGroup(49).HasFocus()</expression>
+    <!-- The multisearch results list shows the info panel in place of the search bar. The combined source list keeps the search bar -->
+    <expression name="Exp_MultiSearch_Searchbar_IsVisible">!ControlGroup(49).HasFocus() | Control.HasFocus(200)</expression>
     <expression name="Exp_MultiSearch_IsBusy">!String.IsEmpty(Window.Property(SkinVariables.MultiSearch.Busy))</expression>
+    <!-- The all results containers (50 to 52) or a content type results row (501 to 510) have results. The script sets the
+         count of the all results only once a container is filled, so it holds while the script refills the containers -->
+    <expression name="Exp_MultiSearch_HasResults">Integer.IsGreater(Window.Property(SkinVariables.MultiSearch.Count),0) |!Integer.IsEqual(Container(501).NumItems,0) | !Integer.IsEqual(Container(502).NumItems,0) | !Integer.IsEqual(Container(503).NumItems,0) | !Integer.IsEqual(Container(504).NumItems,0) | !Integer.IsEqual(Container(505).NumItems,0) | !Integer.IsEqual(Container(506).NumItems,0) | !Integer.IsEqual(Container(507).NumItems,0) | !Integer.IsEqual(Container(508).NumItems,0) | !Integer.IsEqual(Container(509).NumItems,0) | !Integer.IsEqual(Container(510).NumItems,0)</expression>
+    <expression name="Exp_MultiSearch_IsEmpty">!$EXP[Exp_MultiSearch_IsBusy] + !$EXP[Exp_MultiSearch_HasResults]</expression>
 
 
 

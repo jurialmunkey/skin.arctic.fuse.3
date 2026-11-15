@@ -76,9 +76,10 @@
                 <onright condition="Skin.HasSetting(HomeSwitcher.Vertical)">ActivateWindow(1180)</onright>
 
 
-                <!-- The window opens from Home so moving to the next hub closes it -->
+                <!-- The window opens from Home so moving to the next hub closes it. Moving right is the only way the
+                     skin closes it, through the script's hidden close button 109 -->
                 <onleft condition="!Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(-1).Property(action)]</onleft>
-                <onright condition="!Skin.HasSetting(HomeSwitcher.Vertical)">Action(PreviousMenu)</onright>
+                <onright condition="!Skin.HasSetting(HomeSwitcher.Vertical)">SendClick(109)</onright>
 
                 <ondown>101</ondown>
 
@@ -117,8 +118,7 @@
                 <!-- <onup>3000</onup> -->
                 <onup>ClearProperty(RefocusMenu)</onup>
                 <onup>3001</onup>
-                <onback>SetProperty(RefocusMenu,True)</onback>
-                <onback>3001</onback>
+                <include content="MultiSearch_OnBack" />
                 <ondown>102</ondown>
                 <width>700</width>
                 <!-- <width>750</width>
@@ -172,10 +172,15 @@
         </definition>
     </include>
 
-    <!-- SkinVariables multisearch window. The script searches the text of edit 100, fills keys 101 and the results rows
-         of group 49 and opens the source and sort selections from buttons 102 and 103 -->
+    <!-- SkinVariables multisearch window. The script searches the text of edit 100, fills keys 101 and the results of
+         group 49 and opens the source and sort selections from buttons 102 and 103. Group 49 holds the results of the
+         standard or combined layout, and the combined layout adds the source list of the id param.
+         The script never closes the window on back. SendClick(109) asks it to close so it stores the search text -->
     <include name="MultiSearch">
         <include>Hub_Window_Background</include>
+        <include content="Object_Hidden_Button">
+            <param name="id">109</param>
+        </include>
         <include content="Home_Control">
             <param name="window">MultiSearch</param>
             <param name="overlay">[false]</param>
@@ -199,8 +204,12 @@
                         <include>MultiSearch_Buttons</include>
                     </include>
                     <control type="group" id="49">
-                        <include>MultiSearch_Results</include>
+                        <include condition="!Skin.HasSetting(HomeSwitcher.Search.Combined)">MultiSearch_Results_Standard</include>
+                        <include content="MultiSearch_Results_Combined" condition="Skin.HasSetting(HomeSwitcher.Search.Combined)">
+                            <param name="id">$PARAM[id]</param>
+                        </include>
                     </control>
+                    <include>MultiSearch_Empty</include>
                 </control>
 
                 <include>MultiSearch_Info</include>
@@ -223,12 +232,6 @@
         </control>
     </include>
 
-    <!-- Sources: All, or Sources: X of Y when only some sources are selected -->
-    <variable name="MultiSearch_Sources_Label">
-        <value condition="Integer.IsEqual(Window.Property(SkinVariables.MultiSearch.Sources.Enabled),Window.Property(SkinVariables.MultiSearch.Sources.Total))">$LOCALIZE[31851]: $LOCALIZE[593]</value>
-        <value>$LOCALIZE[31851]: $INFO[Window.Property(SkinVariables.MultiSearch.Sources.Enabled)] $LOCALIZE[20163] $INFO[Window.Property(SkinVariables.MultiSearch.Sources.Total)]</value>
-    </variable>
-
     <!-- Chosen content type, genre and decade filters, or the script's Any label when no filter is set.
          The content type filter is a DBType so it is shown with the same Kodi labels as the script's select dialog -->
     <variable name="MultiSearch_DBType_Label">
@@ -243,6 +246,12 @@
         <value condition="String.IsEqual(Window.Property(SkinVariables.MultiSearch.DBType),song)">$LOCALIZE[179]</value>
         <value condition="!String.IsEmpty(Window.Property(SkinVariables.MultiSearch.DBType))">$INFO[Window.Property(SkinVariables.MultiSearch.DBType)]</value>
         <value>$ADDON[script.skinvariables 32100]</value>
+    </variable>
+    <!-- The script gives All or the labels of the enabled sources, so several enabled sources are shown as Custom -->
+    <variable name="MultiSearch_Sources_Label">
+        <value condition="Integer.IsGreater(Window.Property(SkinVariables.MultiSearch.Sources.Enabled),1) + !String.IsEqual(Window.Property(SkinVariables.MultiSearch.Sources.Label),$LOCALIZE[593])">$LOCALIZE[31639]</value>
+        <value condition="!String.IsEmpty(Window.Property(SkinVariables.MultiSearch.Sources.Label))">$INFO[Window.Property(SkinVariables.MultiSearch.Sources.Label)]</value>
+        <value>$LOCALIZE[593]</value>
     </variable>
     <variable name="MultiSearch_Genre_Label">
         <value condition="!String.IsEmpty(Window.Property(SkinVariables.MultiSearch.Genre))">$INFO[Window.Property(SkinVariables.MultiSearch.Genre)]</value>
@@ -269,54 +278,65 @@
         </control>
     </include>
 
+    <!-- Back from any multisearch control returns to the search edit through 3001 -->
+    <include name="MultiSearch_OnBack">
+        <param name="condition">true</param>
+        <definition>
+            <onback condition="$PARAM[condition]">ClearProperty(RefocusMenu)</onback>
+            <onback condition="$PARAM[condition]">3001</onback>
+        </definition>
+    </include>
+
+    <!-- Search option button -->
+    <include name="MultiSearch_Button">
+        <include content="Button_Underline_Switcher">
+            <param name="id">$PARAM[id]</param>
+            <param name="control">button</param>
+            <include content="MultiSearch_OnBack" />
+            <nested />
+        </include>
+    </include>
+
     <!-- Sources, content type and reset, then sort and the genre and decade filters on their own row so long values have room -->
     <include name="MultiSearch_Buttons">
         <include content="MultiSearch_Button_Row">
             <param name="top">350</param>
             <param name="onup">101</param>
             <param name="ondown">103</param>
-            <include content="Button_Underline_Switcher">
+            <include content="MultiSearch_Button">
                 <param name="id">102</param>
-                <param name="control">button</param>
-                <label>$VAR[MultiSearch_Sources_Label] ⌄</label>
+                <label>$LOCALIZE[31851]: $VAR[MultiSearch_Sources_Label] ⌄</label>
             </include>
-            <include content="Button_Underline_Switcher">
+            <include content="MultiSearch_Button">
                 <param name="id">107</param>
-                <param name="control">button</param>
                 <label>$LOCALIZE[467]: $VAR[MultiSearch_DBType_Label] ⌄</label>
             </include>
-            <include content="Button_Underline_Switcher">
+            <include content="MultiSearch_Button">
                 <param name="id">106</param>
-                <param name="control">button</param>
-                <label>$LOCALIZE[31820]</label>
+                <label>$LOCALIZE[13007]</label>
             </include>
         </include>
         <include content="MultiSearch_Button_Row">
             <param name="top">410</param>
             <param name="onup">102</param>
-            <param name="ondown">SetFocus($INFO[Window.Property(TMDbHelper.WidgetContainer)])</param>
-            <include content="Button_Underline_Switcher">
+            <param name="ondown">$VAR[MultiSearch_Action_Reset]</param>
+            <include content="MultiSearch_Button">
                 <param name="id">103</param>
-                <param name="control">button</param>
                 <label>$LOCALIZE[31016]$INFO[Window.Property(SkinVariables.MultiSearch.SortBy),: ,] ⌄</label>
             </include>
-            <include content="Button_Underline_Switcher">
+            <include content="MultiSearch_Button">
                 <param name="id">104</param>
-                <param name="control">button</param>
                 <label>$LOCALIZE[515]: $VAR[MultiSearch_Genre_Label] ⌄</label>
             </include>
-            <include content="Button_Underline_Switcher">
+            <include content="MultiSearch_Button">
                 <param name="id">105</param>
-                <param name="control">button</param>
                 <label>$LOCALIZE[31852]: $VAR[MultiSearch_Decade_Label] ⌄</label>
             </include>
         </include>
     </include>
 
-    <!-- Results laid out like a standard hub widget set. The script fills the all results container for their most
-         common widget style from shortcuts/skinvariables-multisearch-containers.json, then lists 501 to 510 with the
-         results of each content type in the style set for it in shortcuts/skinvariables-multisearch-styles.json -->
-    <include name="MultiSearch_Results">
+    <!-- Standard layout, laid out like a standard hub widget set with a row for each content type -->
+    <include name="MultiSearch_Results_Standard">
         <include content="Hub_Widgets_Grouplist">
             <param name="onup">103</param>
             <param name="bumper">false</param>
@@ -332,69 +352,220 @@
                 <param name="id">52</param>
                 <param name="include">List_Square_Row</param>
             </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">501</param>
-                <param name="label">$LOCALIZE[342]</param>
-                <param name="include">List_Poster_Row</param>
-            </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">502</param>
-                <param name="label">$LOCALIZE[20434]</param>
-                <param name="include">List_Poster_Row</param>
-            </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">503</param>
-                <param name="label">$LOCALIZE[20343]</param>
-                <param name="include">List_Poster_Row</param>
-            </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">504</param>
-                <param name="label">$LOCALIZE[33054]</param>
-                <param name="include">List_Poster_Row</param>
-            </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">505</param>
-                <param name="label">$LOCALIZE[20360]</param>
-                <param name="include">List_Landscape_Row</param>
-            </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">506</param>
-                <param name="label">$LOCALIZE[20389]</param>
-                <param name="include">List_Landscape_Row</param>
-            </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">507</param>
-                <param name="label">$LOCALIZE[133]</param>
-                <param name="include">List_Square_Row</param>
-            </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">508</param>
-                <param name="label">$LOCALIZE[132]</param>
-                <param name="include">List_Square_Row</param>
-            </include>
-            <include content="MultiSearch_Results_Row">
-                <param name="id">509</param>
-                <param name="label">$LOCALIZE[134]</param>
-                <param name="include">List_Square_Row</param>
-            </include>
-            <!-- Other content types have no style so they use the fallback container's style -->
-            <include content="MultiSearch_Results_Row">
-                <param name="id">510</param>
-                <param name="label">$ADDON[script.skinvariables 32103]</param>
-                <param name="include">List_Landscape_Row</param>
-            </include>
+            <include>MultiSearch_Results_MediaType_Rows</include>
         </include>
     </include>
 
-    <!-- All results row for one widget style. Only the container the script chose is shown, and it shows the loading
-         placeholders while the script searches -->
+    <!-- Combined layout, positioned like a combined hub: the source list above the all results containers -->
+    <include name="MultiSearch_Results_Combined">
+        <include content="MultiSearch_Combined_Source_List">
+            <param name="id">$PARAM[id]</param>
+        </include>
+        <include content="MultiSearch_Combined_Container">
+            <param name="id">50</param>
+            <param name="sourceid">$PARAM[id]</param>
+            <param name="include">List_Landscape_Row</param>
+        </include>
+        <include content="MultiSearch_Combined_Container">
+            <param name="id">51</param>
+            <param name="sourceid">$PARAM[id]</param>
+            <param name="include">List_Poster_Row</param>
+        </include>
+        <include content="MultiSearch_Combined_Container">
+            <param name="id">52</param>
+            <param name="sourceid">$PARAM[id]</param>
+            <param name="include">List_Square_Row</param>
+        </include>
+    </include>
+
+    <!-- Source list that the script fills with all results, then each content type or each source with results as set
+         by the source_buttons param. The selected item decides the results of the all
+         results container. Placed like the combined hub widget switcher.
+         The script reads the actions of the focused list, so the list keeps focus instead of a select button -->
+    <include name="MultiSearch_Combined_Source_List">
+        <control type="group">
+            <top>520</top>
+            <height>40</height>
+            <visible>!$EXP[Exp_MultiSearch_IsEmpty]</visible>
+            <control type="group">
+                <left>view_pad</left>
+                <include>View_Line_Divider</include>
+            </control>
+            <include content="Categories_Selector">
+                <param name="id">$PARAM[id]</param>
+                <param name="altfocusid">$PARAM[id]</param>
+                <centertop>0</centertop>
+                <height>80</height>
+                <left>40</left>
+                <onup>103</onup>
+                <ondown>SetFocus($INFO[Window.Property(SkinVariables.MultiSearch.Container)])</ondown>
+                <include>Hub_Grouplist_OnLeftRight</include>
+                <onfocus>ClearProperty(HomeSwitcher.IsVisible,Home)</onfocus>
+                <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
+                <include content="MultiSearch_OnBack" />
+            </include>
+        </control>
+    </include>
+
+    <!-- All results container for one widget style, placed like a combined hub widget. Only the container the script
+         chose is shown, and it shows the loading placeholders while the script searches -->
+    <include name="MultiSearch_Combined_Container">
+        <param name="visible">String.IsEqual(Window.Property(SkinVariables.MultiSearch.Container),$PARAM[id]) + !$EXP[Exp_MultiSearch_IsEmpty]</param>
+        <definition>
+            <include content="$PARAM[include]">
+                <param name="id">$PARAM[id]</param>
+                <param name="hidden_button_enabled">false</param>
+                <top>510</top>
+                <bottom>-40</bottom>
+                <onup>$PARAM[sourceid]</onup>
+                <include>Hub_Grouplist_OnLeftRight</include>
+                <visible>$PARAM[visible]</visible>
+                <include content="MultiSearch_Widget_Row_OnFocus">
+                    <param name="id">$PARAM[id]</param>
+                </include>
+                <include content="MultiSearch_Widget_Row_OnBack">
+                    <param name="id">$PARAM[id]</param>
+                </include>
+            </include>
+            <include content="Widget_Busy">
+                <param name="visible">$EXP[Exp_MultiSearch_IsBusy] + Integer.IsEqual(Container($PARAM[id]).NumItems,0)</param>
+                <param name="include">$PARAM[include]</param>
+                <top>510</top>
+                <left>view_pad</left>
+                <visible>$PARAM[visible]</visible>
+            </include>
+        </definition>
+    </include>
+
+    <!-- The script fills lists 501 to 510 with the results of each content type in the style set for it in
+         shortcuts/skinvariables-multisearch-styles.json. The no_all_list param keeps the all results containers empty,
+         so they only show the loading placeholders before the first results -->
+    <include name="MultiSearch_Results_MediaType_Rows">
+        <include content="MultiSearch_Results_Row">
+            <param name="id">501</param>
+            <param name="label">$LOCALIZE[342]</param>
+            <param name="include">List_Poster_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">502</param>
+            <param name="label">$LOCALIZE[20434]</param>
+            <param name="include">List_Poster_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">503</param>
+            <param name="label">$LOCALIZE[20343]</param>
+            <param name="include">List_Poster_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">504</param>
+            <param name="label">$LOCALIZE[33054]</param>
+            <param name="include">List_Poster_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">505</param>
+            <param name="label">$LOCALIZE[20360]</param>
+            <param name="include">List_Landscape_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">506</param>
+            <param name="label">$LOCALIZE[20389]</param>
+            <param name="include">List_Landscape_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">507</param>
+            <param name="label">$LOCALIZE[133]</param>
+            <param name="include">List_Square_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">508</param>
+            <param name="label">$LOCALIZE[132]</param>
+            <param name="include">List_Square_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">509</param>
+            <param name="label">$LOCALIZE[134]</param>
+            <param name="include">List_Square_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row">
+            <param name="id">510</param>
+            <param name="label">$ADDON[script.skinvariables 32103]</param>
+            <param name="include">List_Square_Row</param>
+        </include>
+    </include>
+
+    <!-- Shown in place of the results rows while there are no results, laid out like a widget label and its items.
+         Kept outside the results grouplist so it is not part of its navigation. The groups repeat the grouplist top,
+         slide and bumper, then the label and items offsets of a widget row, so it sits where the first row would be -->
+    <include name="MultiSearch_Empty">
+        <control type="group">
+            <top>widget_grouplist_t_detailed</top>
+            <animation effect="slide" start="0" end="0,-440" condition="true">Conditional</animation>
+            <visible>$EXP[Exp_MultiSearch_IsEmpty]</visible>
+            <control type="group">
+                <top>widget_tbump_h_detailed</top>
+                <control type="group">
+                    <top>widget_label_t</top>
+                    <left>view_pad</left>
+                    <right>view_pad</right>
+                    <include content="View_Line">
+                        <param name="label">$LOCALIZE[31861]</param>
+                        <param name="top">20</param>
+                        <param name="left">0</param>
+                    </include>
+                    <control type="group">
+                        <top>widget_label_h_detailed</top>
+                        <control type="group">
+                            <top>widget_items_t_detailed</top>
+                            <include>MultiSearch_Empty_Welcome</include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <!-- Centered vertically on the poster items, which List_Core offsets by 80 within the row -->
+    <include name="MultiSearch_Empty_Welcome">
+        <control type="group">
+            <top>80</top>
+            <height>view_poster_item_h</height>
+            <control type="group">
+                <centertop>50%</centertop>
+                <height>180</height>
+                <control type="label">
+                    <top>0</top>
+                    <height>80</height>
+                    <font>font_head_bold</font>
+                    <textcolor>main_fg_90</textcolor>
+                    <label>$LOCALIZE[31281]</label>
+                </control>
+                <control type="textbox">
+                    <top>80</top>
+                    <height>100</height>
+                    <width>1200</width>
+                    <font>font_main_plot</font>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$VAR[MultiSearch_Empty_Label]</label>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <!-- The script gives All or the labels of the enabled sources -->
+    <variable name="MultiSearch_Empty_Label">
+        <value condition="String.IsEmpty(Window.Property(SkinVariables.MultiSearch.Sources.Label)) | String.IsEqual(Window.Property(SkinVariables.MultiSearch.Sources.Label),$LOCALIZE[593])">$LOCALIZE[31863] $LOCALIZE[31864].[CR]$LOCALIZE[31865]</value>
+        <value>$LOCALIZE[31863] $INFO[Window.Property(SkinVariables.MultiSearch.Sources.Label)].[CR]$LOCALIZE[31865]</value>
+    </variable>
+
+    <!-- All results row for one widget style. The no_all_list param keeps it empty, so the container the script chose
+         only shows the loading placeholders while the script searches and no content type row has results yet -->
     <include name="MultiSearch_Results_All_Row">
         <include content="MultiSearch_Results_Row">
             <param name="id">$PARAM[id]</param>
             <param name="label">$LOCALIZE[31850]</param>
             <param name="include">$PARAM[include]</param>
             <param name="visible">String.IsEqual(Window.Property(SkinVariables.MultiSearch.Container),$PARAM[id])</param>
-            <param name="altvisible">$EXP[Exp_MultiSearch_IsBusy]</param>
+            <param name="altvisible">$EXP[Exp_MultiSearch_IsBusy] + !$EXP[Exp_MultiSearch_HasResults]</param>
         </include>
     </include>
 
@@ -426,6 +597,9 @@
                 <param name="visible">$PARAM[visible] + [!Integer.IsEqual(Container($PARAM[id]).NumItems,0) | $PARAM[altvisible]]</param>
                 <param name="busy_visible">$EXP[Exp_MultiSearch_IsBusy] + Integer.IsEqual(Container($PARAM[id]).NumItems,0)</param>
                 <param name="busy_spinner">$EXP[Exp_MultiSearch_IsBusy]</param>
+                <include content="Animation_Widget_FadeOut">
+                    <param name="condition">!Control.HasFocus($PARAM[id]) + !Integer.IsEqual(Window.Property(TMDbHelper.WidgetContainer),$PARAM[id])</param>
+                </include>
             </include>
             <include content="$PARAM[include]">
                 <param name="id">$PARAM[id]</param>
@@ -461,13 +635,24 @@
         <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
     </include>
 
-    <!-- Back moves to the first item, then from the first item returns to the search edit. Each branch focuses a raw
-         control id so Kodi does not also close the window -->
+    <!-- First visible results control: the combined source list, the all results container, then the content type rows -->
+    <variable name="MultiSearch_Action_Reset">
+        <value condition="Control.IsVisible(200)">SetFocus(200)</value>
+        <value condition="Control.IsVisible(50)">SetFocus(50)</value>
+        <value condition="Control.IsVisible(51)">SetFocus(51)</value>
+        <value condition="Control.IsVisible(52)">SetFocus(52)</value>
+        <value>$VAR[Hub_Action_Reset]</value>
+    </variable>
+
+    <!-- Back moves to the first item, then from the first item focuses the first row so the grouplist scrolls back to
+         the top and returns to the search edit. Each branch focuses a raw control id so Kodi does not also close the window -->
     <include name="MultiSearch_Widget_Row_OnBack">
         <onback condition="$EXP[Exp_Navigation_OnPrevious] + !Integer.IsEqual(Container($PARAM[id]).CurrentItem,1)">$PARAM[id]</onback>
         <onback condition="$EXP[Exp_Navigation_OnPrevious] + !Integer.IsEqual(Container($PARAM[id]).CurrentItem,1)">SetFocus($PARAM[id],0,absolute)</onback>
-        <onback condition="Integer.IsEqual(Container($PARAM[id]).CurrentItem,1) | $EXP[Exp_Navigation_OnParent]">ClearProperty(RefocusMenu)</onback>
-        <onback condition="Integer.IsEqual(Container($PARAM[id]).CurrentItem,1) | $EXP[Exp_Navigation_OnParent]">3001</onback>
+        <onback condition="Integer.IsEqual(Container($PARAM[id]).CurrentItem,1) | $EXP[Exp_Navigation_OnParent]">$VAR[MultiSearch_Action_Reset]</onback>
+        <include content="MultiSearch_OnBack">
+            <param name="condition">Integer.IsEqual(Container($PARAM[id]).CurrentItem,1) | $EXP[Exp_Navigation_OnParent]</param>
+        </include>
     </include>
 
 </includes>
