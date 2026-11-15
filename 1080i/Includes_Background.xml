@@ -21,7 +21,7 @@
         <param name="flixart_size_w">flixart_size_w</param>
         <param name="flixart_size_h">flixart_size_h</param>
         <param name="right">0</param>
-        <param name="diffuse_variant">flixart</param>
+        <param name="diffuse_variant">flixart_reflect</param>
         <param name="aspectratio">scale</param>
         <param name="fadetime">background_fadetime</param>
         <definition>
@@ -39,18 +39,29 @@
                 <animation effect="fade" start="0" end="100" reversible="false" delay="300" time="background_fadetime" condition="!$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
                 <include>Background_NotVideo</include>
             </control>
+            <control type="image">
+                <fadetime>$PARAM[fadetime]</fadetime>
+                <right>$PARAM[right]</right>
+                <top>$PARAM[flixart_size_h]</top>
+                <height>$PARAM[flixart_size_h]</height>
+                <width>$PARAM[flixart_size_w]</width>
+                <aspectratio scalediffuse="false" align="$PARAM[align]" aligny="$PARAM[aligny]">$PARAM[aspectratio]</aspectratio>
+                <include content="Texture_FlixArt_Foreground">
+                    <param name="variant">$PARAM[diffuse_variant]</param>
+                    <param name="flipy">true</param>
+                </include>
+                <animation effect="fade" start="100" end="0" reversible="false" time="300" condition="$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
+                <animation effect="fade" start="0" end="100" reversible="false" delay="300" time="background_fadetime" condition="!$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
+                <include>Background_NotVideo</include>
+            </control>
         </definition>
     </include>
 
     <include name="Background_Artwork">
         <param name="fadetime">background_fadetime</param>
         <definition>
-            <include content="Background_FlixArt" condition="$EXP[Exp_TMDbHelper_IsBlur]">
+            <include content="Background_FlixArt">
                 <param name="fadetime">$PARAM[fadetime]</param>
-            </include>
-            <include content="Background_FlixArt" condition="!$EXP[Exp_TMDbHelper_IsBlur]">
-                <param name="fadetime">$PARAM[fadetime]</param>
-                <param name="diffuse_variant">flixart_new</param>
             </include>
         </definition>
     </include>
@@ -163,41 +174,6 @@
             </control>
             <control type="image">
                 <texture colordiffuse="black">$VAR[Image_FlixArt_FullscreenInverse]</texture>
-            </control>
-        </control>
-    </include>
-
-    <include name="Background_Video_FlixArt">
-        <control type="group">
-            <description>On-screen videowindow for background video</description>
-            <control type="group">
-                <top>0</top>
-                <height>flixart_size_h</height>
-                <visible>![$EXP[Exp_Video_IsNotPlaying]]</visible>
-                <control type="videowindow">
-                    <right>0</right>
-                    <width>flixart_size_w</width>
-                    <visible>!Window.IsVisible(1123)</visible>
-                </control>
-                <control type="visualisation">
-                    <right>0</right>
-                    <width>flixart_size_w</width>
-                    <visible>!Window.IsVisible(1123)</visible>
-                </control>
-                <control type="image">
-                    <right>0</right>
-                    <width>flixart_size_w</width>
-                    <texture colordiffuse="black">$VAR[Image_FlixArt_Inverse]</texture>
-                </control>
-                <control type="image">
-                    <left>0</left>
-                    <right>flixart_size_w</right>
-                    <texture colordiffuse="black">common/white.png</texture>
-                </control>
-            </control>
-            <control type="image">
-                <top>flixart_size_h</top>
-                <texture colordiffuse="black">common/white.png</texture>
             </control>
         </control>
     </include>
