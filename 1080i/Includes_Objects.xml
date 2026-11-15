@@ -498,7 +498,7 @@
 
             <control type="group">
 
-                <visible>![[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)] | [String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)] | [String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)] | [String.IsEmpty($PARAM[listitem].$PARAM[main_artwork]) + String.StartsWith($PARAM[listitem].Icon,Default)]]</visible>
+                <visible>![[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)] | [String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)] | [String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)] | [String.IsEmpty($PARAM[listitem].$PARAM[main_artwork]) + [String.IsEmpty($PARAM[listitem].Icon) | String.StartsWith($PARAM[listitem].Icon,Default)]]]</visible>
 
                 <include content="Object_Layout_Image_Circle" condition="$PARAM[include_discart]">
                     <param name="diffuse">$PARAM[diffuse]</param>
@@ -521,7 +521,7 @@
 
             <control type="group">
 
-                <visible>[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)] | [String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)] | [String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)] | [String.IsEmpty($PARAM[listitem].$PARAM[main_artwork]) + String.StartsWith($PARAM[listitem].Icon,Default)]</visible>
+                <visible>[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)] | [String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)] | [String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)] | [String.IsEmpty($PARAM[listitem].$PARAM[main_artwork]) + [String.IsEmpty($PARAM[listitem].Icon) | String.StartsWith($PARAM[listitem].Icon,Default)]]</visible>
 
                 <include content="Dimension_Padding">
                     <param name="pad">20</param>
@@ -594,14 +594,16 @@
         <param name="selected">false</param>
         <param name="listitem">ListItem</param>
         <definition>
-            <control type="image">
-                <include condition="$PARAM[selected]">Color_SelectedImage</include>
-                <colordiffuse>main_fg_90</colordiffuse>
-                <texture background="true">$INFO[$PARAM[listitem].Icon]</texture>
-                <aspectratio>keep</aspectratio>
+            <control type="group">
                 <visible>![String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)]</visible>
                 <visible>![String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)]</visible>
                 <visible>![String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)]</visible>
+                <control type="image">
+                    <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                    <colordiffuse>main_fg_90</colordiffuse>
+                    <texture background="true" fallback="DefaultFolder.png">$INFO[$PARAM[listitem].Icon]</texture>
+                    <aspectratio>keep</aspectratio>
+                </control>
             </control>
             <control type="image">
                 <include condition="$PARAM[selected]">Color_SelectedImage</include>
