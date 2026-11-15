@@ -194,6 +194,7 @@
 
             <control type="group">
                 <include condition="Skin.HasSetting(HomeSwitcher.Vertical)">Hub_Window_Side_Slide</include>
+                <include condition="Skin.HasSetting(HomeSwitcher.Search.Combined)">MultiSearch_Footer_Left</include>
 
                 <!-- Content -->
                 <control type="group" id="400">
@@ -216,8 +217,36 @@
 
                 <include condition="Skin.HasSetting(HomeSwitcher.Vertical)">Hub_VertMenu</include>
             </control>
+
+            <control type="group">
+                <include>Furniture_Reposition</include>
+                <visible>!$EXP[Exp_InfoDialogs]</visible>
+                <include>Furniture_Footer_Right</include>
+            </control>
         </control>
     </include>
+
+    <!-- Item count of the shown all results container in the combined layout, like the footer of a combined hub -->
+    <include name="MultiSearch_Footer_Left">
+        <control type="group">
+            <visible>!$EXP[Exp_InfoDialogs]</visible>
+            <control type="group">
+                <include>Dimension_Bottombar</include>
+                <include content="View_Furniture_Footer_ViewLine">
+                    <param name="visible">true</param>
+                    <param name="label">$VAR[MultiSearch_Combined_NumItems]</param>
+                    <param name="label_fallback">$INFO[System.AddonVersion(skin.arctic.fuse.3),arctic.fuse v,]</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <!-- Only the all results container the script chose is visible, and none while there are no results -->
+    <variable name="MultiSearch_Combined_NumItems">
+        <value condition="Control.IsVisible(50)">$INFO[Container(50).NumItems,, $LOCALIZE[31022]]</value>
+        <value condition="Control.IsVisible(51)">$INFO[Container(51).NumItems,, $LOCALIZE[31022]]</value>
+        <value condition="Control.IsVisible(52)">$INFO[Container(52).NumItems,, $LOCALIZE[31022]]</value>
+    </variable>
 
     <!-- Info panel of the focused result. Shown in place of the search bar while the results list has focus -->
     <include name="MultiSearch_Info">
@@ -309,7 +338,7 @@
             </include>
             <include content="MultiSearch_Button">
                 <param name="id">107</param>
-                <label>$LOCALIZE[467]: $VAR[MultiSearch_DBType_Label] ⌄</label>
+                <label>$LOCALIZE[31324]: $VAR[MultiSearch_DBType_Label] ⌄</label>
             </include>
             <include content="MultiSearch_Button">
                 <param name="id">106</param>

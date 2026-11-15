@@ -493,11 +493,12 @@
         <param name="discart_diffuse">diffuse/circle/discart.png</param>
         <param name="overlay_diffuse" />
         <param name="selected">false</param>
+        <param name="main_artwork">Art(poster)</param>
         <definition>
+
             <control type="group">
-                <visible>![String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)]</visible>
-                <visible>![String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)]</visible>
-                <visible>![String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)]</visible>
+
+                <visible>![[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)] | [String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)] | [String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)] | [String.IsEmpty($PARAM[listitem].$PARAM[main_artwork]) + String.StartsWith($PARAM[listitem].Icon,Default)]]</visible>
 
                 <include content="Object_Layout_Image_Circle" condition="$PARAM[include_discart]">
                     <param name="diffuse">$PARAM[diffuse]</param>
@@ -516,37 +517,112 @@
                     <param name="aspectratio">$PARAM[aspectratio]</param>
                     <param name="selected">$PARAM[selected]</param>
                 </include>
+            </control>
 
+            <control type="group">
+
+                <visible>[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)] | [String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)] | [String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)] | [String.IsEmpty($PARAM[listitem].$PARAM[main_artwork]) + String.StartsWith($PARAM[listitem].Icon,Default)]</visible>
+
+                <include content="Dimension_Padding">
+                    <param name="pad">20</param>
+                </include>
+                <control type="group">
+                    <bottom>50%</bottom>
+                    <control type="group">
+                        <bottom>10</bottom>
+                        <top>-10</top>
+                        <control type="textbox">
+                            <aligny>top</aligny>
+                            <font>font_midi_bold</font>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>main_fg_90</textcolor>
+                            <label>$INFO[$PARAM[listitem].Label]</label>
+                            <autoscroll>false</autoscroll>
+                        </control>
+                    </control>
+                </control>
+                <control type="image">
+                    <centertop>50%</centertop>
+                    <height>1</height>
+                    <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                    <colordiffuse>main_fg_100</colordiffuse>
+                    <texture>common/white.png</texture>
+                    <animation effect="fade" start="100" end="30" condition="true">Conditional</animation>
+                </control>
+                <control type="group">
+                    <top>50%</top>
+                    <control type="group">
+                        <bottom>-10</bottom>
+                        <top>10</top>
+                        <!-- <bottom>0</bottom>
+                        <height>60</height> -->
+                        <control type="group">
+                            <centertop>50%</centertop>
+                            <right>0</right>
+                            <width>60</width>
+                            <height>60</height>
+                            <include content="Object_DefautIcon">
+                                <param name="listitem">$PARAM[listitem]</param>
+                                <param name="selected">$PARAM[selected]</param>
+                            </include>
+                        </control>
+                        <control type="label">
+                            <aligny>center</aligny>
+                            <font>font_hint_bold</font>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>main_fg_90</textcolor>
+                            <label>$INFO[$PARAM[listitem].DBType]</label>
+                            <autoscroll>false</autoscroll>
+                            <visible>!String.IsEmpty($PARAM[listitem].DBType)</visible>
+                        </control>
+                        <control type="label">
+                            <aligny>center</aligny>
+                            <font>font_hint_bold</font>
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <textcolor>main_fg_90</textcolor>
+                            <label>$INFO[Container.FolderName]</label>
+                            <autoscroll>false</autoscroll>
+                            <visible>String.IsEmpty($PARAM[listitem].DBType)</visible>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Object_DefautIcon">
+        <param name="selected">false</param>
+        <param name="listitem">ListItem</param>
+        <definition>
+            <control type="image">
+                <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                <colordiffuse>main_fg_90</colordiffuse>
+                <texture background="true">$INFO[$PARAM[listitem].Icon]</texture>
+                <aspectratio>keep</aspectratio>
+                <visible>![String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)]</visible>
+                <visible>![String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)]</visible>
+                <visible>![String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)]</visible>
             </control>
             <control type="image">
-                <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
-                    <param name="colordiffuse">$VAR[ColorSelected]</param>
-                </include>
-                <colordiffuse>main_fg_100</colordiffuse>
-                <texture background="true" diffuse="$PARAM[icon_diffuse]" fallback="DefaultGenres.png">$VAR[Image_Icon]</texture>
-                <aspectratio scalediffuse="false">keep</aspectratio>
-                <bordersize>$PARAM[genre_bordersize]</bordersize>
+                <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                <colordiffuse>main_fg_90</colordiffuse>
+                <texture background="true" fallback="DefaultGenre.png">$INFO[ListItem.Label,genres/,.png]</texture>
+                <aspectratio>keep</aspectratio>
                 <visible>[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)]</visible>
             </control>
             <control type="image">
-                <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
-                    <param name="colordiffuse">$VAR[ColorSelected]</param>
-                </include>
-                <colordiffuse>main_fg_100</colordiffuse>
-                <texture background="true" diffuse="$PARAM[icon_diffuse]" fallback="DefaultStudios.png">$VAR[Image_Icon]</texture>
-                <aspectratio scalediffuse="false">keep</aspectratio>
-                <bordersize>$PARAM[other_bordersize]</bordersize>
-                <visible>[String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)]</visible>
+                <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                <colordiffuse>main_fg_90</colordiffuse>
+                <texture background="true" fallback="DefaultCountry.png">$INFO[ListItem.Label,resource://resource.images.moviecountryicons.maps/,.png]</texture>
+                <aspectratio>keep</aspectratio>
+                <visible>[String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)]</visible>
             </control>
             <control type="image">
-                <include content="Object_ColorDiffuse" condition="$PARAM[selected]">
-                    <param name="colordiffuse">$VAR[ColorSelected]</param>
-                </include>
-                <colordiffuse>main_fg_100</colordiffuse>
-                <texture background="true" diffuse="$PARAM[icon_diffuse]" fallback="DefaultCountry.png">$VAR[Image_Icon]</texture>
-                <aspectratio scalediffuse="false">keep</aspectratio>
-                <bordersize>$PARAM[other_bordersize]</bordersize>
-                <visible>[String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)]</visible>
+                <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                <colordiffuse>main_fg_90</colordiffuse>
+                <texture background="true" fallback="DefaultStudios.png">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</texture>
+                <aspectratio>keep</aspectratio>
+                <visible>[String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)]</visible>
             </control>
         </definition>
     </include>
@@ -1822,6 +1898,7 @@
         <param name="item_h">160</param>
         <param name="icon">$INFO[ListItem.Icon]</param>
         <param name="icon_check">[String.StartsWith(ListItem.Icon,Default) | String.StartsWith(ListItem.Icon,special://skin/extras/icons/)]</param>
+        <param name="icon_default_check">String.StartsWith(ListItem.Icon,Default)</param>
         <definition>
             <control type="group">
                 <left>0</left>
@@ -1836,10 +1913,23 @@
                         <texture background="true" fallback="$PARAM[fallback]" colordiffuse="white" diffuse="diffuse/square_w120_h120.png">$PARAM[icon]</texture>
                         <visible>![$PARAM[icon_check]]</visible>
                     </control>
-                    <control type="image">
-                        <aspectratio align="left">keep</aspectratio>
-                        <texture background="true" fallback="$PARAM[fallback]" colordiffuse="$PARAM[color]" diffuse="diffuse/square_w120_h120.png">$PARAM[icon]</texture>
+                    <control type="group">
                         <visible>$PARAM[icon_check]</visible>
+                        <height>80</height>
+                        <width>80</width>
+                        <centertop>50%</centertop>
+                        <centerleft>50%</centerleft>
+                        <control type="image">
+                            <aspectratio align="left">keep</aspectratio>
+                            <texture background="true" fallback="$PARAM[fallback]" colordiffuse="$PARAM[color]">$PARAM[icon]</texture>
+                            <visible>!$PARAM[icon_default_check]</visible>
+                        </control>
+                        <control type="image">
+                            <aspectratio align="left">keep</aspectratio>
+                            <bordersize>icon_default_bordersize</bordersize>
+                            <texture background="true" fallback="$PARAM[fallback]" colordiffuse="$PARAM[color]">$PARAM[icon]</texture>
+                            <visible>$PARAM[icon_default_check]</visible>
+                        </control>
                     </control>
                 </control>
             </control>

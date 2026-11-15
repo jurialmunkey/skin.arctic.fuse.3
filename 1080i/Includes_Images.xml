@@ -34,6 +34,7 @@
 
     <variable name="Image_StyledBackground_Path">
         <value condition="Skin.String(Background.Style,goldenage)">resource://resource.images.arctic.backgrounds.goldenage/midnight_champagne/</value>
+        <value condition="String.IsEmpty(Skin.String(Background.Style))">resource://resource.images.arctic.backgrounds.surrealist/</value>
         <value>resource://resource.images.arctic.backgrounds.$INFO[Skin.String(Background.Style)]/</value>
     </variable>
 
@@ -70,7 +71,7 @@
 
     <variable name="Image_Blur_Fallback">
 
-        <value condition="String.IsEmpty(Skin.String(Background.Style))">$VAR[Image_SimpleBackground]</value>
+        <value condition="Skin.String(Background.Style,simple)">$VAR[Image_SimpleBackground]</value>
 
         <value condition="$EXP[Exp_IsGenre] | Container.Content(genres)">$VAR[Image_GenreBackground]</value>
 
@@ -144,6 +145,25 @@
         <value condition="Window.IsVisible(MyPlaylist.xml)">$VAR[Image_StyledBackground_Path,,content/playlists.jpg]</value>
 
         <value>$VAR[Image_SimpleBackground]</value>
+    </variable>
+
+    <variable name="Image_Media_Landscape">
+        <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+        <value condition="!String.IsEmpty(ListItem.Property(override_landscape))">$INFO[ListItem.Property(override_landscape)]</value>
+        <value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,musicvideo)] + !String.IsEmpty(ListItem.Art(thumb)) + String.IsEqual(ListItem.Icon,ListItem.Art(thumb)) + !String.IsEqual(ListItem.Art(thumb),ListItem.Art(poster)) + !String.IsEqual(ListItem.Art(thumb),ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(season.landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(season.landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(tvshow.landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.EPGEventIcon)">$INFO[ListItem.EPGEventIcon]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(thumb)) + !String.StartsWith(ListItem.Art(thumb),Default)">$INFO[ListItem.Art(thumb)]</value>
+        <value>$VAR[Image_Blur_Fallback]</value>
+    </variable>
+
+    <variable name="Image_Media_Square">
+        <value condition="!String.IsEmpty(ListItem.Icon) + !String.StartsWith(ListItem.Icon,Default)">$INFO[ListItem.Icon]</value>
+        <value>$VAR[Image_Blur_Fallback]</value>
     </variable>
 
     <variable name="Image_OSD_SkipPrev">
