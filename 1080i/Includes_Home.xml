@@ -14,9 +14,8 @@
     <variable name="Hub_Label_home">
         <value>$INFO[Skin.String(HomeSwitcher.Home.Name)]</value>
     </variable>
-    <!-- Home and Search keep the widget-first default focus of a hub that is not in the menu -->
+    <!-- Home keeps the widget-first default focus of a hub that is not in the menu -->
     <expression name="Exp_Hub_Enabled_Home">false</expression>
-    <expression name="Exp_Hub_Enabled_1105">false</expression>
     <variable name="Hub_Shortcut_home">
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.Home.Shortcut.Target))">ActivateWindow($INFO[Skin.String(HomeSwitcher.Home.Shortcut.Target)],$INFO[Skin.String(HomeSwitcher.Home.Shortcut.Path)],return)</value>
         <value>$INFO[Skin.String(HomeSwitcher.Home.Shortcut.Path)]</value>
@@ -35,16 +34,29 @@
         </definition>
     </include>
 
-    <include name="Home_ControlList_Item_1105">
+    <include name="Home_ControlList_Item_MultiSearch">
         <include content="Home_ControlList_Item">
-            <param name="label">Search</param>
+            <param name="label">$LOCALIZE[137]</param>
             <param name="icon">special://skin/extras/icons/search.png</param>
-            <param name="action">ReplaceWindow(1105)</param>
+            <param name="action">RunScript(script.skinvariables,run_multisearch,tmdbhelper_container,progress_dialog$VAR[Value_MultiSearch_Layout_Param]$VAR[Value_MultiSearch_Discover_Param])</param>
             <param name="enabled">[!Skin.HasSetting(HomeSwitcher.DisableSearch)]</param>
-            <param name="visible">Window.IsVisible(1105)</param>
+            <param name="visible">$EXP[Exp_Hubs_Window_IsMultiSearch]</param>
             <param name="mod">$PARAM[mod]</param>
         </include>
     </include>
+
+    <!-- Discover sources from TMDbHelper follow the search widgets unless they are turned off in the search hub settings -->
+    <variable name="Value_MultiSearch_Discover_Param">
+        <value condition="Skin.HasSetting(HomeSwitcher.Search.DisableDiscover)">,no_discover</value>
+    </variable>
+
+    <!-- Standard shows a results row for each content type. Combined fills source list 200 instead, with all results
+         and either each content type or each source when the selector setting is on sources -->
+    <variable name="Value_MultiSearch_Layout_Param">
+        <value condition="!Skin.HasSetting(HomeSwitcher.Search.Combined)">,mediatype_lists,no_all_list</value>
+        <value condition="Skin.HasSetting(HomeSwitcher.Search.Combined.Sources)">,source_buttons=sources</value>
+        <value>,source_buttons=content</value>
+    </variable>
 
     <include name="Home_ControlList_Item_Home">
         <include content="Home_ControlList_Item">
@@ -52,14 +64,14 @@
             <param name="icon">$VAR[Home_Icon_home]</param>
             <param name="action">ReplaceWindow(Home)</param>
             <param name="enabled">true</param>
-            <param name="visible">Window.IsVisible(1105) | Window.IsVisible(Home)</param>
+            <param name="visible">$EXP[Exp_Hubs_Window_IsMultiSearch] | Window.IsVisible(Home)</param>
             <param name="mod">$PARAM[mod]</param>
         </include>
     </include>
 
     <include name="Home_ControlList_Items">
         <definition>
-            <include content="Home_ControlList_Item_1105">
+            <include content="Home_ControlList_Item_MultiSearch">
                 <param name="mod">$PARAM[mod]</param>
             </include>
             <include content="Home_ControlList_Item_Home">
@@ -85,7 +97,7 @@
 
                 <item>
                     <property name="action">ActivateWindow(1170)</property>
-                    <visible>!$EXP[Exp_Hubs_Menu_Loopback]</visible>
+                    <visible>$EXP[Exp_Hubs_Power_IsEnabled]</visible>
                 </item>
                 <item>
                     <property name="action">noop</property>
@@ -120,22 +132,31 @@
 
     </include>
 
+    <!-- Back from the multisearch menu returns to its search edit instead -->
     <include name="Home_Movement">
-        <include content="Home_Horz_Movement" condition="!Skin.HasSetting(HomeSwitcher.Vertical)">
-            <param name="window">$PARAM[window]</param>
-        </include>
-        <include content="Home_Vert_Movement" condition="Skin.HasSetting(HomeSwitcher.Vertical)">
-            <param name="window">$PARAM[window]</param>
-        </include>
+        <param name="multisearch">false</param>
+        <definition>
+            <include content="Home_Horz_Movement" condition="!Skin.HasSetting(HomeSwitcher.Vertical)">
+                <param name="window">$PARAM[window]</param>
+            </include>
+            <include content="Home_Vert_Movement" condition="Skin.HasSetting(HomeSwitcher.Vertical)">
+                <param name="window">$PARAM[window]</param>
+            </include>
 
-        <onback condition="Player.HasMedia">SetProperty(FullscreenRefocus,SetFocus(300))</onback>
-        <onback condition="Player.HasMedia">309</onback>
-        <onback condition="!Player.HasMedia">303</onback>
+            <onback condition="Player.HasMedia + ![$PARAM[multisearch]]">SetProperty(FullscreenRefocus,SetFocus(300))</onback>
+            <onback condition="Player.HasMedia + ![$PARAM[multisearch]]">309</onback>
+            <onback condition="!Player.HasMedia + ![$PARAM[multisearch]]">303</onback>
+            <include content="MultiSearch_OnBack">
+                <param name="condition">$PARAM[multisearch]</param>
+            </include>
+        </definition>
     </include>
 
     <include name="Home_Control">
         <param name="onclick_condition">true</param>
         <param name="fade_visible">!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</param>
+        <!-- The multisearch window opens from Home so moving to the next hub closes it through its hidden close button 109 and clicking focuses its edit -->
+        <param name="multisearch">false</param>
         <definition>
             <include>Home_ControlList</include>
             <control type="button" id="300">
@@ -145,24 +166,27 @@
                 <texturefocus />
 
                 <onleft condition="!Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(-1).Property(action)]</onleft>
-                <onright condition="!Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(1).Property(action)]</onright>
+                <onright condition="!Skin.HasSetting(HomeSwitcher.Vertical) + ![$PARAM[multisearch]]">$INFO[Container(399).ListItem(1).Property(action)]</onright>
+                <onright condition="!Skin.HasSetting(HomeSwitcher.Vertical) + $PARAM[multisearch]">SendClick(109)</onright>
                 <onup condition="Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(-1).Property(action)]</onup>
-                <ondown condition="Skin.HasSetting(HomeSwitcher.Vertical)">$INFO[Container(399).ListItem(1).Property(action)]</ondown>
+                <ondown condition="Skin.HasSetting(HomeSwitcher.Vertical) + ![$PARAM[multisearch]]">$INFO[Container(399).ListItem(1).Property(action)]</ondown>
+                <ondown condition="Skin.HasSetting(HomeSwitcher.Vertical) + $PARAM[multisearch]">SendClick(109)</ondown>
 
                 <onfocus>SetProperty(HomeSwitcher.IsVisible,True,Home)</onfocus>
                 <onfocus condition="$PARAM[overlay]">SetProperty(InfoPanel.FullSwitch,Wall,Home)</onfocus>
                 <onfocus condition="![$PARAM[overlay]]">ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
                 <onfocus condition="$PARAM[overlay]">SetProperty(Background.ShowOverlay,True,Home)</onfocus>
                 <onfocus condition="![$PARAM[overlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
-                <include content="Hub_ClickActions" condition="!Window.IsVisible(1105)">
+                <include content="Hub_ClickActions" condition="![$PARAM[multisearch]]">
                     <param name="window">$PARAM[window]</param>
                     <param name="condition">$PARAM[onclick_condition]</param>
                 </include>
-                <onclick condition="Window.IsVisible(1105)">SetFocus(3001)</onclick>
-                <onclick condition="Window.IsVisible(1105)">AlarmClock(reclick,Action(Select),00:00,silent)</onclick>
+                <onclick condition="$PARAM[multisearch]">SetFocus(3001)</onclick>
+                <onclick condition="$PARAM[multisearch]">AlarmClock(reclick,Action(Select),00:00,silent)</onclick>
 
                 <include content="Home_Movement">
                     <param name="window">$PARAM[window]</param>
+                    <param name="multisearch">$PARAM[multisearch]</param>
                 </include>
 
                 <nested />
@@ -220,7 +244,7 @@
         <control type="group">
             <visible>!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
             <include content="Animation_ConditionalFade">
-                <param name="condition">Window.IsVisible(1105)</param>
+                <param name="condition">$EXP[Exp_Hubs_Window_IsMultiSearch]</param>
             </include>
             <include>Home_Animation</include>
             <include content="Furniture_Header" condition="!Skin.HasSetting(HomeSwitcher.DisableHeader)">
@@ -290,7 +314,7 @@
                     <align>center</align>
                     <include content="Home_Object_VertIcon" condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">
                         <param name="icon">special://skin/extras/icons/search.png</param>
-                        <param name="window">1105</param>
+                        <param name="window">script-skinvariables-multisearch-generated.xml</param>
                     </include>
                     <include content="Home_Object_VertIcon">
                         <param name="icon">$VAR[Home_Icon_home]</param>
@@ -341,7 +365,7 @@
                 <param name="include">Home_Settings_Button</param>
                 <param name="id_prefix">31</param>
             </include>
-            <include condition="!$EXP[Exp_Hubs_Menu_Loopback]">Home_Settings_Button</include>
+            <include condition="$EXP[Exp_Hubs_Power_IsEnabled]">Home_Settings_Button</include>
             <control type="group">
                 <width>0</width>
             </control>
@@ -790,7 +814,7 @@
                     <control type="group">
                         <width>80</width>
                         <height>1080</height>
-                        <visible>!$EXP[Exp_Hubs_Menu_Loopback]</visible>
+                        <visible>$EXP[Exp_Hubs_Power_IsEnabled]</visible>
                     </control>
                     <control type="group">
                         <width>0</width>

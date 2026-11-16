@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <variable name="Image_FlixArt_MaskPath">
-        <value condition="Skin.String(Skin.FlixArt.Size,Large)">special://skin/extras/diffuse/flixart/1440x810/</value>
-        <value condition="Skin.String(Skin.FlixArt.Size,ExtraLarge)">special://skin/extras/diffuse/flixart/1600x900/</value>
-        <value>special://skin/extras/diffuse/flixart/1280x720/</value>
-    </variable>
-
-    <variable name="Image_FlixArt_Inverse">
-        <value condition="$EXP[Exp_TMDbHelper_IsBlur]">$VAR[Image_FlixArt_MaskPath,,flixart_invert.png]</value>
-        <value>$VAR[Image_FlixArt_MaskPath,,flixart_new_invert.png]</value>
-    </variable>
-
     <variable name="Image_FlixArt_FullscreenInverse">
         <value condition="$EXP[Exp_TMDbHelper_IsBlur]">special://skin/extras/diffuse/flixart/1920x1080/flixart_invert.png</value>
         <value>special://skin/extras/diffuse/flixart/1920x1080/flixart_new_invert.png</value>
@@ -43,71 +32,141 @@
         <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.Base_Poster)]</value>
     </variable>
 
+    <variable name="Image_StyledBackground_Path">
+        <value condition="Skin.String(Background.Style,goldenage)">resource://resource.images.arctic.backgrounds.goldenage/midnight_champagne/</value>
+        <value condition="String.IsEmpty(Skin.String(Background.Style))">resource://resource.images.arctic.backgrounds.surrealist/</value>
+        <value>resource://resource.images.arctic.backgrounds.$INFO[Skin.String(Background.Style)]/</value>
+    </variable>
+
+    <variable name="Image_GenreBackground">
+        <value condition="String.IsEqual(ListItem.Label,Action)">$VAR[Image_StyledBackground_Path,,genres/action.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Adventure)">$VAR[Image_StyledBackground_Path,,genres/adventure.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Action &amp; Adventure) | String.IsEqual(ListItem.Label,Action and Adventure)">$VAR[Image_StyledBackground_Path,,genres/action-adventure.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Animation)">$VAR[Image_StyledBackground_Path,,genres/animation.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Comedy)">$VAR[Image_StyledBackground_Path,,genres/comedy.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Crime)">$VAR[Image_StyledBackground_Path,,genres/crime.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Documentary)">$VAR[Image_StyledBackground_Path,,genres/documentary.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Drama)">$VAR[Image_StyledBackground_Path,,genres/drama.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Family)">$VAR[Image_StyledBackground_Path,,genres/family.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Fantasy)">$VAR[Image_StyledBackground_Path,,genres/fantasy.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,History)">$VAR[Image_StyledBackground_Path,,genres/history.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Horror)">$VAR[Image_StyledBackground_Path,,genres/horror.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Kids)">$VAR[Image_StyledBackground_Path,,genres/kids.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Music)">$VAR[Image_StyledBackground_Path,,genres/music.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Mystery)">$VAR[Image_StyledBackground_Path,,genres/mystery.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,News)">$VAR[Image_StyledBackground_Path,,genres/news.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Reality)">$VAR[Image_StyledBackground_Path,,genres/reality.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Romance)">$VAR[Image_StyledBackground_Path,,genres/romance.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Science Fiction) | String.IsEqual(ListItem.Label,Sci-Fi)">$VAR[Image_StyledBackground_Path,,genres/science-fiction.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Sci-Fi &amp; Fantasy) | String.IsEqual(ListItem.Label,Science Fiction &amp; Fantasy)">$VAR[Image_StyledBackground_Path,,genres/sci-fi-fantasy.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Soap)">$VAR[Image_StyledBackground_Path,,genres/soap.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Talk)">$VAR[Image_StyledBackground_Path,,genres/talk.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Thriller)">$VAR[Image_StyledBackground_Path,,genres/thriller.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,TV Movie)">$VAR[Image_StyledBackground_Path,,genres/tv-movie.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,War)">$VAR[Image_StyledBackground_Path,,genres/war.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,War &amp; Politics) | String.IsEqual(ListItem.Label,War and Politics)">$VAR[Image_StyledBackground_Path,,genres/war-politics.jpg]</value>
+        <value condition="String.IsEqual(ListItem.Label,Western)">$VAR[Image_StyledBackground_Path,,genres/western.jpg]</value>
+        <value>$VAR[Image_StyledBackground_Path,,content/genres.jpg]</value>
+    </variable>
+
     <variable name="Image_Blur_Fallback">
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[135])">special://skin/extras/backgrounds/content/fanart-arctic-genres.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20388])">special://skin/extras/backgrounds/content/fanart-arctic-studios.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[344])">special://skin/extras/backgrounds/content/fanart-arctic-actors.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20348])">special://skin/extras/backgrounds/content/fanart-arctic-directors.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[652])">special://skin/extras/backgrounds/content/fanart-arctic-years.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20459])">special://skin/extras/backgrounds/content/fanart-arctic-tags.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20451])">special://skin/extras/backgrounds/content/fanart-arctic-countries.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[40000])">special://skin/extras/backgrounds/content/fanart-arctic-versions.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[342])">special://skin/extras/backgrounds/content/fanart-arctic-movies.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20343])">special://skin/extras/backgrounds/content/fanart-arctic-tvshows.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20434])">special://skin/extras/backgrounds/content/fanart-arctic-sets.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20389])">special://skin/extras/backgrounds/content/fanart-arctic-musicvideos.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[133])">special://skin/extras/backgrounds/content/fanart-arctic-artists.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[132])">special://skin/extras/backgrounds/content/fanart-arctic-albums.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[134])">special://skin/extras/backgrounds/content/fanart-arctic-songs.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[29994])">special://skin/extras/backgrounds/content/fanart-arctic-roles.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[136])">special://skin/extras/backgrounds/content/fanart-arctic-playlists.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[744])">special://skin/extras/backgrounds/content/fanart-arctic-files.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[39031])">special://skin/extras/backgrounds/content/fanart-arctic-sources.jpg</value>
-        <value condition="String.IsEmpty(ListItem.DBType) + [String.IsEqual(ListItem.Label,$LOCALIZE[1037]) | String.IsEqual(ListItem.Label,$LOCALIZE[1038])]">special://skin/extras/backgrounds/content/fanart-arctic-addons.jpg</value>
 
-        <value condition="Container.Content(genres)">special://skin/extras/backgrounds/content/fanart-arctic-genres.jpg</value>
-        <value condition="Container.Content(studios)">special://skin/extras/backgrounds/content/fanart-arctic-studios.jpg</value>
-        <value condition="Container.Content(actors)">special://skin/extras/backgrounds/content/fanart-arctic-actors.jpg</value>
-        <value condition="Container.Content(directors)">special://skin/extras/backgrounds/content/fanart-arctic-directors.jpg</value>
-        <value condition="Container.Content(years)">special://skin/extras/backgrounds/content/fanart-arctic-years.jpg</value>
-        <value condition="Container.Content(tags)">special://skin/extras/backgrounds/content/fanart-arctic-tags.jpg</value>
-        <value condition="Container.Content(countries)">special://skin/extras/backgrounds/content/fanart-arctic-countries.jpg</value>
-        <value condition="Container.Content(videoversions)">special://skin/extras/backgrounds/content/fanart-arctic-versions.jpg</value>
-        <value condition="Container.Content(movies)">special://skin/extras/backgrounds/content/fanart-arctic-movies.jpg</value>
-        <value condition="Container.Content(tvshows)">special://skin/extras/backgrounds/content/fanart-arctic-tvshows.jpg</value>
-        <value condition="Container.Content(seasons)">special://skin/extras/backgrounds/content/fanart-arctic-seasons.jpg</value>
-        <value condition="Container.Content(episodes)">special://skin/extras/backgrounds/content/fanart-arctic-episodes.jpg</value>
-        <value condition="Container.Content(sets)">special://skin/extras/backgrounds/content/fanart-arctic-sets.jpg</value>
-        <value condition="Container.Content(musicvideos)">special://skin/extras/backgrounds/content/fanart-arctic-musicvideos.jpg</value>
-        <value condition="Container.Content(artists)">special://skin/extras/backgrounds/content/fanart-arctic-artists.jpg</value>
-        <value condition="Container.Content(albums)">special://skin/extras/backgrounds/content/fanart-arctic-albums.jpg</value>
-        <value condition="Container.Content(songs)">special://skin/extras/backgrounds/content/fanart-arctic-songs.jpg</value>
-        <value condition="Container.Content(playlists)">special://skin/extras/backgrounds/content/fanart-arctic-playlists.jpg</value>
-        <value condition="Container.Content(files)">special://skin/extras/backgrounds/content/fanart-arctic-files.jpg</value>
-        <value condition="Container.Content(sources)">special://skin/extras/backgrounds/content/fanart-arctic-sources.jpg</value>
-        <value condition="Container.Content(addons)">special://skin/extras/backgrounds/content/fanart-arctic-addons.jpg</value>
-        <value condition="Container.Content(plugins)">special://skin/extras/backgrounds/content/fanart-arctic-plugins.jpg</value>
-        <value condition="Container.Content(games)">special://skin/extras/backgrounds/content/fanart-arctic-games.jpg</value>
-        <value condition="Container.Content(images)">special://skin/extras/backgrounds/content/fanart-arctic-images.jpg</value>
-        <value condition="Container.Content(mixed)">special://skin/extras/backgrounds/content/fanart-arctic-mixed.jpg</value>
-        <value condition="Container.Content(videos)">special://skin/extras/backgrounds/content/fanart-arctic-videos.jpg</value>
-        <value condition="Container.Content(recordings)">special://skin/extras/backgrounds/content/fanart-arctic-recordings.jpg</value>
-        <value condition="Container.Content(roles)">special://skin/extras/backgrounds/content/fanart-arctic-roles.jpg</value>
-        <value condition="Container.Content(videoassets)">special://skin/extras/backgrounds/content/fanart-arctic-videoassets.jpg</value>
-        <value condition="Container.Content(videoextras)">special://skin/extras/backgrounds/content/fanart-arctic-videoextras.jpg</value>
-        <value condition="Container.Content(livetv)">special://skin/extras/backgrounds/content/fanart-arctic-livetv.jpg</value>
+        <value condition="Skin.String(Background.Style,simple)">$VAR[Image_SimpleBackground]</value>
 
-        <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyVideoNav.xml)">special://skin/extras/backgrounds/content/fanart-arctic-videoassets.jpg</value>
-        <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyMusicNav.xml)">special://skin/extras/backgrounds/content/fanart-arctic-artists.jpg</value>
-        <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyPics.xml)">special://skin/extras/backgrounds/content/fanart-arctic-images.jpg</value>
-        <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyPrograms.xml)">special://skin/extras/backgrounds/content/fanart-arctic-plugins.jpg</value>
-        <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyGames.xml)">special://skin/extras/backgrounds/content/fanart-arctic-games.jpg</value>
-        <value condition="Skin.HasSetting(Info.EnableStylisedBackgrounds) + Window.IsVisible(MyPlaylist.xml)">special://skin/extras/backgrounds/content/fanart-arctic-playlists.jpg</value>
+        <value condition="$EXP[Exp_IsGenre] | Container.Content(genres)">$VAR[Image_GenreBackground]</value>
+
+        <value condition="String.IsEmpty(ListItem.DBType) + [String.IsEqual(ListItem.Icon,DefaultRecentlyAddedMovies.png) | String.IsEqual(ListItem.Label,$LOCALIZE[20386])]">$VAR[Image_StyledBackground_Path,,content/recentlyaddedmovies.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + [String.IsEqual(ListItem.Icon,DefaultRecentlyAddedEpisodes.png) | String.IsEqual(ListItem.Label,$LOCALIZE[20387])]">$VAR[Image_StyledBackground_Path,,content/recentlyaddedtvshows.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Icon,DefaultInProgressShows.png)">$VAR[Image_StyledBackground_Path,,content/inprogresstvshows.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[575])">$VAR[Image_StyledBackground_Path,,content/inprogressmovies.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + [String.IsEqual(ListItem.Icon,DefaultMusicTop100.png) | String.IsEqual(ListItem.Icon,DefaultMusicTop100Albums.png) | String.IsEqual(ListItem.Icon,DefaultMusicTop100Songs.png) | String.IsEqual(ListItem.Label,$LOCALIZE[271]) | String.IsEqual(ListItem.Label,$LOCALIZE[10504]) | String.IsEqual(ListItem.Label,$LOCALIZE[10505])]">$VAR[Image_StyledBackground_Path,,content/top100.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + [String.IsEqual(ListItem.Icon,DefaultMusicRecentlyAdded.png) | String.IsEqual(ListItem.Label,$LOCALIZE[359])]">$VAR[Image_StyledBackground_Path,,content/recentlyaddedalbums.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + [String.IsEqual(ListItem.Icon,DefaultMusicRecentlyPlayed.png) | String.IsEqual(ListItem.Label,$LOCALIZE[517])]">$VAR[Image_StyledBackground_Path,,content/recentlyplayedalbums.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + [String.IsEqual(ListItem.Icon,DefaultMusicCompilations.png) | String.IsEqual(ListItem.Label,$LOCALIZE[521])]">$VAR[Image_StyledBackground_Path,,content/compilations.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[1050])">$VAR[Image_StyledBackground_Path,,content/singles.jpg]</value>
+
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[135])">$VAR[Image_StyledBackground_Path,,content/genres.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20388])">$VAR[Image_StyledBackground_Path,,content/studios.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[344])">$VAR[Image_StyledBackground_Path,,content/actors.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20348])">$VAR[Image_StyledBackground_Path,,content/directors.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[652])">$VAR[Image_StyledBackground_Path,,content/years.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20459])">$VAR[Image_StyledBackground_Path,,content/tags.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20451])">$VAR[Image_StyledBackground_Path,,content/countries.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[40000])">$VAR[Image_StyledBackground_Path,,content/versions.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[342])">$VAR[Image_StyledBackground_Path,,content/movies.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20343])">$VAR[Image_StyledBackground_Path,,content/tvshows.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20434])">$VAR[Image_StyledBackground_Path,,content/sets.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[20389])">$VAR[Image_StyledBackground_Path,,content/musicvideos.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[133])">$VAR[Image_StyledBackground_Path,,content/artists.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[132])">$VAR[Image_StyledBackground_Path,,content/albums.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[134])">$VAR[Image_StyledBackground_Path,,content/songs.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[29994])">$VAR[Image_StyledBackground_Path,,content/roles.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[136])">$VAR[Image_StyledBackground_Path,,content/playlists.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[744])">$VAR[Image_StyledBackground_Path,,content/files.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Label,$LOCALIZE[39031])">$VAR[Image_StyledBackground_Path,,content/sources.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + [String.IsEqual(ListItem.Label,$LOCALIZE[1037]) | String.IsEqual(ListItem.Label,$LOCALIZE[1038])]">$VAR[Image_StyledBackground_Path,,content/addons.jpg]</value>
+
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Icon,DefaultMovieTitle.png)">$VAR[Image_StyledBackground_Path,,content/movies.jpg]</value>
+        <value condition="String.IsEmpty(ListItem.DBType) + String.IsEqual(ListItem.Icon,DefaultTVShowTitle.png)">$VAR[Image_StyledBackground_Path,,content/tvshows.jpg]</value>
+
+        <value condition="Container.Content(studios)">$VAR[Image_StyledBackground_Path,,content/studios.jpg]</value>
+        <value condition="Container.Content(actors)">$VAR[Image_StyledBackground_Path,,content/actors.jpg]</value>
+        <value condition="Container.Content(directors)">$VAR[Image_StyledBackground_Path,,content/directors.jpg]</value>
+        <value condition="Container.Content(years)">$VAR[Image_StyledBackground_Path,,content/years.jpg]</value>
+        <value condition="Container.Content(tags)">$VAR[Image_StyledBackground_Path,,content/tags.jpg]</value>
+        <value condition="Container.Content(countries)">$VAR[Image_StyledBackground_Path,,content/countries.jpg]</value>
+        <value condition="Container.Content(videoversions)">$VAR[Image_StyledBackground_Path,,content/versions.jpg]</value>
+        <value condition="Container.Content(movies)">$VAR[Image_StyledBackground_Path,,content/movies.jpg]</value>
+        <value condition="Container.Content(tvshows)">$VAR[Image_StyledBackground_Path,,content/tvshows.jpg]</value>
+        <value condition="Container.Content(seasons)">$VAR[Image_StyledBackground_Path,,content/seasons.jpg]</value>
+        <value condition="Container.Content(episodes)">$VAR[Image_StyledBackground_Path,,content/episodes.jpg]</value>
+        <value condition="Container.Content(sets)">$VAR[Image_StyledBackground_Path,,content/sets.jpg]</value>
+        <value condition="Container.Content(musicvideos)">$VAR[Image_StyledBackground_Path,,content/musicvideos.jpg]</value>
+        <value condition="Container.Content(artists)">$VAR[Image_StyledBackground_Path,,content/artists.jpg]</value>
+        <value condition="Container.Content(albums)">$VAR[Image_StyledBackground_Path,,content/albums.jpg]</value>
+        <value condition="Container.Content(songs)">$VAR[Image_StyledBackground_Path,,content/songs.jpg]</value>
+        <value condition="Container.Content(playlists)">$VAR[Image_StyledBackground_Path,,content/playlists.jpg]</value>
+        <value condition="Container.Content(files)">$VAR[Image_StyledBackground_Path,,content/files.jpg]</value>
+        <value condition="Container.Content(sources)">$VAR[Image_StyledBackground_Path,,content/sources.jpg]</value>
+        <value condition="Container.Content(addons)">$VAR[Image_StyledBackground_Path,,content/addons.jpg]</value>
+        <value condition="Container.Content(plugins)">$VAR[Image_StyledBackground_Path,,content/plugins.jpg]</value>
+        <value condition="Container.Content(games)">$VAR[Image_StyledBackground_Path,,content/games.jpg]</value>
+        <value condition="Container.Content(images)">$VAR[Image_StyledBackground_Path,,content/images.jpg]</value>
+        <value condition="Container.Content(mixed)">$VAR[Image_StyledBackground_Path,,content/mixed.jpg]</value>
+        <value condition="Container.Content(videos)">$VAR[Image_StyledBackground_Path,,content/videos.jpg]</value>
+        <value condition="Container.Content(recordings)">$VAR[Image_StyledBackground_Path,,content/recordings.jpg]</value>
+        <value condition="Container.Content(roles)">$VAR[Image_StyledBackground_Path,,content/roles.jpg]</value>
+        <value condition="Container.Content(videoassets)">$VAR[Image_StyledBackground_Path,,content/videoassets.jpg]</value>
+        <value condition="Container.Content(videoextras)">$VAR[Image_StyledBackground_Path,,content/videoextras.jpg]</value>
+        <value condition="Container.Content(livetv)">$VAR[Image_StyledBackground_Path,,content/livetv.jpg]</value>
+
+        <value condition="Window.IsVisible(MyVideoNav.xml)">$VAR[Image_StyledBackground_Path,,content/videoassets.jpg]</value>
+        <value condition="Window.IsVisible(MyMusicNav.xml)">$VAR[Image_StyledBackground_Path,,content/artists.jpg]</value>
+        <value condition="Window.IsVisible(MyPics.xml)">$VAR[Image_StyledBackground_Path,,content/images.jpg]</value>
+        <value condition="Window.IsVisible(MyPrograms.xml)">$VAR[Image_StyledBackground_Path,,content/plugins.jpg]</value>
+        <value condition="Window.IsVisible(MyGames.xml)">$VAR[Image_StyledBackground_Path,,content/games.jpg]</value>
+        <value condition="Window.IsVisible(MyPlaylist.xml)">$VAR[Image_StyledBackground_Path,,content/playlists.jpg]</value>
+
         <value>$VAR[Image_SimpleBackground]</value>
     </variable>
 
-    <variable name="Image_BasicList_Landscape">
-        <value>$VAR[Image_Landscape]</value>
+    <variable name="Image_Media_Landscape">
+        <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+        <value condition="!String.IsEmpty(ListItem.Property(override_landscape))">$INFO[ListItem.Property(override_landscape)]</value>
+        <value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,musicvideo)] + !String.IsEmpty(ListItem.Art(thumb)) + String.IsEqual(ListItem.Icon,ListItem.Art(thumb)) + !String.IsEqual(ListItem.Art(thumb),ListItem.Art(poster)) + !String.IsEqual(ListItem.Art(thumb),ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(season.landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(season.landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(tvshow.landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.EPGEventIcon)">$INFO[ListItem.EPGEventIcon]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(thumb)) + !String.StartsWith(ListItem.Art(thumb),Default)">$INFO[ListItem.Art(thumb)]</value>
+        <value>$VAR[Image_Blur_Fallback]</value>
+    </variable>
+
+    <variable name="Image_Media_Square">
+        <value condition="!String.IsEmpty(ListItem.Icon) + !String.StartsWith(ListItem.Icon,Default)">$INFO[ListItem.Icon]</value>
+        <value>$VAR[Image_Blur_Fallback]</value>
     </variable>
 
     <variable name="Image_OSD_SkipPrev">

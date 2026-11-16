@@ -41,7 +41,6 @@
                 <param name="window">1104</param>
             </include>
 
-            <onload condition="String.IsEmpty(Window(1105).Property(TMDbHelper.WidgetContainer))">SetProperty(TMDbHelper.WidgetContainer,501,1105)</onload>
             <include content="Hub_Onload_Window">
                 <param name="window">1106</param>
             </include>
@@ -313,24 +312,29 @@
         <onright condition="Skin.HasSetting(HomeSwitcher.Vertical)">ActivateWindow(1180)</onright>
     </include>
 
+    <!-- Up from the first widget focuses onup. Disable bumper to focus onup with the vertical menu too -->
     <include name="Hub_Widgets_Grouplist">
-        <control type="grouplist" id="602">
-            <animation effect="slide" start="0" end="0,-440" condition="true">Conditional</animation>
+        <param name="onup">302</param>
+        <param name="bumper">true</param>
+        <definition>
+            <control type="grouplist" id="602">
+                <animation effect="slide" start="0" end="0,-440" condition="true">Conditional</animation>
 
-            <onup condition="!Control.IsVisible(301) + Skin.HasSetting(HomeSwitcher.Vertical)">SetProperty(Bumper.Direction,Up,Home)</onup>
-            <onup condition="!Control.IsVisible(301) + Skin.HasSetting(HomeSwitcher.Vertical)">ActivateWindow(1180)</onup>
-            <onup condition="!Control.IsVisible(301) + !Skin.HasSetting(HomeSwitcher.Vertical)">302</onup>
-            <onup condition="Control.IsVisible(301)">301</onup>
-            <ondown>ActivateWindow(1180)</ondown>
-            <include>Hub_Grouplist_OnLeftRight</include>
-            <orientation>vertical</orientation>
-            <control type="group" id="599">
-                <height>widget_tbump_h_detailed</height>
+                <onup condition="!Control.IsVisible(301) + Skin.HasSetting(HomeSwitcher.Vertical) + $PARAM[bumper]">SetProperty(Bumper.Direction,Up,Home)</onup>
+                <onup condition="!Control.IsVisible(301) + Skin.HasSetting(HomeSwitcher.Vertical) + $PARAM[bumper]">ActivateWindow(1180)</onup>
+                <onup condition="!Control.IsVisible(301) + [!Skin.HasSetting(HomeSwitcher.Vertical) | ![$PARAM[bumper]]]">$PARAM[onup]</onup>
+                <onup condition="Control.IsVisible(301)">301</onup>
+                <ondown>ActivateWindow(1180)</ondown>
+                <include>Hub_Grouplist_OnLeftRight</include>
+                <orientation>vertical</orientation>
+                <control type="group" id="599">
+                    <height>widget_tbump_h_detailed</height>
+                </control>
+                <top>widget_grouplist_t_detailed</top>
+                <bottom>widget_grouplist_b_detailed</bottom>
+                <nested />
             </control>
-            <top>widget_grouplist_t_detailed</top>
-            <bottom>widget_grouplist_b_detailed</bottom>
-            <nested />
-        </control>
+        </definition>
     </include>
 
     <include name="Hub_Combined_Widgets_Grouplist">
@@ -981,14 +985,18 @@
                 <visible>$PARAM[condition]</visible>
                 <include>Background_StartUp</include>
                 <control type="videowindow" />
-                <include>Object_StartUp_Logo</include>
-                <control type="label">
-                    <centertop>610</centertop>
-                    <height>40</height>
-                    <aligny>center</aligny>
-                    <align>center</align>
-                    <textcolor>main_logo</textcolor>
-                    <label>$PARAM[label]...</label>
+                <include>Object_StartUp_Weather</include>
+                <control type="group">
+                    <include>Animation_StartUp_Offset</include>
+                    <include>Object_StartUp_Logo</include>
+                    <control type="label">
+                        <centertop>610</centertop>
+                        <height>40</height>
+                        <aligny>center</aligny>
+                        <align>center</align>
+                        <textcolor>main_logo</textcolor>
+                        <label>$PARAM[label]...</label>
+                    </control>
                 </control>
                 <include content="Furniture_Busy" condition="$PARAM[busyspinner]">
                     <param name="hasspinner">true</param>
