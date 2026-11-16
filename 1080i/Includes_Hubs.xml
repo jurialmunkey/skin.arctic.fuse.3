@@ -921,50 +921,6 @@
         </control>
     </include>
 
-    <include name="Hub_Settings_Items">
-        <item>
-            <label>$LOCALIZE[400]</label>
-            <property name="guid">weather</property>
-            <property name="widget_id">$NUMBER[501]</property>
-            <property name="show_overlay">true</property>
-            <onclick>ActivateWindow(1161)</onclick>
-            <visible>!Integer.IsEqual(Container(501).NumItems,0) | Container(501).IsUpdating</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[1036]</label>
-            <property name="guid">favourites</property>
-            <property name="widget_id">$NUMBER[502]</property>
-            <property name="show_overlay">true</property>
-            <onclick>ActivateWindow(1160)</onclick>
-            <visible>!Integer.IsEqual(Container(502).NumItems,0) | Container(502).IsUpdating</visible>
-        </item>
-        <item>
-            <label>$LOCALIZE[5]</label>
-            <property name="guid">settings</property>
-            <property name="widget_id">$NUMBER[503]</property>
-            <property name="show_overlay">true</property>
-            <onclick>ActivateWindow(settings)</onclick>
-            <visible>!Integer.IsEqual(Container(503).NumItems,0) | Container(503).IsUpdating</visible>
-        </item>
-    </include>
-
-    <include name="Hub_Settings_Favourites_Onclick">
-        <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-openfavourite.json,use_rules,close_dialog=false,folderpath=$INFO[Container(502).ListItem.FolderPath])</onclick>
-    </include>
-
-    <include name="Hub_Settings_Widgets">
-        <include content="Hub_Wall_Widget">
-            <param name="id">502</param>
-            <param name="content">favourites://</param>
-            <param name="include">List_Square_Row</param>
-            <param name="sortby">lastused</param>
-            <param name="sortorder">descending</param>
-            <param name="visible">String.IsEqual(Container(601).ListItem.Property(guid),favourites)</param>
-            <param name="home_switcher">true</param>
-            <param name="include_action">Hub_Settings_Favourites_Onclick</param>
-        </include>
-    </include>
-
     <include name="Hub_Widget_Overlay">
         <include content="Object_Property" condition="String.IsEqual(Skin.String(HomeSwitcher.$PARAM[window_id].Mode),Wall)">
             <param name="name">show_overlay</param>
