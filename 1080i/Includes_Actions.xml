@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <variable name="Action_SearchEnabled">
-        <value condition="!Skin.HasSetting(HomeSwitcher.DisableSearch)">true</value>
-    </variable>
-
-    <variable name="Action_PowerEnabled">
-        <value condition="!Skin.HasSetting(HomeSwitcher.LoopBack)">true</value>
-    </variable>
-
     <variable name="Action_FirstStart_HomeFocus">
         <value condition="Skin.HasSetting(HomeSwitcher.DisableFirstWidgetFocus)">SetFocus(300)</value>
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.Home.Spotlight.Target))">SetFocus(310)</value>
@@ -216,20 +208,6 @@
         </definition>
     </include>
 
-    <include name="Action_SetupWizard_Open">
-        <onclick>ClearProperty(SetupWizard.Page,Home)</onclick>
-        <onclick>SetProperty(SetupWizard.Index,0,Home)</onclick>
-        <onclick>ActivateWindow(1130)</onclick>
-    </include>
-
-    <!-- Opens a single wizard step without the rail -->
-    <include name="Action_SetupWizard_Page_Open">
-        <definition>
-            <onclick>SetProperty(SetupWizard.Page,$PARAM[page],Home)</onclick>
-            <onclick>ActivateWindow(1130)</onclick>
-        </definition>
-    </include>
-
     <!-- Asks before applying a full home screen preset. On yes, skinvariables-setupwizard-preset.json sets the hub types,
          layouts and spotlights, copies the preset folder (home, search and hub menus and widgets) over the current
          profile's menu files without asking again, and flags a template rebuild. Optional onconfirm runs after it. -->
@@ -327,17 +305,6 @@
 
         <onload condition="Skin.HasSetting(TMDbHelper.EnableData)">Skin.SetBool(TMDbHelper.Service)</onload>
         <onload condition="!Skin.HasSetting(TMDbHelper.EnableData)">Skin.Reset(TMDbHelper.Service)</onload>
-    </include>
-    <include name="_Action_Blur_OnUnload">
-        <param name="sourceimage">Art(fanart)</param>
-        <definition>
-            <onunload>SetProperty(TMDbHelper.Blur.SourceImage,$PARAM[sourceimage],Home)</onunload>
-        </definition>
-    </include>
-    <include name="Action_Blur_OnUnload">
-        <include content="_Action_Blur_OnUnload">
-            <param name="sourceimage">Art(fanart)|Property(fanart)</param>
-        </include>
     </include>
 
     <variable name="Action_Update_Color">

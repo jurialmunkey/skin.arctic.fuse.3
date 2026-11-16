@@ -189,40 +189,6 @@
         </definition>
     </include>
 
-    <include name="List_SettingsWidget">
-        <param name="item_h">120</param>
-        <param name="itemlayout_h">175</param>
-        <param name="detailed">false</param>
-        <param name="itemlayout_include">Layout_SettingsSelect</param>
-        <param name="control">panel</param>
-        <param name="orientation">vertical</param>
-        <definition>
-            <include content="List_Core">
-                <param name="orientation">$PARAM[orientation]</param>
-                <param name="control">$PARAM[control]</param>
-                <param name="id">$PARAM[id]</param>
-                <param name="altfocus">$PARAM[altfocus]</param>
-                <param name="item_h">$PARAM[item_h]</param>
-                <param name="itemlayout_h">$PARAM[itemlayout_h]</param>
-                <param name="item_w">$PARAM[item_w]</param>
-                <param name="itemlayout_w">$PARAM[itemlayout_w]</param>
-                <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
-                <param name="detailed">$PARAM[detailed]</param>
-                <param name="variation">$PARAM[variation]</param>
-                <param name="misc">$PARAM[misc]</param>
-                <param name="icon">$PARAM[icon]</param>
-                <param name="offset_x">0</param>
-                <param name="offset_y">0</param>
-                <param name="textcolor">$PARAM[textcolor]</param>
-                <param name="hidden_button_enabled">$PARAM[hidden_button_enabled]</param>
-                <param name="hidden_button">$PARAM[hidden_button]</param>
-                <param name="include_detailed_labels">$PARAM[include_detailed_labels]</param>
-                <param name="diffuse">$PARAM[diffuse]</param>
-                <nested />
-            </include>
-        </definition>
-    </include>
-
     <include name="List_DialogSelect">
         <param name="item_height">80</param>
         <param name="detailed">false</param>
@@ -471,29 +437,6 @@
                         </control>
                     </control>
                 </focusedlayout>
-            </include>
-        </definition>
-    </include>
-
-    <include name="List_Banner_Row">
-        <param name="orientation">horizontal</param>
-        <param name="control">fixedlist</param>
-        <definition>
-            <include content="List_Core">
-                <param name="orientation">$PARAM[orientation]</param>
-                <param name="control">$PARAM[control]</param>
-                <param name="id">$PARAM[id]</param>
-                <param name="item_w">view_banner_item_w</param>
-                <param name="item_h">view_poster_item_h</param>
-                <param name="itemlayout_w">view_banner_itemlayout_w</param>
-                <param name="itemlayout_h">view_poster_itemlayout_h</param>
-                <param name="itemlayout_include">Layout_Banner</param>
-                <param name="offset_y">$PARAM[offset_y]</param>
-                <param name="detailed">$PARAM[detailed]</param>
-                <param name="hidden_button_enabled">$PARAM[hidden_button_enabled]</param>
-                <param name="hidden_button">$PARAM[hidden_button]</param>
-                <nested />
-                <include>List_Banner_Row_Movement</include>
             </include>
         </definition>
     </include>
@@ -855,29 +798,6 @@
         </definition>
     </include>
 
-    <include name="List_ButtonMenu_Row_HiddenButton_View_OnFocus">
-        <param name="condition">true</param>
-        <definition>
-            <onfocus condition="$PARAM[condition]">ClearProperty($PARAM[prefix]SpecialFolderPath)</onfocus>
-            <onfocus condition="$PARAM[condition]">ClearProperty($PARAM[prefix]SpecialFolderLabel)</onfocus>
-            <onfocus condition="$PARAM[condition]">ClearProperty($PARAM[prefix]SpecialFolderStyle)</onfocus>
-            <onfocus condition="$PARAM[condition]">ClearProperty($PARAM[prefix]SpecialFolderSortBy)</onfocus>
-            <onfocus condition="$PARAM[condition]">ClearProperty($PARAM[prefix]SpecialFolderSortOrder)</onfocus>
-            <onfocus condition="$PARAM[condition]">ClearProperty($PARAM[prefix]SpecialFolderLimit)</onfocus>
-            <!-- Update Path -->
-            <onfocus condition="$PARAM[condition] + !String.IsEmpty($PARAM[container]ListItem.FolderPath) + $PARAM[container]ListItem.IsFolder">SetProperty($PARAM[prefix]SpecialFolderPath,$INFO[$PARAM[container]ListItem.FolderPath])</onfocus>
-            <onfocus condition="$PARAM[condition] + !String.IsEmpty($PARAM[container]ListItem.FolderPath) + $PARAM[container]ListItem.IsFolder">SetProperty($PARAM[prefix]SpecialFolderLabel,$INFO[$PARAM[container]ListItem.Label])</onfocus>
-        </definition>
-    </include>
-
-    <include name="List_ButtonMenu_Row_HiddenButton_View">
-        <control type="button">
-            <visible allowhiddenfocus="true">false</visible>
-            <animation effect="fade" start="0" end="0" time="400" reversible="false">Focus</animation>
-            <include>List_ButtonMenu_Row_HiddenButton_View_OnFocus</include>
-        </control>
-    </include>
-
     <include name="List_ButtonMenu_Row_HiddenButton_ERow_OnFocus">
         <param name="condition">true</param>
         <param name="prefix" />
@@ -894,132 +814,6 @@
             <visible allowhiddenfocus="true">false</visible>
             <include>List_ButtonMenu_Row_HiddenButton_ERow_OnFocus</include>
         </control>
-    </include>
-
-    <include name="List_ButtonMenu_Row">
-        <param name="control">list</param>
-        <param name="itemlayout_w">240</param>
-        <param name="font">font_mini_bold</param>
-        <param name="color_fo">main_fg_100</param>
-        <param name="color_nf">main_fg_30</param>
-        <param name="altfocus">false</param>
-        <param name="offset_x">40</param>
-        <param name="hidden_button" />
-        <param name="hidden_button_enabled">false</param>
-        <param name="backing">false</param>
-        <param name="label_fo">true</param>
-        <param name="underline">false</param>
-        <definition>
-            <control type="$PARAM[control]" id="$PARAM[id]">
-                <nested />
-                <include content="$PARAM[hidden_button]_OnFocus" condition="$PARAM[hidden_button_enabled]">
-                    <param name="id">$PARAM[id]</param>
-                    <param name="container">Container($PARAM[id]).</param>
-                    <param name="prefix">$PARAM[hidden_button_prefix]</param>
-                </include>
-                <orientation>horizontal</orientation>
-                <scrolltime tween="quadratic">400</scrolltime>
-                <itemlayout height="120" width="$PARAM[itemlayout_w]">
-                    <control type="group">
-                        <animation effect="fadediffuse" start="FFFFFFFF" end="FFFF0000" condition="String.IsEqual(ListItem.Property(disabled),True)">Conditional</animation>
-                        <left>$PARAM[offset_x]</left>
-                        <right>-$PARAM[offset_x]</right>
-                        <height>120</height>
-
-                        <control type="group">
-                            <right>40</right>
-                            <height>40</height>
-                            <centertop>50%</centertop>
-                            <control type="label">
-                                <height>20</height>
-                                <centertop>18</centertop>
-                                <aligny>center</aligny>
-                                <align>center</align>
-                                <font>$PARAM[font]</font>
-                                <textcolor>$PARAM[color_nf]</textcolor>
-                                <label>$INFO[ListItem.Label]</label>
-                            </control>
-                        </control>
-                    </control>
-                </itemlayout>
-                <focusedlayout height="120" width="$PARAM[itemlayout_w]">
-                    <include content="$PARAM[hidden_button]" condition="$PARAM[hidden_button_enabled]">
-                        <param name="id">$PARAM[id]</param>
-                        <param name="prefix">$PARAM[hidden_button_prefix]</param>
-                    </include>
-                    <control type="group">
-                        <left>$PARAM[offset_x]</left>
-                        <right>-$PARAM[offset_x]</right>
-                        <height>120</height>
-                        <control type="group">
-                            <right>40</right>
-                            <height>40</height>
-                            <centertop>50%</centertop>
-                            <visible>![Control.HasFocus($PARAM[id]) | $PARAM[altfocus]]</visible>
-                            <animation effect="fadediffuse" start="FFFFFFFF" end="FFFF0000" condition="String.IsEqual(ListItem.Property(disabled),True)">Conditional</animation>
-
-                            <control type="group">
-                                <visible>$PARAM[label_fo]</visible>
-                                <control type="label">
-                                    <height>20</height>
-                                    <centertop>18</centertop>
-                                    <aligny>center</aligny>
-                                    <align>center</align>
-                                    <font>$PARAM[font]</font>
-                                    <textcolor>$PARAM[color_fo]</textcolor>
-                                    <label>$INFO[ListItem.Label]</label>
-                                </control>
-                                <control type="group">
-                                    <control type="image">
-                                        <include>Texture_Highlight_Scrollbar_V</include>
-                                        <height>8</height>
-                                        <width>40</width>
-                                        <centerleft>50%</centerleft>
-                                        <centerbottom>-5</centerbottom>
-                                        <visible>$PARAM[underline]</visible>
-                                    </control>
-                                </control>
-                            </control>
-                            <control type="group">
-                                <visible>![$PARAM[label_fo]]</visible>
-                                <control type="label">
-                                    <height>20</height>
-                                    <centertop>18</centertop>
-                                    <aligny>center</aligny>
-                                    <align>center</align>
-                                    <font>$PARAM[font]</font>
-                                    <textcolor>$PARAM[color_nf]</textcolor>
-                                    <label>$INFO[ListItem.Label]</label>
-                                </control>
-                            </control>
-                        </control>
-                        <control type="group">
-                            <right>40</right>
-                            <height>40</height>
-                            <visible>[Control.HasFocus($PARAM[id]) | $PARAM[altfocus]]</visible>
-                            <centertop>50%</centertop>
-                            <control type="image">
-                                <height>80</height>
-                                <centertop>50%</centertop>
-                                <left>-20</left>
-                                <right>-20</right>
-                                <include>Texture_Menu_Highlight_H</include>
-                            </control>
-                            <control type="label">
-                                <height>20</height>
-                                <centertop>18</centertop>
-                                <aligny>center</aligny>
-                                <align>center</align>
-                                <font>$PARAM[font]</font>
-                                <include>Color_SelectedText</include>
-                                <label>$INFO[ListItem.Label]</label>
-                                <animation effect="fadediffuse" start="FFFFFFFF" end="FFFF0000" condition="String.IsEqual(ListItem.Property(disabled),True)">Conditional</animation>
-                            </control>
-                        </control>
-                    </control>
-                </focusedlayout>
-            </control>
-        </definition>
     </include>
 
     <include name="List_Widget_Row_HiddenButton">
