@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Template for SkinVariables run_skinsettings. The script fills grouplists 3 and 5 from shortcuts/skinvariables-skinsettings.json
-     using the template controls below, configures the search box in place, sets the description in textbox 6, and removes the
+     using the template controls below, configures the search box and tags button in place, sets the description in textbox 6, and removes the
      template controls from the generated window. -->
 <window>
     <include content="Action_SettingsCategories_Onload">
@@ -20,10 +20,13 @@
                 <param name="label">$LOCALIZE[166] $LOCALIZE[5]</param>
                 <include content="Settings_Left_Group">
                     <include content="Settings_Left_Content">
+                        <!-- The script lists the search category first. Moving to another category clears the search.
+                             Right from the search category goes to the tags button -->
                         <control type="grouplist" id="3">
                             <orientation>vertical</orientation>
                             <onup>3</onup>
                             <ondown>3</ondown>
+                            <onright condition="String.IsEqual(Window.Property(SkinVariables.SkinSettings.Category),SkinVariables.Search)">17</onright>
                             <onright>5</onright>
                             <right>40</right>
                         </control>
@@ -36,35 +39,43 @@
                         <onleft>5</onleft>
                     </include>
 
-                    <!-- The first and last settings move to the search box -->
+                    <!-- The first and last settings move to the last focused of the tags button and search box -->
                     <include content="Settings_Right_Grouplist">
                         <param name="id">5</param>
                         <onleft>3</onleft>
-                        <onup>12</onup>
-                        <ondown>12</ondown>
+                        <onup>20</onup>
+                        <ondown>20</ondown>
                     </include>
 
-                    <!-- Global search box. The script keeps it in place and sets the first and last settings in view as window properties -->
-                    <control type="group">
-                        <right>20</right>
-                        <width>560</width>
-                        <height>80</height>
-                        <centertop>60</centertop>
-                        <include content="Settings_Button">
-                            <param name="id">12</param>
-                            <param name="control">edit</param>
-                            <description>Search Edit</description>
-                            <textoffsetx>80</textoffsetx>
-                            <texturenofocus colordiffuse="main_fg_06" border="40">common/menu.png</texturenofocus>
-                            <onleft>3</onleft>
-                            <onup condition="!String.IsEmpty(Window.Property(SkinVariables.SkinSettings.BottomControlID))">SetFocus($INFO[Window.Property(SkinVariables.SkinSettings.BottomControlID)])</onup>
-                            <ondown condition="!String.IsEmpty(Window.Property(SkinVariables.SkinSettings.TopControlID))">SetFocus($INFO[Window.Property(SkinVariables.SkinSettings.TopControlID)])</ondown>
+                    <!-- Global search box and tags button. The script keeps them in place, opens the tags to filter by from the tags button,
+                         and sets the selected tag and the first and last settings in view as window properties.
+                         The group remembers which of them was last focused so the settings can move back to it -->
+                    <control type="group" id="20">
+                        <defaultcontrol>12</defaultcontrol>
+                        <include content="Settings_SearchBox">
+                            <param name="buttonid">17</param>
+                            <param name="icon">special://skin/extras/icons/tags.png</param>
+                            <param name="right">600</param>
+                            <param name="width">280</param>
+                            <include content="Settings_SearchBox_Button">
+                                <param name="id">17</param>
+                                <description>Tags Button</description>
+                                <label>$VAR[Label_Settings_SearchTag]</label>
+                                <!-- The box width less the icon offset and a smaller right padding than textoffsetx gives -->
+                                <textwidth>170</textwidth>
+                                <onleft>3</onleft>
+                                <onright>12</onright>
+                            </include>
                         </include>
-                        <include content="Button_Image">
+                        <include content="Settings_SearchBox">
                             <param name="buttonid">12</param>
                             <param name="icon">special://skin/extras/icons/search.png</param>
-                            <param name="getlabel">false</param>
-                            <param name="top">0</param>
+                            <include content="Settings_SearchBox_Button">
+                                <param name="id">12</param>
+                                <param name="control">edit</param>
+                                <description>Search Edit</description>
+                                <onleft>17</onleft>
+                            </include>
                         </include>
                     </control>
 
@@ -87,6 +98,9 @@
             <width>settings_category_w</width>
             <onfocus>SetProperty(Settings.Skin.CategoryId,$INFO[System.CurrentControlId],Home)</onfocus>
             <onfocus>SetProperty(Settings.Skin.CategoryLabel,$INFO[System.CurrentControl])</onfocus>
+            <!-- Clicking a category moves focus to the tags button and clicks it to open the tags to filter by -->
+            <onclick>SetFocus(17)</onclick>
+            <onclick>SendClick(17)</onclick>
             <description>Category Button</description>
         </include>
 

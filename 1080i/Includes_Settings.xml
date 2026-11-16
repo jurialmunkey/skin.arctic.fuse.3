@@ -173,6 +173,13 @@
 
     <include name="Settings_Box">
         <control type="image">
+            <top>160</top>
+            <width>1000</width>
+            <right>-160</right>
+            <aspectratio aligny="bottom" align="right">keep</aspectratio>
+            <texture colordiffuse="panel_fg_12" flipx="true">$VAR[Image_SettingsBackground]</texture>
+        </control>
+        <control type="image">
             <texture border="20" colordiffuse="main_fg_12">common/dialog.png</texture>
         </control>
     </include>
@@ -324,6 +331,44 @@
                     <param name="help">$PARAM[help]</param>
                 </include>
             </control>
+        </definition>
+    </include>
+
+    <!-- Box with an icon placed above the SkinVariables skinsettings list. Nest a Settings_SearchBox_Button with the same id -->
+    <include name="Settings_SearchBox">
+        <param name="right">20</param>
+        <param name="width">560</param>
+        <definition>
+            <control type="group">
+                <right>$PARAM[right]</right>
+                <width>$PARAM[width]</width>
+                <height>80</height>
+                <centertop>60</centertop>
+                <nested />
+                <include content="Button_Image">
+                    <param name="buttonid">$PARAM[buttonid]</param>
+                    <param name="icon">$PARAM[icon]</param>
+                    <param name="getlabel">false</param>
+                    <param name="top">0</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Button of a Settings_SearchBox. The script configures it in place through its nested content.
+         Up and down move to the last and first settings in view, which the script sets as window properties -->
+    <include name="Settings_SearchBox_Button">
+        <param name="control">button</param>
+        <definition>
+            <include content="Settings_Button">
+                <param name="id">$PARAM[id]</param>
+                <param name="control">$PARAM[control]</param>
+                <nested />
+                <textoffsetx>80</textoffsetx>
+                <texturenofocus colordiffuse="main_fg_06" border="40">common/menu.png</texturenofocus>
+                <onup condition="!String.IsEmpty(Window.Property(SkinVariables.SkinSettings.BottomControlID))">SetFocus($INFO[Window.Property(SkinVariables.SkinSettings.BottomControlID)])</onup>
+                <ondown condition="!String.IsEmpty(Window.Property(SkinVariables.SkinSettings.TopControlID))">SetFocus($INFO[Window.Property(SkinVariables.SkinSettings.TopControlID)])</ondown>
+            </include>
         </definition>
     </include>
 
