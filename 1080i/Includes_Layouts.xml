@@ -2069,18 +2069,19 @@
             <control type="group">
                 <width>$PARAM[item_w]</width>
                 <height>$PARAM[item_h]</height>
+                <include content="Object_ItemBack">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                </include>
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include content="Texture_Box_Highlight_V">
+                        <param name="variant">-backing</param>
+                    </include>
+                </include>
 
                 <control type="group">
-                    <include content="Object_ItemBack">
-                        <param name="selected">$PARAM[selected]</param>
-                        <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
-                    </include>
-                    <include content="Object_Control" condition="$PARAM[selected]">
-                        <param name="control">image</param>
-                        <include content="Texture_Box_Highlight_V">
-                            <param name="variant">-backing</param>
-                        </include>
-                    </include>
+                    <visible>![String.IsEqual(ListItem.DBType,actor) | String.IsEqual(ListItem.DBType,video) | $PARAM[detailed]]</visible>
                     <include content="Object_Layout_Image_Icon">
                         <param name="diffuse">$PARAM[diffuse]</param>
                         <param name="icon">$PARAM[icon]</param>
@@ -2090,7 +2091,19 @@
                     </include>
                 </control>
                 <control type="group">
-                    <visible>[[String.IsEqual(ListItem.DBType,actor) | String.IsEqual(ListItem.DBType,video)] + ![String.IsEmpty(ListItem.$PARAM[main_artwork]) + String.StartsWith(ListItem.Icon,Default)]] | $PARAM[detailed]</visible>
+                    <visible>[String.IsEqual(ListItem.DBType,actor) | String.IsEqual(ListItem.DBType,video) | $PARAM[detailed]]</visible>
+                    <control type="image">
+                        <bordersize>40</bordersize>
+                        <bottom>60</bottom>
+                        <texture background="true" fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+                        <aspectratio scalediffuse="false">keep</aspectratio>
+                        <visible>[String.StartsWith(ListItem.Icon,Default) | String.IsEmpty(ListItem.Icon)]</visible>
+                    </control>
+                    <control type="image">
+                        <texture background="true" diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>
+                        <aspectratio scalediffuse="false">scale</aspectratio>
+                        <visible>![String.StartsWith(ListItem.Icon,Default) | String.IsEmpty(ListItem.Icon)]</visible>
+                    </control>
                     <include content="Layout_Labels">
                         <param name="top">-85</param>
                         <param name="left">20</param>
