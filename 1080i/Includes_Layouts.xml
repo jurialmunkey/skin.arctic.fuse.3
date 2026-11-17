@@ -1109,7 +1109,6 @@
         <param name="variation">false</param>
         <param name="misc">0</param>
         <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
-        <param name="listitem">ListItem</param>
         <definition>
             <control type="group">
                 <left>$PARAM[misc]</left>
@@ -1144,14 +1143,13 @@
                                 <centertop>50%</centertop>
                                 <width>40</width>
                                 <height>40</height>
-                                <visible>[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)] | [String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)] | [String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)] | [String.IsEmpty($PARAM[listitem].Art(poster)) + String.StartsWith($PARAM[listitem].Icon,Default)]</visible>
+                                <visible>[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)] | [String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)] | [String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)] | [String.IsEmpty(ListItem.Art(poster)) + String.StartsWith(ListItem.Icon,Default)]</visible>
                                 <include content="Object_DefautIcon">
-                                    <param name="listitem">$PARAM[listitem]</param>
                                     <param name="selected">$PARAM[selected]</param>
                                 </include>
                             </control>
                             <control type="group">
-                                <visible>![[String.IsEqual($PARAM[listitem].DBType,genre) | String.IsEqual($PARAM[listitem].Property(DBType),genre)] | [String.IsEqual($PARAM[listitem].DBType,studio) | String.IsEqual($PARAM[listitem].Property(DBType),studio)] | [String.IsEqual($PARAM[listitem].DBType,country) | String.IsEqual($PARAM[listitem].Property(DBType),country)] | [String.IsEmpty($PARAM[listitem].Art(poster)) + String.StartsWith($PARAM[listitem].Icon,Default)]]</visible>
+                                <visible>![[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)] | [String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)] | [String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)] | [String.IsEmpty(ListItem.Art(poster)) + String.StartsWith(ListItem.Icon,Default)]]</visible>
                                 <control type="image">
                                     <include content="Dimension_Padding"><param name="pad">-40</param></include>
                                     <bordersize>40</bordersize>
@@ -1213,7 +1211,6 @@
                     </control>
                     <include condition="$PARAM[indicator]" content="Object_Indicator_List">
                         <param name="affix">$PARAM[affix]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="selected">$PARAM[selected]</param>
                         <centertop>50%</centertop>
                         <centerright>80</centerright>
@@ -1222,7 +1219,6 @@
                     </include>
                     <include condition="$PARAM[indicator]" content="Object_Indicator_List">
                         <param name="affix">$PARAM[affix]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="selected">$PARAM[selected]</param>
                         <centertop>50%</centertop>
                         <centerright>15</centerright>
@@ -1242,7 +1238,6 @@
         <param name="variation">false</param>
         <param name="icon">$VAR[Image_Landscape]</param>
         <param name="textcolor">main_fg</param>
-        <param name="listitem">ListItem</param>
         <param name="progress">Progress</param>
         <param name="affix" />
         <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
@@ -1274,16 +1269,13 @@
                             <param name="diffuse">$PARAM[diffuse]</param>
                             <param name="icon">$PARAM[icon]</param>
                             <param name="main_artwork">Art(fanart)</param>
-                            <param name="listitem">$PARAM[listitem]</param>
                             <param name="selected">$PARAM[selected]</param>
                             <param name="aspectratio">scale</param>
                         </include>
                         <include content="Object_ContentBanner" condition="$PARAM[indicator]">
-                            <param name="listitem">$PARAM[listitem]</param>
                         </include>
 
                         <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
-                            <param name="listitem">$PARAM[listitem]</param>
                         </include>
                     </control>
 
@@ -1323,7 +1315,6 @@
                                         </control>
                                         <include content="Object_Indicator_List">
                                             <param name="affix">$PARAM[affix]</param>
-                                            <param name="listitem">$PARAM[listitem]</param>
                                             <param name="selected">$PARAM[selected]</param>
                                             <centertop>50%</centertop>
                                             <centerright>120</centerright>
@@ -1351,7 +1342,6 @@
                                         </control>
                                         <include content="Object_Indicator_List">
                                             <param name="affix">$PARAM[affix]</param>
-                                            <param name="listitem">$PARAM[listitem]</param>
                                             <param name="selected">$PARAM[selected]</param>
                                             <centertop>50%</centertop>
                                             <centerright>15</centerright>
@@ -1900,7 +1890,6 @@
         <param name="selected">false</param>
         <param name="diffuse">diffuse/card_w731_h310.png</param>
         <param name="textcolor">main_fg</param>
-        <param name="listitem">ListItem</param>
         <param name="artwork">Layout_Card_Artwork</param>
         <param name="affix" />
         <definition>
@@ -1915,7 +1904,6 @@
 
                     <include content="$PARAM[artwork]">
                         <param name="diffuse">$PARAM[diffuse]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="selected">$PARAM[selected]</param>
                         <param name="item_h">$PARAM[item_h]</param>
                     </include>
@@ -1923,14 +1911,11 @@
 
                 <control type="group">
                     <include content="Object_ContentBanner" condition="$PARAM[indicator]">
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include condition="!$PARAM[selected]" content="Object_Indicator">
                         <param name="affix">$PARAM[affix]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Object_SelectBox" condition="$PARAM[selected]">
                         <param name="indicator">true</param>
@@ -1947,7 +1932,6 @@
             <param name="diffuse">$PARAM[diffuse]</param>
             <param name="icon">$VAR[Image_Card_Fanart]</param>
             <param name="main_artwork">Art(fanart)</param>
-            <param name="listitem">$PARAM[listitem]</param>
             <param name="aspectratio">scale</param>
             <param name="selected">$PARAM[selected]</param>
         </include>
@@ -1965,7 +1949,6 @@
             <include content="Object_Layout_Image_Icon">
                 <param name="diffuse">diffuse/gatefold_w217_h310.png</param>
                 <param name="icon">$VAR[Image_Poster]</param>
-                <param name="listitem">$PARAM[listitem]</param>
                 <param name="aspectratio">scale</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
@@ -1976,7 +1959,6 @@
                 <param name="diffuse">diffuse/gatefold_w643_h310.png</param>
                 <param name="icon">$VAR[Image_Landscape]</param>
                 <param name="main_artwork">Art(fanart)</param>
-                <param name="listitem">$PARAM[listitem]</param>
                 <param name="aspectratio">scale</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
@@ -1985,7 +1967,6 @@
                 <param name="left">20</param>
                 <param name="right">20</param>
                 <param name="item_h">$PARAM[item_h]</param>
-                <param name="listitem">$PARAM[listitem]</param>
                 <param name="textcolor">panel_fg</param>
                 <param name="fade">true</param>
                 <param name="fade_texture">common/poster_fade_br.png</param>
@@ -1998,7 +1979,6 @@
         <param name="selected">false</param>
         <param name="diffuse">diffuse/card_w731_h310.png</param>
         <param name="textcolor">main_fg</param>
-        <param name="listitem">ListItem</param>
         <param name="affix" />
         <definition>
             <control type="group">
@@ -2014,7 +1994,6 @@
                         <param name="diffuse">$PARAM[diffuse]</param>
                         <param name="icon">$VAR[Image_Card_Fanart]</param>
                         <param name="main_artwork">Art(fanart)</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="aspectratio">scale</param>
                         <param name="selected">$PARAM[selected]</param>
                     </include>
@@ -2028,21 +2007,17 @@
                     <param name="top">10</param>
                     <param name="item_h">$PARAM[item_h]</param>
                     <param name="affix">$PARAM[affix]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="textcolor">$PARAM[textcolor]</param>
                     <param name="use_label2">$PARAM[use_label2]</param>
                 </include>
 
                 <control type="group">
                     <include content="Object_ContentBanner" condition="$PARAM[indicator]">
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include condition="!$PARAM[selected]" content="Object_Indicator">
                         <param name="affix">$PARAM[affix]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Object_SelectBox" condition="$PARAM[selected]">
                         <param name="indicator">true</param>
@@ -2056,7 +2031,6 @@
     <include name="Layout_Gallery">
         <param name="selected">false</param>
         <param name="diffuse">diffuse/landscape_w1680_h670.png</param>
-        <param name="listitem">ListItem</param>
         <definition>
             <control type="group">
                 <width>$PARAM[item_w]</width>
@@ -2090,7 +2064,6 @@
         <param name="indicator">true</param>
         <param name="diffuse">diffuse/poster_w217_h310.png</param>
         <param name="icon">$VAR[Image_Poster]</param>
-        <param name="listitem">ListItem</param>
         <param name="main_artwork">Art(poster)</param>
         <definition>
             <control type="group">
@@ -2111,21 +2084,19 @@
                     <include content="Object_Layout_Image_Icon">
                         <param name="diffuse">$PARAM[diffuse]</param>
                         <param name="icon">$PARAM[icon]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="aspectratio">scale</param>
                         <param name="selected">$PARAM[selected]</param>
                         <param name="main_artwork">$PARAM[main_artwork]</param>
                     </include>
                 </control>
                 <control type="group">
-                    <visible>[[String.IsEqual($PARAM[listitem].DBType,actor) | String.IsEqual($PARAM[listitem].DBType,video)] + ![String.IsEmpty($PARAM[listitem].$PARAM[main_artwork]) + String.StartsWith($PARAM[listitem].Icon,Default)]] | $PARAM[detailed]</visible>
+                    <visible>[[String.IsEqual(ListItem.DBType,actor) | String.IsEqual(ListItem.DBType,video)] + ![String.IsEmpty(ListItem.$PARAM[main_artwork]) + String.StartsWith(ListItem.Icon,Default)]] | $PARAM[detailed]</visible>
                     <include content="Layout_Labels">
                         <param name="top">-85</param>
                         <param name="left">20</param>
                         <param name="right">20</param>
                         <param name="item_h">$PARAM[item_h]</param>
                         <param name="affix">$PARAM[affix]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="textcolor">panel_fg</param>
                         <param name="fade">true</param>
                         <param name="include_detailed_labels">true</param>
@@ -2134,18 +2105,14 @@
                 </control>
                 <control type="group">
                     <include content="Object_ContentBanner" condition="$PARAM[indicator]">
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include condition="!$PARAM[selected] + $PARAM[indicator]" content="Object_Indicator">
                         <param name="affix">$PARAM[affix]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Object_SelectBox" condition="$PARAM[selected]">
                         <param name="affix">$PARAM[affix]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="indicator">$PARAM[indicator]</param>
                         <param name="focusbounce">true</param>
                     </include>
@@ -2159,7 +2126,6 @@
     <!-- Poster in a wide (view_ranked_item_w) item with a style layer drawn behind it: Ranked, Stack, Disc -->
     <include name="Layout_PosterWide">
         <param name="selected">false</param>
-        <param name="listitem">ListItem</param>
         <param name="poster_left">0</param>
         <definition>
             <control type="group">
@@ -2167,7 +2133,6 @@
                 <height>$PARAM[item_h]</height>
                 <include content="$PARAM[behind]">
                     <param name="selected">$PARAM[selected]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
                 <control type="group">
                     <left>$PARAM[poster_left]</left>
@@ -2176,7 +2141,6 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="item_w">view_poster_item_w</param>
                         <param name="item_h">$PARAM[item_h]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="detailed">$PARAM[detailed]</param>
                         <param name="indicator">$PARAM[indicator]</param>
                         <param name="icon">$PARAM[icon]</param>
@@ -2193,7 +2157,6 @@
     <!-- Left aligned to the item and bottom aligned to the poster, drawn 1:1 by keeping aspect in a box of the texture height -->
     <include name="Layout_PosterWide_Ranked">
         <param name="selected">false</param>
-        <param name="listitem">ListItem</param>
         <definition>
             <control type="image">
                 <left>0</left>
@@ -2202,11 +2165,11 @@
                 <height>210</height>
                 <aspectratio align="left" aligny="bottom">keep</aspectratio>
                 <include content="Object_Texture" condition="$PARAM[selected]">
-                    <param name="texture">numerals/solid/$INFO[$PARAM[listitem].CurrentItem].png</param>
+                    <param name="texture">numerals/solid/$INFO[ListItem.CurrentItem].png</param>
                     <param name="colordiffuse">main_fg_100</param>
                 </include>
                 <include content="Object_Texture" condition="!$PARAM[selected]">
-                    <param name="texture">numerals/outline/$INFO[$PARAM[listitem].CurrentItem].png</param>
+                    <param name="texture">numerals/outline/$INFO[ListItem.CurrentItem].png</param>
                     <param name="colordiffuse">main_fg_50</param>
                 </include>
             </control>
@@ -2237,7 +2200,6 @@
     <!-- The poster_cut masks clear the part under the poster so it doesn't show through when the widget fades -->
     <include name="Layout_PosterWide_Disc">
         <param name="selected">false</param>
-        <param name="listitem">ListItem</param>
         <definition>
             <control type="group">
                 <top>10</top>
@@ -2251,7 +2213,6 @@
                     <param name="overlay_diffuse">diffuse/circle/circle_200_poster_cut.png</param>
                     <param name="include_discart">true</param>
                     <param name="icon">$VAR[Image_Circle]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="aspectratio">scale</param>
                 </include>
             </control>
@@ -2262,7 +2223,6 @@
     <!-- The focused item uses Layout_Poster (List_Shelf_Row), so the spine is never selected -->
     <include name="Layout_Shelf">
         <param name="indicator">true</param>
-        <param name="listitem">ListItem</param>
         <param name="diffuse">diffuse/shelf_w100_h310.png</param>
         <param name="affix" />
         <definition>
@@ -2276,17 +2236,15 @@
                     <param name="diffuse">$PARAM[diffuse]</param>
                     <param name="icon">$VAR[Image_Shelf_Spine]</param>
                     <param name="main_artwork">Art(fanart)</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="aspectratio">scale</param>
                 </include>
                 <!-- Spine art has its own title so skip the dim and title overlay -->
                 <control type="group">
-                    <visible>String.IsEmpty($PARAM[listitem].Art(spine))</visible>
+                    <visible>String.IsEmpty(ListItem.Art(spine))</visible>
                     <control type="image">
                         <texture diffuse="$PARAM[diffuse]" colordiffuse="panel_bg_50">common/white.png</texture>
                     </control>
                     <include content="Layout_Shelf_Title">
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                 </control>
                 <control type="label">
@@ -2296,12 +2254,11 @@
                     <aligny>center</aligny>
                     <font>font_tiny_bold</font>
                     <textcolor>main_fg_70</textcolor>
-                    <label>$INFO[$PARAM[listitem].Year]</label>
+                    <label>$INFO[ListItem.Year]</label>
                 </control>
                 <!-- Spines centre the indicator as there is no room for the usual right indent -->
                 <include content="Object_Indicator" condition="$PARAM[indicator]">
                     <param name="affix">$PARAM[affix]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="right">18.13</param>
                 </include>
             </control>
@@ -2311,7 +2268,6 @@
     <!-- Clearlogo turned a quarter turn clockwise to read down the spine -->
     <!-- Without a clearlogo the title is shown upright and wrapped -->
     <include name="Layout_Shelf_Title">
-        <param name="listitem">ListItem</param>
         <definition>
             <control type="group">
                 <centerleft>50%</centerleft>
@@ -2333,8 +2289,8 @@
                 <aligny>center</aligny>
                 <font>font_tiny_bold</font>
                 <textcolor>main_fg_90</textcolor>
-                <label>$INFO[$PARAM[listitem].Label]</label>
-                <visible>String.IsEmpty($PARAM[listitem].Art(clearlogo)) + String.IsEmpty($PARAM[listitem].Art(tvshow.clearlogo)) + String.IsEmpty($PARAM[listitem].Art(artist.clearlogo))</visible>
+                <label>$INFO[ListItem.Label]</label>
+                <visible>String.IsEmpty(ListItem.Art(clearlogo)) + String.IsEmpty(ListItem.Art(tvshow.clearlogo)) + String.IsEmpty(ListItem.Art(artist.clearlogo))</visible>
             </control>
         </definition>
     </include>
@@ -2343,20 +2299,17 @@
     <!-- The 110 date column + 40 gap + 410 landscape fill view_board_item_w -->
     <include name="Layout_Timeline">
         <param name="selected">false</param>
-        <param name="listitem">ListItem</param>
         <definition>
             <control type="group">
                 <width>$PARAM[item_w]</width>
                 <height>$PARAM[item_h]</height>
                 <include content="Layout_Timeline_Track" condition="$PARAM[selected]">
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="dot_texture">common/circle.png</param>
                     <param name="dot_colordiffuse">$VAR[ColorHighlight]</param>
                     <param name="year_textcolor">main_fg_100</param>
                     <param name="date_textcolor">main_fg_70</param>
                 </include>
                 <include content="Layout_Timeline_Track" condition="!$PARAM[selected]">
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
                 <control type="group">
                     <left>150</left>
@@ -2365,7 +2318,6 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="item_w">view_landscape_item_w</param>
                         <param name="item_h">view_landscape_item_h</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="detailed">$PARAM[detailed]</param>
                         <param name="indicator">$PARAM[indicator]</param>
                         <param name="icon">$PARAM[icon]</param>
@@ -2382,7 +2334,6 @@
     <!-- Track line through the landscape centre from the date column to the next item (gap around the dot) -->
     <!-- with the premiered year above and date below an open dot (filled when focused), centred in the date column -->
     <include name="Layout_Timeline_Track">
-        <param name="listitem">ListItem</param>
         <param name="dot_texture">common/circle_ring.png</param>
         <param name="dot_colordiffuse">main_fg_50</param>
         <param name="year_textcolor">main_fg_70</param>
@@ -2409,7 +2360,7 @@
                         <aligny>center</aligny>
                         <font>font_head_bold</font>
                         <textcolor>$PARAM[year_textcolor]</textcolor>
-                        <label>$INFO[$PARAM[listitem].Year]</label>
+                        <label>$INFO[ListItem.Year]</label>
                     </control>
                     <control type="image">
                         <centerleft>50%</centerleft>
@@ -2427,7 +2378,7 @@
                         <aligny>center</aligny>
                         <font>font_tiny_bold</font>
                         <textcolor>$PARAM[date_textcolor]</textcolor>
-                        <label>$INFO[$PARAM[listitem].Premiered]</label>
+                        <label>$INFO[ListItem.Premiered]</label>
                     </control>
                 </control>
             </control>
@@ -2538,7 +2489,6 @@
         <param name="detailed">false</param>
         <param name="variation">false</param>
         <param name="icon">$VAR[Image_Square]</param>
-        <param name="listitem">ListItem</param>
         <param name="progress">Progress</param>
         <param name="textcolor">main_fg</param>
         <param name="misc">-20</param>
@@ -2564,29 +2514,25 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="diffuse">$PARAM[diffuse]</param>
                         <param name="icon">$PARAM[icon]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="icon_diffuse">$PARAM[diffuse]</param>
                     </include>
 
                     <include content="Object_ProgressLine">
-                        <param name="progress">$PARAM[listitem].$PARAM[progress]</param>
+                        <param name="progress">ListItem.$PARAM[progress]</param>
                     </include>
                     <include content="Object_Indicator" condition="!$PARAM[selected] + ![$PARAM[detailed]]">
                         <param name="affix">$PARAM[affix]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Object_SelectBox" condition="$PARAM[selected]">
                         <param name="affix">$PARAM[affix]</param>
                         <param name="indicator">![$PARAM[detailed]]</param>
                         <param name="focusbounce">true</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                 </control>
                 <include content="Layout_Labels" condition="![$PARAM[variation]]">
                     <param name="top">10</param>
                     <param name="item_h">$PARAM[item_h]</param>
                     <param name="affix">$PARAM[affix]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="textcolor">$PARAM[textcolor]</param>
                     <param name="use_label2">$PARAM[use_label2]</param>
                 </include>
@@ -2600,7 +2546,6 @@
         <param name="detailed">false</param>
         <param name="variation">false</param>
         <param name="icon">$VAR[Image_Circle]</param>
-        <param name="listitem">ListItem</param>
         <param name="progress">Progress</param>
         <param name="textcolor">main_fg</param>
         <param name="misc">-20</param>
@@ -2632,7 +2577,6 @@
                         <param name="diffuse">diffuse/circle/$PARAM[diffuse].png</param>
                         <param name="include_discart">true</param>
                         <param name="icon">$PARAM[icon]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
                         <param name="aspectratio">scale</param>
                     </include>
 
@@ -2645,7 +2589,6 @@
                             <right>0</right>
                             <centerbottom>50%</centerbottom>
                             <param name="affix">$PARAM[affix]</param>
-                            <param name="listitem">$PARAM[listitem]</param>
                             <param name="selected">$PARAM[selected]</param>
                             <param name="shadow">false</param>
                         </include>
@@ -2687,9 +2630,9 @@
                         <aligny>$PARAM[aligny]</aligny>
                         <font>font_mini</font>
                         <include content="Object_Label" condition="$PARAM[use_label2]">
-                            <param name="label">$INFO[$PARAM[listitem].Label]$INFO[$PARAM[listitem].Label2, - ,]</param>
+                            <param name="label">$INFO[ListItem.Label]$INFO[ListItem.Label2, - ,]</param>
                         </include>
-                        <label>$INFO[$PARAM[listitem].Label]</label>
+                        <label>$INFO[ListItem.Label]</label>
                         <align>left</align>
                         <include condition="$PARAM[selected]">Color_SelectedText</include>
                         <textcolor>main_fg_70</textcolor>
@@ -2701,16 +2644,16 @@
                         <aligny>$PARAM[aligny]</aligny>
                         <font>font_mini</font>
                         <include content="Object_Label" condition="$PARAM[use_label2]">
-                            <param name="label">$INFO[$PARAM[listitem].Label]$INFO[$PARAM[listitem].Label2, - ,]</param>
+                            <param name="label">$INFO[ListItem.Label]$INFO[ListItem.Label2, - ,]</param>
                         </include>
-                        <label>$INFO[$PARAM[listitem].Label]</label>
+                        <label>$INFO[ListItem.Label]</label>
                         <align>left</align>
                         <include condition="$PARAM[selected]">Color_SelectedText</include>
                         <textcolor>main_fg_70</textcolor>
                     </include>
 
                     <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_detailed_labels]">
-                        <label>$INFO[$PARAM[listitem].Label]</label>
+                        <label>$INFO[ListItem.Label]</label>
                         <include condition="$PARAM[selected]">Color_SelectedText</include>
                         <textcolor>$PARAM[textcolor]_90</textcolor>
                         <align>left</align>
@@ -2726,21 +2669,21 @@
                             <align>left</align>
                         </include>
                         <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
-                            <label>$INFO[$PARAM[listitem].StartTime]$INFO[$PARAM[listitem].EndTime, - ,]</label>
+                            <label>$INFO[ListItem.StartTime]$INFO[ListItem.EndTime, - ,]</label>
                             <include condition="$PARAM[selected]">Color_SelectedText</include>
                             <textcolor>$PARAM[textcolor]_70</textcolor>
                             <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
                             <align>right</align>
-                            <visible>!String.IsEmpty($PARAM[listitem].ChannelNumberLabel)</visible>
+                            <visible>!String.IsEmpty(ListItem.ChannelNumberLabel)</visible>
                             <visible>ListItem.InProgress</visible>
                         </include>
                         <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
-                            <label>$INFO[$PARAM[listitem].Date]</label>
+                            <label>$INFO[ListItem.Date]</label>
                             <include condition="$PARAM[selected]">Color_SelectedText</include>
                             <textcolor>$PARAM[textcolor]_70</textcolor>
                             <selectedcolor>$PARAM[textcolor]_70</selectedcolor>
                             <align>right</align>
-                            <visible>!String.IsEmpty($PARAM[listitem].ChannelNumberLabel)</visible>
+                            <visible>!String.IsEmpty(ListItem.ChannelNumberLabel)</visible>
                             <visible>!ListItem.InProgress</visible>
                         </include>
                     </control>
@@ -2755,7 +2698,6 @@
         <param name="icon">$VAR[Image_Landscape]</param>
         <param name="textcolor">main_fg</param>
         <param name="diffuse">diffuse/landscape_w410_h231.png</param>
-        <param name="listitem">ListItem</param>
         <param name="progress">Progress</param>
         <param name="affix" />
         <definition>
@@ -2780,7 +2722,6 @@
                     <param name="diffuse">$PARAM[diffuse]</param>
                     <param name="icon">$PARAM[icon]</param>
                     <param name="main_artwork">Art(fanart)</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="selected">$PARAM[selected]</param>
                     <param name="aspectratio">keep</param>
                 </include>
@@ -2789,39 +2730,34 @@
                     <param name="diffuse">$PARAM[diffuse]</param>
                     <param name="icon">$PARAM[icon]</param>
                     <param name="main_artwork">Art(fanart)</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="selected">$PARAM[selected]</param>
                     <param name="aspectratio">scale</param>
                 </include>
 
                 <include content="Object_ClearLogo_WithShadow">
                     <param name="diffuse">$PARAM[diffuse]</param>
-                    <param name="icon">$INFO[$PARAM[listitem].Art(clearlogo)]</param>
-                    <visible>[String.IsEqual($PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[listitem].DBType,tvshow)] + String.IsEmpty($PARAM[listitem].Art(landscape)) + String.IsEmpty($PARAM[listitem].Art(tvshow.landscape))</visible>
+                    <param name="icon">$INFO[ListItem.Art(clearlogo)]</param>
+                    <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + String.IsEmpty(ListItem.Art(landscape)) + String.IsEmpty(ListItem.Art(tvshow.landscape))</visible>
                 </include>
 
                 <include content="Object_ProgressLine">
-                    <param name="progress">$PARAM[listitem].$PARAM[progress]</param>
+                    <param name="progress">ListItem.$PARAM[progress]</param>
                 </include>
 
                 <include content="Object_Indicator" condition="!$PARAM[selected]">
                     <param name="affix">$PARAM[affix]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
 
                 <include content="Object_ContentBanner" condition="$PARAM[indicator]">
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
 
                 <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
 
                 <include content="Layout_Labels" condition="![$PARAM[detailed]]">
                     <param name="top">10</param>
                     <param name="item_h">$PARAM[item_h]</param>
                     <param name="affix">$PARAM[affix]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="textcolor">$PARAM[textcolor]</param>
                     <param name="use_label2">$PARAM[use_label2]</param>
                 </include>
@@ -2830,7 +2766,6 @@
                     <param name="affix">$PARAM[affix]</param>
                     <param name="indicator">true</param>
                     <param name="focusbounce">true</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
             </control>
         </definition>
@@ -2843,7 +2778,6 @@
         <param name="icon">$VAR[Image_Poster]</param>
         <param name="textcolor">main_fg</param>
         <param name="diffuse">diffuse/poster_w217_h310.png</param>
-        <param name="listitem">ListItem</param>
         <param name="progress">Progress</param>
         <param name="affix" />
         <definition>
@@ -2867,33 +2801,28 @@
                 <include content="Object_Layout_Image_Icon">
                     <param name="diffuse">$PARAM[diffuse]</param>
                     <param name="icon">$PARAM[icon]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="selected">$PARAM[selected]</param>
                     <param name="aspectratio">scale</param>
                 </include>
 
                 <include content="Object_ProgressLine">
-                    <param name="progress">$PARAM[listitem].$PARAM[progress]</param>
+                    <param name="progress">ListItem.$PARAM[progress]</param>
                 </include>
 
                 <include content="Object_Indicator" condition="!$PARAM[selected]">
                     <param name="affix">$PARAM[affix]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
 
                 <include content="Object_ContentBanner" condition="$PARAM[indicator]">
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
 
                 <include content="Object_TraktOverlays" condition="$PARAM[indicator] + [Skin.HasSetting(Indicator.TraktWatchlist) | Skin.HasSetting(Indicator.TraktFavourites)]">
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
 
                 <include content="Layout_Labels">
                     <param name="top">10</param>
                     <param name="item_h">$PARAM[item_h]</param>
                     <param name="affix">$PARAM[affix]</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                     <param name="textcolor">$PARAM[textcolor]</param>
                     <param name="use_label2">$PARAM[use_label2]</param>
                 </include>
@@ -2902,7 +2831,6 @@
                     <param name="affix">$PARAM[affix]</param>
                     <param name="indicator">true</param>
                     <param name="focusbounce">true</param>
-                    <param name="listitem">$PARAM[listitem]</param>
                 </include>
             </control>
         </definition>
