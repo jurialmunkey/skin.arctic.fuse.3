@@ -718,6 +718,110 @@
         </include>
     </include>
 
+    <!-- Style of the search results of each content type, read by shortcuts/skinvariables-multisearch-styles.json.
+         Default is the style of results without a content type and of content types set to Default.
+         Clicking a content type opens its style choices -->
+    <include name="DialogCustom_Shortcuts_Items_SearchStyles">
+        <onclick>SetProperty(CustomDialogSelectItems,DialogCustom_SearchStyles_Select,Home)</onclick>
+        <onclick>SetProperty(CustomDialogSelectTitle,$INFO[Container(8000).ListItem.Label],Home)</onclick>
+        <onclick>SetProperty(ConfigureSearchStyleSetting,$INFO[Container(8000).ListItem.Property(setting)],Home)</onclick>
+        <onclick>SetProperty(ConfigureSearchStyleValue,$INFO[Container(8000).ListItem.Property(widget_style)],Home)</onclick>
+        <onclick>ActivateWindow(1119)</onclick>
+        <content>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[571]</param>
+                <param name="style">Default</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[342]</param>
+                <param name="style">Movie</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[20434]</param>
+                <param name="style">Set</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[20343]</param>
+                <param name="style">TVShow</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[33054]</param>
+                <param name="style">Season</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[20360]</param>
+                <param name="style">Episode</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[20389]</param>
+                <param name="style">MusicVideo</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[133]</param>
+                <param name="style">Artist</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[132]</param>
+                <param name="style">Album</param>
+            </include>
+            <include content="DialogCustom_Shortcuts_Item_SearchStyle">
+                <param name="label">$LOCALIZE[134]</param>
+                <param name="style">Song</param>
+            </include>
+        </content>
+    </include>
+    <include name="DialogCustom_Shortcuts_Item_SearchStyle">
+        <definition>
+            <item>
+                <label>$PARAM[label]</label>
+                <property name="setting">HomeSwitcher.Search.Style.$PARAM[style]</property>
+                <property name="widget_style">$INFO[Skin.String(HomeSwitcher.Search.Style.$PARAM[style])]</property>
+            </item>
+        </definition>
+    </include>
+
+    <!-- Style choices of the content type opened from the search styles popup. Default follows the style of the
+         Default item, so the Default item itself only has the styles -->
+    <include name="DialogCustom_SearchStyles_Select">
+        <include content="DialogCustom_SearchStyles_Select_Item" condition="!String.IsEqual(Window(Home).Property(ConfigureSearchStyleSetting),HomeSwitcher.Search.Style.Default)">
+            <param name="id">8001</param>
+            <param name="groupid">8101</param>
+            <param name="label">$LOCALIZE[571]</param>
+            <param name="style">Default</param>
+        </include>
+        <include content="DialogCustom_SearchStyles_Select_Item">
+            <param name="id">8002</param>
+            <param name="groupid">8102</param>
+            <param name="label">$LOCALIZE[20021]</param>
+            <param name="style">Poster</param>
+        </include>
+        <include content="DialogCustom_SearchStyles_Select_Item">
+            <param name="id">8003</param>
+            <param name="groupid">8103</param>
+            <param name="label">$LOCALIZE[31045]</param>
+            <param name="style">Landscape</param>
+        </include>
+        <include content="DialogCustom_SearchStyles_Select_Item">
+            <param name="id">8004</param>
+            <param name="groupid">8104</param>
+            <param name="label">$LOCALIZE[31320]</param>
+            <param name="style">Square</param>
+        </include>
+    </include>
+    <include name="DialogCustom_SearchStyles_Select_Item">
+        <include content="Button_Dialog_Setting">
+            <param name="dialog">true</param>
+            <param name="id">$PARAM[id]</param>
+            <param name="groupid">$PARAM[groupid]</param>
+            <param name="control">radiobutton</param>
+            <param name="istext">true</param>
+            <param name="label">$PARAM[label]</param>
+            <onclick>Skin.SetString($INFO[Window(Home).Property(ConfigureSearchStyleSetting)],$PARAM[style])</onclick>
+            <onclick>Close</onclick>
+            <selected>String.IsEqual(Window(Home).Property(ConfigureSearchStyleValue),$PARAM[style])</selected>
+        </include>
+    </include>
+
     <include name="DialogCustom_Shortcuts_Items_SpotlightConfigure">
         <include content="DialogCustom_Shortcuts_Items">
             <param name="include">DialogCustom_Shortcuts_Items_SpotlightConfigure_Items</param>
@@ -834,6 +938,18 @@
                 <visible>$PARAM[enabled]</visible>
                 <visible>$PARAM[visible]</visible>
                 <visible>Skin.HasSetting(HomeSwitcher.Search.Combined)</visible>
+            </include>
+            <include content="Settings_ButtonImage" description="Style">
+                <param name="id">9410</param>
+                <param name="groupid">9510</param>
+                <param name="icon">special://skin/extras/icons/view-poster.png</param>
+                <param name="window">shortcuts</param>
+                <param name="help">$LOCALIZE[31877]</param>
+                <label>$LOCALIZE[736]</label>
+                <onclick>SetProperty(Dialog.1124.Header,SearchStyles,Home)</onclick>
+                <onclick>ActivateWindow(1124)</onclick>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
             </include>
         </definition>
     </include>
