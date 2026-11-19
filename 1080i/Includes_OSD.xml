@@ -264,14 +264,8 @@
             <texture colordiffuse="panel_bg_70" border="4,0,4,0">common/gradient-v.png</texture>
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
-            <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1143) | Window.IsActive(1144) | Window.IsActive(1145) | Window.IsActive(1146) | Window.IsActive(1147) | Window.IsActive(1148) | Window.IsActive(1149) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml)</visible>
+            <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1143) | Window.IsActive(1144) | Window.IsActive(1145) | Window.IsActive(1146) | Window.IsActive(1147) | Window.IsActive(1148) | Window.IsActive(1149) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml) | Window.IsActive(DialogSlider.xml)</visible>
         </control>
-    </include>
-
-    <include name="OSD_Part_Background_Blur">
-        <include content="Part_Background_Blur">
-            <param name="transparency">true</param>
-        </include>
     </include>
 
     <include name="OSD_Stream_Pill">
@@ -292,16 +286,23 @@
             <visible>$PARAM[focused]</visible>
             <centertop>50%</centertop>
         </include>
-        <control type="label">
+        <include content="Info_Line_Pill_Text">
+            <param name="colordiffuse">panel_fg</param>
+            <param name="fill">12</param>
+            <param name="texture">common/_none.png</param>
+            <param name="border">20</param>
+            <param name="textcolor">panel_fg_70</param>
+            <param name="font">font_tiny_bold</param>
+            <param name="textoffsetx">20</param>
+            <param name="textoffsety">0</param>
+            <param name="aligny">center</param>
+            <param name="label">$PARAM[label]</param>
             <height>40</height>
             <width min="80" max="400">auto</width>
-            <font>font_tiny_bold</font>
-            <textcolor>panel_fg_70</textcolor>
+            <shadowcolor>00000000</shadowcolor>
             <visible>![$PARAM[focused]]</visible>
-            <label>$PARAM[label]</label>
             <centertop>50%</centertop>
-            <textoffsetx>10</textoffsetx>
-        </control>
+        </include>
     </include>
 
     <include name="OSD_Stream_Row">
@@ -311,10 +312,8 @@
         <param name="video_focused">false</param>
         <definition>
             <visible>!Window.IsVisible(DialogSettings.xml)</visible>
-            <!-- Skip the slide in when moving across from a neighbouring row (recorded by OSD_CustomDialog_FakeButton), so the rows read as one window -->
             <include content="Animation_SlideIn_Dialog">
                 <param name="posy">48</param>
-                <param name="windowopen_condition">!String.IsEqual(Window(videoosd).Property(OSD.CustomDialog.Switch),$PARAM[buttonid])</param>
             </include>
             <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
 
@@ -322,7 +321,6 @@
                 <height>80</height>
                 <bottom>470</bottom>
                 <right>0</right>
-                <width>760</width>
                 <orientation>horizontal</orientation>
                 <align>right</align>
                 <itemgap>20</itemgap>
@@ -415,8 +413,23 @@
                     <param name="subtitles_focused">$PARAM[subtitles_focused]</param>
                     <param name="video_focused">$PARAM[video_focused]</param>
                     <content>plugin://script.skinvariables?info=get_player_streams&amp;stream_type=$PARAM[stream_type]&amp;reload=$INFO[Window.Property(UID)]</content>
+                    <!-- Offset card after the streams. The list's own onclick overrides item onclicks, so the card names its slider action in a property instead -->
+                    <content>
+                        <item>
+                            <label>$INFO[Container($PARAM[id]1).ListItem.Label]</label>
+                            <label2>$PARAM[slider_header]</label2>
+                            <icon>special://skin/extras/icons/sliders.png</icon>
+                            <property name="slider">$PARAM[slider]</property>
+                        </item>
+                    </content>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(slider))">Action($INFO[ListItem.Property(slider)])</onclick>
                     <onclick condition="$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))">Action(ShowSubtitles)</onclick>
-                    <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))]">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
+                    <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))] + String.IsEmpty(ListItem.Property(slider))">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
+                </include>
+                <!-- The offset card's label: the delay in milliseconds, for example "+100 ms" -->
+                <include content="Object_Hidden_List">
+                    <param name="id">$PARAM[id]1</param>
+                    <content>plugin://script.skinvariables?info=get_delay_label&amp;value=$INFO[$PARAM[slider_value]]</content>
                 </include>
             </control>
         </definition>
@@ -697,6 +710,8 @@
 
     <include name="OSD_Progress_Bar">
         <control type="group">
+            <!-- The sync ruler replaces the bar while DialogSlider is up; the time labels stay -->
+            <visible>!Window.IsVisible(DialogSlider.xml)</visible>
             <left>view_osd_l</left>
             <right>view_osd_r</right>
             <bottom>120</bottom>
@@ -996,7 +1011,6 @@
             <texturenofocus />
             <font />
             <label />
-            <onfocus condition="$EXP[Exp_OSD_StreamRows]">SetProperty(OSD.CustomDialog.Switch,600$PARAM[id],videoosd)</onfocus>
             <onfocus>Close</onfocus>
             <onfocus>SetFocus(600$PARAM[id])</onfocus>
         </control>

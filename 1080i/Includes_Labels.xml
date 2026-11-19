@@ -1070,6 +1070,19 @@
     </variable>
 
     <!-- Tags for Object_Tags labels: each tag is wrapped in &#x2002; and &#x2000;, which the _lines font draws as the tag ends, with &#x2005; as the gap between tags -->
+    <!-- DialogSlider: the delay scales show the live player value; other sliders show Kodi's value label -->
+    <variable name="Label_DialogSlider_Value">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay]">$INFO[Player.AudioDelay]</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">$INFO[Player.SubtitleDelay]</value>
+        <value>$INFO[Control.GetLabel(12)]</value>
+    </variable>
+    <!-- Steps match Kodi's default audiodelaystep (0.025) and subsdelaystep (0.1) -->
+    <variable name="Label_DialogSlider_Hint">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay]">&#9664; &#9654;  $LOCALIZE[31880] 25 ms</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#9664; &#9654;  $LOCALIZE[31880] 100 ms</value>
+        <value>&#9664; &#9654;  $LOCALIZE[31880]</value>
+    </variable>
+
     <variable name="Label_StreamCard_Tags">
         <value condition="!String.IsEmpty(ListItem.Property(tags))">$INFO[ListItem.Property(tags)]</value>
         <value>$VAR[Label_ListItem_StreamCodec,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_ListItem_StreamChannels,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsImpaired,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsForced,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsDefault,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsOriginal,&#x2002;,&#x2000;]</value>
