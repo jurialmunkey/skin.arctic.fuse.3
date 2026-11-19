@@ -721,6 +721,42 @@
         <value>SW</value>
     </variable>
 
+    <!-- Amlogic process labels only exist on CoreELEC builds. Elsewhere an $INFO with a prefix prints the prefix alone, so use these with $VAR prefixes -->
+    <variable name="Label_PlayerProcess_AmlogicDisplayMode">
+        <value condition="!String.IsEmpty(Player.Process(amlogic.displaymode))">$INFO[Player.Process(amlogic.displaymode)]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_AmlogicPixFormat">
+        <value condition="!String.IsEmpty(Player.Process(amlogic.pixformat))">$INFO[Player.Process(amlogic.pixformat)]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_AmlogicEOTF">
+        <value condition="!String.IsEmpty(Player.Process(amlogic.eoft_gamut))">$INFO[Player.Process(amlogic.eoft_gamut)]</value>
+    </variable>
+
+    <!-- Player process info lines. Each value starts from the first available part so the • only sits between parts -->
+    <variable name="Label_PlayerProcess_OutputDetails">
+        <value condition="!String.IsEmpty(Player.Process(videodar))">$INFO[Player.Process(videodar),, $LOCALIZE[31260]]$INFO[Player.Process(videofps), • , $LOCALIZE[31259]]$VAR[Label_PlayerProcess_AmlogicEOTF, • ,]</value>
+        <value condition="!String.IsEmpty(Player.Process(videofps))">$INFO[Player.Process(videofps),, $LOCALIZE[31259]]$VAR[Label_PlayerProcess_AmlogicEOTF, • ,]</value>
+        <value>$VAR[Label_PlayerProcess_AmlogicEOTF]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_CPU">
+        <value condition="!String.IsEmpty(System.CpuUsage)">$INFO[System.CpuUsage]$INFO[System.CpuFrequency, • ,]$VAR[Label_System_Temp, • ,]</value>
+        <value condition="!String.IsEmpty(System.CpuFrequency)">$INFO[System.CpuFrequency]$VAR[Label_System_Temp, • ,]</value>
+        <value>$VAR[Label_System_Temp]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_Channel">
+        <value condition="!String.IsEmpty(VideoPlayer.ChannelNumberLabel)">$INFO[VideoPlayer.ChannelNumberLabel,$LOCALIZE[19029] ,]$INFO[VideoPlayer.ChannelName, • ,]</value>
+        <value>$INFO[VideoPlayer.ChannelName]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_PVRDevice">
+        <value condition="!String.IsEmpty(PVR.ActStreamClient)">$INFO[PVR.ActStreamClient]$INFO[PVR.ActStreamStatus, • ,]</value>
+        <value>$INFO[PVR.ActStreamStatus]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_PVRService">
+        <value condition="!String.IsEmpty(PVR.ActStreamProviderName)">$INFO[PVR.ActStreamProviderName]$INFO[PVR.ActStreamMux, • $LOCALIZE[19100] ,]$INFO[PVR.ActStreamEncryptionName, • ,]</value>
+        <value condition="!String.IsEmpty(PVR.ActStreamMux)">$INFO[PVR.ActStreamMux,$LOCALIZE[19100] ,]$INFO[PVR.ActStreamEncryptionName, • ,]</value>
+        <value>$INFO[PVR.ActStreamEncryptionName]</value>
+    </variable>
+
     <variable name="Label_StreamLanguage">
         <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label]</value>
         <value>UNK</value>
