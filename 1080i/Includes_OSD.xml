@@ -220,75 +220,6 @@
         </definition>
     </include>
 
-    <include name="OSD_Stream_Selector_Layout">
-        <param name="selected">false</param>
-        <param name="color_fg">dialog_fg_90</param>
-        <param name="enabled">true</param>
-        <definition>
-            <control type="group">
-                <left>20</left>
-                <right>20</right>
-                <include content="Object_Control" condition="$PARAM[selected]">
-                    <param name="control">image</param>
-                    <include>Texture_Menu_Highlight_H</include>
-                </include>
-                <control type="group">
-                    <left>40</left>
-                    <right>20</right>
-                    <control type="label">
-                        <textcolor>$PARAM[color_fg]</textcolor>
-                        <label>$VAR[Label_StreamLanguage,[UPPERCASE],[/UPPERCASE]]$INFO[ListItem.Label2, | ,]</label>
-                        <right>$PARAM[label_right]</right>
-                    </control>
-                    <control type="label">
-                        <right>240</right>
-                        <align>right</align>
-                        <label>$VAR[Label_PlayerStream_IsForced,  ,]$VAR[Label_PlayerStream_IsDefault,  ,]$VAR[Label_PlayerStream_IsOriginal,  ,]$INFO[ListItem.Property(codec),  ,]$INFO[ListItem.Property(channels),  , $LOCALIZE[10127]]$INFO[ListItem.Property(bitrate),  , bps]</label>
-                        <bottom>2</bottom>
-                        <font>font_tiny_bold</font>
-                        <textcolor>$PARAM[color_fg]</textcolor>
-                    </control>
-
-                    <control type="image">
-                        <right>120</right>
-                        <top>-1</top>
-                        <bottom>1</bottom>
-                        <width>80</width>
-                        <bordersize>22</bordersize>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture colordiffuse="$PARAM[color_fg]">flags/cc.png</texture>
-                        <animation effect="fade" end="33" condition="String.IsEmpty(ListItem.Property(isimpaired))">Conditional</animation>
-                    </control>
-
-                    <control type="image">
-                        <right>60</right>
-                        <width>80</width>
-                        <bordersize>28</bordersize>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture colordiffuse="$PARAM[color_fg]">$VAR[Image_IsCurrentStream]</texture>
-                        <visible>$PARAM[enabled]</visible>
-                    </control>
-                    <control type="image">
-                        <right>60</right>
-                        <width>80</width>
-                        <bordersize>28</bordersize>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture colordiffuse="$PARAM[color_fg]">buttons/check-off.png</texture>
-                        <visible>!$PARAM[enabled]</visible>
-                    </control>
-
-                    <control type="image">
-                        <right>0</right>
-                        <width>80</width>
-                        <bordersize>18</bordersize>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture fallback="flags/color/language/unk.png">$INFO[ListItem.Property(language),flags/color/language/,.png]</texture>
-                    </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
     <include name="OSD_VideoBackground_Dialog">
         <control type="group">
             <control type="image">
@@ -343,135 +274,139 @@
         </include>
     </include>
 
-    <include name="OSD_Stream_Selector_Divider">
-        <control type="image">
-            <texture border="20" colordiffuse="dialog_fg_12">common/dialog.png</texture>
-        </control>
-        <control type="image">
-            <left>40</left>
-            <right>40</right>
-            <height>1</height>
-            <centerbottom>40</centerbottom>
-            <texture colordiffuse="dialog_fg_06">common/white.png</texture>
+    <include name="OSD_Stream_Pill">
+        <include content="Info_Line_Pill_Text">
+            <param name="colordiffuse">panel_fg</param>
+            <param name="fill">12</param>
+            <param name="texture">common/dialog.png</param>
+            <param name="border">20</param>
+            <param name="textcolor">panel_fg_100</param>
+            <param name="font">font_tiny_bold</param>
+            <param name="textoffsetx">20</param>
+            <param name="textoffsety">0</param>
+            <param name="aligny">center</param>
+            <param name="label">$PARAM[label]</param>
+            <height>40</height>
+            <width min="80" max="400">auto</width>
+            <shadowcolor>00000000</shadowcolor>
+            <visible>$PARAM[focused]</visible>
+            <centertop>50%</centertop>
+        </include>
+        <control type="label">
+            <height>40</height>
+            <width min="80" max="400">auto</width>
+            <font>font_tiny_bold</font>
+            <textcolor>panel_fg_70</textcolor>
+            <visible>![$PARAM[focused]]</visible>
+            <label>$PARAM[label]</label>
+            <centertop>50%</centertop>
         </control>
     </include>
 
-    <include name="OSD_Stream_Selector_BackgroundResizer">
+    <include name="OSD_Stream_Row">
+        <param name="enabled">true</param>
+        <param name="audio_focused">false</param>
+        <param name="subtitles_focused">false</param>
+        <param name="video_focused">false</param>
         <definition>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>760</height>
-                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,6)</visible>
+            <visible>!Window.IsVisible(DialogSettings.xml)</visible>
+            <include content="Animation_SlideIn_Dialog">
+                <param name="posy">48</param>
+            </include>
+            <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
+
+            <control type="grouplist">
+                <height>80</height>
+                <bottom>470</bottom>
+                <right>0</right>
+                <width>760</width>
+                <orientation>horizontal</orientation>
+                <align>right</align>
+                <itemgap>30</itemgap>
+                <control type="label">
+                    <width>auto</width>
+                    <aligny>center</aligny>
+                    <font>font_head_bold</font>
+                    <textcolor>panel_fg_100</textcolor>
+                    <label>$PARAM[header]</label>
+                </control>
+                <control type="label">
+                    <width>auto</width>
+                    <aligny>center</aligny>
+                    <font>font_mini</font>
+                    <textcolor>panel_fg_70</textcolor>
+                    <label>$INFO[Container($PARAM[id]).NumItems,, $LOCALIZE[31022]]</label>
+                </control>
+                <control type="label">
+                    <width>auto</width>
+                    <aligny>center</aligny>
+                    <font>font_main</font>
+                    <textcolor>panel_fg_100</textcolor>
+                    <label>•</label>
+                </control>
+                <include content="OSD_Stream_Pill">
+                    <param name="label">$LOCALIZE[292]</param>
+                    <param name="focused">$PARAM[audio_focused]</param>
+                </include>
+                <include content="OSD_Stream_Pill">
+                    <param name="label">$LOCALIZE[287]</param>
+                    <param name="focused">$PARAM[subtitles_focused]</param>
+                </include>
+                <include content="OSD_Stream_Pill">
+                    <param name="label">$LOCALIZE[157]</param>
+                    <param name="focused">$PARAM[video_focused]</param>
+                </include>
             </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>680</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,6)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>600</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,5)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>520</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,4)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>440</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,3)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>360</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,2)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>280</height>
-                <visible>Integer.IsLess(Container($PARAM[id]).NumItems,2)</visible>
-            </control>
+
+            <include content="List_Core">
+                <param name="control">fixedlist</param>
+                <param name="orientation">horizontal</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="item_w">osd_streamcard_item_w</param>
+                <param name="item_h">osd_streamcard_item_h</param>
+                <param name="itemlayout_w">osd_streamcard_itemlayout_w</param>
+                <param name="itemlayout_h">osd_streamcard_itemlayout_h</param>
+                <param name="itemlayout_include">Layout_StreamCard</param>
+                <param name="offset_x">40</param>
+                <param name="offset_y">40</param>
+                <param name="misc">$PARAM[enabled]</param>
+                <param name="preloaditems">0</param>
+                <width>1680</width>
+                <right>-80</right>
+                <bottom>190</bottom>
+                <focusposition>0</focusposition>
+                <movement>3</movement>
+                <height>osd_streamcard_itemlayout_h</height>
+                <ondown>$PARAM[buttonid]</ondown>
+                <onup>noop</onup>
+                <animation effect="slide" start="0" end="400" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
+                <animation effect="slide" start="0" end="800" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
+                <animation effect="slide" start="0" end="1200" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+                <nested />
+            </include>
         </definition>
     </include>
 
     <include name="OSD_Stream_Selector">
-        <param name="width">960</param>
         <param name="enabled">true</param>
         <param name="toggle">false</param>
+        <param name="audio_focused">false</param>
+        <param name="subtitles_focused">false</param>
+        <param name="video_focused">false</param>
         <definition>
             <control type="group">
-
-                <visible>!Window.IsVisible(DialogSettings.xml)</visible>
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="posy">48</param>
+                <include content="OSD_Stream_Row">
+                    <param name="id">$PARAM[id]</param>
+                    <param name="buttonid">$PARAM[buttonid]</param>
+                    <param name="header">$PARAM[header]</param>
+                    <param name="enabled">$PARAM[enabled]</param>
+                    <param name="audio_focused">$PARAM[audio_focused]</param>
+                    <param name="subtitles_focused">$PARAM[subtitles_focused]</param>
+                    <param name="video_focused">$PARAM[video_focused]</param>
+                    <content>plugin://script.skinvariables?info=get_player_streams&amp;stream_type=$PARAM[stream_type]&amp;reload=$INFO[Window.Property(UID)]</content>
+                    <onclick condition="$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))">Action(ShowSubtitles)</onclick>
+                    <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))]">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
                 </include>
-
-                <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
-                <right>-40</right>
-                <width>$PARAM[width]</width>
-                <bottom>220</bottom>
-                <height>760</height>
-                <control type="group">
-                    <animation effect="slide" start="0" end="0,80" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,6)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,160" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,5)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,240" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,320" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,400" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,480" condition="Integer.IsLess(Container($PARAM[id]).NumItems,2)">Conditional</animation>
-                    <include content="OSD_Stream_Selector_BackgroundResizer">
-                        <param name="id">$PARAM[id]</param>
-                    </include>
-                    <include content="Object_MenuHeader">
-                        <param name="label">$PARAM[header]</param>
-                        <param name="icon">$PARAM[icon]</param>
-                    </include>
-                    <control type="panel" id="$PARAM[id]">
-                        <top>140</top>
-                        <bottom>40</bottom>
-                        <ondown>$PARAM[buttonid]</ondown>
-                        <onleft>$PARAM[buttonid]</onleft>
-                        <onright>$PARAM[scrollbarid]</onright>
-                        <onup>noop</onup>
-                        <pagecontrol>$PARAM[scrollbarid]</pagecontrol>
-                        <orientation>vertical</orientation>
-                        <itemlayout height="80">
-                            <include content="OSD_Stream_Selector_Layout">
-                                <param name="enabled">$PARAM[enabled]</param>
-                                <param name="label_right">$PARAM[label_right]</param>
-                            </include>
-                        </itemlayout>
-                        <focusedlayout height="80">
-                            <include content="OSD_Stream_Selector_Layout">
-                                <param name="selected">true</param>
-                                <param name="color_fg">$VAR[ColorSelected]</param>
-                                <param name="enabled">$PARAM[enabled]</param>
-                                <param name="label_right">$PARAM[label_right]</param>
-                            </include>
-                        </focusedlayout>
-                        <content>plugin://script.skinvariables?info=get_player_streams&amp;stream_type=$PARAM[stream_type]&amp;reload=$INFO[Window.Property(UID)]</content>
-                        <onclick condition="$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))">Action(ShowSubtitles)</onclick>
-                        <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))]">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
-
-                    </control>
-                </control>
-
-                <include content="Part_Scrollbar_Max">
-                    <param name="id">$PARAM[scrollbarid]</param>
-                    <top>120</top>
-                    <bottom>40</bottom>
-                    <onleft>$PARAM[id]</onleft>
-                    <onright>$PARAM[buttonid]</onright>
-                </include>
-
             </control>
         </definition>
     </include>

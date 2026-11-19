@@ -199,13 +199,14 @@
             </control>
             <control type="group">
                 <left>60</left>
-                <include content="Part_Box">
+                <include content="Object_ItemBack">
                     <param name="colordiffuse">panel_fg_12</param>
                 </include>
+
                 <include content="Object_Control" condition="$PARAM[selected]">
-                    <param name="control">group</param>
+                    <param name="control">image</param>
+                    <include>Texture_Box_Highlight_V</include>
                     <visible>$PARAM[focused]</visible>
-                    <include>Part_Box_Highlight</include>
                 </include>
                 <include content="Layout_ProcessNode_Labels">
                     <param name="visible">![$PARAM[focused]]</param>
@@ -2792,6 +2793,95 @@
                             <visible>!ListItem.InProgress</visible>
                         </include>
                     </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Player stream card. misc: condition that the current stream is switched on (subtitles can be off) -->
+    <include name="Layout_StreamCard">
+        <param name="selected">false</param>
+        <param name="misc">true</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+
+                <include content="Object_ItemBack">
+                    <param name="colordiffuse">panel_fg_12</param>
+                </include>
+
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include>Texture_Box_Highlight_V</include>
+                </include>
+
+                <control type="group">
+                    <include content="Dimension_Padding"><param name="pad">20</param></include>
+
+                    <control type="group">
+                        <height>60</height>
+                        <control type="label">
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <right>90</right>
+                            <aligny>center</aligny>
+                            <font>font_title_midi</font>
+                            <textcolor>panel_fg_100</textcolor>
+                            <label>$VAR[Label_StreamLanguage,[UPPERCASE],[/UPPERCASE]]</label>
+                        </control>
+
+                        <control type="image">
+                            <right>0</right>
+                            <centertop>50%</centertop>
+                            <width>60</width>
+                            <height>40</height>
+                            <aspectratio align="right">keep</aspectratio>
+                            <texture fallback="flags/color/language/unk.png">$INFO[ListItem.Property(language),flags/color/language/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(language))</visible>
+                        </control>
+                        <control type="image">
+                            <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                            <right>0</right>
+                            <centertop>50%</centertop>
+                            <width>40</width>
+                            <height>40</height>
+                            <bordersize>-8</bordersize>
+                            <aspectratio align="right">keep</aspectratio>
+                            <colordiffuse>panel_fg_100</colordiffuse>
+                            <texture>$INFO[ListItem.Icon]</texture>
+                            <visible>String.IsEmpty(ListItem.Property(language))</visible>
+                        </control>
+
+                        <control type="image">
+                            <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                            <right>60</right>
+                            <centertop>50%</centertop>
+                            <width>24</width>
+                            <height>24</height>
+                            <colordiffuse>panel_fg_100</colordiffuse>
+                            <texture>buttons/check-on.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(iscurrent)) + $PARAM[misc]</visible>
+                        </control>
+                    </control>
+
+                    <control type="group">
+                        <top>60</top>
+                        <height>40</height>
+                        <control type="label">
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <aligny>center</aligny>
+                            <font>font_tiny</font>
+                            <textcolor>panel_fg_90</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+                    </control>
+
+                    <include content="Object_Tags">
+                        <param name="label">$VAR[Label_StreamCard_Tags]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <bottom>0</bottom>
+                        <height>40</height>
+                    </include>
                 </control>
             </control>
         </definition>
