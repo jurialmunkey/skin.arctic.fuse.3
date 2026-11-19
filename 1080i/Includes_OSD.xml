@@ -383,22 +383,35 @@
                 <width>1680</width>
                 <right>-80</right>
                 <bottom>190</bottom>
-                <focusposition>0</focusposition>
-                <movement>3</movement>
+                <focusposition>1</focusposition>
+                <movement>2</movement>
                 <height>osd_streamcard_itemlayout_h</height>
                 <ondown>$PARAM[buttonid]</ondown>
                 <onup>noop</onup>
                 <animation effect="slide" start="0" end="400" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
-                <animation effect="slide" start="0" end="800" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
-                <animation effect="slide" start="0" end="1200" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+                <animation effect="slide" start="0" end="400" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
+                <animation effect="slide" start="0" end="800" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
                 <nested />
             </include>
         </definition>
     </include>
 
+    <!-- Download card after the offset card, opening Kodi's subtitle search -->
+    <include name="OSD_Stream_DownloadCard">
+        <content>
+            <item>
+                <label>$LOCALIZE[137]</label>
+                <label2>$LOCALIZE[24134]</label2>
+                <icon>special://skin/extras/icons/download.png</icon>
+                <property name="window">subtitlesearch</property>
+            </item>
+        </content>
+    </include>
+
     <include name="OSD_Stream_Selector">
         <param name="enabled">true</param>
         <param name="toggle">false</param>
+        <param name="download">false</param>
         <param name="audio_focused">false</param>
         <param name="subtitles_focused">false</param>
         <param name="video_focused">false</param>
@@ -418,13 +431,14 @@
                         <item>
                             <label>$INFO[Container($PARAM[id]1).ListItem.Label]</label>
                             <label2>$PARAM[slider_header]</label2>
-                            <icon>special://skin/extras/icons/sliders.png</icon>
                             <property name="slider">$PARAM[slider]</property>
                         </item>
                     </content>
+                    <include condition="$PARAM[download]">OSD_Stream_DownloadCard</include>
                     <onclick condition="!String.IsEmpty(ListItem.Property(slider))">Action($INFO[ListItem.Property(slider)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(window))">ActivateWindow($INFO[ListItem.Property(window)])</onclick>
                     <onclick condition="$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))">Action(ShowSubtitles)</onclick>
-                    <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))] + String.IsEmpty(ListItem.Property(slider))">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
+                    <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))] + String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Property(window))">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
                 </include>
                 <!-- The offset card's label: the delay in milliseconds, for example "+100 ms" -->
                 <include content="Object_Hidden_List">
@@ -710,8 +724,8 @@
 
     <include name="OSD_Progress_Bar">
         <control type="group">
-            <!-- The sync ruler replaces the bar while DialogSlider is up; the time labels stay -->
-            <visible>!Window.IsVisible(DialogSlider.xml)</visible>
+            <!-- The sync ruler replaces the bar while DialogSlider or the playback speed ruler is up; the time labels stay -->
+            <visible>!$EXP[Exp_OSD_SliderVisible]</visible>
             <left>view_osd_l</left>
             <right>view_osd_r</right>
             <bottom>120</bottom>

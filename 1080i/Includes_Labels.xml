@@ -690,9 +690,8 @@
         <value>$LOCALIZE[19055]</value>
     </variable>
 
-    <variable name="Label_OSD_Header">
-        <value condition="!String.IsEmpty(PVR.ChannelNumberInput)">$INFO[PVR.ChannelNumberInput,$LOCALIZE[19165] ,]</value>
-        <value condition="!String.IsEmpty(Player.SeekNumeric)">$INFO[Player.SeekNumeric,$LOCALIZE[31233] ,]</value>
+    <!-- Rewind and fast forward speed, for example "RW 8x" or "FF 8x" -->
+    <variable name="Label_OSD_SeekSpeed">
         <value condition="Player.Forwarding32x">FF 32x</value>
         <value condition="Player.Forwarding16x">FF 16x</value>
         <value condition="Player.Forwarding8x">FF 8x</value>
@@ -705,6 +704,12 @@
         <value condition="Player.Rewinding4x">RW 4x</value>
         <value condition="Player.Rewinding2x">RW 2x</value>
         <value condition="Player.Rewinding">RW</value>
+    </variable>
+
+    <variable name="Label_OSD_Header">
+        <value condition="!String.IsEmpty(PVR.ChannelNumberInput)">$INFO[PVR.ChannelNumberInput,$LOCALIZE[19165] ,]</value>
+        <value condition="!String.IsEmpty(Player.SeekNumeric)">$INFO[Player.SeekNumeric,$LOCALIZE[31233] ,]</value>
+        <value condition="Player.Forwarding | Player.Rewinding">$VAR[Label_OSD_SeekSpeed]</value>
         <value condition="[Player.Seeking | Player.HasPerformedSeek(3)] + !String.IsEmpty(Player.SeekOffset)">$LOCALIZE[773]$INFO[Player.SeekOffset, ,]</value>
         <value condition="Player.Seeking + String.IsEmpty(Player.SeekOffset)">$LOCALIZE[773]$INFO[Player.SeekStepSize, ,]</value>
         <value condition="Player.Caching">$LOCALIZE[439] $INFO[Player.CacheLevel,,%]</value>
@@ -762,8 +767,11 @@
         <value>$INFO[PVR.ActStreamEncryptionName]</value>
     </variable>
 
+    <!-- Stream card title: offset cards keep their case so "ms" stays lowercase, and window cards keep theirs -->
     <variable name="Label_StreamLanguage">
-        <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(window))">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label,[UPPERCASE],[/UPPERCASE]]</value>
         <value>UNK</value>
     </variable>
 
@@ -1081,6 +1089,38 @@
         <value condition="$EXP[Exp_DialogSlider_AudioDelay]">&#9664; &#9654;  $LOCALIZE[31880] 25 ms</value>
         <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#9664; &#9654;  $LOCALIZE[31880] 100 ms</value>
         <value>&#9664; &#9654;  $LOCALIZE[31880]</value>
+    </variable>
+
+    <!-- Playback speed (1149): tempo 0.80 to 1.50 when tempo is enabled, otherwise rewind and fast forward speeds -->
+    <variable name="Label_OSD_PlaybackSpeed">
+        <value condition="Player.Forwarding | Player.Rewinding">$VAR[Label_OSD_SeekSpeed]</value>
+        <value condition="Player.TempoEnabled + !String.IsEmpty(Player.PlaySpeed) + !String.IsEqual(Player.PlaySpeed,0.00)">$INFO[Player.PlaySpeed]×</value>
+        <value condition="Player.TempoEnabled">1.00×</value>
+        <value>1×</value>
+    </variable>
+    <!-- Ruler steps from normal speed, as the ruler fills from a value of zero. Tempo: one step per 0.10 -->
+    <variable name="Value_OSD_TempoStep">
+        <value condition="String.IsEqual(Player.PlaySpeed,0.80)">-2</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,0.90)">-1</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.10)">1</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.20)">2</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.30)">3</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.40)">4</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.50)">5</value>
+        <value>0</value>
+    </variable>
+    <variable name="Value_OSD_SeekStep">
+        <value condition="Player.Rewinding32x">-5</value>
+        <value condition="Player.Rewinding16x">-4</value>
+        <value condition="Player.Rewinding8x">-3</value>
+        <value condition="Player.Rewinding4x">-2</value>
+        <value condition="Player.Rewinding2x">-1</value>
+        <value condition="Player.Forwarding2x">1</value>
+        <value condition="Player.Forwarding4x">2</value>
+        <value condition="Player.Forwarding8x">3</value>
+        <value condition="Player.Forwarding16x">4</value>
+        <value condition="Player.Forwarding32x">5</value>
+        <value>0</value>
     </variable>
 
     <variable name="Label_StreamCard_Tags">
