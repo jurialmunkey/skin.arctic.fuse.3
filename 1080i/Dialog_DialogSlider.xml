@@ -86,24 +86,31 @@
         </definition>
     </include>
 
-    <!-- Rewind and fast forward speeds under the 144px major ticks, with normal speed in the centre -->
+    <!-- Range labels under the 144px major ticks, as DialogSlider_RulerLabels. The origin defaults to the centre -->
     <include name="DialogSlider_RulerLabels_Speed">
-        <control type="group">
-            <top>150</top>
-            <height>40</height>
-            <visible>$PARAM[visible]</visible>
-            <include content="DialogSlider_RulerLabel"><param name="left">-50</param><param name="label">32×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">94</param><param name="label">16×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">238</param><param name="label">8×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">382</param><param name="label">4×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">526</param><param name="label">2×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">670</param><param name="label">1×</param><param name="textcolor">panel_fg_90</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">814</param><param name="label">2×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">958</param><param name="label">4×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">1102</param><param name="label">8×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">1246</param><param name="label">16×</param></include>
-            <include content="DialogSlider_RulerLabel"><param name="left">1390</param><param name="label">32×</param></include>
-        </control>
+        <param name="label_0" />
+        <param name="label_5" />
+        <param name="origin_label">$NUMBER[0]</param>
+        <param name="origin_left">670</param>
+        <definition>
+            <control type="group">
+                <top>150</top>
+                <height>40</height>
+                <visible>$PARAM[visible]</visible>
+                <include content="DialogSlider_RulerLabel"><param name="left">-50</param><param name="label">$PARAM[label_0]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">94</param><param name="label">$PARAM[label_1]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">238</param><param name="label">$PARAM[label_2]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">382</param><param name="label">$PARAM[label_3]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">526</param><param name="label">$PARAM[label_4]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">670</param><param name="label">$PARAM[label_5]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">814</param><param name="label">$PARAM[label_6]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">958</param><param name="label">$PARAM[label_7]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">1102</param><param name="label">$PARAM[label_8]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">1246</param><param name="label">$PARAM[label_9]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">1390</param><param name="label">$PARAM[label_10]</param></include>
+                <include content="DialogSlider_RulerLabel"><param name="left">$PARAM[origin_left]</param><param name="label">$PARAM[origin_label]</param><param name="textcolor">panel_fg_90</param></include>
+            </control>
+        </definition>
     </include>
 
     <!-- One 18px step of the ruler list from SkinVariables get_slider_ruler: the fill from zero to the nib, and the nib with its value pill.
@@ -179,9 +186,10 @@
 
     <!-- Ruler list for one known scale. Its path includes the live value, so Kodi reloads it on every change.
          Items are centred on the 18px steps, with four blank items each side so the pill has room at the ends.
-         The fill starts at a value of zero, so scales centred elsewhere pass a step count as the value -->
+         The fill starts at the origin value, zero by default -->
     <include name="DialogSlider_RulerList">
         <param name="pill_label">$INFO[ListItem.Label]</param>
+        <param name="origin">0</param>
         <definition>
         <control type="list">
             <left>-81</left>
@@ -201,22 +209,41 @@
                     <param name="pill_label">$PARAM[pill_label]</param>
                 </include>
             </focusedlayout>
-            <content>plugin://script.skinvariables?info=get_slider_ruler&amp;value=$PARAM[value]&amp;minimum=$PARAM[minimum]&amp;maximum=$PARAM[maximum]&amp;steps=80&amp;pad=4</content>
+            <content>plugin://script.skinvariables?info=get_slider_ruler&amp;value=$PARAM[value]&amp;minimum=$PARAM[minimum]&amp;maximum=$PARAM[maximum]&amp;origin=$PARAM[origin]&amp;steps=80&amp;pad=4</content>
         </control>
         </definition>
     </include>
 
-    <!-- Baseline and ticks. speed: ten 144px segments instead of eight 180px ones. origin: left of the tall tick where the fill starts -->
+    <!-- Baseline and ticks -->
     <include name="DialogSlider_RulerFrame">
         <param name="speed">false</param>
         <param name="origin">719</param>
         <definition>
-            <control type="image">
-                <centertop>140</centertop>
-                <height>2</height>
-                <texture colordiffuse="panel_fg_30">common/white.png</texture>
-                <visible>$PARAM[visible]</visible>
-            </control>
+            <include content="DialogSlider_RulerBaseline">
+                <param name="visible">$PARAM[visible]</param>
+            </include>
+            <include content="DialogSlider_RulerTicks">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="speed">$PARAM[speed]</param>
+                <param name="origin">$PARAM[origin]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="DialogSlider_RulerBaseline">
+        <control type="image">
+            <centertop>140</centertop>
+            <height>2</height>
+            <texture colordiffuse="panel_fg_30">common/white.png</texture>
+            <visible>$PARAM[visible]</visible>
+        </control>
+    </include>
+
+    <!-- speed: ten 144px segments instead of eight 180px ones. origin: left of the tall tick where the fill starts -->
+    <include name="DialogSlider_RulerTicks">
+        <param name="speed">false</param>
+        <param name="origin">719</param>
+        <definition>
             <control type="group">
                 <centertop>100</centertop>
                 <height>44</height>
@@ -274,13 +301,26 @@
 
     <include name="DialogSlider_Ruler">
         <include content="DialogSlider_RulerGroup">
-            <include content="DialogSlider_RulerFrame">
+            <!-- Scales are known from the heading. Other sliders keep just the baseline and Kodi's nib -->
+            <include content="DialogSlider_RulerBaseline">
                 <param name="visible">true</param>
             </include>
+            <include content="DialogSlider_RulerTicks">
+                <param name="visible">$EXP[Exp_DialogSlider_CentreScale]</param>
+            </include>
+            <include content="DialogSlider_RulerTicks">
+                <param name="visible">$EXP[Exp_DialogSlider_Zoom]</param>
+                <param name="origin">539</param>
+            </include>
+            <include content="DialogSlider_RulerTicks">
+                <param name="visible">$EXP[Exp_DialogSlider_LeftScale]</param>
+                <param name="speed">true</param>
+                <param name="origin">-1</param>
+            </include>
 
-            <!-- Audio offset: -1 to +1 s in 25 ms steps. Subtitle offset: -4 to +4 s in 100 ms steps -->
+            <!-- Audio offset: -1 to +1 s in 25 ms steps, shared with sharpness. Subtitle offset: -4 to +4 s in 100 ms steps. Vertical shift: -2 to +2 -->
             <include content="DialogSlider_RulerLabels">
-                <param name="visible">$EXP[Exp_DialogSlider_AudioDelay]</param>
+                <param name="visible">$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]</param>
                 <param name="label_0">&#8722;1.00</param>
                 <param name="label_1">&#8722;0.75</param>
                 <param name="label_2">&#8722;0.50</param>
@@ -301,27 +341,112 @@
                 <param name="label_7">+3.0</param>
                 <param name="label_8">+4.0</param>
             </include>
-            <include content="DialogSlider_RulerList">
-                <param name="visible">$EXP[Exp_DialogSlider_AudioDelay]</param>
-                <param name="value">$INFO[Player.AudioDelay]</param>
-                <param name="minimum">-1</param>
-                <param name="maximum">1</param>
-            </include>
-            <include content="DialogSlider_RulerList">
-                <param name="visible">$EXP[Exp_DialogSlider_SubtitleDelay]</param>
-                <param name="value">$INFO[Player.SubtitleDelay]</param>
-                <param name="minimum">-4</param>
-                <param name="maximum">4</param>
+            <include content="DialogSlider_RulerLabels">
+                <param name="visible">$EXP[Exp_DialogSlider_VerticalShift]</param>
+                <param name="label_0">&#8722;2.0</param>
+                <param name="label_1">&#8722;1.5</param>
+                <param name="label_2">&#8722;1.0</param>
+                <param name="label_3">&#8722;0.5</param>
+                <param name="label_5">+0.5</param>
+                <param name="label_6">+1.0</param>
+                <param name="label_7">+1.5</param>
+                <param name="label_8">+2.0</param>
             </include>
 
-            <!-- Kodi's slider takes left and right. For the delay scales its nib is faded out (it stays focusable) and the ruler list draws the value -->
+            <!-- Zoom and pixel ratio: 0.4 to 2.0, filling from 1.0 -->
+            <include content="DialogSlider_RulerLabels">
+                <param name="visible">$EXP[Exp_DialogSlider_Zoom]</param>
+                <param name="label_0">0.4</param>
+                <param name="label_1">0.6</param>
+                <param name="label_2">0.8</param>
+                <param name="label_4">1.2</param>
+                <param name="label_5">1.4</param>
+                <param name="label_6">1.6</param>
+                <param name="label_7">1.8</param>
+                <param name="label_8">2.0</param>
+                <param name="origin_label">1.0</param>
+                <param name="origin_left">490</param>
+            </include>
+
+            <!-- Scales filling from zero at the left: picture adjustments 0 to 100, noise reduction 0 to 1, volume amplification 0 to 60 dB, tone mapping 0 to 5 -->
+            <include content="DialogSlider_RulerLabels_Speed">
+                <param name="visible">$EXP[Exp_DialogSlider_Adjustment]</param>
+                <param name="label_1">10</param>
+                <param name="label_2">20</param>
+                <param name="label_3">30</param>
+                <param name="label_4">40</param>
+                <param name="label_5">50</param>
+                <param name="label_6">60</param>
+                <param name="label_7">70</param>
+                <param name="label_8">80</param>
+                <param name="label_9">90</param>
+                <param name="label_10">100</param>
+                <param name="origin_left">-50</param>
+            </include>
+            <include content="DialogSlider_RulerLabels_Speed">
+                <param name="visible">$EXP[Exp_DialogSlider_NoiseReduction]</param>
+                <param name="label_1">0.1</param>
+                <param name="label_2">0.2</param>
+                <param name="label_3">0.3</param>
+                <param name="label_4">0.4</param>
+                <param name="label_5">0.5</param>
+                <param name="label_6">0.6</param>
+                <param name="label_7">0.7</param>
+                <param name="label_8">0.8</param>
+                <param name="label_9">0.9</param>
+                <param name="label_10">1.0</param>
+                <param name="origin_left">-50</param>
+            </include>
+            <include content="DialogSlider_RulerLabels_Speed">
+                <param name="visible">$EXP[Exp_DialogSlider_VolumeAmp]</param>
+                <param name="label_1">6</param>
+                <param name="label_2">12</param>
+                <param name="label_3">18</param>
+                <param name="label_4">24</param>
+                <param name="label_5">30</param>
+                <param name="label_6">36</param>
+                <param name="label_7">42</param>
+                <param name="label_8">48</param>
+                <param name="label_9">54</param>
+                <param name="label_10">60</param>
+                <param name="origin_left">-50</param>
+            </include>
+            <include content="DialogSlider_RulerLabels_Speed">
+                <param name="visible">$EXP[Exp_DialogSlider_ToneMap]</param>
+                <param name="label_1">0.5</param>
+                <param name="label_2">1.0</param>
+                <param name="label_3">1.5</param>
+                <param name="label_4">2.0</param>
+                <param name="label_5">2.5</param>
+                <param name="label_6">3.0</param>
+                <param name="label_7">3.5</param>
+                <param name="label_8">4.0</param>
+                <param name="label_9">4.5</param>
+                <param name="label_10">5.0</param>
+                <param name="origin_left">-50</param>
+            </include>
+
+            <include content="DialogSlider_RulerList">
+                <param name="visible">$EXP[Exp_DialogSlider_Ruler]</param>
+                <param name="value">$VAR[Label_DialogSlider_Value]</param>
+                <param name="minimum">$VAR[Value_DialogSlider_RulerMinimum]</param>
+                <param name="maximum">$VAR[Value_DialogSlider_RulerMaximum]</param>
+                <param name="origin">$VAR[Value_DialogSlider_RulerOrigin]</param>
+                <param name="pill_label">$VAR[Label_DialogSlider_Pill]</param>
+            </include>
+
+            <!-- Kodi's slider takes left and right. For the known scales its nib is faded out (it stays focusable) and the ruler list draws the value.
+                 Other scales show only its nib, matching the ruler nib, on the ruler baseline. The hidden bar uses the nib texture so Kodi draws the nib at the control height,
+                 and the 20px overhang each side lets the nib centre reach both end ticks -->
             <control type="slider" id="11">
+                <left>-20</left>
+                <right>-20</right>
                 <centertop>140</centertop>
-                <height>12</height>
-                <texturesliderbar colordiffuse="panel_fg_30" border="6">slider/slider_bg.png</texturesliderbar>
-                <textureslidernib colordiffuse="panel_fg_100" border="6">slider/slider_nib.png</textureslidernib>
-                <include>Texture_Slider_NibFocus</include>
-                <animation effect="fade" start="0" end="0" time="0" condition="$EXP[Exp_DialogSlider_Delay]">Conditional</animation>
+                <height>40</height>
+                <texturesliderbar colordiffuse="00ffffff">slider/slider_nib_ring.png</texturesliderbar>
+                <textureslidernib colordiffuse="panel_fg_100">slider/slider_nib_ring.png</textureslidernib>
+                <textureslidernibfocus colordiffuse="panel_fg_100">slider/slider_nib_ring.png</textureslidernibfocus>
+                <animation effect="fade" start="0" end="0" time="0" condition="$EXP[Exp_DialogSlider_Ruler]">Conditional</animation>
                 <ondown>Close</ondown>
                 <onup>Close</onup>
             </control>
