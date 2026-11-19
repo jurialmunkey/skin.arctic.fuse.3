@@ -466,59 +466,80 @@
         </definition>
     </include>
 
-    <!-- The script fills lists 501 to 510 with the results of each content type in the style set for it in
-         shortcuts/skinvariables-multisearch-styles.json. The no_all_list param keeps the all results containers empty,
-         so they only show the loading placeholders before the first results -->
+    <!-- The script fills lists 501 to 510 with the results of each content type. Each list uses the style chosen for
+         its content type, the same style that shortcuts/skinvariables-multisearch-styles.json gives the script.
+         The no_all_list param keeps the all results containers empty, so they only show
+         the loading placeholders before the first results -->
     <include name="MultiSearch_Results_MediaType_Rows">
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">501</param>
             <param name="label">$LOCALIZE[342]</param>
-            <param name="include">List_Poster_Row</param>
+            <param name="style">Movie</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">502</param>
             <param name="label">$LOCALIZE[20434]</param>
-            <param name="include">List_Poster_Row</param>
+            <param name="style">Set</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">503</param>
             <param name="label">$LOCALIZE[20343]</param>
-            <param name="include">List_Poster_Row</param>
+            <param name="style">TVShow</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">504</param>
             <param name="label">$LOCALIZE[33054]</param>
-            <param name="include">List_Poster_Row</param>
+            <param name="style">Season</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">505</param>
             <param name="label">$LOCALIZE[20360]</param>
-            <param name="include">List_Landscape_Row</param>
+            <param name="style">Episode</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">506</param>
             <param name="label">$LOCALIZE[20389]</param>
-            <param name="include">List_Landscape_Row</param>
+            <param name="style">MusicVideo</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">507</param>
             <param name="label">$LOCALIZE[133]</param>
-            <param name="include">List_Square_Row</param>
+            <param name="style">Artist</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">508</param>
             <param name="label">$LOCALIZE[132]</param>
-            <param name="include">List_Square_Row</param>
+            <param name="style">Album</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">509</param>
             <param name="label">$LOCALIZE[134]</param>
-            <param name="include">List_Square_Row</param>
+            <param name="style">Song</param>
         </include>
-        <include content="MultiSearch_Results_Row">
+        <include content="MultiSearch_Results_MediaType_Row">
             <param name="id">510</param>
             <param name="label">$ADDON[script.skinvariables 32103]</param>
+            <param name="style">Default</param>
+        </include>
+    </include>
+
+    <!-- Results row of one content type in the style of its HomeSwitcher.Search.Style setting. A content type set to
+         Default uses the style of the Default setting, and poster is used when neither gives a style -->
+    <include name="MultiSearch_Results_MediaType_Row">
+        <include content="MultiSearch_Results_Row" condition="Skin.String(HomeSwitcher.Search.Style.$PARAM[style],Landscape) | [Skin.String(HomeSwitcher.Search.Style.$PARAM[style],Default) + Skin.String(HomeSwitcher.Search.Style.Default,Landscape)]">
+            <param name="id">$PARAM[id]</param>
+            <param name="label">$PARAM[label]</param>
+            <param name="include">List_Landscape_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row" condition="Skin.String(HomeSwitcher.Search.Style.$PARAM[style],Square) | [Skin.String(HomeSwitcher.Search.Style.$PARAM[style],Default) + Skin.String(HomeSwitcher.Search.Style.Default,Square)]">
+            <param name="id">$PARAM[id]</param>
+            <param name="label">$PARAM[label]</param>
             <param name="include">List_Square_Row</param>
+        </include>
+        <include content="MultiSearch_Results_Row" condition="![Skin.String(HomeSwitcher.Search.Style.$PARAM[style],Landscape) | [Skin.String(HomeSwitcher.Search.Style.$PARAM[style],Default) + Skin.String(HomeSwitcher.Search.Style.Default,Landscape)]] + ![Skin.String(HomeSwitcher.Search.Style.$PARAM[style],Square) | [Skin.String(HomeSwitcher.Search.Style.$PARAM[style],Default) + Skin.String(HomeSwitcher.Search.Style.Default,Square)]]">
+            <param name="id">$PARAM[id]</param>
+            <param name="label">$PARAM[label]</param>
+            <param name="include">List_Poster_Row</param>
         </include>
     </include>
 

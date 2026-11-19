@@ -128,6 +128,9 @@
     <expression name="Exp_MultiSearch_HasResults">Integer.IsGreater(Window.Property(SkinVariables.MultiSearch.Count),0) |!Integer.IsEqual(Container(501).NumItems,0) | !Integer.IsEqual(Container(502).NumItems,0) | !Integer.IsEqual(Container(503).NumItems,0) | !Integer.IsEqual(Container(504).NumItems,0) | !Integer.IsEqual(Container(505).NumItems,0) | !Integer.IsEqual(Container(506).NumItems,0) | !Integer.IsEqual(Container(507).NumItems,0) | !Integer.IsEqual(Container(508).NumItems,0) | !Integer.IsEqual(Container(509).NumItems,0) | !Integer.IsEqual(Container(510).NumItems,0)</expression>
     <expression name="Exp_MultiSearch_IsEmpty">!$EXP[Exp_MultiSearch_IsBusy] + !$EXP[Exp_MultiSearch_HasResults]</expression>
 
+    <!-- SkinVariables skin settings: the search category (-200) is selected. A search or tag selects it and leaving it clears the search -->
+    <expression name="Exp_SkinSettings_IsSearchCategory">String.IsEqual(Window.Property(SkinVariables.SkinSettings.Category),SkinVariables.Search)</expression>
+
 
 
     <!-- ============== -->
@@ -136,6 +139,7 @@
 
     <expression name="Exp_DialogCustomPlot_Info_HasContent">[!Container(7000).IsUpdating + !String.IsEmpty(Control.GetLabel(7006))]</expression>
     <expression name="Exp_DialogCustomPlot_Info_IsSelected">[Integer.IsEqual(Control.GetLabel(7007),9001)]</expression>
+    <expression name="Exp_DialogCustomPlot_Details_IsLoaded">[!Container(7000).IsUpdating + Integer.IsGreater(Container(7000).NumItems,0)]</expression>
     <expression name="Exp_DialogCustomPlot_List_HasFocus">[Control.HasFocus(7001) | Control.HasFocus(7002) | Control.HasFocus(7003) | Control.HasFocus(7004) | Control.HasFocus(7005)]</expression>
     <expression name="Exp_DialogCustomPlot_IsPerson">[!String.IsEmpty(Window.Property(tmdb_id)) + String.IsEqual(Window.Property(tmdb_type),person)]</expression>
     <expression name="Exp_DialogCustomPlot_IsVideo">[!String.IsEmpty(Window.Property(tmdb_id)) + [String.IsEqual(Window.Property(tmdb_type),movie) | String.IsEqual(Window.Property(tmdb_type),tv)]]</expression>
@@ -210,6 +214,11 @@
 
     <expression name="Exp_OSD_QuickInfo">[$EXP[Exp_OSD_PVRChannelSwitch] | Window.IsActive(fullscreeninfo) | $EXP[Exp_OSD_DelayInfo]]</expression>
 
+    <expression name="Exp_DialogSlider_AudioDelay">String.IsEqual(Control.GetLabel(10),$LOCALIZE[297])</expression>
+    <expression name="Exp_DialogSlider_SubtitleDelay">String.IsEqual(Control.GetLabel(10),$LOCALIZE[22006])</expression>
+    <expression name="Exp_OSD_SliderVisible">[Window.IsVisible(DialogSlider.xml) | Window.IsVisible(1149)]</expression>
+    <expression name="Exp_DialogSlider_Delay">[$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_SubtitleDelay]]</expression>
+    <expression name="Exp_OSD_StreamRows">[Window.IsVisible(1146) | Window.IsVisible(1147) | Window.IsVisible(1148)]</expression>
     <expression name="Exp_OSD_HideControls">[Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(videobookmarks) | Window.IsActive(pvrosdguide) | Window.IsActive(pvrosdchannels) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml)]</expression>
 
     <!-- ==== -->

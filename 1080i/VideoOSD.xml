@@ -6,7 +6,6 @@
     <animation effect="fade" end="0" start="100" time="300">WindowClose</animation>
     <onload>SetProperty(UID,$ESCINFO[Player.Title]$INFO[Player.Time(ss)],1146)</onload>
     <onload>SetProperty(UID,$ESCINFO[Player.Title]$INFO[Player.Time(ss)],1147)</onload>
-    <onunload>CancelAlarm(osd_timeout,true)</onunload>
     <controls>
 
         <control type="group">
@@ -14,8 +13,6 @@
             <include>OSD_HideControls</include>
 
             <control type="group">
-                <visible>!Window.IsActive(DialogPlayerProcessInfo.xml)</visible>
-                <visible>!Window.IsVisible(DialogSlider.xml)</visible>
 
                 <control type="group">
                     <!-- Left Side Buttons -->
@@ -49,7 +46,6 @@
                         <!-- Button 2 -->
                         <control type="button" id="6002">
                             <include>Defs_OSD_Button</include>
-                            <onclick condition="VideoPlayer.Content(livetv)">CancelAlarm(osd_timeout,true)</onclick>
                             <onclick condition="VideoPlayer.Content(livetv)">Close</onclick>
                             <onclick condition="VideoPlayer.Content(livetv)">ActivateWindow(TVGuide)</onclick>
                             <onclick condition="!VideoPlayer.Content(livetv)">$VAR[Action_OSD_SkipPrev]</onclick>
@@ -94,7 +90,6 @@
                         <!-- Button 4 -->
                         <control type="button" id="6004">
                             <include>Defs_OSD_Button</include>
-                            <onclick>CancelAlarm(osd_timeout,true)</onclick>
                             <onclick>PlayerControl(Stop)</onclick>
                             <onup>8200</onup>
                         </control>
@@ -123,7 +118,6 @@
                             <include>Defs_OSD_Button</include>
                             <onup>ActivateWindow(1145)</onup>
                             <onfocus>ActivateWindow(1145)</onfocus>
-                            <onclick>CancelAlarm(osd_timeout,true)</onclick>
                             <onclick>$VAR[Action_OSD_WikiInfo]</onclick>
                         </control>
                         <include content="OSD_Button_Icon_Overlay">
@@ -139,7 +133,6 @@
                             <label>$INFO[VideoPlayer.AudioLanguage,[UPPERCASE],[/UPPERCASE]]</label>
                             <onup>ActivateWindow(1146)</onup>
                             <onfocus>ActivateWindow(1146)</onfocus>
-                            <onclick>CancelAlarm(osd_timeout,true)</onclick>
                             <onclick>ActivateWindow(osdaudiosettings)</onclick>
                         </control>
                         <include content="OSD_Button_Icon_Overlay">
@@ -156,7 +149,6 @@
                             <label>$VAR[Label_OSD_SubtitlesLanguage]</label>
                             <onup>ActivateWindow(1147)</onup>
                             <onfocus>ActivateWindow(1147)</onfocus>
-                            <onclick>CancelAlarm(osd_timeout,true)</onclick>
                             <onclick>ActivateWindow(osdsubtitlesettings)</onclick>
                         </control>
                         <include content="OSD_Button_Icon_Overlay">
@@ -170,7 +162,6 @@
                         <!-- Button 8 -->
                         <control type="button" id="6008">
                             <include>Defs_OSD_Button</include>
-                            <onclick>CancelAlarm(osd_timeout,true)</onclick>
                             <onclick>ActivateWindow(osdvideosettings)</onclick>
                             <onup>ActivateWindow(1148)</onup>
                             <onfocus>ActivateWindow(1148)</onfocus>
@@ -201,6 +192,7 @@
                         <midtexture />
                         <info>Player.Progress</info>
                         <visible>Control.HasFocus(8200)</visible>
+                        <visible>!$EXP[Exp_OSD_SliderVisible]</visible>
                         <visible>!Pvr.IsPlayingTv</visible>
                     </control>
                     <control type="progress">
@@ -210,6 +202,7 @@
                         <midtexture />
                         <info>PVR.EpgEventProgress</info>
                         <visible>Control.HasFocus(8200)</visible>
+                        <visible>!$EXP[Exp_OSD_SliderVisible]</visible>
                         <visible>Pvr.IsPlayingTv</visible>
                     </control>
                     <control type="slider" id="8200">
@@ -218,6 +211,7 @@
                         <texturesliderbar />
                         <textureslidernib />
                         <textureslidernibfocus />
+                        <onup>ActivateWindow(1149)</onup>
                         <ondown>6091</ondown>
                     </control>
                 </control>
