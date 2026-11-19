@@ -8,4 +8,12 @@
         <stop>!Window.IsVisible(1191) | !String.IsEqual(Window(1191).Property(SplashTest.AutoTime),true) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(splashtest_autotime),3)</stop>
         <onstop condition="Window.IsVisible(1191) + String.IsEqual(Window(1191).Property(SplashTest.AutoTime),true)">SetProperty(SplashTest.Hour,$VAR[Value_StartUp_Test_NextHour],1191)</onstop>
     </timer>
+    <timer>
+        <name>osd_autoclose</name>
+        <description>Close the OSD after OSD_Timeout seconds without input. Input and dialogs that pause auto close reset the countdown.</description>
+        <start reset="true">[Window.IsVisible(videoosd) | Window.IsVisible(musicosd)] + !String.IsEmpty(Skin.String(OSD_Timeout))</start>
+        <reset>!System.IdleTime(1) | Window.IsVisible(DialogSettings.xml) | Window.IsVisible(1118) | Window.IsVisible(DialogSubtitles.xml) | Window.IsVisible(DialogSlider.xml) | Window.IsVisible(DialogPlayerProcessInfo.xml) | Window.IsVisible(DialogFullScreenInfo.xml) | Window.IsVisible(videobookmarks) | Window.IsVisible(1140) | Window.IsVisible(1141) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels)</reset>
+        <stop>[!Window.IsVisible(videoosd) + !Window.IsVisible(musicosd)] | String.IsEmpty(Skin.String(OSD_Timeout)) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(osd_autoclose),Skin.String(OSD_Timeout))</stop>
+        <onstop condition="!String.IsEmpty(Skin.String(OSD_Timeout)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(osd_autoclose),Skin.String(OSD_Timeout))">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-closeosd.json,use_rules=True)</onstop>
+    </timer>
 </timers>
