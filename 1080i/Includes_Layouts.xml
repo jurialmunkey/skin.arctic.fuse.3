@@ -174,6 +174,97 @@
         </definition>
     </include>
 
+    <!-- Process chain node: connector from the previous node, then a box with label, label2 and the sub property -->
+    <include name="Layout_ProcessNode">
+        <param name="selected">false</param>
+        <param name="focused">false</param>
+        <definition>
+            <control type="group">
+                <width>60</width>
+                <visible>!Integer.IsEqual(ListItem.CurrentItem,1)</visible>
+                <control type="image">
+                    <right>30</right>
+                    <centertop>50%</centertop>
+                    <height>2</height>
+                    <texture colordiffuse="panel_fg_12">common/white.png</texture>
+                </control>
+                <control type="image">
+                    <right>10</right>
+                    <centertop>50%</centertop>
+                    <width>20</width>
+                    <height>20</height>
+                    <animation effect="rotate" end="-90" center="auto" condition="true">Conditional</animation>
+                    <texture colordiffuse="panel_fg_12">arrows/arrow-menu-up.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <left>60</left>
+                <include content="Part_Box">
+                    <param name="colordiffuse">panel_fg_12</param>
+                </include>
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">group</param>
+                    <visible>$PARAM[focused]</visible>
+                    <include>Part_Box_Highlight</include>
+                </include>
+                <include content="Layout_ProcessNode_Labels">
+                    <param name="visible">![$PARAM[focused]]</param>
+                </include>
+                <include content="Layout_ProcessNode_Labels" condition="$PARAM[selected]">
+                    <param name="visible">$PARAM[focused]</param>
+                    <param name="scroll">true</param>
+                    <param name="color_hint">$VAR[ColorSelected]</param>
+                    <param name="color_value">$VAR[ColorSelected]</param>
+                    <param name="color_sub">$VAR[ColorSelected]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_ProcessNode_Labels">
+        <param name="visible">true</param>
+        <param name="scroll">false</param>
+        <param name="color_hint">panel_fg_50</param>
+        <param name="color_value">panel_fg_90</param>
+        <param name="color_sub">panel_fg_70</param>
+        <definition>
+            <control type="group">
+                <left>20</left>
+                <right>20</right>
+                <visible>$PARAM[visible]</visible>
+                <control type="group">
+                    <animation effect="slide" end="0,10" condition="String.IsEmpty(ListItem.Property(sub))">Conditional</animation>
+                    <control type="label">
+                        <top>20</top>
+                        <height>20</height>
+                        <aligny>center</aligny>
+                        <font>font_hint_bold</font>
+                        <textcolor>$PARAM[color_hint]</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <top>40</top>
+                        <height>40</height>
+                        <aligny>center</aligny>
+                        <font>font_main_bold</font>
+                        <textcolor>$PARAM[color_value]</textcolor>
+                        <scroll>$PARAM[scroll]</scroll>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </control>
+                <control type="label">
+                    <top>80</top>
+                    <height>20</height>
+                    <aligny>center</aligny>
+                    <font>font_tiny</font>
+                    <textcolor>$PARAM[color_sub]</textcolor>
+                    <scroll>$PARAM[scroll]</scroll>
+                    <label>$INFO[ListItem.Property(sub)]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Layout_ViewType">
         <param name="selected">false</param>
         <param name="current">ListItem.IsSelected</param>
