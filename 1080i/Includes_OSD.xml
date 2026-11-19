@@ -300,6 +300,7 @@
             <visible>![$PARAM[focused]]</visible>
             <label>$PARAM[label]</label>
             <centertop>50%</centertop>
+            <textoffsetx>10</textoffsetx>
         </control>
     </include>
 
@@ -310,8 +311,10 @@
         <param name="video_focused">false</param>
         <definition>
             <visible>!Window.IsVisible(DialogSettings.xml)</visible>
+            <!-- Skip the slide in when moving across from a neighbouring row (recorded by OSD_CustomDialog_FakeButton), so the rows read as one window -->
             <include content="Animation_SlideIn_Dialog">
                 <param name="posy">48</param>
+                <param name="windowopen_condition">!String.IsEqual(Window(videoosd).Property(OSD.CustomDialog.Switch),$PARAM[buttonid])</param>
             </include>
             <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
 
@@ -322,7 +325,15 @@
                 <width>760</width>
                 <orientation>horizontal</orientation>
                 <align>right</align>
-                <itemgap>30</itemgap>
+                <itemgap>20</itemgap>
+                <control type="image">
+                    <centertop>42</centertop>
+                    <width>40</width>
+                    <height>40</height>
+                    <bordersize>-8</bordersize>
+                    <aspectratio>keep</aspectratio>
+                    <texture>special://skin/extras/icons/video.png</texture>
+                </control>
                 <control type="label">
                     <width>auto</width>
                     <aligny>center</aligny>
@@ -985,6 +996,7 @@
             <texturenofocus />
             <font />
             <label />
+            <onfocus condition="$EXP[Exp_OSD_StreamRows]">SetProperty(OSD.CustomDialog.Switch,600$PARAM[id],videoosd)</onfocus>
             <onfocus>Close</onfocus>
             <onfocus>SetFocus(600$PARAM[id])</onfocus>
         </control>
