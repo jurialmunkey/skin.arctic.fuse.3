@@ -36,7 +36,7 @@
         </definition>
     </include>
 
-    <!-- Ratings line items, one per ratings menu path (the rating property name). Called in menu order by the generated skinvariables-ratingsmovies/ratingstvshows includes -->
+    <!-- Ratings line items, one per ratings menu path (the rating property name). Shown through Info_Meta_Ratings_Item -->
     <include name="Info_Meta_Ratings_MetaCritic_Rating">
         <include content="Info_Meta_Object">
             <param name="icon">flags/$VAR[Color_Directory]/ratings/metacritic.png</param>
@@ -120,6 +120,67 @@
         </include>
     </include>
 
+    <!-- A ratings line item, called in menu order by the generated skinvariables-ratings[content] includes.
+         list is the generated static list of available ratings: the item shows while it is one of the list's first three items,
+         or first six when extra_slots is true (the line's ends at or status is turned off) -->
+    <include name="Info_Meta_Ratings_Item">
+        <definition>
+            <include content="Info_Meta_Ratings_$PARAM[path]">
+                <param name="visible">[$PARAM[visible]] + [String.IsEqual(Container($PARAM[list]).ListItemAbsolute(0).Property(path),$PARAM[path]) | String.IsEqual(Container($PARAM[list]).ListItemAbsolute(1).Property(path),$PARAM[path]) | String.IsEqual(Container($PARAM[list]).ListItemAbsolute(2).Property(path),$PARAM[path]) | [[$PARAM[extra_slots]] + [String.IsEqual(Container($PARAM[list]).ListItemAbsolute(3).Property(path),$PARAM[path]) | String.IsEqual(Container($PARAM[list]).ListItemAbsolute(4).Property(path),$PARAM[path]) | String.IsEqual(Container($PARAM[list]).ListItemAbsolute(5).Property(path),$PARAM[path])]]]</param>
+                <param name="service">$PARAM[service]</param>
+                <param name="source">$PARAM[source]</param>
+                <param name="source_prefix">$PARAM[source_prefix]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- The static lists of available ratings that the ratings line reads (Container ratings_id 1-3: movies, TV shows, episodes).
+         They go once at the top level of each window that shows the line, never inside a view or group that can be hidden:
+         a hidden list stops updating, and Kodi can read it in place of a live list with the same id.
+         Defaults match Info_Meta's library line. The OSD line uses 731 with the Player source and the info plot dialog 732 with the C7000 source -->
+    <include name="Info_Meta_Ratings_Lists">
+        <param name="ratings_id">730</param>
+        <param name="source">Window(Home).Property</param>
+        <param name="source_prefix">TMDbHelper.ListItem.</param>
+        <param name="include_tmdbhelper">$EXP[Exp_TMDbHelper_IsData]</param>
+        <definition>
+            <include content="Info_Meta_Ratings_List" condition="$PARAM[include_tmdbhelper]">
+                <param name="id">$PARAM[ratings_id]1</param>
+                <param name="include">skinvariables-ratingsmovies-list</param>
+                <param name="source">$PARAM[source]</param>
+                <param name="source_prefix">$PARAM[source_prefix]</param>
+            </include>
+            <include content="Info_Meta_Ratings_List" condition="$PARAM[include_tmdbhelper]">
+                <param name="id">$PARAM[ratings_id]2</param>
+                <param name="include">skinvariables-ratingstvshows-list</param>
+                <param name="source">$PARAM[source]</param>
+                <param name="source_prefix">$PARAM[source_prefix]</param>
+            </include>
+            <include content="Info_Meta_Ratings_List" condition="$PARAM[include_tmdbhelper]">
+                <param name="id">$PARAM[ratings_id]3</param>
+                <param name="include">skinvariables-ratingsepisodes-list</param>
+                <param name="source">$PARAM[source]</param>
+                <param name="source_prefix">$PARAM[source_prefix]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Static list of the available ratings for one ratings menu (include), in menu order -->
+    <include name="Info_Meta_Ratings_List">
+        <definition>
+            <include content="Object_Hidden_List">
+                <param name="id">$PARAM[id]</param>
+                <content>
+                    <include content="$PARAM[include]">
+                        <param name="source">$PARAM[source]</param>
+                        <param name="source_prefix">$PARAM[source_prefix]</param>
+                    </include>
+                </content>
+            </include>
+        </definition>
+    </include>
+
     <include name="Info_Meta_Item_Row">
         <control type="group">
             <left>40</left>
@@ -150,6 +211,7 @@
         <param name="source_prefix">TMDbHelper.ListItem.</param>
         <param name="include_tmdbhelper">$EXP[Exp_TMDbHelper_IsData]</param>
         <param name="status">Window(Home).Property(TMDbHelper.ListItem.Status)</param>
+        <param name="ratings_id">730</param>
         <definition>
 
             <control type="group">
@@ -197,12 +259,24 @@
                     <!-- Ratings -->
                     <include content="skinvariables-ratingsmovies" condition="$PARAM[include_tmdbhelper]">
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
+                        <param name="list">$PARAM[ratings_id]1</param>
+                        <param name="extra_slots">Skin.HasSetting(Ratings.Movies.DisableEndTime)</param>
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
                     </include>
                     <include content="skinvariables-ratingstvshows" condition="$PARAM[include_tmdbhelper]">
-                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
+                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season)</param>
+                        <param name="list">$PARAM[ratings_id]2</param>
+                        <param name="extra_slots">Skin.HasSetting(Ratings.TVShows.DisableStatus)</param>
+                        <param name="service">$PARAM[service]</param>
+                        <param name="source">$PARAM[source]</param>
+                        <param name="source_prefix">$PARAM[source_prefix]</param>
+                    </include>
+                    <include content="skinvariables-ratingsepisodes" condition="$PARAM[include_tmdbhelper]">
+                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
+                        <param name="list">$PARAM[ratings_id]3</param>
+                        <param name="extra_slots">Skin.HasSetting(Ratings.Episodes.DisableEndTime)</param>
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
@@ -252,19 +326,19 @@
                     <include content="Info_Meta_Object">
                         <param name="icon">flags/$VAR[Color_Directory]/ratings/ends.png</param>
                         <param name="label">$INFO[$PARAM[container]$PARAM[listitem].EndTimeResume,$LOCALIZE[31600] ,]</param>
-                        <param name="visible">[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video)] + !String.IsEqual($PARAM[container]$PARAM[listitem].Property(tmdb_type),person) + !String.IsEmpty($PARAM[container]$PARAM[listitem].EndTimeResume)</param>
+                        <param name="visible">[[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) + !Skin.HasSetting(Ratings.Movies.DisableEndTime)] | [String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode) + !Skin.HasSetting(Ratings.Episodes.DisableEndTime)] | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,video)] + !String.IsEqual($PARAM[container]$PARAM[listitem].Property(tmdb_type),person) + !String.IsEmpty($PARAM[container]$PARAM[listitem].EndTimeResume)</param>
                     </include>
                     <include content="Info_Meta_Object">
                         <param name="icon">flags/$VAR[Color_Directory]/ratings/ends.png</param>
                         <param name="label">$INFO[$PARAM[container]$PARAM[service].FinishTime,$LOCALIZE[31600] ,]</param>
-                        <param name="visible">[$PARAM[override_tvshow] | $PARAM[override_movie]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].FinishTime)</param>
+                        <param name="visible">[[[$PARAM[override_tvshow]] + !Skin.HasSetting(Ratings.Episodes.DisableEndTime)] | [[$PARAM[override_movie]] + !Skin.HasSetting(Ratings.Movies.DisableEndTime)]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].FinishTime)</param>
                     </include>
 
                     <!-- Status -->
                     <include content="Info_Meta_Object" condition="$PARAM[include_tmdbhelper]">
                         <param name="label">$VAR[Label_$PARAM[service]_Status]$VAR[Label_$PARAM[service]_StatusDate, ,]</param>
                         <param name="icon">$VAR[Image_$PARAM[service]_Status]</param>
-                        <param name="visible">[[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | $PARAM[override_tvshow]] + !String.IsEmpty($PARAM[status])]</param>
+                        <param name="visible">[[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | $PARAM[override_tvshow]] + !String.IsEmpty($PARAM[status]) + !Skin.HasSetting(Ratings.TVShows.DisableStatus)]</param>
                     </include>
 
                 </control>

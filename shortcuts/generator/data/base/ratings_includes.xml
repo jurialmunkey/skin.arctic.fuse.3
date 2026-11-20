@@ -1,4 +1,5 @@
 <contents>
+    <!-- Each ratings menu item path is the name of the rating property that holds its value -->
     <lists>
         <list name="ratingsmovies">
             <value name="content">Movies</value>
@@ -6,10 +7,26 @@
         <list name="ratingstvshows">
             <value name="content">TVShows</value>
         </list>
+        <list name="ratingsepisodes">
+            <value name="content">Episodes</value>
+        </list>
     </lists>
     <items>
         <item>
-            <value name="comments">Enabled {content} ratings in menu order: Info_Meta_Ratings_[path] for each, shown while it is one of the first three available</value>
+            <value name="comments">Enabled {content} ratings in menu order as static list items, each listed while its rating has a value, so the list's first items are the first available ratings</value>
+            <template>generator/data/parts/basic_include.xmltemplate</template>
+            <value name="includes_name">skinvariables-{item}-list</value>
+            <value name="includes_part">
+                <items menu="{item}">
+                    <item>
+                        <template>generator/data/parts/ratings_list_item.xmltemplate</template>
+                        <condition>{item_disabled}!=True</condition>
+                    </item>
+                </items>
+            </value>
+        </item>
+        <item>
+            <value name="comments">Enabled {content} ratings in menu order: Info_Meta_Ratings_Item for each, shown while it is one of the first available ratings in the static list</value>
             <template>generator/data/parts/basic_include.xmltemplate</template>
             <value name="includes_name">skinvariables-{item}</value>
             <value name="includes_part">
