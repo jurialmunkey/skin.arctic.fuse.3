@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
     <!-- Sync ruler for DialogSlider. The ruler sits 50px above the OSD progress bar, which stays visible, with its baseline 140 from the top of DialogSlider_Ruler.
-         Ticks every 36px (two 18px steps), a major tick every 180px and a tall tick at zero. -->
+         Two tick styles: small ticks every 36px (two 18px steps) and a medium tick at each major interval. -->
 
     <include name="DialogSlider_RulerTick">
         <param name="height">14</param>
@@ -217,7 +217,6 @@
     <!-- Baseline and ticks -->
     <include name="DialogSlider_RulerFrame">
         <param name="speed">false</param>
-        <param name="origin">719</param>
         <definition>
             <include content="DialogSlider_RulerBaseline">
                 <param name="visible">$PARAM[visible]</param>
@@ -225,7 +224,6 @@
             <include content="DialogSlider_RulerTicks">
                 <param name="visible">$PARAM[visible]</param>
                 <param name="speed">$PARAM[speed]</param>
-                <param name="origin">$PARAM[origin]</param>
             </include>
         </definition>
     </include>
@@ -239,10 +237,9 @@
         </control>
     </include>
 
-    <!-- speed: ten 144px segments instead of eight 180px ones. origin: left of the tall tick where the fill starts -->
+    <!-- speed: ten 144px segments instead of eight 180px ones -->
     <include name="DialogSlider_RulerTicks">
         <param name="speed">false</param>
-        <param name="origin">719</param>
         <definition>
             <control type="group">
                 <centertop>100</centertop>
@@ -254,11 +251,6 @@
                     <param name="left">1439</param>
                     <param name="height">28</param>
                     <param name="colordiffuse">panel_fg_50</param>
-                </include>
-                <include content="DialogSlider_RulerTick">
-                    <param name="left">$PARAM[origin]</param>
-                    <param name="height">44</param>
-                    <param name="colordiffuse">panel_fg_90</param>
                 </include>
             </control>
         </definition>
@@ -310,12 +302,10 @@
             </include>
             <include content="DialogSlider_RulerTicks">
                 <param name="visible">$EXP[Exp_DialogSlider_Zoom]</param>
-                <param name="origin">539</param>
             </include>
             <include content="DialogSlider_RulerTicks">
                 <param name="visible">$EXP[Exp_DialogSlider_LeftScale]</param>
                 <param name="speed">true</param>
-                <param name="origin">-1</param>
             </include>
 
             <!-- Audio offset: -1 to +1 s in 25 ms steps, shared with sharpness. Subtitle offset: -4 to +4 s in 100 ms steps. Vertical shift: -2 to +2 -->
@@ -371,16 +361,16 @@
             <!-- Scales filling from zero at the left: picture adjustments 0 to 100, noise reduction 0 to 1, volume amplification 0 to 60 dB, tone mapping 0 to 5 -->
             <include content="DialogSlider_RulerLabels_Speed">
                 <param name="visible">$EXP[Exp_DialogSlider_Adjustment]</param>
-                <param name="label_1">10</param>
-                <param name="label_2">20</param>
-                <param name="label_3">30</param>
-                <param name="label_4">40</param>
-                <param name="label_5">50</param>
-                <param name="label_6">60</param>
-                <param name="label_7">70</param>
-                <param name="label_8">80</param>
-                <param name="label_9">90</param>
-                <param name="label_10">100</param>
+                <param name="label_1">$NUMBER[10]</param>
+                <param name="label_2">$NUMBER[20]</param>
+                <param name="label_3">$NUMBER[30]</param>
+                <param name="label_4">$NUMBER[40]</param>
+                <param name="label_5">$NUMBER[50]</param>
+                <param name="label_6">$NUMBER[60]</param>
+                <param name="label_7">$NUMBER[70]</param>
+                <param name="label_8">$NUMBER[80]</param>
+                <param name="label_9">$NUMBER[90]</param>
+                <param name="label_10">$NUMBER[100]</param>
                 <param name="origin_left">-50</param>
             </include>
             <include content="DialogSlider_RulerLabels_Speed">
@@ -399,16 +389,16 @@
             </include>
             <include content="DialogSlider_RulerLabels_Speed">
                 <param name="visible">$EXP[Exp_DialogSlider_VolumeAmp]</param>
-                <param name="label_1">6</param>
-                <param name="label_2">12</param>
-                <param name="label_3">18</param>
-                <param name="label_4">24</param>
-                <param name="label_5">30</param>
-                <param name="label_6">36</param>
-                <param name="label_7">42</param>
-                <param name="label_8">48</param>
-                <param name="label_9">54</param>
-                <param name="label_10">60</param>
+                <param name="label_1">$NUMBER[6]</param>
+                <param name="label_2">$NUMBER[12]</param>
+                <param name="label_3">$NUMBER[18]</param>
+                <param name="label_4">$NUMBER[24]</param>
+                <param name="label_5">$NUMBER[30]</param>
+                <param name="label_6">$NUMBER[36]</param>
+                <param name="label_7">$NUMBER[42]</param>
+                <param name="label_8">$NUMBER[48]</param>
+                <param name="label_9">$NUMBER[54]</param>
+                <param name="label_10">$NUMBER[60]</param>
                 <param name="origin_left">-50</param>
             </include>
             <include content="DialogSlider_RulerLabels_Speed">
@@ -453,69 +443,26 @@
         </include>
     </include>
 
-    <!-- Heading with its icon and the key hint, in the OSD title position. DialogSlider leaves label empty for Kodi to set label 10 -->
-    <include name="DialogSlider_Heading">
+    <!-- The OSD settings spotlight in the same place as in DialogSettings. DialogSlider leaves label empty for Kodi to set label 10.
+         Opened from the OSD settings it appears without animating, so it reads as the same element -->
+    <include name="DialogSlider_Spotlight">
+        <param name="id">10</param>
         <param name="label" />
-        <param name="icon">$VAR[Image_DialogSlider_Icon]</param>
         <param name="hint">$VAR[Label_DialogSlider_Hint]</param>
         <definition>
-        <control type="group">
-            <bottom>320</bottom>
-            <control type="grouplist">
-                <left>view_pad</left>
-                <width>1000</width>
-                <bottom>40</bottom>
-                <height>80</height>
-                <orientation>horizontal</orientation>
-                <itemgap>20</itemgap>
-                <control type="image">
-                    <centertop>50%</centertop>
-                    <width>40</width>
-                    <height>40</height>
-                    <bordersize>-8</bordersize>
-                    <aspectratio>keep</aspectratio>
-                    <texture colordiffuse="panel_fg_100">$PARAM[icon]</texture>
-                </control>
-                <control type="label" id="10">
-                    <width>auto</width>
-                    <aligny>center</aligny>
-                    <font>font_title_main</font>
-                    <textcolor>panel_fg_100</textcolor>
-                    <label>$PARAM[label]</label>
-                </control>
+            <control type="group">
+                <right>view_pad</right>
+                <width>1200</width>
+                <include content="Animation_SlideIn_Dialog">
+                    <param name="visible_condition">false</param>
+                    <param name="windowopen_condition">!Window.IsVisible(DialogSettings.xml)</param>
+                </include>
+                <include content="DialogSettings_OSD_Spotlight">
+                    <param name="id">$PARAM[id]</param>
+                    <param name="label">$PARAM[label]</param>
+                    <param name="hint">$PARAM[hint]</param>
+                </include>
             </control>
-            <control type="label">
-                <left>view_pad</left>
-                <width>1000</width>
-                <bottom>0</bottom>
-                <height>40</height>
-                <aligny>center</aligny>
-                <font>font_mini</font>
-                <textcolor>panel_fg_70</textcolor>
-                <label>$PARAM[hint]</label>
-            </control>
-        </control>
-        </definition>
-    </include>
-
-    <!-- Large value on the right. Kodi still sets label 12, which stays hidden behind the player delay labels -->
-    <include name="DialogSlider_Value">
-        <param name="value">$VAR[Label_DialogSlider_Value]</param>
-        <definition>
-        <control type="label" id="12">
-            <visible>false</visible>
-        </control>
-        <control type="label">
-            <right>view_pad</right>
-            <width>800</width>
-            <bottom>320</bottom>
-            <height>120</height>
-            <align>right</align>
-            <aligny>bottom</aligny>
-            <font>font_title_huge</font>
-            <textcolor>panel_fg_100</textcolor>
-            <label>$PARAM[value]</label>
-        </control>
         </definition>
     </include>
 </includes>

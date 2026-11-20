@@ -11,11 +11,127 @@
         <include content="Object_Hidden_Button">
             <param name="id">28</param>
         </include>
+        <!-- Over fullscreen video (the OSD video, audio and subtitle settings) the list floats on the right instead of a panel -->
+        <include condition="Window.IsVisible(fullscreenvideo)">DialogSettings_OSD</include>
+        <include condition="!Window.IsVisible(fullscreenvideo)">DialogSettings_Panel</include>
+    </include>
+
+    <include name="DialogSettings_Panel">
         <include>DialogSettings_Button_Templates</include>
         <include content="Part_Dim_Overlay">
             <param name="visible">!Window.IsVisible(DialogSlider.xml)</param>
         </include>
         <include>DialogSettings_Main</include>
+    </include>
+
+    <!-- OSD layout: the settings list on the right, then the focused setting's name large with the key hints,
+         ending above the OSD seekbar so the OSD buttons stay clear below -->
+    <include name="DialogSettings_OSD">
+        <include content="DialogSettings_Button_Templates">
+            <param name="fg">panel_fg</param>
+            <param name="fill">panel_fg_12</param>
+        </include>
+        <control type="group">
+            <right>view_pad</right>
+            <width>1200</width>
+            <visible>!Window.IsVisible(DialogSlider.xml)</visible>
+            <include>Animation_SlideIn_Dialog</include>
+            <include>DialogSettings_OSD_Heading</include>
+            <include>DialogSettings_OSD_List</include>
+        </control>
+        <!-- Kept out of the list's group with no Visible animation, so it stays put when a slider opens and DialogSlider shows the same spotlight in its place -->
+        <control type="group">
+            <right>view_pad</right>
+            <width>1200</width>
+            <visible>!Window.IsVisible(DialogSlider.xml)</visible>
+            <include content="Animation_SlideIn_Dialog">
+                <param name="visible_condition">false</param>
+            </include>
+            <include>DialogSettings_OSD_Spotlight</include>
+        </control>
+    </include>
+
+    <!-- Right side fade behind the OSD layout, drawn in the seekbar layer so the seekbar and clock sit above it -->
+    <include name="DialogSettings_OSD_Background">
+        <control type="image">
+            <right>0</right>
+            <width>1040</width>
+            <visible>Window.IsVisible(DialogSettings.xml) + !Window.IsVisible(DialogSlider.xml)</visible>
+            <include>Animation_FadeIn</include>
+            <include>Animation_FadeOut</include>
+            <texture colordiffuse="panel_bg_90" border="0,4,0,4">common/gradient-h.png</texture>
+        </control>
+    </include>
+
+    <include name="DialogSettings_OSD_Heading">
+        <control type="label" id="2">
+            <top>120</top>
+            <height>40</height>
+            <align>right</align>
+            <font>font_hint_bold</font>
+            <textcolor>panel_fg_50</textcolor>
+        </control>
+    </include>
+
+    <!-- Grouplist 5 shows five 80px rows; scrollbar 61 sits just outside its right edge -->
+    <include name="DialogSettings_OSD_List">
+        <control type="group">
+            <right>-40</right>
+            <width>760</width>
+            <top>180</top>
+            <height>400</height>
+            <control type="grouplist" id="5">
+                <right>40</right>
+                <pagecontrol>61</pagecontrol>
+                <onleft>Action(Select)</onleft>
+                <onright>Action(Select)</onright>
+            </control>
+            <include content="Part_Scrollbar">
+                <param name="id">61</param>
+                <top>0</top>
+                <bottom>0</bottom>
+                <centerright>20</centerright>
+                <texturesliderbar colordiffuse="panel_fg_30" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+            </include>
+        </control>
+    </include>
+
+    <!-- Right aligned spotlight: a short divider, the name large, and the key hints under it, 180 tall from its bottom.
+         Defaults to the focused setting's name (System.CurrentControl). DialogSlider passes id 10 with an empty label for Kodi to fill -->
+    <include name="DialogSettings_OSD_Spotlight">
+        <param name="id">0</param>
+        <param name="label">$INFO[System.CurrentControl]</param>
+        <param name="hint">&#9650; &#9660;  $LOCALIZE[424]       &#9664; &#9654;  $LOCALIZE[31880]</param>
+        <param name="bottom">280</param>
+        <definition>
+            <control type="group">
+                <bottom>$PARAM[bottom]</bottom>
+                <height>180</height>
+                <control type="image">
+                    <top>0</top>
+                    <right>0</right>
+                    <width>80</width>
+                    <height>2</height>
+                    <texture colordiffuse="panel_fg_30">common/white.png</texture>
+                </control>
+                <control type="label" id="$PARAM[id]">
+                    <top>20</top>
+                    <height>120</height>
+                    <align>right</align>
+                    <font>font_title_huge</font>
+                    <textcolor>panel_fg_100</textcolor>
+                    <label>$PARAM[label]</label>
+                </control>
+                <control type="label">
+                    <top>140</top>
+                    <height>40</height>
+                    <align>right</align>
+                    <font>font_mini</font>
+                    <textcolor>panel_fg_70</textcolor>
+                    <label>$PARAM[hint]</label>
+                </control>
+            </control>
+        </definition>
     </include>
 
     <include name="DialogSettings_Main">
@@ -176,65 +292,82 @@
         </control>
     </include>
 
-    <!-- Button Definitions -->
+    <!-- Button Definitions. fg and fill: the dialog colours, or panel_fg and panel_fg_12 over fullscreen video -->
     <include name="DialogSettings_Button_Templates">
-        <include content="Settings_Button">
-            <param name="id">7</param>
-            <param name="control">button</param>
-            <param name="dialog">true</param>
-            <description>Default Setting Button</description>
-        </include>
+        <param name="fg">dialog_fg</param>
+        <param name="fill">dialog_fg_06</param>
+        <definition>
+            <include content="Settings_Button">
+                <param name="id">7</param>
+                <param name="control">button</param>
+                <param name="dialog">true</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <description>Default Setting Button</description>
+            </include>
 
-        <include content="Settings_Button">
-            <param name="id">8</param>
-            <param name="control">radiobutton</param>
-            <param name="dialog">true</param>
-            <description>Default Setting Button</description>
-        </include>
+            <include content="Settings_Button">
+                <param name="id">8</param>
+                <param name="control">radiobutton</param>
+                <param name="dialog">true</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <description>Default Setting Button</description>
+            </include>
 
-        <include content="Settings_Button">
-            <param name="id">9</param>
-            <param name="control">spincontrolex</param>
-            <param name="dialog">true</param>
-            <description>Default Setting Button</description>
-        </include>
+            <include content="Settings_Button">
+                <param name="id">9</param>
+                <param name="control">spincontrolex</param>
+                <param name="dialog">true</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <description>Default Setting Button</description>
+            </include>
 
-        <control type="image" id="11">
-            <visible>false</visible>
-        </control>
+            <control type="image" id="11">
+                <visible>false</visible>
+            </control>
 
-        <control type="label" id="6">
-            <visible>false</visible>
-        </control>
+            <control type="label" id="6">
+                <visible>false</visible>
+            </control>
 
-        <include content="Settings_Button">
-            <param name="id">12</param>
-            <param name="control">edit</param>
-            <param name="dialog">true</param>
-            <description>Default Setting Button</description>
-        </include>
+            <include content="Settings_Button">
+                <param name="id">12</param>
+                <param name="control">edit</param>
+                <param name="dialog">true</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <description>Default Setting Button</description>
+            </include>
 
-        <include content="Settings_Button">
-            <param name="id">13</param>
-            <param name="control">sliderex</param>
-            <param name="dialog">true</param>
-            <description>Default Setting Button</description>
-            <textwidth>settings_slider_text_w</textwidth>
-        </include>
+            <include content="Settings_Button">
+                <param name="id">13</param>
+                <param name="control">sliderex</param>
+                <param name="dialog">true</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <description>Default Setting Button</description>
+                <textwidth>settings_slider_text_w</textwidth>
+            </include>
 
-        <include content="Settings_Label">
-            <param name="id">14</param>
-            <param name="control">label</param>
-            <param name="dialog">true</param>
-            <description>Default Setting Label</description>
-        </include>
+            <include content="Settings_Label">
+                <param name="id">14</param>
+                <param name="control">label</param>
+                <param name="dialog">true</param>
+                <param name="fg">$PARAM[fg]</param>
+                <description>Default Setting Label</description>
+            </include>
 
-        <include content="Settings_Button">
-            <param name="id">15</param>
-            <param name="control">colorbutton</param>
-            <param name="dialog">true</param>
-            <description>Default Setting Button</description>
-        </include>
+            <include content="Settings_Button">
+                <param name="id">15</param>
+                <param name="control">colorbutton</param>
+                <param name="dialog">true</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <description>Default Setting Button</description>
+            </include>
+        </definition>
     </include>
 
     <!-- Items -->

@@ -311,6 +311,8 @@
     <include name="Settings_Button">
         <param name="control">button</param>
         <param name="dialog">false</param>
+        <param name="fg">dialog_fg</param>
+        <param name="fill">dialog_fg_06</param>
         <param name="window" />
         <param name="reload">false</param>
         <param name="help" />
@@ -323,7 +325,10 @@
                 <textoffsetx>40</textoffsetx>
                 <texturenofocus />
                 <alttexturenofocus />
-                <include condition="$PARAM[dialog]">defs_dialog_$PARAM[control]</include>
+                <include content="defs_dialog_$PARAM[control]" condition="$PARAM[dialog]">
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="fill">$PARAM[fill]</param>
+                </include>
                 <include content="Settings_Button_$PARAM[window]">
                     <param name="id">$PARAM[id]</param>
                     <param name="baseid">$PARAM[baseid]</param>
@@ -418,11 +423,12 @@
     <include name="Settings_Label">
         <param name="control">label</param>
         <param name="dialog">false</param>
+        <param name="fg">dialog_fg</param>
         <param name="window" />
         <definition>
             <control type="$PARAM[control]" id="$PARAM[baseid]$PARAM[id]">
                 <include content="Object_TextColor" condition="$PARAM[dialog]">
-                    <param name="textcolor">dialog_fg_30</param>
+                    <param name="textcolor">$PARAM[fg]_30</param>
                 </include>
                 <nested />
                 <align>left</align>
