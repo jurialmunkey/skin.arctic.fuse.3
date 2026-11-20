@@ -41,7 +41,21 @@
         <param name="service">ListItem</param>
         <param name="source">Window(Home).Property</param>
         <param name="source_prefix">TMDbHelper.ListItem.</param>
+        <param name="container" />
+        <param name="listitem">ListItem</param>
         <definition>
+            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Kodi)">
+                <param name="icon">flags/$VAR[Color_Directory]/ratings/kodi.png</param>
+                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]base_rating)]</param>
+                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]base_rating)) + String.IsEmpty($PARAM[container]$PARAM[listitem].Rating) + !String.IsEmpty(Window.Property(TMDBHelper.WidgetContainer))</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
+            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Kodi)">
+                <param name="icon">flags/$VAR[Color_Directory]/ratings/kodi.png</param>
+                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Rating]</param>
+                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[container]$PARAM[listitem].Rating)</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
             <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Metacritic)">
                 <param name="icon">flags/$VAR[Color_Directory]/ratings/metacritic.png</param>
                 <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]MetaCritic_Rating),,%]</param>
@@ -122,6 +136,7 @@
 
     <include name="Info_Meta">
         <param name="visible">true</param>
+        <param name="container" />
         <param name="listitem">ListItem</param>
         <param name="service">ListItem</param>
         <param name="override_movie">false</param>
@@ -183,6 +198,8 @@
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
                         <param name="content">Movies</param>
@@ -191,6 +208,8 @@
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
                         <param name="content">Movies</param>
@@ -199,6 +218,38 @@
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
+                        <param name="content">Movies</param>
+                        <param name="item">Item04</param>
+                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
+                        <param name="service">$PARAM[service]</param>
+                        <param name="source">$PARAM[source]</param>
+                        <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
+                        <param name="content">Movies</param>
+                        <param name="item">Item05</param>
+                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
+                        <param name="service">$PARAM[service]</param>
+                        <param name="source">$PARAM[source]</param>
+                        <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
+                        <param name="content">Movies</param>
+                        <param name="item">Item06</param>
+                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
+                        <param name="service">$PARAM[service]</param>
+                        <param name="source">$PARAM[source]</param>
+                        <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
                         <param name="content">TVShows</param>
@@ -207,6 +258,8 @@
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
                         <param name="content">TVShows</param>
@@ -215,6 +268,8 @@
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
                     <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
                         <param name="content">TVShows</param>
@@ -223,6 +278,38 @@
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
+                        <param name="content">TVShows</param>
+                        <param name="item">Item04</param>
+                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
+                        <param name="service">$PARAM[service]</param>
+                        <param name="source">$PARAM[source]</param>
+                        <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
+                        <param name="content">TVShows</param>
+                        <param name="item">Item05</param>
+                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
+                        <param name="service">$PARAM[service]</param>
+                        <param name="source">$PARAM[source]</param>
+                        <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
+                    </include>
+                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
+                        <param name="content">TVShows</param>
+                        <param name="item">Item06</param>
+                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
+                        <param name="service">$PARAM[service]</param>
+                        <param name="source">$PARAM[source]</param>
+                        <param name="source_prefix">$PARAM[source_prefix]</param>
+                        <param name="container">$PARAM[container]</param>
+                        <param name="listitem">$PARAM[listitem]</param>
                     </include>
 
                     <!-- Total Episodes (Service Disabled) -->
