@@ -36,69 +36,88 @@
         </definition>
     </include>
 
-    <include name="Info_Meta_Ratings">
-        <param name="visible">true</param>
-        <param name="service">ListItem</param>
-        <param name="source">Window(Home).Property</param>
-        <param name="source_prefix">TMDbHelper.ListItem.</param>
-        <definition>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Metacritic)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/metacritic.png</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]MetaCritic_Rating),,%]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]MetaCritic_Rating))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-            </include>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],RottenTomatoesUser)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/$VAR[Image_$PARAM[service]_RottenTomatoes_UserMeter]</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]RottenTomatoes_UserMeter),,%]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]RottenTomatoes_UserMeter))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-            </include>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],RottenTomatoesCritic)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/$VAR[Image_$PARAM[service]_RottenTomatoes]</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]RottenTomatoes_Rating),,%]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]RottenTomatoes_Rating))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-            </include>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Trakt)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/trakt.png</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]Trakt_Rating)]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]Trakt_Rating))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-            </include>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],IMDb)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/imdb.png</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]IMDb_Rating),,]$INFO[$PARAM[source]($PARAM[source_prefix]Top250),  #,]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]IMDb_Rating))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="icon_w">52</param>
-            </include>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],TMDb)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/tmdb.png</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]TMDb_Rating),,]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]TMDb_Rating))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-            </include>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],MDBList)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/mdblist.png</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]MDBList_Rating),,%]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]MDBList_Rating))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-            </include>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],Letterboxd)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/letterboxd.png</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]Letterboxd_Rating)]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]Letterboxd_Rating))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-            </include>
-            <include content="Info_Meta_Object" condition="Skin.String(CustomRating.$PARAM[content].$PARAM[item],MyAnimeList)">
-                <param name="icon">flags/$VAR[Color_Directory]/ratings/mal.png</param>
-                <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]MyAnimeList_Rating)]</param>
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]MyAnimeList_Rating))</param>
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="icon_w">52</param>
-            </include>
-        </definition>
+    <!-- Ratings line items, one per ratings menu path (the rating property name). Called in menu order by the generated skinvariables-ratingsmovies/ratingstvshows includes -->
+    <include name="Info_Meta_Ratings_MetaCritic_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/metacritic.png</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]MetaCritic_Rating),,%]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_RottenTomatoes_UserMeter">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/$VAR[Image_$PARAM[service]_RottenTomatoes_UserMeter]</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]RottenTomatoes_UserMeter),,%]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_RottenTomatoes_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/$VAR[Image_$PARAM[service]_RottenTomatoes]</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]RottenTomatoes_Rating),,%]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_Trakt_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/trakt.png</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]Trakt_Rating)]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_IMDb_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/imdb.png</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]IMDb_Rating),,]$INFO[$PARAM[source]($PARAM[source_prefix]Top250),  #,]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            <param name="icon_w">52</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_TMDb_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/tmdb.png</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]TMDb_Rating),,]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_MDBList_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/mdblist.png</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]MDBList_Rating),,%]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_Letterboxd_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/letterboxd.png</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]Letterboxd_Rating)]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_MyAnimeList_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/mal.png</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]MyAnimeList_Rating)]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            <param name="icon_w">52</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_Oscar_Wins">
+        <include content="Info_Meta_Object">
+            <param name="icon">flags/$VAR[Color_Directory]/ratings/oscars.png</param>
+            <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]Oscar_Wins),x,]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
     </include>
 
     <include name="Info_Meta_Item_Row">
@@ -176,49 +195,13 @@
                     <include>Info_Meta_Grouplist_Definition</include>
 
                     <!-- Ratings -->
-                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
-                        <param name="content">Movies</param>
-                        <param name="item">Item01</param>
+                    <include content="skinvariables-ratingsmovies" condition="$PARAM[include_tmdbhelper]">
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
                     </include>
-                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
-                        <param name="content">Movies</param>
-                        <param name="item">Item02</param>
-                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
-                        <param name="service">$PARAM[service]</param>
-                        <param name="source">$PARAM[source]</param>
-                        <param name="source_prefix">$PARAM[source_prefix]</param>
-                    </include>
-                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
-                        <param name="content">Movies</param>
-                        <param name="item">Item03</param>
-                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
-                        <param name="service">$PARAM[service]</param>
-                        <param name="source">$PARAM[source]</param>
-                        <param name="source_prefix">$PARAM[source_prefix]</param>
-                    </include>
-                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
-                        <param name="content">TVShows</param>
-                        <param name="item">Item01</param>
-                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
-                        <param name="service">$PARAM[service]</param>
-                        <param name="source">$PARAM[source]</param>
-                        <param name="source_prefix">$PARAM[source_prefix]</param>
-                    </include>
-                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
-                        <param name="content">TVShows</param>
-                        <param name="item">Item02</param>
-                        <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
-                        <param name="service">$PARAM[service]</param>
-                        <param name="source">$PARAM[source]</param>
-                        <param name="source_prefix">$PARAM[source_prefix]</param>
-                    </include>
-                    <include content="Info_Meta_Ratings" condition="$PARAM[include_tmdbhelper]">
-                        <param name="content">TVShows</param>
-                        <param name="item">Item03</param>
+                    <include content="skinvariables-ratingstvshows" condition="$PARAM[include_tmdbhelper]">
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
@@ -282,13 +265,6 @@
                         <param name="label">$VAR[Label_$PARAM[service]_Status]$VAR[Label_$PARAM[service]_StatusDate, ,]</param>
                         <param name="icon">$VAR[Image_$PARAM[service]_Status]</param>
                         <param name="visible">[[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season) | $PARAM[override_tvshow]] + !String.IsEmpty($PARAM[status])]</param>
-                    </include>
-
-                    <!-- Awards -->
-                    <include content="Info_Meta_Object" condition="[$PARAM[include_tmdbhelper]] + String.IsEmpty(Skin.String(CustomRating.Movies.Item03))">
-                        <param name="icon">flags/$VAR[Color_Directory]/ratings/oscars.png</param>
-                        <param name="label">$INFO[$PARAM[source]($PARAM[source_prefix]Oscar_Wins),x,]</param>
-                        <param name="visible">[String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]Oscar_Wins))</param>
                     </include>
 
                 </control>

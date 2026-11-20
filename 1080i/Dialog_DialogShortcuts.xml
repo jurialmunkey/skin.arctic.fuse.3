@@ -2183,4 +2183,142 @@
         </definition>
     </include>
 
+    <!-- Ratings dialog (1137): the ratings menu named by Shortcuts.EditMenu, whose items can only be moved and enabled or disabled.
+         The list passes focus to the focused item's move and enable buttons (22900), which follow it down the list and are painted in its focused layout -->
+    <include name="DialogRatings">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Animation_BounceIn_Dialog</include>
+            <include>Dimension_DialogWideMenu</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogWideMenu</param>
+            </include>
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+                <control type="group">
+                    <include>Size_Group_Head</include>
+                    <include content="Part_HeadText">
+                        <param name="label">$INFO[Window(Home).Property(CustomDialogSettingsTitle)]</param>
+                    </include>
+                    <include content="Part_ItemPage">
+                        <param name="id">22001</param>
+                    </include>
+                    <include>Part_CloseButton</include>
+                </control>
+                <control type="group">
+                    <include>Size_Group_Body</include>
+                    <control type="group">
+                        <include>Size_Grouplist_Pad</include>
+                        <include content="List_Dialog">
+                            <param name="id">22001</param>
+                            <param name="itemlayout_include">DialogRatings_Layout</param>
+                            <param name="altfocus">ControlGroup(22900).HasFocus()</param>
+                            <pagecontrol>61</pagecontrol>
+                            <content>plugin://script.skinvariables/?info=get_shortcuts_node&amp;edit=true&amp;skin=$VAR[Path_SkinVariables_SkinFolder]$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload),&amp;reload=,]$INFO[Window(Home).Property(Shortcuts.EditMenu),&amp;,]</content>
+                            <onfocus>SetFocus(22900)</onfocus>
+                            <onright>61</onright>
+                            <onclick>noop</onclick>
+                        </include>
+                        <include>DialogRatings_Buttons</include>
+                    </control>
+                </control>
+                <include content="Part_Scrollbar">
+                    <param name="id">61</param>
+                    <onleft>22900</onleft>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <!-- Ratings dialog list item: unmasked icon and label, turned red while the item is disabled (as in the shortcuts editor). The focused item also paints its buttons -->
+    <include name="DialogRatings_Layout">
+        <definition>
+            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <animation effect="fadediffuse" start="ffffffff" end="FFBF0000" condition="String.IsEqual(ListItem.Property(disabled),True)">Conditional</animation>
+                <include content="Part_List_Icon">
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="diffuse" />
+                </include>
+                <include content="List_Layout_Dialog_Labels">
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+            </control>
+            <include condition="$PARAM[selected]">DialogRatings_FakeButtons</include>
+        </definition>
+    </include>
+
+    <include name="DialogRatings_FakeButtons">
+        <control type="group">
+            <right>20</right>
+            <height>72</height>
+            <centertop>50%</centertop>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22901</param>
+                <param name="icon">special://skin/extras/icons/circle-arrow-up.png</param>
+                <right>104</right>
+            </include>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22902</param>
+                <param name="icon">special://skin/extras/icons/circle-arrow-down.png</param>
+                <right>52</right>
+            </include>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22905</param>
+                <param name="icon">$VAR[DialogShortcuts_Items_DisableEnable_Icon]</param>
+                <right>0</right>
+            </include>
+        </control>
+    </include>
+
+    <!-- Move up, move down and enable buttons for the ratings dialog's focused item, slid down to its row. Back closes the dialog -->
+    <include name="DialogRatings_Buttons">
+        <control type="group">
+            <animation effect="slide" start="0" end="0,80" condition="Container(22001).Position(1)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,160" condition="Container(22001).Position(2)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,240" condition="Container(22001).Position(3)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,320" condition="Container(22001).Position(4)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,400" condition="Container(22001).Position(5)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,480" condition="Container(22001).Position(6)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,560" condition="Container(22001).Position(7)">Conditional</animation>
+            <control type="grouplist" id="22900">
+                <orientation>horizontal</orientation>
+                <itemgap>-20</itemgap>
+                <onup>Control.Move(22001,-1)</onup>
+                <ondown>Control.Move(22001,1)</ondown>
+                <onright>61</onright>
+                <height>72</height>
+                <centertop>40</centertop>
+                <align>right</align>
+                <right>20</right>
+                <include content="DialogShortcuts_MoveButton">
+                    <param name="id">22901</param>
+                    <param name="move">-1</param>
+                    <param name="target">$INFO[Container(22001).ListItem(-1).Property(item),&amp;&amp;offset::,]</param>
+                    <param name="texture">special://skin/extras/icons/circle-arrow-up.png</param>
+                    <param name="onback">noop</param>
+                </include>
+                <include content="DialogShortcuts_MoveButton">
+                    <param name="id">22902</param>
+                    <param name="move">1</param>
+                    <param name="target">$INFO[Container(22001).ListItem(1).Property(item),&amp;&amp;offset::,]</param>
+                    <param name="texture">special://skin/extras/icons/circle-arrow-down.png</param>
+                    <param name="onback">noop</param>
+                </include>
+                <control type="button" id="22905">
+                    <texturenofocus colordiffuse="$VAR[ColorSelected_30]">$VAR[DialogShortcuts_Items_DisableEnable_Icon]</texturenofocus>
+                    <texturefocus colordiffuse="$VAR[ColorSelected]">$VAR[DialogShortcuts_Items_DisableEnable_Icon]</texturefocus>
+                    <include content="DialogShortcuts_Toggle_Onclick">
+                        <param name="container">22001</param>
+                    </include>
+                    <width>72</width>
+                    <height>72</height>
+                </control>
+            </control>
+        </control>
+    </include>
+
 </includes>
