@@ -82,6 +82,11 @@
         <value>$LOCALIZE[202]</value>
     </variable>
 
+    <variable name="Label_Setting_InfoTags_Style">
+        <value condition="!Skin.HasSetting(InfoTags.DisableTags)">$LOCALIZE[31882]</value>
+        <value>$LOCALIZE[31329]</value>
+    </variable>
+
     <variable name="Label_Setting_Hub_LiveTV_Search">
         <value condition="!$EXP[Exp_HubsWindow_Mode_Standard]">$LOCALIZE[137]</value>
         <value>$LOCALIZE[568]</value>
@@ -107,11 +112,8 @@
 
     <variable name="Label_Setting_BackgroundStyle">
         <value condition="Skin.String(Background.Style,bauhaus)">$LOCALIZE[31853]</value>
-        <value condition="Skin.String(Background.Style,goldenage)">$LOCALIZE[31854]</value>
         <value condition="Skin.String(Background.Style,expressionist)">$LOCALIZE[31855]</value>
-        <value condition="Skin.String(Background.Style,faceted)">$LOCALIZE[31856]</value>
         <value condition="Skin.String(Background.Style,mosaic)">$LOCALIZE[31857]</value>
-        <value condition="Skin.String(Background.Style,watercolour)">$LOCALIZE[31859]</value>
         <value condition="Skin.String(Background.Style,surrealist) | String.IsEmpty(Skin.String(Background.Style))">$LOCALIZE[31860]</value>
         <value condition="Skin.String(Background.Style,couture)">$LOCALIZE[31869]</value>
         <value condition="Skin.String(Background.Style,masquerade)">$LOCALIZE[31870]</value>
@@ -688,9 +690,8 @@
         <value>$LOCALIZE[19055]</value>
     </variable>
 
-    <variable name="Label_OSD_Header">
-        <value condition="!String.IsEmpty(PVR.ChannelNumberInput)">$INFO[PVR.ChannelNumberInput,$LOCALIZE[19165] ,]</value>
-        <value condition="!String.IsEmpty(Player.SeekNumeric)">$INFO[Player.SeekNumeric,$LOCALIZE[31233] ,]</value>
+    <!-- Rewind and fast forward speed, for example "RW 8x" or "FF 8x" -->
+    <variable name="Label_OSD_SeekSpeed">
         <value condition="Player.Forwarding32x">FF 32x</value>
         <value condition="Player.Forwarding16x">FF 16x</value>
         <value condition="Player.Forwarding8x">FF 8x</value>
@@ -703,6 +704,12 @@
         <value condition="Player.Rewinding4x">RW 4x</value>
         <value condition="Player.Rewinding2x">RW 2x</value>
         <value condition="Player.Rewinding">RW</value>
+    </variable>
+
+    <variable name="Label_OSD_Header">
+        <value condition="!String.IsEmpty(PVR.ChannelNumberInput)">$INFO[PVR.ChannelNumberInput,$LOCALIZE[19165] ,]</value>
+        <value condition="!String.IsEmpty(Player.SeekNumeric)">$INFO[Player.SeekNumeric,$LOCALIZE[31233] ,]</value>
+        <value condition="Player.Forwarding | Player.Rewinding">$VAR[Label_OSD_SeekSpeed]</value>
         <value condition="[Player.Seeking | Player.HasPerformedSeek(3)] + !String.IsEmpty(Player.SeekOffset)">$LOCALIZE[773]$INFO[Player.SeekOffset, ,]</value>
         <value condition="Player.Seeking + String.IsEmpty(Player.SeekOffset)">$LOCALIZE[773]$INFO[Player.SeekStepSize, ,]</value>
         <value condition="Player.Caching">$LOCALIZE[439] $INFO[Player.CacheLevel,,%]</value>
@@ -724,8 +731,47 @@
         <value>SW</value>
     </variable>
 
+    <!-- Amlogic process labels only exist on CoreELEC builds. Elsewhere an $INFO with a prefix prints the prefix alone, so use these with $VAR prefixes -->
+    <variable name="Label_PlayerProcess_AmlogicDisplayMode">
+        <value condition="!String.IsEmpty(Player.Process(amlogic.displaymode))">$INFO[Player.Process(amlogic.displaymode)]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_AmlogicPixFormat">
+        <value condition="!String.IsEmpty(Player.Process(amlogic.pixformat))">$INFO[Player.Process(amlogic.pixformat)]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_AmlogicEOTF">
+        <value condition="!String.IsEmpty(Player.Process(amlogic.eoft_gamut))">$INFO[Player.Process(amlogic.eoft_gamut)]</value>
+    </variable>
+
+    <!-- Player process info lines. Each value starts from the first available part so the • only sits between parts -->
+    <variable name="Label_PlayerProcess_OutputDetails">
+        <value condition="!String.IsEmpty(Player.Process(videodar))">$INFO[Player.Process(videodar),, $LOCALIZE[31260]]$INFO[Player.Process(videofps), • , $LOCALIZE[31259]]$VAR[Label_PlayerProcess_AmlogicEOTF, • ,]</value>
+        <value condition="!String.IsEmpty(Player.Process(videofps))">$INFO[Player.Process(videofps),, $LOCALIZE[31259]]$VAR[Label_PlayerProcess_AmlogicEOTF, • ,]</value>
+        <value>$VAR[Label_PlayerProcess_AmlogicEOTF]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_CPU">
+        <value condition="!String.IsEmpty(System.CpuUsage)">$INFO[System.CpuUsage]$INFO[System.CpuFrequency, • ,]$VAR[Label_System_Temp, • ,]</value>
+        <value condition="!String.IsEmpty(System.CpuFrequency)">$INFO[System.CpuFrequency]$VAR[Label_System_Temp, • ,]</value>
+        <value>$VAR[Label_System_Temp]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_Channel">
+        <value condition="!String.IsEmpty(VideoPlayer.ChannelNumberLabel)">$INFO[VideoPlayer.ChannelNumberLabel,$LOCALIZE[19029] ,]$INFO[VideoPlayer.ChannelName, • ,]</value>
+        <value>$INFO[VideoPlayer.ChannelName]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_PVRDevice">
+        <value condition="!String.IsEmpty(PVR.ActStreamClient)">$INFO[PVR.ActStreamClient]$INFO[PVR.ActStreamStatus, • ,]</value>
+        <value>$INFO[PVR.ActStreamStatus]</value>
+    </variable>
+    <variable name="Label_PlayerProcess_PVRService">
+        <value condition="!String.IsEmpty(PVR.ActStreamProviderName)">$INFO[PVR.ActStreamProviderName]$INFO[PVR.ActStreamMux, • $LOCALIZE[19100] ,]$INFO[PVR.ActStreamEncryptionName, • ,]</value>
+        <value condition="!String.IsEmpty(PVR.ActStreamMux)">$INFO[PVR.ActStreamMux,$LOCALIZE[19100] ,]$INFO[PVR.ActStreamEncryptionName, • ,]</value>
+        <value>$INFO[PVR.ActStreamEncryptionName]</value>
+    </variable>
+
+    <!-- Stream card title: offset cards keep their case so "ms" stays lowercase, and window cards keep theirs -->
     <variable name="Label_StreamLanguage">
-        <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(window))">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label,[UPPERCASE],[/UPPERCASE]]</value>
         <value>UNK</value>
     </variable>
 
@@ -1002,6 +1048,86 @@
         <value condition="ListItem.Property(IsOriginal)">$LOCALIZE[39111]</value>
     </variable>
 
+    <variable name="Label_PlayerStream_IsImpaired">
+        <value condition="!String.IsEmpty(ListItem.Property(IsImpaired))">CC</value>
+    </variable>
+
+    <variable name="Label_ListItem_StreamCodec">
+        <value condition="String.IsEqual(ListItem.Property(codec),dca)">DTS</value>
+        <value condition="String.IsEqual(ListItem.Property(codec),dtshd_ma)">DTS-HD MA</value>
+        <value condition="String.IsEqual(ListItem.Property(codec),dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(ListItem.Property(codec),dtshd_ma_x)">DTS:X</value>
+        <value condition="String.IsEqual(ListItem.Property(codec),dtshd_ma_x_imax)">DTS:X IMAX</value>
+        <value condition="String.IsEqual(ListItem.Property(codec),eac3)">E-AC3</value>
+        <value condition="String.IsEqual(ListItem.Property(codec),eac3_ddp_atmos)">E-AC3 Atmos</value>
+        <value condition="String.IsEqual(ListItem.Property(codec),truehd_atmos)">TrueHD Atmos</value>
+        <value condition="String.StartsWith(ListItem.Property(codec),aac)">AAC</value>
+        <value condition="String.StartsWith(ListItem.Property(codec),pcm)">PCM</value>
+        <value>$INFO[ListItem.Property(codec)]</value>
+    </variable>
+
+    <variable name="Label_ListItem_StreamChannels">
+        <value condition="Integer.IsEqual(ListItem.Property(channels),10)">9.1</value>
+        <value condition="Integer.IsEqual(ListItem.Property(channels),9)">8.1</value>
+        <value condition="Integer.IsEqual(ListItem.Property(channels),8)">7.1</value>
+        <value condition="Integer.IsEqual(ListItem.Property(channels),7)">6.1</value>
+        <value condition="Integer.IsEqual(ListItem.Property(channels),6)">5.1</value>
+        <value condition="Integer.IsEqual(ListItem.Property(channels),5)">4.1</value>
+        <value condition="Integer.IsEqual(ListItem.Property(channels),3)">2.1</value>
+        <value>$INFO[ListItem.Property(channels),,.0]</value>
+    </variable>
+
+    <!-- Tags for Object_Tags labels: each tag is wrapped in &#x2002; and &#x2000;, which the _lines font draws as the tag ends, with &#x2005; as the gap between tags -->
+    <!-- DialogSlider: the delay scales show the live player value; other sliders show Kodi's value label -->
+    <variable name="Label_DialogSlider_Value">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay]">$INFO[Player.AudioDelay]</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">$INFO[Player.SubtitleDelay]</value>
+        <value>$INFO[Control.GetLabel(12)]</value>
+    </variable>
+    <!-- Steps match Kodi's default audiodelaystep (0.025) and subsdelaystep (0.1) -->
+    <variable name="Label_DialogSlider_Hint">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay]">&#9664; &#9654;  $LOCALIZE[31880] 25 ms</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#9664; &#9654;  $LOCALIZE[31880] 100 ms</value>
+        <value>&#9664; &#9654;  $LOCALIZE[31880]</value>
+    </variable>
+
+    <!-- Playback speed (1149): tempo 0.80 to 1.50 when tempo is enabled, otherwise rewind and fast forward speeds -->
+    <variable name="Label_OSD_PlaybackSpeed">
+        <value condition="Player.Forwarding | Player.Rewinding">$VAR[Label_OSD_SeekSpeed]</value>
+        <value condition="Player.TempoEnabled + !String.IsEmpty(Player.PlaySpeed) + !String.IsEqual(Player.PlaySpeed,0.00)">$INFO[Player.PlaySpeed]×</value>
+        <value condition="Player.TempoEnabled">1.00×</value>
+        <value>1×</value>
+    </variable>
+    <!-- Ruler steps from normal speed, as the ruler fills from a value of zero. Tempo: one step per 0.10 -->
+    <variable name="Value_OSD_TempoStep">
+        <value condition="String.IsEqual(Player.PlaySpeed,0.80)">-2</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,0.90)">-1</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.10)">1</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.20)">2</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.30)">3</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.40)">4</value>
+        <value condition="String.IsEqual(Player.PlaySpeed,1.50)">5</value>
+        <value>0</value>
+    </variable>
+    <variable name="Value_OSD_SeekStep">
+        <value condition="Player.Rewinding32x">-5</value>
+        <value condition="Player.Rewinding16x">-4</value>
+        <value condition="Player.Rewinding8x">-3</value>
+        <value condition="Player.Rewinding4x">-2</value>
+        <value condition="Player.Rewinding2x">-1</value>
+        <value condition="Player.Forwarding2x">1</value>
+        <value condition="Player.Forwarding4x">2</value>
+        <value condition="Player.Forwarding8x">3</value>
+        <value condition="Player.Forwarding16x">4</value>
+        <value condition="Player.Forwarding32x">5</value>
+        <value>0</value>
+    </variable>
+
+    <variable name="Label_StreamCard_Tags">
+        <value condition="!String.IsEmpty(ListItem.Property(tags))">$INFO[ListItem.Property(tags)]</value>
+        <value>$VAR[Label_ListItem_StreamCodec,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_ListItem_StreamChannels,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsImpaired,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsForced,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsDefault,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsOriginal,&#x2002;,&#x2000;]</value>
+    </variable>
+
     <variable name="Label_OSD_SubtitlesLanguage">
         <value condition="VideoPlayer.SubtitlesEnabled">$INFO[VideoPlayer.SubtitlesLanguage,[UPPERCASE],[/UPPERCASE]]</value>
     </variable>
@@ -1107,6 +1233,27 @@
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Next_Aired))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Next_Aired)]</value>
         <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Last_Aired))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Last_Aired)]</value>
         <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbtype),movie) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Premiered))">$INFO[Window(Home).Property(TMDbHelper.ListItem.Premiered)]</value>
+        <value>$LOCALIZE[1446]</value>
+    </variable>
+
+    <variable name="Label_C7000_Status">
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Canceled)">$LOCALIZE[31490]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Ended)">$LOCALIZE[31493]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Released)">$LOCALIZE[31498]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,In Production) | String.IsEqual(Container(7000).ListItem.Status,Post Production)">$LOCALIZE[31499]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Planned)">$LOCALIZE[31504]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Returning Series) + Integer.IsEqual(Container(7000).ListItem.Property(Next_Aired.Episode),1) + Integer.IsEqual(Container(7000).ListItem.Property(Next_Aired.Season),1)">$LOCALIZE[31545]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Returning Series) + Integer.IsEqual(Container(7000).ListItem.Property(Next_Aired.Episode),1)">$LOCALIZE[31381]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Returning Series) + !String.IsEmpty(Container(7000).ListItem.Property(Next_Aired.Days_Until_Aired)) + Integer.IsLess(Container(7000).ListItem.Property(Next_Aired.Days_Until_Aired),7) + Integer.IsLess(Container(7000).ListItem.Property(Last_Aired.Days_From_Aired),8)">$LOCALIZE[31544]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Returning Series) + !String.IsEmpty(Container(7000).ListItem.Property(Next_Aired))">$LOCALIZE[31381]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Returning Series)">$LOCALIZE[31099]</value>
+        <value>$LOCALIZE[13205]</value>
+    </variable>
+
+    <variable name="Label_C7000_StatusDate">
+        <value condition="!String.IsEmpty(Container(7000).ListItem.Property(Next_Aired))">$INFO[Container(7000).ListItem.Property(Next_Aired)]</value>
+        <value condition="!String.IsEmpty(Container(7000).ListItem.Property(Last_Aired))">$INFO[Container(7000).ListItem.Property(Last_Aired)]</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.DBType,movie) + !String.IsEmpty(Container(7000).ListItem.Premiered)">$INFO[Container(7000).ListItem.Premiered]</value>
         <value>$LOCALIZE[1446]</value>
     </variable>
 

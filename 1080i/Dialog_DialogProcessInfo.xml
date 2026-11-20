@@ -1,23 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-    <include name="DialogProcessInfo_Items_PVRObject">
-        <item>
-            <label>$PARAM[label]</label>
-            <label2>$INFO[$PARAM[info]]$PARAM[affix]</label2>
-            <visible>!String.ISEmpty($PARAM[info])</visible>
-            <visible>!String.IsEqual($PARAM[info],$LOCALIZE[13205])</visible>
-            <visible>VideoPlayer.Content(livetv)</visible>
-        </item>
+    <!-- Top fade behind the process chain, drawn in the seekbar layer so the seekbar sits above it.
+         Sized so the last lane sits at about half dim: two lanes or three with Live TV -->
+    <include name="DialogProcessInfo_Background">
+        <control type="image">
+            <top>0</top>
+            <include content="Object_Height" condition="VideoPlayer.Content(livetv)">
+                <param name="height">1200</param>
+            </include>
+            <height>960</height>
+            <visible>Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
+            <texture colordiffuse="panel_bg_90" border="4,0,4,0" flipy="true">common/gradient-v.png</texture>
+            <include content="Animation_Fade_In">
+                <param name="type">Visible</param>
+            </include>
+            <include content="Animation_Fade_Out">
+                <param name="type">Hidden</param>
+            </include>
+        </control>
     </include>
 
-    <include name="DialogProcessInfo_Items_VideoObject">
-        <item>
-            <label>$PARAM[label]</label>
-            <label2>$INFO[$PARAM[info]]$PARAM[affix]</label2>
-            <visible>!String.ISEmpty($PARAM[info])</visible>
-            <visible>!String.IsEqual($PARAM[info],$LOCALIZE[13205])</visible>
-            <visible>!VideoPlayer.Content(livetv)</visible>
-        </item>
+    <!-- File or channel on the left, system usage pills on the right -->
+    <include name="DialogProcessInfo_Details">
+        <control type="group">
+            <height>40</height>
+            <control type="label">
+                <right>800</right>
+                <aligny>center</aligny>
+                <haspath>true</haspath>
+                <font>font_tiny</font>
+                <textcolor>panel_fg_70</textcolor>
+                <include content="Object_Label" condition="VideoPlayer.Content(livetv)">
+                    <param name="label">$VAR[Label_PlayerProcess_Channel]</param>
+                </include>
+                <label>$INFO[Player.FileNameAndPath]</label>
+            </control>
+            <control type="grouplist">
+                <right>0</right>
+                <width>760</width>
+                <orientation>horizontal</orientation>
+                <align>right</align>
+                <itemgap>20</itemgap>
+                <include content="DialogProcessInfo_Pill">
+                    <param name="label">$LOCALIZE[31258]</param>
+                    <param name="value">$VAR[Label_PlayerProcess_CPU]</param>
+                </include>
+                <include content="DialogProcessInfo_Pill">
+                    <param name="label">$LOCALIZE[31117]</param>
+                    <param name="value">$INFO[System.Memory(used)] / $INFO[System.Memory(total)] • $INFO[System.Memory(used.percent)]</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogProcessInfo_Pill">
+        <include content="Info_Line_Pill_Text">
+            <param name="colordiffuse">panel_fg</param>
+            <param name="fill">12</param>
+            <param name="texture">common/dialog.png</param>
+            <param name="border">20</param>
+            <param name="textcolor">panel_fg_90</param>
+            <param name="font">font_tiny</param>
+            <param name="textoffsetx">20</param>
+            <param name="textoffsety">0</param>
+            <param name="aligny">center</param>
+            <param name="label">[COLOR=panel_fg_50]$PARAM[label][/COLOR]   $PARAM[value]</param>
+            <height>40</height>
+            <width min="80" max="400">auto</width>
+            <shadowcolor>00000000</shadowcolor>
+        </include>
+    </include>
+
+    <!-- One lane of the process chain: label on the left, then a horizontal list of nodes -->
+    <include name="DialogProcessInfo_Lane">
+        <param name="onup">noop</param>
+        <param name="ondown">noop</param>
+        <definition>
+            <control type="group">
+                <top>$PARAM[top]</top>
+                <height>160</height>
+                <control type="label">
+                    <width>80</width>
+                    <aligny>center</aligny>
+                    <font>font_hint_bold</font>
+                    <textcolor>panel_fg_50</textcolor>
+                    <label>$PARAM[label]</label>
+                </control>
+                <control type="list" id="$PARAM[id]">
+                    <left>80</left>
+                    <orientation>horizontal</orientation>
+                    <onup>$PARAM[onup]</onup>
+                    <ondown>$PARAM[ondown]</ondown>
+                    <onclick>RunScript(script.skinvariables,run_dialog=ok,"heading=$INFO[Container($PARAM[id]).ListItem.Label]","message=$INFO[Container($PARAM[id]).ListItem.Label2]$INFO[Container($PARAM[id]).ListItem.Property(sub),[CR],]")</onclick>
+                    <itemlayout width="420" height="120">
+                        <include>Layout_ProcessNode</include>
+                    </itemlayout>
+                    <focusedlayout width="420" height="120">
+                        <include content="Layout_ProcessNode">
+                            <param name="selected">true</param>
+                            <param name="focused">Control.HasFocus($PARAM[id])</param>
+                        </include>
+                    </focusedlayout>
+                    <include>$PARAM[items]</include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogProcessInfo_Lanes">
+        <control type="group">
+            <top>60</top>
+            <include content="DialogProcessInfo_Lane">
+                <param name="id">5</param>
+                <param name="top">0</param>
+                <param name="label">$LOCALIZE[291]</param>
+                <param name="items">DialogProcessInfo_Items_Video</param>
+                <param name="ondown">SetFocus(6,$INFO[Container(5).Position])</param>
+            </include>
+            <include content="DialogProcessInfo_Lane">
+                <param name="id">6</param>
+                <param name="top">140</param>
+                <param name="label">$LOCALIZE[292]</param>
+                <param name="items">DialogProcessInfo_Items_Audio</param>
+                <param name="onup">SetFocus(5,$INFO[Container(6).Position])</param>
+                <param name="ondown">SetFocus(7,$INFO[Container(6).Position])</param>
+            </include>
+            <include content="DialogProcessInfo_Lane" condition="VideoPlayer.Content(livetv)">
+                <param name="id">7</param>
+                <param name="top">280</param>
+                <param name="label">$LOCALIZE[31085]</param>
+                <param name="items">DialogProcessInfo_Items_LiveTV</param>
+                <param name="onup">SetFocus(6,$INFO[Container(7).Position])</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- A chain node, hidden while its info is empty or unknown -->
+    <include name="DialogProcessInfo_Node">
+        <param name="sub" />
+        <definition>
+            <item>
+                <label>$PARAM[label]</label>
+                <label2>$PARAM[value]</label2>
+                <property name="sub">$PARAM[sub]</property>
+                <visible>!String.IsEmpty($PARAM[info])</visible>
+                <visible>!String.IsEqual($PARAM[info],$LOCALIZE[13205])</visible>
+            </item>
+        </definition>
     </include>
 
     <include name="DialogProcessInfo_FileDetails_Items">
@@ -120,97 +249,86 @@
         </content>
     </include>
 
-    <include name="DialogProcessInfo_Items">
+    <include name="DialogProcessInfo_Items_Video">
         <content>
-
-            <!-- Process -->
-            <item>
-                <label>$LOCALIZE[38031]</label>
-                <label2>$INFO[Player.Process(videodar),, $LOCALIZE[31260]]$INFO[Player.Process(videofps),$COMMA , $LOCALIZE[31259]]$INFO[VideoPlayer.VideoBitrate,$COMMA , kb/s]</label2>
-            </item>
-            <item>
-                <label>$LOCALIZE[169]</label>
-                <label2>$INFO[Player.Process(videowidth),,x]$INFO[Player.Process(videoheight),, $LOCALIZE[31261]]</label2>
-            </item>
-            <include content="DialogProcessInfo_Items_VideoObject">
-                <param name="label">$LOCALIZE[31216]</param>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[21870]</param>
+                <param name="info">VideoPlayer.VideoCodec</param>
+                <param name="value">[UPPERCASE]$INFO[VideoPlayer.VideoCodec][/UPPERCASE]</param>
+                <param name="sub">$INFO[VideoPlayer.VideoBitrate,, kb/s]</param>
+            </include>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[31878]</param>
                 <param name="info">Player.Process(videodecoder)</param>
-                <param name="affix">$VAR[Label_VideoHWDecoder, (,)]$INFO[Player.Process(amlogic.displaymode)]</param>
+                <param name="value">$INFO[Player.Process(videodecoder)]</param>
+                <param name="sub">$VAR[Label_VideoHWDecoder]$VAR[Label_PlayerProcess_AmlogicDisplayMode, • ,]</param>
             </include>
-            <include content="DialogProcessInfo_Items_VideoObject">
-                <param name="label">$LOCALIZE[31217]</param>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[14101]</param>
                 <param name="info">Player.Process(pixformat)</param>
-                <param name="affix">$INFO[Player.Process(amlogic.pixformat), ,]</param>
+                <param name="value">$INFO[Player.Process(pixformat)]$VAR[Label_PlayerProcess_AmlogicPixFormat, ,]</param>
+                <param name="sub">$INFO[Player.Process(deintmethod),$LOCALIZE[16020] ,]</param>
             </include>
-            <include content="DialogProcessInfo_Items_VideoObject">
-                <param name="label">$LOCALIZE[31119]</param>
-                <param name="info">Player.Process(amlogic.eoft_gamut)</param>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[31879]</param>
+                <param name="info">Player.Process(videowidth)</param>
+                <param name="value">$INFO[Player.Process(videowidth),, × ]$INFO[Player.Process(videoheight)]$VAR[Label_VideoHDRCodec, • ,]</param>
+                <param name="sub">$VAR[Label_PlayerProcess_OutputDetails]</param>
             </include>
-            <item>
-                <label>$LOCALIZE[20474]</label>
-                <label2>$VAR[Label_VideoHDRCodec]$INFO[VideoPlayer.VideoCodec, • [UPPERCASE],[/UPPERCASE]]</label2>
-            </item>
-            <item>
-                <label>$LOCALIZE[292]</label>
-                <label2>$VAR[Label_VideoPlayer_AudioChannels]$INFO[VideoPlayer.AudioCodec, • [UPPERCASE],[/UPPERCASE]]</label2>
-            </item>
-            <item>
-                <label>$LOCALIZE[31256] ($LOCALIZE[31117])</label>
-                <label2>$INFO[system.memory(used)] / $INFO[system.memory(total)] • $INFO[System.Memory(used.percent)]</label2>
-            </item>
-            <item>
-                <label>$LOCALIZE[31256] ($LOCALIZE[31258])</label>
-                <label2>$INFO[System.CpuFrequency]$VAR[Label_System_Temp, • ,]$INFO[System.CpuUsage, • ,]</label2>
-            </item>
-            <include content="DialogProcessInfo_Items_VideoObject">
-                <param name="label">$LOCALIZE[16038]</param>
-                <param name="info">Player.Process(deintmethod)</param>
-            </include>
+        </content>
+    </include>
 
-            <!-- PVR -->
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19099]</param>
-                <param name="info">PVR.ActStreamServiceName</param>
+    <include name="DialogProcessInfo_Items_Audio">
+        <content>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[21870]</param>
+                <param name="info">VideoPlayer.AudioCodec</param>
+                <param name="value">[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]</param>
+                <param name="sub">$VAR[Label_VideoPlayer_AudioChannels]</param>
             </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19101]</param>
-                <param name="info">PVR.ActStreamProviderName</param>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[31878]</param>
+                <param name="info">Player.Process(audiodecoder)</param>
+                <param name="value">$INFO[Player.Process(audiodecoder)]</param>
             </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19010]</param>
-                <param name="info">PVR.ActStreamBer</param>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[21444]</param>
+                <param name="info">Player.Process(audiochannels)</param>
+                <param name="value">$INFO[Player.Process(audiochannels)]</param>
             </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19011]</param>
-                <param name="info">PVR.ActStreamUnc</param>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[31879]</param>
+                <param name="info">Player.Process(audiosamplerate)</param>
+                <param name="value">$INFO[Player.Process(audiosamplerate),, Hz]$INFO[Player.Process(audiobitspersample), • , bit]</param>
             </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19100]</param>
-                <param name="info">PVR.ActStreamMux</param>
-            </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19007]</param>
-                <param name="info">PVR.ActStreamStatus</param>
-            </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
+        </content>
+    </include>
+
+    <include name="DialogProcessInfo_Items_LiveTV">
+        <content>
+            <include content="DialogProcessInfo_Node">
                 <param name="label">$LOCALIZE[19006]</param>
                 <param name="info">PVR.ActStreamDevice</param>
+                <param name="value">$INFO[PVR.ActStreamDevice]</param>
+                <param name="sub">$VAR[Label_PlayerProcess_PVRDevice]</param>
             </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19015]</param>
-                <param name="info">PVR.ActStreamEncryptionName</param>
-            </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
+            <include content="DialogProcessInfo_Node">
                 <param name="label">$LOCALIZE[19008]</param>
                 <param name="info">PVR.ActStreamSignal</param>
+                <param name="value">$INFO[PVR.ActStreamSignal]</param>
+                <param name="sub">$INFO[PVR.ActStreamSNR,$LOCALIZE[19009] ,]</param>
             </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19009]</param>
-                <param name="info">PVR.ActStreamSNR</param>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[19010]</param>
+                <param name="info">PVR.ActStreamBer</param>
+                <param name="value">$INFO[PVR.ActStreamBer]</param>
+                <param name="sub">$INFO[PVR.ActStreamUnc,$LOCALIZE[19011] ,]</param>
             </include>
-            <include content="DialogProcessInfo_Items_PVRObject">
-                <param name="label">$LOCALIZE[19012]</param>
-                <param name="info">PVR.ActStreamClient</param>
+            <include content="DialogProcessInfo_Node">
+                <param name="label">$LOCALIZE[19099]</param>
+                <param name="info">PVR.ActStreamServiceName</param>
+                <param name="value">$INFO[PVR.ActStreamServiceName]</param>
+                <param name="sub">$VAR[Label_PlayerProcess_PVRService]</param>
             </include>
         </content>
     </include>

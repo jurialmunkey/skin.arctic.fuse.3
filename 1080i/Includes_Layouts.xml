@@ -174,6 +174,98 @@
         </definition>
     </include>
 
+    <!-- Process chain node: connector from the previous node, then a box with label, label2 and the sub property -->
+    <include name="Layout_ProcessNode">
+        <param name="selected">false</param>
+        <param name="focused">false</param>
+        <definition>
+            <control type="group">
+                <width>60</width>
+                <visible>!Integer.IsEqual(ListItem.CurrentItem,1)</visible>
+                <control type="image">
+                    <right>30</right>
+                    <centertop>50%</centertop>
+                    <height>2</height>
+                    <texture colordiffuse="panel_fg_12">common/white.png</texture>
+                </control>
+                <control type="image">
+                    <right>10</right>
+                    <centertop>50%</centertop>
+                    <width>20</width>
+                    <height>20</height>
+                    <animation effect="rotate" end="-90" center="auto" condition="true">Conditional</animation>
+                    <texture colordiffuse="panel_fg_12">arrows/arrow-menu-up.png</texture>
+                </control>
+            </control>
+            <control type="group">
+                <left>60</left>
+                <include content="Object_ItemBack">
+                    <param name="colordiffuse">panel_fg_12</param>
+                </include>
+
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include>Texture_Box_Highlight_V</include>
+                    <visible>$PARAM[focused]</visible>
+                </include>
+                <include content="Layout_ProcessNode_Labels">
+                    <param name="visible">![$PARAM[focused]]</param>
+                </include>
+                <include content="Layout_ProcessNode_Labels" condition="$PARAM[selected]">
+                    <param name="visible">$PARAM[focused]</param>
+                    <param name="scroll">true</param>
+                    <param name="color_hint">$VAR[ColorSelected]</param>
+                    <param name="color_value">$VAR[ColorSelected]</param>
+                    <param name="color_sub">$VAR[ColorSelected]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_ProcessNode_Labels">
+        <param name="visible">true</param>
+        <param name="scroll">false</param>
+        <param name="color_hint">panel_fg_50</param>
+        <param name="color_value">panel_fg_90</param>
+        <param name="color_sub">panel_fg_70</param>
+        <definition>
+            <control type="group">
+                <left>20</left>
+                <right>20</right>
+                <visible>$PARAM[visible]</visible>
+                <control type="group">
+                    <animation effect="slide" end="0,10" condition="String.IsEmpty(ListItem.Property(sub))">Conditional</animation>
+                    <control type="label">
+                        <top>20</top>
+                        <height>20</height>
+                        <aligny>center</aligny>
+                        <font>font_hint_bold</font>
+                        <textcolor>$PARAM[color_hint]</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <top>40</top>
+                        <height>40</height>
+                        <aligny>center</aligny>
+                        <font>font_main_bold</font>
+                        <textcolor>$PARAM[color_value]</textcolor>
+                        <scroll>$PARAM[scroll]</scroll>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </control>
+                <control type="label">
+                    <top>80</top>
+                    <height>20</height>
+                    <aligny>center</aligny>
+                    <font>font_tiny</font>
+                    <textcolor>$PARAM[color_sub]</textcolor>
+                    <scroll>$PARAM[scroll]</scroll>
+                    <label>$INFO[ListItem.Property(sub)]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="Layout_ViewType">
         <param name="selected">false</param>
         <param name="current">ListItem.IsSelected</param>
@@ -2701,6 +2793,116 @@
                             <visible>!ListItem.InProgress</visible>
                         </include>
                     </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Layout_StreamCard_Title">
+        <param name="selected">false</param>
+        <definition>
+            <control type="label">
+                <nested />
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <aligny>center</aligny>
+                <font>font_title_midi</font>
+                <textcolor>panel_fg_100</textcolor>
+                <label>$VAR[Label_StreamLanguage]</label>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Player stream card. misc: condition that the current stream is switched on (subtitles can be off) -->
+    <include name="Layout_StreamCard">
+        <param name="selected">false</param>
+        <param name="misc">true</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+
+                <include content="Object_ItemBack">
+                    <param name="colordiffuse">panel_fg_12</param>
+                </include>
+
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include>Texture_Box_Highlight_V</include>
+                </include>
+
+                <control type="group">
+                    <include content="Dimension_Padding"><param name="pad">20</param></include>
+
+                    <control type="group">
+                        <height>60</height>
+                        <!-- The title stops short of the flag and tick. Cards with only the 40px icon (video cards) get a wider title, and offset cards (no icon) the full width -->
+                        <include content="Layout_StreamCard_Title">
+                            <param name="selected">$PARAM[selected]</param>
+                            <right>90</right>
+                            <visible>!String.IsEmpty(ListItem.Property(language)) | [!String.IsEmpty(ListItem.Property(iscurrent)) + $PARAM[misc]]</visible>
+                        </include>
+                        <include content="Layout_StreamCard_Title">
+                            <param name="selected">$PARAM[selected]</param>
+                            <right>60</right>
+                            <visible>String.IsEmpty(ListItem.Property(language)) + String.IsEmpty(ListItem.Property(slider)) + ![!String.IsEmpty(ListItem.Property(iscurrent)) + $PARAM[misc]]</visible>
+                        </include>
+                        <include content="Layout_StreamCard_Title">
+                            <param name="selected">$PARAM[selected]</param>
+                            <visible>!String.IsEmpty(ListItem.Property(slider))</visible>
+                        </include>
+
+                        <control type="image">
+                            <right>0</right>
+                            <centertop>50%</centertop>
+                            <width>60</width>
+                            <height>40</height>
+                            <aspectratio align="right">keep</aspectratio>
+                            <texture fallback="flags/color/language/unk.png">$INFO[ListItem.Property(language),flags/color/language/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(language))</visible>
+                        </control>
+                        <control type="image">
+                            <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                            <right>0</right>
+                            <centertop>50%</centertop>
+                            <width>40</width>
+                            <height>40</height>
+                            <bordersize>-8</bordersize>
+                            <aspectratio align="right">keep</aspectratio>
+                            <colordiffuse>panel_fg_100</colordiffuse>
+                            <texture>$INFO[ListItem.Icon]</texture>
+                            <visible>String.IsEmpty(ListItem.Property(language)) + String.IsEmpty(ListItem.Property(slider))</visible>
+                        </control>
+
+                        <control type="image">
+                            <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                            <right>60</right>
+                            <centertop>50%</centertop>
+                            <width>24</width>
+                            <height>24</height>
+                            <colordiffuse>panel_fg_100</colordiffuse>
+                            <texture>buttons/check-on.png</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(iscurrent)) + $PARAM[misc]</visible>
+                        </control>
+                    </control>
+
+                    <control type="group">
+                        <top>60</top>
+                        <height>40</height>
+                        <control type="label">
+                            <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <aligny>center</aligny>
+                            <font>font_tiny</font>
+                            <textcolor>panel_fg_90</textcolor>
+                            <label>$INFO[ListItem.Label2]</label>
+                        </control>
+                    </control>
+
+                    <include content="Object_Tags">
+                        <param name="label">$VAR[Label_StreamCard_Tags]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                        <bottom>0</bottom>
+                        <height>40</height>
+                    </include>
                 </control>
             </control>
         </definition>
