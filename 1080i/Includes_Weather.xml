@@ -5,29 +5,118 @@
             <control type="image">
                 <bordersize>0</bordersize>
                 <aspectratio scalediffuse="false">scale</aspectratio>
-                <texture background="true" diffuse="$PARAM[diffuse]" fallback="special://home/addons/resource.images.arctic.weather/resources/weather-woodblock-landscape/na.jpg">special://home/addons/resource.images.arctic.weather/resources/weather-woodblock-landscape/$PARAM[fanartcode].jpg</texture>
+                <texture background="true" diffuse="$PARAM[diffuse]" fallback="special://home/addons/resource.images.arctic.splash/resources/weather/na.jpg">special://home/addons/resource.images.arctic.splash/resources/weather/$PARAM[fanartcode].jpg</texture>
             </control>
-            <control type="image">
-                <bordersize>0</bordersize>
-                <aspectratio scalediffuse="false" aligny="bottom">keep</aspectratio>
-                <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Image_StyledBackground_Path,,weather/$PARAM[fanartcode].png]</texture>
+        </definition>
+    </include>
+
+    <variable name="Label_Landscape_Lower_Weather">
+        <value>$INFO[ListItem.Label2]</value>
+    </variable>
+
+    <include name="Layout_Weather_Temperature">
+        <control type="label">
+            <left>20</left>
+            <right>120</right>
+            <bottom>$PARAM[bottom]</bottom>
+            <height>$PARAM[height]</height>
+            <aligny>center</aligny>
+            <font>$PARAM[font]</font>
+            <textcolor>$PARAM[textcolor]</textcolor>
+            <shadowcolor>shadow_hard</shadowcolor>
+            <label>$INFO[ListItem.Property($PARAM[property]),,°]</label>
+        </control>
+    </include>
+
+    <!-- Forecast card: fixed landscape size so the weather widget ignores saved widget styles. -->
+    <include name="Layout_Weather">
+        <param name="selected">false</param>
+        <param name="textcolor">main_fg</param>
+        <param name="diffuse">diffuse/landscape_w410_h231.png</param>
+        <param name="affix" />
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+
+                <include content="Object_ItemBack">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="shadow_colordiffuse">$PARAM[shadow_colordiffuse]</param>
+                </include>
+
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include content="Texture_Box_Highlight_V">
+                        <param name="variant">-backing</param>
+                    </include>
+                </include>
+
+                <include content="Weather_Card_Landscape_Artwork">
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="fanartcode">$INFO[ListItem.Property(fanartcode)]</param>
+                </include>
+
+                <control type="image">
+                    <texture colordiffuse="shadow_back" diffuse="$PARAM[diffuse]">common/gradient-v.png</texture>
+                </control>
+
+                <include content="Layout_Weather_Temperature">
+                    <param name="property">hightemp</param>
+                    <param name="bottom">40</param>
+                    <param name="height">80</param>
+                    <param name="font">font_title_huge</param>
+                    <param name="textcolor">main_fg_100</param>
+                </include>
+                <include content="Layout_Weather_Temperature">
+                    <param name="property">lowtemp</param>
+                    <param name="bottom">10</param>
+                    <param name="height">30</param>
+                    <param name="font">font_mini_bold</param>
+                    <param name="textcolor">ffa4dcff</param>
+                </include>
+
+                <control type="image">
+                    <right>20</right>
+                    <bottom>20</bottom>
+                    <width>80</width>
+                    <height>80</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture background="true" colordiffuse="main_fg_90">resource://resource.images.weathericons.white/$INFO[ListItem.Property(fanartcode)].png</texture>
+                </control>
+
+                <include content="Layout_Labels">
+                    <param name="top">10</param>
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="affix">_Weather</param>
+                    <param name="textcolor">$PARAM[textcolor]</param>
+                    <param name="use_label2">true</param>
+                </include>
+
+                <include content="Object_SelectBox" condition="$PARAM[selected]">
+                    <param name="affix">$PARAM[affix]</param>
+                    <param name="indicator">true</param>
+                    <param name="focusbounce">true</param>
+                </include>
             </control>
         </definition>
     </include>
 
     <include name="Weather_Details_HighLow_Item">
         <item>
-            <label>$INFO[Window(weather).Property($PARAM[day].Title)][CR]$INFO[Window(weather).Property($PARAM[day].HighTemp)]$INFO[System.TemperatureUnits] - $INFO[Window(weather).Property($PARAM[day].LowTemp)]$INFO[System.TemperatureUnits]</label>
+            <label>$INFO[Window(weather).Property($PARAM[day].Title)]</label>
+            <label2>$INFO[Window(weather).Property($PARAM[day].Outlook)]$INFO[Window(weather).Property($PARAM[day].ChancePrecipitation), • ,]</label2>
             <property name="fanartcode">$INFO[Window(weather).Property($PARAM[day].FanartCode)]</property>
             <property name="title">$INFO[Window(weather).Property($PARAM[day].Title)]</property>
             <property name="hightemp">$INFO[Window(weather).Property($PARAM[day].HighTemp)]</property>
             <property name="lowtemp">$INFO[Window(weather).Property($PARAM[day].LowTemp)]</property>
             <property name="outlook">$INFO[Window(weather).Property($PARAM[day].Outlook)]</property>
             <property name="biography">$INFO[Window(weather).Property($PARAM[day].Outlook),,[CR]]$INFO[Window(weather).Property($PARAM[day].ChancePrecipitation),$LOCALIZE[31465]: ,]</property>
-            <property name="fanart">resource://resource.images.weatherfanart.multi/$INFO[Window(weather).Property($PARAM[day].FanartCode)]/weather-$INFO[Window(weather).Property($PARAM[day].FanartCode)]-00.jpg</property>
-            <property name="imagepath">resource://resource.images.weatherfanart.multi/$INFO[Window(weather).Property($PARAM[day].FanartCode)]/</property>
+            <property name="fanart">special://home/addons/resource.images.arctic.splash/resources/weather/$INFO[Window(weather).Property($PARAM[day].FanartCode)].jpg</property>
             <property name="CustomInfo01">$LOCALIZE[8]</property>
             <property name="CustomInfo02">$INFO[Weather.Location]</property>
+            <property name="rainamount">$INFO[Window(weather).Property($PARAM[day].RainAmount)]</property>
+            <property name="sunrise">$INFO[Window(weather).Property($PARAM[day].Sunrise)]</property>
+            <property name="sunset">$INFO[Window(weather).Property($PARAM[day].Sunset)]</property>
             <property name="is_weather">true</property>
             <onclick>ActivateWindow(1161)</onclick>
         </item>

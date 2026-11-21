@@ -532,6 +532,7 @@
             <param name="id">23902</param>
             <label>$LOCALIZE[31282] $LOCALIZE[33063]</label>
             <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>!$EXP[DialogShortcuts_IsWeatherWidget_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -565,7 +566,7 @@
             <selected>$EXP[DialogShortcuts_IsCombinedWidget_Expression]</selected>
             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_combined&amp;&amp;]$VAR[Value_Shortcut_CombinedWidget_Toggle])</onclick>
             <visible>$EXP[DialogShortcuts_IsStandardHubWidgets_Expression]</visible>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsConfigurableWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -680,7 +681,9 @@
 
     <!-- Search widgets only supply multisearch sources, so options for how a widget shows its items do not apply to them -->
     <expression name="DialogShortcuts_IsSearchWidgets_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=searchwidgets)]</expression>
-    <expression name="DialogShortcuts_IsConfigurableWidgetMode_Expression">[$EXP[DialogShortcuts_IsWidgetMode_Expression] + !$EXP[DialogShortcuts_IsSearchWidgets_Expression]]</expression>
+    <!-- The weather widget has a fixed forecast layout, so it has no display options. -->
+    <expression name="DialogShortcuts_IsWeatherWidget_Expression">String.IsEqual(Container(22001).ListItem.Property(path),Weather)</expression>
+    <expression name="DialogShortcuts_IsConfigurableWidgetMode_Expression">[$EXP[DialogShortcuts_IsWidgetMode_Expression] + !$EXP[DialogShortcuts_IsSearchWidgets_Expression] + !$EXP[DialogShortcuts_IsWeatherWidget_Expression]]</expression>
 
     <expression name="DialogShortcuts_IsCombinedWidget_Expression">String.IsEqual(Container(22001).ListItem.Property(widget_combined),True)</expression>
 

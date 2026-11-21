@@ -105,6 +105,7 @@
         <param name="allowhiddenfocus_visible">true</param>
         <param name="home_switcher">false</param>
         <param name="include_action">Object_Null</param>
+        <param name="include_content">Object_Null</param>
         <definition>
             <control type="group">
                 <height>1080</height>
@@ -119,6 +120,7 @@
                     <bottom>-40</bottom>
                     <onup>601</onup>
                     <include>$PARAM[include_action]</include>
+                    <include>$PARAM[include_content]</include>
                     <include>Hub_Grouplist_OnLeftRight</include>
                     <onback condition="$EXP[Exp_Navigation_OnParent] + !Player.HasMedia">SetFocus($PARAM[id],0,absolute)</onback>
                     <include content="Action_Widget_OnBack">
@@ -155,6 +157,7 @@
         <param name="visible">true</param>
         <param name="allowhiddenfocus">false</param>
         <param name="autoscroll">false</param>
+        <param name="include_content">Object_Null</param>
         <definition>
             <include content="$PARAM[include]">
                 <param name="id">$PARAM[id]</param>
@@ -178,6 +181,8 @@
                 <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
                 <content sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" target="$PARAM[target]" limit="$PARAM[limit]" browse="$VAR[Defs_BrowseLimitedLists]">$PARAM[content]</content>
                 <visible allowhiddenfocus="$PARAM[allowhiddenfocus]">$PARAM[visible]</visible>
+
+                <include>$PARAM[include_content]</include>
 
                 <include content="Defs_AutoScroll" condition="$PARAM[autoscroll]">
                     <param name="condition">[!Control.HasFocus($PARAM[id]) | System.IdleTime(3)]</param>
