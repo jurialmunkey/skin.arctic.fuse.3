@@ -179,8 +179,8 @@
     <!-- OSD layout: filename and status, four results, then the service as the spotlight with its buttons above the seekbar -->
     <include name="DialogSubtitles_OSD">
         <control type="group">
+            <left>view_pad</left>
             <right>view_pad</right>
-            <width>1200</width>
             <include>Animation_SlideIn_Dialog</include>
             <include>DialogSubtitles_OSD_Heading</include>
             <include>DialogSubtitles_OSD_List</include>
@@ -189,11 +189,9 @@
                 <bottom>500</bottom>
                 <centerright>-60</centerright>
                 <onleft>120</onleft>
-                <onright>9000</onright>
             </include>
             <include content="DialogSettings_OSD_Spotlight">
                 <param name="id">100</param>
-                <param name="hint">&#9650;&#9660;  $LOCALIZE[424]       &#9664; &#9654;  $LOCALIZE[31885]</param>
             </include>
             <include>DialogSubtitles_OSD_Actions</include>
         </control>
@@ -222,9 +220,9 @@
         <include content="List_Core">
             <param name="orientation">vertical</param>
             <param name="id">120</param>
-            <param name="item_w">1200</param>
+            <param name="item_w">1420</param>
             <param name="item_h">100</param>
-            <param name="itemlayout_w">1200</param>
+            <param name="itemlayout_w">1420</param>
             <param name="itemlayout_h">100</param>
             <param name="itemlayout_include">Layout_DialogSubtitles_OSD</param>
             <param name="offset_x">0</param>
@@ -232,7 +230,7 @@
             <param name="preloaditems">0</param>
             <include>DialogSubtitles_OSD_ListSlide</include>
             <right>-40</right>
-            <width>1200</width>
+            <width>1420</width>
             <top>180</top>
             <height>400</height>
             <pagecontrol>61</pagecontrol>
@@ -240,28 +238,19 @@
             <ondown>noop</ondown>
             <onleft>9000</onleft>
             <onright condition="$EXP[Exp_DialogSubtitles_HasPages]">61</onright>
-            <onright condition="!$EXP[Exp_DialogSubtitles_HasPages]">9000</onright>
         </include>
     </include>
 
-    <!-- Search and service buttons, hidden until focused from the list or scrollbar.
-         Text centres on the OSD heading at 810, and the 10px underline at the bottom of each button centres on its divider at 840 -->
+    <!-- Search and service buttons on the left edge, with the list taking the remaining width -->
     <include name="DialogSubtitles_OSD_Actions">
         <control type="grouplist" id="9000">
-            <top>775</top>
-            <height>70</height>
-            <orientation>horizontal</orientation>
-            <align>right</align>
-            <itemgap>40</itemgap>
-            <visible allowhiddenfocus="true">ControlGroup(9000).HasFocus()</visible>
-            <include>Animation_OSD_Seekbar_Slide</include>
-            <include>Animation_FadeIn</include>
-            <include>Animation_FadeOut</include>
-            <onup>120</onup>
-            <ondown>120</ondown>
-            <onleft>120</onleft>
+            <left>0</left>
+            <width>360</width>
+            <top>180</top>
+            <height>400</height>
+            <orientation>vertical</orientation>
             <onright>120</onright>
-            <include content="DialogSubtitles_OSD_Button">
+            <include content="DialogSelect_OSD_Action">
                 <param name="id">160</param>
                 <label>$LOCALIZE[137]</label>
             </include>
@@ -271,24 +260,12 @@
         </control>
     </include>
 
-    <include name="DialogSubtitles_OSD_Button">
-        <definition>
-            <include content="Button_Underline_Switcher">
-                <param name="id">$PARAM[id]</param>
-                <param name="control">button</param>
-                <nested />
-                <height>70</height>
-                <aligny>center</aligny>
-                <textcolor>main_fg_50</textcolor>
-                <focusedcolor>main_fg_100</focusedcolor>
-            </include>
-        </definition>
-    </include>
-
     <include name="DialogSubtitles_OSD_ServiceItem">
-        <include content="DialogSubtitles_OSD_Button">
+        <include content="DialogSelect_OSD_Action">
             <param name="id">90$PARAM[id]</param>
+            <param name="control">radiobutton</param>
             <label>$INFO[Container(150).ListItemAbsolute($PARAM[pos]).Label]</label>
+            <selected>String.IsEqual(Container(150).ListItemAbsolute($PARAM[pos]).Label,Control.GetLabel(100))</selected>
             <onclick>SetFocus(150,$PARAM[pos],absolute)</onclick>
             <onclick>Action(Select)</onclick>
             <onclick>SetFocus(120)</onclick>

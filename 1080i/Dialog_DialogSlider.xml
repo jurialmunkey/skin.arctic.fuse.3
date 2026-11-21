@@ -89,21 +89,24 @@
         </control>
     </include>
 
-    <!-- The fill from the origin to the nib: the whole slice between the ends, and the half slices towards the fill at each end -->
+    <!-- The fill from the origin to the nib: the straight slice between the ends, and a rounded cap at each end that meets the neighbouring slice -->
     <include name="DialogSlider_RulerStep_Fill">
         <include content="DialogSlider_RulerStep_FillBar">
             <param name="left">66</param>
             <param name="width">9</param>
+            <param name="texture">progress-end</param>
             <param name="visible">Integer.IsGreater($PARAM[index],$PARAM[lower]) + Integer.IsLess($PARAM[index],$PARAM[upper])</param>
         </include>
         <include content="DialogSlider_RulerStep_FillBar">
             <param name="left">66</param>
-            <param name="width">4</param>
+            <param name="width">12</param>
+            <param name="texture">progress-right</param>
             <param name="visible">Integer.IsEqual($PARAM[index],$PARAM[upper]) + !Integer.IsEqual($PARAM[lower],$PARAM[upper])</param>
         </include>
         <include content="DialogSlider_RulerStep_FillBar">
-            <param name="left">70</param>
-            <param name="width">5</param>
+            <param name="left">63</param>
+            <param name="width">12</param>
+            <param name="texture">progress-left</param>
             <param name="visible">Integer.IsEqual($PARAM[index],$PARAM[lower]) + !Integer.IsEqual($PARAM[lower],$PARAM[upper])</param>
         </include>
     </include>
@@ -111,10 +114,14 @@
     <include name="DialogSlider_RulerStep_FillBar">
         <control type="image">
             <left>$PARAM[left]</left>
-            <top>136</top>
+            <top>134</top>
             <width>$PARAM[width]</width>
-            <height>8</height>
-            <texture colordiffuse="$VAR[ColorHighlight]">common/white.png</texture>
+            <height>12</height>
+            <include content="Texture_FocusStyle">
+                <param name="directory">progress</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">0</param>
+            </include>
             <visible>$PARAM[visible]</visible>
         </control>
     </include>
