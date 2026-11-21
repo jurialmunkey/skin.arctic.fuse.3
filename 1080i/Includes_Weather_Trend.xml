@@ -6,7 +6,8 @@
         <control type="label" id="8050">
             <include>Object_Hidden_Item_Definition</include>
             <visible>false</visible>
-            <label>$INFO[Window(weather).Property(Day0.HighTemp)]:$INFO[Window(weather).Property(Day0.LowTemp)]:$INFO[Window(weather).Property(Day1.HighTemp)]:$INFO[Window(weather).Property(Day1.LowTemp)]:$INFO[Window(weather).Property(Day2.HighTemp)]:$INFO[Window(weather).Property(Day2.LowTemp)]:$INFO[Window(weather).Property(Day3.HighTemp)]:$INFO[Window(weather).Property(Day3.LowTemp)]:$INFO[Window(weather).Property(Day4.HighTemp)]:$INFO[Window(weather).Property(Day4.LowTemp)]</label>
+            <!-- Keep the chart cache key in sync with skinvariables-weather-trend.json. -->
+            <label>range:$INFO[Window(weather).Property(Day0.HighTemp)]:$INFO[Window(weather).Property(Day0.LowTemp)]:$INFO[Window(weather).Property(Day1.HighTemp)]:$INFO[Window(weather).Property(Day1.LowTemp)]:$INFO[Window(weather).Property(Day2.HighTemp)]:$INFO[Window(weather).Property(Day2.LowTemp)]:$INFO[Window(weather).Property(Day3.HighTemp)]:$INFO[Window(weather).Property(Day3.LowTemp)]:$INFO[Window(weather).Property(Day4.HighTemp)]:$INFO[Window(weather).Property(Day4.LowTemp)]</label>
         </control>
     </include>
 
@@ -218,7 +219,8 @@
         </definition>
     </include>
 
-    <!-- SkinVariables supplies an index from 0 to 16. Each plot step is 7.5px. -->
+    <!-- SkinVariables rounds 16 * (maximum - temperature) / spread to an index
+         from 0 to 16, or uses index 8 for a flat forecast. Each step is 7.5px. -->
     <include name="Weather_Trend_Position">
         <definition>
             <animation effect="slide" end="0,7.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],1)">Conditional</animation>

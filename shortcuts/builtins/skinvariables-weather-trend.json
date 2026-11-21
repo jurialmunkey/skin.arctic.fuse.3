@@ -13,13 +13,14 @@
         "plotted": "$INFO[Window(weather).Property(Weather.Trend.Source)]"
     },
     "values": {
-        "source": ["{high0}:{low0}:{high1}:{low1}:{high2}:{low2}:{high3}:{low3}:{high4}:{low4}"]
+        "temperatures": ["{high0}:{low0}:{high1}:{low1}:{high2}:{low2}:{high3}:{low3}:{high4}:{low4}"],
+        "source": ["range:{temperatures}"]
     },
     "operations": [
         {
             "regex": {
                 "numeric": {
-                    "input": "{source}",
+                    "input": "{temperatures}",
                     "regex": "^-?[0-9]{{1,4}}(?::-?[0-9]{{1,4}}){{9}}$",
                     "value": "true"
                 }
@@ -112,33 +113,6 @@
             "sums": {
                 "spread": ["{maximum4}", "{negative_minimum}"]
             }
-        },
-        {
-            "values": {
-                "degrees": [
-                    {
-                        "rules": ["Integer.IsLessOrEqual({spread},8)"],
-                        "value": "0.5"
-                    },
-                    {
-                        "rules": ["Integer.IsLessOrEqual({spread},16)"],
-                        "value": "1"
-                    },
-                    {
-                        "rules": ["Integer.IsLessOrEqual({spread},32)"],
-                        "value": "2"
-                    },
-                    {
-                        "rules": ["Integer.IsLessOrEqual({spread},80)"],
-                        "value": "5"
-                    },
-                    {
-                        "rules": ["Integer.IsLessOrEqual({spread},160)"],
-                        "value": "10"
-                    },
-                    "100"
-                ]
-            }
         }
     ],
     "actions": [
@@ -157,16 +131,16 @@
             ],
             "value": [
                 "ClearProperty(Weather.Trend.Source,weather)",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day0.High&temperature={high0}&following={high1}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day1.High&temperature={high1}&following={high2}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day2.High&temperature={high2}&following={high3}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day3.High&temperature={high3}&following={high4}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day4.High&temperature={high4}&following={high4}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day0.Low&temperature={low0}&following={low1}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day1.Low&temperature={low1}&following={low2}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day2.Low&temperature={low2}&following={low3}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day3.Low&temperature={low3}&following={low4}&maximum={maximum4}&degrees={degrees}",
-                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day4.Low&temperature={low4}&following={low4}&maximum={maximum4}&degrees={degrees}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day0.High&temperature={high0}&following={high1}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day1.High&temperature={high1}&following={high2}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day2.High&temperature={high2}&following={high3}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day3.High&temperature={high3}&following={high4}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day4.High&temperature={high4}&following={high4}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day0.Low&temperature={low0}&following={low1}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day1.Low&temperature={low1}&following={low2}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day2.Low&temperature={low2}&following={low3}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day3.Low&temperature={low3}&following={low4}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day4.Low&temperature={low4}&following={low4}&maximum={maximum4}&spread={spread}",
                 "SetProperty(Weather.Trend.Ready,true,weather)",
                 "SetProperty(Weather.Trend.Source,{source},weather)"
             ]
