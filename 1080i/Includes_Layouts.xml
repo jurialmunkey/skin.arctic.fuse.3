@@ -1519,40 +1519,8 @@
                         <right>12</right>
                         <centertop>92</centertop>
                         <height>32</height>
-                        <include content="Object_StarRating">
-                            <width>32</width>
-                            <height>32</height>
+                        <include content="Object_StarRating_Row">
                             <param name="selected">$PARAM[selected]</param>
-                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,5)">Conditional</animation>
-                            <right>0</right>
-                        </include>
-                        <include content="Object_StarRating">
-                            <width>32</width>
-                            <height>32</height>
-                            <param name="selected">$PARAM[selected]</param>
-                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,4)">Conditional</animation>
-                            <right>20</right>
-                        </include>
-                        <include content="Object_StarRating">
-                            <width>32</width>
-                            <height>32</height>
-                            <param name="selected">$PARAM[selected]</param>
-                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,3)">Conditional</animation>
-                            <right>40</right>
-                        </include>
-                        <include content="Object_StarRating">
-                            <width>32</width>
-                            <height>32</height>
-                            <param name="selected">$PARAM[selected]</param>
-                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,2)">Conditional</animation>
-                            <right>60</right>
-                        </include>
-                        <include content="Object_StarRating">
-                            <width>32</width>
-                            <height>32</height>
-                            <param name="selected">$PARAM[selected]</param>
-                            <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,1)">Conditional</animation>
-                            <right>80</right>
                         </include>
                     </control>
                     <control type="group">
@@ -1635,6 +1603,119 @@
                     <textcolor>dialog_fg_70</textcolor>
                     <selectedcolor>dialog_fg_70</selectedcolor>
                     <label>$INFO[ListItem.Label2]</label>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- OSD subtitle result: flag over language, the wrapped release name, then SYNC and CC tags and the rating -->
+    <include name="Layout_DialogSubtitles_OSD">
+        <param name="selected">false</param>
+        <definition>
+            <control type="group">
+                <width>$PARAM[item_w]</width>
+                <height>$PARAM[item_h]</height>
+                <include content="Object_Control" condition="$PARAM[selected]">
+                    <param name="control">image</param>
+                    <include>Texture_Menu_Highlight_H</include>
+                </include>
+                <control type="group">
+                    <left>20</left>
+                    <width>80</width>
+                    <control type="image">
+                        <centerleft>50%</centerleft>
+                        <top>16</top>
+                        <width>60</width>
+                        <height>40</height>
+                        <aspectratio>keep</aspectratio>
+                        <texture fallback="flags/color/language/unk.png">$INFO[ListItem.Thumb,flags/color/language/,.png]</texture>
+                    </control>
+                    <control type="label">
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <left>-20</left>
+                        <right>-20</right>
+                        <top>60</top>
+                        <height>20</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_hint</font>
+                        <textcolor>main_fg_70</textcolor>
+                        <selectedcolor>main_fg_70</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </control>
+                <include content="Object_Control">
+                    <param name="control">textbox</param>
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <left>120</left>
+                    <right>360</right>
+                    <centertop>50%</centertop>
+                    <height>95</height>
+                    <aligny>center</aligny>
+                    <font>font_mini</font>
+                    <textcolor>main_fg_100</textcolor>
+                    <selectedcolor>main_fg_100</selectedcolor>
+                    <autoscroll>false</autoscroll>
+                    <label>$INFO[ListItem.Label2]</label>
+                </include>
+                <include content="Layout_DialogSubtitles_OSD_Tag">
+                    <param name="label">&#x2002;SYNC&#x2000;</param>
+                    <param name="property">sync</param>
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="right">280</param>
+                    <param name="width">100</param>
+                </include>
+                <include content="Layout_DialogSubtitles_OSD_Tag">
+                    <param name="label">&#x2002;CC&#x2000;</param>
+                    <param name="property">hearing_imp</param>
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="right">220</param>
+                    <param name="width">60</param>
+                </include>
+                <control type="group">
+                    <right>40</right>
+                    <width>180</width>
+                    <centertop>50%</centertop>
+                    <height>48</height>
+                    <include content="Object_StarRating_Row">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="size">48</param>
+                        <param name="right_2">30</param>
+                        <param name="right_3">60</param>
+                        <param name="right_4">90</param>
+                        <param name="right_5">120</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A SYNC or CC tag, dimmed when the item's property is off. property: the ListItem property -->
+    <include name="Layout_DialogSubtitles_OSD_Tag">
+        <param name="selected">false</param>
+        <definition>
+            <control type="group">
+                <right>$PARAM[right]</right>
+                <width>$PARAM[width]</width>
+                <centertop>50%</centertop>
+                <height>40</height>
+                <include content="Object_Tags">
+                    <param name="label">$PARAM[label]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="align">right</param>
+                    <visible>ListItem.property($PARAM[property])</visible>
+                </include>
+                <include content="Object_Tags" condition="!$PARAM[selected]">
+                    <param name="label">$PARAM[label]</param>
+                    <param name="textcolor">main_fg_30</param>
+                    <param name="align">right</param>
+                    <visible>!ListItem.property($PARAM[property])</visible>
+                </include>
+                <include content="Object_Tags" condition="$PARAM[selected]">
+                    <param name="label">$PARAM[label]</param>
+                    <param name="textcolor">$VAR[ColorSelected_30]</param>
+                    <param name="align">right</param>
+                    <visible>!ListItem.property($PARAM[property])</visible>
                 </include>
             </control>
         </definition>
