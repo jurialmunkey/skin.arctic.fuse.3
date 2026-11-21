@@ -35,6 +35,7 @@
         <control type="group">
             <right>view_pad</right>
             <width>1200</width>
+            <visible>!$EXP[Exp_OSD_DialogSelect]</visible>
             <include>Animation_SlideIn_Dialog</include>
             <include>DialogSettings_OSD_Heading</include>
             <include>DialogSettings_OSD_List</include>
@@ -43,7 +44,7 @@
         <control type="group">
             <right>view_pad</right>
             <width>1200</width>
-            <visible>!Window.IsVisible(DialogSlider.xml)</visible>
+            <visible>!Window.IsVisible(DialogSlider.xml) + !$EXP[Exp_OSD_DialogSelect]</visible>
             <include content="Animation_SlideIn_Dialog">
                 <param name="visible_condition">false</param>
             </include>
@@ -66,6 +67,7 @@
     <!-- Small label above the list with its item count. list: the list's control id -->
     <include name="DialogSettings_OSD_Heading">
         <param name="list">5</param>
+        <param name="visible">true</param>
         <definition>
             <control type="label">
                 <top>120</top>
@@ -74,6 +76,7 @@
                 <font>font_hint_bold</font>
                 <textcolor>main_fg_50</textcolor>
                 <label>$INFO[Container($PARAM[list]).NumItems,, $LOCALIZE[31022]]</label>
+                <visible>$PARAM[visible]</visible>
             </control>
         </definition>
     </include>
@@ -100,9 +103,10 @@
     </include>
 
     <include name="DialogSettings_OSD_Scrollbar">
+        <param name="id">61</param>
         <definition>
             <include content="Part_Scrollbar">
-                <param name="id">61</param>
+                <param name="id">$PARAM[id]</param>
                 <nested />
                 <texturesliderbar colordiffuse="main_fg_30" border="4">scrollbar/scrollv_line.png</texturesliderbar>
             </include>
