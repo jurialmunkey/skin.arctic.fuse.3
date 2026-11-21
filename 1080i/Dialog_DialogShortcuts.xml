@@ -374,8 +374,8 @@
         <value>special://skin/extras/icons/circle-cancel.png</value>
     </variable>
 
-    <!-- Shortcut item options. container is the shortcuts list, include_after_toggle adds options straight after the enable button. static/static_home mark the fixed entries of the hubs window (1115),
-         whose options act on skin settings: Search and Power can only be enabled/disabled, Home is always enabled -->
+    <!-- Shortcut item options. container is the shortcuts list, include_after_toggle adds options straight after the enable button. static/static_home/static_power mark fixed entries of the hubs window (1115),
+         whose options act on skin settings. Search and Power can be toggled, Power has a configurable icon, and Home is always enabled -->
     <include name="DialogShortcuts_Items_Basic">
         <param name="container">22001</param>
         <param name="enabled">$EXP[DialogShortcuts_IsEnabled_Expression]</param>
@@ -383,6 +383,7 @@
         <param name="toggle_label">$VAR[Label_Shortcut_EnableDisable]</param>
         <param name="static">false</param>
         <param name="static_home">false</param>
+        <param name="static_power">false</param>
         <param name="onback">22904</param>
         <param name="include_after_toggle">Object_Null</param>
         <param name="widgets">$EXP[DialogShortcuts_IsWidgetMode_Expression]</param>
@@ -390,6 +391,7 @@
         <param name="window" />
         <param name="shortcut_label">false</param>
         <param name="item_label2">false</param>
+        <param name="icon_label2" />
         <definition>
 
         <include content="Settings_ButtonImage">
@@ -485,13 +487,14 @@
             <label>$LOCALIZE[31274]</label>
             <param name="icon">special://skin/extras/icons/image.png</param>
             <param name="has_label2">$PARAM[item_label2]</param>
-            <param name="label2">$INFO[Container($PARAM[container]).ListItem.Icon]</param>
+            <param name="label2">$PARAM[icon_label2]</param>
             <onclick condition="![$PARAM[static]]">SetProperty(url,$INFO[Container($PARAM[container]).ListItem.Property(url)],1117)</onclick>
             <onclick condition="$PARAM[static_home]">SetProperty(setting,HomeSwitcher.Home.Icon,1117)</onclick>
+            <onclick condition="$PARAM[static_power]">SetProperty(setting,HomeSwitcher.Power.Icon,1117)</onclick>
             <onclick>ActivateWindow(1117)</onclick>
             <onback>$PARAM[onback]</onback>
             <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
+            <visible>![$PARAM[static]] | $PARAM[static_home] | $PARAM[static_power]</visible>
         </include>
         </definition>
     </include>
@@ -1314,7 +1317,7 @@
                 <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">6</param></include>
                 <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">7</param></include>
                 <include content="HubsWindow_Preview_HomeBar_Icon">
-                    <param name="icon">special://skin/extras/icons/power.png</param>
+                    <param name="icon">$VAR[Home_Icon_power]</param>
                     <param name="focused">$EXP[Exp_HubsWindow_Item_PowerPreview]</param>
                     <param name="visible">!Skin.HasSetting(HomeSwitcher.LoopBack)</param>
                 </include>
@@ -1959,7 +1962,7 @@
         <content>
             <item>
                 <label>$LOCALIZE[33060]</label>
-                <icon>special://skin/extras/icons/power.png</icon>
+                <icon>$VAR[Home_Icon_power]</icon>
                 <property name="static">power</property>
                 <property name="editmenu">menu=power</property>
                 <property name="disabled">$VAR[Label_Hubs_Power_Disabled]</property>
