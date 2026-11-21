@@ -119,6 +119,22 @@
             <param name="colordiffuse">$PARAM[colordiffuse]</param>
         </include>
     </include>
+    <include name="Info_Meta_Ratings_Rating">
+        <include content="Info_Meta_Object">
+            <param name="icon">special://skin/extras/icons/kodi.png</param>
+            <param name="label">$INFO[$PARAM[info]]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
+    <include name="Info_Meta_Ratings_UserRating">
+        <include content="Info_Meta_Object">
+            <param name="icon">special://skin/extras/icons/circle-user.png</param>
+            <param name="label">$INFO[$PARAM[info]]</param>
+            <param name="visible">$PARAM[visible]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+        </include>
+    </include>
 
     <!-- A ratings line item, called in menu order by the generated skinvariables-ratings[content] includes with its menu position.
          It shows while its rating is available and fewer than three ratings before it are, or fewer than six when extra_slots is true
@@ -126,7 +142,8 @@
     <include name="Info_Meta_Ratings_Item">
         <definition>
             <include content="Info_Meta_Ratings_$PARAM[path]">
-                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[source_prefix]$PARAM[path])) + [!Control.IsVisible($PARAM[list]$PARAM[position]3) | [[$PARAM[extra_slots]] + !Control.IsVisible($PARAM[list]$PARAM[position]6)]]</param>
+                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[info]) + [!Control.IsVisible($PARAM[list]$PARAM[position]3) | [[$PARAM[extra_slots]] + !Control.IsVisible($PARAM[list]$PARAM[position]6)]]</param>
+                <param name="info">$PARAM[info]</param>
                 <param name="service">$PARAM[service]</param>
                 <param name="source">$PARAM[source]</param>
                 <param name="source_prefix">$PARAM[source_prefix]</param>
@@ -144,22 +161,26 @@
         <param name="ratings_id">730</param>
         <param name="source">Window(Home).Property</param>
         <param name="source_prefix">TMDbHelper.ListItem.</param>
+        <param name="infolabels">ListItem</param>
         <param name="include_tmdbhelper">$EXP[Exp_TMDbHelper_IsData]</param>
         <definition>
             <include content="skinvariables-ratingsmovies-counts" condition="$PARAM[include_tmdbhelper]">
                 <param name="list">$PARAM[ratings_id]1</param>
                 <param name="source">$PARAM[source]</param>
                 <param name="source_prefix">$PARAM[source_prefix]</param>
+                <param name="infolabels">$PARAM[infolabels]</param>
             </include>
             <include content="skinvariables-ratingstvshows-counts" condition="$PARAM[include_tmdbhelper]">
                 <param name="list">$PARAM[ratings_id]2</param>
                 <param name="source">$PARAM[source]</param>
                 <param name="source_prefix">$PARAM[source_prefix]</param>
+                <param name="infolabels">$PARAM[infolabels]</param>
             </include>
             <include content="skinvariables-ratingsepisodes-counts" condition="$PARAM[include_tmdbhelper]">
                 <param name="list">$PARAM[ratings_id]3</param>
                 <param name="source">$PARAM[source]</param>
                 <param name="source_prefix">$PARAM[source_prefix]</param>
+                <param name="infolabels">$PARAM[infolabels]</param>
             </include>
         </definition>
     </include>
@@ -283,6 +304,7 @@
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,movie) | $PARAM[override_movie]</param>
                         <param name="list">$PARAM[ratings_id]1</param>
                         <param name="extra_slots">Skin.HasSetting(Ratings.Movies.DisableEndTime)</param>
+                        <param name="infolabels">$PARAM[container]$PARAM[listitem]</param>
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
@@ -291,6 +313,7 @@
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,tvshow) | String.IsEqual($PARAM[container]$PARAM[listitem].DBType,season)</param>
                         <param name="list">$PARAM[ratings_id]2</param>
                         <param name="extra_slots">Skin.HasSetting(Ratings.TVShows.DisableStatus)</param>
+                        <param name="infolabels">$PARAM[container]$PARAM[listitem]</param>
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
@@ -299,6 +322,7 @@
                         <param name="visible">String.IsEqual($PARAM[container]$PARAM[listitem].DBType,episode)</param>
                         <param name="list">$PARAM[ratings_id]3</param>
                         <param name="extra_slots">Skin.HasSetting(Ratings.Episodes.DisableEndTime)</param>
+                        <param name="infolabels">$PARAM[container]$PARAM[listitem]</param>
                         <param name="service">$PARAM[service]</param>
                         <param name="source">$PARAM[source]</param>
                         <param name="source_prefix">$PARAM[source_prefix]</param>
