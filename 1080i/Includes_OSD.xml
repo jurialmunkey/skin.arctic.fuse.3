@@ -271,10 +271,15 @@
             <include>Animation_SlideIn_Dialog</include>
             <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
 
-            <include content="DialogSettings_OSD_Heading">
-                <param name="id">0</param>
-                <param name="label">$PARAM[header]</param>
-            </include>
+            <control type="group">
+                <include content="OSD_Stream_ListSlide">
+                    <param name="id">$PARAM[id]</param>
+                </include>
+                <include content="DialogSettings_OSD_Heading">
+                    <param name="id">0</param>
+                    <param name="label">$PARAM[header]</param>
+                </include>
+            </control>
 
             <include content="List_Core">
                 <param name="orientation">vertical</param>
@@ -297,6 +302,9 @@
                 <onup>noop</onup>
                 <onleft>noop</onleft>
                 <onright>noop</onright>
+                <include content="OSD_Stream_ListSlide">
+                    <param name="id">$PARAM[id]</param>
+                </include>
                 <nested />
             </include>
 
@@ -307,10 +315,18 @@
             </include>
 
             <include content="DialogSettings_OSD_Spotlight">
-                <param name="label">$VAR[Label_OSD_StreamSpotlight]</param>
+                <param name="label">$PARAM[header]</param>
                 <param name="hint">&#9650; &#9660;  $LOCALIZE[424]</param>
             </include>
         </definition>
+    </include>
+
+    <!-- Short lists sit one 80px row lower for each row under five, so they end just above the spotlight -->
+    <include name="OSD_Stream_ListSlide">
+        <animation effect="slide" end="0,320" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+        <animation effect="slide" end="0,240" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
+        <animation effect="slide" end="0,160" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
+        <animation effect="slide" end="0,80" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
     </include>
 
     <!-- Download row after the offset row, opening Kodi's subtitle search -->
