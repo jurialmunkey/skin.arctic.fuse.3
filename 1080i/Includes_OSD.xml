@@ -276,8 +276,7 @@
                     <param name="id">$PARAM[id]</param>
                 </include>
                 <include content="DialogSettings_OSD_Heading">
-                    <param name="id">0</param>
-                    <param name="label">$PARAM[header]</param>
+                    <param name="list">$PARAM[id]</param>
                 </include>
             </control>
 
@@ -293,7 +292,7 @@
                 <param name="offset_y">0</param>
                 <param name="misc">$PARAM[enabled]</param>
                 <param name="preloaditems">0</param>
-                <right>0</right>
+                <right>-40</right>
                 <width>osd_streamrow_w</width>
                 <top>180</top>
                 <height>400</height>
@@ -311,14 +310,23 @@
             <include content="DialogSettings_OSD_Scrollbar">
                 <top>180</top>
                 <bottom>500</bottom>
-                <centerright>-20</centerright>
-            </include>
-
-            <include content="DialogSettings_OSD_Spotlight">
-                <param name="label">$PARAM[header]</param>
-                <param name="hint">&#9650; &#9660;  $LOCALIZE[424]</param>
+                <centerright>-60</centerright>
             </include>
         </definition>
+    </include>
+
+    <!-- Kept out of the list's group with no Visible animation, so it stays put when a slider opens and the slider shows the same spotlight in its place -->
+    <include name="OSD_Stream_Spotlight">
+        <control type="group">
+            <visible>!Window.IsVisible(DialogSettings.xml) + !$EXP[Exp_OSD_SliderVisible]</visible>
+            <include content="Animation_SlideIn_Dialog">
+                <param name="visible_condition">false</param>
+            </include>
+            <include content="DialogSettings_OSD_Spotlight">
+                <param name="id">0</param>
+                <param name="label">$PARAM[header]</param>
+            </include>
+        </control>
     </include>
 
     <!-- Short lists sit one 80px row lower for each row under five, so they end just above the spotlight -->
@@ -350,7 +358,6 @@
                 <include content="OSD_Stream_Row">
                     <param name="id">$PARAM[id]</param>
                     <param name="buttonid">$PARAM[buttonid]</param>
-                    <param name="header">$PARAM[header]</param>
                     <param name="enabled">$PARAM[enabled]</param>
                     <content>plugin://script.skinvariables?info=get_player_streams&amp;stream_type=$PARAM[stream_type]&amp;reload=$INFO[Window.Property(UID)]</content>
                     <!-- Offset row after the streams. The list's own onclick overrides item onclicks, so the row names its slider action in a property instead -->
@@ -374,6 +381,9 @@
                     <content>plugin://script.skinvariables?info=get_delay_label&amp;value=$INFO[$PARAM[slider_value]]</content>
                 </include>
             </control>
+            <include content="OSD_Stream_Spotlight">
+                <param name="header">$PARAM[header]</param>
+            </include>
         </definition>
     </include>
 

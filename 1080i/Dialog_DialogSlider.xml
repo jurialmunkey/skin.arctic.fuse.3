@@ -265,20 +265,20 @@
         </definition>
     </include>
 
-    <!-- Over the OSD settings the ruler quickly fades in and out. Otherwise it slides in with the spotlight -->
+    <!-- Over the OSD settings and stream lists the ruler quickly fades in and out. Otherwise it slides in with the spotlight -->
     <include name="DialogSlider_RulerAnimation">
         <include content="Animation_SlideIn_Dialog">
-            <param name="windowopen_condition">!Window.IsVisible(DialogSettings.xml)</param>
+            <param name="windowopen_condition">!$EXP[Exp_OSD_SpotlightList]</param>
         </include>
         <include content="Animation_Fade_In">
             <param name="type">WindowOpen</param>
             <param name="time">150</param>
-            <param name="condition">Window.IsVisible(DialogSettings.xml)</param>
+            <param name="condition">$EXP[Exp_OSD_SpotlightList]</param>
         </include>
         <include content="Animation_Fade_Out">
             <param name="type">WindowClose</param>
             <param name="time">150</param>
-            <param name="condition">Window.IsVisible(DialogSettings.xml)</param>
+            <param name="condition">$EXP[Exp_OSD_SpotlightList]</param>
         </include>
     </include>
 
@@ -331,7 +331,7 @@
     </include>
 
     <!-- The OSD settings spotlight in the same place as in DialogSettings, with the slider value before the key hints. DialogSlider leaves label empty for Kodi to set label 10.
-         Opened from the OSD settings it appears without animating, so it reads as the same element -->
+         Opened from the OSD settings or stream lists it appears without animating, so it reads as the same element -->
     <include name="DialogSlider_Spotlight">
         <param name="id">10</param>
         <param name="label" />
@@ -343,7 +343,7 @@
                 <width>1200</width>
                 <include content="Animation_SlideIn_Dialog">
                     <param name="visible_condition">false</param>
-                    <param name="windowopen_condition">!Window.IsVisible(DialogSettings.xml)</param>
+                    <param name="windowopen_condition">!$EXP[Exp_OSD_SpotlightList]</param>
                 </include>
                 <include content="DialogSettings_OSD_Spotlight">
                     <param name="id">$PARAM[id]</param>

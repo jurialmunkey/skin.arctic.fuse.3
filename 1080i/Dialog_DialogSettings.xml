@@ -24,12 +24,13 @@
         <include>DialogSettings_Main</include>
     </include>
 
-    <!-- OSD layout: the settings list on the right, then the focused setting's name large with the key hints,
+    <!-- OSD layout: the settings list on the right, then the dialog heading large with the key hints,
          ending above the OSD seekbar so the OSD buttons stay clear below -->
     <include name="DialogSettings_OSD">
         <include content="DialogSettings_Button_Templates">
             <param name="fg">main_fg</param>
             <param name="fill">main_fg_12</param>
+            <param name="slider_focus">true</param>
         </include>
         <control type="group">
             <right>view_pad</right>
@@ -55,46 +56,45 @@
         <control type="image">
             <right>0</right>
             <width>1040</width>
-            <visible>Window.IsVisible(DialogSettings.xml) | $EXP[Exp_OSD_StreamRows]</visible>
+            <visible>$EXP[Exp_OSD_SpotlightList]</visible>
             <include>Animation_FadeIn</include>
             <include>Animation_FadeOut</include>
             <texture colordiffuse="shadow_back" border="0,4,0,4">common/gradient-h.png</texture>
         </control>
     </include>
 
-    <!-- Defaults to label 2, which Kodi fills in DialogSettings. The OSD stream windows pass their own header -->
+    <!-- Small label above the list with its item count. list: the list's control id -->
     <include name="DialogSettings_OSD_Heading">
-        <param name="id">2</param>
-        <param name="label" />
+        <param name="list">5</param>
         <definition>
-            <control type="label" id="$PARAM[id]">
+            <control type="label">
                 <top>120</top>
                 <height>40</height>
                 <align>right</align>
                 <font>font_hint_bold</font>
                 <textcolor>main_fg_50</textcolor>
-                <label>$PARAM[label]</label>
+                <label>$INFO[Container($PARAM[list]).NumItems,, $LOCALIZE[31022]]</label>
             </control>
         </definition>
     </include>
 
-    <!-- Grouplist 5 shows five 80px rows; scrollbar 61 sits just outside its right edge -->
+    <!-- Grouplist 5 shows five 80px rows. It overhangs by the controls' 40px text offset so their labels align with the heading and spotlight; scrollbar 61 sits just outside it -->
     <include name="DialogSettings_OSD_List">
         <control type="group">
-            <right>-40</right>
-            <width>760</width>
+            <right>-80</right>
+            <width>800</width>
             <top>180</top>
             <height>400</height>
             <control type="grouplist" id="5">
                 <right>40</right>
                 <pagecontrol>61</pagecontrol>
-                <onleft>Action(Select)</onleft>
-                <onright>Action(Select)</onright>
+                <onright>61</onright>
             </control>
             <include content="DialogSettings_OSD_Scrollbar">
                 <top>0</top>
                 <bottom>0</bottom>
                 <centerright>20</centerright>
+                <onleft>5</onleft>
             </include>
         </control>
     </include>
@@ -110,11 +110,11 @@
     </include>
 
     <!-- Right aligned spotlight: a short divider, the name large, and the key hints under it, 180 tall from its bottom.
-         Defaults to the focused setting's name (System.CurrentControl). DialogSlider passes id 10 with an empty label for Kodi to fill -->
+         Defaults to label 2, the heading Kodi fills in DialogSettings. DialogSlider passes id 10 for Kodi to fill, and custom windows pass id 0 with their own label -->
     <include name="DialogSettings_OSD_Spotlight">
-        <param name="id">0</param>
-        <param name="label">$INFO[System.CurrentControl]</param>
-        <param name="hint">&#9650; &#9660;  $LOCALIZE[424]       &#9664; &#9654;  $LOCALIZE[31880]</param>
+        <param name="id">2</param>
+        <param name="label" />
+        <param name="hint">&#9650; &#9660;  $LOCALIZE[424]</param>
         <param name="bottom">280</param>
         <definition>
             <control type="group">
@@ -305,10 +305,27 @@
         </control>
     </include>
 
-    <!-- Button Definitions. fg and fill: the dialog colours, or main_fg and main_fg_12 over fullscreen video -->
+    <!-- Focus textures and colours that drop to the unfocused look while DialogSlider is open -->
+    <include name="DialogSettings_Button_SliderFocus">
+        <include content="Texture_FocusStyle">
+            <param name="include">Object_TextureFocus</param>
+            <param name="colordiffuse">$VAR[ColorDialogSettingsFocus]</param>
+        </include>
+        <focusedcolor>$VAR[ColorDialogSettingsFocusText]</focusedcolor>
+        <textureradioonfocus colordiffuse="$VAR[ColorDialogSettingsFocusText]">buttons/check-on.png</textureradioonfocus>
+        <textureradioofffocus colordiffuse="$VAR[ColorDialogSettingsFocusText]">buttons/check-off.png</textureradioofffocus>
+        <textureupfocus flipy="true" colordiffuse="$VAR[ColorDialogSettingsFocusArrow]">buttons/triangle-down.png</textureupfocus>
+        <texturedownfocus colordiffuse="$VAR[ColorDialogSettingsFocusArrow]">buttons/triangle-down.png</texturedownfocus>
+        <include content="Texture_Slider_NibFocus">
+            <param name="colordiffuse">$VAR[ColorDialogSettingsFocusNib]</param>
+        </include>
+    </include>
+
+    <!-- Button Definitions. fg and fill: the dialog colours, or main_fg and main_fg_12 over fullscreen video. slider_focus: hide the focus look under DialogSlider -->
     <include name="DialogSettings_Button_Templates">
         <param name="fg">dialog_fg</param>
         <param name="fill">dialog_fg_06</param>
+        <param name="slider_focus">false</param>
         <definition>
             <include content="Settings_Button">
                 <param name="id">7</param>
@@ -316,6 +333,7 @@
                 <param name="dialog">true</param>
                 <param name="fg">$PARAM[fg]</param>
                 <param name="fill">$PARAM[fill]</param>
+                <include condition="$PARAM[slider_focus]">DialogSettings_Button_SliderFocus</include>
                 <description>Default Setting Button</description>
             </include>
 
@@ -325,6 +343,7 @@
                 <param name="dialog">true</param>
                 <param name="fg">$PARAM[fg]</param>
                 <param name="fill">$PARAM[fill]</param>
+                <include condition="$PARAM[slider_focus]">DialogSettings_Button_SliderFocus</include>
                 <description>Default Setting Button</description>
             </include>
 
@@ -334,6 +353,7 @@
                 <param name="dialog">true</param>
                 <param name="fg">$PARAM[fg]</param>
                 <param name="fill">$PARAM[fill]</param>
+                <include condition="$PARAM[slider_focus]">DialogSettings_Button_SliderFocus</include>
                 <description>Default Setting Button</description>
             </include>
 
@@ -351,6 +371,7 @@
                 <param name="dialog">true</param>
                 <param name="fg">$PARAM[fg]</param>
                 <param name="fill">$PARAM[fill]</param>
+                <include condition="$PARAM[slider_focus]">DialogSettings_Button_SliderFocus</include>
                 <description>Default Setting Button</description>
             </include>
 
@@ -360,6 +381,7 @@
                 <param name="dialog">true</param>
                 <param name="fg">$PARAM[fg]</param>
                 <param name="fill">$PARAM[fill]</param>
+                <include condition="$PARAM[slider_focus]">DialogSettings_Button_SliderFocus</include>
                 <description>Default Setting Button</description>
                 <textwidth>settings_slider_text_w</textwidth>
             </include>
@@ -378,6 +400,7 @@
                 <param name="dialog">true</param>
                 <param name="fg">$PARAM[fg]</param>
                 <param name="fill">$PARAM[fill]</param>
+                <include condition="$PARAM[slider_focus]">DialogSettings_Button_SliderFocus</include>
                 <description>Default Setting Button</description>
             </include>
         </definition>
