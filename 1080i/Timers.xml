@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <timers>
     <timer>
+        <name>weather_trend</name>
+        <description>Recalculate the MyWeather chart when the daily temperatures change.</description>
+        <start reset="true">Window.IsActive(weather) + Weather.IsFetched + !String.IsEqual(Control.GetLabel(8050),Window(weather).Property(Weather.Trend.Source))</start>
+        <stop>!Window.IsActive(weather) | !Weather.IsFetched | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(weather_trend),1)</stop>
+        <onstop condition="Window.IsActive(weather) + Weather.IsFetched">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend.json,use_rules=True)</onstop>
+    </timer>
+    <timer>
         <name>splashtest_autotime</name>
         <description>Advance the splash preview by one hour every three seconds.</description>
         <!-- Timers are loaded directly, without the includes expression expansion pass. -->

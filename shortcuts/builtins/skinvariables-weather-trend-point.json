@@ -1,0 +1,131 @@
+{
+    "regex": {
+        "negative_current": {
+            "input": "-{temperature}",
+            "regex": "^--",
+            "value": ""
+        },
+        "negative_next": {
+            "input": "-{following}",
+            "regex": "^--",
+            "value": ""
+        }
+    },
+    "operations": [
+        {
+            "sums": {
+                "current": ["{maximum}", "{negative_current}"],
+                "next": ["{maximum}", "{negative_next}"]
+            }
+        },
+        {
+            "sums": {
+                "current_half_degree": ["{current}", "{current}"],
+                "next_half_degree": ["{next}", "{next}"],
+                "current_two_degrees": ["{current}", "{current}", "{current}", "{current}", "{current}", "5"],
+                "next_two_degrees": ["{next}", "{next}", "{next}", "{next}", "{next}", "5"],
+                "current_five_degrees": ["{current}", "{current}", "5"],
+                "next_five_degrees": ["{next}", "{next}", "5"],
+                "current_ten_degrees": ["{current}", "5"],
+                "next_ten_degrees": ["{next}", "5"],
+                "current_hundred_degrees": ["{current}", "50"],
+                "next_hundred_degrees": ["{next}", "50"]
+            }
+        },
+        {
+            "values": {
+                "current_scaled": [
+                    {
+                        "rules": ["{degrees}==0.5"],
+                        "value": "{current_half_degree}"
+                    },
+                    {
+                        "rules": ["{degrees}==2"],
+                        "value": "{current_two_degrees}"
+                    },
+                    {
+                        "rules": ["{degrees}==5"],
+                        "value": "{current_five_degrees}"
+                    },
+                    {
+                        "rules": ["{degrees}==10"],
+                        "value": "{current_ten_degrees}"
+                    },
+                    {
+                        "rules": ["{degrees}==100"],
+                        "value": "{current_hundred_degrees}"
+                    },
+                    "{current}"
+                ],
+                "next_scaled": [
+                    {
+                        "rules": ["{degrees}==0.5"],
+                        "value": "{next_half_degree}"
+                    },
+                    {
+                        "rules": ["{degrees}==2"],
+                        "value": "{next_two_degrees}"
+                    },
+                    {
+                        "rules": ["{degrees}==5"],
+                        "value": "{next_five_degrees}"
+                    },
+                    {
+                        "rules": ["{degrees}==10"],
+                        "value": "{next_ten_degrees}"
+                    },
+                    {
+                        "rules": ["{degrees}==100"],
+                        "value": "{next_hundred_degrees}"
+                    },
+                    "{next}"
+                ],
+                "decimal_places": [
+                    {
+                        "rules": ["{degrees}==100"],
+                        "value": "[0-9][0-9]$"
+                    },
+                    {
+                        "rules": ["{degrees}==2||{degrees}==5||{degrees}==10"],
+                        "value": "[0-9]$"
+                    },
+                    "^$"
+                ]
+            }
+        },
+        {
+            "regex": {
+                "current_step": {
+                    "input": "00{current_scaled}",
+                    "regex": "{decimal_places}",
+                    "value": ""
+                },
+                "next_step": {
+                    "input": "00{next_scaled}",
+                    "regex": "{decimal_places}",
+                    "value": ""
+                }
+            }
+        },
+        {
+            "sums": {
+                "position": ["{current_step}"],
+                "delta": ["{next_step}", "-{current_step}"]
+            }
+        },
+        {
+            "regex": {
+                "slope": {
+                    "input": "{delta}",
+                    "regex": "^-",
+                    "value": ""
+                }
+            }
+        }
+    ],
+    "actions": [
+        "SetProperty(Weather.Trend.{key}.Position,{position},weather)",
+        "SetProperty(Weather.Trend.{key}.Delta,{delta},weather)",
+        "SetProperty(Weather.Trend.{key}.Slope,{slope},weather)"
+    ]
+}
