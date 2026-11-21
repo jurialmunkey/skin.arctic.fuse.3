@@ -372,8 +372,8 @@
         <value>special://skin/extras/icons/circle-cancel.png</value>
     </variable>
 
-    <!-- Shortcut item options. container is the shortcuts list, include_after_toggle adds options straight after the enable button. static/static_home mark the fixed entries of the hubs window (1115),
-         whose options act on skin settings: Search and Power can only be enabled/disabled, Home is always enabled -->
+    <!-- Shortcut item options. container is the shortcuts list, include_after_toggle adds options straight after the enable button. static/static_home/static_power mark fixed entries of the hubs window (1115),
+         whose options act on skin settings: Search and Power can only be enabled/disabled, Power also has a configurable icon, Home is always enabled -->
     <include name="DialogShortcuts_Items_Basic">
         <param name="container">22001</param>
         <param name="enabled">$EXP[DialogShortcuts_IsEnabled_Expression]</param>
@@ -381,6 +381,7 @@
         <param name="toggle_label">$VAR[Label_Shortcut_EnableDisable]</param>
         <param name="static">false</param>
         <param name="static_home">false</param>
+        <param name="static_power">false</param>
         <param name="onback">22904</param>
         <param name="include_after_toggle">Object_Null</param>
         <param name="widgets">$EXP[DialogShortcuts_IsWidgetMode_Expression]</param>
@@ -486,10 +487,11 @@
             <param name="label2">$INFO[Container($PARAM[container]).ListItem.Icon]</param>
             <onclick condition="![$PARAM[static]]">SetProperty(url,$INFO[Container($PARAM[container]).ListItem.Property(url)],1117)</onclick>
             <onclick condition="$PARAM[static_home]">SetProperty(setting,HomeSwitcher.Home.Icon,1117)</onclick>
+            <onclick condition="$PARAM[static_power]">SetProperty(setting,HomeSwitcher.Power.Icon,1117)</onclick>
             <onclick>ActivateWindow(1117)</onclick>
             <onback>$PARAM[onback]</onback>
             <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
+            <visible>![$PARAM[static]] | $PARAM[static_home] | $PARAM[static_power]</visible>
         </include>
         </definition>
     </include>
