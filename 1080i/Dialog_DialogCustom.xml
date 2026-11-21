@@ -226,6 +226,59 @@
     <include name="DialogCustom_Select_Items">
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSelectItems),DialogCustom_Buttons_Items_Select)">DialogCustom_Buttons_Items_Select</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSelectItems),DialogCustom_SearchStyles_Select)">DialogCustom_SearchStyles_Select</include>
+        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSelectItems),DialogCustom_FlixArtSize_Select)">DialogCustom_FlixArtSize_Select</include>
+    </include>
+
+    <include name="DialogCustom_FlixArtSize_Select">
+        <include content="DialogCustom_FlixArtSize_Select_Item">
+            <param name="id">8001</param>
+            <param name="groupid">8101</param>
+            <param name="label">$LOCALIZE[602]</param>
+            <param name="label2">1280x720</param>
+            <param name="selected">String.IsEmpty(Skin.String(Skin.FlixArt.Size))</param>
+            <param name="action">Skin.Reset(Skin.FlixArt.Size)</param>
+        </include>
+        <include content="DialogCustom_FlixArtSize_Select_Item">
+            <param name="id">8002</param>
+            <param name="groupid">8102</param>
+            <param name="label">$LOCALIZE[31439]</param>
+            <param name="label2">1440x810</param>
+            <param name="selected">Skin.String(Skin.FlixArt.Size,Large)</param>
+            <param name="action">Skin.SetString(Skin.FlixArt.Size,Large)</param>
+        </include>
+        <include content="DialogCustom_FlixArtSize_Select_Item">
+            <param name="id">8003</param>
+            <param name="groupid">8103</param>
+            <param name="label">$LOCALIZE[31440]</param>
+            <param name="label2">1600x900</param>
+            <param name="selected">Skin.String(Skin.FlixArt.Size,ExtraLarge)</param>
+            <param name="action">Skin.SetString(Skin.FlixArt.Size,ExtraLarge)</param>
+        </include>
+        <include content="DialogCustom_FlixArtSize_Select_Item">
+            <param name="id">8004</param>
+            <param name="groupid">8104</param>
+            <param name="label">$LOCALIZE[244]</param>
+            <param name="label2">1920x1080</param>
+            <param name="selected">Skin.String(Skin.FlixArt.Size,FullScreen)</param>
+            <param name="action">Skin.SetString(Skin.FlixArt.Size,FullScreen)</param>
+        </include>
+    </include>
+
+    <include name="DialogCustom_FlixArtSize_Select_Item">
+        <include content="Button_Dialog_Setting">
+            <param name="dialog">true</param>
+            <param name="id">$PARAM[id]</param>
+            <param name="groupid">$PARAM[groupid]</param>
+            <param name="control">radiobutton</param>
+            <param name="istext">true</param>
+            <selected>$PARAM[selected]</selected>
+            <param name="label">$PARAM[label]</param>
+            <param name="label2">$PARAM[label2]</param>
+            <param name="has_label2">true</param>
+            <onclick>$PARAM[action]</onclick>
+            <onclick>Dialog.Close(1119,true)</onclick>
+            <include>DialogCustom_Reload_1118</include>
+        </include>
     </include>
 
     <include name="DialogCustom_Settings_Items_BackgroundStyle">
@@ -305,48 +358,26 @@
 
         <include content="Button_Divider_Label">
             <param name="id">8007</param>
-            <label>$LOCALIZE[31441]</label>
+            <label>$LOCALIZE[33063]</label>
         </include>
 
-        <include content="Button_Dialog_Setting">
+        <include content="Settings_Button">
             <param name="dialog">true</param>
             <param name="id">8008</param>
-            <param name="groupid">8108</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <selected>String.IsEmpty(Skin.String(Skin.FlixArt.Size))</selected>
-            <param name="label">$LOCALIZE[602]</param>
-            <param name="label2">1280x720</param>
-            <param name="has_label2">true</param>
-            <onclick>Skin.Reset(Skin.FlixArt.Size)</onclick>
-            <include>DialogCustom_Reload_1118</include>
+            <label>$LOCALIZE[31441]</label>
+            <label2>$VAR[Label_Setting_FlixArt_Size]</label2>
+            <onclick>SetProperty(CustomDialogSelectItems,DialogCustom_FlixArtSize_Select,Home)</onclick>
+            <onclick>SetProperty(CustomDialogSelectTitle,$LOCALIZE[31441],Home)</onclick>
+            <onclick>ActivateWindow(1119)</onclick>
         </include>
 
-        <include content="Button_Dialog_Setting">
+        <include content="Settings_Button" condition="$EXP[Exp_TMDbHelper_IsBlur]">
             <param name="dialog">true</param>
             <param name="id">8009</param>
-            <param name="groupid">8109</param>
             <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <selected>Skin.String(Skin.FlixArt.Size,Large)</selected>
-            <param name="label">$LOCALIZE[31439]</param>
-            <param name="label2">1440x810</param>
-            <param name="has_label2">true</param>
-            <onclick>Skin.SetString(Skin.FlixArt.Size,Large)</onclick>
-            <include>DialogCustom_Reload_1118</include>
-        </include>
-
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">8010</param>
-            <param name="groupid">8110</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <selected>Skin.String(Skin.FlixArt.Size,ExtraLarge)</selected>
-            <param name="label">$LOCALIZE[31440]</param>
-            <param name="label2">1600x900</param>
-            <param name="has_label2">true</param>
-            <onclick>Skin.SetString(Skin.FlixArt.Size,ExtraLarge)</onclick>
+            <label>$LOCALIZE[31297]</label>
+            <selected>Skin.HasSetting(Background.ExtraFanart)</selected>
+            <onclick>Skin.ToggleSetting(Background.ExtraFanart)</onclick>
             <include>DialogCustom_Reload_1118</include>
         </include>
     </include>

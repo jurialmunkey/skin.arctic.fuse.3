@@ -35,9 +35,7 @@
                 <include content="Texture_FlixArt_Foreground">
                     <param name="variant">$PARAM[diffuse_variant]</param>
                 </include>
-                <animation effect="fade" start="100" end="0" reversible="false" time="300" condition="$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
-                <animation effect="fade" start="0" end="100" reversible="false" delay="300" time="background_fadetime" condition="!$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
-                <include>Background_NotVideo</include>
+                <include>Background_FlixArt_Visibility</include>
             </control>
             <control type="image">
                 <fadetime>$PARAM[fadetime]</fadetime>
@@ -50,9 +48,25 @@
                     <param name="variant">$PARAM[diffuse_variant_mirror]</param>
                     <param name="flipy">true</param>
                 </include>
-                <animation effect="fade" start="100" end="0" reversible="false" time="300" condition="$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
-                <animation effect="fade" start="0" end="100" reversible="false" delay="300" time="background_fadetime" condition="!$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
-                <include>Background_NotVideo</include>
+                <include>Background_FlixArt_Visibility</include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Background_FlixArt_Visibility">
+        <animation effect="fade" start="100" end="0" reversible="false" time="300" condition="$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
+        <animation effect="fade" start="0" end="100" reversible="false" delay="300" time="background_fadetime" condition="!$EXP[Exp_BackgroundArtwork_IsHidden]">Conditional</animation>
+        <include>Background_NotVideo</include>
+    </include>
+
+    <include name="Background_FlixArt_FullScreen">
+        <param name="fadetime">background_fadetime</param>
+        <definition>
+            <control type="image">
+                <fadetime>$PARAM[fadetime]</fadetime>
+                <aspectratio>scale</aspectratio>
+                <texture background="true">$VAR[Image_Foreground]</texture>
+                <include>Background_FlixArt_Visibility</include>
             </control>
         </definition>
     </include>
@@ -60,7 +74,10 @@
     <include name="Background_Artwork">
         <param name="fadetime">background_fadetime</param>
         <definition>
-            <include content="Background_FlixArt">
+            <include content="Background_FlixArt_FullScreen" condition="Skin.String(Skin.FlixArt.Size,FullScreen)">
+                <param name="fadetime">$PARAM[fadetime]</param>
+            </include>
+            <include content="Background_FlixArt" condition="!Skin.String(Skin.FlixArt.Size,FullScreen)">
                 <param name="fadetime">$PARAM[fadetime]</param>
             </include>
         </definition>
