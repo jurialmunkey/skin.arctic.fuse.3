@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-    <!-- Sync ruler for DialogSlider. The ruler sits 50px above the OSD progress bar, which stays visible, with its baseline 140 from the top of DialogSlider_Ruler.
-         Steps are 18px apart with step 0 at the left end. Minor ticks fall on every second step, major ticks every ten steps (180px scales) or eight (144px scales). -->
+    <!-- Sync ruler for DialogSlider. The ruler matches the OSD settings list width, under the spotlight, with its baseline 140 from the top of DialogSlider_Ruler
+         on the same line as the OSD header divider. Steps are 9px apart with step 0 at the left end. Minor ticks fall on every second step, major ticks every ten steps (90px scales) or eight (72px scales). -->
 
-    <!-- One step of the ruler, a 140px group centred on its 18px slice. The grouplists overlap the groups so each starts 18px after the last.
+    <!-- One step of the ruler, a 140px group centred on its 9px slice. The grouplists overlap the groups so each starts 9px after the last.
          Groups always stay visible so the grouplist keeps its spacing; each piece has its own condition.
          Back layer (front false): the minor tick on even steps, the major tick and label where the scale has one, and the fill.
-         Front layer (front true): the nib and value pill, drawn over the back layer.
+         Front layer (front true): the nib, drawn over the back layer.
          index: the step from 0 to 80. minor: an even step. labelled: a step that is major in some scale, with major its condition -->
     <include name="DialogSlider_RulerStep">
         <param name="minor">false</param>
@@ -36,7 +36,6 @@
                 <param name="upper">$PARAM[upper]</param>
             </include>
             <include content="DialogSlider_RulerStep_Nib" condition="$PARAM[front]">
-                <param name="pill_label">$PARAM[pill_label]</param>
                 <param name="visible">Integer.IsEqual($PARAM[index],$PARAM[nib])</param>
             </include>
         </control>
@@ -93,18 +92,18 @@
     <!-- The fill from the origin to the nib: the whole slice between the ends, and the half slices towards the fill at each end -->
     <include name="DialogSlider_RulerStep_Fill">
         <include content="DialogSlider_RulerStep_FillBar">
-            <param name="left">61</param>
-            <param name="width">18</param>
+            <param name="left">66</param>
+            <param name="width">9</param>
             <param name="visible">Integer.IsGreater($PARAM[index],$PARAM[lower]) + Integer.IsLess($PARAM[index],$PARAM[upper])</param>
         </include>
         <include content="DialogSlider_RulerStep_FillBar">
-            <param name="left">61</param>
-            <param name="width">9</param>
+            <param name="left">66</param>
+            <param name="width">4</param>
             <param name="visible">Integer.IsEqual($PARAM[index],$PARAM[upper]) + !Integer.IsEqual($PARAM[lower],$PARAM[upper])</param>
         </include>
         <include content="DialogSlider_RulerStep_FillBar">
             <param name="left">70</param>
-            <param name="width">9</param>
+            <param name="width">5</param>
             <param name="visible">Integer.IsEqual($PARAM[index],$PARAM[lower]) + !Integer.IsEqual($PARAM[lower],$PARAM[upper])</param>
         </include>
     </include>
@@ -115,7 +114,7 @@
             <top>136</top>
             <width>$PARAM[width]</width>
             <height>8</height>
-            <texture colordiffuse="main_fg_100">common/white.png</texture>
+            <texture colordiffuse="$VAR[ColorHighlight]">common/white.png</texture>
             <visible>$PARAM[visible]</visible>
         </control>
     </include>
@@ -137,154 +136,123 @@
                 <height>28</height>
                 <texture colordiffuse="main_fg_100">common/circle.png</texture>
             </control>
-            <control type="image">
-                <left>69</left>
-                <top>80</top>
-                <width>2</width>
-                <height>34</height>
-                <texture colordiffuse="main_fg_100">common/white.png</texture>
-            </control>
-            <control type="image">
-                <left>0</left>
-                <top>38</top>
-                <width>140</width>
-                <height>40</height>
-                <texture colordiffuse="main_fg_100" border="20">common/dialog.png</texture>
-            </control>
-            <control type="label">
-                <left>0</left>
-                <top>38</top>
-                <width>140</width>
-                <height>40</height>
-                <align>center</align>
-                <aligny>center</aligny>
-                <font>font_tiny_bold</font>
-                <textcolor>main_bg_90</textcolor>
-                <label>$PARAM[pill_label]</label>
-            </control>
         </control>
     </include>
 
     <!-- The 81 ruler steps from 0 to 80 -->
     <include name="DialogSlider_RulerSteps">
-        <include content="DialogSlider_RulerStep"><param name="index">0</param><param name="minor">true</param><param name="labelled">true</param><param name="major">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">1</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">2</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">3</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">4</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">5</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">6</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">7</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">8</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">9</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">10</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">11</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">12</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">13</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">14</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">15</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">16</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">17</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">18</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">19</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">20</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">21</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">22</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">23</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">24</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">25</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">26</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">27</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">28</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">29</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">30</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">31</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">32</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">33</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">34</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">35</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">36</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">37</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">38</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">39</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">40</param><param name="minor">true</param><param name="labelled">true</param><param name="major">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">41</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">42</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">43</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">44</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">45</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">46</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">47</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">48</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">49</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">50</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">51</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">52</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">53</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">54</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">55</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">56</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">57</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">58</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">59</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">60</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">61</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">62</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">63</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">64</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">65</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">66</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">67</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">68</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">69</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">70</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">71</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">72</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">73</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">74</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">75</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">76</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">77</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">78</param><param name="minor">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">79</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
-        <include content="DialogSlider_RulerStep"><param name="index">80</param><param name="minor">true</param><param name="labelled">true</param><param name="major">true</param><param name="front">$PARAM[front]</param><param name="pill_label">$PARAM[pill_label]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">0</param><param name="minor">true</param><param name="labelled">true</param><param name="major">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">1</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">2</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">3</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">4</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">5</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">6</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">7</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">8</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">9</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">10</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">11</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">12</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">13</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">14</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">15</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">16</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">17</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">18</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">19</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">20</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">21</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">22</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">23</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">24</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">25</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">26</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">27</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">28</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">29</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">30</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">31</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">32</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">33</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">34</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">35</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">36</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">37</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">38</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">39</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">40</param><param name="minor">true</param><param name="labelled">true</param><param name="major">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">41</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">42</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">43</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">44</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">45</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">46</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">47</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">48</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">49</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">50</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">51</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">52</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">53</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">54</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">55</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">56</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">57</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">58</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">59</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">60</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">61</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">62</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">63</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">64</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">65</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">66</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">67</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">68</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">69</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">70</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerDecimal]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">71</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">72</param><param name="minor">true</param><param name="labelled">true</param><param name="major">$EXP[Exp_DialogSlider_RulerSpeed]</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">73</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">74</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">75</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">76</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">77</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">78</param><param name="minor">true</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">79</param><param name="front">$PARAM[front]</param></include>
+        <include content="DialogSlider_RulerStep"><param name="index">80</param><param name="minor">true</param><param name="labelled">true</param><param name="major">true</param><param name="front">$PARAM[front]</param></include>
     </include>
 
-    <!-- One layer of the ruler: a grouplist of the steps, each group 140px wide and 18px after the last.
-         It starts 70px left of step 0 and is 1580px wide so the pill at either end is not clipped -->
+    <!-- One layer of the ruler: a grouplist of the steps, each group 140px wide and 9px after the last.
+         It starts 70px left of step 0 and is 860px wide so the groups at either end are not clipped -->
     <include name="DialogSlider_RulerLayer">
         <control type="grouplist">
             <left>-70</left>
             <top>0</top>
-            <width>1580</width>
+            <width>860</width>
             <height>200</height>
             <orientation>horizontal</orientation>
-            <itemgap>-122</itemgap>
+            <itemgap>-131</itemgap>
             <scrolltime>0</scrolltime>
             <visible>$PARAM[visible]</visible>
             <include content="DialogSlider_RulerSteps">
                 <param name="front">$PARAM[front]</param>
-                <param name="pill_label">$PARAM[pill_label]</param>
             </include>
         </control>
     </include>
 
-    <!-- Ruler for one known scale: ticks, labels and fill behind, nib and pill in front so later steps do not draw over them.
+    <!-- Ruler for one known scale: ticks, labels and fill behind, nib in front so later steps do not draw over it.
          The steps compare their index with the properties SkinVariables run_sliderruler sets. The nib waits until the script has set them -->
     <include name="DialogSlider_RulerScale">
-        <param name="pill_label">$INFO[Window(Home).Property(SkinVariables.SliderRuler.Label)]</param>
-        <definition>
-            <include content="DialogSlider_RulerLayer">
-                <param name="visible">$PARAM[visible]</param>
-                <param name="front">false</param>
-                <param name="pill_label" />
-            </include>
-            <include content="DialogSlider_RulerLayer">
-                <param name="visible">$PARAM[visible] + !String.IsEmpty(Window(Home).Property(SkinVariables.SliderRuler.Ready))</param>
-                <param name="front">true</param>
-                <param name="pill_label">$PARAM[pill_label]</param>
-            </include>
-        </definition>
+        <include content="DialogSlider_RulerLayer">
+            <param name="visible">$PARAM[visible]</param>
+            <param name="front">false</param>
+        </include>
+        <include content="DialogSlider_RulerLayer">
+            <param name="visible">$PARAM[visible] + !String.IsEmpty(Window(Home).Property(SkinVariables.SliderRuler.Ready))</param>
+            <param name="front">true</param>
+        </include>
     </include>
 
     <!-- Starts SkinVariables run_sliderruler for the window. It follows the value and range variables named here
@@ -297,6 +265,23 @@
         </definition>
     </include>
 
+    <!-- Over the OSD settings the ruler quickly fades in and out. Otherwise it slides in with the spotlight -->
+    <include name="DialogSlider_RulerAnimation">
+        <include content="Animation_SlideIn_Dialog">
+            <param name="windowopen_condition">!Window.IsVisible(DialogSettings.xml)</param>
+        </include>
+        <include content="Animation_Fade_In">
+            <param name="type">WindowOpen</param>
+            <param name="time">150</param>
+            <param name="condition">Window.IsVisible(DialogSettings.xml)</param>
+        </include>
+        <include content="Animation_Fade_Out">
+            <param name="type">WindowClose</param>
+            <param name="time">150</param>
+            <param name="condition">Window.IsVisible(DialogSettings.xml)</param>
+        </include>
+    </include>
+
     <include name="DialogSlider_RulerBaseline">
         <control type="image">
             <centertop>140</centertop>
@@ -306,12 +291,12 @@
         </control>
     </include>
 
-    <!-- The ruler's area above the OSD progress bar. Nest the frame, labels, lists and the focusable control -->
+    <!-- The ruler's area under the spotlight, as wide as the OSD settings list. Nest the frame, labels, lists and the focusable control -->
     <include name="DialogSlider_RulerGroup">
         <control type="group">
-            <left>view_osd_l</left>
-            <right>view_osd_r</right>
-            <bottom>120</bottom>
+            <right>view_pad</right>
+            <width>720</width>
+            <bottom>180</bottom>
             <height>200</height>
             <nested />
         </control>
@@ -325,7 +310,6 @@
             </include>
             <include content="DialogSlider_RulerScale">
                 <param name="visible">$EXP[Exp_DialogSlider_Ruler]</param>
-                <param name="pill_label">$VAR[Label_DialogSlider_Pill]</param>
             </include>
 
             <!-- Kodi's slider takes left and right. For the known scales its nib is faded out (it stays focusable) and the ruler list draws the value.
@@ -346,11 +330,12 @@
         </include>
     </include>
 
-    <!-- The OSD settings spotlight in the same place as in DialogSettings. DialogSlider leaves label empty for Kodi to set label 10.
+    <!-- The OSD settings spotlight in the same place as in DialogSettings, with the slider value before the key hints. DialogSlider leaves label empty for Kodi to set label 10.
          Opened from the OSD settings it appears without animating, so it reads as the same element -->
     <include name="DialogSlider_Spotlight">
         <param name="id">10</param>
         <param name="label" />
+        <param name="value">$VAR[Label_DialogSlider_Display]</param>
         <param name="hint">$VAR[Label_DialogSlider_Hint]</param>
         <definition>
             <control type="group">
@@ -363,7 +348,7 @@
                 <include content="DialogSettings_OSD_Spotlight">
                     <param name="id">$PARAM[id]</param>
                     <param name="label">$PARAM[label]</param>
-                    <param name="hint">$PARAM[hint]</param>
+                    <param name="hint">[B]$PARAM[value][/B]       $PARAM[hint]</param>
                 </include>
             </control>
         </definition>

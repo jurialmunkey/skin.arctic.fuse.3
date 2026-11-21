@@ -173,6 +173,15 @@
 
     <expression name="Exp_BackgroundArtwork_IsSimple">[$EXP[Exp_PlainBackgroundWindows] | [Window.IsMedia + [[Window.IsVisible(DialogBusy.xml) + Integer.IsEqual(Container.NumItems,0)]]]]</expression>
 
+    <expression name="Exp_Background_HasStylePack">
+        [[Skin.String(Background.Style,surrealist) | String.IsEmpty(Skin.String(Background.Style))] + System.AddonIsEnabled(resource.images.arctic.backgrounds.surrealist)] |
+        [Skin.String(Background.Style,bauhaus) + System.AddonIsEnabled(resource.images.arctic.backgrounds.bauhaus)] |
+        [Skin.String(Background.Style,expressionist) + System.AddonIsEnabled(resource.images.arctic.backgrounds.expressionist)] |
+        [Skin.String(Background.Style,mosaic) + System.AddonIsEnabled(resource.images.arctic.backgrounds.mosaic)] |
+        [Skin.String(Background.Style,couture) + System.AddonIsEnabled(resource.images.arctic.backgrounds.couture)] |
+        [Skin.String(Background.Style,masquerade) + System.AddonIsEnabled(resource.images.arctic.backgrounds.masquerade)]
+    </expression>
+
     <expression name="Exp_FurnitureBusy_AnimationCond_DialogExtendedProgressBar">[Window.IsActive(DialogNotification.xml) | Window.IsActive(DialogBusy.xml) | Window.IsActive(DialogVolumeBar.xml)]</expression>
     <expression name="Exp_FurnitureBusy_AnimationCond_DialogNotification">[Window.IsActive(DialogExtendedProgressBar.xml) | Window.IsActive(DialogBusy.xml) | Window.IsActive(DialogVolumeBar.xml)]</expression>
     <expression name="Exp_FurnitureBusy_AnimationCond_DialogBusy">[Window.IsActive(DialogExtendedProgressBar.xml) | Window.IsActive(DialogNotification.xml) | Window.IsActive(DialogVolumeBar.xml)]</expression>
@@ -226,14 +235,15 @@
     <expression name="Exp_DialogSlider_NoiseReduction">String.IsEqual(Control.GetLabel(10),$LOCALIZE[16312])</expression>
     <expression name="Exp_DialogSlider_VolumeAmp">String.IsEqual(Control.GetLabel(10),$LOCALIZE[660])</expression>
     <expression name="Exp_DialogSlider_ToneMap">String.IsEqual(Control.GetLabel(10),$LOCALIZE[36556])</expression>
-    <!-- Ruler layouts: eight 180px segments filling from the centre, or ten 144px segments filling from the left. Zoom uses the 180px segments filling from 1.0 -->
+    <!-- Ruler layouts: eight 90px segments filling from the centre, or ten 72px segments filling from the left. Zoom uses the 90px segments filling from 1.0 -->
     <expression name="Exp_DialogSlider_CentreScale">[$EXP[Exp_DialogSlider_Delay] | $EXP[Exp_DialogSlider_Sharpness] | $EXP[Exp_DialogSlider_VerticalShift]]</expression>
     <expression name="Exp_DialogSlider_LeftScale">[$EXP[Exp_DialogSlider_Adjustment] | $EXP[Exp_DialogSlider_NoiseReduction] | $EXP[Exp_DialogSlider_VolumeAmp] | $EXP[Exp_DialogSlider_ToneMap]]</expression>
     <expression name="Exp_DialogSlider_Ruler">[$EXP[Exp_DialogSlider_CentreScale] | $EXP[Exp_DialogSlider_Zoom] | $EXP[Exp_DialogSlider_LeftScale]]</expression>
-    <!-- Ruler major ticks: every ten steps on the 180px scales, every eight on the 144px scales, including the playback speed ruler (1149) -->
+    <!-- Ruler major ticks: every ten steps on the 90px scales, every eight on the 72px scales, including the playback speed ruler (1149) -->
     <expression name="Exp_DialogSlider_RulerDecimal">[$EXP[Exp_DialogSlider_CentreScale] | $EXP[Exp_DialogSlider_Zoom] | [Window.IsVisible(1149) + Player.TempoEnabled]]</expression>
     <expression name="Exp_DialogSlider_RulerSpeed">[$EXP[Exp_DialogSlider_LeftScale] | [Window.IsVisible(1149) + !Player.TempoEnabled]]</expression>
     <expression name="Exp_OSD_StreamRows">[Window.IsVisible(1146) | Window.IsVisible(1147) | Window.IsVisible(1148)]</expression>
+    <expression name="Exp_StreamRow_HasTags">[!String.IsEmpty(ListItem.Property(codec)) | !String.IsEmpty(ListItem.Property(tags))]</expression>
     <expression name="Exp_OSD_HideControls">[Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(videobookmarks) | Window.IsActive(pvrosdguide) | Window.IsActive(pvrosdchannels) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml)]</expression>
 
     <!-- ==== -->

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window type="dialog" id="1135">
     <defaultcontrol always="true">3</defaultcontrol>
-    <onload condition="Skin.String(Background.Style,bauhaus)">SetFocus(3,1,absolute)</onload>
-    <onload condition="Skin.String(Background.Style,surrealist) | String.IsEmpty(Skin.String(Background.Style))">SetFocus(3,2,absolute)</onload>
-    <onload condition="Skin.String(Background.Style,expressionist)">SetFocus(3,3,absolute)</onload>
-    <onload condition="Skin.String(Background.Style,mosaic)">SetFocus(3,4,absolute)</onload>
-    <onload condition="Skin.String(Background.Style,couture)">SetFocus(3,5,absolute)</onload>
-    <onload condition="Skin.String(Background.Style,masquerade)">SetFocus(3,6,absolute)</onload>
+    <onload condition="[$EXP[Exp_Background_HasStylePack]] + Skin.String(Background.Style,bauhaus)">SetFocus(3,1,absolute)</onload>
+    <onload condition="[$EXP[Exp_Background_HasStylePack]] + [Skin.String(Background.Style,surrealist) | String.IsEmpty(Skin.String(Background.Style))]">SetFocus(3,2,absolute)</onload>
+    <onload condition="[$EXP[Exp_Background_HasStylePack]] + Skin.String(Background.Style,expressionist)">SetFocus(3,3,absolute)</onload>
+    <onload condition="[$EXP[Exp_Background_HasStylePack]] + Skin.String(Background.Style,mosaic)">SetFocus(3,4,absolute)</onload>
+    <onload condition="[$EXP[Exp_Background_HasStylePack]] + Skin.String(Background.Style,couture)">SetFocus(3,5,absolute)</onload>
+    <onload condition="[$EXP[Exp_Background_HasStylePack]] + Skin.String(Background.Style,masquerade)">SetFocus(3,6,absolute)</onload>
     <controls>
         <include content="DialogSelect_Viewtype">
             <param name="header">$LOCALIZE[31268]</param>
             <param name="include_content">DialogSelect_BackgroundStyle_Items</param>
-            <param name="current">String.IsEqual(Container(3).ListItem.Property(style),Skin.String(Background.Style)) | [String.IsEmpty(Skin.String(Background.Style)) + String.IsEqual(Container(3).ListItem.Property(style),surrealist)]</param>
+            <param name="current">[![$EXP[Exp_Background_HasStylePack]] + String.IsEqual(Container(3).ListItem.Property(style),simple)] | [[$EXP[Exp_Background_HasStylePack]] + [String.IsEqual(Container(3).ListItem.Property(style),Skin.String(Background.Style)) | [String.IsEmpty(Skin.String(Background.Style)) + String.IsEqual(Container(3).ListItem.Property(style),surrealist)]]]</param>
         </include>
     </controls>
 </window>

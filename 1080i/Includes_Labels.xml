@@ -111,6 +111,7 @@
     </variable>
 
     <variable name="Label_Setting_BackgroundStyle">
+        <value condition="![$EXP[Exp_Background_HasStylePack]]">$LOCALIZE[31438]</value>
         <value condition="Skin.String(Background.Style,bauhaus)">$LOCALIZE[31853]</value>
         <value condition="Skin.String(Background.Style,expressionist)">$LOCALIZE[31855]</value>
         <value condition="Skin.String(Background.Style,mosaic)">$LOCALIZE[31857]</value>
@@ -767,9 +768,9 @@
         <value>$INFO[PVR.ActStreamEncryptionName]</value>
     </variable>
 
-    <!-- Stream card title: offset cards keep their case so "ms" stays lowercase, and window cards keep theirs -->
+    <!-- Stream row title: slider rows show their name with the value on the right, and window rows keep their case -->
     <variable name="Label_StreamLanguage">
-        <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Label2]</value>
         <value condition="!String.IsEmpty(ListItem.Property(window))">$INFO[ListItem.Label]</value>
         <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label,[UPPERCASE],[/UPPERCASE]]</value>
         <value>UNK</value>
@@ -1111,8 +1112,8 @@
         <value condition="$EXP[Exp_DialogSlider_Zoom]">1</value>
         <value>0</value>
     </variable>
-    <!-- The delay scales label the pill in milliseconds from the ruler script; other scales repeat Kodi's value label -->
-    <variable name="Label_DialogSlider_Pill">
+    <!-- The value in the spotlight. The delay scales show milliseconds from the ruler script; other scales repeat Kodi's value label -->
+    <variable name="Label_DialogSlider_Display">
         <value condition="$EXP[Exp_DialogSlider_Delay]">$INFO[Window(Home).Property(SkinVariables.SliderRuler.Label)]</value>
         <value>$INFO[Control.GetLabel(12)]</value>
     </variable>
@@ -1300,9 +1301,28 @@
         <value condition="Window.IsVisible(1149)">32×</value>
     </variable>
 
-    <variable name="Label_StreamCard_Tags">
+    <!-- Right aligned codec and channel tags, or a row's own tags -->
+    <variable name="Label_StreamRow_Tags">
         <value condition="!String.IsEmpty(ListItem.Property(tags))">$INFO[ListItem.Property(tags)]</value>
-        <value>$VAR[Label_ListItem_StreamCodec,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_ListItem_StreamChannels,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsImpaired,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsForced,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsDefault,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsOriginal,&#x2002;,&#x2000;]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(codec))">$VAR[Label_ListItem_StreamCodec,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_ListItem_StreamChannels,&#x2002;,&#x2000;]</value>
+    </variable>
+
+    <variable name="Label_StreamRow_Status">
+        <value>$VAR[Label_PlayerStream_IsImpaired,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsForced,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsDefault,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsOriginal,&#x2002;,&#x2000;]</value>
+    </variable>
+
+    <variable name="Label_StreamRow_Detail">
+        <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Property(detail)]</value>
+        <value>$INFO[ListItem.Label2]</value>
+    </variable>
+
+    <!-- The focused row's name for the OSD stream spotlight, or its language when the stream has no name -->
+    <variable name="Label_OSD_StreamSpotlight">
+        <value condition="Window.IsVisible(1146) + !String.IsEmpty(Container(6206).ListItem.Label2)">$INFO[Container(6206).ListItem.Label2]</value>
+        <value condition="Window.IsVisible(1146)">$INFO[Container(6206).ListItem.Label,[UPPERCASE],[/UPPERCASE]]</value>
+        <value condition="Window.IsVisible(1147) + !String.IsEmpty(Container(6207).ListItem.Label2)">$INFO[Container(6207).ListItem.Label2]</value>
+        <value condition="Window.IsVisible(1147)">$INFO[Container(6207).ListItem.Label,[UPPERCASE],[/UPPERCASE]]</value>
+        <value condition="Window.IsVisible(1148)">$INFO[Container(6208).ListItem.Label2]</value>
     </variable>
 
     <variable name="Label_OSD_SubtitlesLanguage">

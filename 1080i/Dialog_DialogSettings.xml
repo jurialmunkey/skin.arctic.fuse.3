@@ -34,7 +34,6 @@
         <control type="group">
             <right>view_pad</right>
             <width>1200</width>
-            <visible>!Window.IsVisible(DialogSlider.xml)</visible>
             <include>Animation_SlideIn_Dialog</include>
             <include>DialogSettings_OSD_Heading</include>
             <include>DialogSettings_OSD_List</include>
@@ -56,21 +55,27 @@
         <control type="image">
             <right>0</right>
             <width>1040</width>
-            <visible>Window.IsVisible(DialogSettings.xml) + !Window.IsVisible(DialogSlider.xml)</visible>
+            <visible>Window.IsVisible(DialogSettings.xml) | $EXP[Exp_OSD_StreamRows]</visible>
             <include>Animation_FadeIn</include>
             <include>Animation_FadeOut</include>
             <texture colordiffuse="shadow_back" border="0,4,0,4">common/gradient-h.png</texture>
         </control>
     </include>
 
+    <!-- Defaults to label 2, which Kodi fills in DialogSettings. The OSD stream windows pass their own header -->
     <include name="DialogSettings_OSD_Heading">
-        <control type="label" id="2">
-            <top>120</top>
-            <height>40</height>
-            <align>right</align>
-            <font>font_hint_bold</font>
-            <textcolor>main_fg_50</textcolor>
-        </control>
+        <param name="id">2</param>
+        <param name="label" />
+        <definition>
+            <control type="label" id="$PARAM[id]">
+                <top>120</top>
+                <height>40</height>
+                <align>right</align>
+                <font>font_hint_bold</font>
+                <textcolor>main_fg_50</textcolor>
+                <label>$PARAM[label]</label>
+            </control>
+        </definition>
     </include>
 
     <!-- Grouplist 5 shows five 80px rows; scrollbar 61 sits just outside its right edge -->
@@ -86,14 +91,22 @@
                 <onleft>Action(Select)</onleft>
                 <onright>Action(Select)</onright>
             </control>
-            <include content="Part_Scrollbar">
-                <param name="id">61</param>
+            <include content="DialogSettings_OSD_Scrollbar">
                 <top>0</top>
                 <bottom>0</bottom>
                 <centerright>20</centerright>
-                <texturesliderbar colordiffuse="main_fg_30" border="4">scrollbar/scrollv_line.png</texturesliderbar>
             </include>
         </control>
+    </include>
+
+    <include name="DialogSettings_OSD_Scrollbar">
+        <definition>
+            <include content="Part_Scrollbar">
+                <param name="id">61</param>
+                <nested />
+                <texturesliderbar colordiffuse="main_fg_30" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+            </include>
+        </definition>
     </include>
 
     <!-- Right aligned spotlight: a short divider, the name large, and the key hints under it, 180 tall from its bottom.
@@ -123,7 +136,7 @@
                     <label>$PARAM[label]</label>
                 </control>
                 <control type="label">
-                    <top>140</top>
+                    <top>120</top>
                     <height>40</height>
                     <align>right</align>
                     <font>font_mini</font>

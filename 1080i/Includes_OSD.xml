@@ -264,136 +264,57 @@
         </control>
     </include>
 
-    <include name="OSD_Stream_Pill">
-        <include content="Info_Line_Pill_Text">
-            <param name="colordiffuse">main_fg</param>
-            <param name="fill">12</param>
-            <param name="texture">common/dialog.png</param>
-            <param name="border">20</param>
-            <param name="textcolor">main_fg_100</param>
-            <param name="font">font_tiny_bold</param>
-            <param name="textoffsetx">20</param>
-            <param name="textoffsety">0</param>
-            <param name="aligny">center</param>
-            <param name="label">$PARAM[label]</param>
-            <height>40</height>
-            <width min="80" max="400">auto</width>
-            <shadowcolor>00000000</shadowcolor>
-            <visible>$PARAM[focused]</visible>
-            <centertop>50%</centertop>
-        </include>
-        <include content="Info_Line_Pill_Text">
-            <param name="colordiffuse">main_fg</param>
-            <param name="fill">12</param>
-            <param name="texture">common/_none.png</param>
-            <param name="border">20</param>
-            <param name="textcolor">main_fg_70</param>
-            <param name="font">font_tiny_bold</param>
-            <param name="textoffsetx">20</param>
-            <param name="textoffsety">0</param>
-            <param name="aligny">center</param>
-            <param name="label">$PARAM[label]</param>
-            <height>40</height>
-            <width min="80" max="400">auto</width>
-            <shadowcolor>00000000</shadowcolor>
-            <visible>![$PARAM[focused]]</visible>
-            <centertop>50%</centertop>
-        </include>
-    </include>
-
     <include name="OSD_Stream_Row">
         <param name="enabled">true</param>
-        <param name="audio_focused">false</param>
-        <param name="subtitles_focused">false</param>
-        <param name="video_focused">false</param>
         <definition>
             <visible>!Window.IsVisible(DialogSettings.xml)</visible>
-            <include content="Animation_SlideIn_Dialog">
-                <param name="posy">48</param>
-            </include>
+            <include>Animation_SlideIn_Dialog</include>
             <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
 
-            <control type="grouplist">
-                <height>80</height>
-                <bottom>470</bottom>
-                <right>0</right>
-                <orientation>horizontal</orientation>
-                <align>right</align>
-                <itemgap>20</itemgap>
-                <control type="image">
-                    <centertop>42</centertop>
-                    <width>40</width>
-                    <height>40</height>
-                    <bordersize>-8</bordersize>
-                    <aspectratio>keep</aspectratio>
-                    <texture>special://skin/extras/icons/video.png</texture>
-                </control>
-                <control type="label">
-                    <width>auto</width>
-                    <aligny>center</aligny>
-                    <font>font_head_bold</font>
-                    <textcolor>main_fg_100</textcolor>
-                    <label>$PARAM[header]</label>
-                </control>
-                <control type="label">
-                    <width>auto</width>
-                    <aligny>center</aligny>
-                    <font>font_mini</font>
-                    <textcolor>main_fg_70</textcolor>
-                    <label>$INFO[Container($PARAM[id]).NumItems,, $LOCALIZE[31022]]</label>
-                </control>
-                <control type="label">
-                    <width>auto</width>
-                    <aligny>center</aligny>
-                    <font>font_main</font>
-                    <textcolor>main_fg_100</textcolor>
-                    <label>•</label>
-                </control>
-                <include content="OSD_Stream_Pill">
-                    <param name="label">$LOCALIZE[292]</param>
-                    <param name="focused">$PARAM[audio_focused]</param>
-                </include>
-                <include content="OSD_Stream_Pill">
-                    <param name="label">$LOCALIZE[287]</param>
-                    <param name="focused">$PARAM[subtitles_focused]</param>
-                </include>
-                <include content="OSD_Stream_Pill">
-                    <param name="label">$LOCALIZE[157]</param>
-                    <param name="focused">$PARAM[video_focused]</param>
-                </include>
-            </control>
+            <include content="DialogSettings_OSD_Heading">
+                <param name="id">0</param>
+                <param name="label">$PARAM[header]</param>
+            </include>
 
             <include content="List_Core">
-                <param name="control">fixedlist</param>
-                <param name="orientation">horizontal</param>
+                <param name="orientation">vertical</param>
                 <param name="id">$PARAM[id]</param>
-                <param name="item_w">osd_streamcard_item_w</param>
-                <param name="item_h">osd_streamcard_item_h</param>
-                <param name="itemlayout_w">osd_streamcard_itemlayout_w</param>
-                <param name="itemlayout_h">osd_streamcard_itemlayout_h</param>
-                <param name="itemlayout_include">Layout_StreamCard</param>
-                <param name="offset_x">40</param>
-                <param name="offset_y">40</param>
+                <param name="item_w">osd_streamrow_w</param>
+                <param name="item_h">osd_streamrow_h</param>
+                <param name="itemlayout_w">osd_streamrow_w</param>
+                <param name="itemlayout_h">osd_streamrow_h</param>
+                <param name="itemlayout_include">Layout_StreamRow</param>
+                <param name="offset_x">0</param>
+                <param name="offset_y">0</param>
                 <param name="misc">$PARAM[enabled]</param>
                 <param name="preloaditems">0</param>
-                <width>1680</width>
-                <right>-80</right>
-                <bottom>190</bottom>
-                <focusposition>1</focusposition>
-                <movement>2</movement>
-                <height>osd_streamcard_itemlayout_h</height>
+                <right>0</right>
+                <width>osd_streamrow_w</width>
+                <top>180</top>
+                <height>400</height>
+                <pagecontrol>61</pagecontrol>
                 <ondown>$PARAM[buttonid]</ondown>
                 <onup>noop</onup>
-                <animation effect="slide" start="0" end="400" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
-                <animation effect="slide" start="0" end="400" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
-                <animation effect="slide" start="0" end="800" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
                 <nested />
+            </include>
+
+            <include content="DialogSettings_OSD_Scrollbar">
+                <top>180</top>
+                <bottom>500</bottom>
+                <centerright>-20</centerright>
+            </include>
+
+            <include content="DialogSettings_OSD_Spotlight">
+                <param name="label">$VAR[Label_OSD_StreamSpotlight]</param>
+                <param name="hint">&#9650; &#9660;  $LOCALIZE[424]</param>
             </include>
         </definition>
     </include>
 
-    <!-- Download card after the offset card, opening Kodi's subtitle search -->
-    <include name="OSD_Stream_DownloadCard">
+    <!-- Download row after the offset row, opening Kodi's subtitle search -->
+    <include name="OSD_Stream_DownloadRow">
         <content>
             <item>
                 <label>$LOCALIZE[137]</label>
@@ -408,9 +329,6 @@
         <param name="enabled">true</param>
         <param name="toggle">false</param>
         <param name="download">false</param>
-        <param name="audio_focused">false</param>
-        <param name="subtitles_focused">false</param>
-        <param name="video_focused">false</param>
         <definition>
             <control type="group">
                 <include content="OSD_Stream_Row">
@@ -418,25 +336,23 @@
                     <param name="buttonid">$PARAM[buttonid]</param>
                     <param name="header">$PARAM[header]</param>
                     <param name="enabled">$PARAM[enabled]</param>
-                    <param name="audio_focused">$PARAM[audio_focused]</param>
-                    <param name="subtitles_focused">$PARAM[subtitles_focused]</param>
-                    <param name="video_focused">$PARAM[video_focused]</param>
                     <content>plugin://script.skinvariables?info=get_player_streams&amp;stream_type=$PARAM[stream_type]&amp;reload=$INFO[Window.Property(UID)]</content>
-                    <!-- Offset card after the streams. The list's own onclick overrides item onclicks, so the card names its slider action in a property instead -->
+                    <!-- Offset row after the streams. The list's own onclick overrides item onclicks, so the row names its slider action in a property instead -->
                     <content>
                         <item>
                             <label>$INFO[Container($PARAM[id]1).ListItem.Label]</label>
                             <label2>$PARAM[slider_header]</label2>
+                            <icon>special://skin/extras/icons/stopwatch.png</icon>
                             <property name="slider">$PARAM[slider]</property>
                         </item>
                     </content>
-                    <include condition="$PARAM[download]">OSD_Stream_DownloadCard</include>
+                    <include condition="$PARAM[download]">OSD_Stream_DownloadRow</include>
                     <onclick condition="!String.IsEmpty(ListItem.Property(slider))">Action($INFO[ListItem.Property(slider)])</onclick>
                     <onclick condition="!String.IsEmpty(ListItem.Property(window))">ActivateWindow($INFO[ListItem.Property(window)])</onclick>
                     <onclick condition="$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))">Action(ShowSubtitles)</onclick>
                     <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))] + String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Property(window))">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
                 </include>
-                <!-- The offset card's label: the delay in milliseconds, for example "+100 ms" -->
+                <!-- The offset row's value: the delay in milliseconds, for example "+100 ms" -->
                 <include content="Object_Hidden_List">
                     <param name="id">$PARAM[id]1</param>
                     <content>plugin://script.skinvariables?info=get_delay_label&amp;value=$INFO[$PARAM[slider_value]]</content>
@@ -723,8 +639,6 @@
 
     <include name="OSD_Progress_Bar">
         <control type="group">
-            <!-- The sync ruler replaces the bar while DialogSlider or the playback speed ruler is up; the time labels stay -->
-            <visible>!$EXP[Exp_OSD_SliderVisible]</visible>
             <left>view_osd_l</left>
             <right>view_osd_r</right>
             <bottom>120</bottom>
