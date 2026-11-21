@@ -1111,9 +1111,9 @@
         <value condition="$EXP[Exp_DialogSlider_Zoom]">1</value>
         <value>0</value>
     </variable>
-    <!-- The delay scales label the pill in milliseconds from the ruler route; other scales repeat Kodi's value label -->
+    <!-- The delay scales label the pill in milliseconds from the ruler script; other scales repeat Kodi's value label -->
     <variable name="Label_DialogSlider_Pill">
-        <value condition="$EXP[Exp_DialogSlider_Delay]">$INFO[ListItem.Label]</value>
+        <value condition="$EXP[Exp_DialogSlider_Delay]">$INFO[Window(Home).Property(SkinVariables.SliderRuler.Label)]</value>
         <value>$INFO[Control.GetLabel(12)]</value>
     </variable>
 
@@ -1147,6 +1147,157 @@
         <value condition="Player.Forwarding16x">4</value>
         <value condition="Player.Forwarding32x">5</value>
         <value>0</value>
+    </variable>
+    <!-- Playback speed ruler (1149) value and range for the ruler script: tempo steps -3 to 5, otherwise seek steps -5 to 5 -->
+    <variable name="Value_OSD_RulerStep">
+        <value condition="Player.TempoEnabled">$VAR[Value_OSD_TempoStep]</value>
+        <value>$VAR[Value_OSD_SeekStep]</value>
+    </variable>
+    <variable name="Value_OSD_RulerMinimum">
+        <value condition="Player.TempoEnabled">-3</value>
+        <value>-5</value>
+    </variable>
+    <variable name="Value_OSD_RulerMaximum">
+        <value>5</value>
+    </variable>
+    <variable name="Value_OSD_RulerOrigin">
+        <value>0</value>
+    </variable>
+    <!-- Ruler tick labels for each step that has a major tick in some scale: 180px scales every ten steps,
+         144px scales every eight. Empty where the scale has no major tick at the step -->
+    <variable name="Label_DialogSlider_RulerTick_0">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">&#8722;1.00</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#8722;4.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">&#8722;2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">0.4</value>
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">0</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">0.70</value>
+        <value condition="Window.IsVisible(1149)">32×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_8">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">10</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.1</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">6</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">0.5</value>
+        <value condition="Window.IsVisible(1149)">16×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_10">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">&#8722;0.75</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#8722;3.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">&#8722;1.5</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">0.6</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">0.80</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_16">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">20</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.2</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">12</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">1.0</value>
+        <value condition="Window.IsVisible(1149)">8×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_20">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">&#8722;0.50</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#8722;2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">&#8722;1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">0.8</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">0.90</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_24">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">30</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.3</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">18</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">1.5</value>
+        <value condition="Window.IsVisible(1149)">4×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_30">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">&#8722;0.25</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#8722;1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">&#8722;0.5</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.0</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.00</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_32">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">40</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.4</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">24</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">2.0</value>
+        <value condition="Window.IsVisible(1149)">2×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_40">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.2</value>
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">50</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.5</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">30</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">2.5</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.10</value>
+        <value condition="Window.IsVisible(1149)">1×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_48">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">60</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.6</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">36</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">3.0</value>
+        <value condition="Window.IsVisible(1149)">2×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_50">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">+0.25</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">+1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">+0.5</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.4</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.20</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_56">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">70</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.7</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">42</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">3.5</value>
+        <value condition="Window.IsVisible(1149)">4×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_60">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">+0.50</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">+2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">+1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.6</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.30</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_64">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">80</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.8</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">48</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">4.0</value>
+        <value condition="Window.IsVisible(1149)">8×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_70">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">+0.75</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">+3.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">+1.5</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.8</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.40</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_72">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">90</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.9</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">54</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">4.5</value>
+        <value condition="Window.IsVisible(1149)">16×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_80">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">+1.00</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">+4.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">+2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">100</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">60</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">5.0</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.50</value>
+        <value condition="Window.IsVisible(1149)">32×</value>
     </variable>
 
     <variable name="Label_StreamCard_Tags">

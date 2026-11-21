@@ -5,6 +5,13 @@
     <!-- Same layer as DialogSeekBar, so the fade and ruler draw under the OSD buttons -->
     <zorder>0</zorder>
     <defaultcontrol always="true">11</defaultcontrol>
+    <include content="DialogSlider_RulerScript">
+        <param name="window">1149</param>
+        <param name="value">Value_OSD_RulerStep</param>
+        <param name="minimum">Value_OSD_RulerMinimum</param>
+        <param name="maximum">Value_OSD_RulerMaximum</param>
+        <param name="origin">Value_OSD_RulerOrigin</param>
+    </include>
     <controls>
 
         <control type="image">
@@ -22,55 +29,13 @@
                 <param name="windowopen_condition">!Window.IsVisible(DialogSeekBar.xml)</param>
             </include>
             <include content="DialogSlider_RulerGroup">
-                <!-- Tempo: 0.70 to 1.50 over eight 0.10 steps, filling from 1.00 -->
-                <include content="DialogSlider_RulerFrame">
-                    <param name="visible">Player.TempoEnabled</param>
+                <!-- Tempo: 0.70 to 1.50 over eight 0.10 steps, filling from 1.00.
+                     Rewind and fast forward: 32x either side of normal speed. Tick labels come from Label_DialogSlider_RulerTick variables -->
+                <include content="DialogSlider_RulerBaseline">
+                    <param name="visible">true</param>
                 </include>
-                <include content="DialogSlider_RulerLabels">
-                    <param name="visible">Player.TempoEnabled</param>
-                    <param name="label_0">0.70</param>
-                    <param name="label_1">0.80</param>
-                    <param name="label_2">0.90</param>
-                    <param name="label_4">1.10</param>
-                    <param name="label_5">1.20</param>
-                    <param name="label_6">1.30</param>
-                    <param name="label_7">1.40</param>
-                    <param name="label_8">1.50</param>
-                    <param name="origin_label">1.00</param>
-                    <param name="origin_left">490</param>
-                </include>
-                <include content="DialogSlider_RulerList">
-                    <param name="visible">Player.TempoEnabled</param>
-                    <param name="value">$VAR[Value_OSD_TempoStep]</param>
-                    <param name="minimum">-3</param>
-                    <param name="maximum">5</param>
-                    <param name="pill_label">$VAR[Label_OSD_PlaybackSpeed]</param>
-                </include>
-
-                <!-- Rewind and fast forward: 32x either side of normal speed -->
-                <include content="DialogSlider_RulerFrame">
-                    <param name="visible">!Player.TempoEnabled</param>
-                    <param name="speed">true</param>
-                </include>
-                <include content="DialogSlider_RulerLabels_Speed">
-                    <param name="visible">!Player.TempoEnabled</param>
-                    <param name="label_0">32×</param>
-                    <param name="label_1">16×</param>
-                    <param name="label_2">8×</param>
-                    <param name="label_3">4×</param>
-                    <param name="label_4">2×</param>
-                    <param name="label_6">2×</param>
-                    <param name="label_7">4×</param>
-                    <param name="label_8">8×</param>
-                    <param name="label_9">16×</param>
-                    <param name="label_10">32×</param>
-                    <param name="origin_label">1×</param>
-                </include>
-                <include content="DialogSlider_RulerList">
-                    <param name="visible">!Player.TempoEnabled</param>
-                    <param name="value">$VAR[Value_OSD_SeekStep]</param>
-                    <param name="minimum">-5</param>
-                    <param name="maximum">5</param>
+                <include content="DialogSlider_RulerScale">
+                    <param name="visible">true</param>
                     <param name="pill_label">$VAR[Label_OSD_PlaybackSpeed]</param>
                 </include>
 
