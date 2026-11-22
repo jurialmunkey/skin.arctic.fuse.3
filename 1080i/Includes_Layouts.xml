@@ -658,6 +658,7 @@
     <include name="Layout_PVRGuide_Channels">
         <param name="detailed">false</param>
         <param name="selected">false</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
         <param name="bottom">0</param>
         <param name="right">20</param>
         <definition>
@@ -678,6 +679,15 @@
                         <include content="Object_InfoCircle" condition="!$PARAM[selected]">
                             <param name="name">$INFO[ListItem.ChannelNumberLabel,$LOCALIZE[19029] ,]</param>
                             <param name="role">$INFO[ListItem.ChannelName]</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <control type="label">
+                                <font>font_mini</font>
+                                <label>$INFO[ListItem.Label]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <textcolor>main_fg_70</textcolor>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
                             <include content="Object_InfoCircle_Image">
                                 <param name="colordiffuse">main_bg_90</param>
                                 <param name="icon">common/white.png</param>
@@ -694,6 +704,15 @@
                             <param name="role">$INFO[ListItem.ChannelName]</param>
                             <param name="textcolor_top">$VAR[ColorSelected]</param>
                             <param name="textcolor_sub">$VAR[ColorSelected]</param>
+                            <param name="include_labels">$PARAM[include_detailed_labels]</param>
+                            <control type="label">
+                                <font>font_mini</font>
+                                <label>$INFO[ListItem.Label]</label>
+                                <align>left</align>
+                                <left>80</left>
+                                <include>Color_SelectedText</include>
+                                <visible>![$PARAM[include_detailed_labels]]</visible>
+                            </control>
                             <include content="Object_InfoCircle_Image">
                                 <param name="colordiffuse">main_bg_90</param>
                                 <param name="icon">common/white.png</param>
@@ -782,6 +801,7 @@
         <param name="detailed">false</param>
         <param name="selected">false</param>
         <param name="affix" />
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
         <definition>
 
             <include content="Object_Control" condition="!$PARAM[selected]">
@@ -789,7 +809,7 @@
                 <texture colordiffuse="main_fg_30" border="40">pvr/progressline-programs.png</texture>
             </include>
 
-            <include content="Object_InfoCircle_Text_Top">
+            <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_detailed_labels]">
                 <include condition="$PARAM[selected]">Color_SelectedText</include>
                 <label>$INFO[ListItem.$PARAM[affix]Title]</label>
                 <textcolor>main_fg_90</textcolor>
@@ -798,7 +818,7 @@
                 <right>40</right>
             </include>
 
-            <include content="Object_InfoCircle_Text_Sub">
+            <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
                 <include condition="$PARAM[selected]">Color_SelectedText</include>
                 <label>$INFO[ListItem.$PARAM[affix]Genre]</label>
                 <textcolor>main_fg_70</textcolor>
@@ -807,12 +827,23 @@
                 <right>40</right>
             </include>
 
+            <control type="label">
+                <font>font_mini</font>
+                <label>$INFO[ListItem.$PARAM[affix]Title]</label>
+                <align>left</align>
+                <left>40</left>
+                <right>40</right>
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <textcolor>main_fg_70</textcolor>
+                <visible>![$PARAM[include_detailed_labels]]</visible>
+            </control>
         </definition>
     </include>
 
     <include name="Layout_PVRGuide_Programs">
         <param name="detailed">false</param>
         <param name="selected">false</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
         <param name="border">40,0,40,0</param>
         <param name="border_genre">40,0,40,0</param>
         <param name="left">0</param>
@@ -853,7 +884,7 @@
             </include>
 
             <!-- No Indicator Text -->
-            <include content="Object_InfoCircle_Text_Top">
+            <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_detailed_labels]">
                 <param name="id">1</param>
                 <include condition="$PARAM[selected] + false">Color_SelectedText</include>
                 <label>$VAR[Label_PVRPrograms]</label>
@@ -863,7 +894,7 @@
                 <right>40</right>
                 <visible>![ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
             </include>
-            <include content="Object_InfoCircle_Text_Sub">
+            <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
                 <param name="id">1</param>
                 <include condition="$PARAM[selected] + false">Color_SelectedText</include>
                 <label>$INFO[ListItem.Genre]</label>
@@ -873,9 +904,20 @@
                 <right>40</right>
                 <visible>![ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
             </include>
+            <control type="label" id="1">
+                <font>font_mini</font>
+                <label>$INFO[ListItem.Label]</label>
+                <align>left</align>
+                <left>$PARAM[left_text]</left>
+                <right>40</right>
+                <include condition="$PARAM[selected] + false">Color_SelectedText</include>
+                <textcolor>main_fg_70</textcolor>
+                <visible>![$PARAM[include_detailed_labels]]</visible>
+                <visible>![ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
+            </control>
 
             <!-- Indicator Text -->
-            <include content="Object_InfoCircle_Text_Top">
+            <include content="Object_InfoCircle_Text_Top" condition="$PARAM[include_detailed_labels]">
                 <param name="id">1</param>
                 <include condition="$PARAM[selected] + false">Color_SelectedText</include>
                 <label>$VAR[Label_PVRPrograms]</label>
@@ -885,7 +927,7 @@
                 <right>40</right>
                 <visible>[ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
             </include>
-            <include content="Object_InfoCircle_Text_Sub">
+            <include content="Object_InfoCircle_Text_Sub" condition="$PARAM[include_detailed_labels]">
                 <param name="id">1</param>
                 <include condition="$PARAM[selected] + false">Color_SelectedText</include>
                 <label>$INFO[ListItem.Genre]</label>
@@ -895,6 +937,17 @@
                 <right>40</right>
                 <visible>[ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
             </include>
+            <control type="label" id="1">
+                <font>font_mini</font>
+                <label>$INFO[ListItem.Label]</label>
+                <align>left</align>
+                <left>$PARAM[left_text_slide]</left>
+                <right>40</right>
+                <include condition="$PARAM[selected] + false">Color_SelectedText</include>
+                <textcolor>main_fg_70</textcolor>
+                <visible>![$PARAM[include_detailed_labels]]</visible>
+                <visible>[ListItem.IsRecording | ListItem.HasTimer | [ListItem.IsPlayable + !Skin.HasSetting(Indicator.DisablePVRGuideCatchUp)]]</visible>
+            </control>
 
             <control type="group">
                 <left>$PARAM[left_text]</left>
@@ -1147,12 +1200,13 @@
         <param name="selected">false</param>
         <param name="right">0</param>
         <param name="visible">true</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
         <definition>
             <control type="group">
                 <right>$PARAM[right]</right>
                 <visible>$PARAM[visible]</visible>
                 <control type="group">
-                    <visible>$EXP[Exp_ListItem_HasMediaListDetails]</visible>
+                    <visible>[$PARAM[include_detailed_labels]] + $EXP[Exp_ListItem_HasMediaListDetails]</visible>
                     <include content="Object_InfoCircle_Text_Top">
                         <left>80</left>
                         <include condition="$PARAM[selected]">Color_SelectedText</include>
@@ -1173,7 +1227,7 @@
                     <left>80</left>
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
                     <textcolor>main_fg_70</textcolor>
-                    <visible>![$EXP[Exp_ListItem_HasMediaListDetails]]</visible>
+                    <visible>![[$PARAM[include_detailed_labels]] + $EXP[Exp_ListItem_HasMediaListDetails]]</visible>
                 </control>
             </control>
         </definition>
@@ -1184,6 +1238,7 @@
         <param name="selected">false</param>
         <param name="variation">false</param>
         <param name="misc">0</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
         <definition>
             <control type="group">
                 <left>$PARAM[misc]</left>
@@ -1243,20 +1298,26 @@
                             <param name="selected">$PARAM[selected]</param>
                             <param name="right">200</param>
                             <param name="visible">$EXP[Exp_ListItem_HasMediaListColumns]</param>
+                            <param name="include_detailed_labels">$PARAM[include_detailed_labels]</param>
                         </include>
                         <include content="Layout_MediaList_Text" condition="![$PARAM[variation]] + $PARAM[detailed]">
                             <param name="selected">$PARAM[selected]</param>
                             <param name="right">120</param>
                             <param name="visible">$EXP[Exp_ListItem_HasMediaListColumns]</param>
+                            <param name="include_detailed_labels">$PARAM[include_detailed_labels]</param>
                         </include>
                         <include content="Layout_MediaList_Text">
                             <param name="selected">$PARAM[selected]</param>
                             <param name="visible">$PARAM[variation] | ![$EXP[Exp_ListItem_HasMediaListColumns]]</param>
+                            <param name="include_detailed_labels">$PARAM[include_detailed_labels]</param>
                         </include>
                         <control type="label">
                             <right>120</right>
                             <font>font_mini</font>
                             <include condition="$PARAM[selected]">Color_SelectedText</include>
+                            <include content="Object_Label" condition="$PARAM[include_detailed_labels]">
+                                <param name="label">$VAR[Label_MediaList_Year_DetailedLabels]</param>
+                            </include>
                             <label>$VAR[Label_MediaList_Year]</label>
                             <align>right</align>
                             <visible>![$PARAM[detailed]]</visible>
@@ -2115,6 +2176,7 @@
                 <param name="textcolor">main_fg</param>
                 <param name="fade">true</param>
                 <param name="fade_texture">common/poster_fade_br.png</param>
+                <param name="include_detailed_labels">true</param>
             </include>
         </control>
     </include>
@@ -2256,6 +2318,7 @@
                         <param name="affix">$PARAM[affix]</param>
                         <param name="textcolor">main_fg</param>
                         <param name="fade">true</param>
+                        <param name="include_detailed_labels">true</param>
                         <param name="use_label2">$PARAM[use_label2]</param>
                     </include>
                 </control>
@@ -2759,6 +2822,7 @@
         <param name="fade">false</param>
         <param name="fade_texture">common/poster_fade.png</param>
         <param name="selected">false</param>
+        <param name="include_detailed_labels">Skin.HasSetting(View.UseDetailedListLabels)</param>
         <param name="use_label">false</param>
         <param name="use_label2">false</param>
         <param name="label">$INFO[ListItem.Label]</param>
@@ -2792,7 +2856,7 @@
                         <align>left</align>
                         <include condition="$PARAM[selected]">Color_SelectedText</include>
                         <textcolor>main_fg_70</textcolor>
-                        <visible>![$EXP[Exp_ListItem_HasLowerDetails]]</visible>
+                        <visible>![[$PARAM[include_detailed_labels]] + $EXP[Exp_ListItem_HasLowerDetails]]</visible>
                     </include>
                     <include content="Object_Control" condition="$PARAM[use_label]">
                         <param name="control">label</param>
@@ -2807,11 +2871,11 @@
                         <align>left</align>
                         <include condition="$PARAM[selected]">Color_SelectedText</include>
                         <textcolor>main_fg_70</textcolor>
-                        <visible>![$EXP[Exp_ListItem_HasLowerDetails]]</visible>
+                        <visible>![[$PARAM[include_detailed_labels]] + $EXP[Exp_ListItem_HasLowerDetails]]</visible>
                     </include>
 
                     <control type="group">
-                        <visible>$EXP[Exp_ListItem_HasLowerDetails]</visible>
+                        <visible>[$PARAM[include_detailed_labels]] + $EXP[Exp_ListItem_HasLowerDetails]</visible>
 
                         <include content="Object_InfoCircle_Text_Top">
                             <label>$PARAM[label]</label>
