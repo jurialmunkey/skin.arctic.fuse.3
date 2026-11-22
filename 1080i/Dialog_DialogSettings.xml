@@ -52,16 +52,19 @@
         </control>
     </include>
 
-    <!-- Right side fade behind the OSD layout, drawn in the seekbar layer so the seekbar and clock sit above it -->
+    <!-- Right side fade behind the OSD layout, or a full dim for the full width subtitles layout. Drawn in the seekbar layer so the seekbar and clock sit above it -->
     <include name="DialogSettings_OSD_Background">
         <control type="image">
             <right>0</right>
             <width>1040</width>
-            <visible>$EXP[Exp_OSD_SpotlightList]</visible>
+            <visible>$EXP[Exp_OSD_SpotlightList] + !$EXP[Exp_OSD_DialogSubtitles]</visible>
             <include>Animation_FadeIn</include>
             <include>Animation_FadeOut</include>
             <texture colordiffuse="shadow_back" border="0,4,0,4">common/gradient-h.png</texture>
         </control>
+        <include content="Part_Dim_Overlay">
+            <param name="visible">$EXP[Exp_OSD_DialogSubtitles]</param>
+        </include>
     </include>
 
     <!-- Small label above the list with its item count. list: the list's control id -->
