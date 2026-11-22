@@ -202,6 +202,14 @@
     <!-- =============== -->
     <!-- ListItem Status -->
     <!-- =============== -->
+    <expression name="Exp_ListItem_HasDetails">[!String.IsEmpty(ListItem.Property(role)) | !String.IsEmpty(ListItem.Label2) | [[!String.IsEmpty(ListItem.Artist) | !String.IsEmpty(ListItem.AlbumArtist)] + !String.IsEqual(ListItem.DBType,artist)]]</expression>
+
+    <expression name="Exp_ListItem_HasLowerDetails">[$EXP[Exp_ListItem_HasDetails] | !String.IsEmpty(ListItem.Property(job)) | !String.IsEmpty(ListItem.Property(character)) | !String.IsEmpty(ListItem.Property(department)) | !String.IsEmpty(ListItem.ChannelName) | [!String.IsEmpty(ListItem.TvShowTitle) + !String.IsEqual(ListItem.Title,ListItem.TvShowTitle) + !String.IsEqual(ListItem.DBType,tvshow)] | !String.IsEmpty(ListItem.Genre) | !String.IsEmpty(ListItem.Premiered) | !String.IsEmpty(ListItem.PictureResolution) | !String.IsEmpty(ListItem.Date) | !String.IsEmpty(ListItem.AddonType) | !String.IsEmpty(ListItem.AddonVersion) | !String.IsEmpty(ListItem.Property(widget))]</expression>
+
+    <expression name="Exp_ListItem_HasMediaListColumns">[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,musicvideo)]</expression>
+
+    <expression name="Exp_ListItem_HasMediaListDetails">[$EXP[Exp_ListItem_HasDetails] | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TvShowTitle)] | [[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.Director)] | [[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + [!String.IsEmpty(ListItem.Property(totalepisodes)) | !String.IsEmpty(ListItem.Episode)]] | !String.IsEmpty(ListItem.Property(Artist_Genre)) | !String.IsEmpty(ListItem.Property(Artist_YearsActive))]</expression>
+
     <expression name="Exp_IsGenre">[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(dbtype),genre)]</expression>
 
     <expression name="Exp_IsStudio">[String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(dbtype),studio)]</expression>
