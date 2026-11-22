@@ -113,7 +113,7 @@
     <include name="Weather_Trend_Today">
         <control type="group">
             <left>80</left>
-            <top>220</top>
+            <top>240</top>
             <width>720</width>
             <visible>Weather.IsFetched + [!String.IsEmpty(Window(weather).Property(Day0.HighTemp)) | !String.IsEmpty(Window(weather).Property(Day0.Outlook))]</visible>
             <control type="label">
@@ -125,7 +125,7 @@
                 <label>$INFO[Window(weather).Property(Current.Condition)]</label>
             </control>
             <control type="grouplist">
-                <top>60</top>
+                <top>40</top>
                 <height>100</height>
                 <itemgap>20</itemgap>
                 <orientation>horizontal</orientation>
@@ -146,24 +146,22 @@
                     <height>120</height>
                     <visible>!String.IsEmpty(Window(weather).Property(Day0.FanartCode))</visible>
                 </include>
-            </control>
+            </control><!--
+            <control type="label">
+                <top>140</top>
+                <width>auto</width>
+                <height>40</height>
+                <font>font_main</font>
+                <aligny>center</aligny>
+                <textcolor>main_fg_90</textcolor>
+                <shadowcolor>shadow_hard</shadowcolor>
+                <label>$INFO[Window(Weather).Property(Current.FeelsLike),$LOCALIZE[402] ,°]</label>
+                <visible>!String.IsEmpty(Window(Weather).Property(Current.FeelsLike))</visible>
+            </control> -->
             <control type="grouplist">
-                <top>180</top>
+                <top>200</top>
                 <include>Info_Meta_Grouplist_Definition</include>
-                <control type="label">
-                    <width>auto</width>
-                    <height>40</height>
-                    <font>font_main</font>
-                    <aligny>center</aligny>
-                    <textcolor>main_fg_90</textcolor>
-                    <shadowcolor>shadow_hard</shadowcolor>
-                    <label>$INFO[Window(Weather).Property(Current.FeelsLike),$LOCALIZE[402] ,°]</label>
-                    <visible>!String.IsEmpty(Window(Weather).Property(Current.FeelsLike))</visible>
-                </control>
-                <control type="group">
-                    <width>12</width>
-                    <visible>!String.IsEmpty(Window(Weather).Property(Current.FeelsLike))</visible>
-                </control>
+
                 <include content="Info_Meta_Weather_Sun">
                     <param name="kind">Sunrise</param>
                     <param name="icon">special://skin/extras/icons/sunrise.png</param>
@@ -175,6 +173,12 @@
                     <param name="icon">special://skin/extras/icons/sunset.png</param>
                     <param name="source">Window(Weather).Property</param>
                     <param name="property_prefix">Day0.</param>
+                </include>
+                <include content="Info_Meta_Object">
+                    <param name="bordersize">-12</param>
+                    <param name="icon">special://skin/extras/icons/temperature-half.png</param>
+                    <param name="label">$INFO[Window(Weather).Property(Current.FeelsLike),$LOCALIZE[402] ,°]</param>
+                    <param name="visible">!String.IsEmpty(Window(Weather).Property(Current.FeelsLike))</param>
                 </include>
             </control>
         </control>
