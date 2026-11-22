@@ -24,10 +24,13 @@
 
         <control type="group">
             <include>Animation_View_WindowChange</include>
-            <include>Weather_Trend_Today</include>
-            <include>Weather_Trend_Forecast</include>
-            <include>Weather_Trend_UV_Forecast</include>
-            <include>Weather_Trend_Radar_Page</include>
+            <control type="group">
+                <visible>!$EXP[Exp_Weather_Is_Loading]</visible>
+                <include>Weather_Trend_Today</include>
+                <include>Weather_Trend_Forecast</include>
+                <include>Weather_Trend_UV_Forecast</include>
+                <include>Weather_Trend_Radar_Page</include>
+            </control>
         </control>
 
         <include content="Furniture_Header">
@@ -47,8 +50,13 @@
         </control>
 
 
-        <include>Weather_Trend_Page_Hint</include>
-        <include>Furniture_Footer_Right</include>
+        <control type="group">
+            <visible>!$EXP[Exp_Weather_Is_Loading]</visible>
+            <include>Weather_Trend_Page_Hint</include>
+        </control>
+        <include content="Furniture_Footer_Right">
+            <param name="visible">!$EXP[Exp_Weather_Is_Loading]</param>
+        </include>
 
         <include content="Furniture_Busy">
             <param name="hasspinner">true</param>
@@ -56,7 +64,9 @@
             <param name="icon">special://skin/extras/icons/kodi.png</param>
             <param name="haslabel">false</param>
             <param name="spinnervisible">[!Window.IsActive(DialogVolumeBar.xml) | Player.Muted]</param>
-            <param name="visible">!Weather.IsFetched</param>
+            <param name="visible">$EXP[Exp_Weather_Is_Loading]</param>
+            <param name="visible_condition">false</param>
+            <param name="windowopen_condition">false</param>
         </include>
 
     </controls>
