@@ -8,6 +8,27 @@
         <onstop condition="Window.IsActive(weather) + Weather.IsFetched">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend.json,use_rules=True)</onstop>
     </timer>
     <timer>
+        <name>weather_trend_details</name>
+        <description>Recalculate the MyWeather precipitation chart when the daily forecast changes.</description>
+        <start reset="true">Window.IsActive(weather) + Weather.IsFetched + !String.IsEqual(Control.GetLabel(8051),Window(weather).Property(Weather.Trend.Details.Source))</start>
+        <stop>!Window.IsActive(weather) | !Weather.IsFetched | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(weather_trend_details),1)</stop>
+        <onstop condition="Window.IsActive(weather) + Weather.IsFetched">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-details.json,use_rules=True)</onstop>
+    </timer>
+    <timer>
+        <name>weather_trend_uv</name>
+        <description>Recalculate the OzWeather UV chart when its four forecast values change.</description>
+        <start reset="true">Window.IsActive(weather) + Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather) + !String.IsEqual(Control.GetLabel(8052),Window(weather).Property(Weather.Trend.UV.Source))</start>
+        <stop>!Window.IsActive(weather) | !Weather.IsFetched | !String.IsEqual(Weather.Plugin,weather.ozweather) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(weather_trend_uv),1)</stop>
+        <onstop condition="Window.IsActive(weather) + Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather)">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-uv.json,use_rules=True)</onstop>
+    </timer>
+    <timer>
+        <name>weather_trend_radar</name>
+        <description>Split the OzWeather forecast text for the MyWeather radar page when the weather updates.</description>
+        <start reset="true">Window.IsActive(weather) + Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather) + !String.IsEqual(Control.GetLabel(8053),Window(weather).Property(Weather.Trend.Radar.Source))</start>
+        <stop>!Window.IsActive(weather) | !Weather.IsFetched | !String.IsEqual(Weather.Plugin,weather.ozweather) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(weather_trend_radar),1)</stop>
+        <onstop condition="Window.IsActive(weather) + Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather)">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-radar.json,use_rules=True)</onstop>
+    </timer>
+    <timer>
         <name>splashtest_autotime</name>
         <description>Advance the splash preview by one hour every three seconds.</description>
         <!-- Timers are loaded directly, without the includes expression expansion pass. -->

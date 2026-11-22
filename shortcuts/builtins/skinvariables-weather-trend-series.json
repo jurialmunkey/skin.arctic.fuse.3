@@ -1,0 +1,166 @@
+{
+    "infolabels": {
+        "raw0": "$INFO[Window(weather).Property(Daily.1.{field})]",
+        "alternate0": "$INFO[Window(weather).Property(Daily.1.{alternate})]",
+        "raw1": "$INFO[Window(weather).Property(Daily.2.{field})]",
+        "alternate1": "$INFO[Window(weather).Property(Daily.2.{alternate})]",
+        "raw2": "$INFO[Window(weather).Property(Daily.3.{field})]",
+        "alternate2": "$INFO[Window(weather).Property(Daily.3.{alternate})]",
+        "raw3": "$INFO[Window(weather).Property(Daily.4.{field})]",
+        "alternate3": "$INFO[Window(weather).Property(Daily.4.{alternate})]",
+        "raw4": "$INFO[Window(weather).Property(Daily.5.{field})]",
+        "alternate4": "$INFO[Window(weather).Property(Daily.5.{alternate})]"
+    },
+    "values": {
+        "pattern": [
+            {"rules": ["{kind}==Chance"], "value": "([0-9]{{1,4}}(?:[.,][0-9]+)?)\\s*%?"},
+            {"rules": ["{kind}==Duration"], "value": "([0-9]{{1,4}}(?:[.,][0-9]+)?)"},
+            {"rules": ["{kind}==Amount"], "value": "([0-9]{{1,4}}(?:[.,][0-9]+)?\\s*(?!(?i:h|hr|hrs|hour|hours)(?:\\s*\\||\\s*$))[^\\W\\d_]+)"},
+            "([0-9]{{1,4}}(?:[.,][0-9]+)?\\s*[-–]\\s*[0-9]{{1,4}}(?:[.,][0-9]+)?\\s*(?!(?i:h|hr|hrs|hour|hours)(?:\\s*\\||\\s*$))[^\\W\\d_]+|(?:None|none))"
+        ],
+        "fallback": [
+            {"rules": ["{kind}==Chance"], "value": "([0-9]{{1,4}}(?:[.,][0-9]+)?)\\s*%"},
+            {"rules": ["{kind}==Amount"], "value": "([0-9]{{1,4}}(?:[.,][0-9]+)?\\s*(?!(?i:h|hr|hrs|hour|hours)(?:\\s*\\||\\s*$))[^\\W\\d_]+)"},
+            {"rules": ["{kind}==Range"], "value": "([0-9]{{1,4}}(?:[.,][0-9]+)?\\s*[-–]\\s*[0-9]{{1,4}}(?:[.,][0-9]+)?\\s*(?!(?i:h|hr|hrs|hour|hours)(?:\\s*\\||\\s*$))[^\\W\\d_]+|(?:None|none))"},
+            "()"
+        ]
+    },
+    "operations": [
+        {
+            "regex": {
+                "match0": {"input": "{raw0}|{alternate0}", "regex": "^(?:\\s*{pattern}\\s*\\|[^|]*|[^|]*\\|\\s*{fallback}\\s*)$|^[\\s\\S]+$", "value": "\\g<1>\\g<2>"},
+                "match1": {"input": "{raw1}|{alternate1}", "regex": "^(?:\\s*{pattern}\\s*\\|[^|]*|[^|]*\\|\\s*{fallback}\\s*)$|^[\\s\\S]+$", "value": "\\g<1>\\g<2>"},
+                "match2": {"input": "{raw2}|{alternate2}", "regex": "^(?:\\s*{pattern}\\s*\\|[^|]*|[^|]*\\|\\s*{fallback}\\s*)$|^[\\s\\S]+$", "value": "\\g<1>\\g<2>"},
+                "match3": {"input": "{raw3}|{alternate3}", "regex": "^(?:\\s*{pattern}\\s*\\|[^|]*|[^|]*\\|\\s*{fallback}\\s*)$|^[\\s\\S]+$", "value": "\\g<1>\\g<2>"},
+                "match4": {"input": "{raw4}|{alternate4}", "regex": "^(?:\\s*{pattern}\\s*\\|[^|]*|[^|]*\\|\\s*{fallback}\\s*)$|^[\\s\\S]+$", "value": "\\g<1>\\g<2>"}
+            }
+        },
+        {
+            "values": {
+                "first": [
+                    {"rules": ["{match0}!="], "value": "0"},
+                    {"rules": ["{match1}!="], "value": "1"},
+                    {"rules": ["{match2}!="], "value": "2"},
+                    {"rules": ["{match3}!="], "value": "3"},
+                    {"rules": ["{match4}!="], "value": "4"},
+                    ""
+                ],
+                "label0": [
+                    {"rules": ["{match0}=="], "value": ""},
+                    {"rules": ["{kind}==Range", "{match0}==None||{match0}==none"], "value": "0 mm"},
+                    {"rules": ["{kind}==Chance"], "value": "{match0}%"},
+                    {"rules": ["{kind}==Duration"], "value": "{match0} h"},
+                    "{match0}"
+                ],
+                "label1": [
+                    {"rules": ["{match1}=="], "value": ""},
+                    {"rules": ["{kind}==Range", "{match1}==None||{match1}==none"], "value": "0 mm"},
+                    {"rules": ["{kind}==Chance"], "value": "{match1}%"},
+                    {"rules": ["{kind}==Duration"], "value": "{match1} h"},
+                    "{match1}"
+                ],
+                "label2": [
+                    {"rules": ["{match2}=="], "value": ""},
+                    {"rules": ["{kind}==Range", "{match2}==None||{match2}==none"], "value": "0 mm"},
+                    {"rules": ["{kind}==Chance"], "value": "{match2}%"},
+                    {"rules": ["{kind}==Duration"], "value": "{match2} h"},
+                    "{match2}"
+                ],
+                "label3": [
+                    {"rules": ["{match3}=="], "value": ""},
+                    {"rules": ["{kind}==Range", "{match3}==None||{match3}==none"], "value": "0 mm"},
+                    {"rules": ["{kind}==Chance"], "value": "{match3}%"},
+                    {"rules": ["{kind}==Duration"], "value": "{match3} h"},
+                    "{match3}"
+                ],
+                "label4": [
+                    {"rules": ["{match4}=="], "value": ""},
+                    {"rules": ["{kind}==Range", "{match4}==None||{match4}==none"], "value": "0 mm"},
+                    {"rules": ["{kind}==Chance"], "value": "{match4}%"},
+                    {"rules": ["{kind}==Duration"], "value": "{match4} h"},
+                    "{match4}"
+                ]
+            }
+        },
+        {
+            "regex": {
+                "decimal0": {"input": "{match0}", "regex": "^([0-9]+)(?:[.,]([0-9]+))?[\\s\\S]*$|^[\\s\\S]*$", "value": "\\g<1>:\\g<2>00"},
+                "decimal1": {"input": "{match1}", "regex": "^([0-9]+)(?:[.,]([0-9]+))?[\\s\\S]*$|^[\\s\\S]*$", "value": "\\g<1>:\\g<2>00"},
+                "decimal2": {"input": "{match2}", "regex": "^([0-9]+)(?:[.,]([0-9]+))?[\\s\\S]*$|^[\\s\\S]*$", "value": "\\g<1>:\\g<2>00"},
+                "decimal3": {"input": "{match3}", "regex": "^([0-9]+)(?:[.,]([0-9]+))?[\\s\\S]*$|^[\\s\\S]*$", "value": "\\g<1>:\\g<2>00"},
+                "decimal4": {"input": "{match4}", "regex": "^([0-9]+)(?:[.,]([0-9]+))?[\\s\\S]*$|^[\\s\\S]*$", "value": "\\g<1>:\\g<2>00"}
+            }
+        },
+        {
+            "regex": {
+                "value0": {"input": "{decimal0}", "regex": "^([0-9]*):([0-9]{{2}})[0-9]*$", "value": "\\g<1>\\g<2>"},
+                "value1": {"input": "{decimal1}", "regex": "^([0-9]*):([0-9]{{2}})[0-9]*$", "value": "\\g<1>\\g<2>"},
+                "value2": {"input": "{decimal2}", "regex": "^([0-9]*):([0-9]{{2}})[0-9]*$", "value": "\\g<1>\\g<2>"},
+                "value3": {"input": "{decimal3}", "regex": "^([0-9]*):([0-9]{{2}})[0-9]*$", "value": "\\g<1>\\g<2>"},
+                "value4": {"input": "{decimal4}", "regex": "^([0-9]*):([0-9]{{2}})[0-9]*$", "value": "\\g<1>\\g<2>"}
+            }
+        },
+        {
+            "regex": {
+                "amount_unit": {
+                    "input": "{match0}|{match1}|{match2}|{match3}|{match4}",
+                    "regex": "^\\|*[0-9]+(?:[.,][0-9]+)?\\s*([^\\W\\d_]+)(?:\\|.*)?$|^.*$",
+                    "value": "\\g<1>"
+                }
+            }
+        },
+        {"lower": {"amount_unit": "{amount_unit}"}},
+        {
+            "values": {
+                "maximum": [
+                    {"rules": ["{kind}==Chance"], "value": "10000"},
+                    {"rules": ["{kind}==Duration"], "value": "2400"},
+                    {"rules": ["{kind}==Amount", "{amount_unit}!=", "|{amount_unit}|>>|in|inch|inches|pulgada|pulgadas|tum|tommur|дюймы|"], "value": "200"},
+                    {"rules": ["{kind}==Amount", "{amount_unit}!=", "|{amount_unit}|>>|cm|centimeter|centimeters|centimetre|centimetres|centimètre|centimètres|"], "value": "500"},
+                    "5000"
+                ]
+            }
+        }
+    ],
+    "actions": [
+        [
+            {"rules": ["{first}=="], "value": "ClearProperty(Weather.Trend.{kind}.First,weather)"},
+            "SetProperty(Weather.Trend.{kind}.First,{first},weather)"
+        ],
+        [
+            {"rules": ["{label0}=="], "value": "ClearProperty(Weather.Trend.Day0.{kind}.Label,weather)"},
+            [
+                "SetProperty(Weather.Trend.Day0.{kind}.Label,\"{label0}\",weather)",
+                {"rules": ["{kind}!=Range"], "value": "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day0.{kind}&temperature={value0}&following={value1}&maximum={maximum}&spread={maximum}"}
+            ]
+        ],
+        [
+            {"rules": ["{label1}=="], "value": "ClearProperty(Weather.Trend.Day1.{kind}.Label,weather)"},
+            [
+                "SetProperty(Weather.Trend.Day1.{kind}.Label,\"{label1}\",weather)",
+                {"rules": ["{kind}!=Range"], "value": "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day1.{kind}&temperature={value1}&following={value2}&maximum={maximum}&spread={maximum}"}
+            ]
+        ],
+        [
+            {"rules": ["{label2}=="], "value": "ClearProperty(Weather.Trend.Day2.{kind}.Label,weather)"},
+            [
+                "SetProperty(Weather.Trend.Day2.{kind}.Label,\"{label2}\",weather)",
+                {"rules": ["{kind}!=Range"], "value": "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day2.{kind}&temperature={value2}&following={value3}&maximum={maximum}&spread={maximum}"}
+            ]
+        ],
+        [
+            {"rules": ["{label3}=="], "value": "ClearProperty(Weather.Trend.Day3.{kind}.Label,weather)"},
+            [
+                "SetProperty(Weather.Trend.Day3.{kind}.Label,\"{label3}\",weather)",
+                {"rules": ["{kind}!=Range"], "value": "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day3.{kind}&temperature={value3}&following={value4}&maximum={maximum}&spread={maximum}"}
+            ]
+        ],
+        [
+            {"rules": ["{label4}=="], "value": "ClearProperty(Weather.Trend.Day4.{kind}.Label,weather)"},
+            [
+                "SetProperty(Weather.Trend.Day4.{kind}.Label,\"{label4}\",weather)",
+                {"rules": ["{kind}!=Range"], "value": "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day4.{kind}&temperature={value4}&following={value4}&maximum={maximum}&spread={maximum}"}
+            ]
+        ]
+    ]
+}

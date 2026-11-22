@@ -226,18 +226,20 @@
 
     <!-- Uses the forecast day's time when the provider supplies one, otherwise today's. kind: Sunrise or Sunset -->
     <include name="Info_Meta_Weather_Sun">
+        <param name="property_prefix" />
+        <param name="visible">true</param>
         <definition>
             <include content="Info_Meta_Object">
                 <param name="bordersize">-12</param>
                 <param name="icon">$PARAM[icon]</param>
-                <param name="label">$INFO[$PARAM[container]$PARAM[listitem].Property($PARAM[kind])]</param>
-                <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Property(is_weather)) + !String.IsEmpty($PARAM[container]$PARAM[listitem].Property($PARAM[kind]))</param>
+                <param name="label">$INFO[$PARAM[source]($PARAM[property_prefix]$PARAM[kind])]</param>
+                <param name="visible">[$PARAM[visible]] + !String.IsEmpty($PARAM[source]($PARAM[property_prefix]$PARAM[kind]))</param>
             </include>
             <include content="Info_Meta_Object">
                 <param name="bordersize">-12</param>
                 <param name="icon">$PARAM[icon]</param>
                 <param name="label">$VAR[DialogWeather_$PARAM[kind]_Label]</param>
-                <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Property(is_weather)) + String.IsEmpty($PARAM[container]$PARAM[listitem].Property($PARAM[kind])) + [!String.IsEmpty(Window(Weather).Property(Current.$PARAM[kind])) | !String.IsEmpty(Window(Weather).Property(Today.$PARAM[kind]))]</param>
+                <param name="visible">[$PARAM[visible]] + String.IsEmpty($PARAM[source]($PARAM[property_prefix]$PARAM[kind])) + [!String.IsEmpty(Window(Weather).Property(Current.$PARAM[kind])) | !String.IsEmpty(Window(Weather).Property(Today.$PARAM[kind]))]</param>
             </include>
         </definition>
     </include>
@@ -350,14 +352,14 @@
                     <include content="Info_Meta_Weather_Sun">
                         <param name="kind">Sunrise</param>
                         <param name="icon">special://skin/extras/icons/sunrise.png</param>
-                        <param name="container">$PARAM[container]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="source">$PARAM[container]$PARAM[listitem].Property</param>
+                        <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Property(is_weather))</param>
                     </include>
                     <include content="Info_Meta_Weather_Sun">
                         <param name="kind">Sunset</param>
                         <param name="icon">special://skin/extras/icons/sunset.png</param>
-                        <param name="container">$PARAM[container]</param>
-                        <param name="listitem">$PARAM[listitem]</param>
+                        <param name="source">$PARAM[container]$PARAM[listitem].Property</param>
+                        <param name="visible">!String.IsEmpty($PARAM[container]$PARAM[listitem].Property(is_weather))</param>
                     </include>
 
                     <!-- Total Episodes (Service Disabled) -->

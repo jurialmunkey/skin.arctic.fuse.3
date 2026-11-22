@@ -2,13 +2,20 @@
 <window id="2600">
     <defaultcontrol always="true">8000</defaultcontrol>
     <menucontrol>9000</menucontrol>
+    <onload>ClearProperty(Weather.Trend.Page,weather)</onload>
     <controls>
 
         <include content="Object_Hidden_Button">
             <param name="id">8000</param>
             <onclick>Weather.LocationNext</onclick>
-            <onleft>ActivateWindow(1161)</onleft>
-            <onright>ActivateWindow(1161)</onright>
+            <onleft condition="$EXP[Exp_Weather_Trend_Prev_Radar]">SetProperty(Weather.Trend.Page,Radar,weather)</onleft>
+            <onleft condition="$EXP[Exp_Weather_Trend_Prev_UV]">SetProperty(Weather.Trend.Page,UV,weather)</onleft>
+            <onleft condition="$EXP[Exp_Weather_Trend_Prev_Details]">SetProperty(Weather.Trend.Page,Details,weather)</onleft>
+            <onleft condition="$EXP[Exp_Weather_Trend_Prev_Temperature]">ClearProperty(Weather.Trend.Page,weather)</onleft>
+            <onright condition="$EXP[Exp_Weather_Trend_Next_Details]">SetProperty(Weather.Trend.Page,Details,weather)</onright>
+            <onright condition="$EXP[Exp_Weather_Trend_Next_UV]">SetProperty(Weather.Trend.Page,UV,weather)</onright>
+            <onright condition="$EXP[Exp_Weather_Trend_Next_Radar]">SetProperty(Weather.Trend.Page,Radar,weather)</onright>
+            <onright condition="$EXP[Exp_Weather_Trend_Next_Temperature]">ClearProperty(Weather.Trend.Page,weather)</onright>
         </include>
 
         <include>Background_StartUp_Layered</include>
@@ -19,6 +26,8 @@
             <include>Animation_View_WindowChange</include>
             <include>Weather_Trend_Today</include>
             <include>Weather_Trend_Forecast</include>
+            <include>Weather_Trend_UV_Forecast</include>
+            <include>Weather_Trend_Radar_Page</include>
         </control>
 
         <include content="Furniture_Header">
@@ -38,6 +47,7 @@
         </control>
 
 
+        <include>Weather_Trend_Page_Hint</include>
         <include>Furniture_Footer_Right</include>
 
         <include content="Furniture_Busy">
