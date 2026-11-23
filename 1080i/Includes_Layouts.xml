@@ -282,38 +282,65 @@
                         <aspectratio>scale</aspectratio>
                         <texture background="true" diffuse="diffuse/landscape_w1040_h585.png">$PARAM[icon]</texture>
                     </control>
-                    <include content="Object_SelectBox" condition="$PARAM[selected]">
-                        <param name="indicator">false</param>
-                        <param name="focusbounce">true</param>
+                    <include content="Layout_ViewType_Selected" condition="$PARAM[selected]">
+                        <param name="current">$PARAM[current]</param>
                     </include>
+                </control>
+            </control>
+        </definition>
+    </include>
 
-                    <include content="Object_Control" condition="$PARAM[selected]">
-                        <param name="control">group</param>
-                        <visible>$PARAM[current]</visible>
-                        <centerbottom>0</centerbottom>
-                        <right>25</right>
-                        <width>64</width>
-                        <height>64</height>
+    <include name="Layout_ViewType_Selected">
+        <include content="Object_SelectBox">
+            <param name="indicator">false</param>
+            <param name="focusbounce">true</param>
+        </include>
 
-                        <!-- Focused Item -->
-                        <include content="Object_Indicator_Selected">
-                            <param name="variant">-joined</param>
-                            <param name="shadow">false</param>
-                        </include>
+        <include content="Object_Control">
+            <param name="control">group</param>
+            <visible>$PARAM[current]</visible>
+            <centerbottom>0</centerbottom>
+            <right>25</right>
+            <width>64</width>
+            <height>64</height>
 
-                        <!-- Black Circle Backing -->
-                        <control type="image">
-                            <texture colordiffuse="ff333333">indicator/circle-colordiffuse.png</texture>
-                        </control>
+            <!-- Focused Item -->
+            <include content="Object_Indicator_Selected">
+                <param name="variant">-joined</param>
+                <param name="shadow">false</param>
+            </include>
 
-                        <control type="image">
-                            <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true" flipx="true" flipy="true">progress/circle/p100.png</texture>
-                            <aspectratio align="center" aligny="center">keep</aspectratio>
-                        </control>
-                        <control type="image">
-                            <bordersize>20</bordersize>
-                            <texture colordiffuse="$VAR[ColorWatchedProgress]">indicator/checkmark.png</texture>
-                        </control>
+            <!-- Black Circle Backing -->
+            <control type="image">
+                <texture colordiffuse="ff333333">indicator/circle-colordiffuse.png</texture>
+            </control>
+
+            <control type="image">
+                <texture colordiffuse="$VAR[ColorWatchedProgress]" diffuse="indicator/circle-diffuse.png" background="true" flipx="true" flipy="true">progress/circle/p100.png</texture>
+                <aspectratio align="center" aligny="center">keep</aspectratio>
+            </control>
+            <control type="image">
+                <bordersize>20</bordersize>
+                <texture colordiffuse="$VAR[ColorWatchedProgress]">indicator/checkmark.png</texture>
+            </control>
+        </include>
+    </include>
+
+    <include name="Layout_ViewType_Wireframe">
+        <param name="selected">false</param>
+        <param name="current">ListItem.IsSelected</param>
+        <definition>
+            <control type="group">
+                <left>-740</left>
+                <right>740</right>
+                <control type="group">
+                    <include content="Dimension_Padding">
+                        <param name="pad">20</param>
+                    </include>
+                    <animation effect="fade" start="100" end="50" condition="![$PARAM[selected]]">Conditional</animation>
+                    <include>Wireframe_Preview</include>
+                    <include content="Layout_ViewType_Selected" condition="$PARAM[selected]">
+                        <param name="current">$PARAM[current]</param>
                     </include>
                 </control>
             </control>

@@ -221,12 +221,32 @@
         </definition>
     </include>
 
+    <include name="DialogSelect_Viewtype_Focus">
+        <control type="grouplist">
+            <orientation>horizontal</orientation>
+            <itemgap>0</itemgap>
+            <control type="group">
+                <width>1000</width>
+            </control>
+            <control type="group">
+                <width>1000</width>
+                <height>580</height>
+                <include content="$PARAM[itemlayout_include]">
+                    <param name="selected">true</param>
+                    <param name="icon">$INFO[Container($PARAM[id]).ListItem.Icon]</param>
+                    <param name="current">$PARAM[current]</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
     <include name="DialogSelect_Viewtype">
         <param name="id">3</param>
         <param name="current">Container(3).ListItem.IsSelected</param>
         <param name="itemlayout_include">Layout_ViewType</param>
         <param name="windowopen_delay">200</param>
         <param name="categories">false</param>
+        <param name="focus_in_list">false</param>
         <definition>
             <include>Part_Dim_Overlay</include>
             <control type="group">
@@ -268,8 +288,8 @@
                                 <control type="wraplist" id="$PARAM[id]">
                                     <onup condition="$PARAM[categories]">10813</onup>
 
-                                    <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
-                                    <animation effect="fade" start="100" end="0" condition="!Integer.IsGreater(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+                                    <animation effect="fade" start="100" end="50" condition="![$PARAM[focus_in_list]]">Conditional</animation>
+                                    <animation effect="fade" start="100" end="0" condition="![$PARAM[focus_in_list]] + !Integer.IsGreater(Container($PARAM[id]).NumItems,1)">Conditional</animation>
                                     <!-- Kodi says which way the filters moved to another category -->
                                     <animation type="Conditional" condition="String.IsEqual(Window.Property(categorymove),next)" reversible="false">
                                         <effect type="slide" start="240,0" end="0,0" time="200" tween="cubic" easing="out" />
@@ -290,29 +310,18 @@
 
                                     <focusedlayout width="1000" height="580">
                                         <include content="$PARAM[itemlayout_include]">
-                                            <param name="selected">false</param>
+                                            <param name="selected">$PARAM[focus_in_list]</param>
                                         </include>
                                     </focusedlayout>
 
                                     <include>$PARAM[include_content]</include>
                                 </control>
 
-                                <control type="grouplist">
-                                    <orientation>horizontal</orientation>
-                                    <itemgap>0</itemgap>
-                                    <control type="group">
-                                        <width>1000</width>
-                                    </control>
-                                    <control type="group">
-                                        <width>1000</width>
-                                        <height>580</height>
-                                        <include content="$PARAM[itemlayout_include]">
-                                            <param name="selected">true</param>
-                                            <param name="icon">$INFO[Container($PARAM[id]).ListItem.Icon]</param>
-                                            <param name="current">$PARAM[current]</param>
-                                        </include>
-                                    </control>
-                                </control>
+                                <include content="DialogSelect_Viewtype_Focus" condition="![$PARAM[focus_in_list]]">
+                                    <param name="id">$PARAM[id]</param>
+                                    <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
+                                    <param name="current">$PARAM[current]</param>
+                                </include>
                             </control>
 
                             <control type="group">
