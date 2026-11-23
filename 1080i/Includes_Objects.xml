@@ -434,8 +434,10 @@
     <include name="Object_Layout_Image_Rectangle">
         <param name="aspectratio">keep</param>
         <param name="selected">false</param>
+        <param name="fadetime">0</param>
         <definition>
             <control type="image">
+                <fadetime>$PARAM[fadetime]</fadetime>
                 <texture background="true" diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>
                 <aspectratio scalediffuse="false">$PARAM[aspectratio]</aspectratio>
                 <visible>![String.IsEqual(ListItem.Art(thumb),ListItem.Icon) | String.IsEmpty(ListItem.Art(thumb))] | !String.IsEmpty(ListItem.Art(fanart)) | !String.IsEmpty(ListItem.Art(poster)) | !String.StartsWith(ListItem.Icon,Default)</visible>
@@ -445,6 +447,7 @@
                     <param name="colordiffuse">$VAR[ColorSelected]</param>
                 </include>
                 <colordiffuse>main_fg_100</colordiffuse>
+                <fadetime>$PARAM[fadetime]</fadetime>
                 <texture background="true" diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>
                 <aspectratio scalediffuse="false">$PARAM[aspectratio]</aspectratio>
                 <visible>String.StartsWith(ListItem.Icon,Default) + [String.IsEqual(ListItem.Art(thumb),ListItem.Icon) | String.IsEmpty(ListItem.Art(thumb))] + String.IsEmpty(ListItem.Art(fanart)) + String.IsEmpty(ListItem.Art(poster))</visible>
@@ -497,6 +500,8 @@
         <param name="selected">false</param>
         <param name="main_artwork">Art(poster)</param>
         <param name="include_generic">true</param>
+        <param name="fadetime">0</param>
+        <param name="orbit_texture">common/orbit.png</param>
         <definition>
 
             <control type="group">
@@ -515,6 +520,7 @@
                 </include>
 
                 <include content="Object_Layout_Image_Rectangle" condition="![$PARAM[include_discart]]">
+                    <param name="fadetime">$PARAM[fadetime]</param>
                     <param name="diffuse">$PARAM[diffuse]</param>
                     <param name="icon">$PARAM[icon]</param>
                     <param name="aspectratio">$PARAM[aspectratio]</param>
@@ -523,6 +529,8 @@
             </control>
 
             <include content="Object_Layout_Image_Generic" condition="$PARAM[include_generic]">
+                <param name="diffuse">$PARAM[diffuse]</param>
+                <param name="orbit_texture">$PARAM[orbit_texture]</param>
                 <param name="main_artwork">$PARAM[main_artwork]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
@@ -537,67 +545,21 @@
 
                 <visible>[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)] | [String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)] | [String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)] | [String.IsEmpty(ListItem.$PARAM[main_artwork]) + [String.StartsWith(ListItem.Icon,Default) | [String.IsEmpty(ListItem.Icon) + String.IsEmpty(ListItem.DBType)]]]</visible>
 
-                <include content="Dimension_Padding">
-                    <param name="pad">20</param>
-                </include>
-                <control type="group">
-                    <bottom>50%</bottom>
-                    <control type="group">
-                        <bottom>10</bottom>
-                        <top>-10</top>
-                        <control type="textbox">
-                            <aligny>top</aligny>
-                            <font>font_midi_bold</font>
-                            <include condition="$PARAM[selected]">Color_SelectedText</include>
-                            <textcolor>main_fg_90</textcolor>
-                            <label>$INFO[ListItem.Label]</label>
-                            <autoscroll>false</autoscroll>
-                        </control>
-                    </control>
-                </control>
                 <control type="image">
-                    <centertop>50%</centertop>
-                    <height>1</height>
                     <include condition="$PARAM[selected]">Color_SelectedImage</include>
                     <colordiffuse>main_fg_100</colordiffuse>
-                    <texture>common/white.png</texture>
-                    <animation effect="fade" start="100" end="30" condition="true">Conditional</animation>
+                    <texture diffuse="$PARAM[diffuse]">$PARAM[orbit_texture]</texture>
+                    <aspectratio scalediffuse="false">scale</aspectratio>
                 </control>
                 <control type="group">
-                    <top>50%</top>
-                    <control type="group">
-                        <bottom>-10</bottom>
-                        <top>10</top>
-                        <!-- <bottom>0</bottom>
-                        <height>60</height> -->
-                        <control type="group">
-                            <centertop>50%</centertop>
-                            <right>0</right>
-                            <width>60</width>
-                            <height>60</height>
-                            <include content="Object_DefautIcon">
-                                <param name="selected">$PARAM[selected]</param>
-                            </include>
-                        </control>
-                        <control type="label">
-                            <aligny>center</aligny>
-                            <font>font_hint_bold</font>
-                            <include condition="$PARAM[selected]">Color_SelectedText</include>
-                            <textcolor>main_fg_90</textcolor>
-                            <label>$INFO[ListItem.DBType]</label>
-                            <autoscroll>false</autoscroll>
-                            <visible>!String.IsEmpty(ListItem.DBType)</visible>
-                        </control>
-                        <control type="label">
-                            <aligny>center</aligny>
-                            <font>font_hint_bold</font>
-                            <include condition="$PARAM[selected]">Color_SelectedText</include>
-                            <textcolor>main_fg_90</textcolor>
-                            <label>$INFO[Container.FolderName]</label>
-                            <autoscroll>false</autoscroll>
-                            <visible>String.IsEmpty(ListItem.DBType)</visible>
-                        </control>
-                    </control>
+                    <centerleft>50%</centerleft>
+                    <centertop>50%</centertop>
+                    <width>60%</width>
+                    <height>40%</height>
+                    <include content="Object_DefautIcon">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="country_size">140%</param>
+                    </include>
                 </control>
             </control>
         </definition>
@@ -605,6 +567,7 @@
 
     <include name="Object_DefautIcon">
         <param name="selected">false</param>
+        <param name="country_size">100%</param>
         <definition>
             <control type="group">
                 <visible>![String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)]</visible>
@@ -625,6 +588,10 @@
                 <visible>[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)]</visible>
             </control>
             <control type="image">
+                <centerleft>50%</centerleft>
+                <centertop>50%</centertop>
+                <width>$PARAM[country_size]</width>
+                <height>$PARAM[country_size]</height>
                 <include condition="$PARAM[selected]">Color_SelectedImage</include>
                 <colordiffuse>main_fg_90</colordiffuse>
                 <texture background="true" fallback="DefaultCountry.png">$INFO[ListItem.Label,resource://resource.images.moviecountryicons.maps/,.png]</texture>
