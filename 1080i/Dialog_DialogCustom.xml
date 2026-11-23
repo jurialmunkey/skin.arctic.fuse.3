@@ -105,6 +105,8 @@
                             <param name="include_content">$PARAM[include_content]</param>
                             <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
                             <param name="item_height">$PARAM[item_height]</param>
+                            <param name="card_w">$PARAM[card_w]</param>
+                            <param name="card_h">$PARAM[card_h]</param>
                         </include>
                     </control>
                     <include content="Part_Scrollbar">
@@ -409,15 +411,17 @@
     <!-- Five cards by three rows with the wizard's 20 gutters, padded 40 from the line, sides and bottom of the visible panel -->
     <include name="DialogCustom_Cards_List">
         <param name="scrollbarid">61</param>
+        <param name="card_w">292</param>
+        <param name="card_h">206.67</param>
         <definition>
             <include content="List_Core">
                 <param name="id">$PARAM[id]</param>
                 <param name="control">panel</param>
                 <param name="orientation">vertical</param>
-                <param name="item_w">292</param>
-                <param name="item_h">206.67</param>
-                <param name="itemlayout_w">292</param>
-                <param name="itemlayout_h">206.67</param>
+                <param name="item_w">$PARAM[card_w]</param>
+                <param name="item_h">$PARAM[card_h]</param>
+                <param name="itemlayout_w">$PARAM[card_w]</param>
+                <param name="itemlayout_h">$PARAM[card_h]</param>
                 <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
                 <param name="offset_x">20</param>
                 <param name="offset_y">20</param>
@@ -426,7 +430,7 @@
                 <left>constant_grouplist_pad</left>
                 <right>constant_grouplist_pad</right>
                 <top>constant_grouplist_pad</top>
-                <bottom>0</bottom>
+                <bottom>constant_grouplist_pad</bottom>
                 <include>$PARAM[include_content]</include>
             </include>
         </definition>
@@ -443,6 +447,194 @@
 
     <include name="DialogCustom_Cards_Items">
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSettingsItems),DialogCustom_Cards_WidgetStyle)">DialogCustom_Cards_WidgetStyle</include>
+    </include>
+
+    <!-- Generic tile style cards (1138): each preview draws the real style with the item's own genre icon -->
+    <include name="DialogCustom_Cards_GenericStyle_Item">
+        <definition>
+            <item>
+                <label>$PARAM[label]</label>
+                <icon>genres/$PARAM[genre].png</icon>
+                <property name="value">$PARAM[style]</property>
+                <property name="current">$VAR[Label_Setting_GenericStyle]</property>
+                <onclick>Skin.SetString(Generic.Style,$PARAM[style])</onclick>
+                <include content="DialogCustom_Reload_1118">
+                    <param name="window">1138</param>
+                </include>
+            </item>
+        </definition>
+    </include>
+
+    <include name="DialogCustom_Cards_GenericStyle">
+        <content>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31891]</param>
+                <param name="style">orbit</param>
+                <param name="genre">Science Fiction</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31892]</param>
+                <param name="style">filmstrip</param>
+                <param name="genre">Western</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31893]</param>
+                <param name="style">reflection</param>
+                <param name="genre">Horror</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31895]</param>
+                <param name="style">aperture</param>
+                <param name="genre">Thriller</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31896]</param>
+                <param name="style">contour</param>
+                <param name="genre">Adventure</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31897]</param>
+                <param name="style">halftone</param>
+                <param name="genre">Comedy</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31898]</param>
+                <param name="style">blueprint</param>
+                <param name="genre">Mystery</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31899]</param>
+                <param name="style">sunburst</param>
+                <param name="genre">Animation</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31900]</param>
+                <param name="style">cornerarc</param>
+                <param name="genre">Fantasy</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31901]</param>
+                <param name="style">fan</param>
+                <param name="genre">Drama</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31902]</param>
+                <param name="style">reveal</param>
+                <param name="genre">Crime</param>
+            </include>
+            <include content="DialogCustom_Cards_GenericStyle_Item">
+                <param name="label">$LOCALIZE[31903]</param>
+                <param name="style">wallpaper</param>
+                <param name="genre">Family</param>
+            </include>
+        </content>
+    </include>
+
+    <include name="DialogCustom_Layout_GenericStyle">
+        <param name="selected">false</param>
+        <definition>
+            <include content="DialogSetupWizard_Card">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="thumb">DialogCustom_Thumb_GenericStyle</param>
+                <param name="labels_h">40</param>
+                <param name="thumb_bottom">60</param>
+                <param name="thumb_pad">0</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="DialogCustom_Thumb_GenericStyle_Textured">
+        <param name="selected">false</param>
+        <param name="align">center</param>
+        <param name="aligny">center</param>
+        <definition>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),$PARAM[style])</visible>
+                <include content="Object_Generic_Textured">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">dialog_fg</param>
+                    <param name="style">$PARAM[style]</param>
+                    <param name="align">$PARAM[align]</param>
+                    <param name="aligny">$PARAM[aligny]</param>
+                    <param name="diffuse">diffuse/landscape_w356_h200.png</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogCustom_Thumb_GenericStyle">
+        <param name="selected">false</param>
+        <definition>
+            <include content="DialogCustom_Thumb_GenericStyle_Textured">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="style">orbit</param>
+            </include>
+            <include content="DialogCustom_Thumb_GenericStyle_Textured">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="style">aperture</param>
+            </include>
+            <include content="DialogCustom_Thumb_GenericStyle_Textured">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="style">contour</param>
+            </include>
+            <include content="DialogCustom_Thumb_GenericStyle_Textured">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="style">halftone</param>
+                <param name="align">right</param>
+                <param name="aligny">bottom</param>
+            </include>
+            <include content="DialogCustom_Thumb_GenericStyle_Textured">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="style">blueprint</param>
+            </include>
+            <include content="DialogCustom_Thumb_GenericStyle_Textured">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="style">sunburst</param>
+            </include>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),cornerarc)</visible>
+                <include content="Object_Generic_Cornerarc">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">dialog_fg</param>
+                    <param name="diffuse">diffuse/landscape_w356_h200.png</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),fan)</visible>
+                <include content="Object_Generic_Fan">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">dialog_fg</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),reveal)</visible>
+                <include content="Object_Generic_Reveal">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">dialog_fg</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),wallpaper)</visible>
+                <include content="Object_Generic_Wallpaper">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">dialog_fg</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),filmstrip)</visible>
+                <include content="Object_Generic_Filmstrip_Horizontal">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">dialog_fg</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(ListItem.Property(value),reflection)</visible>
+                <include content="Object_Generic_Reflection">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">dialog_fg</param>
+                </include>
+            </control>
+        </definition>
     </include>
 
     <!-- Widget style card: the style's wireframe on a setup wizard card, setting the edited shortcut's widget_style -->

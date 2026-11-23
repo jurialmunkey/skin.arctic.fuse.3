@@ -501,7 +501,8 @@
         <param name="main_artwork">Art(poster)</param>
         <param name="include_generic">true</param>
         <param name="fadetime">0</param>
-        <param name="orbit_texture">common/orbit.png</param>
+        <param name="generic_size">standard</param>
+        <param name="filmstrip_axis">Horizontal</param>
         <definition>
 
             <control type="group">
@@ -530,7 +531,8 @@
 
             <include content="Object_Layout_Image_Generic" condition="$PARAM[include_generic]">
                 <param name="diffuse">$PARAM[diffuse]</param>
-                <param name="orbit_texture">$PARAM[orbit_texture]</param>
+                <param name="generic_size">$PARAM[generic_size]</param>
+                <param name="filmstrip_axis">$PARAM[filmstrip_axis]</param>
                 <param name="main_artwork">$PARAM[main_artwork]</param>
                 <param name="selected">$PARAM[selected]</param>
             </include>
@@ -545,29 +547,477 @@
 
                 <visible>[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)] | [String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)] | [String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)] | [String.IsEmpty(ListItem.$PARAM[main_artwork]) + [String.StartsWith(ListItem.Icon,Default) | [String.IsEmpty(ListItem.Icon) + String.IsEmpty(ListItem.DBType)]]]</visible>
 
-                <control type="image">
-                    <include condition="$PARAM[selected]">Color_SelectedImage</include>
-                    <colordiffuse>main_fg_100</colordiffuse>
-                    <texture diffuse="$PARAM[diffuse]">$PARAM[orbit_texture]</texture>
-                    <aspectratio scalediffuse="false">scale</aspectratio>
-                </control>
-                <control type="group">
-                    <centerleft>50%</centerleft>
-                    <centertop>50%</centertop>
-                    <width>60%</width>
-                    <height>40%</height>
-                    <include content="Object_DefautIcon">
-                        <param name="selected">$PARAM[selected]</param>
-                        <param name="country_size">140%</param>
-                    </include>
-                </control>
+                <include content="Object_Generic_Textured" condition="![Skin.String(Generic.Style,filmstrip) | Skin.String(Generic.Style,reflection) | Skin.String(Generic.Style,aperture) | Skin.String(Generic.Style,contour) | Skin.String(Generic.Style,halftone) | Skin.String(Generic.Style,blueprint) | Skin.String(Generic.Style,sunburst) | Skin.String(Generic.Style,cornerarc) | Skin.String(Generic.Style,fan) | Skin.String(Generic.Style,reveal) | Skin.String(Generic.Style,wallpaper)]">
+                    <param name="style">orbit</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="generic_size">$PARAM[generic_size]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Textured" condition="Skin.String(Generic.Style,aperture)">
+                    <param name="style">aperture</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="generic_size">$PARAM[generic_size]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Textured" condition="Skin.String(Generic.Style,contour)">
+                    <param name="style">contour</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="generic_size">$PARAM[generic_size]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Textured" condition="Skin.String(Generic.Style,halftone)">
+                    <param name="style">halftone</param>
+                    <param name="align">right</param>
+                    <param name="aligny">bottom</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="generic_size">$PARAM[generic_size]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Textured" condition="Skin.String(Generic.Style,blueprint)">
+                    <param name="style">blueprint</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="generic_size">$PARAM[generic_size]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Textured" condition="Skin.String(Generic.Style,sunburst)">
+                    <param name="style">sunburst</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="generic_size">$PARAM[generic_size]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Cornerarc" condition="Skin.String(Generic.Style,cornerarc)">
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="generic_size">$PARAM[generic_size]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Fan" condition="Skin.String(Generic.Style,fan)">
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Reveal" condition="Skin.String(Generic.Style,reveal)">
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Wallpaper" condition="Skin.String(Generic.Style,wallpaper)">
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Filmstrip_$PARAM[filmstrip_axis]" condition="Skin.String(Generic.Style,filmstrip)">
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+                <include content="Object_Generic_Reflection" condition="Skin.String(Generic.Style,reflection)">
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
             </control>
+        </definition>
+    </include>
+
+    <!-- Generic tile styles: chosen in skin settings (1138), which also previews them with the dialog foreground -->
+    <include name="Object_Generic_Icon">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <param name="centerleft">50%</param>
+        <param name="centertop">50%</param>
+        <param name="width">60%</param>
+        <param name="height">40%</param>
+        <param name="country_size">140%</param>
+        <param name="flipy">false</param>
+        <param name="mask" />
+        <param name="aligny">center</param>
+        <definition>
+            <control type="group">
+                <centerleft>$PARAM[centerleft]</centerleft>
+                <centertop>$PARAM[centertop]</centertop>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <include content="Object_DefautIcon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="country_size">$PARAM[country_size]</param>
+                    <param name="flipy">$PARAM[flipy]</param>
+                    <param name="mask">$PARAM[mask]</param>
+                    <param name="aligny">$PARAM[aligny]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Texture behind a centred icon. Wide textures make scale follow tile height, so patterns keep their proportions -->
+    <include name="Object_Generic_Textured">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <param name="style">orbit</param>
+        <param name="generic_size">standard</param>
+        <param name="align">center</param>
+        <param name="aligny">center</param>
+        <param name="include_icon">true</param>
+        <definition>
+            <control type="image">
+                <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                <colordiffuse>$PARAM[fg]_100</colordiffuse>
+                <texture diffuse="$PARAM[diffuse]">generic/$PARAM[style]_$PARAM[generic_size].png</texture>
+                <aspectratio align="$PARAM[align]" aligny="$PARAM[aligny]" scalediffuse="false">scale</aspectratio>
+            </control>
+            <include content="Object_Generic_Icon" condition="$PARAM[include_icon]">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Arcs grow from the bottom right corner, with the icon anchored inside them -->
+    <include name="Object_Generic_Cornerarc">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <param name="generic_size">standard</param>
+        <definition>
+            <include content="Object_Generic_Textured">
+                <param name="style">cornerarc</param>
+                <param name="align">right</param>
+                <param name="aligny">bottom</param>
+                <param name="include_icon">false</param>
+                <param name="diffuse">$PARAM[diffuse]</param>
+                <param name="generic_size">$PARAM[generic_size]</param>
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+            </include>
+            <control type="group">
+                <right>13%</right>
+                <bottom>16%</bottom>
+                <width>42%</width>
+                <height>40%</height>
+                <include content="Object_DefautIcon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="align">right</param>
+                    <param name="aligny">bottom</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Thin line for filmstrip rails and the reveal divider -->
+    <include name="Object_Generic_Line">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <control type="image">
+                <centerleft>$PARAM[centerleft]</centerleft>
+                <centertop>$PARAM[centertop]</centertop>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                <colordiffuse>$PARAM[fg]_30</colordiffuse>
+                <texture>common/white.png</texture>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Object_Generic_Filmstrip_Side">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <control type="group">
+                <animation effect="fade" start="100" end="30" time="0" condition="true">Conditional</animation>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">$PARAM[centerleft]</param>
+                    <param name="centertop">$PARAM[centertop]</param>
+                    <param name="width">$PARAM[width]</param>
+                    <param name="height">$PARAM[height]</param>
+                    <param name="country_size">100%</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Object_Generic_Filmstrip_Horizontal">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <include content="Object_Generic_Line">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">50%</param>
+                <param name="centertop">10%</param>
+                <param name="width">50%</param>
+                <param name="height">2</param>
+            </include>
+            <include content="Object_Generic_Line">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">50%</param>
+                <param name="centertop">90%</param>
+                <param name="width">50%</param>
+                <param name="height">2</param>
+            </include>
+            <include content="Object_Generic_Filmstrip_Side">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">14%</param>
+                <param name="centertop">50%</param>
+                <param name="width">24%</param>
+                <param name="height">30%</param>
+            </include>
+            <include content="Object_Generic_Filmstrip_Side">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">86%</param>
+                <param name="centertop">50%</param>
+                <param name="width">24%</param>
+                <param name="height">30%</param>
+            </include>
+            <include content="Object_Generic_Icon">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Object_Generic_Filmstrip_Vertical">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <include content="Object_Generic_Line">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">10%</param>
+                <param name="centertop">50%</param>
+                <param name="width">2</param>
+                <param name="height">50%</param>
+            </include>
+            <include content="Object_Generic_Line">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">90%</param>
+                <param name="centertop">50%</param>
+                <param name="width">2</param>
+                <param name="height">50%</param>
+            </include>
+            <include content="Object_Generic_Filmstrip_Side">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">50%</param>
+                <param name="centertop">14%</param>
+                <param name="width">30%</param>
+                <param name="height">24%</param>
+            </include>
+            <include content="Object_Generic_Filmstrip_Side">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">50%</param>
+                <param name="centertop">86%</param>
+                <param name="width">30%</param>
+                <param name="height">24%</param>
+            </include>
+            <include content="Object_Generic_Icon">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Positive rotate angles turn counter-clockwise, so each side copy leans away from the main icon -->
+    <include name="Object_Generic_Fan_Side">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <control type="group">
+                <centerleft>$PARAM[centerleft]</centerleft>
+                <centertop>52%</centertop>
+                <width>36%</width>
+                <height>36%</height>
+                <animation effect="fade" start="100" end="25" time="0" condition="true">Conditional</animation>
+                <animation effect="rotate" end="$PARAM[angle]" center="auto" condition="true">Conditional</animation>
+                <include content="Object_DefautIcon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Object_Generic_Fan">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <include content="Object_Generic_Fan_Side">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">25%</param>
+                <param name="angle">18</param>
+            </include>
+            <include content="Object_Generic_Fan_Side">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">75%</param>
+                <param name="angle">-18</param>
+            </include>
+            <include content="Object_Generic_Icon">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Object_Generic_Reveal">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <include content="Object_Generic_Icon">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="width">80%</param>
+                <param name="height">60%</param>
+                <param name="country_size">115%</param>
+                <param name="mask">generic/reveal_mask.png</param>
+            </include>
+            <include content="Object_Generic_Line">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centerleft">50%</param>
+                <param name="centertop">50%</param>
+                <param name="width">2</param>
+                <param name="height">100%</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Copies stay inside the tile, as separate images aren't cropped by its shape. The positions also fit a circle -->
+    <include name="Object_Generic_Wallpaper">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <control type="group">
+                <animation effect="fade" start="100" end="20" time="0" condition="true">Conditional</animation>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">23%</param>
+                    <param name="centertop">17%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">41%</param>
+                    <param name="centertop">17%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">59%</param>
+                    <param name="centertop">17%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">77%</param>
+                    <param name="centertop">17%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">23%</param>
+                    <param name="centertop">83%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">41%</param>
+                    <param name="centertop">83%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">59%</param>
+                    <param name="centertop">83%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">77%</param>
+                    <param name="centertop">83%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">12%</param>
+                    <param name="centertop">50%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+                <include content="Object_Generic_Icon">
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="centerleft">88%</param>
+                    <param name="centertop">50%</param>
+                    <param name="width">14%</param>
+                    <param name="height">20%</param>
+                    <param name="country_size">100%</param>
+                </include>
+            </control>
+            <include content="Object_Generic_Icon">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Kodi flips a diffuse along with its texture, so the fade mask is opaque at the bottom of the file -->
+    <include name="Object_Generic_Reflection">
+        <param name="selected">false</param>
+        <param name="fg">main_fg</param>
+        <definition>
+            <include content="Object_Generic_Icon">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centertop">36%</param>
+                <param name="country_size">100%</param>
+                <param name="aligny">bottom</param>
+            </include>
+            <include content="Object_Generic_Icon">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="fg">$PARAM[fg]</param>
+                <param name="centertop">77%</param>
+                <param name="country_size">100%</param>
+                <param name="flipy">true</param>
+                <param name="mask">common/reflection_fade.png</param>
+                <param name="aligny">top</param>
+            </include>
         </definition>
     </include>
 
     <include name="Object_DefautIcon">
         <param name="selected">false</param>
         <param name="country_size">100%</param>
+        <param name="fg">main_fg</param>
+        <param name="flipy">false</param>
+        <param name="mask" />
+        <param name="align">center</param>
+        <param name="aligny">center</param>
         <definition>
             <control type="group">
                 <visible>![String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)]</visible>
@@ -575,16 +1025,16 @@
                 <visible>![String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)]</visible>
                 <control type="image">
                     <include condition="$PARAM[selected]">Color_SelectedImage</include>
-                    <colordiffuse>main_fg_90</colordiffuse>
-                    <texture background="true" fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
-                    <aspectratio>keep</aspectratio>
+                    <colordiffuse>$PARAM[fg]_90</colordiffuse>
+                    <texture flipy="$PARAM[flipy]" diffuse="$PARAM[mask]" background="true" fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+                    <aspectratio align="$PARAM[align]" aligny="$PARAM[aligny]">keep</aspectratio>
                 </control>
             </control>
             <control type="image">
                 <include condition="$PARAM[selected]">Color_SelectedImage</include>
-                <colordiffuse>main_fg_90</colordiffuse>
-                <texture background="true" fallback="DefaultGenre.png">$INFO[ListItem.Label,genres/,.png]</texture>
-                <aspectratio>keep</aspectratio>
+                <colordiffuse>$PARAM[fg]_90</colordiffuse>
+                <texture flipy="$PARAM[flipy]" diffuse="$PARAM[mask]" background="true" fallback="DefaultGenre.png">$INFO[ListItem.Label,genres/,.png]</texture>
+                <aspectratio align="$PARAM[align]" aligny="$PARAM[aligny]">keep</aspectratio>
                 <visible>[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)]</visible>
             </control>
             <control type="image">
@@ -593,16 +1043,16 @@
                 <width>$PARAM[country_size]</width>
                 <height>$PARAM[country_size]</height>
                 <include condition="$PARAM[selected]">Color_SelectedImage</include>
-                <colordiffuse>main_fg_90</colordiffuse>
-                <texture background="true" fallback="DefaultCountry.png">$INFO[ListItem.Label,resource://resource.images.moviecountryicons.maps/,.png]</texture>
-                <aspectratio>keep</aspectratio>
+                <colordiffuse>$PARAM[fg]_90</colordiffuse>
+                <texture flipy="$PARAM[flipy]" diffuse="$PARAM[mask]" background="true" fallback="DefaultCountry.png">$INFO[ListItem.Label,resource://resource.images.moviecountryicons.maps/,.png]</texture>
+                <aspectratio align="$PARAM[align]" aligny="$PARAM[aligny]">keep</aspectratio>
                 <visible>[String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)]</visible>
             </control>
             <control type="image">
                 <include condition="$PARAM[selected]">Color_SelectedImage</include>
-                <colordiffuse>main_fg_90</colordiffuse>
-                <texture background="true" fallback="DefaultStudios.png">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</texture>
-                <aspectratio>keep</aspectratio>
+                <colordiffuse>$PARAM[fg]_90</colordiffuse>
+                <texture flipy="$PARAM[flipy]" diffuse="$PARAM[mask]" background="true" fallback="DefaultStudios.png">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</texture>
+                <aspectratio align="$PARAM[align]" aligny="$PARAM[aligny]">keep</aspectratio>
                 <visible>[String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)]</visible>
             </control>
         </definition>
