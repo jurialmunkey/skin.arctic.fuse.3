@@ -5,9 +5,13 @@
         <include content="Object_Hidden_List">
             <param name="id">150</param>
             <onright>120</onright>
+            <onright condition="$EXP[Exp_DialogSubtitles_NoResults]">9000</onright>
             <onleft>120</onleft>
+            <onleft condition="$EXP[Exp_DialogSubtitles_NoResults]">9000</onleft>
             <onup>120</onup>
+            <onup condition="$EXP[Exp_DialogSubtitles_NoResults]">9000</onup>
             <ondown>120</ondown>
+            <ondown condition="$EXP[Exp_DialogSubtitles_NoResults]">9000</ondown>
         </include>
         <control type="image" id="110" description="Service Logo">
             <visible>false</visible>
@@ -19,6 +23,12 @@
             <visible>false</visible>
         </control>
 
+        <!-- Over fullscreen video the results float on the right instead of a panel -->
+        <include condition="Window.IsVisible(fullscreenvideo)">DialogSubtitles_OSD</include>
+        <include condition="!Window.IsVisible(fullscreenvideo)">DialogSubtitles_Panel</include>
+    </include>
+
+    <include name="DialogSubtitles_Panel">
         <include content="Part_Dim_Overlay">
             <param name="visible">!Window.IsVisible(DialogSlider.xml)</param>
         </include>
@@ -114,49 +124,153 @@
                 <param name="icon">special://skin/extras/icons/search.png</param>
                 <label>$LOCALIZE[137]</label>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="DialogSubtitles_Services">
+                <param name="item">DialogSubtitles_Items_ListItem</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- One item for each of Kodi's first ten services. item: the include drawing a service -->
+    <include name="DialogSubtitles_Services">
+        <definition>
+            <include content="$PARAM[item]">
                 <param name="id">01</param>
                 <param name="pos">0</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">02</param>
                 <param name="pos">1</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">03</param>
                 <param name="pos">2</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">04</param>
                 <param name="pos">3</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">05</param>
                 <param name="pos">4</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">06</param>
                 <param name="pos">5</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">07</param>
                 <param name="pos">6</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">08</param>
                 <param name="pos">7</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">09</param>
                 <param name="pos">8</param>
             </include>
-            <include content="DialogSubtitles_Items_ListItem">
+            <include content="$PARAM[item]">
                 <param name="id">10</param>
                 <param name="pos">9</param>
             </include>
-
-
         </definition>
+    </include>
+
+    <!-- OSD layout: filename and status, four results, then the service as the spotlight with its buttons above the seekbar -->
+    <include name="DialogSubtitles_OSD">
+        <control type="group">
+            <left>view_pad</left>
+            <right>view_pad</right>
+            <include>Animation_SlideIn_Dialog</include>
+            <include>DialogSubtitles_OSD_Heading</include>
+            <include>DialogSubtitles_OSD_List</include>
+            <include content="DialogSettings_OSD_Scrollbar">
+                <top>180</top>
+                <bottom>500</bottom>
+                <centerright>-60</centerright>
+                <onleft>120</onleft>
+            </include>
+            <include content="DialogSettings_OSD_Spotlight">
+                <param name="id">100</param>
+            </include>
+            <include>DialogSubtitles_OSD_Actions</include>
+        </control>
+    </include>
+
+    <!-- Short lists sit one 100px row lower for each row under four, so they end just above the spotlight -->
+    <include name="DialogSubtitles_OSD_ListSlide">
+        <animation effect="slide" end="0,300" condition="Integer.IsEqual(Container(120).NumItems,1)">Conditional</animation>
+        <animation effect="slide" end="0,200" condition="Integer.IsEqual(Container(120).NumItems,2)">Conditional</animation>
+        <animation effect="slide" end="0,100" condition="Integer.IsEqual(Container(120).NumItems,3)">Conditional</animation>
+    </include>
+
+    <include name="DialogSubtitles_OSD_Heading">
+        <control type="label">
+            <include>DialogSubtitles_OSD_ListSlide</include>
+            <top>120</top>
+            <height>40</height>
+            <align>right</align>
+            <font>font_hint_bold</font>
+            <textcolor>main_fg_70</textcolor>
+            <label>$INFO[Player.FileName]$INFO[Control.GetLabel(140),  &#8226;  ,]$INFO[Control.GetLabel(130),  &#8226;  ,]</label>
+        </control>
+    </include>
+
+    <include name="DialogSubtitles_OSD_List">
+        <include content="List_Core">
+            <param name="orientation">vertical</param>
+            <param name="id">120</param>
+            <param name="item_w">1420</param>
+            <param name="item_h">100</param>
+            <param name="itemlayout_w">1420</param>
+            <param name="itemlayout_h">100</param>
+            <param name="itemlayout_include">Layout_DialogSubtitles_OSD</param>
+            <param name="offset_x">0</param>
+            <param name="offset_y">0</param>
+            <param name="preloaditems">0</param>
+            <include>DialogSubtitles_OSD_ListSlide</include>
+            <right>-40</right>
+            <width>1420</width>
+            <top>180</top>
+            <height>400</height>
+            <pagecontrol>61</pagecontrol>
+            <onup>noop</onup>
+            <ondown>noop</ondown>
+            <onleft>9000</onleft>
+            <onright condition="$EXP[Exp_DialogSubtitles_HasPages]">61</onright>
+        </include>
+    </include>
+
+    <!-- Search and service buttons on the left edge, with the list taking the remaining width -->
+    <include name="DialogSubtitles_OSD_Actions">
+        <control type="grouplist" id="9000">
+            <left>-40</left>
+            <width>400</width>
+            <top>180</top>
+            <height>400</height>
+            <orientation>vertical</orientation>
+            <onright>120</onright>
+            <include content="DialogSelect_OSD_Action">
+                <param name="id">160</param>
+                <label>$LOCALIZE[137]</label>
+            </include>
+            <include content="DialogSubtitles_Services">
+                <param name="item">DialogSubtitles_OSD_ServiceItem</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="DialogSubtitles_OSD_ServiceItem">
+        <include content="DialogSelect_OSD_Action">
+            <param name="id">90$PARAM[id]</param>
+            <param name="control">radiobutton</param>
+            <label>$INFO[Container(150).ListItemAbsolute($PARAM[pos]).Label]</label>
+            <selected>String.IsEqual(Container(150).ListItemAbsolute($PARAM[pos]).Label,Control.GetLabel(100))</selected>
+            <onclick>SetFocus(150,$PARAM[pos],absolute)</onclick>
+            <onclick>Action(Select)</onclick>
+            <onclick>SetFocus(120)</onclick>
+            <visible>!String.IsEmpty(Container(150).ListItemAbsolute($PARAM[pos]).Label)</visible>
+        </include>
     </include>
 
 </includes>

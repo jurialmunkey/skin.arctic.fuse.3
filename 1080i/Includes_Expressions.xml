@@ -111,10 +111,10 @@
 
     <expression name="Exp_Hubs_Spotlight_SlideDown">[Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301)]</expression>
 
-    <!-- Hub navigation wraps around only when neither the Search entry nor the Power button ends the menu -->
-    <expression name="Exp_Hubs_Menu_Loopback">[[Skin.HasSetting(HomeSwitcher.DisableSearch) + Skin.HasSetting(HomeSwitcher.LoopBack)] | Skin.HasSetting(HomeSwitcher.Vertical)]</expression>
+    <!-- Power ends either menu. With Power disabled, the vertical menu always wraps and the horizontal menu wraps when Search is disabled -->
+    <expression name="Exp_Hubs_Menu_Loopback">!$EXP[Exp_Hubs_Power_IsEnabled] + [Skin.HasSetting(HomeSwitcher.DisableSearch) | Skin.HasSetting(HomeSwitcher.Vertical)]</expression>
     <!-- LoopBack disables the Power button -->
-    <expression name="Exp_Hubs_Power_IsEnabled">[!Skin.HasSetting(HomeSwitcher.LoopBack) + !Skin.HasSetting(HomeSwitcher.Vertical)]</expression>
+    <expression name="Exp_Hubs_Power_IsEnabled">[!Skin.HasSetting(HomeSwitcher.LoopBack)]</expression>
 
     <expression name="Exp_Hubs_SlideInfo">[!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible)) + !Skin.HasSetting(HomeSwitcher.Vertical)]</expression>
 
@@ -173,6 +173,16 @@
 
     <expression name="Exp_BackgroundArtwork_IsSimple">[$EXP[Exp_PlainBackgroundWindows] | [Window.IsMedia + [[Window.IsVisible(DialogBusy.xml) + Integer.IsEqual(Container.NumItems,0)]]]]</expression>
 
+    <expression name="Exp_Background_HasStylePack">
+        [[Skin.String(Background.Style,surrealist) | String.IsEmpty(Skin.String(Background.Style))] + System.AddonIsEnabled(resource.images.arctic.backgrounds.surrealist)] |
+        [Skin.String(Background.Style,bauhaus) + System.AddonIsEnabled(resource.images.arctic.backgrounds.bauhaus)] |
+        [Skin.String(Background.Style,expressionist) + System.AddonIsEnabled(resource.images.arctic.backgrounds.expressionist)] |
+        [Skin.String(Background.Style,mosaic) + System.AddonIsEnabled(resource.images.arctic.backgrounds.mosaic)] |
+        [Skin.String(Background.Style,couture) + System.AddonIsEnabled(resource.images.arctic.backgrounds.couture)] |
+        [Skin.String(Background.Style,masquerade) + System.AddonIsEnabled(resource.images.arctic.backgrounds.masquerade)] |
+        [Skin.String(Background.Style,anime) + System.AddonIsEnabled(resource.images.arctic.backgrounds.anime)]
+    </expression>
+
     <expression name="Exp_FurnitureBusy_AnimationCond_DialogExtendedProgressBar">[Window.IsActive(DialogNotification.xml) | Window.IsActive(DialogBusy.xml) | Window.IsActive(DialogVolumeBar.xml)]</expression>
     <expression name="Exp_FurnitureBusy_AnimationCond_DialogNotification">[Window.IsActive(DialogExtendedProgressBar.xml) | Window.IsActive(DialogBusy.xml) | Window.IsActive(DialogVolumeBar.xml)]</expression>
     <expression name="Exp_FurnitureBusy_AnimationCond_DialogBusy">[Window.IsActive(DialogExtendedProgressBar.xml) | Window.IsActive(DialogNotification.xml) | Window.IsActive(DialogVolumeBar.xml)]</expression>
@@ -192,6 +202,14 @@
     <!-- =============== -->
     <!-- ListItem Status -->
     <!-- =============== -->
+    <expression name="Exp_ListItem_HasDetails">[!String.IsEmpty(ListItem.Property(role)) | !String.IsEmpty(ListItem.Label2) | [[!String.IsEmpty(ListItem.Artist) | !String.IsEmpty(ListItem.AlbumArtist)] + !String.IsEqual(ListItem.DBType,artist)]]</expression>
+
+    <expression name="Exp_ListItem_HasLowerDetails">[$EXP[Exp_ListItem_HasDetails] | !String.IsEmpty(ListItem.Property(job)) | !String.IsEmpty(ListItem.Property(character)) | !String.IsEmpty(ListItem.Property(department)) | !String.IsEmpty(ListItem.ChannelName) | [!String.IsEmpty(ListItem.TvShowTitle) + !String.IsEqual(ListItem.Title,ListItem.TvShowTitle) + !String.IsEqual(ListItem.DBType,tvshow)] | !String.IsEmpty(ListItem.Genre) | !String.IsEmpty(ListItem.Premiered) | !String.IsEmpty(ListItem.PictureResolution) | !String.IsEmpty(ListItem.Date) | !String.IsEmpty(ListItem.AddonType) | !String.IsEmpty(ListItem.AddonVersion) | !String.IsEmpty(ListItem.Property(widget))]</expression>
+
+    <expression name="Exp_ListItem_HasMediaListColumns">[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,set) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,song) | String.IsEqual(ListItem.DBType,musicvideo)]</expression>
+
+    <expression name="Exp_ListItem_HasMediaListDetails">[$EXP[Exp_ListItem_HasDetails] | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.TvShowTitle)] | [[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.Director)] | [[String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)] + [!String.IsEmpty(ListItem.Property(totalepisodes)) | !String.IsEmpty(ListItem.Episode)]] | !String.IsEmpty(ListItem.Property(Artist_Genre)) | !String.IsEmpty(ListItem.Property(Artist_YearsActive))]</expression>
+
     <expression name="Exp_IsGenre">[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(dbtype),genre)]</expression>
 
     <expression name="Exp_IsStudio">[String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(dbtype),studio)]</expression>
@@ -218,7 +236,30 @@
     <expression name="Exp_DialogSlider_SubtitleDelay">String.IsEqual(Control.GetLabel(10),$LOCALIZE[22006])</expression>
     <expression name="Exp_OSD_SliderVisible">[Window.IsVisible(DialogSlider.xml) | Window.IsVisible(1149)]</expression>
     <expression name="Exp_DialogSlider_Delay">[$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_SubtitleDelay]]</expression>
+    <!-- DialogSlider headings with a fixed range in Kodi. Zoom shares its range with pixel ratio, and the picture adjustments share 0 to 100 -->
+    <expression name="Exp_DialogSlider_Sharpness">String.IsEqual(Control.GetLabel(10),$LOCALIZE[16313])</expression>
+    <expression name="Exp_DialogSlider_VerticalShift">String.IsEqual(Control.GetLabel(10),$LOCALIZE[225])</expression>
+    <expression name="Exp_DialogSlider_Zoom">[String.IsEqual(Control.GetLabel(10),$LOCALIZE[216]) | String.IsEqual(Control.GetLabel(10),$LOCALIZE[217])]</expression>
+    <expression name="Exp_DialogSlider_Adjustment">[String.IsEqual(Control.GetLabel(10),$LOCALIZE[464]) | String.IsEqual(Control.GetLabel(10),$LOCALIZE[465]) | String.IsEqual(Control.GetLabel(10),$LOCALIZE[466]) | String.IsEqual(Control.GetLabel(10),$LOCALIZE[471]) | String.IsEqual(Control.GetLabel(10),$LOCALIZE[472])]</expression>
+    <expression name="Exp_DialogSlider_NoiseReduction">String.IsEqual(Control.GetLabel(10),$LOCALIZE[16312])</expression>
+    <expression name="Exp_DialogSlider_VolumeAmp">String.IsEqual(Control.GetLabel(10),$LOCALIZE[660])</expression>
+    <expression name="Exp_DialogSlider_ToneMap">String.IsEqual(Control.GetLabel(10),$LOCALIZE[36556])</expression>
+    <!-- Ruler layouts: eight 90px segments filling from the centre, or ten 72px segments filling from the left. Zoom uses the 90px segments filling from 1.0 -->
+    <expression name="Exp_DialogSlider_CentreScale">[$EXP[Exp_DialogSlider_Delay] | $EXP[Exp_DialogSlider_Sharpness] | $EXP[Exp_DialogSlider_VerticalShift]]</expression>
+    <expression name="Exp_DialogSlider_LeftScale">[$EXP[Exp_DialogSlider_Adjustment] | $EXP[Exp_DialogSlider_NoiseReduction] | $EXP[Exp_DialogSlider_VolumeAmp] | $EXP[Exp_DialogSlider_ToneMap]]</expression>
+    <expression name="Exp_DialogSlider_Ruler">[$EXP[Exp_DialogSlider_CentreScale] | $EXP[Exp_DialogSlider_Zoom] | $EXP[Exp_DialogSlider_LeftScale]]</expression>
+    <!-- Ruler major ticks: every ten steps on the 90px scales, every eight on the 72px scales, including the playback speed ruler (1149) -->
+    <expression name="Exp_DialogSlider_RulerDecimal">[$EXP[Exp_DialogSlider_CentreScale] | $EXP[Exp_DialogSlider_Zoom] | [Window.IsVisible(1149) + Player.TempoEnabled]]</expression>
+    <expression name="Exp_DialogSlider_RulerSpeed">[$EXP[Exp_DialogSlider_LeftScale] | [Window.IsVisible(1149) + !Player.TempoEnabled]]</expression>
     <expression name="Exp_OSD_StreamRows">[Window.IsVisible(1146) | Window.IsVisible(1147) | Window.IsVisible(1148)]</expression>
+    <expression name="Exp_DialogSelect_Standard">[!Window.IsActive(12015) + String.IsEmpty(Window(Home).Property(SkinViewtypes.DialogIsActive)) + ![Window.IsDialogTopMost(gamevideofilter) | Window.IsDialogTopMost(gamestretchmode) | Window.IsDialogTopMost(gamesaves) | Window.IsDialogTopMost(gamevideorotation) | Window.IsDialogTopMost(ingamesaves)]]</expression>
+    <expression name="Exp_OSD_DialogSelect">[Window.IsVisible(fullscreenvideo) + Window.IsVisible(DialogSelect.xml) + $EXP[Exp_DialogSelect_Standard]]</expression>
+    <expression name="Exp_OSD_DialogSubtitles">[Window.IsVisible(fullscreenvideo) + Window.IsVisible(DialogSubtitles.xml)]</expression>
+    <expression name="Exp_DialogSubtitles_NoResults">Integer.IsEqual(Container(120).NumItems,0)</expression>
+    <expression name="Exp_DialogSubtitles_HasPages">Integer.IsGreater(Container(120).NumPages,1)</expression>
+    <expression name="Exp_OSD_SpotlightList">[Window.IsVisible(DialogSettings.xml) | $EXP[Exp_OSD_StreamRows] | $EXP[Exp_OSD_DialogSelect] | $EXP[Exp_OSD_DialogSubtitles]]</expression>
+    <expression name="Exp_StreamRow_HasTags">[!String.IsEmpty(ListItem.Property(codec)) | !String.IsEmpty(ListItem.Property(tags))]</expression>
+    <expression name="Exp_StreamRow_IsStream">!String.IsEmpty(ListItem.Property(isfolder))</expression>
     <expression name="Exp_OSD_HideControls">[Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(videobookmarks) | Window.IsActive(pvrosdguide) | Window.IsActive(pvrosdchannels) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml)]</expression>
 
     <!-- ==== -->

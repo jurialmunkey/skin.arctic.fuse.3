@@ -1,0 +1,138 @@
+{
+    "infolabels": {
+        "source": "$INFO[Control.GetLabel(8052)]",
+        "plotted": "$INFO[Window(weather).Property(Weather.Trend.UV.Source)]",
+        "raw0": "$INFO[Window(weather).Property(Daily.1.UVIndex)]",
+        "raw1": "$INFO[Window(weather).Property(Daily.2.UVIndex)]",
+        "raw2": "$INFO[Window(weather).Property(Daily.3.UVIndex)]",
+        "raw3": "$INFO[Window(weather).Property(Daily.4.UVIndex)]"
+    },
+    "operations": [
+        {
+            "regex": {
+                "uv0": {"input": "{raw0}", "regex": "^\\s*([0-9]{{1,3}})(?:\\s*\\([^)]*\\))?\\s*$|^[\\s\\S]+$", "value": "\\g<1>"},
+                "uv1": {"input": "{raw1}", "regex": "^\\s*([0-9]{{1,3}})(?:\\s*\\([^)]*\\))?\\s*$|^[\\s\\S]+$", "value": "\\g<1>"},
+                "uv2": {"input": "{raw2}", "regex": "^\\s*([0-9]{{1,3}})(?:\\s*\\([^)]*\\))?\\s*$|^[\\s\\S]+$", "value": "\\g<1>"},
+                "uv3": {"input": "{raw3}", "regex": "^\\s*([0-9]{{1,3}})(?:\\s*\\([^)]*\\))?\\s*$|^[\\s\\S]+$", "value": "\\g<1>"}
+            }
+        },
+        {
+            "regex": {
+                "negative0": {"input": "-{uv0}", "regex": "^-$", "value": "0"},
+                "negative1": {"input": "-{uv1}", "regex": "^-$", "value": "0"},
+                "negative2": {"input": "-{uv2}", "regex": "^-$", "value": "0"},
+                "negative3": {"input": "-{uv3}", "regex": "^-$", "value": "0"}
+            }
+        },
+        {
+            "sums": {
+                "position0": ["12", "{negative0}"],
+                "position1": ["12", "{negative1}"],
+                "position2": ["12", "{negative2}"],
+                "position3": ["12", "{negative3}"]
+            }
+        },
+        {
+            "regex": {
+                "position0": {"input": "{position0}", "regex": "^-[0-9]+$", "value": "0"},
+                "position1": {"input": "{position1}", "regex": "^-[0-9]+$", "value": "0"},
+                "position2": {"input": "{position2}", "regex": "^-[0-9]+$", "value": "0"},
+                "position3": {"input": "{position3}", "regex": "^-[0-9]+$", "value": "0"}
+            }
+        },
+        {
+            "values": {
+                "first": [
+                    {"rules": ["{uv0}!="], "value": "0"},
+                    {"rules": ["{uv1}!="], "value": "1"},
+                    {"rules": ["{uv2}!="], "value": "2"},
+                    {"rules": ["{uv3}!="], "value": "3"},
+                    ""
+                ],
+                "color0": [
+                    {"rules": ["{uv0}=="], "value": "ff67be4d"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv0},11)"], "value": "ff7b439c"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv0},8)"], "value": "ffee154a"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv0},6)"], "value": "fff66b34"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv0},3)"], "value": "fffcbd22"},
+                    "ff67be4d"
+                ],
+                "color1": [
+                    {"rules": ["{uv1}=="], "value": "ff67be4d"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv1},11)"], "value": "ff7b439c"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv1},8)"], "value": "ffee154a"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv1},6)"], "value": "fff66b34"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv1},3)"], "value": "fffcbd22"},
+                    "ff67be4d"
+                ],
+                "color2": [
+                    {"rules": ["{uv2}=="], "value": "ff67be4d"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv2},11)"], "value": "ff7b439c"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv2},8)"], "value": "ffee154a"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv2},6)"], "value": "fff66b34"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv2},3)"], "value": "fffcbd22"},
+                    "ff67be4d"
+                ],
+                "color3": [
+                    {"rules": ["{uv3}=="], "value": "ff67be4d"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv3},11)"], "value": "ff7b439c"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv3},8)"], "value": "ffee154a"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv3},6)"], "value": "fff66b34"},
+                    {"rules": ["Integer.IsGreaterOrEqual({uv3},3)"], "value": "fffcbd22"},
+                    "ff67be4d"
+                ]
+            }
+        }
+    ],
+    "actions": [
+        {
+            "rules": [
+                "Window.IsActive(weather)",
+                "Weather.IsFetched",
+                "String.IsEqual(Weather.Plugin,weather.ozweather)",
+                "{source}!=",
+                "{source}!={plotted}"
+            ],
+            "value": [
+                "ClearProperty(Weather.Trend.UV.Source,weather)",
+                [
+                    {"rules": ["{first}=="], "value": "ClearProperty(Weather.Trend.UV.First,weather)"},
+                    "SetProperty(Weather.Trend.UV.First,{first},weather)"
+                ],
+                [
+                    {"rules": ["{uv0}=="], "value": "ClearProperty(Weather.Trend.Day0.UV.Label,weather)"},
+                    [
+                        "SetProperty(Weather.Trend.Day0.UV.Label,{uv0},weather)",
+                        "SetProperty(Weather.Trend.Day0.UV.Color,{color0},weather)",
+                        "SetProperty(Weather.Trend.Day0.UV.Position,{position0},weather)"
+                    ]
+                ],
+                [
+                    {"rules": ["{uv1}=="], "value": "ClearProperty(Weather.Trend.Day1.UV.Label,weather)"},
+                    [
+                        "SetProperty(Weather.Trend.Day1.UV.Label,{uv1},weather)",
+                        "SetProperty(Weather.Trend.Day1.UV.Color,{color1},weather)",
+                        "SetProperty(Weather.Trend.Day1.UV.Position,{position1},weather)"
+                    ]
+                ],
+                [
+                    {"rules": ["{uv2}=="], "value": "ClearProperty(Weather.Trend.Day2.UV.Label,weather)"},
+                    [
+                        "SetProperty(Weather.Trend.Day2.UV.Label,{uv2},weather)",
+                        "SetProperty(Weather.Trend.Day2.UV.Color,{color2},weather)",
+                        "SetProperty(Weather.Trend.Day2.UV.Position,{position2},weather)"
+                    ]
+                ],
+                [
+                    {"rules": ["{uv3}=="], "value": "ClearProperty(Weather.Trend.Day3.UV.Label,weather)"},
+                    [
+                        "SetProperty(Weather.Trend.Day3.UV.Label,{uv3},weather)",
+                        "SetProperty(Weather.Trend.Day3.UV.Color,{color3},weather)",
+                        "SetProperty(Weather.Trend.Day3.UV.Position,{position3},weather)"
+                    ]
+                ],
+                "SetProperty(Weather.Trend.UV.Source,\"{source}\",weather)"
+            ]
+        }
+    ]
+}

@@ -3,26 +3,32 @@
     <!-- Same layer as DialogSeekBar, so the fade and ruler draw under the OSD buttons -->
     <zorder>0</zorder>
     <defaultcontrol always="true">11</defaultcontrol>
+    <include content="DialogSlider_RulerScript">
+        <param name="window">DialogSlider.xml</param>
+        <param name="value">Label_DialogSlider_Value</param>
+        <param name="minimum">Value_DialogSlider_RulerMinimum</param>
+        <param name="maximum">Value_DialogSlider_RulerMaximum</param>
+    </include>
     <controls>
 
         <control type="image">
             <bottom>0</bottom>
             <height>768</height>
-            <texture colordiffuse="panel_bg_70" border="4,0,4,0">common/gradient-v.png</texture>
+            <texture colordiffuse="shadow_full" border="4,0,4,0">common/gradient-v.png</texture>
             <!-- The seekbar draws the OSD fade when it is up -->
             <visible>!Window.IsVisible(DialogSeekBar.xml)</visible>
         </control>
 
         <control type="group">
-            <!-- With the seekbar up the ruler stands in for its bar, so it appears in place without sliding in -->
-            <include content="Animation_SlideIn_Dialog">
-                <param name="posy">48</param>
-                <param name="windowopen_condition">!Window.IsVisible(DialogSeekBar.xml)</param>
-            </include>
-            <include>DialogSlider_Heading</include>
-            <include>DialogSlider_Value</include>
+            <include>DialogSlider_RulerAnimation</include>
             <include>DialogSlider_Ruler</include>
+            <!-- Kodi still sets the value in label 12; the spotlight shows it instead -->
+            <control type="label" id="12">
+                <visible>false</visible>
+            </control>
         </control>
+
+        <include>DialogSlider_Spotlight</include>
 
     </controls>
 </window>

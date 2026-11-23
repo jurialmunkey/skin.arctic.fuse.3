@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <expression name="Exp_Weather_Is_Loading">[!Weather.IsFetched | [String.IsEqual(Weather.Plugin,weather.ozweather) + String.IsEmpty(Window(weather).Property(Weather.IsFetched))]]</expression>
+    <expression name="Exp_Weather_Trend_Ready">String.IsEqual(Window(weather).Property(Weather.Trend.Ready),true) + String.IsEqual(Control.GetLabel(8050),Window(weather).Property(Weather.Trend.Source))</expression>
+    <expression name="Exp_Weather_Trend_Has_Rain_Chance">!String.IsEmpty(Window(weather).Property(Weather.Trend.Chance.First))</expression>
+    <expression name="Exp_Weather_Trend_Has_Precipitation_Amount">!String.IsEmpty(Window(weather).Property(Weather.Trend.Amount.First))</expression>
+    <expression name="Exp_Weather_Trend_Has_Precipitation">[$EXP[Exp_Weather_Trend_Has_Rain_Chance] | $EXP[Exp_Weather_Trend_Has_Precipitation_Amount] | !String.IsEmpty(Window(weather).Property(Weather.Trend.Duration.First)) | !String.IsEmpty(Window(weather).Property(Weather.Trend.Range.First))]</expression>
+    <expression name="Exp_Weather_Trend_Has_Details">[Weather.IsFetched + String.IsEqual(Control.GetLabel(8051),Window(weather).Property(Weather.Trend.Details.Source)) + $EXP[Exp_Weather_Trend_Has_Precipitation]]</expression>
+    <expression name="Exp_Weather_Trend_Details_Page">[$EXP[Exp_Weather_Trend_Has_Details] + String.IsEqual(Window(weather).Property(Weather.Trend.Page),Details)]</expression>
+
+    <expression name="Exp_Weather_Trend_Temperature_Page">[!$EXP[Exp_Weather_Trend_Details_Page] + !$EXP[Exp_Weather_Trend_UV_Page] + !$EXP[Exp_Weather_Trend_Radar_Page]]</expression>
+    <expression name="Exp_Weather_Trend_Has_Pages">[$EXP[Exp_Weather_Trend_Has_Details] | $EXP[Exp_Weather_Trend_Has_UV] | $EXP[Exp_Weather_Trend_Has_Radar]]</expression>
+    <expression name="Exp_Weather_Trend_Has_Two_Pages">[[$EXP[Exp_Weather_Trend_Has_Details] + !$EXP[Exp_Weather_Trend_Has_UV] + !$EXP[Exp_Weather_Trend_Has_Radar]] | [!$EXP[Exp_Weather_Trend_Has_Details] + $EXP[Exp_Weather_Trend_Has_UV] + !$EXP[Exp_Weather_Trend_Has_Radar]] | [!$EXP[Exp_Weather_Trend_Has_Details] + !$EXP[Exp_Weather_Trend_Has_UV] + $EXP[Exp_Weather_Trend_Has_Radar]]]</expression>
+
+    <expression name="Exp_Weather_Trend_Next_Details">[$EXP[Exp_Weather_Trend_Temperature_Page] + $EXP[Exp_Weather_Trend_Has_Details]]</expression>
+    <expression name="Exp_Weather_Trend_Next_UV">[$EXP[Exp_Weather_Trend_Has_UV] + [$EXP[Exp_Weather_Trend_Details_Page] | [$EXP[Exp_Weather_Trend_Temperature_Page] + !$EXP[Exp_Weather_Trend_Has_Details]]]]</expression>
+    <expression name="Exp_Weather_Trend_Next_Radar">[$EXP[Exp_Weather_Trend_Has_Radar] + [$EXP[Exp_Weather_Trend_UV_Page] | [$EXP[Exp_Weather_Trend_Details_Page] + !$EXP[Exp_Weather_Trend_Has_UV]] | [$EXP[Exp_Weather_Trend_Temperature_Page] + !$EXP[Exp_Weather_Trend_Has_Details] + !$EXP[Exp_Weather_Trend_Has_UV]]]]</expression>
+    <expression name="Exp_Weather_Trend_Next_Temperature">[$EXP[Exp_Weather_Trend_Radar_Page] | [$EXP[Exp_Weather_Trend_UV_Page] + !$EXP[Exp_Weather_Trend_Has_Radar]] | [$EXP[Exp_Weather_Trend_Details_Page] + !$EXP[Exp_Weather_Trend_Has_UV] + !$EXP[Exp_Weather_Trend_Has_Radar]]]</expression>
+
+    <expression name="Exp_Weather_Trend_Prev_Radar">[$EXP[Exp_Weather_Trend_Temperature_Page] + $EXP[Exp_Weather_Trend_Has_Radar]]</expression>
+    <expression name="Exp_Weather_Trend_Prev_UV">[$EXP[Exp_Weather_Trend_Has_UV] + [$EXP[Exp_Weather_Trend_Radar_Page] | [$EXP[Exp_Weather_Trend_Temperature_Page] + !$EXP[Exp_Weather_Trend_Has_Radar]]]]</expression>
+    <expression name="Exp_Weather_Trend_Prev_Details">[$EXP[Exp_Weather_Trend_Has_Details] + [$EXP[Exp_Weather_Trend_UV_Page] | [$EXP[Exp_Weather_Trend_Radar_Page] + !$EXP[Exp_Weather_Trend_Has_UV]] | [$EXP[Exp_Weather_Trend_Temperature_Page] + !$EXP[Exp_Weather_Trend_Has_Radar] + !$EXP[Exp_Weather_Trend_Has_UV]]]]</expression>
+    <expression name="Exp_Weather_Trend_Prev_Temperature">[$EXP[Exp_Weather_Trend_Details_Page] | [$EXP[Exp_Weather_Trend_UV_Page] + !$EXP[Exp_Weather_Trend_Has_Details]] | [$EXP[Exp_Weather_Trend_Radar_Page] + !$EXP[Exp_Weather_Trend_Has_UV] + !$EXP[Exp_Weather_Trend_Has_Details]]]</expression>
+
+    <variable name="Label_Weather_Trend_Page_Next">
+        <value condition="$EXP[Exp_Weather_Trend_Next_Details]">$LOCALIZE[33021]</value>
+        <value condition="$EXP[Exp_Weather_Trend_Next_UV]">$LOCALIZE[403]</value>
+        <value condition="$EXP[Exp_Weather_Trend_Next_Radar]">$LOCALIZE[31473]</value>
+        <value>$LOCALIZE[1375]</value>
+    </variable>
+
+    <variable name="Label_Weather_Trend_Page_Prev">
+        <value condition="$EXP[Exp_Weather_Trend_Prev_Radar]">$LOCALIZE[31473]</value>
+        <value condition="$EXP[Exp_Weather_Trend_Prev_UV]">$LOCALIZE[403]</value>
+        <value condition="$EXP[Exp_Weather_Trend_Prev_Details]">$LOCALIZE[33021]</value>
+        <value>$LOCALIZE[1375]</value>
+    </variable>
+
+    <variable name="Label_Weather_Trend_Page_Hint">
+        <value condition="$EXP[Exp_Weather_Trend_Has_Two_Pages]">‹ $VAR[Label_Weather_Trend_Page_Next] ›</value>
+        <value>‹ $VAR[Label_Weather_Trend_Page_Prev]  ·  $VAR[Label_Weather_Trend_Page_Next] ›</value>
+    </variable>
+
+    <variable name="Label_Weather_Trend_Heading">
+        <value condition="$EXP[Exp_Weather_Trend_Details_Page]">$LOCALIZE[33021]</value>
+        <value>$LOCALIZE[1375]</value>
+    </variable>
+
+    <include name="Weather_Trend_Page_Hint">
+        <control type="group">
+            <include>Dimension_Bottombar</include>
+            <include content="View_Furniture_Footer_ViewLine">
+                <param name="visible">$EXP[Exp_Weather_Trend_Has_Pages]</param>
+                <param name="label">$VAR[Label_Weather_Trend_Page_Hint]</param>
+                <param name="align">left</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Source">
+        <control type="label" id="8050">
+            <include>Object_Hidden_Item_Definition</include>
+            <visible>false</visible>
+            <!-- Keep the chart cache key in sync with skinvariables-weather-trend.json. -->
+            <label>range:$INFO[Window(weather).Property(Day0.HighTemp)]:$INFO[Window(weather).Property(Day0.LowTemp)]:$INFO[Window(weather).Property(Day1.HighTemp)]:$INFO[Window(weather).Property(Day1.LowTemp)]:$INFO[Window(weather).Property(Day2.HighTemp)]:$INFO[Window(weather).Property(Day2.LowTemp)]:$INFO[Window(weather).Property(Day3.HighTemp)]:$INFO[Window(weather).Property(Day3.LowTemp)]:$INFO[Window(weather).Property(Day4.HighTemp)]:$INFO[Window(weather).Property(Day4.LowTemp)]</label>
+        </control>
+        <control type="label" id="8051">
+            <include>Object_Hidden_Item_Definition</include>
+            <visible>false</visible>
+            <!-- Track the raw fields read by the daily series rules, including empty values. -->
+            <label>precipitation:$INFO[Weather.Plugin]:$INFO[Window(weather).Property(Daily.1.ChancePrecipitation)]:$INFO[Window(weather).Property(Daily.1.PrecipitationAmount)]:$INFO[Window(weather).Property(Daily.1.PrecipitationHours)]:$INFO[Window(weather).Property(Daily.1.RainAmount)]:$INFO[Window(weather).Property(Daily.1.Precipitation)]:$INFO[Window(weather).Property(Daily.2.ChancePrecipitation)]:$INFO[Window(weather).Property(Daily.2.PrecipitationAmount)]:$INFO[Window(weather).Property(Daily.2.PrecipitationHours)]:$INFO[Window(weather).Property(Daily.2.RainAmount)]:$INFO[Window(weather).Property(Daily.2.Precipitation)]:$INFO[Window(weather).Property(Daily.3.ChancePrecipitation)]:$INFO[Window(weather).Property(Daily.3.PrecipitationAmount)]:$INFO[Window(weather).Property(Daily.3.PrecipitationHours)]:$INFO[Window(weather).Property(Daily.3.RainAmount)]:$INFO[Window(weather).Property(Daily.3.Precipitation)]:$INFO[Window(weather).Property(Daily.4.ChancePrecipitation)]:$INFO[Window(weather).Property(Daily.4.PrecipitationAmount)]:$INFO[Window(weather).Property(Daily.4.PrecipitationHours)]:$INFO[Window(weather).Property(Daily.4.RainAmount)]:$INFO[Window(weather).Property(Daily.4.Precipitation)]:$INFO[Window(weather).Property(Daily.5.ChancePrecipitation)]:$INFO[Window(weather).Property(Daily.5.PrecipitationAmount)]:$INFO[Window(weather).Property(Daily.5.PrecipitationHours)]:$INFO[Window(weather).Property(Daily.5.RainAmount)]:$INFO[Window(weather).Property(Daily.5.Precipitation)]</label>
+        </control>
+        <include>Weather_Trend_UV_Source</include>
+        <include>Weather_Trend_Radar_Source</include>
+    </include>
+
+    <include name="Weather_Trend_Shading">
+        <control type="image">
+            <width>1080</width>
+            <texture colordiffuse="shadow_hard" flipx="true" border="0,4,0,4">common/gradient-h.png</texture>
+        </control>
+        <control type="image">
+            <bottom>0</bottom>
+            <height>720</height>
+            <texture colordiffuse="shadow_back" border="4,0,4,0">common/gradient-v.png</texture>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Icon">
+        <param name="day">Day0</param>
+        <definition>
+            <control type="image">
+                <aspectratio>keep</aspectratio>
+                <texture background="true" colordiffuse="main_fg_90">resource://resource.images.weathericons.white/$INFO[Window(weather).Property($PARAM[day].FanartCode)].png</texture>
+                <nested />
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Header">
+        <control type="group">
+            <left>view_pad</left>
+            <top>view_pad</top>
+            <width>info_title_w</width>
+            <height>info_title_h</height>
+            <include content="Info_Title_Text">
+                <param name="title">Weather.Location</param>
+                <param name="colordiffuse">main_fg</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Today">
+        <control type="group">
+            <left>80</left>
+            <top>240</top>
+            <width>720</width>
+            <visible>Weather.IsFetched + [!String.IsEmpty(Window(weather).Property(Day0.HighTemp)) | !String.IsEmpty(Window(weather).Property(Day0.Outlook))]</visible>
+            <control type="label">
+                <height>40</height>
+                <font>font_head_bold</font>
+                <aligny>center</aligny>
+                <textcolor>main_fg_100</textcolor>
+                <shadowcolor>shadow_hard</shadowcolor>
+                <label>$INFO[Window(weather).Property(Current.Condition)]</label>
+            </control>
+            <control type="grouplist">
+                <top>40</top>
+                <height>100</height>
+                <itemgap>20</itemgap>
+                <orientation>horizontal</orientation>
+                <usecontrolcoords>true</usecontrolcoords>
+                <control type="label">
+                    <width>auto</width>
+                    <height>100</height>
+                    <font>font_title_huge</font>
+                    <aligny>center</aligny>
+                    <textcolor>main_fg_100</textcolor>
+                    <shadowcolor>shadow_hard</shadowcolor>
+                    <label>$INFO[Window(weather).Property(Current.Temperature),,°]</label>
+                    <visible>!String.IsEmpty(Window(weather).Property(Current.Temperature))</visible>
+                </control>
+                <include content="Weather_Trend_Icon">
+                    <centertop>50%</centertop>
+                    <width>120</width>
+                    <height>120</height>
+                    <visible>!String.IsEmpty(Window(weather).Property(Day0.FanartCode))</visible>
+                </include>
+            </control><!--
+            <control type="label">
+                <top>140</top>
+                <width>auto</width>
+                <height>40</height>
+                <font>font_main</font>
+                <aligny>center</aligny>
+                <textcolor>main_fg_90</textcolor>
+                <shadowcolor>shadow_hard</shadowcolor>
+                <label>$INFO[Window(Weather).Property(Current.FeelsLike),$LOCALIZE[402] ,°]</label>
+                <visible>!String.IsEmpty(Window(Weather).Property(Current.FeelsLike))</visible>
+            </control> -->
+            <control type="grouplist">
+                <top>200</top>
+                <include>Info_Meta_Grouplist_Definition</include>
+
+                <include content="Info_Meta_Weather_Sun">
+                    <param name="kind">Sunrise</param>
+                    <param name="icon">special://skin/extras/icons/sunrise.png</param>
+                    <param name="source">Window(Weather).Property</param>
+                    <param name="property_prefix">Day0.</param>
+                </include>
+                <include content="Info_Meta_Weather_Sun">
+                    <param name="kind">Sunset</param>
+                    <param name="icon">special://skin/extras/icons/sunset.png</param>
+                    <param name="source">Window(Weather).Property</param>
+                    <param name="property_prefix">Day0.</param>
+                </include>
+                <include content="Info_Meta_Object">
+                    <param name="bordersize">-12</param>
+                    <param name="icon">special://skin/extras/icons/temperature-half.png</param>
+                    <param name="label">$INFO[Window(Weather).Property(Current.FeelsLike),$LOCALIZE[402] ,°]</param>
+                    <param name="visible">!String.IsEmpty(Window(Weather).Property(Current.FeelsLike))</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Forecast">
+        <control type="group">
+            <left>60</left>
+            <right>60</right>
+            <top>420</top>
+            <visible>Weather.IsFetched + !$EXP[Exp_Weather_Trend_UV_Page] + !$EXP[Exp_Weather_Trend_Radar_Page]</visible>
+            <control type="group">
+                <top>80</top>
+                <include content="Weather_Trend_UV_Title">
+                    <param name="left">20</param>
+                    <param name="top">0</param>
+                    <param name="width">320</param>
+                    <param name="align">left</param>
+                    <param name="label">$VAR[Label_Weather_Trend_Heading]</param>
+                </include>
+                <include content="Weather_Trend_Day">
+                    <param name="day">Day0</param>
+                    <param name="left">0</param>
+                    <param name="has_name">true</param>
+                </include>
+                <include content="Weather_Trend_Day">
+                    <param name="day">Day1</param>
+                    <param name="left">360</param>
+                    <param name="title">$INFO[Window(weather).Property(Day1.Title)]</param>
+                </include>
+                <include content="Weather_Trend_Day">
+                    <param name="day">Day2</param>
+                    <param name="left">720</param>
+                    <param name="title">$INFO[Window(weather).Property(Day2.Title)]</param>
+                </include>
+                <include content="Weather_Trend_Day">
+                    <param name="day">Day3</param>
+                    <param name="left">1080</param>
+                    <param name="title">$INFO[Window(weather).Property(Day3.Title)]</param>
+                </include>
+                <include content="Weather_Trend_Day">
+                    <param name="day">Day4</param>
+                    <param name="left">1440</param>
+                    <param name="title">$INFO[Window(weather).Property(Day4.Title)]</param>
+                    <param name="connect">false</param>
+                </include>
+                <include>Weather_Trend_Detail_Chart</include>
+            </control>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Day">
+        <param name="title" />
+        <param name="connect">true</param>
+        <param name="has_name">false</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <width>360</width>
+                <include content="Weather_Trend_Point">
+                    <param name="day">$PARAM[day]</param>
+                    <param name="kind">High</param>
+                    <param name="label_top">-40</param>
+                    <param name="label">$INFO[Window(weather).Property($PARAM[day].HighTemp),,°]</param>
+                    <param name="has_name">$PARAM[has_name]</param>
+                    <param name="name">$LOCALIZE[393]</param>
+                    <param name="color">fff9ebd9</param>
+                    <param name="dot_color">fff9ebd9</param>
+                    <param name="visible">$EXP[Exp_Weather_Trend_Ready] + !$EXP[Exp_Weather_Trend_Details_Page]</param>
+                    <param name="connect">$PARAM[connect]</param>
+                </include>
+                <include content="Weather_Trend_Point">
+                    <param name="day">$PARAM[day]</param>
+                    <param name="kind">Low</param>
+                    <param name="label_top">10</param>
+                    <param name="label">$INFO[Window(weather).Property($PARAM[day].LowTemp),,°]</param>
+                    <param name="has_name">$PARAM[has_name]</param>
+                    <param name="name">$LOCALIZE[391]</param>
+                    <param name="color">ffa4dcff</param>
+                    <param name="dot_color">ffa4dcff</param>
+                    <param name="diffuse">weather/trend/dashes.png</param>
+                    <param name="visible">$EXP[Exp_Weather_Trend_Ready] + !$EXP[Exp_Weather_Trend_Details_Page]</param>
+                    <param name="connect">$PARAM[connect]</param>
+                </include>
+                <control type="group">
+                    <bottom>180</bottom>
+                    <control type="label">
+                        <height>40</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_main_bold</font>
+                        <textcolor>main_fg_100</textcolor>
+                        <shadowcolor>shadow_hard</shadowcolor>
+                        <label>$PARAM[title]</label>
+                    </control>
+                    <include content="Weather_Trend_Icon">
+                        <param name="day">$PARAM[day]</param>
+                        <top>250</top>
+                        <centerleft>50%</centerleft>
+                        <width>120</width>
+                        <height>120</height>
+                        <visible>!String.IsEmpty(Window(weather).Property($PARAM[day].FanartCode))</visible>
+                    </include>
+                    <include content="Weather_Trend_Day_Text">
+                        <param name="label">$INFO[Window(weather).Property($PARAM[day].Outlook)]</param>
+                        <param name="visible">![$EXP[Exp_Weather_Trend_Details_Page] + !String.IsEmpty(Window(weather).Property(Weather.Trend.$PARAM[day].Range.Label))]</param>
+                    </include>
+                    <include content="Weather_Trend_Day_Text">
+                        <param name="label">$INFO[Window(weather).Property(Weather.Trend.$PARAM[day].Range.Label)]</param>
+                        <param name="visible">$EXP[Exp_Weather_Trend_Details_Page] + !String.IsEmpty(Window(weather).Property(Weather.Trend.$PARAM[day].Range.Label))</param>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Day_Text">
+        <definition>
+            <control type="textbox">
+                <bottom>-40</bottom>
+                <left>10</left>
+                <right>10</right>
+                <height>80</height>
+                <align>center</align>
+                <aligny>top</aligny>
+                <font>font_main</font>
+                <textcolor>main_fg_90</textcolor>
+                <shadowcolor>shadow_hard</shadowcolor>
+                <label>$PARAM[label]</label>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Detail_Chart">
+        <control type="group">
+            <top>84</top>
+            <height>160</height>
+            <visible>$EXP[Exp_Weather_Trend_Details_Page]</visible>
+            <include content="Weather_Trend_Detail_Series">
+                <param name="kind">Chance</param>
+                <param name="name">$LOCALIZE[31465]</param>
+                <param name="color">ffa0d9cb</param>
+                <param name="diffuse">weather/trend/dots.png</param>
+            </include>
+            <include content="Weather_Trend_Detail_Series">
+                <param name="kind">Amount</param>
+                <param name="name">$LOCALIZE[33021]</param>
+                <param name="color">ffa0d9cb</param>
+                <param name="visible">!$EXP[Exp_Weather_Trend_Has_Rain_Chance]</param>
+            </include>
+            <include content="Weather_Trend_Detail_Series">
+                <param name="kind">Duration</param>
+                <param name="name">$LOCALIZE[33021]</param>
+                <param name="color">ffa0d9cb</param>
+                <param name="visible">!$EXP[Exp_Weather_Trend_Has_Rain_Chance] + !$EXP[Exp_Weather_Trend_Has_Precipitation_Amount]</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Detail_Series">
+        <param name="diffuse" />
+        <param name="visible">true</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible] + !String.IsEmpty(Window(weather).Property(Weather.Trend.$PARAM[kind].First))</visible>
+                <include content="Weather_Trend_Detail_Point">
+                    <param name="index">0</param>
+                    <param name="next">1</param>
+                    <param name="left">0</param>
+                    <param name="kind">$PARAM[kind]</param>
+                    <param name="name">$PARAM[name]</param>
+                    <param name="color">$PARAM[color]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                </include>
+                <include content="Weather_Trend_Detail_Point">
+                    <param name="index">1</param>
+                    <param name="next">2</param>
+                    <param name="left">360</param>
+                    <param name="kind">$PARAM[kind]</param>
+                    <param name="name">$PARAM[name]</param>
+                    <param name="color">$PARAM[color]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                </include>
+                <include content="Weather_Trend_Detail_Point">
+                    <param name="index">2</param>
+                    <param name="next">3</param>
+                    <param name="left">720</param>
+                    <param name="kind">$PARAM[kind]</param>
+                    <param name="name">$PARAM[name]</param>
+                    <param name="color">$PARAM[color]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                </include>
+                <include content="Weather_Trend_Detail_Point">
+                    <param name="index">3</param>
+                    <param name="next">4</param>
+                    <param name="left">1080</param>
+                    <param name="kind">$PARAM[kind]</param>
+                    <param name="name">$PARAM[name]</param>
+                    <param name="color">$PARAM[color]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                </include>
+                <include content="Weather_Trend_Detail_Point">
+                    <param name="index">4</param>
+                    <param name="next">5</param>
+                    <param name="left">1440</param>
+                    <param name="kind">$PARAM[kind]</param>
+                    <param name="name">$PARAM[name]</param>
+                    <param name="color">$PARAM[color]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="connect">false</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Detail_Point">
+        <param name="connect">true</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <include content="Weather_Trend_Point">
+                    <param name="day">Day$PARAM[index]</param>
+                    <param name="kind">$PARAM[kind]</param>
+                    <param name="top">0</param>
+                    <param name="plot_height">160</param>
+                    <param name="position_include">Weather_Trend_Detail_Position</param>
+                    <param name="segment_top">-170</param>
+                    <param name="segment_height">340</param>
+                    <param name="label_top">-42</param>
+                    <param name="label">$INFO[Window(weather).Property(Weather.Trend.Day$PARAM[index].$PARAM[kind].Label)]</param>
+                    <param name="visible">!String.IsEmpty(Window(weather).Property(Weather.Trend.Day$PARAM[index].$PARAM[kind].Label))</param>
+                    <param name="has_name">true</param>
+                    <param name="name">$PARAM[name]</param>
+                    <param name="name_visible">Integer.IsEqual(Window(weather).Property(Weather.Trend.$PARAM[kind].First),$PARAM[index])</param>
+                    <param name="color">$PARAM[color]</param>
+                    <param name="dot_color">$PARAM[color]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="connect">$PARAM[connect]</param>
+                    <param name="line_visible">!String.IsEmpty(Window(weather).Property(Weather.Trend.Day$PARAM[next].$PARAM[kind].Label))</param>
+                </include>
+                <control type="label">
+                    <left>100</left>
+                    <top>65</top>
+                    <width>160</width>
+                    <height>30</height>
+                    <font>font_mini_bold</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>main_fg_30</textcolor>
+                    <label>—</label>
+                    <visible>String.IsEmpty(Window(weather).Property(Weather.Trend.Day$PARAM[index].$PARAM[kind].Label))</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Point">
+        <param name="diffuse" />
+        <param name="left">180</param>
+        <param name="top">90</param>
+        <param name="plot_height">120</param>
+        <param name="position_include">Weather_Trend_Position</param>
+        <param name="segment_top">-127.5</param>
+        <param name="segment_height">255</param>
+        <param name="has_name">false</param>
+        <param name="name" />
+        <param name="name_visible">true</param>
+        <param name="line_visible">true</param>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>360</width>
+                <height>$PARAM[plot_height]</height>
+                <visible>$PARAM[visible]</visible>
+                <include content="$PARAM[position_include]">
+                    <param name="position">Window(weather).Property(Weather.Trend.$PARAM[day].$PARAM[kind].Position)</param>
+                </include>
+                <include content="Weather_Trend_Line" condition="$PARAM[connect]">
+                    <param name="delta">Window(weather).Property(Weather.Trend.$PARAM[day].$PARAM[kind].Delta)</param>
+                    <param name="color">$PARAM[color]</param>
+                    <param name="diffuse">$PARAM[diffuse]</param>
+                    <param name="visible">$PARAM[line_visible]</param>
+                    <param name="top">$PARAM[segment_top]</param>
+                    <param name="height">$PARAM[segment_height]</param>
+                    <param name="texture">weather/trend/segment-$INFO[Window(weather).Property(Weather.Trend.$PARAM[day].$PARAM[kind].Slope)].png</param>
+                </include>
+                <control type="image">
+                    <left>-5</left>
+                    <top>-5</top>
+                    <width>10</width>
+                    <height>10</height>
+                    <texture colordiffuse="$PARAM[dot_color]">common/circle.png</texture>
+                </control>
+                <control type="label">
+                    <left>-80</left>
+                    <top>$PARAM[label_top]</top>
+                    <width>160</width>
+                    <height>30</height>
+                    <font>font_mini_bold</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>$PARAM[color]</textcolor>
+                    <shadowcolor>shadow_hard</shadowcolor>
+                    <label>$PARAM[label]</label>
+                </control>
+                <include content="Weather_Trend_Line_Name" condition="$PARAM[has_name]">
+                    <param name="label">$PARAM[name]</param>
+                    <param name="color">$PARAM[dot_color]</param>
+                    <param name="visible">$PARAM[name_visible]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Line_Name">
+        <definition>
+            <control type="label">
+                <left>-166</left>
+                <top>-15</top>
+                <width>150</width>
+                <height>30</height>
+                <font>font_hint_bold</font>
+                <align>right</align>
+                <aligny>center</aligny>
+                <textcolor>$PARAM[color]</textcolor>
+                <shadowcolor>shadow_hard</shadowcolor>
+                <label>$PARAM[label]</label>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- SkinVariables rounds 16 * (maximum - value) / spread to an index
+         from 0 to 16, or uses index 8 for a flat forecast. Each step is 7.5px. -->
+    <include name="Weather_Trend_Position">
+        <definition>
+            <animation effect="slide" end="0,7.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],1)">Conditional</animation>
+            <animation effect="slide" end="0,15" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],2)">Conditional</animation>
+            <animation effect="slide" end="0,22.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],3)">Conditional</animation>
+            <animation effect="slide" end="0,30" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],4)">Conditional</animation>
+            <animation effect="slide" end="0,37.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],5)">Conditional</animation>
+            <animation effect="slide" end="0,45" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],6)">Conditional</animation>
+            <animation effect="slide" end="0,52.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],7)">Conditional</animation>
+            <animation effect="slide" end="0,60" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],8)">Conditional</animation>
+            <animation effect="slide" end="0,67.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],9)">Conditional</animation>
+            <animation effect="slide" end="0,75" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],10)">Conditional</animation>
+            <animation effect="slide" end="0,82.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],11)">Conditional</animation>
+            <animation effect="slide" end="0,90" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],12)">Conditional</animation>
+            <animation effect="slide" end="0,97.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],13)">Conditional</animation>
+            <animation effect="slide" end="0,105" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],14)">Conditional</animation>
+            <animation effect="slide" end="0,112.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],15)">Conditional</animation>
+            <animation effect="slide" end="0,120" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],16)">Conditional</animation>
+        </definition>
+    </include>
+
+    <!-- The detail plot uses the same 16 steps at 10px each. -->
+    <include name="Weather_Trend_Detail_Position">
+        <definition>
+            <animation effect="slide" end="0,10" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],1)">Conditional</animation>
+            <animation effect="slide" end="0,20" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],2)">Conditional</animation>
+            <animation effect="slide" end="0,30" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],3)">Conditional</animation>
+            <animation effect="slide" end="0,40" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],4)">Conditional</animation>
+            <animation effect="slide" end="0,50" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],5)">Conditional</animation>
+            <animation effect="slide" end="0,60" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],6)">Conditional</animation>
+            <animation effect="slide" end="0,70" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],7)">Conditional</animation>
+            <animation effect="slide" end="0,80" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],8)">Conditional</animation>
+            <animation effect="slide" end="0,90" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],9)">Conditional</animation>
+            <animation effect="slide" end="0,100" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],10)">Conditional</animation>
+            <animation effect="slide" end="0,110" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],11)">Conditional</animation>
+            <animation effect="slide" end="0,120" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],12)">Conditional</animation>
+            <animation effect="slide" end="0,130" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],13)">Conditional</animation>
+            <animation effect="slide" end="0,140" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],14)">Conditional</animation>
+            <animation effect="slide" end="0,150" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],15)">Conditional</animation>
+            <animation effect="slide" end="0,160" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],16)">Conditional</animation>
+        </definition>
+    </include>
+
+    <!-- Each segment starts at the centre of its texture and extends to the
+         next column. Flip the texture for upward steps. -->
+    <include name="Weather_Trend_Line">
+        <definition>
+            <include content="Weather_Trend_Segment">
+                <param name="visible">$PARAM[visible] + !Integer.IsLess($PARAM[delta],0)</param>
+                <param name="color">$PARAM[color]</param>
+                <param name="diffuse">$PARAM[diffuse]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="height">$PARAM[height]</param>
+            </include>
+            <include content="Weather_Trend_Segment">
+                <param name="visible">$PARAM[visible] + Integer.IsLess($PARAM[delta],0)</param>
+                <param name="flipy">true</param>
+                <param name="color">$PARAM[color]</param>
+                <param name="diffuse">$PARAM[diffuse]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="height">$PARAM[height]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Segment">
+        <param name="flipx">false</param>
+        <param name="flipy">false</param>
+        <param name="diffuse" />
+        <param name="width">360</param>
+        <definition>
+            <control type="image">
+                <left>0</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <visible>$PARAM[visible]</visible>
+                <aspectratio scalediffuse="true">stretch</aspectratio>
+                <texture colordiffuse="$PARAM[color]" diffuse="$PARAM[diffuse]" flipx="$PARAM[flipx]" flipy="$PARAM[flipy]">$PARAM[texture]</texture>
+            </control>
+        </definition>
+    </include>
+</includes>

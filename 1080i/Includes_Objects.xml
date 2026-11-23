@@ -206,16 +206,18 @@
         </definition>
     </include>
 
-    <!-- Outlined text tags: the _lines twin of the font draws the outlines over the same label. See Label_StreamCard_Tags -->
+    <!-- Outlined text tags: the _lines twin of the font draws the outlines over the same label. See Label_StreamRow_Tags -->
     <include name="Object_Tags">
         <param name="selected">false</param>
         <param name="font">font_hint_bold</param>
-        <param name="textcolor">panel_fg_90</param>
+        <param name="textcolor">main_fg_90</param>
+        <param name="align">left</param>
         <definition>
             <control type="group">
                 <nested />
                 <control type="label">
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <align>$PARAM[align]</align>
                     <aligny>center</aligny>
                     <font>$PARAM[font]</font>
                     <textcolor>$PARAM[textcolor]</textcolor>
@@ -223,6 +225,7 @@
                 </control>
                 <control type="label">
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <align>$PARAM[align]</align>
                     <aligny>center</aligny>
                     <font>$PARAM[font]_lines</font>
                     <textcolor>$PARAM[textcolor]</textcolor>
@@ -277,6 +280,53 @@
                 <aspectratio>keep</aspectratio>
                 <texture>flags/star10.png</texture>
             </control>
+        </definition>
+    </include>
+
+    <!-- Five stars from the right, faded above ListItem.ActualIcon. right_2 to right_5: each star's offset -->
+    <include name="Object_StarRating_Row">
+        <param name="selected">false</param>
+        <param name="size">32</param>
+        <param name="right_2">20</param>
+        <param name="right_3">40</param>
+        <param name="right_4">60</param>
+        <param name="right_5">80</param>
+        <definition>
+            <include content="Object_StarRating">
+                <width>$PARAM[size]</width>
+                <height>$PARAM[size]</height>
+                <param name="selected">$PARAM[selected]</param>
+                <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,5)">Conditional</animation>
+                <right>0</right>
+            </include>
+            <include content="Object_StarRating">
+                <width>$PARAM[size]</width>
+                <height>$PARAM[size]</height>
+                <param name="selected">$PARAM[selected]</param>
+                <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,4)">Conditional</animation>
+                <right>$PARAM[right_2]</right>
+            </include>
+            <include content="Object_StarRating">
+                <width>$PARAM[size]</width>
+                <height>$PARAM[size]</height>
+                <param name="selected">$PARAM[selected]</param>
+                <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,3)">Conditional</animation>
+                <right>$PARAM[right_3]</right>
+            </include>
+            <include content="Object_StarRating">
+                <width>$PARAM[size]</width>
+                <height>$PARAM[size]</height>
+                <param name="selected">$PARAM[selected]</param>
+                <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,2)">Conditional</animation>
+                <right>$PARAM[right_4]</right>
+            </include>
+            <include content="Object_StarRating">
+                <width>$PARAM[size]</width>
+                <height>$PARAM[size]</height>
+                <param name="selected">$PARAM[selected]</param>
+                <animation effect="fade" start="100" end="25" condition="Integer.IsLess(ListItem.ActualIcon,1)">Conditional</animation>
+                <right>$PARAM[right_5]</right>
+            </include>
         </definition>
     </include>
 
@@ -826,7 +876,7 @@
                     <width>80</width>
                     <aspectratio>keep</aspectratio>
                     <height>120</height>
-                    <texture colordiffuse="panel_fg_70" flipx="true">arrows/arrow-240.png</texture>
+                    <texture colordiffuse="main_fg_70" flipx="true">arrows/arrow-240.png</texture>
                     <visible>Container(52).HasPrevious</visible>
                 </control>
                 <control type="image">
@@ -835,7 +885,7 @@
                     <width>80</width>
                     <aspectratio>keep</aspectratio>
                     <height>120</height>
-                    <texture colordiffuse="panel_fg_70" flipx="false">arrows/arrow-240.png</texture>
+                    <texture colordiffuse="main_fg_70" flipx="false">arrows/arrow-240.png</texture>
                     <visible>Container(52).HasNext</visible>
                 </control>
                 <control type="fixedlist" id="52">
@@ -1057,8 +1107,8 @@
             </control>
             <control type="label">
                 <font>font_tiny_bold</font>
-                <textcolor>panel_fg_90</textcolor>
-                <shadowcolor>panel_bg_12</shadowcolor>
+                <textcolor>main_fg_90</textcolor>
+                <shadowcolor>main_bg_12</shadowcolor>
                 <label>$PARAM[label]</label>
                 <align>center</align>
                 <aligny>center</aligny>
@@ -1287,7 +1337,7 @@
                     <font>font_hint_bold</font>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <textcolor>panel_fg_100</textcolor>
+                    <textcolor>main_fg_100</textcolor>
                     <label>$INFO[ListItem.Property(UnWatchedEpisodes)]</label>
                     <include content="Object_Indicator_Visible">
                         <param name="include_type">Episodes</param>

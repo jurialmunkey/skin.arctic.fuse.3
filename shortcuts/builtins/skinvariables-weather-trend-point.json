@@ -1,0 +1,113 @@
+{
+    "regex": {
+        "negative_current": {
+            "input": "-{temperature}",
+            "regex": "^--",
+            "value": ""
+        },
+        "negative_next": {
+            "input": "-{following}",
+            "regex": "^--",
+            "value": ""
+        }
+    },
+    "operations": [
+        {
+            "sums": {
+                "current_distance": ["{maximum}", "{negative_current}"],
+                "next_distance": ["{maximum}", "{negative_next}"],
+                "threshold_increment": ["{spread}", "{spread}"]
+            }
+        },
+        {
+            "sums": {
+                "current_distance_x8": ["{current_distance}", "{current_distance}", "{current_distance}", "{current_distance}", "{current_distance}", "{current_distance}", "{current_distance}", "{current_distance}"],
+                "next_distance_x8": ["{next_distance}", "{next_distance}", "{next_distance}", "{next_distance}", "{next_distance}", "{next_distance}", "{next_distance}", "{next_distance}"],
+                "step_2_threshold": ["{spread}", "{threshold_increment}"],
+                "step_3_threshold": ["{step_2_threshold}", "{threshold_increment}"],
+                "step_4_threshold": ["{step_3_threshold}", "{threshold_increment}"],
+                "step_5_threshold": ["{step_4_threshold}", "{threshold_increment}"],
+                "step_6_threshold": ["{step_5_threshold}", "{threshold_increment}"],
+                "step_7_threshold": ["{step_6_threshold}", "{threshold_increment}"],
+                "step_8_threshold": ["{step_7_threshold}", "{threshold_increment}"],
+                "step_9_threshold": ["{step_8_threshold}", "{threshold_increment}"],
+                "step_10_threshold": ["{step_9_threshold}", "{threshold_increment}"],
+                "step_11_threshold": ["{step_10_threshold}", "{threshold_increment}"],
+                "step_12_threshold": ["{step_11_threshold}", "{threshold_increment}"],
+                "step_13_threshold": ["{step_12_threshold}", "{threshold_increment}"],
+                "step_14_threshold": ["{step_13_threshold}", "{threshold_increment}"],
+                "step_15_threshold": ["{step_14_threshold}", "{threshold_increment}"],
+                "step_16_threshold": ["{step_15_threshold}", "{threshold_increment}"]
+            }
+        },
+        {
+            "sums": {
+                "current_distance_x32": ["{current_distance_x8}", "{current_distance_x8}", "{current_distance_x8}", "{current_distance_x8}"],
+                "next_distance_x32": ["{next_distance_x8}", "{next_distance_x8}", "{next_distance_x8}", "{next_distance_x8}"]
+            }
+        },
+        {
+            "values": {
+                "position": [
+                    {"rules": ["{spread}==0"], "value": "8"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_16_threshold})"], "value": "16"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_15_threshold})"], "value": "15"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_14_threshold})"], "value": "14"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_13_threshold})"], "value": "13"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_12_threshold})"], "value": "12"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_11_threshold})"], "value": "11"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_10_threshold})"], "value": "10"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_9_threshold})"], "value": "9"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_8_threshold})"], "value": "8"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_7_threshold})"], "value": "7"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_6_threshold})"], "value": "6"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_5_threshold})"], "value": "5"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_4_threshold})"], "value": "4"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_3_threshold})"], "value": "3"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{step_2_threshold})"], "value": "2"},
+                    {"rules": ["Integer.IsGreaterOrEqual({current_distance_x32},{spread})"], "value": "1"},
+                    "0"
+                ],
+                "next_position": [
+                    {"rules": ["{spread}==0"], "value": "8"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_16_threshold})"], "value": "16"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_15_threshold})"], "value": "15"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_14_threshold})"], "value": "14"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_13_threshold})"], "value": "13"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_12_threshold})"], "value": "12"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_11_threshold})"], "value": "11"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_10_threshold})"], "value": "10"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_9_threshold})"], "value": "9"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_8_threshold})"], "value": "8"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_7_threshold})"], "value": "7"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_6_threshold})"], "value": "6"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_5_threshold})"], "value": "5"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_4_threshold})"], "value": "4"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_3_threshold})"], "value": "3"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{step_2_threshold})"], "value": "2"},
+                    {"rules": ["Integer.IsGreaterOrEqual({next_distance_x32},{spread})"], "value": "1"},
+                    "0"
+                ]
+            }
+        },
+        {
+            "sums": {
+                "delta": ["{next_position}", "-{position}"]
+            }
+        },
+        {
+            "regex": {
+                "slope": {
+                    "input": "{delta}",
+                    "regex": "^-",
+                    "value": ""
+                }
+            }
+        }
+    ],
+    "actions": [
+        "SetProperty(Weather.Trend.{key}.Position,{position},weather)",
+        "SetProperty(Weather.Trend.{key}.Delta,{delta},weather)",
+        "SetProperty(Weather.Trend.{key}.Slope,{slope},weather)"
+    ]
+}

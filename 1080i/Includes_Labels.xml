@@ -111,12 +111,14 @@
     </variable>
 
     <variable name="Label_Setting_BackgroundStyle">
+        <value condition="![$EXP[Exp_Background_HasStylePack]]">$LOCALIZE[31438]</value>
         <value condition="Skin.String(Background.Style,bauhaus)">$LOCALIZE[31853]</value>
         <value condition="Skin.String(Background.Style,expressionist)">$LOCALIZE[31855]</value>
         <value condition="Skin.String(Background.Style,mosaic)">$LOCALIZE[31857]</value>
         <value condition="Skin.String(Background.Style,surrealist) | String.IsEmpty(Skin.String(Background.Style))">$LOCALIZE[31860]</value>
         <value condition="Skin.String(Background.Style,couture)">$LOCALIZE[31869]</value>
         <value condition="Skin.String(Background.Style,masquerade)">$LOCALIZE[31870]</value>
+        <value condition="Skin.String(Background.Style,anime)">$LOCALIZE[31884]</value>
         <value>$LOCALIZE[31438]</value>
     </variable>
 
@@ -180,6 +182,13 @@
         <value condition="Skin.HasSetting(HomeSwitcher.Vertical)">$LOCALIZE[31788]</value>
         <value condition="Skin.HasSetting(HomeSwitcher.EnableIcons)">$LOCALIZE[31787]</value>
         <value>$LOCALIZE[31786]</value>
+    </variable>
+
+    <variable name="Label_Setting_FlixArt_Size">
+        <value condition="Skin.String(Skin.FlixArt.Size,Large)">$LOCALIZE[31439]</value>
+        <value condition="Skin.String(Skin.FlixArt.Size,ExtraLarge)">$LOCALIZE[31440]</value>
+        <value condition="Skin.String(Skin.FlixArt.Size,FullScreen)">$LOCALIZE[244]</value>
+        <value>$LOCALIZE[602]</value>
     </variable>
 
     <variable name="Label_Setting_Hub_Mode">
@@ -348,7 +357,7 @@
         <value>$INFO[Container(30000).ListItem.Label]</value>
     </variable>
     <variable name="Image_HubsWindow_Header">
-        <value condition="$EXP[Exp_HubsWindow_Item_Add]">$INFO[Container(30000).ListItem(-1).Icon]</value>
+        <value condition="$EXP[Exp_HubsWindow_Item_PowerPreview]">$VAR[Home_Icon_power]</value>
         <value>$INFO[Container(30000).ListItem.Icon]</value>
     </variable>
 
@@ -767,9 +776,9 @@
         <value>$INFO[PVR.ActStreamEncryptionName]</value>
     </variable>
 
-    <!-- Stream card title: offset cards keep their case so "ms" stays lowercase, and window cards keep theirs -->
+    <!-- Stream row title: slider rows show their name with the value on the right, and window rows keep their case -->
     <variable name="Label_StreamLanguage">
-        <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Label2]</value>
         <value condition="!String.IsEmpty(ListItem.Property(window))">$INFO[ListItem.Label]</value>
         <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label,[UPPERCASE],[/UPPERCASE]]</value>
         <value>UNK</value>
@@ -907,8 +916,8 @@
     </variable>
 
     <variable name="Label_OSD_UpNext_SubTitle">
-        <value condition="!String.IsEmpty(Window.Property(tvshowtitle))">$INFO[Window.Property(tvshowtitle)]$VAR[Label_OSD_UpNext_Plot_Episode_Number, [COLOR=panel_fg_30]•[/COLOR] ,]$INFO[Window.Property(year), [COLOR=panel_fg_30]•[/COLOR] ,]$INFO[Window.Property(rating), [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="!String.IsEmpty(Window.Property(year))">$INFO[Window.Property(year)]$INFO[Window.Property(rating), [COLOR=panel_fg_30]•[/COLOR] ,]</value>
+        <value condition="!String.IsEmpty(Window.Property(tvshowtitle))">$INFO[Window.Property(tvshowtitle)]$VAR[Label_OSD_UpNext_Plot_Episode_Number, [COLOR=main_fg_30]•[/COLOR] ,]$INFO[Window.Property(year), [COLOR=main_fg_30]•[/COLOR] ,]$INFO[Window.Property(rating), [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="!String.IsEmpty(Window.Property(year))">$INFO[Window.Property(year)]$INFO[Window.Property(rating), [COLOR=main_fg_30]•[/COLOR] ,]</value>
         <value>$INFO[Window.Property(rating)]</value>
     </variable>
 
@@ -968,57 +977,57 @@
     </variable>
 
     <variable name="Label_OSD_UpNext_Playlist_SubTitle">
-        <value condition="!Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)">$INFO[Container(450).ListItemAbsolute(0).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_0,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(0).Year]$INFO[Container(450).ListItemAbsolute(0).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,1)">$INFO[Container(450).ListItemAbsolute(1).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_1,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(1).Year]$INFO[Container(450).ListItemAbsolute(1).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,2)">$INFO[Container(450).ListItemAbsolute(2).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_2,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(2).Year]$INFO[Container(450).ListItemAbsolute(2).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,3)">$INFO[Container(450).ListItemAbsolute(3).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_3,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(3).Year]$INFO[Container(450).ListItemAbsolute(3).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,4)">$INFO[Container(450).ListItemAbsolute(4).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_4,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(4).Year]$INFO[Container(450).ListItemAbsolute(4).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,5)">$INFO[Container(450).ListItemAbsolute(5).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_5,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(5).Year]$INFO[Container(450).ListItemAbsolute(5).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,6)">$INFO[Container(450).ListItemAbsolute(6).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_6,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(6).Year]$INFO[Container(450).ListItemAbsolute(6).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,7)">$INFO[Container(450).ListItemAbsolute(7).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_7,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(7).Year]$INFO[Container(450).ListItemAbsolute(7).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,8)">$INFO[Container(450).ListItemAbsolute(8).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_8,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(8).Year]$INFO[Container(450).ListItemAbsolute(8).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,9)">$INFO[Container(450).ListItemAbsolute(9).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_9,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(9).Year]$INFO[Container(450).ListItemAbsolute(9).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,10)">$INFO[Container(450).ListItemAbsolute(10).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_10,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(10).Year]$INFO[Container(450).ListItemAbsolute(10).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,11)">$INFO[Container(450).ListItemAbsolute(11).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_11,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(11).Year]$INFO[Container(450).ListItemAbsolute(11).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,12)">$INFO[Container(450).ListItemAbsolute(12).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_12,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(12).Year]$INFO[Container(450).ListItemAbsolute(12).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,13)">$INFO[Container(450).ListItemAbsolute(13).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_13,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(13).Year]$INFO[Container(450).ListItemAbsolute(13).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,14)">$INFO[Container(450).ListItemAbsolute(14).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_14,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(14).Year]$INFO[Container(450).ListItemAbsolute(14).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,15)">$INFO[Container(450).ListItemAbsolute(15).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_15,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(15).Year]$INFO[Container(450).ListItemAbsolute(15).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,16)">$INFO[Container(450).ListItemAbsolute(16).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_16,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(16).Year]$INFO[Container(450).ListItemAbsolute(16).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,17)">$INFO[Container(450).ListItemAbsolute(17).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_17,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(17).Year]$INFO[Container(450).ListItemAbsolute(17).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,18)">$INFO[Container(450).ListItemAbsolute(18).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_18,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(18).Year]$INFO[Container(450).ListItemAbsolute(18).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,19)">$INFO[Container(450).ListItemAbsolute(19).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_19,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(19).Year]$INFO[Container(450).ListItemAbsolute(19).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,20)">$INFO[Container(450).ListItemAbsolute(20).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_20,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(20).Year]$INFO[Container(450).ListItemAbsolute(20).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,21)">$INFO[Container(450).ListItemAbsolute(21).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_21,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(21).Year]$INFO[Container(450).ListItemAbsolute(21).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,22)">$INFO[Container(450).ListItemAbsolute(22).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_22,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(22).Year]$INFO[Container(450).ListItemAbsolute(22).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,23)">$INFO[Container(450).ListItemAbsolute(23).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_23,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(23).Year]$INFO[Container(450).ListItemAbsolute(23).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,24)">$INFO[Container(450).ListItemAbsolute(24).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_24,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(24).Year]$INFO[Container(450).ListItemAbsolute(24).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,25)">$INFO[Container(450).ListItemAbsolute(25).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_25,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(25).Year]$INFO[Container(450).ListItemAbsolute(25).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,26)">$INFO[Container(450).ListItemAbsolute(26).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_26,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(26).Year]$INFO[Container(450).ListItemAbsolute(26).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,27)">$INFO[Container(450).ListItemAbsolute(27).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_27,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(27).Year]$INFO[Container(450).ListItemAbsolute(27).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,28)">$INFO[Container(450).ListItemAbsolute(28).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_28,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(28).Year]$INFO[Container(450).ListItemAbsolute(28).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,29)">$INFO[Container(450).ListItemAbsolute(29).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_29,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(29).Year]$INFO[Container(450).ListItemAbsolute(29).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,30)">$INFO[Container(450).ListItemAbsolute(30).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_30,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(30).Year]$INFO[Container(450).ListItemAbsolute(30).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,31)">$INFO[Container(450).ListItemAbsolute(31).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_31,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(31).Year]$INFO[Container(450).ListItemAbsolute(31).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,32)">$INFO[Container(450).ListItemAbsolute(32).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_32,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(32).Year]$INFO[Container(450).ListItemAbsolute(32).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,33)">$INFO[Container(450).ListItemAbsolute(33).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_33,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(33).Year]$INFO[Container(450).ListItemAbsolute(33).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,34)">$INFO[Container(450).ListItemAbsolute(34).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_34,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(34).Year]$INFO[Container(450).ListItemAbsolute(34).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,35)">$INFO[Container(450).ListItemAbsolute(35).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_35,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(35).Year]$INFO[Container(450).ListItemAbsolute(35).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,36)">$INFO[Container(450).ListItemAbsolute(36).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_36,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(36).Year]$INFO[Container(450).ListItemAbsolute(36).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,37)">$INFO[Container(450).ListItemAbsolute(37).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_37,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(37).Year]$INFO[Container(450).ListItemAbsolute(37).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,38)">$INFO[Container(450).ListItemAbsolute(38).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_38,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(38).Year]$INFO[Container(450).ListItemAbsolute(38).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,39)">$INFO[Container(450).ListItemAbsolute(39).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_39,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(39).Year]$INFO[Container(450).ListItemAbsolute(39).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,40)">$INFO[Container(450).ListItemAbsolute(40).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_40,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(40).Year]$INFO[Container(450).ListItemAbsolute(40).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,41)">$INFO[Container(450).ListItemAbsolute(41).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_41,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(41).Year]$INFO[Container(450).ListItemAbsolute(41).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,42)">$INFO[Container(450).ListItemAbsolute(42).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_42,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(42).Year]$INFO[Container(450).ListItemAbsolute(42).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,43)">$INFO[Container(450).ListItemAbsolute(43).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_43,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(43).Year]$INFO[Container(450).ListItemAbsolute(43).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,44)">$INFO[Container(450).ListItemAbsolute(44).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_44,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(44).Year]$INFO[Container(450).ListItemAbsolute(44).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,45)">$INFO[Container(450).ListItemAbsolute(45).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_45,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(45).Year]$INFO[Container(450).ListItemAbsolute(45).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,46)">$INFO[Container(450).ListItemAbsolute(46).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_46,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(46).Year]$INFO[Container(450).ListItemAbsolute(46).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,47)">$INFO[Container(450).ListItemAbsolute(47).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_47,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(47).Year]$INFO[Container(450).ListItemAbsolute(47).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,48)">$INFO[Container(450).ListItemAbsolute(48).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_48,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(48).Year]$INFO[Container(450).ListItemAbsolute(48).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,49)">$INFO[Container(450).ListItemAbsolute(49).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_49,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(49).Year]$INFO[Container(450).ListItemAbsolute(49).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
-        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,50)">$INFO[Container(450).ListItemAbsolute(50).TvShowTitle,, [COLOR=panel_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_50,, [COLOR=panel_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(50).Year]$INFO[Container(450).ListItemAbsolute(50).Rating, [COLOR=panel_fg_30]•[/COLOR] ,]</value>
+        <value condition="!Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)">$INFO[Container(450).ListItemAbsolute(0).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_0,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(0).Year]$INFO[Container(450).ListItemAbsolute(0).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,1)">$INFO[Container(450).ListItemAbsolute(1).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_1,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(1).Year]$INFO[Container(450).ListItemAbsolute(1).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,2)">$INFO[Container(450).ListItemAbsolute(2).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_2,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(2).Year]$INFO[Container(450).ListItemAbsolute(2).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,3)">$INFO[Container(450).ListItemAbsolute(3).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_3,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(3).Year]$INFO[Container(450).ListItemAbsolute(3).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,4)">$INFO[Container(450).ListItemAbsolute(4).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_4,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(4).Year]$INFO[Container(450).ListItemAbsolute(4).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,5)">$INFO[Container(450).ListItemAbsolute(5).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_5,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(5).Year]$INFO[Container(450).ListItemAbsolute(5).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,6)">$INFO[Container(450).ListItemAbsolute(6).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_6,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(6).Year]$INFO[Container(450).ListItemAbsolute(6).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,7)">$INFO[Container(450).ListItemAbsolute(7).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_7,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(7).Year]$INFO[Container(450).ListItemAbsolute(7).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,8)">$INFO[Container(450).ListItemAbsolute(8).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_8,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(8).Year]$INFO[Container(450).ListItemAbsolute(8).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,9)">$INFO[Container(450).ListItemAbsolute(9).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_9,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(9).Year]$INFO[Container(450).ListItemAbsolute(9).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,10)">$INFO[Container(450).ListItemAbsolute(10).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_10,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(10).Year]$INFO[Container(450).ListItemAbsolute(10).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,11)">$INFO[Container(450).ListItemAbsolute(11).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_11,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(11).Year]$INFO[Container(450).ListItemAbsolute(11).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,12)">$INFO[Container(450).ListItemAbsolute(12).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_12,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(12).Year]$INFO[Container(450).ListItemAbsolute(12).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,13)">$INFO[Container(450).ListItemAbsolute(13).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_13,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(13).Year]$INFO[Container(450).ListItemAbsolute(13).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,14)">$INFO[Container(450).ListItemAbsolute(14).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_14,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(14).Year]$INFO[Container(450).ListItemAbsolute(14).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,15)">$INFO[Container(450).ListItemAbsolute(15).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_15,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(15).Year]$INFO[Container(450).ListItemAbsolute(15).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,16)">$INFO[Container(450).ListItemAbsolute(16).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_16,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(16).Year]$INFO[Container(450).ListItemAbsolute(16).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,17)">$INFO[Container(450).ListItemAbsolute(17).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_17,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(17).Year]$INFO[Container(450).ListItemAbsolute(17).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,18)">$INFO[Container(450).ListItemAbsolute(18).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_18,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(18).Year]$INFO[Container(450).ListItemAbsolute(18).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,19)">$INFO[Container(450).ListItemAbsolute(19).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_19,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(19).Year]$INFO[Container(450).ListItemAbsolute(19).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,20)">$INFO[Container(450).ListItemAbsolute(20).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_20,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(20).Year]$INFO[Container(450).ListItemAbsolute(20).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,21)">$INFO[Container(450).ListItemAbsolute(21).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_21,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(21).Year]$INFO[Container(450).ListItemAbsolute(21).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,22)">$INFO[Container(450).ListItemAbsolute(22).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_22,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(22).Year]$INFO[Container(450).ListItemAbsolute(22).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,23)">$INFO[Container(450).ListItemAbsolute(23).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_23,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(23).Year]$INFO[Container(450).ListItemAbsolute(23).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,24)">$INFO[Container(450).ListItemAbsolute(24).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_24,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(24).Year]$INFO[Container(450).ListItemAbsolute(24).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,25)">$INFO[Container(450).ListItemAbsolute(25).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_25,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(25).Year]$INFO[Container(450).ListItemAbsolute(25).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,26)">$INFO[Container(450).ListItemAbsolute(26).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_26,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(26).Year]$INFO[Container(450).ListItemAbsolute(26).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,27)">$INFO[Container(450).ListItemAbsolute(27).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_27,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(27).Year]$INFO[Container(450).ListItemAbsolute(27).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,28)">$INFO[Container(450).ListItemAbsolute(28).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_28,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(28).Year]$INFO[Container(450).ListItemAbsolute(28).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,29)">$INFO[Container(450).ListItemAbsolute(29).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_29,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(29).Year]$INFO[Container(450).ListItemAbsolute(29).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,30)">$INFO[Container(450).ListItemAbsolute(30).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_30,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(30).Year]$INFO[Container(450).ListItemAbsolute(30).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,31)">$INFO[Container(450).ListItemAbsolute(31).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_31,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(31).Year]$INFO[Container(450).ListItemAbsolute(31).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,32)">$INFO[Container(450).ListItemAbsolute(32).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_32,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(32).Year]$INFO[Container(450).ListItemAbsolute(32).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,33)">$INFO[Container(450).ListItemAbsolute(33).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_33,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(33).Year]$INFO[Container(450).ListItemAbsolute(33).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,34)">$INFO[Container(450).ListItemAbsolute(34).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_34,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(34).Year]$INFO[Container(450).ListItemAbsolute(34).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,35)">$INFO[Container(450).ListItemAbsolute(35).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_35,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(35).Year]$INFO[Container(450).ListItemAbsolute(35).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,36)">$INFO[Container(450).ListItemAbsolute(36).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_36,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(36).Year]$INFO[Container(450).ListItemAbsolute(36).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,37)">$INFO[Container(450).ListItemAbsolute(37).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_37,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(37).Year]$INFO[Container(450).ListItemAbsolute(37).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,38)">$INFO[Container(450).ListItemAbsolute(38).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_38,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(38).Year]$INFO[Container(450).ListItemAbsolute(38).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,39)">$INFO[Container(450).ListItemAbsolute(39).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_39,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(39).Year]$INFO[Container(450).ListItemAbsolute(39).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,40)">$INFO[Container(450).ListItemAbsolute(40).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_40,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(40).Year]$INFO[Container(450).ListItemAbsolute(40).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,41)">$INFO[Container(450).ListItemAbsolute(41).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_41,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(41).Year]$INFO[Container(450).ListItemAbsolute(41).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,42)">$INFO[Container(450).ListItemAbsolute(42).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_42,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(42).Year]$INFO[Container(450).ListItemAbsolute(42).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,43)">$INFO[Container(450).ListItemAbsolute(43).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_43,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(43).Year]$INFO[Container(450).ListItemAbsolute(43).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,44)">$INFO[Container(450).ListItemAbsolute(44).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_44,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(44).Year]$INFO[Container(450).ListItemAbsolute(44).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,45)">$INFO[Container(450).ListItemAbsolute(45).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_45,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(45).Year]$INFO[Container(450).ListItemAbsolute(45).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,46)">$INFO[Container(450).ListItemAbsolute(46).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_46,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(46).Year]$INFO[Container(450).ListItemAbsolute(46).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,47)">$INFO[Container(450).ListItemAbsolute(47).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_47,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(47).Year]$INFO[Container(450).ListItemAbsolute(47).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,48)">$INFO[Container(450).ListItemAbsolute(48).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_48,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(48).Year]$INFO[Container(450).ListItemAbsolute(48).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,49)">$INFO[Container(450).ListItemAbsolute(49).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_49,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(49).Year]$INFO[Container(450).ListItemAbsolute(49).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
+        <value condition="Integer.IsEqual(VideoPlayer.PlaylistPosition,50)">$INFO[Container(450).ListItemAbsolute(50).TvShowTitle,, [COLOR=main_fg_30]•[/COLOR] ]$VAR[Label_Plot_Episode_Number_LIA_C450_50,, [COLOR=main_fg_30]•[/COLOR] ]$INFO[Container(450).ListItemAbsolute(50).Year]$INFO[Container(450).ListItemAbsolute(50).Rating, [COLOR=main_fg_30]•[/COLOR] ,]</value>
     </variable>
 
     <variable name="Label_MusicMood">
@@ -1090,6 +1099,32 @@
         <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#9664; &#9654;  $LOCALIZE[31880] 100 ms</value>
         <value>&#9664; &#9654;  $LOCALIZE[31880]</value>
     </variable>
+    <!-- DialogSlider ruler range and fill origin for each known scale, from the ranges Kodi gives these sliders.
+         Zoom and pixel ratio run 0.5 to 2.0 and tone mapping 0.1 to 5.0; their rulers start lower so the ticks fall on round values -->
+    <variable name="Value_DialogSlider_RulerMinimum">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">-1</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">-4</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">-2</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">0.4</value>
+        <value>0</value>
+    </variable>
+    <variable name="Value_DialogSlider_RulerMaximum">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness] | $EXP[Exp_DialogSlider_NoiseReduction]">1</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">4</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift] | $EXP[Exp_DialogSlider_Zoom]">2</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">5</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">60</value>
+        <value>100</value>
+    </variable>
+    <variable name="Value_DialogSlider_RulerOrigin">
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1</value>
+        <value>0</value>
+    </variable>
+    <!-- The value in the spotlight. The delay scales show milliseconds from the ruler script; other scales repeat Kodi's value label -->
+    <variable name="Label_DialogSlider_Display">
+        <value condition="$EXP[Exp_DialogSlider_Delay]">$INFO[Window(Home).Property(SkinVariables.SliderRuler.Label)]</value>
+        <value>$INFO[Control.GetLabel(12)]</value>
+    </variable>
 
     <!-- Playback speed (1149): tempo 0.80 to 1.50 when tempo is enabled, otherwise rewind and fast forward speeds -->
     <variable name="Label_OSD_PlaybackSpeed">
@@ -1122,10 +1157,171 @@
         <value condition="Player.Forwarding32x">5</value>
         <value>0</value>
     </variable>
+    <!-- Playback speed ruler (1149) value and range for the ruler script: tempo steps -3 to 5, otherwise seek steps -5 to 5 -->
+    <variable name="Value_OSD_RulerStep">
+        <value condition="Player.TempoEnabled">$VAR[Value_OSD_TempoStep]</value>
+        <value>$VAR[Value_OSD_SeekStep]</value>
+    </variable>
+    <variable name="Value_OSD_RulerMinimum">
+        <value condition="Player.TempoEnabled">-3</value>
+        <value>-5</value>
+    </variable>
+    <variable name="Value_OSD_RulerMaximum">
+        <value>5</value>
+    </variable>
+    <variable name="Value_OSD_RulerOrigin">
+        <value>0</value>
+    </variable>
+    <!-- Ruler tick labels for each step that has a major tick in some scale: 180px scales every ten steps,
+         144px scales every eight. Empty where the scale has no major tick at the step -->
+    <variable name="Label_DialogSlider_RulerTick_0">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">&#8722;1.00</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#8722;4.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">&#8722;2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">0.4</value>
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">0</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">0.70</value>
+        <value condition="Window.IsVisible(1149)">32×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_8">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">10</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.1</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">6</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">0.5</value>
+        <value condition="Window.IsVisible(1149)">16×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_10">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">&#8722;0.75</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#8722;3.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">&#8722;1.5</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">0.6</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">0.80</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_16">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">20</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.2</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">12</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">1.0</value>
+        <value condition="Window.IsVisible(1149)">8×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_20">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">&#8722;0.50</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#8722;2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">&#8722;1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">0.8</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">0.90</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_24">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">30</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.3</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">18</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">1.5</value>
+        <value condition="Window.IsVisible(1149)">4×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_30">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">&#8722;0.25</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">&#8722;1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">&#8722;0.5</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.0</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.00</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_32">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">40</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.4</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">24</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">2.0</value>
+        <value condition="Window.IsVisible(1149)">2×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_40">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.2</value>
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">50</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.5</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">30</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">2.5</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.10</value>
+        <value condition="Window.IsVisible(1149)">1×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_48">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">60</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.6</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">36</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">3.0</value>
+        <value condition="Window.IsVisible(1149)">2×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_50">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">+0.25</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">+1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">+0.5</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.4</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.20</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_56">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">70</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.7</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">42</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">3.5</value>
+        <value condition="Window.IsVisible(1149)">4×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_60">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">+0.50</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">+2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">+1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.6</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.30</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_64">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">80</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.8</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">48</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">4.0</value>
+        <value condition="Window.IsVisible(1149)">8×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_70">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">+0.75</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">+3.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">+1.5</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">1.8</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.40</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_72">
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">90</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">0.9</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">54</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">4.5</value>
+        <value condition="Window.IsVisible(1149)">16×</value>
+    </variable>
+    <variable name="Label_DialogSlider_RulerTick_80">
+        <value condition="$EXP[Exp_DialogSlider_AudioDelay] | $EXP[Exp_DialogSlider_Sharpness]">+1.00</value>
+        <value condition="$EXP[Exp_DialogSlider_SubtitleDelay]">+4.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VerticalShift]">+2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Zoom]">2.0</value>
+        <value condition="$EXP[Exp_DialogSlider_Adjustment]">100</value>
+        <value condition="$EXP[Exp_DialogSlider_NoiseReduction]">1.0</value>
+        <value condition="$EXP[Exp_DialogSlider_VolumeAmp]">60</value>
+        <value condition="$EXP[Exp_DialogSlider_ToneMap]">5.0</value>
+        <value condition="Window.IsVisible(1149) + Player.TempoEnabled">1.50</value>
+        <value condition="Window.IsVisible(1149)">32×</value>
+    </variable>
 
-    <variable name="Label_StreamCard_Tags">
+    <!-- Right aligned codec and channel tags, or a row's own tags -->
+    <variable name="Label_StreamRow_Tags">
         <value condition="!String.IsEmpty(ListItem.Property(tags))">$INFO[ListItem.Property(tags)]</value>
-        <value>$VAR[Label_ListItem_StreamCodec,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_ListItem_StreamChannels,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsImpaired,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsForced,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsDefault,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsOriginal,&#x2002;,&#x2000;]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(codec))">$VAR[Label_ListItem_StreamCodec,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_ListItem_StreamChannels,&#x2002;,&#x2000;]</value>
+    </variable>
+
+    <variable name="Label_StreamRow_Status">
+        <value>$VAR[Label_PlayerStream_IsImpaired,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsForced,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsDefault,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsOriginal,&#x2002;,&#x2000;]</value>
+    </variable>
+
+    <variable name="Label_StreamRow_Detail">
+        <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Property(detail)]</value>
+        <value>$INFO[ListItem.Label2]</value>
     </variable>
 
     <variable name="Label_OSD_SubtitlesLanguage">
@@ -1333,6 +1529,7 @@
     </variable>
 
     <variable name="Label_Overlay_Title">
+        <value condition="!String.IsEmpty(ListItem.Property(is_weather))">$INFO[ListItem.Property(title)]</value>
         <value condition="!$EXP[Exp_TMDbHelper_IsData]">$INFO[ListItem.Label]</value>
         <value>$INFO[Window(Home).Property(TMDbHelper.ListItem.base_label)]</value>
     </variable>

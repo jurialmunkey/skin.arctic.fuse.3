@@ -105,6 +105,7 @@
         <param name="allowhiddenfocus_visible">true</param>
         <param name="home_switcher">false</param>
         <param name="include_action">Object_Null</param>
+        <param name="include_content">Object_Null</param>
         <definition>
             <control type="group">
                 <height>1080</height>
@@ -119,6 +120,7 @@
                     <bottom>-40</bottom>
                     <onup>601</onup>
                     <include>$PARAM[include_action]</include>
+                    <include>$PARAM[include_content]</include>
                     <include>Hub_Grouplist_OnLeftRight</include>
                     <onback condition="$EXP[Exp_Navigation_OnParent] + !Player.HasMedia">SetFocus($PARAM[id],0,absolute)</onback>
                     <include content="Action_Widget_OnBack">
@@ -155,6 +157,7 @@
         <param name="visible">true</param>
         <param name="allowhiddenfocus">false</param>
         <param name="autoscroll">false</param>
+        <param name="include_content">Object_Null</param>
         <definition>
             <include content="$PARAM[include]">
                 <param name="id">$PARAM[id]</param>
@@ -178,6 +181,8 @@
                 <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
                 <content sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" target="$PARAM[target]" limit="$PARAM[limit]" browse="$VAR[Defs_BrowseLimitedLists]">$PARAM[content]</content>
                 <visible allowhiddenfocus="$PARAM[allowhiddenfocus]">$PARAM[visible]</visible>
+
+                <include>$PARAM[include_content]</include>
 
                 <include content="Defs_AutoScroll" condition="$PARAM[autoscroll]">
                     <param name="condition">[!Control.HasFocus($PARAM[id]) | System.IdleTime(3)]</param>
@@ -250,19 +255,35 @@
 
     <expression name="Hub_Spotlight_Visible_Expression">[Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),301) + [!Integer.IsEqual(Container(301).NumItems,0) | Container(301).IsUpdating]]</expression>
 
+    <!-- Replaces the info panel with MyWeather's header and current conditions while a weather widget is focused -->
+    <include name="Hub_Weather_Info">
+        <definition>
+            <control type="group">
+                <visible>!$EXP[Exp_Hubs_SlideInfo] + !$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id]) + !String.IsEmpty(Container($PARAM[id]).ListItem.Property(is_weather))</visible>
+                <include>Weather_Trend_Header</include>
+                <include>Weather_Trend_Today</include>
+            </control>
+        </definition>
+    </include>
+
     <include name="Hub_Wall_Info">
         <control type="group">
             <animation effect="fade" start="0" end="100" delay="399" time="1" condition="!$EXP[Hub_Spotlight_Visible_Expression]">Conditional</animation>
             <animation effect="fade" start="100" end="0" condition="$EXP[Hub_Spotlight_Visible_Expression]">Conditional</animation>
-            <visible>!$EXP[Exp_Hubs_SlideInfo]</visible>
-            <include>Home_Info_Animation</include>
-            <include>Info_Panel_Dimensions</include>
-            <include content="Info_Panel">
-                <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])]</param>
-                <param name="visible_line">false</param>
-                <param name="visible_plot">false</param>
-                <param name="visible_meta">false</param>
-                <param name="container">Container($PARAM[id]).</param>
+            <control type="group">
+                <visible>!$EXP[Exp_Hubs_SlideInfo]</visible>
+                <include>Home_Info_Animation</include>
+                <include>Info_Panel_Dimensions</include>
+                <include content="Info_Panel">
+                    <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id]) + String.IsEmpty(Container($PARAM[id]).ListItem.Property(is_weather))]</param>
+                    <param name="visible_line">false</param>
+                    <param name="visible_plot">false</param>
+                    <param name="visible_meta">false</param>
+                    <param name="container">Container($PARAM[id]).</param>
+                </include>
+            </control>
+            <include content="Hub_Weather_Info">
+                <param name="id">$PARAM[id]</param>
             </include>
         </control>
     </include>
@@ -277,7 +298,7 @@
                 <control type="group">
                     <top>200</top>
                     <include content="Info_Panel">
-                        <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])]</param>
+                        <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id]) + String.IsEmpty(Container($PARAM[id]).ListItem.Property(is_weather))]</param>
                         <param name="visible_line">false</param>
                         <param name="visible_plot">false</param>
                         <param name="visible_meta">false</param>
@@ -291,7 +312,7 @@
                 <include>Info_Panel_Dimensions</include>
                 <include>Home_Info_Animation</include>
                 <include content="Info_Panel">
-                    <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id])]</param>
+                    <param name="visible">[!$EXP[Exp_InfoDialogs] + Integer.IsEqual(Window.Property(TMDBHelper.WidgetContainer),$PARAM[id]) + String.IsEmpty(Container($PARAM[id]).ListItem.Property(is_weather))]</param>
                     <param name="visible_line">true</param>
                     <param name="visible_plot">true</param>
                     <param name="visible_meta">true</param>
@@ -299,6 +320,9 @@
                     <param name="container">Container($PARAM[id]).</param>
                 </include>
             </control>
+            <include content="Hub_Weather_Info">
+                <param name="id">$PARAM[id]</param>
+            </include>
         </control>
     </include>
 

@@ -1,0 +1,153 @@
+{
+    "infolabels": {
+        "high0": "$INFO[Window(weather).Property(Day0.HighTemp)]",
+        "low0": "$INFO[Window(weather).Property(Day0.LowTemp)]",
+        "high1": "$INFO[Window(weather).Property(Day1.HighTemp)]",
+        "low1": "$INFO[Window(weather).Property(Day1.LowTemp)]",
+        "high2": "$INFO[Window(weather).Property(Day2.HighTemp)]",
+        "low2": "$INFO[Window(weather).Property(Day2.LowTemp)]",
+        "high3": "$INFO[Window(weather).Property(Day3.HighTemp)]",
+        "low3": "$INFO[Window(weather).Property(Day3.LowTemp)]",
+        "high4": "$INFO[Window(weather).Property(Day4.HighTemp)]",
+        "low4": "$INFO[Window(weather).Property(Day4.LowTemp)]",
+        "plotted": "$INFO[Window(weather).Property(Weather.Trend.Source)]"
+    },
+    "values": {
+        "temperatures": ["{high0}:{low0}:{high1}:{low1}:{high2}:{low2}:{high3}:{low3}:{high4}:{low4}"],
+        "source": ["range:{temperatures}"]
+    },
+    "operations": [
+        {
+            "regex": {
+                "numeric": {
+                    "input": "{temperatures}",
+                    "regex": "^-?[0-9]{{1,4}}(?::-?[0-9]{{1,4}}){{9}}$",
+                    "value": "true"
+                }
+            }
+        },
+        {
+            "values": {
+                "maximum0": [
+                    {
+                        "rules": ["{numeric}==true"],
+                        "value": "{high0}"
+                    },
+                    "0"
+                ],
+                "maximum1": [
+                    {
+                        "rules": ["{numeric}==true", "Integer.IsGreater({high1},{maximum0})"],
+                        "value": "{high1}"
+                    },
+                    "{maximum0}"
+                ],
+                "maximum2": [
+                    {
+                        "rules": ["{numeric}==true", "Integer.IsGreater({high2},{maximum1})"],
+                        "value": "{high2}"
+                    },
+                    "{maximum1}"
+                ],
+                "maximum3": [
+                    {
+                        "rules": ["{numeric}==true", "Integer.IsGreater({high3},{maximum2})"],
+                        "value": "{high3}"
+                    },
+                    "{maximum2}"
+                ],
+                "maximum4": [
+                    {
+                        "rules": ["{numeric}==true", "Integer.IsGreater({high4},{maximum3})"],
+                        "value": "{high4}"
+                    },
+                    "{maximum3}"
+                ],
+                "minimum0": [
+                    {
+                        "rules": ["{numeric}==true"],
+                        "value": "{low0}"
+                    },
+                    "0"
+                ],
+                "minimum1": [
+                    {
+                        "rules": ["{numeric}==true", "Integer.IsLess({low1},{minimum0})"],
+                        "value": "{low1}"
+                    },
+                    "{minimum0}"
+                ],
+                "minimum2": [
+                    {
+                        "rules": ["{numeric}==true", "Integer.IsLess({low2},{minimum1})"],
+                        "value": "{low2}"
+                    },
+                    "{minimum1}"
+                ],
+                "minimum3": [
+                    {
+                        "rules": ["{numeric}==true", "Integer.IsLess({low3},{minimum2})"],
+                        "value": "{low3}"
+                    },
+                    "{minimum2}"
+                ],
+                "minimum4": [
+                    {
+                        "rules": ["{numeric}==true", "Integer.IsLess({low4},{minimum3})"],
+                        "value": "{low4}"
+                    },
+                    "{minimum3}"
+                ]
+            }
+        },
+        {
+            "regex": {
+                "negative_minimum": {
+                    "input": "-{minimum4}",
+                    "regex": "^--",
+                    "value": ""
+                }
+            }
+        },
+        {
+            "sums": {
+                "spread": ["{maximum4}", "{negative_minimum}"]
+            }
+        }
+    ],
+    "actions": [
+        {
+            "rules": [
+                "Window.IsActive(weather)",
+                "Weather.IsFetched",
+                "{source}!={plotted}",
+                "{numeric}==true",
+                "Integer.IsLessOrEqual({spread},1600)",
+                "Integer.IsGreaterOrEqual({high0},{low0})",
+                "Integer.IsGreaterOrEqual({high1},{low1})",
+                "Integer.IsGreaterOrEqual({high2},{low2})",
+                "Integer.IsGreaterOrEqual({high3},{low3})",
+                "Integer.IsGreaterOrEqual({high4},{low4})"
+            ],
+            "value": [
+                "ClearProperty(Weather.Trend.Source,weather)",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day0.High&temperature={high0}&following={high1}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day1.High&temperature={high1}&following={high2}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day2.High&temperature={high2}&following={high3}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day3.High&temperature={high3}&following={high4}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day4.High&temperature={high4}&following={high4}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day0.Low&temperature={low0}&following={low1}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day1.Low&temperature={low1}&following={low2}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day2.Low&temperature={low2}&following={low3}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day3.Low&temperature={low3}&following={low4}&maximum={maximum4}&spread={spread}",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-point.json&use_rules=True&key=Day4.Low&temperature={low4}&following={low4}&maximum={maximum4}&spread={spread}",
+                "SetProperty(Weather.Trend.Ready,true,weather)",
+                "SetProperty(Weather.Trend.Source,{source},weather)"
+            ]
+        },
+        {
+            "rules": ["Window.IsActive(weather)", "Weather.IsFetched", "{source}!={plotted}"],
+            "value": ["ClearProperty(Weather.Trend.Ready,weather)", "SetProperty(Weather.Trend.Source,{source},weather)"]
+        }
+    ]
+}
