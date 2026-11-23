@@ -508,7 +508,7 @@
             <control type="group">
 
                 <include content="Object_Visible" condition="$PARAM[include_generic]">
-                    <param name="visible">![[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)] | [String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)] | [String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)] | [String.IsEmpty(ListItem.$PARAM[main_artwork]) + [String.StartsWith(ListItem.Icon,Default) | [String.IsEmpty(ListItem.Icon) + String.IsEmpty(ListItem.DBType)]]]]</param>
+                    <param name="visible">![[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)] | [String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)] | [String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)] | [String.IsEmpty(ListItem.$PARAM[main_artwork]) + [String.StartsWith(ListItem.Icon,Default) | [String.IsEmpty(ListItem.Icon) + [String.IsEmpty(ListItem.DBType) | $EXP[Exp_ListItem_IsPerson]]]]]]</param>
                 </include>
 
                 <include content="Object_Layout_Image_Circle" condition="$PARAM[include_discart]">
@@ -545,7 +545,7 @@
         <definition>
             <control type="group">
 
-                <visible>[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)] | [String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)] | [String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)] | [String.IsEmpty(ListItem.$PARAM[main_artwork]) + [String.StartsWith(ListItem.Icon,Default) | [String.IsEmpty(ListItem.Icon) + String.IsEmpty(ListItem.DBType)]]]</visible>
+                <visible>[String.IsEqual(ListItem.DBType,genre) | String.IsEqual(ListItem.Property(DBType),genre)] | [String.IsEqual(ListItem.DBType,studio) | String.IsEqual(ListItem.Property(DBType),studio)] | [String.IsEqual(ListItem.DBType,country) | String.IsEqual(ListItem.Property(DBType),country)] | [String.IsEmpty(ListItem.$PARAM[main_artwork]) + [String.StartsWith(ListItem.Icon,Default) | [String.IsEmpty(ListItem.Icon) + [String.IsEmpty(ListItem.DBType) | $EXP[Exp_ListItem_IsPerson]]]]]</visible>
 
                 <include content="Object_Generic_Textured" condition="![Skin.String(Generic.Style,filmstrip) | Skin.String(Generic.Style,reflection) | Skin.String(Generic.Style,aperture) | Skin.String(Generic.Style,contour) | Skin.String(Generic.Style,halftone) | Skin.String(Generic.Style,blueprint) | Skin.String(Generic.Style,sunburst) | Skin.String(Generic.Style,cornerarc) | Skin.String(Generic.Style,fan) | Skin.String(Generic.Style,reveal) | Skin.String(Generic.Style,wallpaper)]">
                     <param name="style">orbit</param>
@@ -1026,7 +1026,7 @@
                 <control type="image">
                     <include condition="$PARAM[selected]">Color_SelectedImage</include>
                     <colordiffuse>$PARAM[fg]_90</colordiffuse>
-                    <texture flipy="$PARAM[flipy]" diffuse="$PARAM[mask]" background="true" fallback="DefaultFolder.png">$INFO[ListItem.Icon]</texture>
+                    <texture flipy="$PARAM[flipy]" diffuse="$PARAM[mask]" background="true" fallback="DefaultFolder.png">$VAR[Image_Generic_Icon]</texture>
                     <aspectratio align="$PARAM[align]" aligny="$PARAM[aligny]">keep</aspectratio>
                 </control>
             </control>
