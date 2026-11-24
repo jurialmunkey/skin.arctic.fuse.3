@@ -227,10 +227,11 @@
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSelectItems),DialogCustom_Buttons_Items_Select)">DialogCustom_Buttons_Items_Select</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSelectItems),DialogCustom_SearchStyles_Select)">DialogCustom_SearchStyles_Select</include>
         <include condition="String.IsEqual(Window(Home).Property(CustomDialogSelectItems),DialogCustom_FlixArtSize_Select)">DialogCustom_FlixArtSize_Select</include>
+        <include condition="String.IsEqual(Window(Home).Property(CustomDialogSelectItems),DialogCustom_FlixArtVisibility_Select)">DialogCustom_FlixArtVisibility_Select</include>
     </include>
 
     <include name="DialogCustom_FlixArtSize_Select">
-        <include content="DialogCustom_FlixArtSize_Select_Item">
+        <include content="DialogCustom_FlixArt_Select_Item">
             <param name="id">8001</param>
             <param name="groupid">8101</param>
             <param name="label">$LOCALIZE[602]</param>
@@ -238,7 +239,7 @@
             <param name="selected">String.IsEmpty(Skin.String(Skin.FlixArt.Size))</param>
             <param name="action">Skin.Reset(Skin.FlixArt.Size)</param>
         </include>
-        <include content="DialogCustom_FlixArtSize_Select_Item">
+        <include content="DialogCustom_FlixArt_Select_Item">
             <param name="id">8002</param>
             <param name="groupid">8102</param>
             <param name="label">$LOCALIZE[31439]</param>
@@ -246,7 +247,7 @@
             <param name="selected">Skin.String(Skin.FlixArt.Size,Large)</param>
             <param name="action">Skin.SetString(Skin.FlixArt.Size,Large)</param>
         </include>
-        <include content="DialogCustom_FlixArtSize_Select_Item">
+        <include content="DialogCustom_FlixArt_Select_Item">
             <param name="id">8003</param>
             <param name="groupid">8103</param>
             <param name="label">$LOCALIZE[31440]</param>
@@ -254,7 +255,7 @@
             <param name="selected">Skin.String(Skin.FlixArt.Size,ExtraLarge)</param>
             <param name="action">Skin.SetString(Skin.FlixArt.Size,ExtraLarge)</param>
         </include>
-        <include content="DialogCustom_FlixArtSize_Select_Item">
+        <include content="DialogCustom_FlixArt_Select_Item">
             <param name="id">8004</param>
             <param name="groupid">8104</param>
             <param name="label">$LOCALIZE[244]</param>
@@ -264,21 +265,52 @@
         </include>
     </include>
 
-    <include name="DialogCustom_FlixArtSize_Select_Item">
-        <include content="Button_Dialog_Setting">
-            <param name="dialog">true</param>
-            <param name="id">$PARAM[id]</param>
-            <param name="groupid">$PARAM[groupid]</param>
-            <param name="control">radiobutton</param>
-            <param name="istext">true</param>
-            <selected>$PARAM[selected]</selected>
-            <param name="label">$PARAM[label]</param>
-            <param name="label2">$PARAM[label2]</param>
-            <param name="has_label2">true</param>
-            <onclick>$PARAM[action]</onclick>
-            <onclick>Dialog.Close(1119,true)</onclick>
-            <include>DialogCustom_Reload_1118</include>
+    <include name="DialogCustom_FlixArtVisibility_Select">
+        <include content="DialogCustom_FlixArt_Select_Item">
+            <param name="id">8001</param>
+            <param name="groupid">8101</param>
+            <param name="label">$LOCALIZE[571]</param>
+            <param name="has_label2">false</param>
+            <param name="selected">String.IsEmpty(Skin.String(Skin.FlixArt.Visibility))</param>
+            <param name="action">Skin.Reset(Skin.FlixArt.Visibility)</param>
         </include>
+        <include content="DialogCustom_FlixArt_Select_Item">
+            <param name="id">8002</param>
+            <param name="groupid">8102</param>
+            <param name="label">$LOCALIZE[31007]</param>
+            <param name="has_label2">false</param>
+            <param name="selected">Skin.String(Skin.FlixArt.Visibility,RowOnly)</param>
+            <param name="action">Skin.SetString(Skin.FlixArt.Visibility,RowOnly)</param>
+        </include>
+        <include content="DialogCustom_FlixArt_Select_Item">
+            <param name="id">8003</param>
+            <param name="groupid">8103</param>
+            <param name="label">$LOCALIZE[31623]</param>
+            <param name="has_label2">false</param>
+            <param name="selected">$EXP[Exp_FlixArt_IsOff]</param>
+            <param name="action">Skin.SetString(Skin.FlixArt.Visibility,Off)</param>
+        </include>
+    </include>
+
+    <include name="DialogCustom_FlixArt_Select_Item">
+        <param name="label2" />
+        <param name="has_label2">true</param>
+        <definition>
+            <include content="Button_Dialog_Setting">
+                <param name="dialog">true</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="groupid">$PARAM[groupid]</param>
+                <param name="control">radiobutton</param>
+                <param name="istext">true</param>
+                <selected>$PARAM[selected]</selected>
+                <param name="label">$PARAM[label]</param>
+                <param name="label2">$PARAM[label2]</param>
+                <param name="has_label2">$PARAM[has_label2]</param>
+                <onclick>$PARAM[action]</onclick>
+                <onclick>Dialog.Close(1119,true)</onclick>
+                <include>DialogCustom_Reload_1118</include>
+            </include>
+        </definition>
     </include>
 
     <include name="DialogCustom_Settings_Items_BackgroundStyle">
@@ -368,6 +400,16 @@
             <label2>$VAR[Label_Setting_FlixArt_Size]</label2>
             <onclick>SetProperty(CustomDialogSelectItems,DialogCustom_FlixArtSize_Select,Home)</onclick>
             <onclick>SetProperty(CustomDialogSelectTitle,$LOCALIZE[31441],Home)</onclick>
+            <onclick>ActivateWindow(1119)</onclick>
+        </include>
+
+        <include content="Settings_Button">
+            <param name="dialog">true</param>
+            <param name="id">8010</param>
+            <label>$LOCALIZE[31907]</label>
+            <label2>$VAR[Label_Setting_FlixArt_Visibility]</label2>
+            <onclick>SetProperty(CustomDialogSelectItems,DialogCustom_FlixArtVisibility_Select,Home)</onclick>
+            <onclick>SetProperty(CustomDialogSelectTitle,$LOCALIZE[31907],Home)</onclick>
             <onclick>ActivateWindow(1119)</onclick>
         </include>
 

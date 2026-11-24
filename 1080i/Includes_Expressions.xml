@@ -174,8 +174,19 @@
 
     <expression name="Exp_View_IsMedia">[Window.IsVisible(videos) | Window.IsVisible(music) | Window.IsVisible(programs) | Window.IsVisible(pictures) | Window.IsVisible(games) | $EXP[Exp_PVRWindows]]</expression>
 
-    <!-- Scrollbar -->
-    <expression name="Exp_BackgroundArtwork_IsHidden">[[![$EXP[Exp_InfoDialogs] | Window.IsVisible(1190)] + [Window.IsVisible(favouritesbrowser) | Window.IsVisible(weather) | !String.IsEmpty(Window.Property(Background.HideArtwork))]] | [[$EXP[Exp_InfoDialogs] | Window.IsVisible(1190)]]]</expression>
+    <!-- Background -->
+    <expression name="Exp_FlixArt_IsOff">[Skin.String(Skin.FlixArt.Visibility,Off)]</expression>
+    <expression name="Exp_FlixArt_IsOffOutsideSpotlight">[$EXP[Exp_FlixArt_IsOff] + !$EXP[Hub_Spotlight_Visible_Expression]]</expression>
+
+    <expression name="Exp_BackgroundArtwork_IsHidden">
+        [$EXP[Exp_FlixArt_IsOffOutsideSpotlight] |
+        [Skin.String(Skin.FlixArt.Visibility,RowOnly) + !$EXP[Hub_Spotlight_Visible_Expression] + [
+            !String.IsEmpty(Window(Home).Property(InfoPanel.FullSwitch)) | $EXP[Exp_PlainBackgroundWindows] |
+            Window.IsVisible(MyPVRGuide.xml) | [Window.IsVisible(MyPVRChannels.xml) + !Control.IsVisible(502)]
+        ]] |
+        $EXP[Exp_InfoDialogs] | Window.IsVisible(1190) | Window.IsVisible(favouritesbrowser) |
+        Window.IsVisible(weather) | !String.IsEmpty(Window.Property(Background.HideArtwork))]
+    </expression>
 
     <expression name="Exp_BackgroundArtwork_IsOverlay">[$EXP[Exp_BackgroundArtwork_IsHidden] | [!$EXP[Exp_InfoDialogs] + !String.IsEmpty(Window(Home).Property(Background.ShowOverlay))] | $EXP[Exp_InfoDialogs] | $EXP[Exp_PlainBackgroundWindows]]</expression>
 
