@@ -150,6 +150,10 @@
     <!-- The crew dialog is showing the person details view instead of the crew list -->
     <expression name="Exp_DialogViewCrew_IsPerson">[!String.IsEmpty(Window.Property(person))]</expression>
 
+    <expression name="Exp_ButtonMenu_QueuedMusic">[!Player.HasMedia + Integer.IsGreater(Playlist.Length(music),1)]</expression>
+    <expression name="Exp_ButtonMenu_QueuedVideo">[!Player.HasMedia + !$EXP[Exp_ButtonMenu_QueuedMusic] + Integer.IsGreater(Playlist.Length(video),1)]</expression>
+    <expression name="Exp_ButtonMenu_MediaControls">[Player.HasMedia | $EXP[Exp_ButtonMenu_QueuedMusic] | $EXP[Exp_ButtonMenu_QueuedVideo]]</expression>
+
     <expression name="Exp_InfoDialogs_WidgetsGroup_HasFocus">[ControlGroup(5000).HasFocus()]</expression>
     <expression name="Exp_InfoDialogs_UsePersonArtwork">[String.IsEqual(ListItem.Property(tmdb_type),person) + !Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) + $EXP[Exp_TMDbHelper_IsData]]</expression>
     <expression name="Exp_InfoDialogs_CastCrew_IsCast">[String.IsEqual(Container(5029).ListItem.Property(crew_type),Cast)]</expression>
