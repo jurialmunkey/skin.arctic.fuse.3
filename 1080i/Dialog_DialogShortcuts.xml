@@ -1997,7 +1997,7 @@
     <!-- Ratings dialog (1137): the ratings menu named by Shortcuts.EditMenu, whose items can only be moved and enabled or disabled.
          The list passes focus to the focused item's move and enable buttons (22900), which follow it down the list and are painted in its focused layout.
          The list starts with a fixed item for the line's ends at or status (detail_label, detail_icon), which only enables or disables: it toggles setting,
-         and while setting is on the line shows up to six ratings instead of three (passed to the item layout as misc).
+         and while setting is on the line shows up to six ratings instead of three.
          Enabled ratings follow in menu order, then disabled ones, so an enabled rating's list position gives its slot on the line.
          Above the list, a preview of the ratings line shows the first enabled ratings with dummy values -->
     <include name="DialogRatings">
@@ -2040,7 +2040,6 @@
                                 <param name="id">22001</param>
                                 <param name="itemlayout_include">DialogRatings_Layout</param>
                                 <param name="altfocus">ControlGroup(22900).HasFocus()</param>
-                                <param name="misc">Skin.HasSetting($PARAM[setting])</param>
                                 <pagecontrol>61</pagecontrol>
                                 <content>
                                     <include content="DialogRatings_Detail_Item">
@@ -2246,16 +2245,31 @@
         </definition>
     </include>
 
-    <!-- Ratings dialog list item: unmasked icon and label, turned red while the item is disabled (as in the shortcuts editor)
-         and light blue while an enabled rating is past the line's three slots after the fixed item (six while misc is true). The focused item also paints its buttons -->
+    <!-- Ratings dialog slots: a rating is unlisted while it is past the line's three slots after the fixed item (six while the fixed item is disabled).
+         Without rating preferences (strict) only the slots count, so an unlisted rating is shown as disabled and enabling it promotes it to the first slot.
+         Item_ expressions read the list item being laid out, the others the focused item of the list (22001) -->
+    <expression name="DialogRatings_IsStrict_Expression">[!Skin.HasSetting(Ratings.EnablePreferences)]</expression>
+    <expression name="DialogRatings_HasSixSlots_Expression">[String.IsEqual(Container(22001).ListItemAbsolute(0).Property(disabled),True)]</expression>
+    <expression name="DialogRatings_Item_IsUnlisted_Expression">[String.IsEmpty(ListItem.Property(static)) + Integer.IsGreater(ListItem.CurrentItem,4) + ![$EXP[DialogRatings_HasSixSlots_Expression] + !Integer.IsGreater(ListItem.CurrentItem,7)]]</expression>
+    <expression name="DialogRatings_Item_IsDisabled_Expression">[String.IsEqual(ListItem.Property(disabled),True) | [$EXP[DialogRatings_IsStrict_Expression] + $EXP[DialogRatings_Item_IsUnlisted_Expression]]]</expression>
+    <expression name="DialogRatings_IsPromotable_Expression">[$EXP[DialogRatings_IsStrict_Expression] + String.IsEmpty(Container(22001).ListItem.Property(static)) + Integer.IsGreater(Container(22001).CurrentItem,4) + ![$EXP[DialogRatings_HasSixSlots_Expression] + !Integer.IsGreater(Container(22001).CurrentItem,7)]]</expression>
+    <expression name="DialogRatings_IsDisabled_Expression">[String.IsEqual(Container(22001).ListItem.Property(disabled),True) | $EXP[DialogRatings_IsPromotable_Expression]]</expression>
+
+    <variable name="DialogRatings_DisableEnable_Icon">
+        <value condition="!$EXP[DialogRatings_IsDisabled_Expression]">special://skin/extras/icons/circle-check.png</value>
+        <value>special://skin/extras/icons/circle-cancel.png</value>
+    </variable>
+
+    <!-- Ratings dialog list item: unmasked icon and label, turned red while the item is shown as disabled (as in the shortcuts editor)
+         and light blue while rating preferences are on and an enabled rating is unlisted. The focused item also paints its buttons -->
     <include name="DialogRatings_Layout">
         <definition>
             <include condition="$PARAM[selected]">Part_List_Highlight</include>
             <control type="group">
                 <left>40</left>
                 <right>40</right>
-                <animation effect="fadediffuse" start="ffffffff" end="FFBF0000" condition="String.IsEqual(ListItem.Property(disabled),True)">Conditional</animation>
-                <animation effect="fadediffuse" start="ffffffff" end="FF7FC4FF" condition="String.IsEmpty(ListItem.Property(static)) + !String.IsEqual(ListItem.Property(disabled),True) + Integer.IsGreater(ListItem.CurrentItem,4) + ![[$PARAM[misc]] + !Integer.IsGreater(ListItem.CurrentItem,7)]">Conditional</animation>
+                <animation effect="fadediffuse" start="ffffffff" end="FFBF0000" condition="$EXP[DialogRatings_Item_IsDisabled_Expression]">Conditional</animation>
+                <animation effect="fadediffuse" start="ffffffff" end="FF7FC4FF" condition="!$EXP[DialogRatings_IsStrict_Expression] + !String.IsEqual(ListItem.Property(disabled),True) + $EXP[DialogRatings_Item_IsUnlisted_Expression]">Conditional</animation>
                 <include content="Part_List_Icon">
                     <param name="item_h">$PARAM[item_h]</param>
                     <param name="diffuse" />
@@ -2276,19 +2290,19 @@
             <centertop>50%</centertop>
             <include content="DialogShortcuts_ShortcutList_FakeButton">
                 <param name="id">22901</param>
-                <visible>String.IsEmpty(ListItem.Property(static)) + !String.IsEqual(ListItem.Property(disabled),True)</visible>
+                <visible>String.IsEmpty(ListItem.Property(static)) + !$EXP[DialogRatings_Item_IsDisabled_Expression]</visible>
                 <param name="icon">special://skin/extras/icons/circle-arrow-up.png</param>
                 <right>104</right>
             </include>
             <include content="DialogShortcuts_ShortcutList_FakeButton">
                 <param name="id">22902</param>
-                <visible>String.IsEmpty(ListItem.Property(static)) + !String.IsEqual(ListItem.Property(disabled),True)</visible>
+                <visible>String.IsEmpty(ListItem.Property(static)) + !$EXP[DialogRatings_Item_IsDisabled_Expression]</visible>
                 <param name="icon">special://skin/extras/icons/circle-arrow-down.png</param>
                 <right>52</right>
             </include>
             <include content="DialogShortcuts_ShortcutList_FakeButton">
                 <param name="id">22905</param>
-                <param name="icon">$VAR[DialogShortcuts_Items_DisableEnable_Icon]</param>
+                <param name="icon">$VAR[DialogRatings_DisableEnable_Icon]</param>
                 <right>0</right>
             </include>
         </control>
@@ -2296,7 +2310,8 @@
 
     <!-- Move up, move down and enable buttons for the ratings dialog's focused item, slid down to its row. Back closes the dialog.
          They are faded out so only the copies painted in the focused layout show, which scroll with the list.
-         The fixed item and disabled ratings have only the enable button, so moving onto them focuses that button first; up and down stop at the ends of the list -->
+         The fixed item and ratings shown as disabled have only the enable button, so moving onto them focuses that button first; up and down stop at the ends of the list.
+         Enabling a promotable rating moves it to the first slot, enabling it first when it is disabled (the move waits for the toggle so the two writes don't overlap) -->
     <include name="DialogRatings_Buttons">
         <control type="group">
             <include>Animation_ConditionalFade</include>
@@ -2311,7 +2326,7 @@
                 <itemgap>-20</itemgap>
                 <onup condition="!String.IsEmpty(Container(22001).ListItemNoWrap(-1).Property(static))">SetFocus(22905)</onup>
                 <onup condition="!String.IsEmpty(Container(22001).ListItemNoWrap(-1).Label)">Control.Move(22001,-1)</onup>
-                <ondown condition="String.IsEqual(Container(22001).ListItemNoWrap(1).Property(disabled),True)">SetFocus(22905)</ondown>
+                <ondown condition="[String.IsEqual(Container(22001).ListItemNoWrap(1).Property(disabled),True) | [$EXP[DialogRatings_IsStrict_Expression] + !String.IsEmpty(Container(22001).ListItemNoWrap(1).Label) + Integer.IsGreater(Container(22001).CurrentItem,3) + ![$EXP[DialogRatings_HasSixSlots_Expression] + !Integer.IsGreater(Container(22001).CurrentItem,6)]]]">SetFocus(22905)</ondown>
                 <ondown condition="!String.IsEmpty(Container(22001).ListItemNoWrap(1).Label)">Control.Move(22001,1)</ondown>
                 <onright>61</onright>
                 <height>72</height>
@@ -2320,7 +2335,7 @@
                 <right>20</right>
                 <include content="DialogShortcuts_MoveButton">
                     <param name="id">22901</param>
-                    <param name="visible">String.IsEmpty(Container(22001).ListItem.Property(static)) + !String.IsEqual(Container(22001).ListItem.Property(disabled),True)</param>
+                    <param name="visible">String.IsEmpty(Container(22001).ListItem.Property(static)) + !$EXP[DialogRatings_IsDisabled_Expression]</param>
                     <param name="move">-1</param>
                     <param name="target">$INFO[Container(22001).ListItem(-1).Property(item),&amp;&amp;offset::,]</param>
                     <param name="texture">special://skin/extras/icons/circle-arrow-up.png</param>
@@ -2328,19 +2343,25 @@
                 </include>
                 <include content="DialogShortcuts_MoveButton">
                     <param name="id">22902</param>
-                    <param name="visible">String.IsEmpty(Container(22001).ListItem.Property(static)) + !String.IsEqual(Container(22001).ListItem.Property(disabled),True)</param>
+                    <param name="visible">String.IsEmpty(Container(22001).ListItem.Property(static)) + !$EXP[DialogRatings_IsDisabled_Expression]</param>
                     <param name="move">1</param>
                     <param name="target">$INFO[Container(22001).ListItem(1).Property(item),&amp;&amp;offset::,]</param>
                     <param name="texture">special://skin/extras/icons/circle-arrow-down.png</param>
                     <param name="onback">noop</param>
                 </include>
                 <control type="button" id="22905">
-                    <texturenofocus colordiffuse="$VAR[ColorSelected_30]">$VAR[DialogShortcuts_Items_DisableEnable_Icon]</texturenofocus>
-                    <texturefocus colordiffuse="$VAR[ColorSelected]">$VAR[DialogShortcuts_Items_DisableEnable_Icon]</texturefocus>
+                    <texturenofocus colordiffuse="$VAR[ColorSelected_30]">$VAR[DialogRatings_DisableEnable_Icon]</texturenofocus>
+                    <texturefocus colordiffuse="$VAR[ColorSelected]">$VAR[DialogRatings_DisableEnable_Icon]</texturefocus>
                     <include content="DialogShortcuts_Toggle_Onclick">
                         <param name="container">22001</param>
-                        <param name="static">!String.IsEmpty(Container(22001).ListItem.Property(static))</param>
+                        <param name="static">!String.IsEmpty(Container(22001).ListItem.Property(static)) | $EXP[DialogRatings_IsPromotable_Expression]</param>
                     </include>
+                    <include content="DialogShortcuts_Move_Onclick">
+                        <param name="condition">$EXP[DialogRatings_IsPromotable_Expression] + !String.IsEqual(Container(22001).ListItem.Property(disabled),True)</param>
+                        <param name="move">0</param>
+                        <param name="target">&amp;&amp;offset::0</param>
+                    </include>
+                    <onclick condition="$EXP[DialogRatings_IsPromotable_Expression] + String.IsEqual(Container(22001).ListItem.Property(disabled),True)">RunScript(script.skinvariables,run_executebuiltin=RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_toggle)||sleep=0.5||RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_move&amp;&amp;move::0&amp;&amp;window_prop::url&amp;&amp;offset::0))</onclick>
                     <width>72</width>
                     <height>72</height>
                 </control>
