@@ -113,40 +113,46 @@
     </include>
 
     <include name="LiveTV_Widgets">
-        <include content="LiveTV_Widgets_Content" condition="!Skin.HasSetting(Hub.$PARAM[window].SquareChannels)">
-            <param name="window">$PARAM[window]</param>
-        </include>
-        <include content="LiveTV_Widgets_Content" condition="Skin.HasSetting(Hub.$PARAM[window].SquareChannels)">
-            <param name="window">$PARAM[window]</param>
-            <param name="channel_include">List_Square_Row</param>
-        </include>
+        <param name="widget_include">Hub_Standard_Widget</param>
+        <definition>
+            <include content="LiveTV_Widgets_Content" condition="!Skin.HasSetting(Hub.$PARAM[window].SquareChannels)">
+                <param name="window">$PARAM[window]</param>
+                <param name="widget_include">$PARAM[widget_include]</param>
+            </include>
+            <include content="LiveTV_Widgets_Content" condition="Skin.HasSetting(Hub.$PARAM[window].SquareChannels)">
+                <param name="window">$PARAM[window]</param>
+                <param name="channel_include">List_Square_Row</param>
+                <param name="widget_include">$PARAM[widget_include]</param>
+            </include>
+        </definition>
     </include>
 
     <include name="LiveTV_Widgets_Content">
         <param name="channel_include">List_Landscape_Row</param>
+        <param name="widget_include">Hub_Standard_Widget</param>
         <definition>
-            <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.$PARAM[window].DisableSearch)">
+            <include content="$PARAM[widget_include]" condition="!Skin.HasSetting(Hub.$PARAM[window].DisableSearch)">
                 <param name="id">01</param>
                 <param name="include">$PARAM[channel_include]</param>
                 <param name="label">$LOCALIZE[568]</param>
                 <param name="visible">true</param>
                 <content target="tvchannels">pvr://channels/tv/*?view=lastplayed</content>
             </include>
-            <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.$PARAM[window].DisableChannels)">
+            <include content="$PARAM[widget_include]" condition="!Skin.HasSetting(Hub.$PARAM[window].DisableChannels)">
                 <param name="id">02</param>
                 <param name="include">$PARAM[channel_include]</param>
                 <param name="label">$VAR[LiveTV_Switcher_Items_GroupName]</param>
                 <param name="altvisible">[Integer.IsEqual(Container(509).NumItems,0) + Container(509).IsUpdating]</param>
                 <content target="tvchannels">$INFO[Container(509).ListItemAbsolute(0).FolderPath]</content>
             </include>
-            <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.$PARAM[window].DisableGroups)">
+            <include content="$PARAM[widget_include]" condition="!Skin.HasSetting(Hub.$PARAM[window].DisableGroups)">
                 <param name="id">03</param>
                 <param name="include">$PARAM[channel_include]</param>
                 <param name="label">$LOCALIZE[19146]</param>
                 <param name="visible">true</param>
                 <content target="tvchannels">pvr://channels/tv/</content>
             </include>
-            <include content="Hub_Standard_Widget" condition="!Skin.HasSetting(Hub.$PARAM[window].DisableRecordings)">
+            <include content="$PARAM[widget_include]" condition="!Skin.HasSetting(Hub.$PARAM[window].DisableRecordings)">
                 <param name="id">04</param>
                 <param name="include">$PARAM[channel_include]</param>
                 <param name="label">$LOCALIZE[19017]</param>
@@ -162,6 +168,17 @@
                 <param name="window">$PARAM[window]</param>
                 <param name="info">$PARAM[info]</param>
             </include>
+        </include>
+    </include>
+
+    <include name="LiveTV_Simple_Content">
+        <include content="Hub_Widgets_Grouplist">
+            <param name="widgetconstants_affix">_simple</param>
+            <include content="LiveTV_Widgets">
+                <param name="window">$PARAM[window]</param>
+                <param name="widget_include">Hub_Simple_Widget</param>
+            </include>
+            <include>Widget_End_Bumper</include>
         </include>
     </include>
 

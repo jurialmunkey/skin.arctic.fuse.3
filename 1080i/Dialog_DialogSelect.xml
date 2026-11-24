@@ -919,13 +919,14 @@
         </definition>
     </include>
 
-    <!-- Opens the layout select dialog (1125) for a setting prefix, noting its current mode (combined/wall conditions, otherwise Standard) -->
+    <!-- Opens the layout select dialog (1125) for a setting prefix, noting its current mode (combined/wall/simple conditions, otherwise Standard) -->
     <include name="DialogSelect_WidgetMode_Onclick">
         <definition>
             <onclick>SetProperty(Dialog.1125.Value,$PARAM[setting],Home)</onclick>
             <onclick>SetProperty(Dialog.1125.Mode,Standard,Home)</onclick>
             <onclick condition="$PARAM[combined]">SetProperty(Dialog.1125.Mode,Combined,Home)</onclick>
             <onclick condition="$PARAM[wall]">SetProperty(Dialog.1125.Mode,Wall,Home)</onclick>
+            <onclick condition="$PARAM[simple]">SetProperty(Dialog.1125.Mode,Simple,Home)</onclick>
             <onclick>ActivateWindow(1125)</onclick>
         </definition>
     </include>
@@ -954,6 +955,14 @@
                 <property name="mode">Wall</property>
                 <onclick>Close</onclick>
                 <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Wall)</onclick>
+            </item>
+
+            <item>
+                <label>$LOCALIZE[31438]</label>
+                <icon>special://skin/extras/modes/standard.jpg</icon>
+                <property name="mode">Simple</property>
+                <onclick>Close</onclick>
+                <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Simple)</onclick>
             </item>
         </content>
     </include>

@@ -687,7 +687,7 @@
 
     <expression name="DialogShortcuts_IsCombinedWidget_Expression">String.IsEqual(Container(22001).ListItem.Property(widget_combined),True)</expression>
 
-    <expression name="DialogShortcuts_IsStandardHubWidgets_Expression">[[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homewidgets) + String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101widgets) + String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102widgets) + String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103widgets) + String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104widgets) + String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1106widgets) + String.IsEqual(Skin.String(HomeSwitcher.1106.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1107widgets) + String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1108widgets) + String.IsEqual(Skin.String(HomeSwitcher.1108.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1109widgets) + String.IsEqual(Skin.String(HomeSwitcher.1109.Mode),Standard)]]</expression>
+    <expression name="DialogShortcuts_IsStandardHubWidgets_Expression">[[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homewidgets) + [String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1106widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1106.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1106.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1107widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1108widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1108.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1108.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1109widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1109.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1109.Mode),Simple)]]]</expression>
 
     <expression name="DialogShortcuts_HasCustomSubmenu_Expression">[String.IsEqual(Container(22001).ListItem.Property(path),Custom_Submenu)]</expression>
 
@@ -995,6 +995,7 @@
                     <param name="setting">HomeSwitcher.$INFO[Container(30000).ListItem.Property(window)]</param>
                     <param name="combined">$EXP[Exp_HubsWindow_Mode_Combined]</param>
                     <param name="wall">$EXP[Exp_HubsWindow_Mode_Wall]</param>
+                    <param name="simple">$EXP[Exp_HubsWindow_Mode_Simple]</param>
                 </include>
                 <visible>$PARAM[visible]</visible>
                 <visible>!$EXP[Exp_HubsWindow_Type_NextAired]</visible>
@@ -1446,7 +1447,7 @@
 
             <!-- Standard and Combined: info panel above the widgets -->
             <control type="group">
-                <visible>!$EXP[Exp_HubsWindow_Preview_Wall]</visible>
+                <visible>!$EXP[Exp_HubsWindow_Preview_Wall] + !$EXP[Exp_HubsWindow_Preview_Simple]</visible>
                 <control type="image">
                     <top>31</top>
                     <width>176</width>
@@ -1501,7 +1502,7 @@
 
             <!-- Standard: a row per widget with its label, the next one peeking in at the bottom -->
             <control type="group">
-                <visible>!$EXP[Exp_HubsWindow_Preview_Combined] + !$EXP[Exp_HubsWindow_Preview_Wall]</visible>
+                <visible>!$EXP[Exp_HubsWindow_Preview_Combined] + !$EXP[Exp_HubsWindow_Preview_Wall] + !$EXP[Exp_HubsWindow_Preview_Simple]</visible>
                 <control type="image">
                     <top>163</top>
                     <width>73</width>
@@ -1552,6 +1553,41 @@
                 <include content="HubsWindow_Preview_Row">
                     <param name="top">184</param>
                     <param name="item_h">98</param>
+                </include>
+            </control>
+
+            <!-- Simple: fullscreen rows with their labels and no info panel -->
+            <control type="group">
+                <visible>$EXP[Exp_HubsWindow_Preview_Simple]</visible>
+                <control type="image">
+                    <top>31</top>
+                    <width>73</width>
+                    <height>7</height>
+                    <texture colordiffuse="main_fg_30">common/white.png</texture>
+                </control>
+                <include content="HubsWindow_Preview_Row">
+                    <param name="top">52</param>
+                    <param name="item_h">98</param>
+                </include>
+                <control type="image">
+                    <top>163</top>
+                    <width>73</width>
+                    <height>7</height>
+                    <texture colordiffuse="main_fg_30">common/white.png</texture>
+                </control>
+                <include content="HubsWindow_Preview_Row">
+                    <param name="top">184</param>
+                    <param name="item_h">98</param>
+                </include>
+                <control type="image">
+                    <top>295</top>
+                    <width>73</width>
+                    <height>7</height>
+                    <texture colordiffuse="main_fg_30">common/white.png</texture>
+                </control>
+                <include content="HubsWindow_Preview_Row">
+                    <param name="top">315</param>
+                    <param name="item_h">28</param>
                 </include>
             </control>
 
