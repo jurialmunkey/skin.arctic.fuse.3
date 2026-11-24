@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <timers>
     <timer>
+        <name>weather_trend</name>
+        <description>Recalculate the MyWeather chart when the daily temperatures change.</description>
+        <start reset="true">Window.IsActive(weather) + Weather.IsFetched + !String.IsEqual(Control.GetLabel(8050),Window(weather).Property(Weather.Trend.Source))</start>
+        <stop>!Window.IsActive(weather) | !Weather.IsFetched | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(weather_trend),1)</stop>
+        <onstop condition="Window.IsActive(weather) + Weather.IsFetched">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend.json,use_rules=True)</onstop>
+    </timer>
+    <timer>
+        <name>weather_trend_details</name>
+        <description>Recalculate the MyWeather precipitation chart when the daily forecast changes.</description>
+        <start reset="true">Window.IsActive(weather) + Weather.IsFetched + !String.IsEqual(Control.GetLabel(8051),Window(weather).Property(Weather.Trend.Details.Source))</start>
+        <stop>!Window.IsActive(weather) | !Weather.IsFetched | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(weather_trend_details),1)</stop>
+        <onstop condition="Window.IsActive(weather) + Weather.IsFetched">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-details.json,use_rules=True)</onstop>
+    </timer>
+    <timer>
+        <name>weather_trend_uv</name>
+        <description>Recalculate the OzWeather UV chart when its four forecast values change.</description>
+        <start reset="true">Window.IsActive(weather) + Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather) + !String.IsEqual(Control.GetLabel(8052),Window(weather).Property(Weather.Trend.UV.Source))</start>
+        <stop>!Window.IsActive(weather) | !Weather.IsFetched | !String.IsEqual(Weather.Plugin,weather.ozweather) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(weather_trend_uv),1)</stop>
+        <onstop condition="Window.IsActive(weather) + Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather)">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-uv.json,use_rules=True)</onstop>
+    </timer>
+    <timer>
+        <name>weather_trend_radar</name>
+        <description>Split the OzWeather forecast text for the MyWeather radar page when the weather updates.</description>
+        <start reset="true">Window.IsActive(weather) + Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather) + !String.IsEqual(Control.GetLabel(8053),Window(weather).Property(Weather.Trend.Radar.Source))</start>
+        <stop>!Window.IsActive(weather) | !Weather.IsFetched | !String.IsEqual(Weather.Plugin,weather.ozweather) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(weather_trend_radar),1)</stop>
+        <onstop condition="Window.IsActive(weather) + Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather)">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-radar.json,use_rules=True)</onstop>
+    </timer>
+    <timer>
         <name>splashtest_autotime</name>
         <description>Advance the splash preview by one hour every three seconds.</description>
         <!-- Timers are loaded directly, without the includes expression expansion pass. -->
         <start reset="true">Window.IsVisible(1191) + String.IsEqual(Window(1191).Property(SplashTest.AutoTime),true)</start>
         <stop>!Window.IsVisible(1191) | !String.IsEqual(Window(1191).Property(SplashTest.AutoTime),true) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(splashtest_autotime),3)</stop>
         <onstop condition="Window.IsVisible(1191) + String.IsEqual(Window(1191).Property(SplashTest.AutoTime),true)">SetProperty(SplashTest.Hour,$VAR[Value_StartUp_Test_NextHour],1191)</onstop>
+    </timer>
+    <timer>
+        <name>osd_autoclose</name>
+        <description>Close the OSD after OSD_Timeout seconds without input. Input and dialogs that pause auto close reset the countdown.</description>
+        <start reset="true">[Window.IsVisible(videoosd) | Window.IsVisible(musicosd)] + !String.IsEmpty(Skin.String(OSD_Timeout))</start>
+        <reset>!System.IdleTime(1) | Window.IsVisible(DialogSettings.xml) | Window.IsVisible(DialogSelect.xml) | Window.IsVisible(1118) | Window.IsVisible(DialogSubtitles.xml) | Window.IsVisible(DialogSlider.xml) | Window.IsVisible(1149) | Window.IsVisible(DialogPlayerProcessInfo.xml) | Window.IsVisible(DialogFullScreenInfo.xml) | Window.IsVisible(videobookmarks) | Window.IsVisible(1140) | Window.IsVisible(1141) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels)</reset>
+        <stop>[!Window.IsVisible(videoosd) + !Window.IsVisible(musicosd)] | String.IsEmpty(Skin.String(OSD_Timeout)) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(osd_autoclose),Skin.String(OSD_Timeout))</stop>
+        <onstop condition="!String.IsEmpty(Skin.String(OSD_Timeout)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(osd_autoclose),Skin.String(OSD_Timeout))">RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-closeosd.json,use_rules=True)</onstop>
     </timer>
 </timers>

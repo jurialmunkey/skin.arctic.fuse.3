@@ -7,8 +7,6 @@
         <param name="defaultcontrol">3</param>
     </include>
 
-    <onload condition="!String.IsEmpty(Window(Home).Property(Settings.Skin.CategoryId))">SetFocus($INFO[Window(Home).Property(Settings.Skin.CategoryId)])</onload>
-
     <onunload>$VAR[Action_RatingsMonitor]</onunload>
 
     <controls>
@@ -20,7 +18,8 @@
                 <param name="label">$LOCALIZE[166] $LOCALIZE[5]</param>
                 <include content="Settings_Left_Group">
                     <include content="Settings_Left_Content">
-                        <!-- The script lists the search category first. Moving to another category clears the search -->
+                        <!-- The script lists the search category first, hidden until a search or tag is active or while it is selected.
+                             Moving to another category clears the search -->
                         <control type="grouplist" id="3">
                             <orientation>vertical</orientation>
                             <onup>3</onup>
@@ -31,16 +30,18 @@
                     </include>
                 </include>
                 <include content="Settings_Right_Group">
-                    <param name="header">$INFO[Window.Property(Settings.Skin.CategoryLabel)]</param>
+                    <param name="header">$INFO[Window.Property(SkinVariables.SkinSettings.Category.Label)]</param>
 
                     <include content="Settings_Right_Scrollbar">
                         <onleft>5</onleft>
                     </include>
 
-                    <!-- The first and last settings move to the last focused of the tags button and search box -->
+                    <!-- The first and last settings move to the last focused of the tags button and search box.
+                         Left returns to the search category while it is selected, as the last focused category would clear the search -->
                     <include content="Settings_Right_Grouplist">
                         <param name="id">5</param>
-                        <onleft>3</onleft>
+                        <onleft condition="$EXP[Exp_SkinSettings_IsSearchCategory]">-200</onleft>
+                        <onleft condition="!$EXP[Exp_SkinSettings_IsSearchCategory]">3</onleft>
                         <onup>20</onup>
                         <ondown>20</ondown>
                     </include>
@@ -61,7 +62,8 @@
                                 <label>$VAR[Label_Settings_SearchTag]</label>
                                 <!-- The box width less the icon offset and a smaller right padding than textoffsetx gives -->
                                 <textwidth>170</textwidth>
-                                <onleft>3</onleft>
+                                <onleft condition="$EXP[Exp_SkinSettings_IsSearchCategory]">-200</onleft>
+                                <onleft condition="!$EXP[Exp_SkinSettings_IsSearchCategory]">3</onleft>
                                 <onright>12</onright>
                             </include>
                         </include>
@@ -94,11 +96,6 @@
             <!-- The script replaces $SUBSTITUTE[label] with each category's own label -->
             <altlabel>[COLOR=$VAR[ColorSelected]]$SUBSTITUTE[label][/COLOR]</altlabel>
             <width>settings_category_w</width>
-            <onfocus>SetProperty(Settings.Skin.CategoryId,$INFO[System.CurrentControlId],Home)</onfocus>
-            <onfocus>SetProperty(Settings.Skin.CategoryLabel,$INFO[System.CurrentControl])</onfocus>
-            <!-- Clicking a category moves focus to the search box and clicks it to open the keyboard -->
-            <onclick>SetFocus(12)</onclick>
-            <onclick>SendClick(12)</onclick>
             <description>Category Button</description>
         </include>
 

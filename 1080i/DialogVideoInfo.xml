@@ -24,6 +24,7 @@
     <onunload>ClearProperty(DialogInfo.PersonArtwork.Path,12003)</onunload>
 
     <controls>
+        <include>Info_Meta_Ratings_Counters</include>
 
         <include condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_VideoButtons</include>
 
@@ -84,21 +85,11 @@
 
                 <include condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_VideoWidgets</include>
                 <include condition="String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_PersonWidgets</include>
-                <include condition="!Skin.HasSetting(VideoInfo.Widgets.DisableGallery)">DialogInfo_GalleryWidget</include>
 
 
                 <include>Widget_End_Bumper</include>
             </control>
         </control>
-
-        <!-- Preserve the selected panel while browsing widgets. -->
-        <include content="Object_Hidden_Button" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
-            <param name="id">8100</param>
-            <include content="DialogInfo_ArtworkNavigation">
-                <param name="returncontrol">SetFocus($INFO[Window.Property(DialogInfo.ArtworkReturn)])</param>
-            </include>
-            <onclick>SetFocus(9000)</onclick>
-        </include>
 
         <control type="group">
             <top>view_pad</top>
@@ -153,12 +144,7 @@
                 <include>DialogInfo_Animation_ArtworkSlide</include>
                 <include>DialogInfo_Animation_ArtworkReturn_Outgoing</include>
                 <animation effect="fade" start="100" end="0" time="400" tween="cubic" easing="inout" reversible="true" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">Conditional</animation>
-                <include content="Object_BigPoster" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
-                    <param name="icon">$VAR[Image_DialogInfo_Fanart]</param>
-                    <param name="diffuse">diffuse/landscape_w1160_h820.png</param>
-                    <param name="aspectratio">keep</param>
-                    <param name="posterback_colordiffuse">black</param>
-                </include>
+                <include condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_VideoArtwork</include>
                 <include condition="$EXP[Exp_InfoDialogs_UsePersonArtwork]">DialogInfo_PersonArtwork</include>
             </control>
         </control>

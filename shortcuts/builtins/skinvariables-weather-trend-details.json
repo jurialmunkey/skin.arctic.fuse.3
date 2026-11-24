@@ -1,0 +1,24 @@
+{
+    "infolabels": {
+        "source": "$INFO[Control.GetLabel(8051)]",
+        "plotted": "$INFO[Window(weather).Property(Weather.Trend.Details.Source)]"
+    },
+    "actions": [
+        {
+            "rules": [
+                "Window.IsActive(weather)",
+                "Weather.IsFetched",
+                "{source}!=",
+                "{source}!={plotted}"
+            ],
+            "value": [
+                "ClearProperty(Weather.Trend.Details.Source,weather)",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-series.json&use_rules=True&kind=Chance&field=ChancePrecipitation&alternate=Precipitation",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-series.json&use_rules=True&kind=Amount&field=PrecipitationAmount&alternate=Precipitation",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-series.json&use_rules=True&kind=Duration&field=PrecipitationHours",
+                "route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-weather-trend-series.json&use_rules=True&kind=Range&field=RainAmount&alternate=Precipitation",
+                "SetProperty(Weather.Trend.Details.Source,\"{source}\",weather)"
+            ]
+        }
+    ]
+}

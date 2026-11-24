@@ -20,6 +20,7 @@
                 <param name="offset_y">0</param>
                 <param name="misc">$PARAM[misc]</param>
                 <param name="icon">$PARAM[icon]</param>
+                <param name="fg">$PARAM[fg]</param>
                 <nested />
             </include>
         </definition>
@@ -76,6 +77,7 @@
 
     <include name="List_Layout_Dialog_SimpleCheckmark">
         <param name="selected">false</param>
+        <param name="fg">dialog_fg</param>
         <definition>
             <include condition="$PARAM[selected]">Part_List_Highlight</include>
             <control type="group">
@@ -83,6 +85,8 @@
                 <right>40</right>
                 <include content="Part_List_Checkmark" condition="!$PARAM[selected]">
                     <param name="selected">$PARAM[misc]</param>
+                    <param name="colordiffuse_off">$PARAM[fg]_30</param>
+                    <param name="colordiffuse_on">$PARAM[fg]_70</param>
                 </include>
                 <include content="Part_List_Checkmark" condition="$PARAM[selected]">
                     <param name="selected">$PARAM[misc]</param>
@@ -91,9 +95,9 @@
                 </include>
                 <control type="label">
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
-                    <textcolor>dialog_fg_70</textcolor>
-                    <selectedcolor>dialog_fg_70</selectedcolor>
-                    <disabledcolor>dialog_fg_30</disabledcolor>
+                    <textcolor>$PARAM[fg]_70</textcolor>
+                    <selectedcolor>$PARAM[fg]_70</selectedcolor>
+                    <disabledcolor>$PARAM[fg]_30</disabledcolor>
                     <label>$INFO[ListItem.Label]</label>
                     <left>40</left>
                 </control>
@@ -106,6 +110,7 @@
         <param name="label2">$INFO[ListItem.Label2]</param>
         <param name="label2_visible">!String.IsEmpty(ListItem.Label2)</param>
         <param name="align">left</param>
+        <param name="fg">dialog_fg</param>
         <definition>
             <control type="group">
                 <left>$PARAM[item_h]</left>
@@ -114,9 +119,9 @@
                 <control type="label">
                     <left>-10</left>
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
-                    <textcolor>dialog_fg_70</textcolor>
-                    <selectedcolor>dialog_fg_70</selectedcolor>
-                    <disabledcolor>dialog_fg_30</disabledcolor>
+                    <textcolor>$PARAM[fg]_70</textcolor>
+                    <selectedcolor>$PARAM[fg]_70</selectedcolor>
+                    <disabledcolor>$PARAM[fg]_30</disabledcolor>
                     <label fallback="$PARAM[fallback]">$PARAM[label]</label>
                     <visible>![$PARAM[label2_visible]]</visible>
                     <align>$PARAM[align]</align>
@@ -124,9 +129,9 @@
                 <control type="label">
                     <left>-10</left>
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
-                    <textcolor>dialog_fg_70</textcolor>
-                    <selectedcolor>dialog_fg_70</selectedcolor>
-                    <disabledcolor>dialog_fg_30</disabledcolor>
+                    <textcolor>$PARAM[fg]_70</textcolor>
+                    <selectedcolor>$PARAM[fg]_70</selectedcolor>
+                    <disabledcolor>$PARAM[fg]_30</disabledcolor>
                     <font>font_main_bold</font>
                     <label fallback="$PARAM[fallback]">$PARAM[label]</label>
                     <visible>$PARAM[label2_visible]</visible>
@@ -137,7 +142,7 @@
                 <control type="label">
                     <left>-10</left>
                     <include condition="$PARAM[selected]">Color_SelectedText</include>
-                    <textcolor>dialog_fg_70</textcolor>
+                    <textcolor>$PARAM[fg]_70</textcolor>
                     <selectedcolor>dialog_fg_70</selectedcolor>
                     <disabledcolor>dialog_fg_30</disabledcolor>
                     <font>font_tiny</font>
@@ -215,6 +220,7 @@
     <include name="List_Layout_Dialog_DetailedCheckmark">
         <param name="selected">false</param>
         <param name="detailed">false</param>
+        <param name="fg">dialog_fg</param>
         <definition>
             <include condition="$PARAM[selected]">Part_List_Highlight</include>
             <control type="group">
@@ -222,6 +228,8 @@
                 <right>40</right>
                 <include content="Part_List_Checkmark" condition="![$PARAM[selected]] + [$PARAM[detailed]]">
                     <param name="selected">$PARAM[misc]</param>
+                    <param name="colordiffuse_off">$PARAM[fg]_30</param>
+                    <param name="colordiffuse_on">$PARAM[fg]_70</param>
                 </include>
                 <include content="Part_List_Checkmark" condition="[$PARAM[selected]] + [$PARAM[detailed]]">
                     <param name="selected">$PARAM[misc]</param>
@@ -237,6 +245,7 @@
                         <param name="icon">$PARAM[icon]</param>
                         <param name="fallback">$PARAM[fallback]</param>
                         <param name="is_defaulticon">$PARAM[is_defaulticon]</param>
+                        <param name="colordiffuse">$PARAM[fg]_90</param>
                     </include>
                     <include content="Part_List_Icon" condition="$PARAM[selected]">
                         <param name="item_h">$PARAM[item_h]</param>
@@ -248,6 +257,7 @@
                     <include content="List_Layout_Dialog_Labels">
                         <param name="item_h">$PARAM[item_h]</param>
                         <param name="selected">$PARAM[selected]</param>
+                        <param name="fg">$PARAM[fg]</param>
                         <param name="label">$PARAM[label]</param>
                         <param name="label2">$PARAM[label2]</param>
                         <param name="label2_visible">$PARAM[label2_visible]</param>
@@ -270,6 +280,17 @@
                 <param name="label">$INFO[ListItem.Label]</param>
                 <param name="label2">$VAR[Label_WatchedOn_Sub]</param>
                 <param name="label2_visible">true</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Basic item with the widget_style property, showing its style -->
+    <include name="List_Layout_Dialog_WidgetStyle">
+        <param name="selected">false</param>
+        <definition>
+            <include content="Layout_DialogBasic">
+                <param name="selected">$PARAM[selected]</param>
+                <param name="label2">$VAR[Label_Widget_Style]</param>
             </include>
         </definition>
     </include>

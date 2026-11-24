@@ -6,7 +6,8 @@
         "hinttext": "$LOCALIZE[16017]",
         "category": {
             "label": "$LOCALIZE[137]",
-            "description": "$LOCALIZE[31849]"
+            "description": "$LOCALIZE[31849]",
+            "autohide": true
         },
         "tags": {
             "description": "$LOCALIZE[31876]"
@@ -588,22 +589,6 @@
                 "$LOCALIZE[31203]"
             ]
         },
-        "appearance_extra_fanart": {
-            "label": "$LOCALIZE[31297]",
-            "control": "radiobutton",
-            "group": "appearance_backgrounds",
-            "description": "$LOCALIZE[31684]",
-            "selected": "Skin.HasSetting(Background.ExtraFanart)",
-            "visible": "$EXP[Exp_TMDbHelper_IsBlur]",
-            "onclick": [
-                {
-                    "action": "Skin.ToggleSetting(Background.ExtraFanart)"
-                }
-            ],
-            "tags": [
-                "$LOCALIZE[31818]"
-            ]
-        },
         "interface_weather": {
             "label": "$LOCALIZE[12600]",
             "control": "radiobutton",
@@ -752,6 +737,18 @@
             "onclick": [
                 {
                     "action": "Skin.ToggleSetting(View.UseDetailedListLabels)"
+                }
+            ]
+        },
+        "views_icon_style": {
+            "label": "$LOCALIZE[31890]",
+            "control": "button",
+            "group": "views_viewtypes",
+            "description": "$LOCALIZE[31894]",
+            "label2": "$VAR[Label_Setting_GenericStyle]",
+            "onclick": [
+                {
+                    "action": "ActivateWindow(1138)"
                 }
             ]
         },
@@ -970,22 +967,37 @@
                 "$LOCALIZE[19033]"
             ]
         },
+        "details_ratings_fallback": {
+            "label": "$LOCALIZE[31268]",
+            "control": "radiobutton",
+            "group": "details_ratings",
+            "description": "$LOCALIZE[31905]",
+            "visible": "$EXP[Exp_TMDbHelper_IsData]",
+            "selected": "Skin.HasSetting(Ratings.EnablePreferences)",
+            "onclick": [
+                {
+                    "action": "Skin.ToggleSetting(Ratings.EnablePreferences)"
+                }
+            ],
+            "tags": [
+                "$LOCALIZE[31203]"
+            ]
+        },
         "details_movie_ratings": {
             "label": "$LOCALIZE[342]",
             "control": "button",
             "group": "details_ratings",
             "description": "$LOCALIZE[31696]",
-            "label2": "$INFO[Skin.String(CustomRating.Movies.Item01)]$INFO[Skin.String(CustomRating.Movies.Item02), • ,]$INFO[Skin.String(CustomRating.Movies.Item03), • ,]",
             "visible": "$EXP[Exp_TMDbHelper_IsData]",
             "onclick": [
                 {
                     "action": "SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31202]: $LOCALIZE[342][/CAPITALIZE],Home)"
                 },
                 {
-                    "action": "SetProperty(CustomDialogSettingsItems,DialogCustom_Ratings_Movies_Items,Home)"
+                    "action": "SetProperty(Shortcuts.EditMenu,menu=ratingsmovies,Home)"
                 },
                 {
-                    "action": "ActivateWindow(1118)"
+                    "action": "ActivateWindow(1137)"
                 }
             ],
             "tags": [
@@ -997,17 +1009,37 @@
             "control": "button",
             "group": "details_ratings",
             "description": "$LOCALIZE[31697]",
-            "label2": "$INFO[Skin.String(CustomRating.TVShows.Item01)]$INFO[Skin.String(CustomRating.TVShows.Item02), • ,]$INFO[Skin.String(CustomRating.TVShows.Item03), • ,]",
             "visible": "$EXP[Exp_TMDbHelper_IsData]",
             "onclick": [
                 {
                     "action": "SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31202]: $LOCALIZE[20343][/CAPITALIZE],Home)"
                 },
                 {
-                    "action": "SetProperty(CustomDialogSettingsItems,DialogCustom_Ratings_TVShows_Items,Home)"
+                    "action": "SetProperty(Shortcuts.EditMenu,menu=ratingstvshows,Home)"
                 },
                 {
-                    "action": "ActivateWindow(1118)"
+                    "action": "ActivateWindow(1137)"
+                }
+            ],
+            "tags": [
+                "$LOCALIZE[31203]"
+            ]
+        },
+        "details_episode_ratings": {
+            "label": "$LOCALIZE[20360]",
+            "control": "button",
+            "group": "details_ratings",
+            "description": "$LOCALIZE[31883]",
+            "visible": "$EXP[Exp_TMDbHelper_IsData]",
+            "onclick": [
+                {
+                    "action": "SetProperty(CustomDialogSettingsTitle,[CAPITALIZE]$LOCALIZE[31202]: $LOCALIZE[20360][/CAPITALIZE],Home)"
+                },
+                {
+                    "action": "SetProperty(Shortcuts.EditMenu,menu=ratingsepisodes,Home)"
+                },
+                {
+                    "action": "ActivateWindow(1137)"
                 }
             ],
             "tags": [
@@ -1064,6 +1096,18 @@
                 }
             ]
         },
+        "details_tags": {
+            "label": "$LOCALIZE[20459]",
+            "control": "button",
+            "group": "details_information",
+            "description": "$LOCALIZE[31881]",
+            "label2": "$VAR[Label_Setting_InfoTags_Style]",
+            "onclick": [
+                {
+                    "action": "Skin.ToggleSetting(InfoTags.DisableTags)"
+                }
+            ]
+        },
         "details_star_rating": {
             "label": "$LOCALIZE[33067]",
             "control": "radiobutton",
@@ -1097,6 +1141,18 @@
             "onclick": [
                 {
                     "action": "Skin.ToggleSetting(InfoTags.EnableHDR)"
+                }
+            ]
+        },
+        "details_3d": {
+            "label": "$LOCALIZE[14232]",
+            "control": "radiobutton",
+            "group": "details_information",
+            "description": "$LOCALIZE[31906]",
+            "selected": "Skin.HasSetting(InfoTags.Enable3D)",
+            "onclick": [
+                {
+                    "action": "Skin.ToggleSetting(InfoTags.Enable3D)"
                 }
             ]
         },

@@ -6,9 +6,8 @@
             <label>$LOCALIZE[559]</label>
             <icon>special://skin/extras/icons/playlist.png</icon>
             <onclick>Action(Back)</onclick>
-            <onclick condition="Integer.IsGreater(Playlist.Length(video),0) + [Player.HasVideo | Integer.IsEqual(Playlist.Length(music),0)]">ActivateWindow(videoplaylist)</onclick>
-            <onclick condition="Integer.IsGreater(Playlist.Length(music),0) + !Player.HasVideo">ActivateWindow(musicplaylist)</onclick>
-            <!-- <visible>[Integer.IsGreater(Playlist.Length(video),0) + [Player.HasVideo | Integer.IsEqual(Playlist.Length(music),0)]] | [Integer.IsGreater(Playlist.Length(music),0) + !Player.HasVideo]</visible> -->
+            <onclick condition="$EXP[Exp_ButtonMenu_QueuedVideo] | [Player.HasMedia + Integer.IsGreater(Playlist.Length(video),0) + [Player.HasVideo | Integer.IsEqual(Playlist.Length(music),0)]]">ActivateWindow(videoplaylist)</onclick>
+            <onclick condition="$EXP[Exp_ButtonMenu_QueuedMusic] | [Player.HasMedia + Integer.IsGreater(Playlist.Length(music),0) + !Player.HasVideo]">ActivateWindow(musicplaylist)</onclick>
         </item>
 
         <item>
@@ -22,13 +21,18 @@
             <label>$VAR[Label_OSD_PausePlay]</label>
             <icon>$VAR[Image_OSD_PausePlay]</icon>
             <onclick condition="Player.HasMedia">PlayerControl(Play)</onclick>
-            <onclick condition="!Player.HasMedia">Action(Back)</onclick>
-            <onclick condition="!Player.HasMedia + Integer.IsGreater(Playlist.Length(music),0)">PlayMedia(playlistmusic://,isdir,playlist_type_hint=0)</onclick>
-            <onclick condition="!Player.HasMedia + !Integer.IsGreater(Playlist.Length(music),0)">PlayMedia(playlistvideo://,isdir,playlist_type_hint=1)</onclick>
-            <!-- <visible>Player.HasMedia | Integer.IsGreater(Playlist.Length(video),0) | Integer.IsGreater(Playlist.Length(music),0)</visible> -->
+            <onclick condition="$EXP[Exp_ButtonMenu_QueuedMusic] | $EXP[Exp_ButtonMenu_QueuedVideo]">Action(Back)</onclick>
+            <onclick condition="$EXP[Exp_ButtonMenu_QueuedMusic]">Playlist.PlayOffset(music,0)</onclick>
+            <onclick condition="$EXP[Exp_ButtonMenu_QueuedVideo]">Playlist.PlayOffset(video,0)</onclick>
+            <visible>!$EXP[Exp_ButtonMenu_StopLiveTV]</visible>
         </item>
 
-
+        <item>
+            <label>$LOCALIZE[31485]</label>
+            <icon>special://skin/extras/icons/stop.png</icon>
+            <onclick>PlayerControl(Stop)</onclick>
+            <visible>$EXP[Exp_ButtonMenu_StopLiveTV]</visible>
+        </item>
 
         <item>
             <label>$LOCALIZE[209]</label>
@@ -36,15 +40,6 @@
             <onclick>PlayerControl(Next)</onclick>
             <!-- <visible>Player.HasAudio</visible> -->
         </item>
-
-        <!-- <item>
-            <label>$LOCALIZE[31485]</label>
-            <icon>special://skin/extras/icons/stop.png</icon>
-            <onclick>PlayerControl(Stop)</onclick>
-            <visible>Player.HasMedia</visible>
-        </item> -->
-
-
 
         <item>
             <label>$LOCALIZE[21483]</label>
@@ -355,7 +350,7 @@
                 <oninfo>$PARAM[onback]</oninfo>
                 <onback>$PARAM[onback]</onback>
                 <onclick>Action(Back)</onclick>
-                <onclick>ActivateWindow(1161)</onclick>
+                <onclick>ActivateWindow(weather)</onclick>
                 <include>defs_dialog_button</include>
             </control>
         </include>

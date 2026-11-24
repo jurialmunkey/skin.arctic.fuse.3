@@ -23,7 +23,7 @@
     </variable>
 
     <variable name="Image_StyledBackground_Path">
-        <value condition="Skin.String(Background.Style,goldenage)">resource://resource.images.arctic.backgrounds.goldenage/midnight_champagne/</value>
+        <value condition="![$EXP[Exp_Background_HasStylePack]]"></value>
         <value condition="String.IsEmpty(Skin.String(Background.Style))">resource://resource.images.arctic.backgrounds.surrealist/</value>
         <value>resource://resource.images.arctic.backgrounds.$INFO[Skin.String(Background.Style)]/</value>
     </variable>
@@ -78,7 +78,7 @@
 
     <variable name="Image_Blur_Fallback">
 
-        <value condition="Skin.String(Background.Style,simple)">$VAR[Image_SimpleBackground]</value>
+        <value condition="![$EXP[Exp_Background_HasStylePack]]">$VAR[Image_SimpleBackground]</value>
 
         <value condition="$EXP[Exp_IsGenre] | Container.Content(genres)">$VAR[Image_GenreBackground]</value>
 
@@ -157,25 +157,6 @@
         <value>$VAR[Image_SimpleBackground]</value>
     </variable>
 
-    <variable name="Image_Media_Landscape">
-        <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
-        <value condition="!String.IsEmpty(ListItem.Property(override_landscape))">$INFO[ListItem.Property(override_landscape)]</value>
-        <value condition="[String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,video) | String.IsEqual(ListItem.DBType,musicvideo)] + !String.IsEmpty(ListItem.Art(thumb)) + String.IsEqual(ListItem.Icon,ListItem.Art(thumb)) + !String.IsEqual(ListItem.Art(thumb),ListItem.Art(poster)) + !String.IsEqual(ListItem.Art(thumb),ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(thumb)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(landscape)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(season.landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(season.landscape)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(tvshow.landscape)) + !Skin.HasSetting(DisableLandscapeArt)">$INFO[ListItem.Art(tvshow.landscape)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
-        <value condition="!String.IsEmpty(ListItem.EPGEventIcon)">$INFO[ListItem.EPGEventIcon]</value>
-        <value condition="!String.IsEmpty(ListItem.Art(thumb)) + !String.StartsWith(ListItem.Art(thumb),Default)">$INFO[ListItem.Art(thumb)]</value>
-        <value>$VAR[Image_Blur_Fallback]</value>
-    </variable>
-
-    <variable name="Image_Media_Square">
-        <value condition="!String.IsEmpty(ListItem.Icon) + !String.StartsWith(ListItem.Icon,Default)">$INFO[ListItem.Icon]</value>
-        <value>$VAR[Image_Blur_Fallback]</value>
-    </variable>
-
     <variable name="Image_OSD_SkipPrev">
         <value condition="!String.IsEmpty(Player.Chapter) + !String.IsEqual(Player.Chapter,00) + !String.IsEmpty(Player.ChapterCount) + !String.IsEqual(Player.ChapterCount,00) + !String.IsEqual(Player.Chapter,01)">special://skin/extras/icons/backward-fast.png</value>
         <value condition="Integer.IsGreater(VideoPlayer.PlaylistPosition,1) + Integer.IsGreater(VideoPlayer.PlaylistLength,1)">special://skin/extras/icons/backward-step.png</value>
@@ -229,6 +210,25 @@
     </variable>
 
 
+    <expression name="Exp_ListItem_IsPerson">[String.IsEqual(ListItem.DBType,actor) | String.IsEqual(ListItem.DBType,director) | String.IsEqual(ListItem.Property(tmdb_type),person)]</expression>
+
+    <!-- Generic tile icon: keeps a specific icon and replaces the plain folder with one for the item's type -->
+    <variable name="Image_Generic_Icon">
+        <value condition="!String.IsEmpty(ListItem.Icon) + !String.IsEqual(ListItem.Icon,DefaultFolder.png)">$INFO[ListItem.Icon]</value>
+        <value condition="String.IsEqual(ListItem.DBType,director)">DefaultDirector.png</value>
+        <value condition="$EXP[Exp_ListItem_IsPerson]">DefaultActor.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,artist)">DefaultArtist.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,album)">DefaultAlbumCover.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,song)">DefaultMusicSongs.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,musicvideo)">DefaultMusicVideos.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,movie)">DefaultMovies.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,set)">DefaultSets.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)">DefaultTVShows.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,tag)">DefaultTags.png</value>
+        <value condition="String.IsEqual(ListItem.DBType,year)">DefaultYear.png</value>
+        <value>DefaultFolder.png</value>
+    </variable>
+
     <variable name="Image_Widget_Style">
         <value condition="String.IsEqual(ListItem.Property(widget_style),Landscape)">special://skin/extras/icons/view-landscape.png</value>
         <value condition="String.IsEqual(ListItem.Property(widget_style),Square)">special://skin/extras/icons/view-square.png</value>
@@ -238,7 +238,6 @@
         <value condition="String.IsEqual(ListItem.Property(widget_style),Poster)">special://skin/extras/icons/view-poster.png</value>
         <value condition="String.IsEqual(ListItem.Property(widget_style),Banner)">special://skin/extras/icons/window-maximize-regular.png</value>
         <value condition="String.IsEqual(ListItem.Property(widget_style),Card)">special://skin/extras/icons/window-maximize-regular.png</value>
-        <value condition="String.IsEqual(ListItem.Property(widget_style),Placard)">special://skin/extras/icons/window-maximize-regular.png</value>
         <value condition="String.IsEqual(ListItem.Property(widget_style),Ranked)">special://skin/extras/icons/view-poster.png</value>
         <value condition="String.IsEqual(ListItem.Property(widget_style),Stack)">special://skin/extras/icons/view-poster.png</value>
         <value condition="String.IsEqual(ListItem.Property(widget_style),Disc)">special://skin/extras/icons/view-circle.png</value>
@@ -327,6 +326,12 @@
         <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Released) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Released)">flags/$VAR[Color_Directory]/status/calendar-check.png</value>
         <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),In Production) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),In Production)">flags/$VAR[Color_Directory]/status/calendar-day.png</value>
         <value condition="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Planned) | String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Status),Planned)">flags/$VAR[Color_Directory]/status/calendar-day.png</value>
+        <value>flags/$VAR[Color_Directory]/status/calendar-day.png</value>
+    </variable>
+
+    <variable name="Image_C7000_Status">
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Canceled)">flags/$VAR[Color_Directory]/status/calendar-xmark.png</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Status,Ended) | String.IsEqual(Container(7000).ListItem.Status,Released)">flags/$VAR[Color_Directory]/status/calendar-check.png</value>
         <value>flags/$VAR[Color_Directory]/status/calendar-day.png</value>
     </variable>
 
@@ -543,11 +548,6 @@
         <value condition="!String.IsEmpty(Window.Property(thumb))">$INFO[Window.Property(thumb)]</value>
     </variable>
 
-    <variable name="Image_IsCurrentStream">
-        <value condition="!String.IsEmpty(ListItem.Property(iscurrent))">buttons/check-on.png</value>
-        <value>buttons/check-off.png</value>
-    </variable>
-
     <variable name="Image_Trailer_PlayPause">
         <value condition="Player.Paused">special://skin/extras/icons/play2.png</value>
         <value>special://skin/extras/icons/pause.png</value>
@@ -669,6 +669,19 @@
 
     <variable name="Image_ListItem_RottenTomatoes_UserMeter">
         <value condition="Integer.IsGreater(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter),59) | String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter))">popcorn.png</value>
+        <value>popcorn_spilt.png</value>
+    </variable>
+
+    <variable name="Image_C7000_RottenTomatoes">
+        <value condition="String.IsEqual(Container(7000).ListItem.Property(RottenTomatoes_Image),certified)">certified.png</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Property(RottenTomatoes_Image),fresh)">rtfresh.png</value>
+        <value condition="String.IsEqual(Container(7000).ListItem.Property(RottenTomatoes_Image),rotten)">rtrotten.png</value>
+        <value condition="Integer.IsGreater(Container(7000).ListItem.Property(RottenTomatoes_Rating),59)">rtfresh.png</value>
+        <value>rtrotten.png</value>
+    </variable>
+
+    <variable name="Image_C7000_RottenTomatoes_UserMeter">
+        <value condition="Integer.IsGreater(Container(7000).ListItem.Property(RottenTomatoes_UserMeter),59) | String.IsEmpty(Container(7000).ListItem.Property(RottenTomatoes_UserMeter))">popcorn.png</value>
         <value>popcorn_spilt.png</value>
     </variable>
 

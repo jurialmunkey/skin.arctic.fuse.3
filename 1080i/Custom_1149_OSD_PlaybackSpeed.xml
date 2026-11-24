@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Playback speed ruler in the DialogSlider style, opened from the video row's speed card.
+     Tempo 0.80 to 1.50 when tempo is enabled, otherwise rewind and fast forward speeds with normal speed in the centre -->
+<window type="dialog" id="1149">
+    <!-- Same layer as DialogSeekBar, so the fade and ruler draw under the OSD buttons -->
+    <zorder>0</zorder>
+    <defaultcontrol always="true">11</defaultcontrol>
+    <include content="DialogSlider_RulerScript">
+        <param name="window">1149</param>
+        <param name="value">Value_OSD_RulerStep</param>
+        <param name="minimum">Value_OSD_RulerMinimum</param>
+        <param name="maximum">Value_OSD_RulerMaximum</param>
+        <param name="origin">Value_OSD_RulerOrigin</param>
+    </include>
+    <controls>
+
+        <control type="image">
+            <bottom>0</bottom>
+            <height>768</height>
+            <texture colordiffuse="shadow_full" border="4,0,4,0">common/gradient-v.png</texture>
+            <!-- The seekbar draws the OSD fade when it is up -->
+            <visible>!Window.IsVisible(DialogSeekBar.xml)</visible>
+        </control>
+
+        <control type="group">
+            <include>DialogSlider_RulerAnimation</include>
+            <include content="DialogSlider_RulerGroup">
+                <!-- Tempo: 0.70 to 1.50 over eight 0.10 steps, filling from 1.00.
+                     Rewind and fast forward: 32x either side of normal speed. Tick labels come from Label_DialogSlider_RulerTick variables -->
+                <include content="DialogSlider_RulerBaseline">
+                    <param name="visible">true</param>
+                </include>
+                <include content="DialogSlider_RulerScale">
+                    <param name="visible">true</param>
+                </include>
+
+                <!-- Takes left and right. Kodi wraps fast forward and rewind past 32x back to normal speed, so stop there.
+                     Kodi ignores rewind and fast forward while paused, so resume playback first -->
+                <include content="Object_Hidden_Button">
+                    <param name="id">11</param>
+                    <onleft condition="Player.TempoEnabled">PlayerControl(TempoDown)</onleft>
+                    <onright condition="Player.TempoEnabled">PlayerControl(TempoUp)</onright>
+                    <onleft condition="!Player.TempoEnabled + Player.Paused">PlayerControl(Play)</onleft>
+                    <onright condition="!Player.TempoEnabled + Player.Paused">PlayerControl(Play)</onright>
+                    <onleft condition="!Player.TempoEnabled + !Player.Rewinding32x">PlayerControl(Rewind)</onleft>
+                    <onright condition="!Player.TempoEnabled + !Player.Forwarding32x">PlayerControl(Forward)</onright>
+                    <onclick>Close</onclick>
+                    <ondown>Close</ondown>
+                    <onup>Close</onup>
+                </include>
+            </include>
+        </control>
+
+        <include content="DialogSlider_Spotlight">
+            <param name="id">0</param>
+            <param name="label">$LOCALIZE[31071]</param>
+            <param name="value">$VAR[Label_OSD_PlaybackSpeed]</param>
+            <param name="hint">&#9664; &#9654;  $LOCALIZE[31880]</param>
+        </include>
+
+    </controls>
+</window>

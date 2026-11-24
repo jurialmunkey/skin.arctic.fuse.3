@@ -75,24 +75,28 @@
         <animation effect="slide" start="0" end="infodialog_artwork_wrap_offset" time="400" tween="cubic" easing="inout" reversible="false" condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkWrapReturn)) + !String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">Conditional</animation>
     </include>
 
+    <!-- The ends of the gallery wrap onto the far edge of the info buttons. -->
     <include name="DialogInfo_ArtworkNavigation">
-        <param name="returncontrol">9000</param>
+        <param name="leftcontrol">4005</param>
+        <param name="rightcontrol">4001</param>
         <param name="widgetcontrol">5029</param>
+        <param name="backcontrol">9000</param>
         <definition>
             <onfocus condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkView))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onfocus>
             <onfocus>SetProperty(DialogInfo.ArtworkView,true)</onfocus>
             <onleft condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">SetProperty(DialogInfo.ArtworkWrapReturn,true)</onleft>
             <onleft condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onleft>
             <onleft>ClearProperty(DialogInfo.ArtworkView)</onleft>
-            <onleft>$PARAM[returncontrol]</onleft>
+            <onleft>$PARAM[leftcontrol]</onleft>
             <onright condition="String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">SetProperty(DialogInfo.ArtworkWrapReturn,true)</onright>
             <onright condition="!String.IsEmpty(Window.Property(DialogInfo.ArtworkReverse))">ClearProperty(DialogInfo.ArtworkWrapReturn)</onright>
             <onright>ClearProperty(DialogInfo.ArtworkView)</onright>
-            <onright>$PARAM[returncontrol]</onright>
-            <onup>8100</onup>
+            <onright>$PARAM[rightcontrol]</onright>
             <ondown>SetFocus($PARAM[widgetcontrol])</ondown>
+            <!-- Back must navigate to a raw control id or Kodi closes the dialog. -->
             <onback>ClearProperty(DialogInfo.ArtworkView)</onback>
-            <onback>$PARAM[returncontrol]</onback>
+            <onback condition="String.IsEqual(Window.Property(DialogInfo.ArtworkReturn),9100)">9100</onback>
+            <onback condition="!String.IsEqual(Window.Property(DialogInfo.ArtworkReturn),9100)">$PARAM[backcontrol]</onback>
         </definition>
     </include>
 
@@ -102,10 +106,10 @@
         <definition>
             <onleft>SetProperty(DialogInfo.ArtworkReturn,$PARAM[returncontrol])</onleft>
             <onleft>SetProperty(DialogInfo.ArtworkReverse,true)</onleft>
-            <onleft>8100</onleft>
+            <onleft>SetFocus(8100,9999,absolute)</onleft>
             <onright>SetProperty(DialogInfo.ArtworkReturn,$PARAM[returncontrol])</onright>
             <onright>ClearProperty(DialogInfo.ArtworkReverse)</onright>
-            <onright>8100</onright>
+            <onright>SetFocus(8100,0,absolute)</onright>
         </definition>
     </include>
 
@@ -119,6 +123,74 @@
                 <param name="fadetime">0</param>
             </include>
         </control>
+    </include>
+
+    <!-- Pad top and bottom so the artwork clears the rounded corners of the backing panel. -->
+    <include name="DialogInfo_ArtworkLandscape">
+        <definition>
+            <control type="image">
+                <nested />
+                <top>40</top>
+                <bottom>40</bottom>
+                <aspectratio>keep</aspectratio>
+                <fadetime>background_fadetime</fadetime>
+                <texture background="true">$PARAM[icon]</texture>
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogInfo_ArtworkDot">
+        <control type="image">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>10</width>
+            <height>10</height>
+            <texture colordiffuse="$PARAM[colordiffuse]">common/circle.png</texture>
+        </control>
+    </include>
+
+    <!-- The list shows position dots in the bottom gutter while a fading image shows its selected artwork. -->
+    <!-- Items run in reverse so entering from the left starts on the main artwork at the end. -->
+    <include name="DialogInfo_VideoArtwork">
+        <include content="Object_BigPoster">
+            <param name="icon_visible">false</param>
+            <param name="posterback_colordiffuse">black</param>
+            <control type="fixedlist" id="8100">
+                <centerleft>50%</centerleft>
+                <centerbottom>20</centerbottom>
+                <width>100</width>
+                <height>20</height>
+                <orientation>horizontal</orientation>
+                <focusposition>2</focusposition>
+                <movement>2</movement>
+                <scrolltime tween="quadratic">400</scrolltime>
+                <include>DialogInfo_ArtworkNavigation</include>
+                <onclick>ShowPicture($INFO[Container(8100).ListItem.Icon])</onclick>
+                <content>
+                    <item>
+                        <icon>$VAR[Image_DialogInfo_Fanart]</icon>
+                        <visible>Skin.HasSetting(VideoInfo.Widgets.DisableGallery)</visible>
+                    </item>
+                </content>
+                <include condition="!Skin.HasSetting(VideoInfo.Widgets.DisableGallery)">DialogInfo_GalleryContent</include>
+                <itemlayout width="20" height="20">
+                    <include content="DialogInfo_ArtworkDot">
+                        <param name="colordiffuse">main_fg_30</param>
+                    </include>
+                </itemlayout>
+                <focusedlayout width="20" height="20">
+                    <include content="DialogInfo_ArtworkDot">
+                        <param name="colordiffuse">main_fg_90</param>
+                    </include>
+                </focusedlayout>
+            </control>
+            <include content="DialogInfo_ArtworkLandscape">
+                <param name="icon">$INFO[Container(8100).ListItem.Icon]</param>
+            </include>
+            <include content="Object_SelectBox">
+                <visible>Control.HasFocus(8100)</visible>
+            </include>
+        </include>
     </include>
 
     <include name="DialogInfo_PersonArtwork">
@@ -135,8 +207,10 @@
             <preloaditems>2</preloaditems>
             <scrolltime tween="quadratic">400</scrolltime>
             <include content="DialogInfo_ArtworkNavigation">
-                <param name="returncontrol">8000</param>
+                <param name="leftcontrol">8000</param>
+                <param name="rightcontrol">8000</param>
                 <param name="widgetcontrol">5000</param>
+                <param name="backcontrol">8000</param>
             </include>
             <itemlayout width="infodialog_poster_item_w" height="infodialog_poster_h">
                 <control type="group">
@@ -444,7 +518,7 @@
     <include name="DialogInfo_Related_CategoryWidget">
         <param name="style">List_Poster_Row</param>
         <param name="action">DialogInfo_Widgets_Action</param>
-        <param name="detailed">true</param>
+        <param name="detailed">false</param>
         <definition>
             <include content="Widget_Info_Row">
                 <param name="id">$PARAM[id]</param>
@@ -1028,167 +1102,136 @@
 
     </include>
 
-    <include name="DialogInfo_GalleryWidget">
-        <include content="_Widget_Row">
-            <param name="id">5020</param>
-            <param name="groupid">5120</param>
-            <param name="label">$LOCALIZE[31098]</param>
-            <param name="include">List_Gallery_Row</param>
-            <param name="visible">$EXP[Exp_InfoDialogs_WidgetsGroup_HasFocus]</param>
-            <param name="widgetfade_include">true</param>
-            <param name="include_movement">false</param>
-            <param name="set_widgetcontainer">false</param>
-            <param name="widget_hideartwork">true</param>
-            <param name="widgetheight">widget_items_h_gallery</param>
-            <param name="altvisible">!String.IsEqual(Window.Property(CurrentID),Window.Property(BaseID))</param>
-            <onfocus>SetProperty(CurrentID,$INFO[Window.Property(BaseID)])</onfocus>
+    <include name="DialogInfo_GalleryItem">
+        <param name="visible">true</param>
+        <definition>
+            <item>
+                <icon>$INFO[ListItem.Art($PARAM[art])]</icon>
+                <visible>!String.IsEmpty(ListItem.Art($PARAM[art]))</visible>
+                <visible>$PARAM[visible]</visible>
+            </item>
+        </definition>
+    </include>
 
-            <content>
-                <item>
-                    <icon>$INFO[ListItem.Art(thumb)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(thumb))</visible>
-                    <visible>Window.IsVisible(DialogVideoInfo.xml)</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart1)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart1))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart1),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart2)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart2))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart2),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart3)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart3))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart3),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart4)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart4))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart4),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart5)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart5))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart5),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart6)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart6))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart6),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart7)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart7))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart7),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart8)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart8))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart8),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart9)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart9))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart9),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart10)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart10))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart10),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart11)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart11))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart11),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart12)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart12))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart12),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart13)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart13))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart13),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart14)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart14))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart14),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart15)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart15))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart15),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart16)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart16))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart16),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart17)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart17))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart17),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart18)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart18))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart18),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart19)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart19))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart19),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(fanart20)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(fanart20))</visible>
-                    <visible>!String.IsEqual(ListItem.Art(fanart20),ListItem.Art(fanart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(discart)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(discart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(clearart)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(clearart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(clearlogo)]</icon>
-                    <visible>!String.IsEmpty(ListItem.Art(clearlogo))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(album.discart)]</icon>
-                    <visible>String.IsEmpty(ListItem.Art(discart))</visible>
-                    <visible>!String.IsEmpty(ListItem.Art(album.discart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(artist.clearlogo)]</icon>
-                    <visible>String.IsEmpty(ListItem.Art(clearlogo))</visible>
-                    <visible>!String.IsEmpty(ListItem.Art(artist.clearlogo))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(artist.clearart)]</icon>
-                    <visible>String.IsEmpty(ListItem.Art(clearart))</visible>
-                    <visible>!String.IsEmpty(ListItem.Art(artist.clearart))</visible>
-                </item>
-                <item>
-                    <icon>$INFO[ListItem.Art(artist.landscape)]</icon>
-                    <visible>String.IsEmpty(ListItem.Art(landscape))</visible>
-                    <visible>!String.IsEmpty(ListItem.Art(artist.landscape))</visible>
-                </item>
-            </content>
-            <include condition="Window.IsVisible(DialogVideoInfo.xml) + ![Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) | !$EXP[Exp_TMDbHelper_IsData]] + !String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_VideoFanartContent</include>
-            <include condition="Window.IsVisible(DialogVideoInfo.xml) + ![Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) | !$EXP[Exp_TMDbHelper_IsData]] + String.IsEqual(ListItem.Property(tmdb_type),person)">DialogInfo_PersonImageContent</include>
+    <!-- Online fanart followed by the local artwork, in reverse so the main artwork comes last. -->
+    <include name="DialogInfo_GalleryContent">
+        <include content="DialogInfo_VideoFanartContent">
+            <param name="sortby">rating</param>
+            <param name="sortorder">ascending</param>
         </include>
+        <content>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">artist.landscape</param>
+                <param name="visible">String.IsEmpty(ListItem.Art(landscape))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">artist.clearart</param>
+                <param name="visible">String.IsEmpty(ListItem.Art(clearart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">artist.clearlogo</param>
+                <param name="visible">String.IsEmpty(ListItem.Art(clearlogo))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">album.discart</param>
+                <param name="visible">String.IsEmpty(ListItem.Art(discart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">clearlogo</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">clearart</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">discart</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart20</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart20),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart19</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart19),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart18</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart18),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart17</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart17),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart16</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart16),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart15</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart15),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart14</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart14),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart13</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart13),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart12</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart12),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart11</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart11),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart10</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart10),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart9</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart9),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart8</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart8),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart7</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart7),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart6</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart6),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart5</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart5),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart4</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart4),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart3</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart3),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart2</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart2),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart1</param>
+                <param name="visible">!String.IsEqual(ListItem.Art(fanart1),ListItem.Art(fanart))</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">fanart</param>
+            </include>
+            <include content="DialogInfo_GalleryItem">
+                <param name="art">thumb</param>
+            </include>
+        </content>
     </include>
 
     <variable name="Path_DialogInfo_Widgets">
@@ -1626,7 +1669,7 @@
     </include>
     <include name="DialogInfo_VideoButtons_UserRating">
         <item>
-            <label>$LOCALIZE[31061]$INFO[ListItem.UserRating, (,)]</label>
+            <label>$LOCALIZE[31061]$INFO[ListItem.UserRating, (,.0)]</label>
             <icon>special://skin/extras/icons/star.png</icon>
             <onclick>Dialog.Close(1172,true)</onclick>
             <onclick>SendClick(7)</onclick>
@@ -2147,8 +2190,20 @@
         </definition>
     </include>
 
+    <!-- Online fanart arrives sorted by rating, so ascending rating reverses it. -->
     <include name="DialogInfo_VideoFanartContent">
-        <content target="images" limit="20" browse="never">$VAR[Path_VideoInfo_OnlineFanart]</content>
+        <param name="sortby" />
+        <param name="sortorder" />
+        <definition>
+            <include content="Object_ContentDynamic" condition="![Skin.HasSetting(VideoInfo.Widgets.DisableOnlineGallery) | !$EXP[Exp_TMDbHelper_IsData]]">
+                <param name="target">images</param>
+                <param name="limit">20</param>
+                <param name="browse">never</param>
+                <param name="sortby">$PARAM[sortby]</param>
+                <param name="sortorder">$PARAM[sortorder]</param>
+                <param name="content">$VAR[Path_VideoInfo_OnlineFanart]</param>
+            </include>
+        </definition>
     </include>
 
     <include name="DialogInfo_PersonImageContent">

@@ -1,0 +1,58 @@
+<contents>
+    <!-- Each ratings menu item path is the name of the rating property that holds its value -->
+    <lists>
+        <list name="ratingsmovies">
+            <value name="content">Movies</value>
+        </list>
+        <list name="ratingstvshows">
+            <value name="content">TVShows</value>
+        </list>
+        <list name="ratingsepisodes">
+            <value name="content">Episodes</value>
+        </list>
+    </lists>
+    <items>
+        <item>
+            <value name="comments">Running counts of the available {content} ratings in menu order: Info_Meta_Ratings_Counts for every menu position, disabled ones passing the counts on unchanged</value>
+            <template>generator/data/parts/basic_include.xmltemplate</template>
+            <value name="includes_name">skinvariables-{item}-counts</value>
+            <value name="includes_part">
+                <items menu="{item}">
+                    <item>
+                        <template>generator/data/parts/ratings_count_item.xmltemplate</template>
+                        <condition>{item_disabled}!=True</condition>
+                        <condition>{item_target}!=infolabel</condition>
+                    </item>
+                    <item>
+                        <template>generator/data/parts/ratings_count_item_infolabel.xmltemplate</template>
+                        <condition>{item_disabled}!=True</condition>
+                        <condition>{item_target}==infolabel</condition>
+                    </item>
+                    <item>
+                        <template>generator/data/parts/ratings_count_item_disabled.xmltemplate</template>
+                        <condition>{item_disabled}==True</condition>
+                    </item>
+                </items>
+            </value>
+        </item>
+        <item>
+            <value name="comments">Enabled {content} ratings in menu order: Info_Meta_Ratings_Item for each, shown while it is one of the first available ratings by the running counts</value>
+            <template>generator/data/parts/basic_include.xmltemplate</template>
+            <value name="includes_name">skinvariables-{item}</value>
+            <value name="includes_part">
+                <items menu="{item}">
+                    <item>
+                        <template>generator/data/parts/ratings_include_item.xmltemplate</template>
+                        <condition>{item_disabled}!=True</condition>
+                        <condition>{item_target}!=infolabel</condition>
+                    </item>
+                    <item>
+                        <template>generator/data/parts/ratings_include_item_infolabel.xmltemplate</template>
+                        <condition>{item_disabled}!=True</condition>
+                        <condition>{item_target}==infolabel</condition>
+                    </item>
+                </items>
+            </value>
+        </item>
+    </items>
+</contents>

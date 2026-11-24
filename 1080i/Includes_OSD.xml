@@ -134,20 +134,20 @@
                     <height>67</height>
                     <aligny>top</aligny>
                     <font>font_mini</font>
-                    <label>$PARAM[top_title] [COLOR=panel_fg_30]•[/COLOR] $PARAM[sub_title]</label>
+                    <label>$PARAM[top_title] [COLOR=main_fg_30]•[/COLOR] $PARAM[sub_title]</label>
                     <align>left</align>
-                    <textcolor>panel_fg_70</textcolor>
+                    <textcolor>main_fg_70</textcolor>
                 </include>
 
                 <include content="Object_InfoCircle_Text_Top" condition="Skin.HasSetting(View.UseDetailedListLabels)">
-                    <textcolor>panel_fg_90</textcolor>
-                    <selectedcolor>panel_fg_90</selectedcolor>
+                    <textcolor>main_fg_90</textcolor>
+                    <selectedcolor>main_fg_90</selectedcolor>
                     <label>$PARAM[top_title]</label>
                 </include>
 
                 <include content="Object_InfoCircle_Text_Sub" condition="Skin.HasSetting(View.UseDetailedListLabels)">
-                    <textcolor>panel_fg_70</textcolor>
-                    <selectedcolor>panel_fg_70</selectedcolor>
+                    <textcolor>main_fg_70</textcolor>
+                    <selectedcolor>main_fg_70</selectedcolor>
                     <label>$PARAM[sub_title]</label>
                 </include>
             </control>
@@ -179,6 +179,7 @@
                         <param name="item_w">view_landscape_item_w</param>
                         <param name="item_h">view_landscape_item_h</param>
                         <param name="detailed">true</param>
+                        <param name="include_generic">false</param>
                     </include>
 
                     <include condition="$PARAM[is_addon]">OSD_UpNext_Progress</include>
@@ -219,75 +220,6 @@
         </definition>
     </include>
 
-    <include name="OSD_Stream_Selector_Layout">
-        <param name="selected">false</param>
-        <param name="color_fg">dialog_fg_90</param>
-        <param name="enabled">true</param>
-        <definition>
-            <control type="group">
-                <left>20</left>
-                <right>20</right>
-                <include content="Object_Control" condition="$PARAM[selected]">
-                    <param name="control">image</param>
-                    <include>Texture_Menu_Highlight_H</include>
-                </include>
-                <control type="group">
-                    <left>40</left>
-                    <right>20</right>
-                    <control type="label">
-                        <textcolor>$PARAM[color_fg]</textcolor>
-                        <label>$VAR[Label_StreamLanguage,[UPPERCASE],[/UPPERCASE]]$INFO[ListItem.Label2, | ,]</label>
-                        <right>$PARAM[label_right]</right>
-                    </control>
-                    <control type="label">
-                        <right>240</right>
-                        <align>right</align>
-                        <label>$VAR[Label_PlayerStream_IsForced,  ,]$VAR[Label_PlayerStream_IsDefault,  ,]$VAR[Label_PlayerStream_IsOriginal,  ,]$INFO[ListItem.Property(codec),  ,]$INFO[ListItem.Property(channels),  , $LOCALIZE[10127]]$INFO[ListItem.Property(bitrate),  , bps]</label>
-                        <bottom>2</bottom>
-                        <font>font_tiny_bold</font>
-                        <textcolor>$PARAM[color_fg]</textcolor>
-                    </control>
-
-                    <control type="image">
-                        <right>120</right>
-                        <top>-1</top>
-                        <bottom>1</bottom>
-                        <width>80</width>
-                        <bordersize>22</bordersize>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture colordiffuse="$PARAM[color_fg]">flags/cc.png</texture>
-                        <animation effect="fade" end="33" condition="String.IsEmpty(ListItem.Property(isimpaired))">Conditional</animation>
-                    </control>
-
-                    <control type="image">
-                        <right>60</right>
-                        <width>80</width>
-                        <bordersize>28</bordersize>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture colordiffuse="$PARAM[color_fg]">$VAR[Image_IsCurrentStream]</texture>
-                        <visible>$PARAM[enabled]</visible>
-                    </control>
-                    <control type="image">
-                        <right>60</right>
-                        <width>80</width>
-                        <bordersize>28</bordersize>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture colordiffuse="$PARAM[color_fg]">buttons/check-off.png</texture>
-                        <visible>!$PARAM[enabled]</visible>
-                    </control>
-
-                    <control type="image">
-                        <right>0</right>
-                        <width>80</width>
-                        <bordersize>18</bordersize>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture fallback="flags/color/language/unk.png">$INFO[ListItem.Property(language),flags/color/language/,.png]</texture>
-                    </control>
-                </control>
-            </control>
-        </definition>
-    </include>
-
     <include name="OSD_VideoBackground_Dialog">
         <control type="group">
             <control type="image">
@@ -308,12 +240,8 @@
                 <include content="Animation_Fade_Out">
                     <param name="type">WindowClose</param>
                 </include>
-                <texture colordiffuse="7f000000">common/white.png</texture>
+                <texture colordiffuse="shadow_hard">common/white.png</texture>
             </control>
-
-            <!-- <control type="image">
-                <texture colordiffuse="panel_bg_70">special://skin/extras/backgrounds/overlay/combined_flixart.png</texture>
-            </control> -->
         </control>
     </include>
 
@@ -321,7 +249,7 @@
         <control type="image">
             <bottom>0</bottom>
             <height>256</height>
-            <texture colordiffuse="panel_bg_70" border="4,0,4,0">common/gradient-v.png</texture>
+            <texture colordiffuse="shadow_full" border="4,0,4,0">common/gradient-v.png</texture>
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
         </control>
@@ -329,149 +257,133 @@
         <control type="image">
             <bottom>0</bottom>
             <height>768</height>
-            <texture colordiffuse="panel_bg_70" border="4,0,4,0">common/gradient-v.png</texture>
+            <texture colordiffuse="shadow_full" border="4,0,4,0">common/gradient-v.png</texture>
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
-            <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1143) | Window.IsActive(1144) | Window.IsActive(1145) | Window.IsActive(1146) | Window.IsActive(1147) | Window.IsActive(1148) | Window.IsActive(1149) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml)</visible>
+            <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1143) | Window.IsActive(1144) | Window.IsActive(1145) | Window.IsActive(1146) | Window.IsActive(1147) | Window.IsActive(1148) | Window.IsActive(1149) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml) | Window.IsActive(DialogSlider.xml)</visible>
         </control>
     </include>
 
-    <include name="OSD_Part_Background_Blur">
-        <include content="Part_Background_Blur">
-            <param name="transparency">true</param>
-        </include>
-    </include>
-
-    <include name="OSD_Stream_Selector_Divider">
-        <control type="image">
-            <texture border="20" colordiffuse="dialog_fg_12">common/dialog.png</texture>
-        </control>
-        <control type="image">
-            <left>40</left>
-            <right>40</right>
-            <height>1</height>
-            <centerbottom>40</centerbottom>
-            <texture colordiffuse="dialog_fg_06">common/white.png</texture>
-        </control>
-    </include>
-
-    <include name="OSD_Stream_Selector_BackgroundResizer">
+    <include name="OSD_Stream_Row">
+        <param name="enabled">true</param>
         <definition>
+            <visible>!Window.IsVisible(DialogSettings.xml) + !$EXP[Exp_OSD_DialogSelect] + !$EXP[Exp_OSD_DialogSubtitles]</visible>
+            <include>Animation_SlideIn_Dialog</include>
+            <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
+
             <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>760</height>
-                <visible>Integer.IsGreater(Container($PARAM[id]).NumItems,6)</visible>
+                <include content="OSD_Stream_ListSlide">
+                    <param name="id">$PARAM[id]</param>
+                </include>
+                <include content="DialogSettings_OSD_Heading">
+                    <param name="list">$PARAM[id]</param>
+                </include>
             </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>680</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,6)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>600</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,5)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>520</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,4)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>440</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,3)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>360</height>
-                <visible>Integer.IsEqual(Container($PARAM[id]).NumItems,2)</visible>
-            </control>
-            <control type="group">
-                <include>OSD_Part_Background_Blur</include>
-                <include>OSD_Stream_Selector_Divider</include>
-                <height>280</height>
-                <visible>Integer.IsLess(Container($PARAM[id]).NumItems,2)</visible>
-            </control>
+
+            <include content="List_Core">
+                <param name="orientation">vertical</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="item_w">osd_streamrow_w</param>
+                <param name="item_h">osd_streamrow_h</param>
+                <param name="itemlayout_w">osd_streamrow_w</param>
+                <param name="itemlayout_h">osd_streamrow_h</param>
+                <param name="itemlayout_include">Layout_StreamRow</param>
+                <param name="offset_x">0</param>
+                <param name="offset_y">0</param>
+                <param name="misc">$PARAM[enabled]</param>
+                <param name="preloaditems">0</param>
+                <right>-40</right>
+                <width>osd_streamrow_w</width>
+                <top>180</top>
+                <height>400</height>
+                <pagecontrol>61</pagecontrol>
+                <ondown>$PARAM[buttonid]</ondown>
+                <onup>noop</onup>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+                <include content="OSD_Stream_ListSlide">
+                    <param name="id">$PARAM[id]</param>
+                </include>
+                <nested />
+            </include>
+
+            <include content="DialogSettings_OSD_Scrollbar">
+                <top>180</top>
+                <bottom>500</bottom>
+                <centerright>-60</centerright>
+            </include>
         </definition>
     </include>
 
+    <!-- Kept out of the list's group with no Visible animation, so it stays put when a slider opens and the slider shows the same spotlight in its place -->
+    <include name="OSD_Stream_Spotlight">
+        <control type="group">
+            <visible>!Window.IsVisible(DialogSettings.xml) + !$EXP[Exp_OSD_SliderVisible] + !$EXP[Exp_OSD_DialogSelect] + !$EXP[Exp_OSD_DialogSubtitles]</visible>
+            <include content="Animation_SlideIn_Dialog">
+                <param name="visible_condition">false</param>
+            </include>
+            <include content="DialogSettings_OSD_Spotlight">
+                <param name="id">0</param>
+                <param name="label">$PARAM[header]</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- Short lists sit one 80px row lower for each row under five, so they end just above the spotlight -->
+    <include name="OSD_Stream_ListSlide">
+        <animation effect="slide" end="0,320" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+        <animation effect="slide" end="0,240" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
+        <animation effect="slide" end="0,160" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
+        <animation effect="slide" end="0,80" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
+    </include>
+
+    <!-- Download row after the offset row, opening Kodi's subtitle search -->
+    <include name="OSD_Stream_DownloadRow">
+        <content>
+            <item>
+                <label>$LOCALIZE[137]</label>
+                <label2>$LOCALIZE[24134]</label2>
+                <icon>special://skin/extras/icons/download.png</icon>
+                <property name="window">subtitlesearch</property>
+            </item>
+        </content>
+    </include>
+
     <include name="OSD_Stream_Selector">
-        <param name="width">960</param>
         <param name="enabled">true</param>
         <param name="toggle">false</param>
+        <param name="download">false</param>
         <definition>
             <control type="group">
-
-                <visible>!Window.IsVisible(DialogSettings.xml)</visible>
-                <include content="Animation_SlideIn_Dialog">
-                    <param name="posy">48</param>
+                <include content="OSD_Stream_Row">
+                    <param name="id">$PARAM[id]</param>
+                    <param name="buttonid">$PARAM[buttonid]</param>
+                    <param name="enabled">$PARAM[enabled]</param>
+                    <content>plugin://script.skinvariables?info=get_player_streams&amp;stream_type=$PARAM[stream_type]&amp;reload=$INFO[Window.Property(UID)]</content>
+                    <!-- Offset row after the streams. The list's own onclick overrides item onclicks, so the row names its slider action in a property instead -->
+                    <content>
+                        <item>
+                            <label>$INFO[Container($PARAM[id]1).ListItem.Label]</label>
+                            <label2>$PARAM[slider_header]</label2>
+                            <icon>special://skin/extras/icons/stopwatch.png</icon>
+                            <property name="slider">$PARAM[slider]</property>
+                        </item>
+                    </content>
+                    <include condition="$PARAM[download]">OSD_Stream_DownloadRow</include>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(slider))">Action($INFO[ListItem.Property(slider)])</onclick>
+                    <onclick condition="!String.IsEmpty(ListItem.Property(window))">ActivateWindow($INFO[ListItem.Property(window)])</onclick>
+                    <onclick condition="$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))">Action(ShowSubtitles)</onclick>
+                    <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))] + String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Property(window))">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
                 </include>
-
-                <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
-                <right>-40</right>
-                <width>$PARAM[width]</width>
-                <bottom>220</bottom>
-                <height>760</height>
-                <control type="group">
-                    <animation effect="slide" start="0" end="0,80" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,6)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,160" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,5)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,240" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,320" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,400" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
-                    <animation effect="slide" start="0" end="0,480" condition="Integer.IsLess(Container($PARAM[id]).NumItems,2)">Conditional</animation>
-                    <include content="OSD_Stream_Selector_BackgroundResizer">
-                        <param name="id">$PARAM[id]</param>
-                    </include>
-                    <include content="Object_MenuHeader">
-                        <param name="label">$PARAM[header]</param>
-                        <param name="icon">$PARAM[icon]</param>
-                    </include>
-                    <control type="panel" id="$PARAM[id]">
-                        <top>140</top>
-                        <bottom>40</bottom>
-                        <ondown>$PARAM[buttonid]</ondown>
-                        <onleft>$PARAM[buttonid]</onleft>
-                        <onright>$PARAM[scrollbarid]</onright>
-                        <onup>noop</onup>
-                        <pagecontrol>$PARAM[scrollbarid]</pagecontrol>
-                        <orientation>vertical</orientation>
-                        <itemlayout height="80">
-                            <include content="OSD_Stream_Selector_Layout">
-                                <param name="enabled">$PARAM[enabled]</param>
-                                <param name="label_right">$PARAM[label_right]</param>
-                            </include>
-                        </itemlayout>
-                        <focusedlayout height="80">
-                            <include content="OSD_Stream_Selector_Layout">
-                                <param name="selected">true</param>
-                                <param name="color_fg">$VAR[ColorSelected]</param>
-                                <param name="enabled">$PARAM[enabled]</param>
-                                <param name="label_right">$PARAM[label_right]</param>
-                            </include>
-                        </focusedlayout>
-                        <content>plugin://script.skinvariables?info=get_player_streams&amp;stream_type=$PARAM[stream_type]&amp;reload=$INFO[Window.Property(UID)]</content>
-                        <onclick condition="$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))">Action(ShowSubtitles)</onclick>
-                        <onclick condition="![$PARAM[toggle] + !String.IsEmpty(ListItem.Property(iscurrent))]">Runscript(script.skinvariables,$PARAM[method]=$INFO[ListItem.Property(index)],reload_property=UID)</onclick>
-
-                    </control>
-                </control>
-
-                <include content="Part_Scrollbar_Max">
-                    <param name="id">$PARAM[scrollbarid]</param>
-                    <top>120</top>
-                    <bottom>40</bottom>
-                    <onleft>$PARAM[id]</onleft>
-                    <onright>$PARAM[buttonid]</onright>
+                <!-- The offset row's value: the delay in milliseconds, for example "+100 ms" -->
+                <include content="Object_Hidden_List">
+                    <param name="id">$PARAM[id]1</param>
+                    <content>plugin://script.skinvariables?info=get_delay_label&amp;value=$INFO[$PARAM[slider_value]]</content>
                 </include>
-
             </control>
+            <include content="OSD_Stream_Spotlight">
+                <param name="header">$PARAM[header]</param>
+            </include>
         </definition>
     </include>
 
@@ -481,7 +393,7 @@
         <param name="itemgap">40</param>
         <param name="visible">true</param>
         <param name="flipx">false</param>
-        <param name="icon_colordiffuse">panel_fg_70</param>
+        <param name="icon_colordiffuse">main_fg_70</param>
         <param name="iconoffset_condition">false</param>
         <param name="itemgap_mod">-</param>
         <definition>
@@ -568,7 +480,7 @@
                 </control>
 
                 <include content="Info_Title">
-                    <param name="colordiffuse">panel_fg</param>
+                    <param name="colordiffuse">main_fg</param>
                     <param name="container" />
                     <param name="listitem">VideoPlayer</param>
                     <param name="service">Player</param>
@@ -576,14 +488,14 @@
                 </include>
 
                 <include content="Info_Line">
-                    <param name="colordiffuse">panel_fg</param>
+                    <param name="colordiffuse">main_fg</param>
                     <param name="container" />
                     <param name="listitem">VideoPlayer</param>
                     <param name="override">true</param>
                 </include>
 
                 <include content="Info_Plot" condition="$PARAM[plot_visible]">
-                    <param name="colordiffuse">panel_fg</param>
+                    <param name="colordiffuse">main_fg</param>
                     <param name="listitem">VideoPlayer</param>
                     <param name="width">info_panel_w</param>
                     <param name="include_main">!VideoPlayer.Content(episodes)</param>
@@ -595,7 +507,7 @@
                 <control type="label">
                     <label>$INFO[VideoPlayer.Season,,x]$INFO[VideoPlayer.Episode,,. ]$INFO[VideoPlayer.Title]</label>
                     <height>40</height>
-                    <colordiffuse>panel_fg_70</colordiffuse>
+                    <colordiffuse>main_fg_70</colordiffuse>
                     <left>40</left>
                     <width>info_panel_w</width>
                     <visible>![$PARAM[plot_visible]]</visible>
@@ -606,7 +518,7 @@
                 <control type="label">
                     <label>$INFO[VideoPlayer.Tagline]</label>
                     <height>40</height>
-                    <colordiffuse>panel_fg_70</colordiffuse>
+                    <colordiffuse>main_fg_70</colordiffuse>
                     <left>40</left>
                     <width>info_panel_w</width>
                     <visible>![$PARAM[plot_visible]]</visible>
@@ -615,9 +527,12 @@
                 </control>
 
                 <include content="Info_Meta">
-                    <param name="colordiffuse">panel_fg</param>
+                    <param name="colordiffuse">main_fg</param>
                     <param name="listitem">VideoPlayer</param>
                     <param name="service">Player</param>
+                    <param name="source_prefix">TMDbHelper.Player.</param>
+                    <param name="ratings_id">731</param>
+                    <param name="status">Window(Home).Property(TMDbHelper.Player.Status)</param>
                     <param name="override_tvshow">VideoPlayer.Content(episodes)</param>
                     <param name="override_movie">VideoPlayer.Content(movies)</param>
                 </include>
@@ -638,7 +553,7 @@
             <align>left</align>
             <aligny>center</aligny>
             <label>$VAR[Label_OSD_Time]</label>
-            <textcolor>panel_fg_100</textcolor>
+            <textcolor>main_fg_100</textcolor>
             <font>font_main</font>
         </control>
         <control type="label">
@@ -649,9 +564,31 @@
             <align>right</align>
             <aligny>center</aligny>
             <label>$VAR[Label_OSD_Duration]</label>
-            <textcolor>panel_fg_100</textcolor>
+            <textcolor>main_fg_100</textcolor>
             <font>font_main</font>
         </control>
+    </include>
+
+    <!-- The seek and scrubber nib, matching the slider ring. The background is as wide as the 1552px control so Kodi draws the nib unscaled and its centre travels the full bar -->
+    <include name="OSD_Progress_SeekNib_Textures">
+        <texturebg colordiffuse="00ffffff">progress/seek_nib_bg.png</texturebg>
+        <righttexture colordiffuse="main_fg_100">progress/seek_nib.png</righttexture>
+        <lefttexture />
+        <midtexture />
+    </include>
+
+    <include name="OSD_Progress_Markers">
+        <param name="texture">progress/marker-dot.png</param>
+        <param name="colordiffuse">ffffffff</param>
+        <definition>
+            <control type="ranges">
+                <width>100%</width>
+                <height>12</height>
+                <texturebg colordiffuse="00ffffff">progress/marker-bg.png</texturebg>
+                <righttexture colordiffuse="$PARAM[colordiffuse]">$PARAM[texture]</righttexture>
+                <info>$PARAM[info]</info>
+            </control>
+        </definition>
     </include>
 
     <include name="OSD_Progress_BarControls">
@@ -696,20 +633,21 @@
             <visible>Pvr.IsPlayingTv</visible>
             <texturebg colordiffuse="00ffffff" border="12,0,12,0">progress/progress-nib.png</texturebg>
         </control>
-        <!-- CutList and Chapters Range -->
-        <control type="ranges">
-            <width>100%</width>
-            <height>12</height>
-            <texturebg colordiffuse="00ffffff">progress/marker-bg.png</texturebg>
-            <righttexture colordiffuse="panel_fg_50">progress/marker.png</righttexture>
-            <info>Player.CutList</info>
-        </control>
-        <control type="ranges">
-            <width>100%</width>
-            <height>12</height>
-            <texturebg colordiffuse="00ffffff">progress/marker-bg.png</texturebg>
-            <righttexture colordiffuse="panel_fg_50">progress/marker.png</righttexture>
-            <info>Player.Chapters</info>
+
+        <include content="OSD_Progress_Markers">
+            <param name="info">Player.Chapters</param>
+            <param name="texture">progress/marker.png</param>
+            <param name="colordiffuse">main_fg_50</param>
+        </include>
+
+        <control type="group">
+            <visible>Player.HasVideo + !Pvr.IsPlayingTv</visible>
+            <include content="OSD_Progress_Markers">
+                <param name="info">Player.Cuts</param>
+            </include>
+            <include content="OSD_Progress_Markers">
+                <param name="info">Player.SceneMarkers</param>
+            </include>
         </control>
 
         <!-- Seek Nib -->
@@ -721,10 +659,7 @@
             <right>-56</right>
             <height>112</height>
             <centertop>50%</centertop>
-            <texturebg colordiffuse="00ffffff">progress/slider_bg.png</texturebg>
-            <righttexture colordiffuse="panel_fg_100">progress/slider_nib.png</righttexture>
-            <lefttexture />
-            <midtexture />
+            <include>OSD_Progress_SeekNib_Textures</include>
             <visible>Player.SeekEnabled + !Pvr.IsPlayingTv + !Player.ChannelPreviewActive</visible>
         </control>
         <control type="progress" id="402">
@@ -737,10 +672,7 @@
             <height>112</height>
             <centertop>50%</centertop>
             <info>Player.Progress</info>
-            <texturebg colordiffuse="00ffffff">progress/slider_bg.png</texturebg>
-            <righttexture colordiffuse="panel_fg_100">progress/slider_nib.png</righttexture>
-            <lefttexture />
-            <midtexture />
+            <include>OSD_Progress_SeekNib_Textures</include>
             <visible>Player.SeekEnabled + Pvr.IsPlayingTv + !Player.ChannelPreviewActive</visible>
         </control>
 
@@ -763,8 +695,8 @@
     <include name="OSD_Codecs">
         <param name="anchor">true</param>
         <param name="include_fps">true</param>
-        <param name="textcolor_sub">panel_fg_70</param>
-        <param name="textcolor_top">panel_fg_90</param>
+        <param name="textcolor_sub">main_fg_70</param>
+        <param name="textcolor_top">main_fg_90</param>
         <param name="itemgap">15</param>
         <param name="align">center</param>
         <definition>
@@ -1015,7 +947,7 @@
             <orientation>vertical</orientation>
             <align>bottom</align>
             <include content="Info_Title">
-                <param name="colordiffuse">panel_fg</param>
+                <param name="colordiffuse">main_fg</param>
                 <param name="container" />
                 <param name="service">Player</param>
                 <param name="listitem">$PARAM[listitem]</param>
@@ -1028,7 +960,7 @@
                 <height>50</height>
                 <control type="label">
                     <label>$PARAM[sub_label]</label>
-                    <textcolor>panel_fg_70</textcolor>
+                    <textcolor>main_fg_70</textcolor>
                     <font>font_main</font>
                     <height>40</height>
                     <centertop>38</centertop>
