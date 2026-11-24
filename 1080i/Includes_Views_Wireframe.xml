@@ -1143,12 +1143,18 @@
         </definition>
     </include>
     
-    <include name="Wireframe_Preview">
+    <include name="Wireframe_Background">
         <definition>
             <control type="image">
                 <aspectratio>scale</aspectratio>
                 <texture background="true" diffuse="diffuse/landscape_w1040_h585.png">$VAR[Image_SimpleBackground]</texture>
             </control>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Preview">
+        <definition>
+            <include>Wireframe_Background</include>
             <include>Wireframe_Furniture</include>
             <include>Wireframe_Panels</include>
             <include>Wireframe_Rows</include>
@@ -1157,4 +1163,333 @@
         </definition>
     </include>
     
+    <!-- Hub layout previews: each layout's real 1920x1080 positions as percentages, so one drawing fits any 16:9 canvas -->
+    <include name="Wireframe_Hub_Block">
+        <param name="fill">main_fg_12</param>
+        <param name="texture">common/widget_text.png</param>
+        <param name="border">12</param>
+        <definition>
+            <include content="Wireframe_Box">
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">$PARAM[border]</param>
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Hub_Bar">
+        <param name="fill">main_fg_30</param>
+        <definition>
+            <include content="Wireframe_Hub_Block">
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">common/scrollh.png</param>
+                <param name="border">4,0,4,0</param>
+                <param name="left">$PARAM[left]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">2.222%</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Hub_Tiles">
+        <param name="first">main_fg_12</param>
+        <param name="height">21.354%</param>
+        <param name="texture">common/widget_text.png</param>
+        <param name="border">12</param>
+        <definition>
+            <include content="Wireframe_Hub_Block">
+                <param name="fill">$PARAM[first]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">$PARAM[border]</param>
+                <param name="left">4.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">21.354%</param>
+                <param name="height">$PARAM[height]</param>
+            </include>
+            <include content="Wireframe_Hub_Block">
+                <param name="fill">main_fg_12</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">$PARAM[border]</param>
+                <param name="left">27.604%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">21.354%</param>
+                <param name="height">$PARAM[height]</param>
+            </include>
+            <include content="Wireframe_Hub_Block">
+                <param name="fill">main_fg_12</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">$PARAM[border]</param>
+                <param name="left">51.042%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">21.354%</param>
+                <param name="height">$PARAM[height]</param>
+            </include>
+            <include content="Wireframe_Hub_Block">
+                <param name="fill">main_fg_12</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">$PARAM[border]</param>
+                <param name="left">74.479%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">21.354%</param>
+                <param name="height">$PARAM[height]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Hub_Labels">
+        <definition>
+            <include content="Wireframe_Hub_Bar">
+                <param name="left">4.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">12.812%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="left">27.604%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">12.812%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="left">51.042%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">12.812%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="left">74.479%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">12.812%</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Hub_Row">
+        <param name="first">main_fg_12</param>
+        <definition>
+            <include content="Wireframe_Hub_Tiles">
+                <param name="top">$PARAM[top]</param>
+                <param name="first">$PARAM[first]</param>
+            </include>
+            <include content="Wireframe_Hub_Labels">
+                <param name="top">$PARAM[label_top]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- The next row cut off by the bottom of the screen -->
+    <include name="Wireframe_Hub_Peek">
+        <include content="Wireframe_Hub_Tiles">
+            <param name="top">95.37%</param>
+            <param name="height">4.63%</param>
+            <param name="texture">common/widget_text_half.png</param>
+            <param name="border">12,12,12,0</param>
+        </include>
+    </include>
+
+    <include name="Wireframe_Hub_Divider">
+        <definition>
+            <control type="group">
+                <left>4.167%</left>
+                <top>$PARAM[top]</top>
+                <width>37.5%</width>
+                <height>1</height>
+                <include content="View_Line_Divider">
+                    <param name="width">100%</param>
+                    <param name="centerbottom">0</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Hub_Section">
+        <definition>
+            <include content="Wireframe_Hub_Bar">
+                <param name="fill">main_fg_70</param>
+                <param name="left">4.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[label_w]</param>
+            </include>
+            <include content="Wireframe_Hub_Divider">
+                <param name="top">$PARAM[line]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Hub_Categories">
+        <definition>
+            <include content="Wireframe_Hub_Bar">
+                <param name="fill">main_fg_70</param>
+                <param name="left">4.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">4.688%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="fill">main_fg_12</param>
+                <param name="left">10.417%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">7.187%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="fill">main_fg_12</param>
+                <param name="left">19.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">6.875%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="fill">main_fg_12</param>
+                <param name="left">27.604%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">5.729%</param>
+            </include>
+            <include content="Wireframe_Hub_Divider">
+                <param name="top">$PARAM[line]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Hub_Title">
+        <include content="Wireframe_Hub_Block">
+            <param name="fill">main_fg_30</param>
+            <param name="left">4.167%</param>
+            <param name="top">7.407%</param>
+            <param name="width">33.333%</param>
+            <param name="height">12.5%</param>
+        </include>
+    </include>
+
+    <include name="Wireframe_Hub_Details">
+        <include content="Wireframe_Hub_Bar">
+            <param name="fill">main_fg_30</param>
+            <param name="left">4.167%</param>
+            <param name="top">23.056%</param>
+            <param name="width">25%</param>
+        </include>
+        <include content="Wireframe_Hub_Bar">
+            <param name="fill">main_fg_70</param>
+            <param name="left">4.167%</param>
+            <param name="top">28.611%</param>
+            <param name="width">19.792%</param>
+        </include>
+        <include content="Wireframe_Hub_Bar">
+            <param name="fill">main_fg_30</param>
+            <param name="left">4.167%</param>
+            <param name="top">32.315%</param>
+            <param name="width">35.417%</param>
+        </include>
+        <include content="Wireframe_Hub_Bar">
+            <param name="fill">main_fg_30</param>
+            <param name="left">4.167%</param>
+            <param name="top">36.111%</param>
+            <param name="width">31.25%</param>
+        </include>
+        <include content="Wireframe_Hub_Bar">
+            <param name="fill">main_fg_30</param>
+            <param name="left">4.167%</param>
+            <param name="top">41.481%</param>
+            <param name="width">21.875%</param>
+        </include>
+    </include>
+
+    <include name="Wireframe_Hub_Screen">
+        <param name="first">$VAR[ColorHighlight]</param>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[standard]</visible>
+                <include>Wireframe_Hub_Title</include>
+                <include>Wireframe_Hub_Details</include>
+                <include content="Wireframe_Hub_Section">
+                    <param name="top">47.037%</param>
+                    <param name="line">50.926%</param>
+                    <param name="label_w">7.292%</param>
+                </include>
+                <include content="Wireframe_Hub_Row">
+                    <param name="top">54.63%</param>
+                    <param name="label_top">78.113%</param>
+                    <param name="first">$PARAM[first]</param>
+                </include>
+                <include content="Wireframe_Hub_Section">
+                    <param name="top">87.778%</param>
+                    <param name="line">91.667%</param>
+                    <param name="label_w">6.25%</param>
+                </include>
+                <include>Wireframe_Hub_Peek</include>
+            </control>
+            <control type="group">
+                <visible>$PARAM[combined]</visible>
+                <include>Wireframe_Hub_Title</include>
+                <include>Wireframe_Hub_Details</include>
+                <include content="Wireframe_Hub_Categories">
+                    <param name="top">47.037%</param>
+                    <param name="line">50.926%</param>
+                </include>
+                <include content="Wireframe_Hub_Row">
+                    <param name="top">54.63%</param>
+                    <param name="label_top">78.113%</param>
+                    <param name="first">$PARAM[first]</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>$PARAM[wall]</visible>
+                <include>Wireframe_Hub_Title</include>
+                <include content="Wireframe_Hub_Categories">
+                    <param name="top">22.963%</param>
+                    <param name="line">26.852%</param>
+                </include>
+                <include content="Wireframe_Hub_Row">
+                    <param name="top">30.556%</param>
+                    <param name="label_top">54.039%</param>
+                    <param name="first">$PARAM[first]</param>
+                </include>
+                <include content="Wireframe_Hub_Row">
+                    <param name="top">62.963%</param>
+                    <param name="label_top">86.446%</param>
+                </include>
+                <include>Wireframe_Hub_Peek</include>
+            </control>
+            <control type="group">
+                <visible>$PARAM[simple]</visible>
+                <include content="Wireframe_Hub_Section">
+                    <param name="top">6.296%</param>
+                    <param name="line">10.185%</param>
+                    <param name="label_w">7.292%</param>
+                </include>
+                <include content="Wireframe_Hub_Row">
+                    <param name="top">13.889%</param>
+                    <param name="label_top">37.372%</param>
+                    <param name="first">$PARAM[first]</param>
+                </include>
+                <include content="Wireframe_Hub_Section">
+                    <param name="top">47.037%</param>
+                    <param name="line">50.926%</param>
+                    <param name="label_w">7.292%</param>
+                </include>
+                <include content="Wireframe_Hub_Row">
+                    <param name="top">54.63%</param>
+                    <param name="label_top">78.113%</param>
+                </include>
+                <include content="Wireframe_Hub_Section">
+                    <param name="top">87.778%</param>
+                    <param name="line">91.667%</param>
+                    <param name="label_w">6.25%</param>
+                </include>
+                <include>Wireframe_Hub_Peek</include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Hub_Preview">
+        <definition>
+            <include>Wireframe_Background</include>
+            <include content="Wireframe_Hub_Screen">
+                <param name="standard">String.IsEqual(ListItem.Property(mode),Standard)</param>
+                <param name="combined">String.IsEqual(ListItem.Property(mode),Combined)</param>
+                <param name="wall">String.IsEqual(ListItem.Property(mode),Wall)</param>
+                <param name="simple">String.IsEqual(ListItem.Property(mode),Simple)</param>
+            </include>
+        </definition>
+    </include>
+
 </includes>
