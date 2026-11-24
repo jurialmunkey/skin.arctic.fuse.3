@@ -360,34 +360,56 @@
         </definition>
     </include>
 
-    <!-- Wireframe block. Position and size are percentages of the thumbnail, so drawings scale with the card. -->
-    <!-- Opaque blocks (on the focused card) sit on a light backing so the card highlight doesn't show through them -->
+    <!-- Opaque shapes sit on a light backing so the card highlight doesn't show through them -->
+    <include name="DialogSetupWizard_Shape">
+        <param name="colour">dialog_fg_12</param>
+        <param name="texture">common/widget_text.png</param>
+        <param name="border">12</param>
+        <param name="aspectratio">stretch</param>
+        <param name="opaque">false</param>
+        <definition>
+            <control type="group">
+                <nested />
+                <include content="Wireframe_Box" condition="$PARAM[opaque]">
+                    <param name="fill">dialog_bg_100</param>
+                    <param name="texture">$PARAM[texture]</param>
+                    <param name="border">$PARAM[border]</param>
+                    <aspectratio>$PARAM[aspectratio]</aspectratio>
+                </include>
+                <include content="Wireframe_Box" condition="$PARAM[opaque]">
+                    <param name="fill">dialog_fg_50</param>
+                    <param name="texture">$PARAM[texture]</param>
+                    <param name="border">$PARAM[border]</param>
+                    <aspectratio>$PARAM[aspectratio]</aspectratio>
+                </include>
+                <include content="Wireframe_Box">
+                    <param name="fill">$PARAM[colour]</param>
+                    <param name="texture">$PARAM[texture]</param>
+                    <param name="border">$PARAM[border]</param>
+                    <aspectratio>$PARAM[aspectratio]</aspectratio>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Position and size are percentages of the thumbnail, so the wizard drawings scale with the card -->
     <include name="DialogSetupWizard_Block">
         <param name="colour">dialog_fg_12</param>
         <param name="texture">common/white.png</param>
         <param name="aspectratio">stretch</param>
         <param name="opaque">false</param>
         <definition>
-            <control type="group">
+            <include content="DialogSetupWizard_Shape">
+                <param name="colour">$PARAM[colour]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">0</param>
+                <param name="aspectratio">$PARAM[aspectratio]</param>
+                <param name="opaque">$PARAM[opaque]</param>
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
                 <width>$PARAM[width]</width>
                 <height>$PARAM[height]</height>
-                <include content="Object_Control" condition="$PARAM[opaque]">
-                    <param name="control">image</param>
-                    <aspectratio>$PARAM[aspectratio]</aspectratio>
-                    <texture colordiffuse="dialog_bg_100">$PARAM[texture]</texture>
-                </include>
-                <include content="Object_Control" condition="$PARAM[opaque]">
-                    <param name="control">image</param>
-                    <aspectratio>$PARAM[aspectratio]</aspectratio>
-                    <texture colordiffuse="dialog_fg_50">$PARAM[texture]</texture>
-                </include>
-                <control type="image">
-                    <aspectratio>$PARAM[aspectratio]</aspectratio>
-                    <texture colordiffuse="$PARAM[colour]">$PARAM[texture]</texture>
-                </control>
-            </control>
+            </include>
         </definition>
     </include>
 
