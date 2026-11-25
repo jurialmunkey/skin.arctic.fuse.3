@@ -2908,23 +2908,38 @@
         </definition>
     </include>
 
-    <include name="Layout_StreamRow_Detail">
+    <include name="Layout_StreamRow_Text">
         <param name="selected">false</param>
         <definition>
-            <control type="label">
+            <control type="group">
                 <nested />
-                <include condition="$PARAM[selected]">Color_SelectedText</include>
-                <top>40</top>
-                <height>30</height>
-                <aligny>center</aligny>
-                <font>font_tiny</font>
-                <textcolor>main_fg_70</textcolor>
-                <label>$VAR[Label_StreamRow_Detail]</label>
+                <!-- Rows without a detail line centre their title -->
+                <control type="group">
+                    <animation effect="slide" end="0,15" condition="[!String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Property(detail))] | [String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Label2)]">Conditional</animation>
+                    <control type="label">
+                        <include condition="$PARAM[selected]">Color_SelectedText</include>
+                        <top>10</top>
+                        <height>30</height>
+                        <aligny>center</aligny>
+                        <font>font_main_bold</font>
+                        <textcolor>main_fg_100</textcolor>
+                        <label>$VAR[Label_StreamLanguage]</label>
+                    </control>
+                </control>
+                <control type="label">
+                    <include condition="$PARAM[selected]">Color_SelectedText</include>
+                    <top>40</top>
+                    <height>30</height>
+                    <aligny>center</aligny>
+                    <font>font_tiny</font>
+                    <textcolor>main_fg_70</textcolor>
+                    <label>$VAR[Label_StreamRow_Detail]</label>
+                </control>
             </control>
         </definition>
     </include>
 
-    <!-- Player stream row: tick, flag or icon, title with status tags over the detail, and codec tags or the value on the right.
+    <!-- Player stream row: tick, flag or icon, title over the detail, and stream tags or the value on the right.
          misc: condition that the current stream is switched on (subtitles can be off) -->
     <include name="Layout_StreamRow">
         <param name="selected">false</param>
@@ -2986,35 +3001,12 @@
                     <control type="group">
                         <animation effect="slide" end="-60,0" condition="!$EXP[Exp_StreamRow_IsStream]">Conditional</animation>
 
-                        <!-- Rows without a detail line centre their title -->
-                        <control type="group">
-                            <animation effect="slide" end="0,15" condition="[!String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Property(detail))] | [String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Label2)]">Conditional</animation>
-                            <control type="label">
-                                <include condition="$PARAM[selected]">Color_SelectedText</include>
-                                <top>10</top>
-                                <height>30</height>
-                                <right>200</right>
-                                <aligny>center</aligny>
-                                <font>font_main_bold</font>
-                                <textcolor>main_fg_100</textcolor>
-                                <label>$VAR[Label_StreamLanguage]</label>
-                            </control>
-                            <include content="Object_Tags">
-                                <param name="label">$VAR[Label_StreamRow_Status]</param>
-                                <param name="selected">$PARAM[selected]</param>
-                                <left>80</left>
-                                <right>280</right>
-                                <top>5</top>
-                                <height>40</height>
-                            </include>
-                        </control>
-
-                        <include content="Layout_StreamRow_Detail">
+                        <include content="Layout_StreamRow_Text">
                             <param name="selected">$PARAM[selected]</param>
-                            <right>300</right>
+                            <right>420</right>
                             <visible>$EXP[Exp_StreamRow_HasTags]</visible>
                         </include>
-                        <include content="Layout_StreamRow_Detail">
+                        <include content="Layout_StreamRow_Text">
                             <param name="selected">$PARAM[selected]</param>
                             <right>200</right>
                             <visible>!$EXP[Exp_StreamRow_HasTags]</visible>
@@ -3026,7 +3018,7 @@
                         <param name="selected">$PARAM[selected]</param>
                         <param name="align">right</param>
                         <right>0</right>
-                        <width>280</width>
+                        <width>400</width>
                         <centertop>50%</centertop>
                         <height>40</height>
                         <visible>String.IsEmpty(ListItem.Property(slider))</visible>
