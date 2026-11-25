@@ -1,0 +1,64 @@
+{
+    "infolabels": {
+        "focused_window": "Container(30000).ListItem.Property(window)"
+    },
+    "localize": {
+        "localize_play": "31927",
+        "localize_browse": "31929",
+        "localize_hub": "31934",
+        "localize_all": "31935",
+        "localize_question": "31936",
+        "localize_cancel": "222"
+    },
+    "values": {
+        "heading": [
+            {
+                "rules": ["{setting}==BrowseAction"],
+                "value": "{localize_browse}"
+            },
+            "{localize_play}"
+        ],
+        "builtin": [
+            {
+                "rules": ["{value}=="],
+                "value": "Skin.Reset"
+            },
+            "Skin.SetString"
+        ],
+        "argument": [
+            {
+                "rules": ["{value}=="],
+                "value": ""
+            },
+            ",{value}"
+        ]
+    },
+    "actions": [
+        {
+            "rules": ["{scope}=="],
+            "value": [
+                "RunScript(script.skinvariables,run_dialog=yesnocustom,\"heading={heading}\",\"message={localize_question}\",\"yeslabel={localize_all}\",\"nolabel={localize_hub}\",\"customlabel={localize_cancel}\",executebuiltin_1=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&use_rules=True&setting={setting}&value={value}&scope=all,executebuiltin_0=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&use_rules=True&setting={setting}&value={value}&scope=hub)"
+            ]
+        },
+        {
+            "rules": ["{scope}==hub", "{focused_window}!="],
+            "value": [
+                "{builtin}(HomeSwitcher.{focused_window}.{setting}{argument})"
+            ]
+        },
+        {
+            "rules": ["{scope}==all"],
+            "value": [
+                "{builtin}(HomeSwitcher.home.{setting}{argument})",
+                "{builtin}(HomeSwitcher.1101.{setting}{argument})",
+                "{builtin}(HomeSwitcher.1102.{setting}{argument})",
+                "{builtin}(HomeSwitcher.1103.{setting}{argument})",
+                "{builtin}(HomeSwitcher.1104.{setting}{argument})",
+                "{builtin}(HomeSwitcher.1106.{setting}{argument})",
+                "{builtin}(HomeSwitcher.1107.{setting}{argument})",
+                "{builtin}(HomeSwitcher.1108.{setting}{argument})",
+                "{builtin}(HomeSwitcher.1109.{setting}{argument})"
+            ]
+        }
+    ]
+}

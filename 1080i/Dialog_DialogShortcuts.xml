@@ -392,6 +392,7 @@
         <param name="shortcut_label">false</param>
         <param name="item_label2">false</param>
         <param name="icon_label2" />
+        <param name="shortcut_visible">true</param>
         <definition>
 
         <include content="Settings_ButtonImage">
@@ -411,91 +412,138 @@
             <visible>![$PARAM[static_home]]</visible>
         </include>
         <include content="$PARAM[include_after_toggle]" />
-
-        <!-- Shortcuts -->
-        <include content="Settings_Label" condition="$PARAM[shortcut_label]">
-            <param name="id">29001</param>
+        <include content="DialogShortcuts_Items_Shortcut">
+            <param name="container">$PARAM[container]</param>
+            <param name="enabled">$PARAM[enabled]</param>
+            <param name="static">$PARAM[static]</param>
+            <param name="static_home">$PARAM[static_home]</param>
+            <param name="static_power">$PARAM[static_power]</param>
+            <param name="onback">$PARAM[onback]</param>
+            <param name="widgets">$PARAM[widgets]</param>
+            <param name="subgroups">$PARAM[subgroups]</param>
             <param name="window">$PARAM[window]</param>
-            <label>$LOCALIZE[31511]</label>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
+            <param name="shortcut_label">$PARAM[shortcut_label]</param>
+            <param name="item_label2">$PARAM[item_label2]</param>
+            <param name="icon_label2">$PARAM[icon_label2]</param>
+            <param name="visible">$PARAM[shortcut_visible]</param>
         </include>
-        <include content="Settings_ButtonImage">
-            <param name="id">29002</param>
-            <param name="groupid">29102</param>
-            <param name="window">$PARAM[window]</param>
-            <param name="help">$LOCALIZE[31834]</param>
-            <label>$LOCALIZE[424]</label>
-            <param name="icon">special://skin/extras/icons/share.png</param>
-            <include content="DialogShortcuts_Allow_SubGroups_Onclick">
-                <param name="condition">$PARAM[subgroups]</param>
+        </definition>
+    </include>
+
+    <!-- Shortcut, path, label and icon options of the focused item of the container, with the same static params as DialogShortcuts_Items_Basic.
+         baseid/groupbase prefix the control ids so the options can be placed twice in one window, and visible further limits where they show -->
+    <include name="DialogShortcuts_Items_Shortcut">
+        <param name="container">22001</param>
+        <param name="enabled">$EXP[DialogShortcuts_IsEnabled_Expression]</param>
+        <param name="static">false</param>
+        <param name="static_home">false</param>
+        <param name="static_power">false</param>
+        <param name="onback">22904</param>
+        <param name="widgets">$EXP[DialogShortcuts_IsWidgetMode_Expression]</param>
+        <param name="subgroups">$EXP[DialogShortcuts_IsSubGrouping_Expression]</param>
+        <param name="window" />
+        <param name="dialog">false</param>
+        <param name="shortcut_label">false</param>
+        <param name="item_label2">false</param>
+        <param name="icon_label2" />
+        <param name="baseid">290</param>
+        <param name="groupbase">291</param>
+        <param name="visible">true</param>
+        <definition>
+            <!-- Shortcuts -->
+            <include content="Settings_Label" condition="$PARAM[shortcut_label]">
+                <param name="id">$PARAM[baseid]01</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <label>$LOCALIZE[31511]</label>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
             </include>
-            <onclick condition="![$PARAM[widgets]]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
-            <onclick condition="$PARAM[widgets]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
-            <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_choose]$VAR[Path_Shortcut_UseRawPath])</onclick>
-            <onclick condition="$PARAM[static_home]">RunScript(script.skinvariables,set_shortcut=HomeSwitcher.Home.Shortcut)</onclick>
-            <onback>$PARAM[onback]</onback>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
-        </include>
-
-        <!-- Path -->
-        <include content="Settings_ButtonImage">
-            <param name="id">29003</param>
-            <param name="groupid">29103</param>
-            <param name="window">$PARAM[window]</param>
-            <param name="help">$LOCALIZE[31835]</param>
-            <label>$LOCALIZE[573]</label>
-            <param name="icon">special://skin/extras/icons/terminal.png</param>
-            <param name="has_label2">$PARAM[item_label2]</param>
-            <param name="label2">$INFO[Container($PARAM[container]).ListItem.Property(path)]</param>
-            <include content="DialogShortcuts_Allow_SubGroups_Onclick">
-                <param name="condition">$PARAM[subgroups]</param>
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[baseid]02</param>
+                <param name="groupid">$PARAM[groupbase]02</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="help">$LOCALIZE[31834]</param>
+                <label>$LOCALIZE[424]</label>
+                <param name="icon">special://skin/extras/icons/share.png</param>
+                <include content="DialogShortcuts_Allow_SubGroups_Onclick">
+                    <param name="condition">$PARAM[subgroups]</param>
+                </include>
+                <onclick condition="![$PARAM[widgets]]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
+                <onclick condition="$PARAM[widgets]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
+                <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_choose]$VAR[Path_Shortcut_UseRawPath])</onclick>
+                <onclick condition="$PARAM[static_home]">RunScript(script.skinvariables,set_shortcut=HomeSwitcher.Home.Shortcut)</onclick>
+                <onback>$PARAM[onback]</onback>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
             </include>
-            <onclick condition="![$PARAM[widgets]]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
-            <onclick condition="$PARAM[widgets]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
-            <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_action]$VAR[Path_Shortcut_UseRawPath])</onclick>
-            <onclick condition="$PARAM[static_home]">RunScript(script.skinvariables,set_shortcut=HomeSwitcher.Home.Shortcut,use_rawpath=True)</onclick>
-            <onback>$PARAM[onback]</onback>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
-        </include>
 
-        <!-- Rename -->
-        <include content="Settings_ButtonImage">
-            <param name="id">29004</param>
-            <param name="groupid">29104</param>
-            <param name="window">$PARAM[window]</param>
-            <param name="help">$LOCALIZE[31836]</param>
-            <label>$LOCALIZE[118]</label>
-            <param name="icon">special://skin/extras/icons/i-cursor.png</param>
-            <param name="has_label2">$PARAM[item_label2]</param>
-            <param name="label2">$INFO[Container($PARAM[container]).ListItem.Label]</param>
-            <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_edit])</onclick>
-            <onclick condition="$PARAM[static_home]">Skin.SetString(HomeSwitcher.Home.Name)</onclick>
-            <onback>$PARAM[onback]</onback>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
-        </include>
+            <!-- Path -->
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[baseid]03</param>
+                <param name="groupid">$PARAM[groupbase]03</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="help">$LOCALIZE[31835]</param>
+                <label>$LOCALIZE[573]</label>
+                <param name="icon">special://skin/extras/icons/terminal.png</param>
+                <param name="has_label2">$PARAM[item_label2]</param>
+                <param name="label2">$INFO[Container($PARAM[container]).ListItem.Property(path)]</param>
+                <include content="DialogShortcuts_Allow_SubGroups_Onclick">
+                    <param name="condition">$PARAM[subgroups]</param>
+                </include>
+                <onclick condition="![$PARAM[widgets]]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
+                <onclick condition="$PARAM[widgets]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
+                <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_action]$VAR[Path_Shortcut_UseRawPath])</onclick>
+                <onclick condition="$PARAM[static_home]">RunScript(script.skinvariables,set_shortcut=HomeSwitcher.Home.Shortcut,use_rawpath=True)</onclick>
+                <onback>$PARAM[onback]</onback>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
+            </include>
 
-        <!-- Icon -->
-        <include content="Settings_ButtonImage">
-            <param name="id">29005</param>
-            <param name="groupid">29105</param>
-            <param name="window">$PARAM[window]</param>
-            <param name="help">$LOCALIZE[31837]</param>
-            <label>$LOCALIZE[31274]</label>
-            <param name="icon">special://skin/extras/icons/image.png</param>
-            <param name="has_label2">$PARAM[item_label2]</param>
-            <param name="label2">$PARAM[icon_label2]</param>
-            <onclick condition="![$PARAM[static]]">SetProperty(url,$INFO[Container($PARAM[container]).ListItem.Property(url)],1117)</onclick>
-            <onclick condition="$PARAM[static_home]">SetProperty(setting,HomeSwitcher.Home.Icon,1117)</onclick>
-            <onclick condition="$PARAM[static_power]">SetProperty(setting,HomeSwitcher.Power.Icon,1117)</onclick>
-            <onclick>ActivateWindow(1117)</onclick>
-            <onback>$PARAM[onback]</onback>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home] | $PARAM[static_power]</visible>
-        </include>
+            <!-- Rename -->
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[baseid]04</param>
+                <param name="groupid">$PARAM[groupbase]04</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="help">$LOCALIZE[31836]</param>
+                <label>$LOCALIZE[118]</label>
+                <param name="icon">special://skin/extras/icons/i-cursor.png</param>
+                <param name="has_label2">$PARAM[item_label2]</param>
+                <param name="label2">$INFO[Container($PARAM[container]).ListItem.Label]</param>
+                <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_edit])</onclick>
+                <onclick condition="$PARAM[static_home]">Skin.SetString(HomeSwitcher.Home.Name)</onclick>
+                <onback>$PARAM[onback]</onback>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
+            </include>
+
+            <!-- Icon -->
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[baseid]05</param>
+                <param name="groupid">$PARAM[groupbase]05</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="help">$LOCALIZE[31837]</param>
+                <label>$LOCALIZE[31274]</label>
+                <param name="icon">special://skin/extras/icons/image.png</param>
+                <param name="has_label2">$PARAM[item_label2]</param>
+                <param name="label2">$PARAM[icon_label2]</param>
+                <onclick condition="![$PARAM[static]]">SetProperty(url,$INFO[Container($PARAM[container]).ListItem.Property(url)],1117)</onclick>
+                <onclick condition="$PARAM[static_home]">SetProperty(setting,HomeSwitcher.Home.Icon,1117)</onclick>
+                <onclick condition="$PARAM[static_power]">SetProperty(setting,HomeSwitcher.Power.Icon,1117)</onclick>
+                <onclick>ActivateWindow(1117)</onclick>
+                <onback>$PARAM[onback]</onback>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home] | $PARAM[static_power]</visible>
+            </include>
         </definition>
     </include>
 
@@ -836,46 +884,61 @@
         </include>
     </include>
     <include name="DialogCustom_Shortcuts_Items_SpotlightConfigure_Items">
-        <include content="Settings_Button" description="Label">
-            <param name="dialog">false</param>
+        <include content="Settings_ButtonImage" description="Label">
+            <param name="dialog">true</param>
             <param name="id">8001</param>
+            <param name="groupid">8101</param>
+            <param name="icon">special://skin/extras/icons/i-cursor.png</param>
             <label>$LOCALIZE[31273]</label>
-            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Label)]</label2>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Label)]</param>
             <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.Label)</onclick>
         </include>
-        <include content="Settings_Button" description="Path">
-            <param name="dialog">false</param>
+        <include content="Settings_ButtonImage" description="Path">
+            <param name="dialog">true</param>
             <param name="id">8003</param>
+            <param name="groupid">8103</param>
+            <param name="icon">special://skin/extras/icons/terminal.png</param>
             <label>$LOCALIZE[573]</label>
-            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)]</label2>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)]</param>
             <onclick>SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
             <onclick>ClearProperty(Shortcuts.Groupings.Subgroup,Home)</onclick>
             <onclick>RunScript(script.skinvariables,set_shortcut=HomeSwitcher.$PARAM[window].Spotlight,use_rawpath=True)</onclick>
         </include>
-        <include content="Settings_Button" description="Limit">
+        <include content="Settings_ButtonImage" description="Limit">
             <param name="dialog">true</param>
             <param name="id">8004</param>
+            <param name="groupid">8104</param>
+            <param name="icon">special://skin/extras/icons/hashtag.png</param>
             <param name="control">button</param>
             <label>$LOCALIZE[31188]</label>
-            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Limit)]</label2>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Limit)]</param>
             <onclick>Skin.SetNumeric(HomeSwitcher.$PARAM[window].Spotlight.Limit)</onclick>
             <visible>![String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path,noop)]</visible>
         </include>
-        <include content="Settings_Button" description="Sort by">
+        <include content="Settings_ButtonImage" description="Sort by">
             <param name="dialog">true</param>
             <param name="id">8005</param>
+            <param name="groupid">8105</param>
+            <param name="icon">special://skin/extras/icons/arrow-down-wide-short.png</param>
             <param name="control">button</param>
             <label>$LOCALIZE[31016]</label>
-            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortMethod)]</label2>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortMethod)]</param>
             <onclick>RunScript(script.skinvariables,run_dialog=select,heading=$LOCALIZE[31016],separator=||,list=default||label||userpreference||random||dateadded||lastplayed||playcount||year||rating||userrating||votes||genre||country||studio||playlist||episodenumber||season||totalepisodes||watchedepisodes||tvshowstatus||tvshowtitle||file||title||track||time||artist||album||lastupdated||lastused||date,"executebuiltin=Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortMethod,{v})")</onclick>
             <visible>![String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path,noop)]</visible>
         </include>
         
-        <include content="Settings_Button" description="Sort order">
+        <include content="Settings_ButtonImage" description="Sort order">
             <param name="dialog">true</param>
             <param name="id">8006</param>
+            <param name="groupid">8106</param>
+            <param name="icon">special://skin/extras/icons/arrow-up-arrow-down.png</param>
             <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31517]</label>
+            <param name="label">$LOCALIZE[31517]</param>
+            <param name="getlabel">false</param>
             <onclick condition="String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,ascending)">Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)</onclick>
             <onclick condition="Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)">Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,ascending)</onclick>
             <selected>Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)</selected>
@@ -962,7 +1025,8 @@
         </definition>
     </include>
 
-    <!-- Main options of the focused hub (type, layout, submenu, spotlight, widgets), shown straight after its enable button in the hubs window (1115) -->
+    <!-- Main options of the focused hub (type, layout, menu, spotlight, widgets), shown straight after its enable button in the hubs window (1115).
+         Menu and Widgets open their popups (HubsWindow_Popup) -->
     <include name="DialogShortcuts_Window_Settings_Hubs_Main">
         <param name="visible">!String.IsEmpty(Container(30000).ListItem.Property(window)) + $EXP[Exp_HubsWindow_Item_Enabled]</param>
         <definition>
@@ -1000,19 +1064,16 @@
                 <visible>$PARAM[visible]</visible>
                 <visible>!$EXP[Exp_HubsWindow_Type_NextAired]</visible>
             </include>
-            <include content="Settings_ButtonImage" description="Submenu">
-                <param name="id">9006</param>
-                <param name="groupid">9106</param>
-                <param name="icon">special://skin/extras/icons/bars.png</param>
+            <include content="Settings_ButtonImage" description="Menu">
+                <param name="id">9004</param>
+                <param name="groupid">9104</param>
+                <param name="icon">special://skin/extras/icons/share.png</param>
                 <param name="has_label2">true</param>
-                <param name="label2">$INFO[Container(30920).NumItems,, $LOCALIZE[31022]]</param>
+                <param name="label2">$INFO[Container(30000).ListItem.Property(path)]</param>
                 <param name="window">shortcuts</param>
-                <param name="help">$LOCALIZE[31730]</param>
-                <label>$LOCALIZE[1034]</label>
-                <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(30000).ListItem.Property(window),,submenu],Home)</onclick>
-                <onclick>SetProperty(Shortcuts.EditMode,mode=submenu,Home)</onclick>
-                <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
-                <onclick>ActivateWindow(1116)</onclick>
+                <param name="help">$LOCALIZE[31932]</param>
+                <label>$LOCALIZE[31933]</label>
+                <onclick>SetFocus(9801)</onclick>
                 <visible>$PARAM[visible]</visible>
             </include>
             <include content="Settings_ButtonImage" description="Spotlight">
@@ -1035,16 +1096,129 @@
                 <param name="groupid">9108</param>
                 <param name="icon">special://skin/extras/icons/layer-group.png</param>
                 <param name="has_label2">true</param>
-                <param name="label2">$INFO[Container(30921).NumItems,, $LOCALIZE[31022]]</param>
+                <param name="label2">$VAR[Label_HubsWindow_Widgets]</param>
                 <param name="window">shortcuts</param>
                 <param name="help">$LOCALIZE[31733]</param>
                 <label>$LOCALIZE[31103]</label>
-                <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(30000).ListItem.Property(window),,widgets],Home)</onclick>
-                <onclick>SetProperty(Shortcuts.EditMode,mode=widgets,Home)</onclick>
-                <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
-                <onclick>ActivateWindow(1116)</onclick>
+                <onclick condition="$EXP[Exp_HubsWindow_Type_Custom]">SetFocus(9851)</onclick>
+                <onclick condition="$EXP[Exp_HubsWindow_Type_LiveTV]">SetFocus(9861)</onclick>
+                <onclick condition="$EXP[Exp_HubsWindow_Type_Addons]">SetFocus(9871)</onclick>
                 <visible>$PARAM[visible]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Custom]</visible>
+                <visible>$EXP[Exp_HubsWindow_Type_Custom] | $EXP[Exp_HubsWindow_Type_LiveTV] | $EXP[Exp_HubsWindow_Type_Addons]</visible>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Menu popup of the focused hub in the hubs window (1115), opened by its Menu button (9004): the shortcut options and the submenu -->
+    <include name="DialogShortcuts_Window_Settings_Hubs_Shortcut">
+        <include content="DialogShortcuts_Items_Shortcut">
+            <param name="container">30000</param>
+            <param name="enabled">$EXP[Exp_HubsWindow_Item_Enabled]</param>
+            <param name="static">$EXP[Exp_HubsWindow_Item_Static]</param>
+            <param name="static_home">$EXP[Exp_HubsWindow_Item_Home]</param>
+            <param name="widgets">false</param>
+            <param name="subgroups">false</param>
+            <param name="onback">9004</param>
+            <param name="window">shortcuts</param>
+            <param name="dialog">true</param>
+            <param name="item_label2">true</param>
+            <param name="icon_label2">$VAR[Image_HubsWindow_Header]</param>
+            <param name="baseid">981</param>
+            <param name="groupbase">982</param>
+        </include>
+        <include content="Settings_ButtonImage" description="Submenu">
+            <param name="id">9006</param>
+            <param name="groupid">9106</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/bars.png</param>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Container(30920).NumItems,, $LOCALIZE[31022]]</param>
+            <param name="window">shortcuts</param>
+            <param name="help">$LOCALIZE[31730]</param>
+            <label>$LOCALIZE[1034]</label>
+            <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(30000).ListItem.Property(window),,submenu],Home)</onclick>
+            <onclick>SetProperty(Shortcuts.EditMode,mode=submenu,Home)</onclick>
+            <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
+            <onclick>ActivateWindow(1116)</onclick>
+            <onback>9004</onback>
+        </include>
+    </include>
+
+    <!-- Widgets popup of a custom hub in the hubs window (1115), opened by its Widgets button (9008): the play and browse actions and editing the widgets.
+         Live tv and add-ons hubs have their own popups of their sections. Kodi does not update visibility inside a hidden popup,
+         so popup buttons must not depend on the focused hub, or the popup can open on a button that then hides -->
+    <include name="DialogShortcuts_Window_Settings_Hubs_Widgets">
+        <include content="DialogShortcuts_Window_Settings_Hubs_Action">
+            <param name="id">9009</param>
+            <param name="groupid">9109</param>
+            <param name="icon">special://skin/extras/icons/play.png</param>
+            <param name="label">$LOCALIZE[31927]</param>
+            <param name="label2">$VAR[Label_HubsWindow_PlayAction]</param>
+            <param name="help">$LOCALIZE[31930]</param>
+            <param name="setting">PlayAction</param>
+        </include>
+        <include content="DialogShortcuts_Window_Settings_Hubs_Action">
+            <param name="id">9010</param>
+            <param name="groupid">9110</param>
+            <param name="icon">special://skin/extras/icons/folder.png</param>
+            <param name="label">$LOCALIZE[31929]</param>
+            <param name="label2">$VAR[Label_HubsWindow_BrowseAction]</param>
+            <param name="help">$LOCALIZE[31931]</param>
+            <param name="setting">BrowseAction</param>
+        </include>
+        <include content="Settings_ButtonImage" description="Edit widgets">
+            <param name="id">9011</param>
+            <param name="groupid">9111</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/layer-group.png</param>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Container(30921).NumItems,, $LOCALIZE[31022]]</param>
+            <param name="window">shortcuts</param>
+            <param name="help">$LOCALIZE[31733]</param>
+            <label>$LOCALIZE[31328]</label>
+            <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(30000).ListItem.Property(window),,widgets],Home)</onclick>
+            <onclick>SetProperty(Shortcuts.EditMode,mode=widgets,Home)</onclick>
+            <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
+            <onclick>ActivateWindow(1116)</onclick>
+            <onback>9008</onback>
+        </include>
+    </include>
+
+    <!-- Play action / Browse action of the focused hub in its widgets popup: Default (reset), Information, Context menu or Plot. Read by Widget_Action_OnClick -->
+    <include name="DialogShortcuts_Window_Settings_Hubs_Action">
+        <definition>
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[id]</param>
+                <param name="groupid">$PARAM[groupid]</param>
+                <param name="dialog">true</param>
+                <param name="icon">$PARAM[icon]</param>
+                <param name="has_label2">true</param>
+                <param name="label2">$PARAM[label2]</param>
+                <param name="window">shortcuts</param>
+                <param name="help">$PARAM[help]</param>
+                <label>$PARAM[label]</label>
+                <onclick>RunScript(script.skinvariables,run_dialog=select,heading=$PARAM[label],separator=||,list=$LOCALIZE[571]||$LOCALIZE[19033]||$LOCALIZE[31928]||$LOCALIZE[207],executebuiltin_0=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=,executebuiltin_1=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=info,executebuiltin_2=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=context,executebuiltin_3=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=plot)</onclick>
+                <onback>9008</onback>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Popup over the hubs window (1115) holding a group of the focused hub's options, shown while it has focus and sized to its visible buttons.
+         id prefixes the control ids: group id0, grouplist id1 (focus it to open), scrollbar id2 and close button id3/id4. Close returns focus to onclose -->
+    <include name="HubsWindow_Popup">
+        <definition>
+            <include content="DialogCustom_Favourites">
+                <param name="id">$PARAM[id]1</param>
+                <param name="groupid">$PARAM[id]0</param>
+                <param name="scrollbarid">$PARAM[id]2</param>
+                <param name="closebutton_id">$PARAM[id]3</param>
+                <param name="closebutton_groupid">$PARAM[id]4</param>
+                <param name="closebutton_onclick">SetFocus($PARAM[onclose])</param>
+                <param name="header">$PARAM[header]</param>
+                <param name="include_list">DialogCustom_Settings_Grouplist</param>
+                <param name="include_content">$PARAM[include_content]</param>
+                <param name="resize">true</param>
+                <param name="visible">ControlGroup($PARAM[id]0).HasFocus()</param>
             </include>
         </definition>
     </include>
@@ -1052,8 +1226,6 @@
     <!-- Options of the focused hub that depend on its type -->
     <include name="DialogShortcuts_Window_Settings_Hubs">
         <include>DialogShortcuts_Window_Settings_NextAired</include>
-        <include>DialogShortcuts_Window_Settings_LiveTV</include>
-        <include>DialogShortcuts_Window_Settings_Addons</include>
     </include>
 
     <include name="DialogShortcuts_Window_Settings_Power_Tiles">
@@ -1854,67 +2026,67 @@
                 <param name="has_label2">true</param>
                 <param name="label2">$VAR[Label_Setting_LiveTV_Style]</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31735]</param>
                 <label>$LOCALIZE[736]</label>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].SquareChannels)</onclick>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9612</param>
                 <param name="groupid">9712</param>
                 <param name="icon">special://skin/extras/icons/search.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31736]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$VAR[Label_Setting_Hub_LiveTV_Search]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableSearch)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableSearch]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9613</param>
                 <param name="groupid">9713</param>
                 <param name="icon">special://skin/extras/icons/livetv.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31737]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[14301]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableChannels)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableChannels]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9614</param>
                 <param name="groupid">9714</param>
                 <param name="icon">special://skin/extras/icons/list-ul.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31738]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[19146]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableGroups)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableGroups]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9615</param>
                 <param name="groupid">9715</param>
                 <param name="icon">special://skin/extras/icons/record-vinyl.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31739]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[19017]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableRecordings)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableRecordings]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
         </definition>
     </include>
@@ -1926,70 +2098,70 @@
                 <param name="groupid">9722</param>
                 <param name="icon">special://skin/extras/icons/video-addons.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31740]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[157]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableVideo)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableVideo]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9623</param>
                 <param name="groupid">9723</param>
                 <param name="icon">special://skin/extras/icons/music.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31741]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[249]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableMusic)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableMusic]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9624</param>
                 <param name="groupid">9724</param>
                 <param name="icon">special://skin/extras/icons/pictures.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31742]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[31011]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisablePicture)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisablePicture]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9625</param>
                 <param name="groupid">9725</param>
                 <param name="icon">special://skin/extras/icons/addon.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31743]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[31010]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableProgram)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableProgram]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9626</param>
                 <param name="groupid">9726</param>
                 <param name="icon">special://skin/extras/icons/gamepad.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31744]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[10821]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableGame)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableGame]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
         </definition>
     </include>

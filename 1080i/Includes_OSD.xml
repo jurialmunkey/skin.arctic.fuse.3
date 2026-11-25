@@ -331,10 +331,13 @@
 
     <!-- Short lists sit one 80px row lower for each row under five, so they end just above the spotlight -->
     <include name="OSD_Stream_ListSlide">
-        <animation effect="slide" end="0,320" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
-        <animation effect="slide" end="0,240" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
-        <animation effect="slide" end="0,160" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
-        <animation effect="slide" end="0,80" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
+        <param name="condition">true</param>
+        <definition>
+            <animation effect="slide" end="0,320" condition="[$PARAM[condition]] + Integer.IsEqual(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+            <animation effect="slide" end="0,240" condition="[$PARAM[condition]] + Integer.IsEqual(Container($PARAM[id]).NumItems,2)">Conditional</animation>
+            <animation effect="slide" end="0,160" condition="[$PARAM[condition]] + Integer.IsEqual(Container($PARAM[id]).NumItems,3)">Conditional</animation>
+            <animation effect="slide" end="0,80" condition="[$PARAM[condition]] + Integer.IsEqual(Container($PARAM[id]).NumItems,4)">Conditional</animation>
+        </definition>
     </include>
 
     <!-- Download row after the offset row, opening Kodi's subtitle search -->
@@ -345,6 +348,7 @@
                 <label2>$LOCALIZE[24134]</label2>
                 <icon>special://skin/extras/icons/download.png</icon>
                 <property name="window">subtitlesearch</property>
+                <visible>!VideoPlayer.HasSubtitles</visible>
             </item>
         </content>
     </include>
@@ -367,6 +371,7 @@
                             <label2>$PARAM[slider_header]</label2>
                             <icon>special://skin/extras/icons/stopwatch.png</icon>
                             <property name="slider">$PARAM[slider]</property>
+                            <visible>$PARAM[enabled]</visible>
                         </item>
                     </content>
                     <include condition="$PARAM[download]">OSD_Stream_DownloadRow</include>

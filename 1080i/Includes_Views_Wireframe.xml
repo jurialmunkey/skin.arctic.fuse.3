@@ -1,12 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-    
-    <!-- Viewtype selector previews: each view drawn at half of its 1920x1080 position on the 960x540 item canvas -->
-    
+
+    <!-- Viewtype selector previews: each view's real 1920x1080 positions as percentages, so one drawing fits any 16:9 canvas -->
+    <!-- Offset groups keep the canvas size so their children still measure in percentages of the whole canvas -->
+
+    <!-- size: Full, Half or Quarter picks the texture made for that canvas scale, so small previews keep the same rounding -->
+    <!-- texture is the name without its size suffix; each border matches its texture's size -->
     <include name="Wireframe_Box">
         <param name="fill">main_fg_12</param>
-        <param name="texture">common/widget_text.png</param>
+        <param name="texture">common/widget_text</param>
         <param name="border">12</param>
+        <param name="border_half">6</param>
+        <param name="border_quarter">3</param>
+        <param name="size">Full</param>
+        <definition>
+            <include content="Wireframe_Box_$PARAM[size]">
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">$PARAM[border]</param>
+                <param name="border_half">$PARAM[border_half]</param>
+                <param name="border_quarter">$PARAM[border_quarter]</param>
+                <nested />
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Box_Full">
+        <definition>
+            <include content="Wireframe_Box_Image">
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture].png</param>
+                <param name="border">$PARAM[border]</param>
+                <nested />
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Box_Half">
+        <definition>
+            <include content="Wireframe_Box_Image">
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]_x50.png</param>
+                <param name="border">$PARAM[border_half]</param>
+                <nested />
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Box_Quarter">
+        <definition>
+            <include content="Wireframe_Box_Image">
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]_x25.png</param>
+                <param name="border">$PARAM[border_quarter]</param>
+                <nested />
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Box_Image">
         <definition>
             <control type="image">
                 <texture colordiffuse="$PARAM[fill]" border="$PARAM[border]">$PARAM[texture]</texture>
@@ -14,20 +66,24 @@
             </control>
         </definition>
     </include>
-    
+
     <include name="Wireframe_Bar">
+        <param name="size">Full</param>
         <param name="fill">main_fg_30</param>
         <definition>
             <include content="Wireframe_Box">
+                <param name="size">$PARAM[size]</param>
                 <param name="fill">$PARAM[fill]</param>
-                <param name="texture">common/scrollh.png</param>
+                <param name="texture">common/scrollh</param>
                 <param name="border">4</param>
-                <height>12</height>
+                <param name="border_half">2</param>
+                <param name="border_quarter">1</param>
+                <height>2.222%</height>
                 <nested />
             </include>
         </definition>
     </include>
-    
+
     <include name="Wireframe_Circle">
         <param name="fill">main_fg_12</param>
         <definition>
@@ -37,635 +93,566 @@
             </control>
         </definition>
     </include>
-    
-    <include name="Wireframe_Tiles_Narrow">
+
+    <include name="Wireframe_Hub_Circle">
+        <param name="fill">main_fg_12</param>
+        <definition>
+            <include content="Wireframe_Circle">
+                <param name="fill">$PARAM[fill]</param>
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Columns: one cell include drawn at each column of a row, the first cell in its own colour -->
+    <include name="Wireframe_Column">
+        <param name="size">Full</param>
+        <definition>
+            <include content="$PARAM[cell]">
+                <param name="size">$PARAM[size]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">$PARAM[left]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Columns_Narrow">
+        <param name="size">Full</param>
+        <param name="cell">Wireframe_Hub_Block</param>
+        <param name="fill">main_fg_12</param>
         <param name="first">main_fg_12</param>
+        <param name="texture">common/widget_text</param>
+        <param name="width">11.309%</param>
+        <param name="height">2.222%</param>
         <definition>
-            <include content="Wireframe_Box">
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
                 <param name="fill">$PARAM[first]</param>
-                <left>40</left>
-                <width>108.57</width>
-                <height>$PARAM[h]</height>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">4.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>168.57</left>
-                <width>108.57</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">17.559%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>297.14</left>
-                <width>108.57</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">30.952%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>425.71</left>
-                <width>108.57</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">44.345%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>554.28</left>
-                <width>108.57</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">57.737%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>682.85</left>
-                <width>108.57</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">71.13%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>811.42</left>
-                <width>108.57</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">84.523%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
         </definition>
     </include>
-    
-    <include name="Wireframe_Labels_Narrow">
-        <param name="fill">main_fg_30</param>
-        <definition>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>40</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>168.57</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>297.14</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>425.71</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>554.28</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>682.85</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>811.42</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Labels_Over_Narrow">
-        <param name="first">main_fg_70</param>
-        <definition>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[first]</param>
-                <left>50</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>178.57</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>307.14</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>435.71</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>564.28</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>692.85</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>821.42</left>
-                <top>$PARAM[top]</top>
-                <width>65.14</width>
-            </include>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Tiles_Landscape">
+
+    <include name="Wireframe_Columns_Landscape">
+        <param name="size">Full</param>
+        <param name="cell">Wireframe_Hub_Block</param>
+        <param name="fill">main_fg_12</param>
         <param name="first">main_fg_12</param>
+        <param name="texture">common/widget_text</param>
+        <param name="width">21.354%</param>
+        <param name="height">2.222%</param>
         <definition>
-            <include content="Wireframe_Box">
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
                 <param name="fill">$PARAM[first]</param>
-                <left>40</left>
-                <width>205</width>
-                <height>$PARAM[h]</height>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">4.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>265</left>
-                <width>205</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">27.604%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>490</left>
-                <width>205</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">51.042%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>715</left>
-                <width>205</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">74.479%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
         </definition>
     </include>
-    
-    <include name="Wireframe_Labels_Landscape">
-        <param name="fill">main_fg_30</param>
-        <definition>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>40</left>
-                <top>$PARAM[top]</top>
-                <width>123</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>265</left>
-                <top>$PARAM[top]</top>
-                <width>123</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>490</left>
-                <top>$PARAM[top]</top>
-                <width>123</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>715</left>
-                <top>$PARAM[top]</top>
-                <width>123</width>
-            </include>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Labels_Over_Landscape">
-        <param name="first">main_fg_70</param>
-        <definition>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[first]</param>
-                <left>50</left>
-                <top>$PARAM[top]</top>
-                <width>123</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>275</left>
-                <top>$PARAM[top]</top>
-                <width>123</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>500</left>
-                <top>$PARAM[top]</top>
-                <width>123</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>725</left>
-                <top>$PARAM[top]</top>
-                <width>123</width>
-            </include>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Tiles_Board">
+
+    <include name="Wireframe_Columns_Board">
+        <param name="size">Full</param>
+        <param name="cell">Wireframe_Hub_Block</param>
+        <param name="fill">main_fg_12</param>
         <param name="first">main_fg_12</param>
+        <param name="texture">common/widget_text</param>
+        <param name="width">29.167%</param>
+        <param name="height">2.222%</param>
         <definition>
-            <include content="Wireframe_Box">
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
                 <param name="fill">$PARAM[first]</param>
-                <left>40</left>
-                <width>280</width>
-                <height>$PARAM[h]</height>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">4.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>340</left>
-                <width>280</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">35.417%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_12</param>
-                <left>640</left>
-                <width>280</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">66.667%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
         </definition>
     </include>
-    
-    <include name="Wireframe_Labels_Board">
-        <param name="fill">main_fg_30</param>
-        <definition>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>40</left>
-                <top>$PARAM[top]</top>
-                <width>168</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>340</left>
-                <top>$PARAM[top]</top>
-                <width>168</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[fill]</param>
-                <left>640</left>
-                <top>$PARAM[top]</top>
-                <width>168</width>
-            </include>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Labels_Over_Board">
-        <param name="first">main_fg_70</param>
-        <definition>
-            <include content="Wireframe_Bar">
-                <param name="fill">$PARAM[first]</param>
-                <left>50</left>
-                <top>$PARAM[top]</top>
-                <width>168</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>350</left>
-                <top>$PARAM[top]</top>
-                <width>168</width>
-            </include>
-            <include content="Wireframe_Bar">
-                <param name="fill">main_fg_70</param>
-                <left>650</left>
-                <top>$PARAM[top]</top>
-                <width>168</width>
-            </include>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Tiles_Circle">
+
+    <include name="Wireframe_Columns_Circle">
+        <param name="cell">Wireframe_Hub_Circle</param>
+        <param name="fill">main_fg_12</param>
         <param name="first">main_fg_12</param>
+        <param name="texture">common/widget_text</param>
+        <param name="width">16.146%</param>
+        <param name="height">28.704%</param>
         <definition>
-            <include content="Wireframe_Circle">
+            <include content="Wireframe_Column">
+                <param name="cell">$PARAM[cell]</param>
                 <param name="fill">$PARAM[first]</param>
-                <left>40</left>
-                <width>155</width>
-                <height>$PARAM[h]</height>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">4.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Circle">
-                <param name="fill">main_fg_12</param>
-                <left>220</left>
-                <width>155</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">22.917%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Circle">
-                <param name="fill">main_fg_12</param>
-                <left>400</left>
-                <width>155</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">41.667%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Circle">
-                <param name="fill">main_fg_12</param>
-                <left>580</left>
-                <width>155</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">60.417%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
-            <include content="Wireframe_Circle">
-                <param name="fill">main_fg_12</param>
-                <left>760</left>
-                <width>155</width>
-                <height>$PARAM[h]</height>
+            <include content="Wireframe_Column">
+                <param name="cell">$PARAM[cell]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="left">79.167%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">$PARAM[width]</param>
+                <param name="height">$PARAM[height]</param>
             </include>
         </definition>
     </include>
-    
+
+    <!-- A row of narrow tiles with optional labels under the tiles or over their bottom edge -->
+    <include name="Wireframe_Row_Narrow">
+        <param name="size">Full</param>
+        <param name="first">$VAR[ColorHighlight]</param>
+        <param name="height">28.704%</param>
+        <param name="labels">false</param>
+        <param name="labels_over">false</param>
+        <param name="label_first">main_fg_70</param>
+        <definition>
+            <include content="Wireframe_Columns_Narrow">
+                <param name="size">$PARAM[size]</param>
+                <param name="first">$PARAM[first]</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="height">$PARAM[height]</param>
+            </include>
+            <include content="Wireframe_Columns_Narrow" condition="$PARAM[labels]">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">Wireframe_Hub_Bar</param>
+                <param name="fill">main_fg_30</param>
+                <param name="first">main_fg_30</param>
+                <param name="top">$PARAM[label_top]</param>
+                <param name="width">6.785%</param>
+            </include>
+            <control type="group">
+                <left>1.042%</left>
+                <width>100%</width>
+                <include content="Wireframe_Columns_Narrow" condition="$PARAM[labels_over]">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="cell">Wireframe_Hub_Bar</param>
+                    <param name="fill">main_fg_70</param>
+                    <param name="first">$PARAM[label_first]</param>
+                    <param name="top">$PARAM[label_top]</param>
+                    <param name="width">6.785%</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
     <include name="Wireframe_Rows">
+        <param name="size">Full</param>
+        <param name="item">ListItem</param>
         <definition>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,500) | Integer.IsEqual(ListItem.Icon,520)</visible>
-                <top>295</top>
-                <include content="Wireframe_Tiles_Narrow">
-                    <param name="h">108.57</param>
-                    <param name="first">$VAR[ColorHighlight]</param>
-                </include>
-                <include content="Wireframe_Labels_Narrow">
-                    <param name="top">120.07</param>
-                </include>
-            </control>
-            <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,501) | Integer.IsEqual(ListItem.Icon,521)</visible>
-                <top>295</top>
-                <include content="Wireframe_Tiles_Landscape">
-                    <param name="h">115.31</param>
-                    <param name="first">$VAR[ColorHighlight]</param>
-                </include>
-                <include content="Wireframe_Labels_Landscape">
-                    <param name="top">126.81</param>
+                <visible>Integer.IsEqual($PARAM[item].Icon,500) | Integer.IsEqual($PARAM[item].Icon,520)</visible>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">54.63%</param>
+                    <param name="height">20.106%</param>
+                    <param name="labels">true</param>
+                    <param name="label_top">76.865%</param>
                 </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,502) | Integer.IsEqual(ListItem.Icon,522)</visible>
-                <top>295</top>
-                <include content="Wireframe_Tiles_Narrow">
-                    <param name="h">155</param>
+                <visible>Integer.IsEqual($PARAM[item].Icon,501) | Integer.IsEqual($PARAM[item].Icon,521)</visible>
+                <include content="Wireframe_Hub_Row">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">54.63%</param>
+                    <param name="label_top">78.113%</param>
                     <param name="first">$VAR[ColorHighlight]</param>
                 </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,503) | Integer.IsEqual(ListItem.Icon,523)</visible>
-                <top>295</top>
-                <include content="Wireframe_Tiles_Circle">
-                    <param name="h">155</param>
-                    <param name="first">$VAR[ColorHighlight]</param>
+                <visible>Integer.IsEqual($PARAM[item].Icon,502) | Integer.IsEqual($PARAM[item].Icon,522)</visible>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">54.63%</param>
                 </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,504) | Integer.IsEqual(ListItem.Icon,524)</visible>
-                <top>295</top>
-                <include content="Wireframe_Tiles_Board">
-                    <param name="h">155</param>
+                <visible>Integer.IsEqual($PARAM[item].Icon,503) | Integer.IsEqual($PARAM[item].Icon,523)</visible>
+                <include content="Wireframe_Columns_Circle">
                     <param name="first">$VAR[ColorHighlight]</param>
+                    <param name="top">54.63%</param>
                 </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,506) | Integer.IsEqual(ListItem.Icon,526)</visible>
-                <top>295</top>
-                <include content="Wireframe_Tiles_Narrow">
-                    <param name="h">155</param>
+                <visible>Integer.IsEqual($PARAM[item].Icon,504) | Integer.IsEqual($PARAM[item].Icon,524)</visible>
+                <include content="Wireframe_Columns_Board">
+                    <param name="size">$PARAM[size]</param>
                     <param name="first">$VAR[ColorHighlight]</param>
-                </include>
-                <include content="Wireframe_Labels_Over_Narrow">
-                    <param name="top">123</param>
-                    <param name="first">$VAR[ColorSelected]</param>
+                    <param name="top">54.63%</param>
+                    <param name="height">28.704%</param>
                 </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,505)</visible>
-                <top>295</top>
-                <include content="Wireframe_Box">
+                <visible>Integer.IsEqual($PARAM[item].Icon,506) | Integer.IsEqual($PARAM[item].Icon,526)</visible>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">54.63%</param>
+                    <param name="labels_over">true</param>
+                    <param name="label_top">77.407%</param>
+                    <param name="label_first">$VAR[ColorSelected]</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>Integer.IsEqual($PARAM[item].Icon,505)</visible>
+                <include content="Wireframe_Hub_Block">
+                    <param name="size">$PARAM[size]</param>
                     <param name="fill">$VAR[ColorHighlight]</param>
-                    <left>40</left>
-                    <top>0</top>
-                    <width>365.71</width>
-                    <height>155</height>
+                    <param name="left">4.167%</param>
+                    <param name="top">54.63%</param>
+                    <param name="width">38.095%</param>
+                    <param name="height">28.704%</param>
                 </include>
-                <include content="Wireframe_Box">
-                    <left>425.71</left>
-                    <top>0</top>
-                    <width>108.57</width>
-                    <height>155</height>
+                <include content="Wireframe_Hub_Block">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="left">44.345%</param>
+                    <param name="top">54.63%</param>
+                    <param name="width">11.309%</param>
+                    <param name="height">28.704%</param>
                 </include>
-                <include content="Wireframe_Box">
-                    <left>554.28</left>
-                    <top>0</top>
-                    <width>108.57</width>
-                    <height>155</height>
+                <include content="Wireframe_Hub_Block">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="left">57.737%</param>
+                    <param name="top">54.63%</param>
+                    <param name="width">11.309%</param>
+                    <param name="height">28.704%</param>
                 </include>
-                <include content="Wireframe_Box">
-                    <left>682.85</left>
-                    <top>0</top>
-                    <width>108.57</width>
-                    <height>155</height>
+                <include content="Wireframe_Hub_Block">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="left">71.13%</param>
+                    <param name="top">54.63%</param>
+                    <param name="width">11.309%</param>
+                    <param name="height">28.704%</param>
                 </include>
-                <include content="Wireframe_Box">
-                    <left>811.42</left>
-                    <top>0</top>
-                    <width>108.57</width>
-                    <height>155</height>
+                <include content="Wireframe_Hub_Block">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="left">84.523%</param>
+                    <param name="top">54.63%</param>
+                    <param name="width">11.309%</param>
+                    <param name="height">28.704%</param>
                 </include>
             </control>
         </definition>
     </include>
-    
+
     <include name="Wireframe_Walls">
+        <param name="size">Full</param>
+        <param name="item">ListItem</param>
         <definition>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,510) | Integer.IsEqual(ListItem.Icon,550)</visible>
-                <control type="group">
-                    <top>165</top>
-                    <include content="Wireframe_Tiles_Narrow">
-                        <param name="h">108.57</param>
-                        <param name="first">$VAR[ColorHighlight]</param>
-                    </include>
-                    <include content="Wireframe_Labels_Narrow">
-                        <param name="top">120.07</param>
-                    </include>
-                </control>
-                <control type="group">
-                    <top>340</top>
-                    <include content="Wireframe_Tiles_Narrow">
-                        <param name="h">108.57</param>
-                        <param name="first">main_fg_12</param>
-                    </include>
-                    <include content="Wireframe_Labels_Narrow">
-                        <param name="top">120.07</param>
-                    </include>
-                </control>
+                <visible>Integer.IsEqual($PARAM[item].Icon,510) | Integer.IsEqual($PARAM[item].Icon,550)</visible>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">30.556%</param>
+                    <param name="height">20.106%</param>
+                    <param name="labels">true</param>
+                    <param name="label_top">52.791%</param>
+                </include>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="first">main_fg_12</param>
+                    <param name="top">62.963%</param>
+                    <param name="height">20.106%</param>
+                    <param name="labels">true</param>
+                    <param name="label_top">85.198%</param>
+                </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,511) | Integer.IsEqual(ListItem.Icon,551)</visible>
-                <control type="group">
-                    <top>165</top>
-                    <include content="Wireframe_Tiles_Landscape">
-                        <param name="h">115.31</param>
-                        <param name="first">$VAR[ColorHighlight]</param>
-                    </include>
-                    <include content="Wireframe_Labels_Landscape">
-                        <param name="top">126.81</param>
-                    </include>
-                </control>
-                <control type="group">
-                    <top>340</top>
-                    <include content="Wireframe_Tiles_Landscape">
-                        <param name="h">115.31</param>
-                        <param name="first">main_fg_12</param>
-                    </include>
-                    <include content="Wireframe_Labels_Landscape">
-                        <param name="top">126.81</param>
-                    </include>
-                </control>
+                <visible>Integer.IsEqual($PARAM[item].Icon,511) | Integer.IsEqual($PARAM[item].Icon,551)</visible>
+                <include content="Wireframe_Hub_Row">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">30.556%</param>
+                    <param name="label_top">54.039%</param>
+                    <param name="first">$VAR[ColorHighlight]</param>
+                </include>
+                <include content="Wireframe_Hub_Row">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">62.963%</param>
+                    <param name="label_top">86.446%</param>
+                </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,512) | Integer.IsEqual(ListItem.Icon,552)</visible>
-                <control type="group">
-                    <top>165</top>
-                    <include content="Wireframe_Tiles_Narrow">
-                        <param name="h">155</param>
-                        <param name="first">$VAR[ColorHighlight]</param>
-                    </include>
-                </control>
-                <control type="group">
-                    <top>340</top>
-                    <include content="Wireframe_Tiles_Narrow">
-                        <param name="h">155</param>
-                        <param name="first">main_fg_12</param>
-                    </include>
-                </control>
+                <visible>Integer.IsEqual($PARAM[item].Icon,512) | Integer.IsEqual($PARAM[item].Icon,552)</visible>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">30.556%</param>
+                </include>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="first">main_fg_12</param>
+                    <param name="top">62.963%</param>
+                </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,513) | Integer.IsEqual(ListItem.Icon,553)</visible>
-                <control type="group">
-                    <top>165</top>
-                    <include content="Wireframe_Tiles_Circle">
-                        <param name="h">155</param>
-                        <param name="first">$VAR[ColorHighlight]</param>
-                    </include>
-                </control>
-                <control type="group">
-                    <top>340</top>
-                    <include content="Wireframe_Tiles_Circle">
-                        <param name="h">155</param>
-                        <param name="first">main_fg_12</param>
-                    </include>
-                </control>
+                <visible>Integer.IsEqual($PARAM[item].Icon,513) | Integer.IsEqual($PARAM[item].Icon,553)</visible>
+                <include content="Wireframe_Columns_Circle">
+                    <param name="first">$VAR[ColorHighlight]</param>
+                    <param name="top">30.556%</param>
+                </include>
+                <include content="Wireframe_Columns_Circle">
+                    <param name="top">62.963%</param>
+                </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,514) | Integer.IsEqual(ListItem.Icon,554)</visible>
-                <control type="group">
-                    <top>165</top>
-                    <include content="Wireframe_Tiles_Board">
-                        <param name="h">155</param>
-                        <param name="first">$VAR[ColorHighlight]</param>
-                    </include>
-                </control>
-                <control type="group">
-                    <top>340</top>
-                    <include content="Wireframe_Tiles_Board">
-                        <param name="h">155</param>
-                        <param name="first">main_fg_12</param>
-                    </include>
-                </control>
+                <visible>Integer.IsEqual($PARAM[item].Icon,514) | Integer.IsEqual($PARAM[item].Icon,554)</visible>
+                <include content="Wireframe_Columns_Board">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="first">$VAR[ColorHighlight]</param>
+                    <param name="top">30.556%</param>
+                    <param name="height">28.704%</param>
+                </include>
+                <include content="Wireframe_Columns_Board">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">62.963%</param>
+                    <param name="height">28.704%</param>
+                </include>
             </control>
             <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,516) | Integer.IsEqual(ListItem.Icon,556)</visible>
-                <control type="group">
-                    <top>165</top>
-                    <include content="Wireframe_Tiles_Narrow">
-                        <param name="h">155</param>
-                        <param name="first">$VAR[ColorHighlight]</param>
-                    </include>
-                    <include content="Wireframe_Labels_Over_Narrow">
-                        <param name="top">123</param>
-                        <param name="first">$VAR[ColorSelected]</param>
-                    </include>
-                </control>
-                <control type="group">
-                    <top>340</top>
-                    <include content="Wireframe_Tiles_Narrow">
-                        <param name="h">155</param>
-                        <param name="first">main_fg_12</param>
-                    </include>
-                    <include content="Wireframe_Labels_Over_Narrow">
-                        <param name="top">123</param>
-                        <param name="first">main_fg_70</param>
-                    </include>
-                </control>
+                <visible>Integer.IsEqual($PARAM[item].Icon,516) | Integer.IsEqual($PARAM[item].Icon,556)</visible>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">30.556%</param>
+                    <param name="labels_over">true</param>
+                    <param name="label_top">53.333%</param>
+                    <param name="label_first">$VAR[ColorSelected]</param>
+                </include>
+                <include content="Wireframe_Row_Narrow">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="first">main_fg_12</param>
+                    <param name="top">62.963%</param>
+                    <param name="labels_over">true</param>
+                    <param name="label_top">85.741%</param>
+                </include>
             </control>
         </definition>
     </include>
-    
+
+    <!-- List row: the group keeps the canvas size and its columns group ends where the row ends (end = space right of the row) -->
     <include name="Wireframe_List_Item">
+        <param name="size">Full</param>
         <param name="back">false</param>
         <param name="fill">main_fg_30</param>
         <param name="columns">true</param>
         <definition>
             <control type="group">
-                <left>30</left>
                 <top>$PARAM[top]</top>
-                <width>$PARAM[w]</width>
-                <height>40</height>
-                <include content="Wireframe_Box" condition="$PARAM[back]">
+                <height>100%</height>
+                <include content="Wireframe_Hub_Block" condition="$PARAM[back]">
+                    <param name="size">$PARAM[size]</param>
                     <param name="fill">$VAR[ColorHighlight]</param>
+                    <param name="left">3.125%</param>
+                    <param name="top">0</param>
+                    <param name="width">$PARAM[w]</param>
+                    <param name="height">7.407%</param>
                 </include>
-                <include content="Wireframe_Circle">
+                <include content="Wireframe_Hub_Circle">
                     <param name="fill">$PARAM[fill]</param>
-                    <left>10</left>
-                    <top>7.5</top>
-                    <width>25</width>
-                    <height>25</height>
+                    <param name="left">4.167%</param>
+                    <param name="top">1.389%</param>
+                    <param name="width">2.604%</param>
+                    <param name="height">4.63%</param>
                 </include>
                 <include content="Wireframe_Bar">
+                    <param name="size">$PARAM[size]</param>
                     <param name="fill">$PARAM[fill]</param>
-                    <left>50</left>
-                    <top>14</top>
-                    <width>120</width>
+                    <left>8.333%</left>
+                    <top>2.593%</top>
+                    <width>12.5%</width>
                 </include>
                 <control type="group">
-                    <visible>$PARAM[columns]</visible>
-                    <include content="Wireframe_Bar">
+                    <right>$PARAM[end]</right>
+                    <width>100%</width>
+                    <include content="Wireframe_Bar" condition="$PARAM[columns]">
+                        <param name="size">$PARAM[size]</param>
                         <param name="fill">$PARAM[fill]</param>
-                        <right>80</right>
-                        <top>14</top>
-                        <width>35</width>
+                        <right>8.333%</right>
+                        <top>2.593%</top>
+                        <width>3.646%</width>
                     </include>
-                    <include content="Wireframe_Bar">
+                    <include content="Wireframe_Bar" condition="$PARAM[columns]">
+                        <param name="size">$PARAM[size]</param>
                         <param name="fill">$PARAM[fill]</param>
-                        <right>54</right>
-                        <top>14</top>
-                        <width>12</width>
+                        <right>5.625%</right>
+                        <top>2.593%</top>
+                        <width>1.25%</width>
                     </include>
-                    <include content="Wireframe_Bar">
+                    <include content="Wireframe_Bar" condition="$PARAM[columns]">
+                        <param name="size">$PARAM[size]</param>
                         <param name="fill">$PARAM[fill]</param>
-                        <right>20</right>
-                        <top>14</top>
-                        <width>20</width>
+                        <right>2.083%</right>
+                        <top>2.593%</top>
+                        <width>2.083%</width>
                     </include>
-                </control>
-                <control type="group">
-                    <visible>![$PARAM[columns]]</visible>
-                    <include content="Wireframe_Bar">
+                    <include content="Wireframe_Bar" condition="![$PARAM[columns]]">
+                        <param name="size">$PARAM[size]</param>
                         <param name="fill">$PARAM[fill]</param>
-                        <right>21</right>
-                        <top>14</top>
-                        <width>12</width>
+                        <right>2.188%</right>
+                        <top>2.593%</top>
+                        <width>1.25%</width>
                     </include>
                 </control>
             </control>
         </definition>
     </include>
-    
+
     <include name="Wireframe_List_Tall">
+        <param name="size">Full</param>
         <param name="columns">true</param>
         <param name="focused">true</param>
         <param name="focus_fill">$VAR[ColorSelected]</param>
@@ -673,47 +660,62 @@
             <control type="group">
                 <visible>$PARAM[visible]</visible>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">155</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">28.704%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">197.5</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">36.574%</param>
                     <param name="columns">$PARAM[columns]</param>
                     <param name="back">$PARAM[focused]</param>
                     <param name="fill">$PARAM[focus_fill]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">240</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">44.444%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">282.5</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">52.315%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">325</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">60.185%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">367.5</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">68.056%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">410</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">75.926%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
             </control>
         </definition>
     </include>
-    
+
     <include name="Wireframe_List_Short">
+        <param name="size">Full</param>
         <param name="columns">true</param>
         <param name="focused">true</param>
         <param name="focus_fill">$VAR[ColorSelected]</param>
@@ -721,458 +723,471 @@
             <control type="group">
                 <visible>$PARAM[visible]</visible>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">290</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">53.704%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">330</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">61.111%</param>
                     <param name="columns">$PARAM[columns]</param>
                     <param name="back">$PARAM[focused]</param>
                     <param name="fill">$PARAM[focus_fill]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">370</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">68.519%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
                 <include content="Wireframe_List_Item">
+                    <param name="size">$PARAM[size]</param>
                     <param name="w">$PARAM[w]</param>
-                    <param name="top">410</param>
+                    <param name="end">$PARAM[end]</param>
+                    <param name="top">75.926%</param>
                     <param name="columns">$PARAM[columns]</param>
                 </include>
             </control>
         </definition>
     </include>
-    
+
+    <!-- Expanded row: the group keeps the canvas size; end is the space right of the row and the line widths run from the text to their right margin -->
     <include name="Wireframe_Expanded_Item">
+        <param name="size">Full</param>
         <param name="back">false</param>
         <param name="fill">main_fg_30</param>
         <param name="art">main_fg_12</param>
         <param name="use_line_3">false</param>
         <param name="line_3">0</param>
+        <param name="line_3_w">0</param>
         <definition>
             <control type="group">
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
-                <width>$PARAM[w]</width>
-                <height>$PARAM[back_h]</height>
-                <include content="Wireframe_Box" condition="$PARAM[back]">
+                <width>100%</width>
+                <height>100%</height>
+                <include content="Wireframe_Hub_Block" condition="$PARAM[back]">
+                    <param name="size">$PARAM[size]</param>
                     <param name="fill">$VAR[ColorHighlight]</param>
+                    <param name="left">0</param>
+                    <param name="top">0</param>
+                    <param name="width">$PARAM[w]</param>
+                    <param name="height">$PARAM[back_h]</param>
                 </include>
-                <include content="Wireframe_Box">
+                <include content="Wireframe_Hub_Block">
+                    <param name="size">$PARAM[size]</param>
                     <param name="fill">$PARAM[art]</param>
-                    <left>10</left>
-                    <top>10</top>
-                    <width>$PARAM[art_w]</width>
-                    <height>$PARAM[art_h]</height>
+                    <param name="left">1.042%</param>
+                    <param name="top">1.852%</param>
+                    <param name="width">$PARAM[art_w]</param>
+                    <param name="height">$PARAM[art_h]</param>
+                </include>
+                <include content="Wireframe_Bar">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="fill">$PARAM[fill]</param>
+                    <left>$PARAM[text_left]</left>
+                    <top>$PARAM[title]</top>
+                    <width>15.625%</width>
+                </include>
+                <include content="Wireframe_Bar">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="fill">$PARAM[fill]</param>
+                    <left>$PARAM[text_left]</left>
+                    <top>$PARAM[line_1]</top>
+                    <width>$PARAM[line_1_w]</width>
+                </include>
+                <include content="Wireframe_Bar">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="fill">$PARAM[fill]</param>
+                    <left>$PARAM[text_left]</left>
+                    <top>$PARAM[line_2]</top>
+                    <width>$PARAM[line_2_w]</width>
+                </include>
+                <include content="Wireframe_Bar" condition="$PARAM[use_line_3]">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="fill">$PARAM[fill]</param>
+                    <left>$PARAM[text_left]</left>
+                    <top>$PARAM[line_3]</top>
+                    <width>$PARAM[line_3_w]</width>
                 </include>
                 <control type="group">
-                    <left>$PARAM[text_left]</left>
+                    <right>$PARAM[end]</right>
+                    <width>100%</width>
                     <include content="Wireframe_Bar">
+                        <param name="size">$PARAM[size]</param>
                         <param name="fill">$PARAM[fill]</param>
-                        <left>0</left>
+                        <right>9.896%</right>
                         <top>$PARAM[title]</top>
-                        <width>150</width>
+                        <width>6.771%</width>
                     </include>
                     <include content="Wireframe_Bar">
+                        <param name="size">$PARAM[size]</param>
                         <param name="fill">$PARAM[fill]</param>
-                        <right>95</right>
+                        <right>7.708%</right>
                         <top>$PARAM[title]</top>
-                        <width>65</width>
+                        <width>1.25%</width>
                     </include>
                     <include content="Wireframe_Bar">
+                        <param name="size">$PARAM[size]</param>
                         <param name="fill">$PARAM[fill]</param>
-                        <right>74</right>
+                        <right>2.083%</right>
                         <top>$PARAM[title]</top>
-                        <width>12</width>
-                    </include>
-                    <include content="Wireframe_Bar">
-                        <param name="fill">$PARAM[fill]</param>
-                        <right>20</right>
-                        <top>$PARAM[title]</top>
-                        <width>45</width>
-                    </include>
-                    <include content="Wireframe_Bar">
-                        <param name="fill">$PARAM[fill]</param>
-                        <left>0</left>
-                        <right>20</right>
-                        <top>$PARAM[line_1]</top>
-                    </include>
-                    <include content="Wireframe_Bar">
-                        <param name="fill">$PARAM[fill]</param>
-                        <left>0</left>
-                        <right>100</right>
-                        <top>$PARAM[line_2]</top>
-                    </include>
-                    <include content="Wireframe_Bar" condition="$PARAM[use_line_3]">
-                        <param name="fill">$PARAM[fill]</param>
-                        <left>0</left>
-                        <right>250</right>
-                        <top>$PARAM[line_3]</top>
+                        <width>4.688%</width>
                     </include>
                 </control>
             </control>
         </definition>
     </include>
-    
+
+    <include name="Wireframe_Expanded_Video_Item">
+        <param name="size">Full</param>
+        <param name="back">false</param>
+        <param name="fill">main_fg_30</param>
+        <param name="art">main_fg_12</param>
+        <definition>
+            <include content="Wireframe_Expanded_Item">
+                <param name="size">$PARAM[size]</param>
+                <param name="left">3.125%</param>
+                <param name="w">68.229%</param>
+                <param name="end">31.771%</param>
+                <param name="back_h">16.667%</param>
+                <param name="art_w">12.963%</param>
+                <param name="art_h">12.963%</param>
+                <param name="text_left">16.088%</param>
+                <param name="title">3.056%</param>
+                <param name="line_1">7.407%</param>
+                <param name="line_1_w">50.058%</param>
+                <param name="line_2">11.019%</param>
+                <param name="line_2_w">41.725%</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="back">$PARAM[back]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="art">$PARAM[art]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Expanded_Combined_Item">
+        <param name="size">Full</param>
+        <param name="back">false</param>
+        <param name="fill">main_fg_30</param>
+        <param name="art">main_fg_12</param>
+        <definition>
+            <include content="Wireframe_Expanded_Item">
+                <param name="size">$PARAM[size]</param>
+                <param name="left">38.125%</param>
+                <param name="w">59.792%</param>
+                <param name="end">40.208%</param>
+                <param name="back_h">18.519%</param>
+                <param name="art_w">14.815%</param>
+                <param name="art_h">14.815%</param>
+                <param name="text_left">17.94%</param>
+                <param name="title">2.315%</param>
+                <param name="line_1">6.852%</param>
+                <param name="line_1_w">39.769%</param>
+                <param name="line_2">10.37%</param>
+                <param name="line_2_w">31.435%</param>
+                <param name="line_3">13.889%</param>
+                <param name="line_3_w">15.81%</param>
+                <param name="use_line_3">true</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="back">$PARAM[back]</param>
+                <param name="fill">$PARAM[fill]</param>
+                <param name="art">$PARAM[art]</param>
+            </include>
+        </definition>
+    </include>
+
     <include name="Wireframe_Expanded_Video">
+        <param name="size">Full</param>
         <definition>
             <control type="group">
                 <visible>$PARAM[visible]</visible>
-                <include content="Wireframe_Expanded_Item">
-                    <param name="left">30</param>
-                    <param name="w">655</param>
-                    <param name="back_h">90</param>
-                    <param name="art_w">124.44</param>
-                    <param name="art_h">70</param>
-                    <param name="text_left">154.44</param>
-                    <param name="title">16.5</param>
-                    <param name="line_1">40</param>
-                    <param name="line_2">59.5</param>
-                    <param name="top">155</param>
+                <include content="Wireframe_Expanded_Video_Item">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">28.704%</param>
                 </include>
-                <include content="Wireframe_Expanded_Item">
-                    <param name="left">30</param>
-                    <param name="w">655</param>
-                    <param name="back_h">90</param>
-                    <param name="art_w">124.44</param>
-                    <param name="art_h">70</param>
-                    <param name="text_left">154.44</param>
-                    <param name="title">16.5</param>
-                    <param name="line_1">40</param>
-                    <param name="line_2">59.5</param>
-                    <param name="top">257.5</param>
+                <include content="Wireframe_Expanded_Video_Item">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">47.685%</param>
                     <param name="back">true</param>
                     <param name="fill">$VAR[ColorSelected]</param>
                     <param name="art">$VAR[ColorSelected]</param>
                 </include>
-                <include content="Wireframe_Expanded_Item">
-                    <param name="left">30</param>
-                    <param name="w">655</param>
-                    <param name="back_h">90</param>
-                    <param name="art_w">124.44</param>
-                    <param name="art_h">70</param>
-                    <param name="text_left">154.44</param>
-                    <param name="title">16.5</param>
-                    <param name="line_1">40</param>
-                    <param name="line_2">59.5</param>
-                    <param name="top">360</param>
+                <include content="Wireframe_Expanded_Video_Item">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">66.667%</param>
                 </include>
             </control>
         </definition>
     </include>
-    
+
     <include name="Wireframe_Expanded_Combined">
+        <param name="size">Full</param>
         <definition>
             <control type="group">
                 <visible>$PARAM[visible]</visible>
-                <include content="Wireframe_Expanded_Item">
-                    <param name="left">366</param>
-                    <param name="w">574</param>
-                    <param name="back_h">100</param>
-                    <param name="art_w">142.22</param>
-                    <param name="art_h">80</param>
-                    <param name="text_left">172.22</param>
-                    <param name="title">12.5</param>
-                    <param name="line_1">37</param>
-                    <param name="line_2">56</param>
-                    <param name="line_3">75</param>
-                    <param name="use_line_3">true</param>
-                    <param name="top">134</param>
+                <include content="Wireframe_Expanded_Combined_Item">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">24.815%</param>
                 </include>
-                <include content="Wireframe_Expanded_Item">
-                    <param name="left">366</param>
-                    <param name="w">574</param>
-                    <param name="back_h">100</param>
-                    <param name="art_w">142.22</param>
-                    <param name="art_h">80</param>
-                    <param name="text_left">172.22</param>
-                    <param name="title">12.5</param>
-                    <param name="line_1">37</param>
-                    <param name="line_2">56</param>
-                    <param name="line_3">75</param>
-                    <param name="use_line_3">true</param>
-                    <param name="top">246.5</param>
+                <include content="Wireframe_Expanded_Combined_Item">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">45.648%</param>
                     <param name="back">true</param>
                     <param name="fill">$VAR[ColorSelected]</param>
                     <param name="art">$VAR[ColorSelected]</param>
                 </include>
-                <include content="Wireframe_Expanded_Item">
-                    <param name="left">366</param>
-                    <param name="w">574</param>
-                    <param name="back_h">100</param>
-                    <param name="art_w">142.22</param>
-                    <param name="art_h">80</param>
-                    <param name="text_left">172.22</param>
-                    <param name="title">12.5</param>
-                    <param name="line_1">37</param>
-                    <param name="line_2">56</param>
-                    <param name="line_3">75</param>
-                    <param name="use_line_3">true</param>
-                    <param name="top">359</param>
+                <include content="Wireframe_Expanded_Combined_Item">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">66.481%</param>
                 </include>
             </control>
         </definition>
     </include>
-    
+
     <include name="Wireframe_Lists">
+        <param name="size">Full</param>
+        <param name="item">ListItem</param>
         <definition>
             <include content="Wireframe_List_Tall">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,580)</param>
-                <param name="w">326</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,580)</param>
+                <param name="w">33.958%</param>
+                <param name="end">62.917%</param>
             </include>
             <include content="Wireframe_List_Tall">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,581)</param>
-                <param name="w">655</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,581)</param>
+                <param name="w">68.229%</param>
+                <param name="end">28.646%</param>
             </include>
             <include content="Wireframe_List_Tall">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,585)</param>
-                <param name="w">564</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,585)</param>
+                <param name="w">58.75%</param>
+                <param name="end">38.125%</param>
             </include>
             <include content="Wireframe_List_Short">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,583)</param>
-                <param name="w">558</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,583)</param>
+                <param name="w">58.125%</param>
+                <param name="end">38.75%</param>
             </include>
             <include content="Wireframe_List_Short">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,584)</param>
-                <param name="w">418</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,584)</param>
+                <param name="w">43.542%</param>
+                <param name="end">53.333%</param>
             </include>
             <include content="Wireframe_List_Tall">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,527)</param>
-                <param name="w">326</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,527)</param>
+                <param name="w">33.958%</param>
+                <param name="end">62.917%</param>
                 <param name="columns">false</param>
                 <param name="focused">false</param>
                 <param name="focus_fill">main_fg_30</param>
             </include>
             <include content="Wireframe_Expanded_Video">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,582) | Integer.IsEqual(ListItem.Icon,528)</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,582) | Integer.IsEqual($PARAM[item].Icon,528)</param>
             </include>
             <include content="Wireframe_Expanded_Combined">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,527)</param>
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,527)</param>
             </include>
         </definition>
     </include>
-    
-    <include name="Wireframe_Panels">
-        <definition>
-            <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,580)</visible>
-                <include content="Wireframe_Box">
-                    <left>376</left>
-                    <top>144</top>
-                    <width>544</width>
-                    <height>306</height>
-                </include>
-            </control>
-            <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,581) | Integer.IsEqual(ListItem.Icon,582) | Integer.IsEqual(ListItem.Icon,528)</visible>
-                <include content="Wireframe_Box">
-                    <left>705</left>
-                    <top>144</top>
-                    <width>215</width>
-                    <height>306</height>
-                </include>
-            </control>
-            <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,585)</visible>
-                <include content="Wireframe_Box">
-                    <left>614</left>
-                    <top>144</top>
-                    <width>306</width>
-                    <height>306</height>
-                </include>
-            </control>
-            <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,583) | Integer.IsEqual(ListItem.Icon,584)</visible>
-                <include content="Wireframe_Box">
-                    <left>608</left>
-                    <top>274.5</top>
-                    <width>312</width>
-                    <height>175.5</height>
-                </include>
-            </control>
-            <control type="group">
-                <visible>Integer.IsEqual(ListItem.Icon,584)</visible>
-                <include content="Wireframe_Box">
-                    <left>468</left>
-                    <top>274.5</top>
-                    <width>120</width>
-                    <height>175.5</height>
-                </include>
-            </control>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Info_Details">
+
+    <include name="Wireframe_Panel">
+        <param name="size">Full</param>
+        <param name="top">26.667%</param>
+        <param name="height">56.667%</param>
         <definition>
             <control type="group">
                 <visible>$PARAM[visible]</visible>
-                <include content="Wireframe_Bar">
-                    <left>40</left>
-                    <top>124.5</top>
-                    <width>240</width>
+                <include content="Wireframe_Hub_Block">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="left">$PARAM[left]</param>
+                    <param name="top">$PARAM[top]</param>
+                    <param name="width">$PARAM[width]</param>
+                    <param name="height">$PARAM[height]</param>
                 </include>
-                <include content="Wireframe_Bar">
-                    <param name="fill">main_fg_70</param>
-                    <left>40</left>
-                    <top>154.5</top>
-                    <width>190</width>
-                </include>
-                <include content="Wireframe_Bar">
-                    <left>40</left>
-                    <top>174.5</top>
-                    <width>340</width>
-                </include>
-                <include content="Wireframe_Bar">
-                    <left>40</left>
-                    <top>195</top>
-                    <width>300</width>
-                </include>
-                <include content="Wireframe_Bar">
-                    <left>40</left>
-                    <top>224</top>
-                    <width>210</width>
-                </include>
-            </control>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Section">
-        <definition>
-            <control type="group">
-                <visible>$PARAM[visible]</visible>
-                <top>$PARAM[top]</top>
-                <include content="Wireframe_Bar">
-                    <param name="fill">main_fg_70</param>
-                    <left>40</left>
-                    <top>-6</top>
-                    <width>$PARAM[label_w]</width>
-                </include>
-                <control type="group">
-                    <left>40</left>
-                    <top>5</top>
-                    <width>360</width>
-                    <height>20</height>
-                    <include content="View_Line_Divider">
-                        <param name="width">360</param>
-                    </include>
-                </control>
-            </control>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Categories">
-        <definition>
-            <control type="group">
-                <visible>$PARAM[visible]</visible>
-                <top>$PARAM[top]</top>
-                <include content="Wireframe_Bar">
-                    <param name="fill">main_fg_70</param>
-                    <left>40</left>
-                    <top>-6</top>
-                    <width>45</width>
-                </include>
-                <include content="Wireframe_Bar">
-                    <param name="fill">main_fg_12</param>
-                    <left>100</left>
-                    <top>-6</top>
-                    <width>69</width>
-                </include>
-                <include content="Wireframe_Bar">
-                    <param name="fill">main_fg_12</param>
-                    <left>184</left>
-                    <top>-6</top>
-                    <width>66</width>
-                </include>
-                <include content="Wireframe_Bar">
-                    <param name="fill">main_fg_12</param>
-                    <left>265</left>
-                    <top>-6</top>
-                    <width>55</width>
-                </include>
-                <control type="group">
-                    <left>40</left>
-                    <top>5</top>
-                    <width>360</width>
-                    <height>20</height>
-                    <include content="View_Line_Divider">
-                        <param name="width">360</param>
-                    </include>
-                </control>
-            </control>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Furniture">
-        <definition>
-            <include content="Wireframe_Box">
-                <param name="fill">main_fg_30</param>
-                <left>40</left>
-                <top>41</top>
-                <width>320</width>
-                <height>64</height>
-            </include>
-            <include content="Wireframe_Info_Details">
-                <param name="visible">[Integer.IsGreaterOrEqual(ListItem.Icon,500) + Integer.IsLessOrEqual(ListItem.Icon,506)] | [Integer.IsGreaterOrEqual(ListItem.Icon,520) + Integer.IsLessOrEqual(ListItem.Icon,526)] | Integer.IsEqual(ListItem.Icon,583) | Integer.IsEqual(ListItem.Icon,584)</param>
-            </include>
-            <include content="Wireframe_Section">
-                <param name="visible">[Integer.IsGreaterOrEqual(ListItem.Icon,500) + Integer.IsLessOrEqual(ListItem.Icon,506)] | Integer.IsEqual(ListItem.Icon,583) | Integer.IsEqual(ListItem.Icon,584)</param>
-                <param name="top">260</param>
-                <param name="label_w">70</param>
-            </include>
-            <include content="Wireframe_Categories">
-                <param name="visible">[Integer.IsGreaterOrEqual(ListItem.Icon,520) + Integer.IsLessOrEqual(ListItem.Icon,526)]</param>
-                <param name="top">260</param>
-            </include>
-            <include content="Wireframe_Section">
-                <param name="visible">[Integer.IsGreaterOrEqual(ListItem.Icon,510) + Integer.IsLessOrEqual(ListItem.Icon,516)] | [Integer.IsGreaterOrEqual(ListItem.Icon,580) + Integer.IsLessOrEqual(ListItem.Icon,582)] | Integer.IsEqual(ListItem.Icon,585) | Integer.IsEqual(ListItem.Icon,527)</param>
-                <param name="top">130</param>
-                <param name="label_w">70</param>
-            </include>
-            <include content="Wireframe_Categories">
-                <param name="visible">Integer.IsEqual(ListItem.Icon,528) | [Integer.IsGreaterOrEqual(ListItem.Icon,550) + Integer.IsLessOrEqual(ListItem.Icon,556)]</param>
-                <param name="top">130</param>
-            </include>
-            <include content="Wireframe_Section">
-                <param name="visible">![[Integer.IsGreaterOrEqual(ListItem.Icon,510) + Integer.IsLessOrEqual(ListItem.Icon,516)] | [Integer.IsGreaterOrEqual(ListItem.Icon,550) + Integer.IsLessOrEqual(ListItem.Icon,556)]]</param>
-                <param name="top">480</param>
-                <param name="label_w">60</param>
-            </include>
-        </definition>
-    </include>
-    
-    <include name="Wireframe_Background">
-        <definition>
-            <control type="image">
-                <aspectratio>scale</aspectratio>
-                <texture background="true" diffuse="diffuse/landscape_w1040_h585.png">$VAR[Image_SimpleBackground]</texture>
             </control>
         </definition>
     </include>
 
-    <include name="Wireframe_Preview">
+    <include name="Wireframe_Panels">
+        <param name="size">Full</param>
+        <param name="item">ListItem</param>
         <definition>
-            <include>Wireframe_Background</include>
-            <include>Wireframe_Furniture</include>
-            <include>Wireframe_Panels</include>
-            <include>Wireframe_Rows</include>
-            <include>Wireframe_Walls</include>
-            <include>Wireframe_Lists</include>
+            <include content="Wireframe_Panel">
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,580)</param>
+                <param name="left">39.167%</param>
+                <param name="width">56.667%</param>
+            </include>
+            <include content="Wireframe_Panel">
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,581) | Integer.IsEqual($PARAM[item].Icon,582) | Integer.IsEqual($PARAM[item].Icon,528)</param>
+                <param name="left">73.438%</param>
+                <param name="width">22.396%</param>
+            </include>
+            <include content="Wireframe_Panel">
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,585)</param>
+                <param name="left">63.958%</param>
+                <param name="width">31.875%</param>
+            </include>
+            <include content="Wireframe_Panel">
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,583) | Integer.IsEqual($PARAM[item].Icon,584)</param>
+                <param name="left">63.333%</param>
+                <param name="top">50.833%</param>
+                <param name="width">32.5%</param>
+                <param name="height">32.5%</param>
+            </include>
+            <include content="Wireframe_Panel">
+                <param name="size">$PARAM[size]</param>
+                <param name="visible">Integer.IsEqual($PARAM[item].Icon,584)</param>
+                <param name="left">48.75%</param>
+                <param name="top">50.833%</param>
+                <param name="width">12.5%</param>
+                <param name="height">32.5%</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Wireframe_Furniture">
+        <param name="size">Full</param>
+        <param name="item">ListItem</param>
+        <definition>
+            <include content="Wireframe_Hub_Block">
+                <param name="size">$PARAM[size]</param>
+                <param name="fill">main_fg_30</param>
+                <param name="left">4.167%</param>
+                <param name="top">7.593%</param>
+                <param name="width">33.333%</param>
+                <param name="height">11.852%</param>
+            </include>
+            <control type="group">
+                <visible>[Integer.IsGreaterOrEqual($PARAM[item].Icon,500) + Integer.IsLessOrEqual($PARAM[item].Icon,506)] | [Integer.IsGreaterOrEqual($PARAM[item].Icon,520) + Integer.IsLessOrEqual($PARAM[item].Icon,526)] | Integer.IsEqual($PARAM[item].Icon,583) | Integer.IsEqual($PARAM[item].Icon,584)</visible>
+                <include content="Wireframe_Hub_Details">
+                    <param name="size">$PARAM[size]</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>[Integer.IsGreaterOrEqual($PARAM[item].Icon,500) + Integer.IsLessOrEqual($PARAM[item].Icon,506)] | Integer.IsEqual($PARAM[item].Icon,583) | Integer.IsEqual($PARAM[item].Icon,584)</visible>
+                <include content="Wireframe_Hub_Section">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">47.037%</param>
+                    <param name="line">50.926%</param>
+                    <param name="label_w">7.292%</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>[Integer.IsGreaterOrEqual($PARAM[item].Icon,520) + Integer.IsLessOrEqual($PARAM[item].Icon,526)]</visible>
+                <include content="Wireframe_Hub_Categories">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">47.037%</param>
+                    <param name="line">50.926%</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>[Integer.IsGreaterOrEqual($PARAM[item].Icon,510) + Integer.IsLessOrEqual($PARAM[item].Icon,516)] | [Integer.IsGreaterOrEqual($PARAM[item].Icon,580) + Integer.IsLessOrEqual($PARAM[item].Icon,582)] | Integer.IsEqual($PARAM[item].Icon,585) | Integer.IsEqual($PARAM[item].Icon,527)</visible>
+                <include content="Wireframe_Hub_Section">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">22.963%</param>
+                    <param name="line">26.852%</param>
+                    <param name="label_w">7.292%</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>Integer.IsEqual($PARAM[item].Icon,528) | [Integer.IsGreaterOrEqual($PARAM[item].Icon,550) + Integer.IsLessOrEqual($PARAM[item].Icon,556)]</visible>
+                <include content="Wireframe_Hub_Categories">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">22.963%</param>
+                    <param name="line">26.852%</param>
+                </include>
+            </control>
+            <control type="group">
+                <visible>![[Integer.IsGreaterOrEqual($PARAM[item].Icon,510) + Integer.IsLessOrEqual($PARAM[item].Icon,516)] | [Integer.IsGreaterOrEqual($PARAM[item].Icon,550) + Integer.IsLessOrEqual($PARAM[item].Icon,556)]]</visible>
+                <include content="Wireframe_Hub_Section">
+                    <param name="size">$PARAM[size]</param>
+                    <param name="top">87.778%</param>
+                    <param name="line">91.667%</param>
+                    <param name="label_w">6.25%</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- diffuse: a rounding mask made at the size the preview is drawn, so the corners keep their radius -->
+    <include name="Wireframe_Background">
+        <param name="diffuse">diffuse/landscape_w1040_h585.png</param>
+        <definition>
+            <control type="image">
+                <aspectratio>scale</aspectratio>
+                <texture background="true" diffuse="$PARAM[diffuse]">$VAR[Image_SimpleBackground]</texture>
+            </control>
+        </definition>
+    </include>
+
+    <!-- item: the listitem the preview draws, Container(id).ListItem when drawn outside the list -->
+    <!-- size: the closest texture scale to the drawn width against the 960 preview (Half or Quarter) -->
+    <include name="Wireframe_Preview">
+        <param name="size">Full</param>
+        <param name="item">ListItem</param>
+        <param name="diffuse">diffuse/landscape_w1040_h585.png</param>
+        <definition>
+            <include content="Wireframe_Background">
+                <param name="diffuse">$PARAM[diffuse]</param>
+            </include>
+            <include content="Wireframe_Furniture">
+                <param name="size">$PARAM[size]</param>
+                <param name="item">$PARAM[item]</param>
+            </include>
+            <include content="Wireframe_Panels">
+                <param name="size">$PARAM[size]</param>
+                <param name="item">$PARAM[item]</param>
+            </include>
+            <include content="Wireframe_Rows">
+                <param name="size">$PARAM[size]</param>
+                <param name="item">$PARAM[item]</param>
+            </include>
+            <include content="Wireframe_Walls">
+                <param name="size">$PARAM[size]</param>
+                <param name="item">$PARAM[item]</param>
+            </include>
+            <include content="Wireframe_Lists">
+                <param name="size">$PARAM[size]</param>
+                <param name="item">$PARAM[item]</param>
+            </include>
         </definition>
     </include>
     
     <!-- Hub layout previews: each layout's real 1920x1080 positions as percentages, so one drawing fits any 16:9 canvas -->
     <include name="Wireframe_Hub_Block">
+        <param name="size">Full</param>
         <param name="fill">main_fg_12</param>
-        <param name="texture">common/widget_text.png</param>
+        <param name="texture">common/widget_text</param>
         <param name="border">12</param>
+        <param name="border_half">6</param>
+        <param name="border_quarter">3</param>
         <definition>
             <include content="Wireframe_Box">
+                <param name="size">$PARAM[size]</param>
                 <param name="fill">$PARAM[fill]</param>
                 <param name="texture">$PARAM[texture]</param>
                 <param name="border">$PARAM[border]</param>
+                <param name="border_half">$PARAM[border_half]</param>
+                <param name="border_quarter">$PARAM[border_quarter]</param>
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
                 <width>$PARAM[width]</width>
@@ -1182,12 +1197,16 @@
     </include>
 
     <include name="Wireframe_Hub_Bar">
+        <param name="size">Full</param>
         <param name="fill">main_fg_30</param>
         <definition>
             <include content="Wireframe_Hub_Block">
+                <param name="size">$PARAM[size]</param>
                 <param name="fill">$PARAM[fill]</param>
-                <param name="texture">common/scrollh.png</param>
+                <param name="texture">common/scrollh</param>
                 <param name="border">4,0,4,0</param>
+                <param name="border_half">2,0,2,0</param>
+                <param name="border_quarter">1,0,1,0</param>
                 <param name="left">$PARAM[left]</param>
                 <param name="top">$PARAM[top]</param>
                 <param name="width">$PARAM[width]</param>
@@ -1197,69 +1216,29 @@
     </include>
 
     <include name="Wireframe_Hub_Tiles">
+        <param name="size">Full</param>
         <param name="first">main_fg_12</param>
         <param name="height">21.354%</param>
-        <param name="texture">common/widget_text.png</param>
-        <param name="border">12</param>
+        <param name="texture">common/widget_text</param>
         <definition>
-            <include content="Wireframe_Hub_Block">
-                <param name="fill">$PARAM[first]</param>
+            <include content="Wireframe_Columns_Landscape">
+                <param name="size">$PARAM[size]</param>
+                <param name="first">$PARAM[first]</param>
                 <param name="texture">$PARAM[texture]</param>
-                <param name="border">$PARAM[border]</param>
-                <param name="left">4.167%</param>
                 <param name="top">$PARAM[top]</param>
-                <param name="width">21.354%</param>
-                <param name="height">$PARAM[height]</param>
-            </include>
-            <include content="Wireframe_Hub_Block">
-                <param name="fill">main_fg_12</param>
-                <param name="texture">$PARAM[texture]</param>
-                <param name="border">$PARAM[border]</param>
-                <param name="left">27.604%</param>
-                <param name="top">$PARAM[top]</param>
-                <param name="width">21.354%</param>
-                <param name="height">$PARAM[height]</param>
-            </include>
-            <include content="Wireframe_Hub_Block">
-                <param name="fill">main_fg_12</param>
-                <param name="texture">$PARAM[texture]</param>
-                <param name="border">$PARAM[border]</param>
-                <param name="left">51.042%</param>
-                <param name="top">$PARAM[top]</param>
-                <param name="width">21.354%</param>
-                <param name="height">$PARAM[height]</param>
-            </include>
-            <include content="Wireframe_Hub_Block">
-                <param name="fill">main_fg_12</param>
-                <param name="texture">$PARAM[texture]</param>
-                <param name="border">$PARAM[border]</param>
-                <param name="left">74.479%</param>
-                <param name="top">$PARAM[top]</param>
-                <param name="width">21.354%</param>
                 <param name="height">$PARAM[height]</param>
             </include>
         </definition>
     </include>
 
     <include name="Wireframe_Hub_Labels">
+        <param name="size">Full</param>
         <definition>
-            <include content="Wireframe_Hub_Bar">
-                <param name="left">4.167%</param>
-                <param name="top">$PARAM[top]</param>
-                <param name="width">12.812%</param>
-            </include>
-            <include content="Wireframe_Hub_Bar">
-                <param name="left">27.604%</param>
-                <param name="top">$PARAM[top]</param>
-                <param name="width">12.812%</param>
-            </include>
-            <include content="Wireframe_Hub_Bar">
-                <param name="left">51.042%</param>
-                <param name="top">$PARAM[top]</param>
-                <param name="width">12.812%</param>
-            </include>
-            <include content="Wireframe_Hub_Bar">
-                <param name="left">74.479%</param>
+            <include content="Wireframe_Columns_Landscape">
+                <param name="size">$PARAM[size]</param>
+                <param name="cell">Wireframe_Hub_Bar</param>
+                <param name="fill">main_fg_30</param>
+                <param name="first">main_fg_30</param>
                 <param name="top">$PARAM[top]</param>
                 <param name="width">12.812%</param>
             </include>
@@ -1267,13 +1246,16 @@
     </include>
 
     <include name="Wireframe_Hub_Row">
+        <param name="size">Full</param>
         <param name="first">main_fg_12</param>
         <definition>
             <include content="Wireframe_Hub_Tiles">
+                <param name="size">$PARAM[size]</param>
                 <param name="top">$PARAM[top]</param>
                 <param name="first">$PARAM[first]</param>
             </include>
             <include content="Wireframe_Hub_Labels">
+                <param name="size">$PARAM[size]</param>
                 <param name="top">$PARAM[label_top]</param>
             </include>
         </definition>
@@ -1281,12 +1263,15 @@
 
     <!-- The next row cut off by the bottom of the screen -->
     <include name="Wireframe_Hub_Peek">
-        <include content="Wireframe_Hub_Tiles">
-            <param name="top">95.37%</param>
-            <param name="height">4.63%</param>
-            <param name="texture">common/widget_text_half.png</param>
-            <param name="border">12,12,12,0</param>
-        </include>
+        <param name="size">Full</param>
+        <definition>
+            <include content="Wireframe_Hub_Tiles">
+                <param name="size">$PARAM[size]</param>
+                <param name="top">95.37%</param>
+                <param name="height">4.63%</param>
+                <param name="texture">common/widget_text_half</param>
+            </include>
+        </definition>
     </include>
 
     <include name="Wireframe_Hub_Divider">
@@ -1305,8 +1290,10 @@
     </include>
 
     <include name="Wireframe_Hub_Section">
+        <param name="size">Full</param>
         <definition>
             <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
                 <param name="fill">main_fg_70</param>
                 <param name="left">4.167%</param>
                 <param name="top">$PARAM[top]</param>
@@ -1319,26 +1306,31 @@
     </include>
 
     <include name="Wireframe_Hub_Categories">
+        <param name="size">Full</param>
         <definition>
             <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
                 <param name="fill">main_fg_70</param>
                 <param name="left">4.167%</param>
                 <param name="top">$PARAM[top]</param>
                 <param name="width">4.688%</param>
             </include>
             <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
                 <param name="fill">main_fg_12</param>
                 <param name="left">10.417%</param>
                 <param name="top">$PARAM[top]</param>
                 <param name="width">7.187%</param>
             </include>
             <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
                 <param name="fill">main_fg_12</param>
                 <param name="left">19.167%</param>
                 <param name="top">$PARAM[top]</param>
                 <param name="width">6.875%</param>
             </include>
             <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
                 <param name="fill">main_fg_12</param>
                 <param name="left">27.604%</param>
                 <param name="top">$PARAM[top]</param>
@@ -1351,46 +1343,58 @@
     </include>
 
     <include name="Wireframe_Hub_Title">
-        <include content="Wireframe_Hub_Block">
-            <param name="fill">main_fg_30</param>
-            <param name="left">4.167%</param>
-            <param name="top">7.407%</param>
-            <param name="width">33.333%</param>
-            <param name="height">12.5%</param>
-        </include>
+        <param name="size">Full</param>
+        <definition>
+            <include content="Wireframe_Hub_Block">
+                <param name="size">$PARAM[size]</param>
+                <param name="fill">main_fg_30</param>
+                <param name="left">4.167%</param>
+                <param name="top">7.407%</param>
+                <param name="width">33.333%</param>
+                <param name="height">12.5%</param>
+            </include>
+        </definition>
     </include>
 
     <include name="Wireframe_Hub_Details">
-        <include content="Wireframe_Hub_Bar">
-            <param name="fill">main_fg_30</param>
-            <param name="left">4.167%</param>
-            <param name="top">23.056%</param>
-            <param name="width">25%</param>
-        </include>
-        <include content="Wireframe_Hub_Bar">
-            <param name="fill">main_fg_70</param>
-            <param name="left">4.167%</param>
-            <param name="top">28.611%</param>
-            <param name="width">19.792%</param>
-        </include>
-        <include content="Wireframe_Hub_Bar">
-            <param name="fill">main_fg_30</param>
-            <param name="left">4.167%</param>
-            <param name="top">32.315%</param>
-            <param name="width">35.417%</param>
-        </include>
-        <include content="Wireframe_Hub_Bar">
-            <param name="fill">main_fg_30</param>
-            <param name="left">4.167%</param>
-            <param name="top">36.111%</param>
-            <param name="width">31.25%</param>
-        </include>
-        <include content="Wireframe_Hub_Bar">
-            <param name="fill">main_fg_30</param>
-            <param name="left">4.167%</param>
-            <param name="top">41.481%</param>
-            <param name="width">21.875%</param>
-        </include>
+        <param name="size">Full</param>
+        <definition>
+            <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
+                <param name="fill">main_fg_30</param>
+                <param name="left">4.167%</param>
+                <param name="top">23.056%</param>
+                <param name="width">25%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
+                <param name="fill">main_fg_70</param>
+                <param name="left">4.167%</param>
+                <param name="top">28.611%</param>
+                <param name="width">19.792%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
+                <param name="fill">main_fg_30</param>
+                <param name="left">4.167%</param>
+                <param name="top">32.315%</param>
+                <param name="width">35.417%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
+                <param name="fill">main_fg_30</param>
+                <param name="left">4.167%</param>
+                <param name="top">36.111%</param>
+                <param name="width">31.25%</param>
+            </include>
+            <include content="Wireframe_Hub_Bar">
+                <param name="size">$PARAM[size]</param>
+                <param name="fill">main_fg_30</param>
+                <param name="left">4.167%</param>
+                <param name="top">41.481%</param>
+                <param name="width">21.875%</param>
+            </include>
+        </definition>
     </include>
 
     <include name="Wireframe_Hub_Screen">

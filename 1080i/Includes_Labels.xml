@@ -83,7 +83,7 @@
     </variable>
 
     <variable name="Label_Setting_InfoTags_Style">
-        <value condition="!Skin.HasSetting(InfoTags.DisableTags)">$LOCALIZE[31882]</value>
+        <value condition="Skin.HasSetting(InfoTags.EnablePills)">$LOCALIZE[31882]</value>
         <value>$LOCALIZE[31329]</value>
     </variable>
 
@@ -186,6 +186,33 @@
         <value>$LOCALIZE[31755]</value>
     </variable>
 
+    <!-- Viewtype selector: rows and walls describe their layout then their tiles, lists describe themselves -->
+    <variable name="Label_Viewtype_Description">
+        <value condition="Integer.IsGreaterOrEqual(Container(3).ListItem.Icon,500) + Integer.IsLessOrEqual(Container(3).ListItem.Icon,506)">$LOCALIZE[31908] $VAR[Label_Viewtype_Tiles]</value>
+        <value condition="Integer.IsGreaterOrEqual(Container(3).ListItem.Icon,510) + Integer.IsLessOrEqual(Container(3).ListItem.Icon,516)">$LOCALIZE[31909] $VAR[Label_Viewtype_Tiles]</value>
+        <value condition="Integer.IsGreaterOrEqual(Container(3).ListItem.Icon,520) + Integer.IsLessOrEqual(Container(3).ListItem.Icon,526)">$LOCALIZE[31910] $VAR[Label_Viewtype_Tiles]</value>
+        <value condition="Integer.IsGreaterOrEqual(Container(3).ListItem.Icon,550) + Integer.IsLessOrEqual(Container(3).ListItem.Icon,556)">$LOCALIZE[31911] $VAR[Label_Viewtype_Tiles]</value>
+        <value condition="Integer.IsEqual(Container(3).ListItem.Icon,580)">$LOCALIZE[31919]</value>
+        <value condition="Integer.IsEqual(Container(3).ListItem.Icon,581)">$LOCALIZE[31920]</value>
+        <value condition="Integer.IsEqual(Container(3).ListItem.Icon,582)">$LOCALIZE[31921]</value>
+        <value condition="Integer.IsEqual(Container(3).ListItem.Icon,583)">$LOCALIZE[31922]</value>
+        <value condition="Integer.IsEqual(Container(3).ListItem.Icon,584)">$LOCALIZE[31923]</value>
+        <value condition="Integer.IsEqual(Container(3).ListItem.Icon,585)">$LOCALIZE[31924]</value>
+        <value condition="Integer.IsEqual(Container(3).ListItem.Icon,527)">$LOCALIZE[31925]</value>
+        <value condition="Integer.IsEqual(Container(3).ListItem.Icon,528)">$LOCALIZE[31926]</value>
+    </variable>
+
+    <!-- Row and wall viewtypes share their last digit for the same tile shape -->
+    <variable name="Label_Viewtype_Tiles">
+        <value condition="String.EndsWith(Container(3).ListItem.Icon,0)">$LOCALIZE[31912]</value>
+        <value condition="String.EndsWith(Container(3).ListItem.Icon,1)">$LOCALIZE[31913]</value>
+        <value condition="String.EndsWith(Container(3).ListItem.Icon,2)">$LOCALIZE[31914]</value>
+        <value condition="String.EndsWith(Container(3).ListItem.Icon,3)">$LOCALIZE[31915]</value>
+        <value condition="String.EndsWith(Container(3).ListItem.Icon,4)">$LOCALIZE[31916]</value>
+        <value condition="String.EndsWith(Container(3).ListItem.Icon,5)">$LOCALIZE[31917]</value>
+        <value condition="String.EndsWith(Container(3).ListItem.Icon,6)">$LOCALIZE[31918]</value>
+    </variable>
+
     <variable name="Label_SetupWizard_WidgetGroup">
         <value condition="Skin.String(SetupWizard.WidgetGroup,library)">$LOCALIZE[31761]</value>
         <value condition="Skin.String(SetupWizard.WidgetGroup,discover)">$LOCALIZE[31762]</value>
@@ -208,7 +235,8 @@
     </variable>
 
     <variable name="Label_Setting_FlixArt_Visibility">
-        <value condition="Skin.String(Skin.FlixArt.Visibility,RowOnly)">$LOCALIZE[31007]</value>
+        <value condition="$EXP[Exp_FlixArt_IsAlways]">$LOCALIZE[20422]</value>
+        <value condition="Skin.String(Skin.FlixArt.Visibility,RowOnly)">$LOCALIZE[31105]</value>
         <value condition="$EXP[Exp_FlixArt_IsOff]">$LOCALIZE[31623]</value>
         <value>$LOCALIZE[571]</value>
     </variable>
@@ -361,6 +389,10 @@
     </variable>
 
     <!-- Spotlight label of the focused hub in the hubs window (1115) -->
+    <!-- Widget count of a custom hub for its Widgets button in the hubs window (1115). Live tv and add-ons hubs have sections instead -->
+    <variable name="Label_HubsWindow_Widgets">
+        <value condition="$EXP[Exp_HubsWindow_Type_Custom]">$INFO[Container(30921).NumItems,, $LOCALIZE[31022]]</value>
+    </variable>
     <variable name="Label_HubsWindow_Spotlight">
         <value condition="String.IsEqual(Container(30000).ListItem.Property(window),home) + !String.IsEmpty(Skin.String(HomeSwitcher.home.Spotlight.Label))">$INFO[Skin.String(HomeSwitcher.home.Spotlight.Label)]</value>
         <value condition="String.IsEqual(Container(30000).ListItem.Property(window),1101) + !String.IsEmpty(Skin.String(HomeSwitcher.1101.Spotlight.Label))">$INFO[Skin.String(HomeSwitcher.1101.Spotlight.Label)]</value>
@@ -372,6 +404,20 @@
         <value condition="String.IsEqual(Container(30000).ListItem.Property(window),1108) + !String.IsEmpty(Skin.String(HomeSwitcher.1108.Spotlight.Label))">$INFO[Skin.String(HomeSwitcher.1108.Spotlight.Label)]</value>
         <value condition="String.IsEqual(Container(30000).ListItem.Property(window),1109) + !String.IsEmpty(Skin.String(HomeSwitcher.1109.Spotlight.Label))">$INFO[Skin.String(HomeSwitcher.1109.Spotlight.Label)]</value>
         <value>$LOCALIZE[16018]</value>
+    </variable>
+
+    <variable name="Label_HubsWindow_PlayAction">
+        <value condition="$EXP[Exp_HubsWindow_PlayAction_Info]">$LOCALIZE[19033]</value>
+        <value condition="$EXP[Exp_HubsWindow_PlayAction_Context]">$LOCALIZE[31928]</value>
+        <value condition="$EXP[Exp_HubsWindow_PlayAction_Plot]">$LOCALIZE[207]</value>
+        <value>$LOCALIZE[571]</value>
+    </variable>
+
+    <variable name="Label_HubsWindow_BrowseAction">
+        <value condition="$EXP[Exp_HubsWindow_BrowseAction_Info]">$LOCALIZE[19033]</value>
+        <value condition="$EXP[Exp_HubsWindow_BrowseAction_Context]">$LOCALIZE[31928]</value>
+        <value condition="$EXP[Exp_HubsWindow_BrowseAction_Plot]">$LOCALIZE[207]</value>
+        <value>$LOCALIZE[571]</value>
     </variable>
 
     <!-- Hubs window (1115) settings header: Add hub shows the Power entry listed just above it -->
@@ -1332,14 +1378,15 @@
         <value condition="Window.IsVisible(1149)">32×</value>
     </variable>
 
-    <!-- Right aligned codec and channel tags, or a row's own tags -->
+    <!-- Right aligned status, codec and channel tags, or a row's own tags -->
     <variable name="Label_StreamRow_Tags">
         <value condition="!String.IsEmpty(ListItem.Property(tags))">$INFO[ListItem.Property(tags)]</value>
-        <value condition="!String.IsEmpty(ListItem.Property(codec))">$VAR[Label_ListItem_StreamCodec,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_ListItem_StreamChannels,&#x2002;,&#x2000;]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(codec))">$VAR[Label_StreamRow_Status]$VAR[Label_ListItem_StreamCodec,&#x2005;&#x2005;&#x2005;&#x2002;,&#x2000;]$VAR[Label_ListItem_StreamChannels,&#x2005;&#x2005;&#x2005;&#x2002;,&#x2000;]</value>
+        <value>$VAR[Label_StreamRow_Status]</value>
     </variable>
 
     <variable name="Label_StreamRow_Status">
-        <value>$VAR[Label_PlayerStream_IsImpaired,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsForced,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsDefault,&#x2002;,&#x2000;&#x2005;&#x2005;&#x2005;]$VAR[Label_PlayerStream_IsOriginal,&#x2002;,&#x2000;]</value>
+        <value>$VAR[Label_PlayerStream_IsImpaired,&#x2002;,&#x2000;]$VAR[Label_PlayerStream_IsForced,&#x2005;&#x2005;&#x2005;&#x2002;,&#x2000;]$VAR[Label_PlayerStream_IsDefault,&#x2005;&#x2005;&#x2005;&#x2002;,&#x2000;]$VAR[Label_PlayerStream_IsOriginal,&#x2005;&#x2005;&#x2005;&#x2002;,&#x2000;]</value>
     </variable>
 
     <variable name="Label_StreamRow_Detail">
