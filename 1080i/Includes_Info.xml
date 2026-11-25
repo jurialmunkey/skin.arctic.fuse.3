@@ -1418,11 +1418,66 @@
         <top>view_pad</top>
     </include>
 
+    <include name="Info_Panel_Biography">
+        <control type="group">
+            <visible>$PARAM[visible]</visible>
+            <height>$PARAM[biography_height]</height>
+            <include content="Info_Plot_TextBox">
+                <param name="label">$INFO[$PARAM[container]ListItem.Property(biography)]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="width">$PARAM[plotwidth]</param>
+                <param name="height">$PARAM[biography_height]</param>
+                <visible>!String.IsEmpty($PARAM[container]ListItem.Property(biography))</visible>
+            </include>
+            <include content="Info_Plot_TextBox">
+                <param name="label">$INFO[$PARAM[container]ListItem.Plot]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="width">$PARAM[plotwidth]</param>
+                <param name="height">$PARAM[biography_height]</param>
+                <visible>String.IsEmpty($PARAM[container]ListItem.Property(biography))</visible>
+            </include>
+        </control>
+    </include>
+
+    <include name="Info_Panel_Details">
+        <!-- Info -->
+        <include content="Info_Line">
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            <param name="container">$PARAM[container]</param>
+            <param name="visible">[$PARAM[visible_line]] + ![$PARAM[is_person]]</param>
+        </include>
+
+        <!-- Plot -->
+        <include content="Info_Plot">
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            <param name="container">$PARAM[container]</param>
+            <param name="width">$PARAM[plotwidth]</param>
+            <param name="height">$PARAM[plotheight]</param>
+            <param name="visible">[$PARAM[visible_plot]] + ![$PARAM[is_person]]</param>
+        </include>
+
+        <include content="Info_Panel_Biography">
+            <param name="container">$PARAM[container]</param>
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            <param name="plotwidth">$PARAM[plotwidth]</param>
+            <param name="biography_height">$PARAM[biography_height]</param>
+            <param name="visible">[$PARAM[visible_plot]] + [$PARAM[is_person]]</param>
+        </include>
+
+        <!-- Meta -->
+        <include content="Info_Meta">
+            <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            <param name="container">$PARAM[container]</param>
+            <param name="visible">[$PARAM[visible_meta]] + ![$PARAM[is_person]]</param>
+        </include>
+    </include>
+
     <include name="Info_Panel">
         <param name="container" />
         <param name="include_title">true</param>
         <param name="include_details">true</param>
         <param name="colordiffuse">main_fg</param>
+        <param name="biography_height">240</param>
         <param name="plotwidth">800</param>
         <param name="plotaligny">center</param>
         <param name="visible">true</param>
@@ -1455,27 +1510,16 @@
                     <height>info_title_h</height>
                 </include>
 
-                <!-- Info -->
-                <include content="Info_Line" condition="$PARAM[include_details]">
-                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <include content="Info_Panel_Details" condition="$PARAM[include_details]">
                     <param name="container">$PARAM[container]</param>
-                    <param name="visible">$PARAM[visible_line]</param>
-                </include>
-
-                <!-- Plot -->
-                <include content="Info_Plot" condition="$PARAM[include_details]">
                     <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                    <param name="container">$PARAM[container]</param>
-                    <param name="width">$PARAM[plotwidth]</param>
-                    <param name="height">$PARAM[plotheight]</param>
-                    <param name="visible">$PARAM[visible_plot]</param>
-                </include>
-
-                <!-- Meta -->
-                <include content="Info_Meta" condition="$PARAM[include_details]">
-                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                    <param name="container">$PARAM[container]</param>
-                    <param name="visible">$PARAM[visible_meta]</param>
+                    <param name="plotwidth">$PARAM[plotwidth]</param>
+                    <param name="biography_height">$PARAM[biography_height]</param>
+                    <param name="plotheight">$PARAM[plotheight]</param>
+                    <param name="visible_line">$PARAM[visible_line]</param>
+                    <param name="visible_plot">$PARAM[visible_plot]</param>
+                    <param name="visible_meta">$PARAM[visible_meta]</param>
+                    <param name="is_person">[String.IsEqual($PARAM[container]ListItem.DBType,actor) | String.IsEqual($PARAM[container]ListItem.DBType,director) | String.IsEqual($PARAM[container]ListItem.Property(tmdb_type),person)]</param>
                 </include>
 
             </control>

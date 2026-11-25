@@ -294,46 +294,35 @@
     </include>
 
     <include name="DialogInfo_Info_Group">
+        <param name="person_details">false</param>
+        <param name="biography_height">560</param>
         <param name="indent">520</param>
         <definition>
             <bottom>-40</bottom>
             <right>$PARAM[indent]</right>
             <control type="group">
                 <include content="DialogInfo_Animation_Left" condition="!String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Spotlight)">
-                    <param name="condition">[String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Full) | String.IsEqual(ListItem.Property(tmdb_type),person) | Window.ISVisible(1190) | Window.ISVisible(1193) | Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)]</param>
+                    <param name="condition">[String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Full) | $EXP[Exp_ListItem_IsPerson] | Window.ISVisible(1190) | Window.ISVisible(1193) | Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)]</param>
                 </include>
                 <include content="DialogInfo_Animation_Delay" condition="String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Spotlight)">
                     <param name="condition">true</param>
                 </include>
-                <include content="Info_Panel" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
-                    <param name="plotheight">120</param>
+                <include content="Info_Panel">
                     <param name="plotwidth">$PARAM[plotwidth]</param>
-                    <param name="include_title">true</param>
-                    <param name="include_details">false</param>
-                    <param name="croplogo">Window(Home).Property(TMDbHelper.ListItem.Current.CropImage)</param>
-                </include>
-                <include content="Info_Panel" condition="String.IsEqual(ListItem.Property(tmdb_type),person)">
-                    <param name="plotheight">560</param>
-                    <param name="plotwidth">$PARAM[plotwidth]</param>
-                    <param name="include_title">true</param>
                     <param name="include_details">false</param>
                     <param name="croplogo">Window(Home).Property(TMDbHelper.ListItem.Current.CropImage)</param>
                 </include>
             </control>
             <control type="group">
                 <include content="DialogInfo_Animation_Left" condition="!String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Spotlight)">
-                    <param name="condition">[String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Wall) | String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),List) | String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Full) | String.IsEqual(ListItem.Property(tmdb_type),person) | Window.ISVisible(1190) | Window.ISVisible(1193) | Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)]</param>
+                    <param name="condition">[String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Wall) | String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),List) | String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Full) | $EXP[Exp_ListItem_IsPerson] | Window.ISVisible(1190) | Window.ISVisible(1193) | Window.IsActive(VideoFullScreen.xml) | Window.IsActive(MusicVisualisation.xml)]</param>
                 </include>
                 <include content="DialogInfo_Animation_Delay" condition="String.IsEqual(Window(Home).Property(InfoPanel.FullSwitch),Spotlight)">
                     <param name="condition">true</param>
                 </include>
-                <include content="Info_Panel" condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">
+                <include content="Info_Panel">
                     <param name="plotheight">120</param>
-                    <param name="plotwidth">$PARAM[plotwidth]</param>
-                    <param name="include_title">false</param>
-                </include>
-                <include content="Info_Panel" condition="String.IsEqual(ListItem.Property(tmdb_type),person)">
-                    <param name="plotheight">560</param>
+                    <param name="biography_height">$PARAM[biography_height]</param>
                     <param name="plotwidth">$PARAM[plotwidth]</param>
                     <param name="include_title">false</param>
                 </include>
@@ -343,7 +332,8 @@
                 <top>400</top>
                 <orientation>vertical</orientation>
                 <include>DialogInfo_Animation_Left</include>
-                <include condition="!String.IsEqual(ListItem.Property(tmdb_type),person)">$PARAM[extended_include]</include>
+                <include condition="!$EXP[Exp_ListItem_IsPerson]">$PARAM[extended_include]</include>
+                <include condition="$PARAM[person_details] + $EXP[Exp_ListItem_IsPerson]">DialogInfo_PersonDetails</include>
             </control>
         </definition>
     </include>
@@ -1256,7 +1246,6 @@
             <onclick>SetProperty(tmdb_id,$PARAM[tmdb_id],$PARAM[window])</onclick>
             <onclick>SetProperty(tmdb_type,$PARAM[tmdb_type],$PARAM[window])</onclick>
             <onclick>SetProperty(dbtype,$PARAM[dbtype],$PARAM[window])</onclick>
-        <param name="condition">true</param>
             <onclick>SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],$PARAM[window])</onclick>
             <onclick>SetProperty(origin_tmdb_type,$VAR[Path_InfoParams_TMDbType],$PARAM[window])</onclick>
             <onclick>SetProperty(origin_season,$VAR[Path_InfoParams_Season],$PARAM[window])</onclick>
@@ -1267,6 +1256,7 @@
 
     <include name="DialogInfo_Widgets_Action">
         <param name="set_path">true</param>
+        <param name="condition">true</param>
         <definition>
             <onclick condition="$PARAM[condition]">SetProperty(trailer,$INFO[Container.ListItem.Trailer],1114)</onclick>
 
@@ -1765,6 +1755,84 @@
                 </include>
             </content>
         </include>
+    </include>
+
+    <include name="DialogInfo_PersonDetail">
+        <include content="Object_InfoCircle">
+            <param name="icon">special://skin/extras/icons/$PARAM[icon].png</param>
+            <param name="role">$LOCALIZE[$PARAM[label]]</param>
+            <param name="name">$INFO[ListItem.Property($PARAM[property])]</param>
+            <visible>!String.IsEmpty(ListItem.Property($PARAM[property]))</visible>
+        </include>
+    </include>
+
+    <include name="DialogInfo_PersonDetails">
+        <control type="group">
+            <top>20</top>
+            <left>20</left>
+            <height>80</height>
+            <include content="View_Line">
+                <param name="top">20</param>
+                <param name="left">20</param>
+                <param name="label">$LOCALIZE[33029]</param>
+            </include>
+        </control>
+        <control type="group">
+            <right>80</right>
+            <height>320</height>
+            <control type="grouplist">
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <width>480</width>
+                <height>320</height>
+                <include content="DialogInfo_PersonDetail">
+                    <param name="property">birthday</param>
+                    <param name="label">31169</param>
+                    <param name="icon">cake-candles</param>
+                </include>
+                <include content="DialogInfo_PersonDetail">
+                    <param name="property">deathday</param>
+                    <param name="label">21897</param>
+                    <param name="icon">cross</param>
+                </include>
+                <include content="DialogInfo_PersonDetail">
+                    <param name="property">age</param>
+                    <param name="label">31322</param>
+                    <param name="icon">clock</param>
+                </include>
+                <include content="DialogInfo_PersonDetail">
+                    <param name="property">gender</param>
+                    <param name="label">39025</param>
+                    <param name="icon">venus-mars</param>
+                </include>
+            </control>
+            <control type="grouplist">
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <left>480</left>
+                <height>320</height>
+                <include content="DialogInfo_PersonDetail">
+                    <param name="property">department</param>
+                    <param name="label">31937</param>
+                    <param name="icon">briefcase</param>
+                </include>
+                <include content="DialogInfo_PersonDetail">
+                    <param name="property">born</param>
+                    <param name="label">21893</param>
+                    <param name="icon">location-dot</param>
+                </include>
+                <include content="DialogInfo_PersonDetail">
+                    <param name="property">numitems.tmdb.movies.cast</param>
+                    <param name="label">31938</param>
+                    <param name="icon">film</param>
+                </include>
+                <include content="DialogInfo_PersonDetail">
+                    <param name="property">numitems.tmdb.tvshows.cast</param>
+                    <param name="label">31939</param>
+                    <param name="icon">tv</param>
+                </include>
+            </control>
+        </control>
     </include>
 
     <!-- Additional Video Info Details not included in info line such as Director and Genres -->
