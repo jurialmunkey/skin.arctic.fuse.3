@@ -143,7 +143,6 @@
     </include>
 
     <include name="DialogWeather_Current_Fanart_HighLow">
-        <param name="fanartcode">$INFO[Weather.FanartCode]</param>
         <param name="diffuse">diffuse/landscape_w480_h270.png</param>
         <param name="day">Day0</param>
         <definition>
@@ -153,11 +152,10 @@
                 <height>280</height>
                 <width>480</width>
                 <include content="Part_Box">
-                    <include content="Weather_Card_Artwork">
+                    <include content="Weather_Card_Landscape_Artwork">
                         <param name="fanartcode">$INFO[Window(weather).Property($PARAM[day].FanartCode)]</param>
-                        <param name="fanartcode_info">Window(weather).Property($PARAM[day].FanartCode)</param>
+                        <param name="path">$VAR[Image_Weather_Fanart_Path]</param>
                         <param name="diffuse">$PARAM[diffuse]</param>
-                        <param name="landscape">true</param>
                     </include>
                     <control type="group">
                         <height>120</height>
@@ -169,15 +167,15 @@
                                 <texture colordiffuse="7f7f7f7f" border="20">common/dialog.png</texture>
                             </control>
                             <control type="image">
-                                <texture colordiffuse="panel_fg_12" border="20">common/dialog.png</texture>
+                                <texture colordiffuse="main_fg_12" border="20">common/dialog.png</texture>
                             </control>
                             <control type="label">
                                 <height>60</height>
                                 <label>$INFO[Window(Weather).Property($PARAM[day].HighTemp),$LOCALIZE[393] ,°]</label>
                                 <align>center</align>
-                                <textcolor>panel_fg_90</textcolor>
+                                <textcolor>main_fg_90</textcolor>
                                 <font>font_mini_bold</font>
-                                <shadowcolor>panel_bg_70</shadowcolor>
+                                <shadowcolor>main_bg_70</shadowcolor>
                             </control>
                             <control type="group">
                                 <height>2</height>
@@ -191,7 +189,7 @@
                                 <control type="image">
                                     <bottom>0</bottom>
                                     <height>1</height>
-                                    <texture colordiffuse="panel_fg_12">common/white.png</texture>
+                                    <texture colordiffuse="main_fg_12">common/white.png</texture>
                                 </control>
                             </control>
                             <control type="label">
@@ -199,9 +197,9 @@
                                 <bottom>0</bottom>
                                 <label>$INFO[Window(Weather).Property($PARAM[day].LowTemp),$LOCALIZE[391] ,°]</label>
                                 <align>center</align>
-                                <textcolor>panel_fg_90</textcolor>
+                                <textcolor>main_fg_90</textcolor>
                                 <font>font_mini_bold</font>
-                                <shadowcolor>panel_bg_70</shadowcolor>
+                                <shadowcolor>main_bg_70</shadowcolor>
                             </control>
                         </include>
                     </control>
@@ -720,42 +718,8 @@
             <height>760</height>
             <control type="group">
                 <include>Size_Grouplist_Pad</include>
-                <include content="Part_Box">
-                    <control type="image">
-                        <aspectratio scalediffuse="false">scale</aspectratio>
-                        <texture background="true" diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/backgrounds/$INFO[Window(weather).Property(Radar)]/legend.png</texture>
-                    </control>
-                    <control type="image">
-                        <aspectratio scalediffuse="false">scale</aspectratio>
-                        <texture background="true" diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/backgrounds/$INFO[Window(weather).Property(Radar)]/background.png</texture>
-                    </control>
-                    <control type="image">
-                        <aspectratio scalediffuse="false">scale</aspectratio>
-                        <texture background="true" diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/backgrounds/$INFO[Window(weather).Property(Radar)]/topography.png</texture>
-                    </control>
-                    <control type="image">
-                        <aspectratio scalediffuse="false">scale</aspectratio>
-                        <texture background="true" diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/backgrounds/$INFO[Window(weather).Property(Radar)]/catchments.png</texture>
-                    </control>
-                    <control type="image">
-                        <aspectratio scalediffuse="false">scale</aspectratio>
-                        <texture background="true" diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/backgrounds/$INFO[Window(weather).Property(Radar)]/range.png</texture>
-                    </control>
-                    <control type="image">
-                        <aspectratio scalediffuse="false">scale</aspectratio>
-                        <texture background="true" diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/backgrounds/$INFO[Window(weather).Property(Radar)]/locations.png</texture>
-                    </control>
-                    <control type="multiimage">
-                        <description>Radar Loop</description>
-                        <aspectratio scalediffuse="false">scale</aspectratio>
-                        <imagepath diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/loop/$INFO[Window(weather).Property(Radar)]/</imagepath>
-                        <timeperimage>300</timeperimage>
-                        <pauseatend>800</pauseatend>
-                        <fadetime>0</fadetime>
-                        <randomize>false</randomize>
-                        <loop>yes</loop>
-                    </control>
-                </include>
+                <include>Part_Box</include>
+                <include>Weather_Radar_Layers</include>
                 <include>DialogWeather_Radar_Footer</include>
             </control>
         </control>
@@ -839,7 +803,7 @@
             </include>
 
             <control type="image">
-                <texture colordiffuse="panel_fg_70" border="20" flipy="true">common/dialog_overlay_v.png</texture>
+                <texture colordiffuse="main_fg_70" border="20" flipy="true">common/dialog_overlay_v.png</texture>
                 <height>60</height>
             </control>
             <control type="group">
@@ -849,16 +813,16 @@
                 <control type="label">
                     <height>20</height>
                     <font>font_mini_bold</font>
-                    <textcolor>panel_bg_70</textcolor>
-                    <shadowcolor>panel_fg_70</shadowcolor>
+                    <textcolor>main_bg_70</textcolor>
+                    <shadowcolor>main_fg_70</shadowcolor>
                     <label fallback="$LOCALIZE[1446]">$INFO[Container(9305$PARAM[mapid]).ListItem.Label]</label>
                     <align>left</align>
                 </control>
                 <control type="label">
                     <height>20</height>
                     <font>font_debug</font>
-                    <textcolor>panel_bg_70</textcolor>
-                    <shadowcolor>panel_fg_70</shadowcolor>
+                    <textcolor>main_bg_70</textcolor>
+                    <shadowcolor>main_fg_70</shadowcolor>
                     <label fallback="$LOCALIZE[1446]">$INFO[Container(9305$PARAM[mapid]).ListItem.Label2]</label>
                     <align>right</align>
                 </control>
@@ -875,7 +839,7 @@
         <param name="label_06">$INFO[Window(weather).Property(Current.RainSince9),$LOCALIZE[31472]: ,mm]</param>
         <definition>
             <control type="image">
-                <texture colordiffuse="panel_fg_70" border="20">common/dialog_overlay_v.png</texture>
+                <texture colordiffuse="main_fg_70" border="20">common/dialog_overlay_v.png</texture>
                 <height>130</height>
                 <bottom>0</bottom>
             </control>
@@ -889,22 +853,22 @@
                 <control type="textbox">
                     <height>auto</height>
                     <font>font_tiny</font>
-                    <textcolor>panel_bg_70</textcolor>
-                    <shadowcolor>panel_fg_70</shadowcolor>
+                    <textcolor>main_bg_70</textcolor>
+                    <shadowcolor>main_fg_70</shadowcolor>
                     <label>$PARAM[label_01]</label>
                 </control>
                 <control type="textbox">
                     <height>auto</height>
                     <font>font_tiny</font>
-                    <textcolor>panel_bg_70</textcolor>
-                    <shadowcolor>panel_fg_70</shadowcolor>
+                    <textcolor>main_bg_70</textcolor>
+                    <shadowcolor>main_fg_70</shadowcolor>
                     <label>$PARAM[label_02]</label>
                 </control>
                 <control type="textbox">
                     <height>auto</height>
                     <font>font_tiny</font>
-                    <textcolor>panel_bg_70</textcolor>
-                    <shadowcolor>panel_fg_70</shadowcolor>
+                    <textcolor>main_bg_70</textcolor>
+                    <shadowcolor>main_fg_70</shadowcolor>
                     <label>$PARAM[label_03]</label>
                 </control>
             </control>
@@ -918,24 +882,24 @@
                     <align>right</align>
                     <height>auto</height>
                     <font>font_tiny</font>
-                    <textcolor>panel_bg_70</textcolor>
-                    <shadowcolor>panel_fg_70</shadowcolor>
+                    <textcolor>main_bg_70</textcolor>
+                    <shadowcolor>main_fg_70</shadowcolor>
                     <label>$PARAM[label_04]</label>
                 </control>
                 <control type="textbox">
                     <align>right</align>
                     <height>auto</height>
                     <font>font_tiny</font>
-                    <textcolor>panel_bg_70</textcolor>
-                    <shadowcolor>panel_fg_70</shadowcolor>
+                    <textcolor>main_bg_70</textcolor>
+                    <shadowcolor>main_fg_70</shadowcolor>
                     <label>$PARAM[label_05]</label>
                 </control>
                 <control type="textbox">
                     <align>right</align>
                     <height>auto</height>
                     <font>font_tiny</font>
-                    <textcolor>panel_bg_70</textcolor>
-                    <shadowcolor>panel_fg_70</shadowcolor>
+                    <textcolor>main_bg_70</textcolor>
+                    <shadowcolor>main_fg_70</shadowcolor>
                     <label>$PARAM[label_06]</label>
                 </control>
             </control>

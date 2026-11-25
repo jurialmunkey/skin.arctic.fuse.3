@@ -177,7 +177,7 @@
             <width>1000</width>
             <right>-160</right>
             <aspectratio aligny="bottom" align="right">keep</aspectratio>
-            <texture colordiffuse="panel_fg_12" flipx="true">$VAR[Image_SettingsBackground]</texture>
+            <texture colordiffuse="main_fg_12" flipx="true">$VAR[Image_SettingsBackground]</texture>
         </control> -->
         <control type="image">
             <texture border="20" colordiffuse="main_fg_12">common/dialog.png</texture>
@@ -311,6 +311,8 @@
     <include name="Settings_Button">
         <param name="control">button</param>
         <param name="dialog">false</param>
+        <param name="fg">dialog_fg</param>
+        <param name="fill">dialog_fg_06</param>
         <param name="window" />
         <param name="reload">false</param>
         <param name="help" />
@@ -323,7 +325,10 @@
                 <textoffsetx>40</textoffsetx>
                 <texturenofocus />
                 <alttexturenofocus />
-                <include condition="$PARAM[dialog]">defs_dialog_$PARAM[control]</include>
+                <include content="defs_dialog_$PARAM[control]" condition="$PARAM[dialog]">
+                    <param name="fg">$PARAM[fg]</param>
+                    <param name="fill">$PARAM[fill]</param>
+                </include>
                 <include content="Settings_Button_$PARAM[window]">
                     <param name="id">$PARAM[id]</param>
                     <param name="baseid">$PARAM[baseid]</param>
@@ -418,11 +423,12 @@
     <include name="Settings_Label">
         <param name="control">label</param>
         <param name="dialog">false</param>
+        <param name="fg">dialog_fg</param>
         <param name="window" />
         <definition>
             <control type="$PARAM[control]" id="$PARAM[baseid]$PARAM[id]">
                 <include content="Object_TextColor" condition="$PARAM[dialog]">
-                    <param name="textcolor">dialog_fg_30</param>
+                    <param name="textcolor">$PARAM[fg]_30</param>
                 </include>
                 <nested />
                 <align>left</align>
@@ -570,6 +576,7 @@
                 <param name="id">$PARAM[id]</param>
                 <param name="itemlayout_include">Layout_Poster</param>
                 <param name="diffuse">diffuse/poster_w108_h160.png</param>
+                <param name="generic_size">standard</param>
                 <param name="detailed">false</param>
                 <param name="indicator">false</param>
                 <param name="item_w">108</param>

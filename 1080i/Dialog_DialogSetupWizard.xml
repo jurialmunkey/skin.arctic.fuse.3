@@ -310,6 +310,7 @@
         <param name="selected">false</param>
         <param name="labels_h">80</param>
         <param name="thumb_bottom">100</param>
+        <param name="thumb_pad">20</param>
         <definition>
             <control type="group">
                 <right>20</right>
@@ -322,7 +323,7 @@
                     <bottom>$PARAM[thumb_bottom]</bottom>
                     <control type="group">
                         <include content="Dimension_Padding">
-                            <param name="pad">20</param>
+                            <param name="pad">$PARAM[thumb_pad]</param>
                         </include>
                         <include content="$PARAM[thumb]">
                             <param name="selected">$PARAM[selected]</param>
@@ -359,34 +360,56 @@
         </definition>
     </include>
 
-    <!-- Wireframe block. Position and size are percentages of the thumbnail, so drawings scale with the card. -->
-    <!-- Opaque blocks (on the focused card) sit on a light backing so the card highlight doesn't show through them -->
+    <!-- Opaque shapes sit on a light backing so the card highlight doesn't show through them -->
+    <include name="DialogSetupWizard_Shape">
+        <param name="colour">dialog_fg_12</param>
+        <param name="texture">common/widget_text.png</param>
+        <param name="border">12</param>
+        <param name="aspectratio">stretch</param>
+        <param name="opaque">false</param>
+        <definition>
+            <control type="group">
+                <nested />
+                <include content="Wireframe_Box_Image" condition="$PARAM[opaque]">
+                    <param name="fill">dialog_bg_100</param>
+                    <param name="texture">$PARAM[texture]</param>
+                    <param name="border">$PARAM[border]</param>
+                    <aspectratio>$PARAM[aspectratio]</aspectratio>
+                </include>
+                <include content="Wireframe_Box_Image" condition="$PARAM[opaque]">
+                    <param name="fill">dialog_fg_50</param>
+                    <param name="texture">$PARAM[texture]</param>
+                    <param name="border">$PARAM[border]</param>
+                    <aspectratio>$PARAM[aspectratio]</aspectratio>
+                </include>
+                <include content="Wireframe_Box_Image">
+                    <param name="fill">$PARAM[colour]</param>
+                    <param name="texture">$PARAM[texture]</param>
+                    <param name="border">$PARAM[border]</param>
+                    <aspectratio>$PARAM[aspectratio]</aspectratio>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Position and size are percentages of the thumbnail, so the wizard drawings scale with the card -->
     <include name="DialogSetupWizard_Block">
         <param name="colour">dialog_fg_12</param>
         <param name="texture">common/white.png</param>
         <param name="aspectratio">stretch</param>
         <param name="opaque">false</param>
         <definition>
-            <control type="group">
+            <include content="DialogSetupWizard_Shape">
+                <param name="colour">$PARAM[colour]</param>
+                <param name="texture">$PARAM[texture]</param>
+                <param name="border">0</param>
+                <param name="aspectratio">$PARAM[aspectratio]</param>
+                <param name="opaque">$PARAM[opaque]</param>
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
                 <width>$PARAM[width]</width>
                 <height>$PARAM[height]</height>
-                <include content="Object_Control" condition="$PARAM[opaque]">
-                    <param name="control">image</param>
-                    <aspectratio>$PARAM[aspectratio]</aspectratio>
-                    <texture colordiffuse="dialog_bg_100">$PARAM[texture]</texture>
-                </include>
-                <include content="Object_Control" condition="$PARAM[opaque]">
-                    <param name="control">image</param>
-                    <aspectratio>$PARAM[aspectratio]</aspectratio>
-                    <texture colordiffuse="dialog_fg_50">$PARAM[texture]</texture>
-                </include>
-                <control type="image">
-                    <aspectratio>$PARAM[aspectratio]</aspectratio>
-                    <texture colordiffuse="$PARAM[colour]">$PARAM[texture]</texture>
-                </control>
-            </control>
+            </include>
         </definition>
     </include>
 
@@ -754,6 +777,11 @@
                 <param name="mode">Wall</param>
                 <param name="label">$LOCALIZE[31008]</param>
                 <param name="label2">$LOCALIZE[31806]</param>
+            </include>
+            <include content="DialogSetupWizard_Widget_Mode">
+                <param name="mode">Simple</param>
+                <param name="label">$LOCALIZE[31438]</param>
+                <param name="label2">$LOCALIZE[31904]</param>
             </include>
         </content>
     </include>

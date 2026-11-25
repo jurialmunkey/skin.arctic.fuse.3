@@ -1,0 +1,74 @@
+{
+    "infolabels": {
+        "source": "$INFO[Control.GetLabel(8053)]",
+        "plotted": "$INFO[Window(weather).Property(Weather.Trend.Radar.Source)]",
+        "today": "$INFO[Window(weather).Property(Day0.OutlookLong)]",
+        "warnings_raw": "$INFO[Window(weather).Property(Current.WarningsText)]"
+    },
+    "operations": [
+        {
+            "regex": {
+                "forecast_raw": {"input": "{today}", "regex": "\\s*(?:Sun protection is recommended|\\[B\\]Major Warnings|\\(Current weather observations)[\\s\\S]*$", "value": ""},
+                "sun_raw": {"input": "{today}", "regex": "^[\\s\\S]*?(Sun protection is recommended from [^\\n]*)[\\s\\S]*$|^[\\s\\S]+$", "value": "\\g<1>"},
+                "warnings_block": {"input": "{warnings_raw}", "regex": "^[\\s\\S]*?\\[B\\]Major Warnings\\[/B\\][^\\n]*\\n([\\s\\S]*?)\\s*\\(Current weather observations[\\s\\S]*$|^[\\s\\S]+$", "value": "\\g<1>"}
+            }
+        },
+        {
+            "regex": {
+                "warnings_lines": {"input": "{warnings_block}", "regex": "(?m)^-\\s*", "value": ""}
+            }
+        },
+        {
+            "regex": {
+                "warnings_joined": {"input": "{warnings_lines}", "regex": "\\s*\\n\\s*", "value": "  ·  "}
+            }
+        },
+        {
+            "regex": {
+                "forecast_flat": {"input": "{forecast_raw}", "regex": "\\s+", "value": " "},
+                "sun_flat": {"input": "{sun_raw}", "regex": "\\s+", "value": " "}
+            }
+        },
+        {
+            "regex": {
+                "forecast": {"input": "{forecast_flat}", "regex": "[\"\\\\]", "value": ""},
+                "sun": {"input": "{sun_flat}", "regex": "[\"\\\\]", "value": ""},
+                "warnings": {"input": "{warnings_joined}", "regex": "[\"\\\\]", "value": ""}
+            }
+        },
+        {
+            "regex": {
+                "has_forecast": {"input": "{forecast}", "regex": "^[\\s\\S]+$", "value": "1"},
+                "has_sun": {"input": "{sun}", "regex": "^[\\s\\S]+$", "value": "1"},
+                "has_warnings": {"input": "{warnings}", "regex": "^[\\s\\S]+$", "value": "1"}
+            }
+        }
+    ],
+    "actions": [
+        {
+            "rules": [
+                "Window.IsActive(weather)",
+                "Weather.IsFetched",
+                "String.IsEqual(Weather.Plugin,weather.ozweather)",
+                "{source}!=",
+                "{source}!={plotted}"
+            ],
+            "value": [
+                "ClearProperty(Weather.Trend.Radar.Source,weather)",
+                [
+                    {"rules": ["{has_forecast}=="], "value": "ClearProperty(Weather.Trend.Radar.Forecast,weather)"},
+                    "SetProperty(Weather.Trend.Radar.Forecast,\"{forecast}\",weather)"
+                ],
+                [
+                    {"rules": ["{has_sun}=="], "value": "ClearProperty(Weather.Trend.Radar.Sun,weather)"},
+                    "SetProperty(Weather.Trend.Radar.Sun,\"{sun}\",weather)"
+                ],
+                [
+                    {"rules": ["{has_warnings}=="], "value": "ClearProperty(Weather.Trend.Radar.Warnings,weather)"},
+                    "SetProperty(Weather.Trend.Radar.Warnings,\"{warnings}\",weather)"
+                ],
+                "SetProperty(Weather.Trend.Radar.Source,\"{source}\",weather)"
+            ]
+        }
+    ]
+}

@@ -10,6 +10,10 @@
         <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.Home.Icon))">$INFO[Skin.String(HomeSwitcher.Home.Icon)]</value>
         <value>special://skin/extras/icons/home.png</value>
     </variable>
+    <variable name="Home_Icon_power">
+        <value condition="!String.IsEmpty(Skin.String(HomeSwitcher.Power.Icon))">$INFO[Skin.String(HomeSwitcher.Power.Icon)]</value>
+        <value>special://skin/extras/icons/power.png</value>
+    </variable>
     <!-- Home is fixed in the menu; hub labels, icons and actions are generated from the hubs menu (home_hubs_variables.xml) -->
     <variable name="Hub_Label_home">
         <value>$INFO[Skin.String(HomeSwitcher.Home.Name)]</value>
@@ -212,8 +216,13 @@
         <animation effect="fade" end="0" start="100" time="200" tween="cubic" easing="out">Hidden</animation>
     </include>
     <include name="Home_Slide_Animation">
-        <animation effect="slide" start="0,-200" end="0" time="400" tween="cubic" easing="out" reversible="false" condition="$EXP[Exp_Hubs_SlideInfo]">Conditional</animation>
-        <animation effect="slide" end="0,-200" start="0" delay="100" time="400" tween="cubic" easing="out" reversible="false" condition="!$EXP[Exp_Hubs_SlideInfo]">Conditional</animation>
+        <param name="start">0,-200</param>
+        <param name="end">0</param>
+        <param name="condition">$EXP[Exp_Hubs_SlideInfo]</param>
+        <definition>
+            <animation effect="slide" start="$PARAM[start]" end="$PARAM[end]" time="400" tween="cubic" easing="out" reversible="false" condition="$PARAM[condition]">Conditional</animation>
+            <animation effect="slide" start="$PARAM[end]" end="$PARAM[start]" delay="100" time="400" tween="cubic" easing="out" reversible="false" condition="![$PARAM[condition]]">Conditional</animation>
+        </definition>
     </include>
     <include name="Home_Info_Animation">
         <animation effect="fade" start="0" end="100" time="400" delay="200" tween="cubic" easing="in">Visible</animation>
@@ -239,7 +248,7 @@
             <include content="Animation_Fade_Out">
                 <param name="type">Hidden</param>
             </include>
-            <texture colordiffuse="shadow_back">common/white.png</texture>
+            <texture colordiffuse="shadow_hard">common/white.png</texture>
         </control>
         <control type="group">
             <visible>!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))</visible>
@@ -294,7 +303,7 @@
             <include content="Animation_Fade_Out">
                 <param name="type">Hidden</param>
             </include>
-            <texture colordiffuse="shadow_back">common/white.png</texture>
+            <texture colordiffuse="shadow_hard">common/white.png</texture>
         </control>
         <control type="group">
             <animation type="Conditional" reversible="false" condition="!String.IsEmpty(Window(Home).Property(HomeSwitcher.IsVisible))">
@@ -323,6 +332,11 @@
                     <include content="skinvariables-hubs-all">
                         <param name="include">Home_Object_VertIcon</param>
                     </include>
+                    <include content="Home_Object_VertIcon" condition="$EXP[Exp_Hubs_Power_IsEnabled]">
+                        <param name="icon">$VAR[Home_Icon_power]</param>
+                        <param name="window">1170</param>
+                        <param name="is_power">true</param>
+                    </include>
                 </control>
             </control>
         </control>
@@ -330,13 +344,14 @@
 
     <include name="Home_Object_VertIcon">
         <param name="visible">True</param>
+        <param name="is_power">false</param>
         <definition>
             <control type="group">
                 <visible>$PARAM[visible]</visible>
                 <height>80</height>
                 <width>80</width>
                 <control type="group">
-                    <visible>Window.IsVisible($PARAM[window])</visible>
+                    <visible>Window.IsVisible($PARAM[window]) + [$PARAM[is_power] | !Window.IsVisible(1170)]</visible>
                     <control type="image">
                         <include>Texture_Menu_Highlight_H</include>
                     </control>
@@ -346,7 +361,7 @@
                     </control>
                 </control>
                 <control type="group">
-                    <visible>!Window.IsVisible($PARAM[window])</visible>
+                    <visible>!Window.IsVisible($PARAM[window]) | [!$PARAM[is_power] + Window.IsVisible(1170)]</visible>
                     <control type="image">
                         <include>Home_Grouplist_Icon_Definition</include>
                         <texture background="true" colordiffuse="main_fg_30">$PARAM[icon]</texture>
@@ -373,7 +388,7 @@
     </include>
 
     <include name="Home_Settings_Button">
-        <param name="icon">special://skin/extras/icons/settings.png</param>
+        <param name="icon">$VAR[Home_Icon_power]</param>
         <param name="window">1170</param>
         <param name="id">3170</param>
         <param name="visible">true</param>

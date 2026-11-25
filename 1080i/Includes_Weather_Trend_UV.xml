@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <expression name="Exp_Weather_Trend_Has_UV">[Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather) + String.IsEqual(Control.GetLabel(8052),Window(weather).Property(Weather.Trend.UV.Source)) + !String.IsEmpty(Window(weather).Property(Weather.Trend.UV.First))]</expression>
+    <expression name="Exp_Weather_Trend_UV_Page">[$EXP[Exp_Weather_Trend_Has_UV] + String.IsEqual(Window(weather).Property(Weather.Trend.Page),UV)]</expression>
+
+    <include name="Weather_Trend_UV_Source">
+        <control type="label" id="8052">
+            <include>Object_Hidden_Item_Definition</include>
+            <visible>false</visible>
+            <label>uv-scale-12:$INFO[Weather.Plugin]:$INFO[Window(weather).Property(Daily.1.UVIndex)]:$INFO[Window(weather).Property(Daily.2.UVIndex)]:$INFO[Window(weather).Property(Daily.3.UVIndex)]:$INFO[Window(weather).Property(Daily.4.UVIndex)]</label>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_UV_Forecast">
+        <control type="group">
+            <left>60</left>
+            <right>60</right>
+            <top>500</top>
+            <visible>$EXP[Exp_Weather_Trend_UV_Page]</visible>
+            <include>Weather_Trend_UV_Plot</include>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_UV_Plot">
+        <control type="group">
+            <top>84</top>
+            <height>314</height>
+            <left>180</left>
+            <include content="Weather_Trend_UV_Title">
+                <param name="left">-160</param>
+                <param name="width">160</param>
+                <param name="align">left</param>
+                <param name="label">$LOCALIZE[403]</param>
+            </include>
+            <!-- Draw the fills first so their edges never cover the markers. -->
+            <include content="Weather_Trend_UV_Cap">
+                <param name="day">0</param>
+                <param name="left">-160</param>
+                <param name="width">160</param>
+                <param name="prefix">log-</param>
+                <param name="flipx">true</param>
+            </include>
+            <include content="Weather_Trend_UV_Cap">
+                <param name="day">3</param>
+                <param name="left">1080</param>
+                <param name="width">160</param>
+                <param name="end">$INFO[Window(weather).Property(Weather.Trend.Day3.UV.Position)]</param>
+            </include>
+            <include content="Weather_Trend_UV_Cap">
+                <param name="day">3</param>
+                <param name="left">1240</param>
+                <param name="width">160</param>
+                <param name="prefix">log-</param>
+            </include>
+            <include content="Weather_Trend_UV_Fill">
+                <param name="day">0</param>
+                <param name="next">1</param>
+                <param name="left">0</param>
+            </include>
+            <include content="Weather_Trend_UV_Fill">
+                <param name="day">1</param>
+                <param name="next">2</param>
+                <param name="left">360</param>
+            </include>
+            <include content="Weather_Trend_UV_Fill">
+                <param name="day">2</param>
+                <param name="next">3</param>
+                <param name="left">720</param>
+            </include>
+            <include>Weather_Trend_UV_Levels</include>
+            <include content="Weather_Trend_UV_Day">
+                <param name="day">0</param>
+                <param name="left">0</param>
+                <param name="title" />
+            </include>
+            <include content="Weather_Trend_UV_Day">
+                <param name="day">1</param>
+                <param name="left">360</param>
+                <param name="title">$INFO[Window(weather).Property(Day1.Title)]</param>
+            </include>
+            <include content="Weather_Trend_UV_Day">
+                <param name="day">2</param>
+                <param name="left">720</param>
+                <param name="title">$INFO[Window(weather).Property(Day2.Title)]</param>
+            </include>
+            <include content="Weather_Trend_UV_Day">
+                <param name="day">3</param>
+                <param name="left">1080</param>
+                <param name="title">$INFO[Window(weather).Property(Day3.Title)]</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_UV_Title">
+        <param name="top">-84</param>
+        <param name="height">40</param>
+        <param name="font">font_main_bold</param>
+        <param name="color">main_fg_100</param>
+        <definition>
+            <control type="label">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <align>$PARAM[align]</align>
+                <aligny>center</aligny>
+                <font>$PARAM[font]</font>
+                <textcolor>$PARAM[color]</textcolor>
+                <shadowcolor>shadow_hard</shadowcolor>
+                <label>$PARAM[label]</label>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_UV_Levels">
+        <include content="Weather_Trend_UV_Level">
+            <param name="top">1.5</param>
+            <param name="color">7b439c</param>
+            <param name="label">$LOCALIZE[31889]</param>
+        </include>
+        <include content="Weather_Trend_UV_Level">
+            <param name="top">66.75</param>
+            <param name="color">ee154a</param>
+            <param name="label">$LOCALIZE[31887]</param>
+        </include>
+        <include content="Weather_Trend_UV_Level">
+            <param name="top">132</param>
+            <param name="color">f66b34</param>
+            <param name="label">$LOCALIZE[393]</param>
+        </include>
+        <include content="Weather_Trend_UV_Level">
+            <param name="top">197.25</param>
+            <param name="color">fcbd22</param>
+            <param name="label">$LOCALIZE[31888]</param>
+        </include>
+        <include content="Weather_Trend_UV_Level">
+            <param name="top">262.5</param>
+            <param name="color">67be4d</param>
+            <param name="label">$LOCALIZE[391]</param>
+        </include>
+    </include>
+
+    <include name="Weather_Trend_UV_Level">
+        <definition>
+            <control type="group">
+                <left>1440</left>
+                <top>$PARAM[top]</top>
+                <include content="Weather_Trend_UV_Title">
+                    <param name="left">20</param>
+                    <param name="top">-13</param>
+                    <param name="width">140</param>
+                    <param name="height">26</param>
+                    <param name="align">left</param>
+                    <param name="font">font_hint_bold</param>
+                    <param name="color">ff$PARAM[color]</param>
+                    <param name="label">$PARAM[label]</param>
+                </include>
+                <include content="Weather_Trend_Dot">
+                    <param name="color">ff$PARAM[color]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_UV_Day">
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <include content="Weather_Trend_UV_Title">
+                    <param name="left">-160</param>
+                    <param name="width">320</param>
+                    <param name="align">center</param>
+                    <param name="label">$PARAM[title]</param>
+                </include>
+                <include content="Weather_Trend_Point">
+                    <param name="day">Day$PARAM[day]</param>
+                    <param name="kind">UV</param>
+                    <param name="left">0</param>
+                    <param name="top">1.5</param>
+                    <param name="plot_height">314</param>
+                    <param name="position_include">Weather_Trend_UV_Position</param>
+                    <param name="label_top">-42</param>
+                    <param name="label">$INFO[Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Label)]</param>
+                    <param name="visible">!String.IsEmpty(Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Label))</param>
+                    <param name="color">main_fg_100</param>
+                    <param name="dot_color">$INFO[Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Color)]</param>
+                    <param name="connect">false</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Caps run from a dot to the end position: UV 0 by default, or the dot's own level to stay flat. -->
+    <include name="Weather_Trend_UV_Cap">
+        <param name="flipx">false</param>
+        <param name="end">12</param>
+        <param name="width">360</param>
+        <param name="prefix" />
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <include content="Weather_Trend_Segment">
+                    <param name="top">0</param>
+                    <param name="width">$PARAM[width]</param>
+                    <param name="height">317</param>
+                    <param name="color">ffffffff</param>
+                    <param name="flipx">$PARAM[flipx]</param>
+                    <param name="visible">!String.IsEmpty(Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Label))</param>
+                    <param name="texture">weather/trend/uv/$PARAM[prefix]$INFO[Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Position)]-$PARAM[end].png</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_UV_Fill">
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <visible>!String.IsEmpty(Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Label)) + !String.IsEmpty(Window(weather).Property(Weather.Trend.Day$PARAM[next].UV.Label))</visible>
+                <!-- The 2px translucent edge is baked into the fill to keep them aligned. -->
+                <include content="Weather_Trend_Segment">
+                    <param name="top">0</param>
+                    <param name="width">360</param>
+                    <param name="height">317</param>
+                    <param name="color">ffffffff</param>
+                    <param name="visible">!Integer.IsLess(Window(weather).Property(Weather.Trend.Day$PARAM[next].UV.Position),Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Position))</param>
+                    <param name="texture">weather/trend/uv/$INFO[Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Position)]-$INFO[Window(weather).Property(Weather.Trend.Day$PARAM[next].UV.Position)].png</param>
+                </include>
+                <include content="Weather_Trend_Segment">
+                    <param name="top">0</param>
+                    <param name="width">360</param>
+                    <param name="height">317</param>
+                    <param name="color">ffffffff</param>
+                    <param name="flipx">true</param>
+                    <param name="visible">Integer.IsLess(Window(weather).Property(Weather.Trend.Day$PARAM[next].UV.Position),Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Position))</param>
+                    <param name="texture">weather/trend/uv/$INFO[Window(weather).Property(Weather.Trend.Day$PARAM[next].UV.Position)]-$INFO[Window(weather).Property(Weather.Trend.Day$PARAM[day].UV.Position)].png</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Each step is one UV index point over a fixed 0–12 scale. -->
+    <include name="Weather_Trend_UV_Position">
+        <definition>
+            <animation effect="slide" end="0,26.166667" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],1)">Conditional</animation>
+            <animation effect="slide" end="0,52.333333" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],2)">Conditional</animation>
+            <animation effect="slide" end="0,78.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],3)">Conditional</animation>
+            <animation effect="slide" end="0,104.666667" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],4)">Conditional</animation>
+            <animation effect="slide" end="0,130.833333" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],5)">Conditional</animation>
+            <animation effect="slide" end="0,157" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],6)">Conditional</animation>
+            <animation effect="slide" end="0,183.166667" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],7)">Conditional</animation>
+            <animation effect="slide" end="0,209.333333" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],8)">Conditional</animation>
+            <animation effect="slide" end="0,235.5" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],9)">Conditional</animation>
+            <animation effect="slide" end="0,261.666667" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],10)">Conditional</animation>
+            <animation effect="slide" end="0,287.833333" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],11)">Conditional</animation>
+            <animation effect="slide" end="0,314" time="0" reversible="false" condition="Integer.IsEqual($PARAM[position],12)">Conditional</animation>
+        </definition>
+    </include>
+</includes>

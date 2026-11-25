@@ -36,22 +36,25 @@
         </definition>
     </include>
 
-    <!-- Check badge for a static item whose label matches its "current" property -->
+    <!-- Check badge for a static item whose label matches its "current" property, or for the item the current condition picks -->
     <include name="Part_List_Current_Check">
-        <control type="group">
-            <right>10</right>
-            <top>10</top>
-            <width>40</width>
-            <height>40</height>
-            <visible>String.IsEqual(ListItem.Label,ListItem.Property(current))</visible>
-            <control type="image">
-                <texture colordiffuse="$VAR[ColorHighlight]">common/circle.png</texture>
+        <param name="current">String.IsEqual(ListItem.Label,ListItem.Property(current))</param>
+        <definition>
+            <control type="group">
+                <right>10</right>
+                <top>10</top>
+                <width>40</width>
+                <height>40</height>
+                <visible>$PARAM[current]</visible>
+                <control type="image">
+                    <texture colordiffuse="$VAR[ColorHighlight]">common/circle.png</texture>
+                </control>
+                <control type="image">
+                    <bordersize>9</bordersize>
+                    <texture colordiffuse="$VAR[ColorSelected]">indicator/checkmark.png</texture>
+                </control>
             </control>
-            <control type="image">
-                <bordersize>9</bordersize>
-                <texture colordiffuse="$VAR[ColorSelected]">indicator/checkmark.png</texture>
-            </control>
-        </control>
+        </definition>
     </include>
 
     <include name="Part_List_Icon_Padding">
@@ -61,8 +64,10 @@
         <right>40</right>
     </include>
 
+    <!-- diffuse masks the icon (empty for none) -->
     <include name="Part_List_Icon">
         <param name="icon">$INFO[ListItem.Icon]</param>
+        <param name="diffuse">diffuse/square_w120_h120.png</param>
         <param name="is_defaulticon">[String.StartsWith(ListItem.Icon,Default) | String.StartsWith(ListItem.Icon,special://skin/extras/icons/)]</param>
         <param name="colordiffuse">dialog_fg_90</param>
         <param name="selected">false</param>
@@ -73,12 +78,12 @@
                     <include>Part_List_Icon_Padding</include>
                     <control type="image">
                         <aspectratio>keep</aspectratio>
-                        <texture background="true" fallback="$PARAM[fallback]" diffuse="diffuse/square_w120_h120.png">$PARAM[icon]</texture>
+                        <texture background="true" fallback="$PARAM[fallback]" diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>
                         <visible>![$PARAM[is_defaulticon]]</visible>
                     </control>
                     <control type="image">
                         <aspectratio>keep</aspectratio>
-                        <texture background="true" fallback="$PARAM[fallback]" diffuse="diffuse/square_w120_h120.png">$PARAM[icon]</texture>
+                        <texture background="true" fallback="$PARAM[fallback]" diffuse="$PARAM[diffuse]">$PARAM[icon]</texture>
                         <include condition="$PARAM[selected]">Color_SelectedImage</include>
                         <colordiffuse>$PARAM[colordiffuse]</colordiffuse>
                         <visible>$PARAM[is_defaulticon]</visible>
@@ -429,7 +434,7 @@
                 <visible>$PARAM[visible]</visible>
                 <include>Animation_FadeIn</include>
                 <include>Animation_FadeOut</include>
-                <texture colordiffuse="shadow_back">common/white.png</texture>
+                <texture colordiffuse="shadow_hard">common/white.png</texture>
             </control>
         </definition>
     </include>
@@ -480,6 +485,7 @@
         <param name="height">40</param>
         <param name="subline">false</param>
         <param name="scroll">false</param>
+        <param name="line">true</param>
         <definition>
             <control type="group">
                 <height>$PARAM[height]</height>
@@ -487,6 +493,7 @@
                 <left>$PARAM[left]</left>
                 <right>$PARAM[right]</right>
                 <control type="image">
+                    <visible>$PARAM[line]</visible>
                     <centertop>-20</centertop>
                     <height>1</height>
                     <left>20</left>
@@ -600,7 +607,7 @@
         <definition>
             <control type="group">
                 <include content="Part_Box">
-                    <param name="colordiffuse">panel_bg_12</param>
+                    <param name="colordiffuse">shadow_soft</param>
                 </include>
                 <nested />
                 <control type="image">

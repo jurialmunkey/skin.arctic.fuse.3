@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <expression name="DialogSelect_Conditional_Buttons_Expression">[[Control.IsEnabled(5) + Control.IsVisible(5)] | [Control.IsEnabled(8) + Control.IsVisible(8)]]</expression>
+    <expression name="DialogSelect_Conditional_Buttons_Expression">[[Control.IsEnabled(5) + Control.IsVisible(5)] | [Control.IsEnabled(6) + Control.IsVisible(6)] | [Control.IsEnabled(7) + Control.IsVisible(7)] | [Control.IsEnabled(8) + Control.IsVisible(8)]]</expression>
 
     <include name="DialogSelect_Standard">
         <include>Part_Dim_Overlay</include>
@@ -79,6 +79,178 @@
         <include>DialogSelect_ArtworkPreview</include>
     </include>
 
+    <include name="DialogSelect_OSD">
+        <control type="group">
+            <right>view_pad</right>
+            <width>1200</width>
+            <include>Animation_SlideIn_Dialog</include>
+            <control type="group">
+                <include content="OSD_Stream_ListSlide">
+                    <param name="id">3</param>
+                    <param name="condition">Control.IsVisible(3)</param>
+                </include>
+                <include content="OSD_Stream_ListSlide">
+                    <param name="id">6</param>
+                    <param name="condition">Control.IsVisible(6)</param>
+                </include>
+                <include content="DialogSelect_OSD_List">
+                    <param name="id">3</param>
+                    <param name="scrollbar">61</param>
+                    <param name="layout">List_Layout_Dialog_SimpleCheckmark</param>
+                </include>
+                <include content="DialogSelect_OSD_List">
+                    <param name="id">6</param>
+                    <param name="scrollbar">62</param>
+                    <param name="layout">List_Layout_Dialog_DetailedCheckmark</param>
+                    <param name="detailed">true</param>
+                </include>
+                <include>DialogSelect_OSD_Actions</include>
+            </control>
+            <include content="DialogSettings_OSD_Spotlight">
+                <param name="id">1</param>
+            </include>
+        </control>
+        <include>DialogSelect_ArtworkPreview</include>
+    </include>
+
+    <include name="DialogSelect_OSD_List">
+        <param name="detailed">false</param>
+        <definition>
+            <include content="DialogSettings_OSD_Heading">
+                <param name="list">$PARAM[id]</param>
+                <param name="visible">Control.IsVisible($PARAM[id])</param>
+            </include>
+            <include content="List_Dialog">
+                <param name="id">$PARAM[id]</param>
+                <param name="itemlayout_include">$PARAM[layout]</param>
+                <param name="detailed">$PARAM[detailed]</param>
+                <param name="fg">main_fg</param>
+                <right>-40</right>
+                <width>osd_streamrow_w</width>
+                <top>180</top>
+                <height>400</height>
+                <pagecontrol>$PARAM[scrollbar]</pagecontrol>
+                <onright>$PARAM[scrollbar]</onright>
+                <onleft>9000</onleft>
+                <oninfo condition="$PARAM[detailed]">SetFocus(99001)</oninfo>
+            </include>
+            <include content="DialogSettings_OSD_Scrollbar">
+                <param name="id">$PARAM[scrollbar]</param>
+                <top>180</top>
+                <bottom>500</bottom>
+                <centerright>-60</centerright>
+                <visible>Control.IsVisible($PARAM[id])</visible>
+                <onleft>$PARAM[id]</onleft>
+            </include>
+        </definition>
+    </include>
+
+    <include name="DialogSelect_OSD_Actions">
+        <control type="group">
+            <right>780</right>
+            <width>280</width>
+            <top>180</top>
+            <height>400</height>
+            <include content="Dialog_OSD_ActionMenu">
+                <param name="stretch">200</param>
+                <param name="available">$EXP[DialogSelect_Conditional_Buttons_Expression]</param>
+                <onright>3</onright>
+                <include content="DialogSelect_Standard_Items">
+                    <param name="button_include">DialogSelect_OSD_Action</param>
+                </include>
+            </include>
+        </control>
+    </include>
+
+    <include name="Dialog_OSD_ActionMenu">
+        <param name="available">true</param>
+        <definition>
+            <control type="grouplist" id="9000">
+                <width>100%</width>
+                <height>100%</height>
+                <orientation>vertical</orientation>
+                <visible allowhiddenfocus="true">ControlGroup(9000).HasFocus()</visible>
+                <animation effect="fade" start="0" end="100" delay="240" time="1" reversible="false">Visible</animation>
+                <nested />
+            </control>
+            <include content="Dialog_OSD_MenuIcon">
+                <param name="stretch">$PARAM[stretch]</param>
+                <param name="available">$PARAM[available]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Dialog_OSD_MenuIcon">
+        <definition>
+            <control type="group">
+                <right>0</right>
+                <width>80</width>
+                <height>80</height>
+                <visible>$PARAM[available]</visible>
+                <animation effect="fade" start="100" end="0" delay="240" time="1" condition="ControlGroup(9000).HasFocus()" reversible="false">Conditional</animation>
+                <include content="Dialog_OSD_FocusSegment">
+                    <param name="left">0</param>
+                    <param name="width">40</param>
+                    <param name="align">left</param>
+                    <animation effect="slide" start="0,0" end="-$PARAM[stretch],0" delay="0" time="240" tween="cubic" condition="ControlGroup(9000).HasFocus()" reversible="false">Conditional</animation>
+                </include>
+                <!-- A 100 px center strip makes its final zoom percentage equal to the stretch in pixels. -->
+                <include content="Dialog_OSD_FocusSegment">
+                    <param name="left">-60</param>
+                    <param name="width">100</param>
+                    <param name="align">center</param>
+                    <animation effect="zoom" start="0,100" end="$PARAM[stretch],100" center="40,40" delay="0" time="240" tween="cubic" condition="ControlGroup(9000).HasFocus()" reversible="false">Conditional</animation>
+                </include>
+                <include content="Dialog_OSD_FocusSegment">
+                    <param name="left">40</param>
+                    <param name="width">40</param>
+                    <param name="align">right</param>
+                </include>
+                <control type="image">
+                    <right>20</right>
+                    <width>40</width>
+                    <top>20</top>
+                    <height>40</height>
+                    <bordersize>icon_menu_bordersize</bordersize>
+                    <colordiffuse>main_fg_70</colordiffuse>
+                    <texture>special://skin/extras/icons/bars.png</texture>
+                    <visible>!ControlGroup(9000).HasFocus()</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Crop the native focus texture so the two rounded ends keep their shape as the middle expands. -->
+    <include name="Dialog_OSD_FocusSegment">
+        <definition>
+            <control type="image">
+                <left>$PARAM[left]</left>
+                <width>$PARAM[width]</width>
+                <height>80</height>
+                <aspectratio align="$PARAM[align]">scale</aspectratio>
+                <include content="Texture_FocusStyle">
+                    <param name="border">0</param>
+                </include>
+                <visible>ControlGroup(9000).HasFocus()</visible>
+                <nested />
+            </control>
+        </definition>
+    </include>
+
+    <include name="DialogSelect_OSD_Action">
+        <param name="control">button</param>
+        <definition>
+            <include content="Settings_Button">
+                <param name="id">$PARAM[id]</param>
+                <param name="control">$PARAM[control]</param>
+                <param name="dialog">true</param>
+                <param name="fg">main_fg</param>
+                <param name="fill">main_fg_12</param>
+                <nested />
+            </include>
+        </definition>
+    </include>
+
     <include name="DialogSelect_ArtworkPreview">
         <param name="listid">6</param>
         <param name="visible">[Control.HasFocus(99001) | Control.HasFocus(99002) | Control.HasFocus(99003)]</param>
@@ -137,12 +309,33 @@
         </definition>
     </include>
 
+    <include name="DialogSelect_Viewtype_Focus">
+        <control type="grouplist">
+            <orientation>horizontal</orientation>
+            <itemgap>0</itemgap>
+            <control type="group">
+                <width>1000</width>
+            </control>
+            <control type="group">
+                <width>1000</width>
+                <height>580</height>
+                <include content="$PARAM[itemlayout_include]">
+                    <param name="selected">true</param>
+                    <param name="icon">$INFO[Container($PARAM[id]).ListItem.Icon]</param>
+                    <param name="current">$PARAM[current]</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
     <include name="DialogSelect_Viewtype">
         <param name="id">3</param>
         <param name="current">Container(3).ListItem.IsSelected</param>
         <param name="itemlayout_include">Layout_ViewType</param>
+        <param name="itemlayout_preview">Wireframe_Preview</param>
         <param name="windowopen_delay">200</param>
         <param name="categories">false</param>
+        <param name="focus_in_list">false</param>
         <definition>
             <include>Part_Dim_Overlay</include>
             <control type="group">
@@ -184,8 +377,8 @@
                                 <control type="wraplist" id="$PARAM[id]">
                                     <onup condition="$PARAM[categories]">10813</onup>
 
-                                    <animation effect="fade" start="100" end="50" condition="true">Conditional</animation>
-                                    <animation effect="fade" start="100" end="0" condition="!Integer.IsGreater(Container($PARAM[id]).NumItems,1)">Conditional</animation>
+                                    <animation effect="fade" start="100" end="50" condition="![$PARAM[focus_in_list]]">Conditional</animation>
+                                    <animation effect="fade" start="100" end="0" condition="![$PARAM[focus_in_list]] + !Integer.IsGreater(Container($PARAM[id]).NumItems,1)">Conditional</animation>
                                     <!-- Kodi says which way the filters moved to another category -->
                                     <animation type="Conditional" condition="String.IsEqual(Window.Property(categorymove),next)" reversible="false">
                                         <effect type="slide" start="240,0" end="0,0" time="200" tween="cubic" easing="out" />
@@ -201,34 +394,26 @@
                                     <itemlayout width="1000" height="580">
                                         <include content="$PARAM[itemlayout_include]">
                                             <param name="selected">false</param>
+                                            <param name="preview">$PARAM[itemlayout_preview]</param>
                                         </include>
                                     </itemlayout>
 
                                     <focusedlayout width="1000" height="580">
                                         <include content="$PARAM[itemlayout_include]">
-                                            <param name="selected">false</param>
+                                            <param name="selected">$PARAM[focus_in_list]</param>
+                                            <param name="current">$PARAM[current]</param>
+                                            <param name="preview">$PARAM[itemlayout_preview]</param>
                                         </include>
                                     </focusedlayout>
 
                                     <include>$PARAM[include_content]</include>
                                 </control>
 
-                                <control type="grouplist">
-                                    <orientation>horizontal</orientation>
-                                    <itemgap>0</itemgap>
-                                    <control type="group">
-                                        <width>1000</width>
-                                    </control>
-                                    <control type="group">
-                                        <width>1000</width>
-                                        <height>580</height>
-                                        <include content="$PARAM[itemlayout_include]">
-                                            <param name="selected">true</param>
-                                            <param name="icon">$INFO[Container($PARAM[id]).ListItem.Icon]</param>
-                                            <param name="current">$PARAM[current]</param>
-                                        </include>
-                                    </control>
-                                </control>
+                                <include content="DialogSelect_Viewtype_Focus" condition="![$PARAM[focus_in_list]]">
+                                    <param name="id">$PARAM[id]</param>
+                                    <param name="itemlayout_include">$PARAM[itemlayout_include]</param>
+                                    <param name="current">$PARAM[current]</param>
+                                </include>
                             </control>
 
                             <control type="group">
@@ -302,6 +487,138 @@
                             </control>
                         </control>
                     </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Viewtype selector: wireframe cards on the left, the focused viewtype drawn large on the right -->
+    <include name="DialogSelect_Viewtype_Panels">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Dimension_DialogGridMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogGridMenu</param>
+                <param name="topline">false</param>
+            </include>
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+                <include>DialogSelect_Viewtype_Cards</include>
+                <control type="group">
+                    <include>Size_RightGroup_Grid</include>
+                    <include>Part_Panel</include>
+                    <include>DialogSelect_Viewtype_Preview_Head</include>
+                    <include>DialogSelect_Viewtype_Preview</include>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogSelect_Viewtype_Cards">
+        <control type="group">
+            <include>Size_LeftGroup_Grid</include>
+            <control type="group">
+                <include>Size_Group_Head</include>
+                <include content="Part_HeadText">
+                    <param name="id">0</param>
+                    <param name="label">$LOCALIZE[31044]</param>
+                    <param name="right">constant_dialog_pad</param>
+                </include>
+                <include content="Part_ItemLine">
+                    <param name="label">$INFO[Container(3).NumItems,, $LOCALIZE[31808]]</param>
+                </include>
+            </control>
+            <control type="group">
+                <include>Size_Group_Body</include>
+                <!-- One column of three rows: 260x186.667 cards with a 20 gap, focus held on the middle row -->
+                <include content="DialogCustom_Cards_List">
+                    <param name="id">3</param>
+                    <param name="control">fixedlist</param>
+                    <param name="card_w">280</param>
+                    <param name="card_h">206.667</param>
+                    <param name="itemlayout_include">DialogSelect_Viewtype_Card</param>
+                    <include content="Object_FocusPosition">
+                        <param name="focusposition">1</param>
+                    </include>
+                    <include content="Object_Movement">
+                        <param name="movement">1</param>
+                    </include>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <!-- Kodi fills control 1 with the dialog heading, shown as the preview subline -->
+    <include name="DialogSelect_Viewtype_Preview_Head">
+        <control type="group">
+            <include>Size_Group_Head</include>
+            <control type="label" id="1">
+                <visible>false</visible>
+            </control>
+            <include content="Part_HeadText">
+                <param name="id">0</param>
+                <param name="label">$INFO[Container(3).ListItem.Label]</param>
+            </include>
+            <include content="Part_ItemLine">
+                <param name="label">[UPPERCASE]$INFO[Control.GetLabel(1)][/UPPERCASE]</param>
+            </include>
+            <include content="Part_CloseButton">
+                <param name="onleft">3</param>
+                <param name="ondown">3</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- The preview's bottom edge sits where the info text line would be, so the line is left out -->
+    <include name="DialogSelect_Viewtype_Preview">
+        <control type="group">
+            <include>Size_Group_Body</include>
+            <control type="group">
+                <left>40</left>
+                <top>40</top>
+                <width>960</width>
+                <height>540</height>
+                <include content="Wireframe_Preview">
+                    <param name="item">Container(3).ListItem</param>
+                </include>
+            </control>
+            <include content="Part_InfoText">
+                <param name="label">$VAR[Label_Viewtype_Description]</param>
+                <param name="line">false</param>
+                <param name="height">60</param>
+                <param name="centerbottom">50</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- Card: a full width 260x146.25 wireframe with the label floating in the 40 below; the panel sets the cards 20 inside its edges so the selection box isn't cut off -->
+    <include name="DialogSelect_Viewtype_Card">
+        <param name="selected">false</param>
+        <definition>
+            <control type="group">
+                <right>20</right>
+                <bottom>20</bottom>
+                <control type="group">
+                    <height>146.25</height>
+                    <include content="Wireframe_Preview">
+                        <param name="diffuse">diffuse/landscape_w260_h146.png</param>
+                        <param name="size">Quarter</param>
+                    </include>
+                    <include content="Part_List_Current_Check">
+                        <param name="current">ListItem.IsSelected</param>
+                    </include>
+                    <include content="Object_SelectBox" condition="$PARAM[selected]">
+                        <param name="shadow">false</param>
+                    </include>
+                </control>
+                <control type="label">
+                    <top>150</top>
+                    <bottom>0</bottom>
+                    <aligny>center</aligny>
+                    <font>font_hint_bold</font>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
                 </control>
             </control>
         </definition>
@@ -698,44 +1015,47 @@
 
     <!-- Items -->
     <include name="DialogSelect_Standard_Items">
-        <include content="Button_Dialog">
-            <param name="id">9001</param>
-            <param name="groupid">9101</param>
-            <label>$VAR[DialogSelect_SideButtons_Label_5]</label>
-            <param name="icon">$VAR[DialogSelect_SideButtons_Image_5]</param>
-            <visible>Control.IsEnabled(5) + Control.IsVisible(5)</visible>
-            <onclick>SetFocus(5)</onclick>
-            <onclick>Action(Select)</onclick>
-        </include>
+        <param name="button_include">Button_Dialog</param>
+        <definition>
+            <include content="$PARAM[button_include]">
+                <param name="id">9001</param>
+                <param name="groupid">9101</param>
+                <label>$VAR[DialogSelect_SideButtons_Label_5]</label>
+                <param name="icon">$VAR[DialogSelect_SideButtons_Image_5]</param>
+                <visible>Control.IsEnabled(5) + Control.IsVisible(5)</visible>
+                <onclick>SetFocus(5)</onclick>
+                <onclick>Action(Select)</onclick>
+            </include>
 
-        <include content="Button_Dialog">
-            <param name="id">9002</param>
-            <param name="groupid">9102</param>
-            <label>$VAR[DialogSelect_SideButtons_Label_8]</label>
-            <param name="icon">$VAR[DialogSelect_SideButtons_Image_8]</param>
-            <visible>Control.IsEnabled(8) + Control.IsVisible(8)</visible>
-            <onclick>SetFocus(8)</onclick>
-            <onclick>Action(Select)</onclick>
-        </include>
+            <include content="$PARAM[button_include]">
+                <param name="id">9002</param>
+                <param name="groupid">9102</param>
+                <label>$VAR[DialogSelect_SideButtons_Label_8]</label>
+                <param name="icon">$VAR[DialogSelect_SideButtons_Image_8]</param>
+                <visible>Control.IsEnabled(8) + Control.IsVisible(8)</visible>
+                <onclick>SetFocus(8)</onclick>
+                <onclick>Action(Select)</onclick>
+            </include>
 
-        <include content="Button_Dialog">
-            <param name="id">9003</param>
-            <param name="groupid">9103</param>
-            <label>$VAR[DialogSelect_SideButtons_Label_7]</label>
-            <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
-            <visible>Control.IsEnabled(7) + Control.IsVisible(7)</visible>
-            <onclick>SetFocus(7)</onclick>
-            <onclick>Action(Select)</onclick>
-        </include>
+            <include content="$PARAM[button_include]">
+                <param name="id">9003</param>
+                <param name="groupid">9103</param>
+                <label>$VAR[DialogSelect_SideButtons_Label_7]</label>
+                <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+                <visible>Control.IsEnabled(7) + Control.IsVisible(7)</visible>
+                <onclick>SetFocus(7)</onclick>
+                <onclick>Action(Select)</onclick>
+            </include>
 
-        <include content="Button_Dialog">
-            <param name="id">9004</param>
-            <param name="groupid">9104</param>
-            <label>$LOCALIZE[1000]</label>
-            <param name="icon">special://skin/extras/icons/images.png</param>
-            <visible>Control.IsEnabled(6) + Control.IsVisible(6)</visible>
-            <onclick>SetFocus(99001)</onclick>
-        </include>
+            <include content="$PARAM[button_include]">
+                <param name="id">9004</param>
+                <param name="groupid">9104</param>
+                <label>$LOCALIZE[1000]</label>
+                <param name="icon">special://skin/extras/icons/images.png</param>
+                <visible>Control.IsEnabled(6) + Control.IsVisible(6)</visible>
+                <onclick>SetFocus(99001)</onclick>
+            </include>
+        </definition>
     </include>
 
     <include name="DialogSelect_Versions_Items">
@@ -823,13 +1143,14 @@
         </definition>
     </include>
 
-    <!-- Opens the layout select dialog (1125) for a setting prefix, noting its current mode (combined/wall conditions, otherwise Standard) -->
+    <!-- Opens the layout select dialog (1125) for a setting prefix, noting its current mode (combined/wall/simple conditions, otherwise Standard) -->
     <include name="DialogSelect_WidgetMode_Onclick">
         <definition>
             <onclick>SetProperty(Dialog.1125.Value,$PARAM[setting],Home)</onclick>
             <onclick>SetProperty(Dialog.1125.Mode,Standard,Home)</onclick>
             <onclick condition="$PARAM[combined]">SetProperty(Dialog.1125.Mode,Combined,Home)</onclick>
             <onclick condition="$PARAM[wall]">SetProperty(Dialog.1125.Mode,Wall,Home)</onclick>
+            <onclick condition="$PARAM[simple]">SetProperty(Dialog.1125.Mode,Simple,Home)</onclick>
             <onclick>ActivateWindow(1125)</onclick>
         </definition>
     </include>
@@ -838,7 +1159,6 @@
         <content>
             <item>
                 <label>$LOCALIZE[10037]</label>
-                <icon>special://skin/extras/modes/standard.jpg</icon>
                 <property name="mode">Standard</property>
                 <onclick>Close</onclick>
                 <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Standard)</onclick>
@@ -846,7 +1166,6 @@
 
             <item>
                 <label>$LOCALIZE[31845]</label>
-                <icon>special://skin/extras/modes/combined.jpg</icon>
                 <property name="mode">Combined</property>
                 <onclick>Close</onclick>
                 <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Combined)</onclick>
@@ -854,10 +1173,16 @@
 
             <item>
                 <label>$LOCALIZE[31008]</label>
-                <icon>special://skin/extras/modes/wall.jpg</icon>
                 <property name="mode">Wall</property>
                 <onclick>Close</onclick>
                 <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Wall)</onclick>
+            </item>
+
+            <item>
+                <label>$LOCALIZE[31438]</label>
+                <property name="mode">Simple</property>
+                <onclick>Close</onclick>
+                <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1125.Value)].Mode,Simple)</onclick>
             </item>
         </content>
     </include>
@@ -910,41 +1235,59 @@
                 <param name="label">$LOCALIZE[31870]</param>
                 <param name="style">masquerade</param>
             </include>
+            <include content="DialogSelect_BackgroundStyle_Item">
+                <param name="label">$LOCALIZE[31884]</param>
+                <param name="style">anime</param>
+            </include>
         </content>
     </include>
 
 
     <include name="DialogSelect_HubType_Items">
-        <content>
-            <item>
-                <label>$LOCALIZE[31639]</label>
-                <icon>special://skin/extras/icons/shapes.png</icon>
-                <onclick>Close</onclick>
-                <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1128.Value)].Type,Custom)</onclick>
+        <include content="DialogSelect_HubType_Item">
+            <param name="id">8001</param>
+            <param name="groupid">8101</param>
+            <param name="label">$LOCALIZE[31639]</param>
+            <param name="icon">special://skin/extras/icons/shapes.png</param>
+            <param name="type">Custom</param>
+        </include>
+        <include content="DialogSelect_HubType_Item">
+            <param name="id">8002</param>
+            <param name="groupid">8102</param>
+            <param name="label">$LOCALIZE[31605]</param>
+            <param name="icon">special://skin/extras/icons/calendar.png</param>
+            <param name="type">NextAired</param>
+        </include>
+        <include content="DialogSelect_HubType_Item">
+            <param name="id">8003</param>
+            <param name="groupid">8103</param>
+            <param name="label">$LOCALIZE[31085] / PVR</param>
+            <param name="icon">special://skin/extras/icons/livetv.png</param>
+            <param name="type">LiveTV</param>
+        </include>
+        <include content="DialogSelect_HubType_Item">
+            <param name="id">8004</param>
+            <param name="groupid">8104</param>
+            <param name="label">$LOCALIZE[24001]</param>
+            <param name="icon">special://skin/extras/icons/addon.png</param>
+            <param name="type">Addons</param>
+        </include>
+    </include>
+
+    <!-- Hub type button of the hub type dialog (1128): sets the type of the hub in Dialog.1128.Value -->
+    <include name="DialogSelect_HubType_Item">
+        <definition>
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[id]</param>
+                <param name="groupid">$PARAM[groupid]</param>
+                <param name="dialog">true</param>
+                <param name="icon">$PARAM[icon]</param>
+                <label>$PARAM[label]</label>
+                <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1128.Value)].Type,$PARAM[type])</onclick>
                 <onclick>ClearProperty(TMDbHelper.WidgetContainer,$INFO[Window(Home).Property(Dialog.1128.Window)])</onclick>
-            </item>
-            <item>
-                <label>$LOCALIZE[31605]</label>
-                <icon>special://skin/extras/icons/calendar.png</icon>
                 <onclick>Close</onclick>
-                <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1128.Value)].Type,NextAired)</onclick>
-                <onclick>ClearProperty(TMDbHelper.WidgetContainer,$INFO[Window(Home).Property(Dialog.1128.Window)])</onclick>
-            </item>
-            <item>
-                <label>$LOCALIZE[31085] / PVR</label>
-                <icon>special://skin/extras/icons/livetv.png</icon>
-                <onclick>Close</onclick>
-                <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1128.Value)].Type,LiveTV)</onclick>
-                <onclick>ClearProperty(TMDbHelper.WidgetContainer,$INFO[Window(Home).Property(Dialog.1128.Window)])</onclick>
-            </item>
-            <item>
-                <label>$LOCALIZE[24001]</label>
-                <icon>special://skin/extras/icons/addon.png</icon>
-                <onclick>Close</onclick>
-                <onclick>Skin.SetString($INFO[Window(Home).Property(Dialog.1128.Value)].Type,Addons)</onclick>
-                <onclick>ClearProperty(TMDbHelper.WidgetContainer,$INFO[Window(Home).Property(Dialog.1128.Window)])</onclick>
-            </item>
-        </content>
+            </include>
+        </definition>
     </include>
 
 </includes>

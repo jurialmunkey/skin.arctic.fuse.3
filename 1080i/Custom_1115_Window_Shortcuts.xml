@@ -139,6 +139,7 @@
                                 <param name="toggle_label">$VAR[Label_HubsWindow_EnableDisable]</param>
                                 <param name="static">$EXP[Exp_HubsWindow_Item_Static]</param>
                                 <param name="static_home">$EXP[Exp_HubsWindow_Item_Home]</param>
+                                <param name="static_power">$EXP[Exp_HubsWindow_Item_PowerPreview]</param>
                                 <param name="widgets">false</param>
                                 <param name="subgroups">false</param>
                                 <param name="onback">30000</param>
@@ -146,15 +147,18 @@
                                 <param name="include_after_toggle">DialogShortcuts_Window_Settings_Hubs_Main</param>
                                 <param name="shortcut_label">true</param>
                                 <param name="item_label2">true</param>
+                                <param name="icon_label2">$VAR[Image_HubsWindow_Header]</param>
+                                <!-- Hubs have their shortcut options in the Menu popup, so only Power shows its icon here -->
+                                <param name="shortcut_visible">$EXP[Exp_HubsWindow_Item_PowerPreview]</param>
                             </include>
 
-                            <!-- Options label when the item has its own options: Search, Power, Next Aired, Live TV and Add-ons -->
+                            <!-- Options label when the item has its own options: Search, Power and Next Aired -->
                             <include content="Settings_Label">
                                 <param name="id">9001</param>
                                 <param name="window">shortcuts</param>
                                 <label>$LOCALIZE[33063]</label>
                                 <visible>$EXP[Exp_HubsWindow_Item_Enabled] | String.IsEqual(Container(30000).ListItem.Property(static),power)</visible>
-                                <visible>String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) | String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=power) | $EXP[Exp_HubsWindow_Type_NextAired] | $EXP[Exp_HubsWindow_Type_LiveTV] | $EXP[Exp_HubsWindow_Type_Addons]</visible>
+                                <visible>String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=search) | String.IsEqual(Container(30000).ListItem.Property(editmenu),menu=power) | $EXP[Exp_HubsWindow_Type_NextAired]</visible>
                             </include>
                             <include>DialogShortcuts_Window_Settings_Search</include>
                             <include>DialogShortcuts_Window_Settings_Hubs</include>
@@ -170,6 +174,32 @@
 
 
 
+        </include>
+
+        <!-- Popups of the focused hub's Menu (9004) and Widgets (9008) buttons, with a widgets popup per hub type -->
+        <include content="HubsWindow_Popup">
+            <param name="id">980</param>
+            <param name="header">$LOCALIZE[31933]</param>
+            <param name="include_content">DialogShortcuts_Window_Settings_Hubs_Shortcut</param>
+            <param name="onclose">9004</param>
+        </include>
+        <include content="HubsWindow_Popup">
+            <param name="id">985</param>
+            <param name="header">$LOCALIZE[31103]</param>
+            <param name="include_content">DialogShortcuts_Window_Settings_Hubs_Widgets</param>
+            <param name="onclose">9008</param>
+        </include>
+        <include content="HubsWindow_Popup">
+            <param name="id">986</param>
+            <param name="header">$LOCALIZE[31103]</param>
+            <param name="include_content">DialogShortcuts_Window_Settings_LiveTV</param>
+            <param name="onclose">9008</param>
+        </include>
+        <include content="HubsWindow_Popup">
+            <param name="id">987</param>
+            <param name="header">$LOCALIZE[31103]</param>
+            <param name="include_content">DialogShortcuts_Window_Settings_Addons</param>
+            <param name="onclose">9008</param>
         </include>
 
     </controls>

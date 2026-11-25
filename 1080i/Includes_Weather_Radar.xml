@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <expression name="Exp_Weather_Trend_Has_Radar">[Weather.IsFetched + String.IsEqual(Weather.Plugin,weather.ozweather) + !String.IsEmpty(Window(weather).Property(Radar))]</expression>
+    <expression name="Exp_Weather_Trend_Radar_Page">[$EXP[Exp_Weather_Trend_Has_Radar] + String.IsEqual(Window(weather).Property(Weather.Trend.Page),Radar)]</expression>
+    <expression name="Exp_Weather_Trend_Radar_Text_Ready">String.IsEqual(Control.GetLabel(8053),Window(weather).Property(Weather.Trend.Radar.Source))</expression>
+
+    <include name="Weather_Trend_Radar_Source">
+        <control type="label" id="8053">
+            <include>Object_Hidden_Item_Definition</include>
+            <visible>false</visible>
+            <label>radar:$INFO[Weather.Plugin]:$INFO[Window(weather).Property(Location)]:$INFO[Window(weather).Property(Updated)]:$INFO[Window(weather).Property(ObservationsUpdated)]:$INFO[Window(weather).Property(ForecastUpdated)]</label>
+        </control>
+    </include>
+
+    <include name="Weather_Radar_Layer">
+        <definition>
+            <control type="image">
+                <aspectratio scalediffuse="false">scale</aspectratio>
+                <texture background="true" diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/backgrounds/$INFO[Window(weather).Property(Radar)]/$PARAM[layer].png</texture>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Radar_Layers">
+        <include content="Weather_Radar_Layer"><param name="layer">legend</param></include>
+        <include content="Weather_Radar_Layer"><param name="layer">background</param></include>
+        <include content="Weather_Radar_Layer"><param name="layer">topography</param></include>
+        <include content="Weather_Radar_Layer"><param name="layer">catchments</param></include>
+        <include content="Weather_Radar_Layer"><param name="layer">range</param></include>
+        <include content="Weather_Radar_Layer"><param name="layer">locations</param></include>
+        <control type="multiimage">
+            <description>Radar Loop</description>
+            <aspectratio scalediffuse="false">scale</aspectratio>
+            <imagepath diffuse="diffuse/landscape_w880_h720.png">special://temp/ozweather/loop/$INFO[Window(weather).Property(Radar)]/</imagepath>
+            <timeperimage>300</timeperimage>
+            <pauseatend>800</pauseatend>
+            <fadetime>0</fadetime>
+            <randomize>false</randomize>
+            <loop>yes</loop>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Radar_Page">
+        <control type="group">
+            <visible>$EXP[Exp_Weather_Trend_Radar_Page]</visible>
+            <include>Weather_Trend_Radar_Details</include>
+            <include>Weather_Trend_Radar_Map</include>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Radar_Map">
+        <control type="group">
+            <left>960</left>
+            <top>180</top>
+            <width>880</width>
+            <control type="group">
+                <height>720</height>
+                <include>Part_Box</include>
+                <include>Weather_Radar_Layers</include>
+            </control>
+            <include content="Weather_Trend_Radar_Caption">
+                <param name="top">-60</param>
+                <param name="font">font_main</param>
+                <param name="color">main_fg_90</param>
+                <param name="label_left">$INFO[Window(weather).Property(RadarLocation)]$INFO[Window(weather).Property(RadarRange),  ·  ,]</param>
+                <param name="label_right">$INFO[Window(weather).Property(RadarOldest)]$INFO[Window(weather).Property(RadarNewest), – ,]</param>
+            </include>
+            <!-- <include content="Weather_Trend_Radar_Caption">
+                <param name="top">680</param>
+                <param name="font">font_mini</param>
+                <param name="color">main_fg_70</param>
+                <param name="label_left">  $INFO[Window(weather).Property(ObservationsStation)]$INFO[Window(weather).Property(ObservationsUpdated),  ·  ,]</param>
+                <param name="label_right">$INFO[Window(weather).Property(ForecastRegion)]$INFO[Window(weather).Property(ForecastUpdated),  ·  ,]  </param>
+            </include> -->
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Radar_Caption">
+        <definition>
+            <include content="Weather_Trend_UV_Title">
+                <param name="left">0</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">430</param>
+                <param name="align">left</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="color">$PARAM[color]</param>
+                <param name="label">$PARAM[label_left]</param>
+            </include>
+            <include content="Weather_Trend_UV_Title">
+                <param name="left">450</param>
+                <param name="top">$PARAM[top]</param>
+                <param name="width">430</param>
+                <param name="align">right</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="color">$PARAM[color]</param>
+                <param name="label">$PARAM[label_right]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Radar_Details">
+        <control type="grouplist">
+            <left>60</left>
+            <top>500</top>
+            <width>840</width>
+            <height>460</height>
+            <orientation>vertical</orientation>
+            <itemgap>0</itemgap>
+            <include>Weather_Trend_Radar_Warning</include>
+            <include content="Weather_Trend_Radar_Heading">
+                <param name="height">60</param>
+                <param name="top">0</param>
+                <param name="label">$LOCALIZE[33006]</param>
+                <param name="visible">$EXP[Exp_Weather_Trend_Radar_Text_Ready] + !String.IsEmpty(Window(weather).Property(Weather.Trend.Radar.Forecast))</param>
+            </include>
+            <include content="Weather_Trend_Radar_Text">
+                <param name="max">200</param>
+                <param name="label">$INFO[Window(weather).Property(Weather.Trend.Radar.Forecast)]$INFO[Window(weather).Property(Weather.Trend.Radar.Sun),[CR][CR],]</param>
+                <param name="visible">$EXP[Exp_Weather_Trend_Radar_Text_Ready] + !String.IsEmpty(Window(weather).Property(Weather.Trend.Radar.Forecast))</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Radar_Warning">
+        <control type="group">
+            <height>140</height>
+            <visible>$EXP[Exp_Weather_Trend_Radar_Text_Ready] + !String.IsEmpty(Window(weather).Property(Weather.Trend.Radar.Warnings))</visible>
+            <control type="group">
+                <bottom>40</bottom>
+                <include content="Part_Box">
+                    <param name="colordiffuse">33f66b34</param>
+                </include>
+                <control type="image">
+                    <centerleft>50</centerleft>
+                    <centertop>50%</centertop>
+                    <width>80</width>
+                    <height>80</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture colordiffuse="fff66b34">special://skin/extras/icons/warning.png</texture>
+                </control>
+                <control type="textbox">
+                    <left>100</left>
+                    <right>20</right>
+                    <aligny>center</aligny>
+                    <font>font_main_bold</font>
+                    <textcolor>main_fg_100</textcolor>
+                    <scroll>true</scroll>
+                    <label>$INFO[Window(weather).Property(Weather.Trend.Radar.Warnings)]</label>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="Weather_Trend_Radar_Heading">
+        <definition>
+            <control type="group">
+                <height>$PARAM[height]</height>
+                <visible>$PARAM[visible]</visible>
+                <include content="Weather_Trend_UV_Title">
+                    <param name="left">20</param>
+                    <param name="top">$PARAM[top]</param>
+                    <param name="width">800</param>
+                    <param name="align">left</param>
+                    <param name="label">$PARAM[label]</param>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="Weather_Trend_Radar_Text">
+        <param name="color">main_fg_90</param>
+        <definition>
+            <control type="textbox">
+                <width>800</width>
+                <left>20</left>
+                <height max="$PARAM[max]">auto</height>
+                <align>left</align>
+                <aligny>top</aligny>
+                <font>font_main_plot</font>
+                <textcolor>$PARAM[color]</textcolor>
+                <shadowcolor>shadow_hard</shadowcolor>
+                <autoscroll delay="5000" time="2000" repeat="5000">true</autoscroll>
+                <label>$PARAM[label]</label>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+</includes>

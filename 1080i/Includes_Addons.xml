@@ -142,4 +142,54 @@
         </include>
     </include>
 
+    <include name="Addons_Simple_Content">
+        <include content="Hub_Widgets_Grouplist">
+            <param name="widgetconstants_affix">_simple</param>
+            <include content="Addons_Widgets">
+                <param name="window">$PARAM[window]</param>
+                <param name="include">Hub_Simple_Widget</param>
+            </include>
+            <include>Widget_End_Bumper</include>
+        </include>
+    </include>
+
+    <!-- Add-on browser panel with its scrollbar. Left moves to the categories and up moves to the search box -->
+    <include name="AddonBrowser_Panel">
+        <definition>
+            <include content="List_DialogSelect">
+                <param name="detailed">True</param>
+                <param name="item_height">100</param>
+                <param name="control">panel</param>
+                <param name="id">$PARAM[id]</param>
+                <param name="item_w">view_addonbrowser_item_w</param>
+                <param name="itemlayout_w">view_addonbrowser_itemlayout_w</param>
+                <param name="variation">true</param>
+                <param name="icon">$VAR[Image_AddonStatus]</param>
+                <param name="textcolor">main_fg</param>
+                <nested />
+                <onleft>6000</onleft>
+                <onright>$PARAM[scrollbar]</onright>
+                <onup>6100</onup>
+                <pagecontrol>$PARAM[scrollbar]</pagecontrol>
+                <top>140</top>
+                <left>20</left>
+                <right>0</right>
+                <bottom>20</bottom>
+            </include>
+
+            <control type="scrollbar" id="$PARAM[scrollbar]">
+                <centerright>0</centerright>
+                <bottom>20</bottom>
+                <top>140</top>
+                <width>scrollbar_w</width>
+                <orientation>vertical</orientation>
+                <texturesliderbackground />
+                <texturesliderbar colordiffuse="main_logo" border="4">scrollbar/scrollv_line.png</texturesliderbar>
+                <include>Texture_Scrollbar_V</include>
+                <onleft>$PARAM[id]</onleft>
+                <visible>Control.IsVisible($PARAM[id])</visible>
+            </control>
+        </definition>
+    </include>
+
 </includes>

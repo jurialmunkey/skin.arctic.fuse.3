@@ -357,13 +357,15 @@
         </definition>
     </include>
 
-    <!-- Enables/disables the focused item of the container. static marks the fixed Search/Power entries of the hubs window (1115), which toggle their skin settings -->
+    <!-- Enables/disables the focused item of the container. static marks fixed entries that toggle skin settings instead:
+         Search/Power in the hubs window (1115), and items whose static property is setting, which toggle the skin setting in their setting property -->
     <include name="DialogShortcuts_Toggle_Onclick">
         <param name="static">false</param>
         <definition>
             <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_toggle])</onclick>
             <onclick condition="String.IsEqual(Container($PARAM[container]).ListItem.Property(static),search)">Skin.ToggleSetting(HomeSwitcher.DisableSearch)</onclick>
             <onclick condition="String.IsEqual(Container($PARAM[container]).ListItem.Property(static),power)">Skin.ToggleSetting(HomeSwitcher.LoopBack)</onclick>
+            <onclick condition="String.IsEqual(Container($PARAM[container]).ListItem.Property(static),setting)">Skin.ToggleSetting($INFO[Container($PARAM[container]).ListItem.Property(setting)])</onclick>
         </definition>
     </include>
 
@@ -372,8 +374,8 @@
         <value>special://skin/extras/icons/circle-cancel.png</value>
     </variable>
 
-    <!-- Shortcut item options. container is the shortcuts list, include_after_toggle adds options straight after the enable button. static/static_home mark the fixed entries of the hubs window (1115),
-         whose options act on skin settings: Search and Power can only be enabled/disabled, Home is always enabled -->
+    <!-- Shortcut item options. container is the shortcuts list, include_after_toggle adds options straight after the enable button. static/static_home/static_power mark fixed entries of the hubs window (1115),
+         whose options act on skin settings. Search and Power can be toggled, Power has a configurable icon, and Home is always enabled -->
     <include name="DialogShortcuts_Items_Basic">
         <param name="container">22001</param>
         <param name="enabled">$EXP[DialogShortcuts_IsEnabled_Expression]</param>
@@ -381,6 +383,7 @@
         <param name="toggle_label">$VAR[Label_Shortcut_EnableDisable]</param>
         <param name="static">false</param>
         <param name="static_home">false</param>
+        <param name="static_power">false</param>
         <param name="onback">22904</param>
         <param name="include_after_toggle">Object_Null</param>
         <param name="widgets">$EXP[DialogShortcuts_IsWidgetMode_Expression]</param>
@@ -388,6 +391,8 @@
         <param name="window" />
         <param name="shortcut_label">false</param>
         <param name="item_label2">false</param>
+        <param name="icon_label2" />
+        <param name="shortcut_visible">true</param>
         <definition>
 
         <include content="Settings_ButtonImage">
@@ -407,90 +412,138 @@
             <visible>![$PARAM[static_home]]</visible>
         </include>
         <include content="$PARAM[include_after_toggle]" />
-
-        <!-- Shortcuts -->
-        <include content="Settings_Label" condition="$PARAM[shortcut_label]">
-            <param name="id">29001</param>
+        <include content="DialogShortcuts_Items_Shortcut">
+            <param name="container">$PARAM[container]</param>
+            <param name="enabled">$PARAM[enabled]</param>
+            <param name="static">$PARAM[static]</param>
+            <param name="static_home">$PARAM[static_home]</param>
+            <param name="static_power">$PARAM[static_power]</param>
+            <param name="onback">$PARAM[onback]</param>
+            <param name="widgets">$PARAM[widgets]</param>
+            <param name="subgroups">$PARAM[subgroups]</param>
             <param name="window">$PARAM[window]</param>
-            <label>$LOCALIZE[31511]</label>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
+            <param name="shortcut_label">$PARAM[shortcut_label]</param>
+            <param name="item_label2">$PARAM[item_label2]</param>
+            <param name="icon_label2">$PARAM[icon_label2]</param>
+            <param name="visible">$PARAM[shortcut_visible]</param>
         </include>
-        <include content="Settings_ButtonImage">
-            <param name="id">29002</param>
-            <param name="groupid">29102</param>
-            <param name="window">$PARAM[window]</param>
-            <param name="help">$LOCALIZE[31834]</param>
-            <label>$LOCALIZE[424]</label>
-            <param name="icon">special://skin/extras/icons/share.png</param>
-            <include content="DialogShortcuts_Allow_SubGroups_Onclick">
-                <param name="condition">$PARAM[subgroups]</param>
+        </definition>
+    </include>
+
+    <!-- Shortcut, path, label and icon options of the focused item of the container, with the same static params as DialogShortcuts_Items_Basic.
+         baseid/groupbase prefix the control ids so the options can be placed twice in one window, and visible further limits where they show -->
+    <include name="DialogShortcuts_Items_Shortcut">
+        <param name="container">22001</param>
+        <param name="enabled">$EXP[DialogShortcuts_IsEnabled_Expression]</param>
+        <param name="static">false</param>
+        <param name="static_home">false</param>
+        <param name="static_power">false</param>
+        <param name="onback">22904</param>
+        <param name="widgets">$EXP[DialogShortcuts_IsWidgetMode_Expression]</param>
+        <param name="subgroups">$EXP[DialogShortcuts_IsSubGrouping_Expression]</param>
+        <param name="window" />
+        <param name="dialog">false</param>
+        <param name="shortcut_label">false</param>
+        <param name="item_label2">false</param>
+        <param name="icon_label2" />
+        <param name="baseid">290</param>
+        <param name="groupbase">291</param>
+        <param name="visible">true</param>
+        <definition>
+            <!-- Shortcuts -->
+            <include content="Settings_Label" condition="$PARAM[shortcut_label]">
+                <param name="id">$PARAM[baseid]01</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <label>$LOCALIZE[31511]</label>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
             </include>
-            <onclick condition="![$PARAM[widgets]]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
-            <onclick condition="$PARAM[widgets]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
-            <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_choose]$VAR[Path_Shortcut_UseRawPath])</onclick>
-            <onclick condition="$PARAM[static_home]">RunScript(script.skinvariables,set_shortcut=HomeSwitcher.Home.Shortcut)</onclick>
-            <onback>$PARAM[onback]</onback>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
-        </include>
-
-        <!-- Path -->
-        <include content="Settings_ButtonImage">
-            <param name="id">29003</param>
-            <param name="groupid">29103</param>
-            <param name="window">$PARAM[window]</param>
-            <param name="help">$LOCALIZE[31835]</param>
-            <label>$LOCALIZE[573]</label>
-            <param name="icon">special://skin/extras/icons/terminal.png</param>
-            <param name="has_label2">$PARAM[item_label2]</param>
-            <param name="label2">$INFO[Container($PARAM[container]).ListItem.Property(path)]</param>
-            <include content="DialogShortcuts_Allow_SubGroups_Onclick">
-                <param name="condition">$PARAM[subgroups]</param>
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[baseid]02</param>
+                <param name="groupid">$PARAM[groupbase]02</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="help">$LOCALIZE[31834]</param>
+                <label>$LOCALIZE[424]</label>
+                <param name="icon">special://skin/extras/icons/share.png</param>
+                <include content="DialogShortcuts_Allow_SubGroups_Onclick">
+                    <param name="condition">$PARAM[subgroups]</param>
+                </include>
+                <onclick condition="![$PARAM[widgets]]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
+                <onclick condition="$PARAM[widgets]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
+                <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_choose]$VAR[Path_Shortcut_UseRawPath])</onclick>
+                <onclick condition="$PARAM[static_home]">RunScript(script.skinvariables,set_shortcut=HomeSwitcher.Home.Shortcut)</onclick>
+                <onback>$PARAM[onback]</onback>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
             </include>
-            <onclick condition="![$PARAM[widgets]]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
-            <onclick condition="$PARAM[widgets]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
-            <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_action]$VAR[Path_Shortcut_UseRawPath])</onclick>
-            <onclick condition="$PARAM[static_home]">RunScript(script.skinvariables,set_shortcut=HomeSwitcher.Home.Shortcut,use_rawpath=True)</onclick>
-            <onback>$PARAM[onback]</onback>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
-        </include>
 
-        <!-- Rename -->
-        <include content="Settings_ButtonImage">
-            <param name="id">29004</param>
-            <param name="groupid">29104</param>
-            <param name="window">$PARAM[window]</param>
-            <param name="help">$LOCALIZE[31836]</param>
-            <label>$LOCALIZE[118]</label>
-            <param name="icon">special://skin/extras/icons/i-cursor.png</param>
-            <param name="has_label2">$PARAM[item_label2]</param>
-            <param name="label2">$INFO[Container($PARAM[container]).ListItem.Label]</param>
-            <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_edit])</onclick>
-            <onclick condition="$PARAM[static_home]">Skin.SetString(HomeSwitcher.Home.Name)</onclick>
-            <onback>$PARAM[onback]</onback>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
-        </include>
+            <!-- Path -->
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[baseid]03</param>
+                <param name="groupid">$PARAM[groupbase]03</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="help">$LOCALIZE[31835]</param>
+                <label>$LOCALIZE[573]</label>
+                <param name="icon">special://skin/extras/icons/terminal.png</param>
+                <param name="has_label2">$PARAM[item_label2]</param>
+                <param name="label2">$INFO[Container($PARAM[container]).ListItem.Property(path)]</param>
+                <include content="DialogShortcuts_Allow_SubGroups_Onclick">
+                    <param name="condition">$PARAM[subgroups]</param>
+                </include>
+                <onclick condition="![$PARAM[widgets]]">SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
+                <onclick condition="$PARAM[widgets]">ClearProperty(Shortcuts.Groupings.Links,Home)</onclick>
+                <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_action]$VAR[Path_Shortcut_UseRawPath])</onclick>
+                <onclick condition="$PARAM[static_home]">RunScript(script.skinvariables,set_shortcut=HomeSwitcher.Home.Shortcut,use_rawpath=True)</onclick>
+                <onback>$PARAM[onback]</onback>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
+            </include>
 
-        <!-- Icon -->
-        <include content="Settings_ButtonImage">
-            <param name="id">29005</param>
-            <param name="groupid">29105</param>
-            <param name="window">$PARAM[window]</param>
-            <param name="help">$LOCALIZE[31837]</param>
-            <label>$LOCALIZE[31274]</label>
-            <param name="icon">special://skin/extras/icons/image.png</param>
-            <param name="has_label2">$PARAM[item_label2]</param>
-            <param name="label2">$INFO[Container($PARAM[container]).ListItem.Icon]</param>
-            <onclick condition="![$PARAM[static]]">SetProperty(url,$INFO[Container($PARAM[container]).ListItem.Property(url)],1117)</onclick>
-            <onclick condition="$PARAM[static_home]">SetProperty(setting,HomeSwitcher.Home.Icon,1117)</onclick>
-            <onclick>ActivateWindow(1117)</onclick>
-            <onback>$PARAM[onback]</onback>
-            <visible>$PARAM[enabled]</visible>
-            <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
-        </include>
+            <!-- Rename -->
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[baseid]04</param>
+                <param name="groupid">$PARAM[groupbase]04</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="help">$LOCALIZE[31836]</param>
+                <label>$LOCALIZE[118]</label>
+                <param name="icon">special://skin/extras/icons/i-cursor.png</param>
+                <param name="has_label2">$PARAM[item_label2]</param>
+                <param name="label2">$INFO[Container($PARAM[container]).ListItem.Label]</param>
+                <onclick condition="![$PARAM[static]]">RunPlugin($INFO[Container($PARAM[container]).ListItem.Property(url),,&amp;func=do_edit])</onclick>
+                <onclick condition="$PARAM[static_home]">Skin.SetString(HomeSwitcher.Home.Name)</onclick>
+                <onback>$PARAM[onback]</onback>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home]</visible>
+            </include>
+
+            <!-- Icon -->
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[baseid]05</param>
+                <param name="groupid">$PARAM[groupbase]05</param>
+                <param name="window">$PARAM[window]</param>
+                <param name="dialog">$PARAM[dialog]</param>
+                <param name="help">$LOCALIZE[31837]</param>
+                <label>$LOCALIZE[31274]</label>
+                <param name="icon">special://skin/extras/icons/image.png</param>
+                <param name="has_label2">$PARAM[item_label2]</param>
+                <param name="label2">$PARAM[icon_label2]</param>
+                <onclick condition="![$PARAM[static]]">SetProperty(url,$INFO[Container($PARAM[container]).ListItem.Property(url)],1117)</onclick>
+                <onclick condition="$PARAM[static_home]">SetProperty(setting,HomeSwitcher.Home.Icon,1117)</onclick>
+                <onclick condition="$PARAM[static_power]">SetProperty(setting,HomeSwitcher.Power.Icon,1117)</onclick>
+                <onclick>ActivateWindow(1117)</onclick>
+                <onback>$PARAM[onback]</onback>
+                <visible>$PARAM[enabled]</visible>
+                <visible>$PARAM[visible]</visible>
+                <visible>![$PARAM[static]] | $PARAM[static_home] | $PARAM[static_power]</visible>
+            </include>
         </definition>
     </include>
 
@@ -527,6 +580,7 @@
             <param name="id">23902</param>
             <label>$LOCALIZE[31282] $LOCALIZE[33063]</label>
             <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>!$EXP[DialogShortcuts_IsWeatherWidget_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -560,7 +614,7 @@
             <selected>$EXP[DialogShortcuts_IsCombinedWidget_Expression]</selected>
             <onclick>RunPlugin($INFO[Container(22001).ListItem.Property(url),,&amp;func=do_edit&amp;&amp;widget_combined&amp;&amp;]$VAR[Value_Shortcut_CombinedWidget_Toggle])</onclick>
             <visible>$EXP[DialogShortcuts_IsStandardHubWidgets_Expression]</visible>
-            <visible>$EXP[DialogShortcuts_IsWidgetMode_Expression]</visible>
+            <visible>$EXP[DialogShortcuts_IsConfigurableWidgetMode_Expression]</visible>
             <onback>22904</onback>
             <visible>$EXP[DialogShortcuts_IsEnabled_Expression]</visible>
         </include>
@@ -675,11 +729,13 @@
 
     <!-- Search widgets only supply multisearch sources, so options for how a widget shows its items do not apply to them -->
     <expression name="DialogShortcuts_IsSearchWidgets_Expression">[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=searchwidgets)]</expression>
-    <expression name="DialogShortcuts_IsConfigurableWidgetMode_Expression">[$EXP[DialogShortcuts_IsWidgetMode_Expression] + !$EXP[DialogShortcuts_IsSearchWidgets_Expression]]</expression>
+    <!-- The weather widget has a fixed forecast layout, so it has no display options. -->
+    <expression name="DialogShortcuts_IsWeatherWidget_Expression">String.IsEqual(Container(22001).ListItem.Property(path),Weather)</expression>
+    <expression name="DialogShortcuts_IsConfigurableWidgetMode_Expression">[$EXP[DialogShortcuts_IsWidgetMode_Expression] + !$EXP[DialogShortcuts_IsSearchWidgets_Expression] + !$EXP[DialogShortcuts_IsWeatherWidget_Expression]]</expression>
 
     <expression name="DialogShortcuts_IsCombinedWidget_Expression">String.IsEqual(Container(22001).ListItem.Property(widget_combined),True)</expression>
 
-    <expression name="DialogShortcuts_IsStandardHubWidgets_Expression">[[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homewidgets) + String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101widgets) + String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102widgets) + String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103widgets) + String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104widgets) + String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1106widgets) + String.IsEqual(Skin.String(HomeSwitcher.1106.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1107widgets) + String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1108widgets) + String.IsEqual(Skin.String(HomeSwitcher.1108.Mode),Standard)] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1109widgets) + String.IsEqual(Skin.String(HomeSwitcher.1109.Mode),Standard)]]</expression>
+    <expression name="DialogShortcuts_IsStandardHubWidgets_Expression">[[String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=homewidgets) + [String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.Home.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1101widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1101.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1102widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1102.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1103widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1103.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1104widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1104.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1106widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1106.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1106.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1107widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1107.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1108widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1108.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1108.Mode),Simple)]] | [String.IsEqual(Window(Home).Property(Shortcuts.EditMenu),menu=1109widgets) + [String.IsEqual(Skin.String(HomeSwitcher.1109.Mode),Standard) | String.IsEqual(Skin.String(HomeSwitcher.1109.Mode),Simple)]]]</expression>
 
     <expression name="DialogShortcuts_HasCustomSubmenu_Expression">[String.IsEqual(Container(22001).ListItem.Property(path),Custom_Submenu)]</expression>
 
@@ -828,46 +884,61 @@
         </include>
     </include>
     <include name="DialogCustom_Shortcuts_Items_SpotlightConfigure_Items">
-        <include content="Settings_Button" description="Label">
-            <param name="dialog">false</param>
+        <include content="Settings_ButtonImage" description="Label">
+            <param name="dialog">true</param>
             <param name="id">8001</param>
+            <param name="groupid">8101</param>
+            <param name="icon">special://skin/extras/icons/i-cursor.png</param>
             <label>$LOCALIZE[31273]</label>
-            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Label)]</label2>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Label)]</param>
             <onclick>Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.Label)</onclick>
         </include>
-        <include content="Settings_Button" description="Path">
-            <param name="dialog">false</param>
+        <include content="Settings_ButtonImage" description="Path">
+            <param name="dialog">true</param>
             <param name="id">8003</param>
+            <param name="groupid">8103</param>
+            <param name="icon">special://skin/extras/icons/terminal.png</param>
             <label>$LOCALIZE[573]</label>
-            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)]</label2>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)]</param>
             <onclick>SetProperty(Shortcuts.Groupings.Links,Links,Home)</onclick>
             <onclick>ClearProperty(Shortcuts.Groupings.Subgroup,Home)</onclick>
             <onclick>RunScript(script.skinvariables,set_shortcut=HomeSwitcher.$PARAM[window].Spotlight,use_rawpath=True)</onclick>
         </include>
-        <include content="Settings_Button" description="Limit">
+        <include content="Settings_ButtonImage" description="Limit">
             <param name="dialog">true</param>
             <param name="id">8004</param>
+            <param name="groupid">8104</param>
+            <param name="icon">special://skin/extras/icons/hashtag.png</param>
             <param name="control">button</param>
             <label>$LOCALIZE[31188]</label>
-            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Limit)]</label2>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Limit)]</param>
             <onclick>Skin.SetNumeric(HomeSwitcher.$PARAM[window].Spotlight.Limit)</onclick>
             <visible>![String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path,noop)]</visible>
         </include>
-        <include content="Settings_Button" description="Sort by">
+        <include content="Settings_ButtonImage" description="Sort by">
             <param name="dialog">true</param>
             <param name="id">8005</param>
+            <param name="groupid">8105</param>
+            <param name="icon">special://skin/extras/icons/arrow-down-wide-short.png</param>
             <param name="control">button</param>
             <label>$LOCALIZE[31016]</label>
-            <label2>$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortMethod)]</label2>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortMethod)]</param>
             <onclick>RunScript(script.skinvariables,run_dialog=select,heading=$LOCALIZE[31016],separator=||,list=default||label||userpreference||random||dateadded||lastplayed||playcount||year||rating||userrating||votes||genre||country||studio||playlist||episodenumber||season||totalepisodes||watchedepisodes||tvshowstatus||tvshowtitle||file||title||track||time||artist||album||lastupdated||lastused||date,"executebuiltin=Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortMethod,{v})")</onclick>
             <visible>![String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.Path,noop)]</visible>
         </include>
         
-        <include content="Settings_Button" description="Sort order">
+        <include content="Settings_ButtonImage" description="Sort order">
             <param name="dialog">true</param>
             <param name="id">8006</param>
+            <param name="groupid">8106</param>
+            <param name="icon">special://skin/extras/icons/arrow-up-arrow-down.png</param>
             <param name="control">radiobutton</param>
-            <label>$LOCALIZE[31517]</label>
+            <param name="label">$LOCALIZE[31517]</param>
+            <param name="getlabel">false</param>
             <onclick condition="String.IsEmpty(Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder)) | Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,ascending)">Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)</onclick>
             <onclick condition="Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)">Skin.SetString(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,ascending)</onclick>
             <selected>Skin.String(HomeSwitcher.$PARAM[window].Spotlight.SortOrder,descending)</selected>
@@ -954,7 +1025,8 @@
         </definition>
     </include>
 
-    <!-- Main options of the focused hub (type, layout, submenu, spotlight, widgets), shown straight after its enable button in the hubs window (1115) -->
+    <!-- Main options of the focused hub (type, layout, menu, spotlight, widgets), shown straight after its enable button in the hubs window (1115).
+         Menu and Widgets open their popups (HubsWindow_Popup) -->
     <include name="DialogShortcuts_Window_Settings_Hubs_Main">
         <param name="visible">!String.IsEmpty(Container(30000).ListItem.Property(window)) + $EXP[Exp_HubsWindow_Item_Enabled]</param>
         <definition>
@@ -987,23 +1059,21 @@
                     <param name="setting">HomeSwitcher.$INFO[Container(30000).ListItem.Property(window)]</param>
                     <param name="combined">$EXP[Exp_HubsWindow_Mode_Combined]</param>
                     <param name="wall">$EXP[Exp_HubsWindow_Mode_Wall]</param>
+                    <param name="simple">$EXP[Exp_HubsWindow_Mode_Simple]</param>
                 </include>
                 <visible>$PARAM[visible]</visible>
                 <visible>!$EXP[Exp_HubsWindow_Type_NextAired]</visible>
             </include>
-            <include content="Settings_ButtonImage" description="Submenu">
-                <param name="id">9006</param>
-                <param name="groupid">9106</param>
-                <param name="icon">special://skin/extras/icons/bars.png</param>
+            <include content="Settings_ButtonImage" description="Menu">
+                <param name="id">9004</param>
+                <param name="groupid">9104</param>
+                <param name="icon">special://skin/extras/icons/share.png</param>
                 <param name="has_label2">true</param>
-                <param name="label2">$INFO[Container(30920).NumItems,, $LOCALIZE[31022]]</param>
+                <param name="label2">$INFO[Container(30000).ListItem.Property(path)]</param>
                 <param name="window">shortcuts</param>
-                <param name="help">$LOCALIZE[31730]</param>
-                <label>$LOCALIZE[1034]</label>
-                <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(30000).ListItem.Property(window),,submenu],Home)</onclick>
-                <onclick>SetProperty(Shortcuts.EditMode,mode=submenu,Home)</onclick>
-                <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
-                <onclick>ActivateWindow(1116)</onclick>
+                <param name="help">$LOCALIZE[31932]</param>
+                <label>$LOCALIZE[31933]</label>
+                <onclick>SetFocus(9801)</onclick>
                 <visible>$PARAM[visible]</visible>
             </include>
             <include content="Settings_ButtonImage" description="Spotlight">
@@ -1026,16 +1096,129 @@
                 <param name="groupid">9108</param>
                 <param name="icon">special://skin/extras/icons/layer-group.png</param>
                 <param name="has_label2">true</param>
-                <param name="label2">$INFO[Container(30921).NumItems,, $LOCALIZE[31022]]</param>
+                <param name="label2">$VAR[Label_HubsWindow_Widgets]</param>
                 <param name="window">shortcuts</param>
                 <param name="help">$LOCALIZE[31733]</param>
                 <label>$LOCALIZE[31103]</label>
-                <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(30000).ListItem.Property(window),,widgets],Home)</onclick>
-                <onclick>SetProperty(Shortcuts.EditMode,mode=widgets,Home)</onclick>
-                <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
-                <onclick>ActivateWindow(1116)</onclick>
+                <onclick condition="$EXP[Exp_HubsWindow_Type_Custom]">SetFocus(9851)</onclick>
+                <onclick condition="$EXP[Exp_HubsWindow_Type_LiveTV]">SetFocus(9861)</onclick>
+                <onclick condition="$EXP[Exp_HubsWindow_Type_Addons]">SetFocus(9871)</onclick>
                 <visible>$PARAM[visible]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Custom]</visible>
+                <visible>$EXP[Exp_HubsWindow_Type_Custom] | $EXP[Exp_HubsWindow_Type_LiveTV] | $EXP[Exp_HubsWindow_Type_Addons]</visible>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Menu popup of the focused hub in the hubs window (1115), opened by its Menu button (9004): the shortcut options and the submenu -->
+    <include name="DialogShortcuts_Window_Settings_Hubs_Shortcut">
+        <include content="DialogShortcuts_Items_Shortcut">
+            <param name="container">30000</param>
+            <param name="enabled">$EXP[Exp_HubsWindow_Item_Enabled]</param>
+            <param name="static">$EXP[Exp_HubsWindow_Item_Static]</param>
+            <param name="static_home">$EXP[Exp_HubsWindow_Item_Home]</param>
+            <param name="widgets">false</param>
+            <param name="subgroups">false</param>
+            <param name="onback">9004</param>
+            <param name="window">shortcuts</param>
+            <param name="dialog">true</param>
+            <param name="item_label2">true</param>
+            <param name="icon_label2">$VAR[Image_HubsWindow_Header]</param>
+            <param name="baseid">981</param>
+            <param name="groupbase">982</param>
+        </include>
+        <include content="Settings_ButtonImage" description="Submenu">
+            <param name="id">9006</param>
+            <param name="groupid">9106</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/bars.png</param>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Container(30920).NumItems,, $LOCALIZE[31022]]</param>
+            <param name="window">shortcuts</param>
+            <param name="help">$LOCALIZE[31730]</param>
+            <label>$LOCALIZE[1034]</label>
+            <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(30000).ListItem.Property(window),,submenu],Home)</onclick>
+            <onclick>SetProperty(Shortcuts.EditMode,mode=submenu,Home)</onclick>
+            <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
+            <onclick>ActivateWindow(1116)</onclick>
+            <onback>9004</onback>
+        </include>
+    </include>
+
+    <!-- Widgets popup of a custom hub in the hubs window (1115), opened by its Widgets button (9008): the play and browse actions and editing the widgets.
+         Live tv and add-ons hubs have their own popups of their sections. Kodi does not update visibility inside a hidden popup,
+         so popup buttons must not depend on the focused hub, or the popup can open on a button that then hides -->
+    <include name="DialogShortcuts_Window_Settings_Hubs_Widgets">
+        <include content="DialogShortcuts_Window_Settings_Hubs_Action">
+            <param name="id">9009</param>
+            <param name="groupid">9109</param>
+            <param name="icon">special://skin/extras/icons/play.png</param>
+            <param name="label">$LOCALIZE[31927]</param>
+            <param name="label2">$VAR[Label_HubsWindow_PlayAction]</param>
+            <param name="help">$LOCALIZE[31930]</param>
+            <param name="setting">PlayAction</param>
+        </include>
+        <include content="DialogShortcuts_Window_Settings_Hubs_Action">
+            <param name="id">9010</param>
+            <param name="groupid">9110</param>
+            <param name="icon">special://skin/extras/icons/folder.png</param>
+            <param name="label">$LOCALIZE[31929]</param>
+            <param name="label2">$VAR[Label_HubsWindow_BrowseAction]</param>
+            <param name="help">$LOCALIZE[31931]</param>
+            <param name="setting">BrowseAction</param>
+        </include>
+        <include content="Settings_ButtonImage" description="Edit widgets">
+            <param name="id">9011</param>
+            <param name="groupid">9111</param>
+            <param name="dialog">true</param>
+            <param name="icon">special://skin/extras/icons/layer-group.png</param>
+            <param name="has_label2">true</param>
+            <param name="label2">$INFO[Container(30921).NumItems,, $LOCALIZE[31022]]</param>
+            <param name="window">shortcuts</param>
+            <param name="help">$LOCALIZE[31733]</param>
+            <label>$LOCALIZE[31328]</label>
+            <onclick>SetProperty(Shortcuts.EditMenu,menu=$INFO[Container(30000).ListItem.Property(window),,widgets],Home)</onclick>
+            <onclick>SetProperty(Shortcuts.EditMode,mode=widgets,Home)</onclick>
+            <onclick>ClearProperty(Shortcuts.EditGUID,Home)</onclick>
+            <onclick>ActivateWindow(1116)</onclick>
+            <onback>9008</onback>
+        </include>
+    </include>
+
+    <!-- Play action / Browse action of the focused hub in its widgets popup: Default (reset), Information, Context menu or Plot. Read by Widget_Action_OnClick -->
+    <include name="DialogShortcuts_Window_Settings_Hubs_Action">
+        <definition>
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[id]</param>
+                <param name="groupid">$PARAM[groupid]</param>
+                <param name="dialog">true</param>
+                <param name="icon">$PARAM[icon]</param>
+                <param name="has_label2">true</param>
+                <param name="label2">$PARAM[label2]</param>
+                <param name="window">shortcuts</param>
+                <param name="help">$PARAM[help]</param>
+                <label>$PARAM[label]</label>
+                <onclick>RunScript(script.skinvariables,run_dialog=select,heading=$PARAM[label],separator=||,list=$LOCALIZE[571]||$LOCALIZE[19033]||$LOCALIZE[31928]||$LOCALIZE[207],executebuiltin_0=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=,executebuiltin_1=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=info,executebuiltin_2=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=context,executebuiltin_3=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=plot)</onclick>
+                <onback>9008</onback>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Popup over the hubs window (1115) holding a group of the focused hub's options, shown while it has focus and sized to its visible buttons.
+         id prefixes the control ids: group id0, grouplist id1 (focus it to open), scrollbar id2 and close button id3/id4. Close returns focus to onclose -->
+    <include name="HubsWindow_Popup">
+        <definition>
+            <include content="DialogCustom_Favourites">
+                <param name="id">$PARAM[id]1</param>
+                <param name="groupid">$PARAM[id]0</param>
+                <param name="scrollbarid">$PARAM[id]2</param>
+                <param name="closebutton_id">$PARAM[id]3</param>
+                <param name="closebutton_groupid">$PARAM[id]4</param>
+                <param name="closebutton_onclick">SetFocus($PARAM[onclose])</param>
+                <param name="header">$PARAM[header]</param>
+                <param name="include_list">DialogCustom_Settings_Grouplist</param>
+                <param name="include_content">$PARAM[include_content]</param>
+                <param name="resize">true</param>
+                <param name="visible">ControlGroup($PARAM[id]0).HasFocus()</param>
             </include>
         </definition>
     </include>
@@ -1043,8 +1226,6 @@
     <!-- Options of the focused hub that depend on its type -->
     <include name="DialogShortcuts_Window_Settings_Hubs">
         <include>DialogShortcuts_Window_Settings_NextAired</include>
-        <include>DialogShortcuts_Window_Settings_LiveTV</include>
-        <include>DialogShortcuts_Window_Settings_Addons</include>
     </include>
 
     <include name="DialogShortcuts_Window_Settings_Power_Tiles">
@@ -1312,7 +1493,7 @@
                 <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">6</param></include>
                 <include content="HubsWindow_Preview_HomeBar_Slot"><param name="slot">7</param></include>
                 <include content="HubsWindow_Preview_HomeBar_Icon">
-                    <param name="icon">special://skin/extras/icons/power.png</param>
+                    <param name="icon">$VAR[Home_Icon_power]</param>
                     <param name="focused">$EXP[Exp_HubsWindow_Item_PowerPreview]</param>
                     <param name="visible">!Skin.HasSetting(HomeSwitcher.LoopBack)</param>
                 </include>
@@ -1395,7 +1576,13 @@
                         </control>
                         <control type="group">
                             <visible>$EXP[Exp_HubsWindow_Item_HasLayout]</visible>
-                            <include>HubsWindow_Preview_Screen</include>
+                            <include content="Wireframe_Hub_Screen">
+                                <param name="first">main_fg_12</param>
+                                <param name="standard">!$EXP[Exp_HubsWindow_Preview_Combined] + !$EXP[Exp_HubsWindow_Preview_Wall] + !$EXP[Exp_HubsWindow_Preview_Simple]</param>
+                                <param name="combined">$EXP[Exp_HubsWindow_Preview_Combined]</param>
+                                <param name="wall">$EXP[Exp_HubsWindow_Preview_Wall]</param>
+                                <param name="simple">$EXP[Exp_HubsWindow_Preview_Simple]</param>
+                            </include>
                         </control>
                         <control type="group">
                             <visible>$EXP[Exp_HubsWindow_Item_PowerPreview]</visible>
@@ -1428,210 +1615,6 @@
                 </control>
             </control>
         </control>
-    </include>
-
-    <!-- Hubs window (1115) preview: the mini home screen -->
-    <include name="HubsWindow_Preview_Screen">
-        <control type="group">
-            <left>25</left>
-            <right>24</right>
-
-            <!-- Standard and Combined: info panel above the widgets -->
-            <control type="group">
-                <visible>!$EXP[Exp_HubsWindow_Preview_Wall]</visible>
-                <control type="image">
-                    <top>31</top>
-                    <width>176</width>
-                    <height>25</height>
-                    <texture colordiffuse="main_fg_70">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <top>71</top>
-                    <width>227</width>
-                    <height>7</height>
-                    <texture colordiffuse="main_fg_50">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <top>87</top>
-                    <width>255</width>
-                    <height>6</height>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <top>100</top>
-                    <width>244</width>
-                    <height>6</height>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <top>111</top>
-                    <width>166</width>
-                    <height>6</height>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <top>128</top>
-                    <width>31</width>
-                    <height>9</height>
-                    <texture colordiffuse="main_fg_12">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <left>40</left>
-                    <top>128</top>
-                    <width>31</width>
-                    <height>9</height>
-                    <texture colordiffuse="main_fg_12">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <left>78</left>
-                    <top>128</top>
-                    <width>42</width>
-                    <height>9</height>
-                    <texture colordiffuse="main_fg_12">common/white.png</texture>
-                </control>
-            </control>
-
-            <!-- Standard: a row per widget with its label, the next one peeking in at the bottom -->
-            <control type="group">
-                <visible>!$EXP[Exp_HubsWindow_Preview_Combined] + !$EXP[Exp_HubsWindow_Preview_Wall]</visible>
-                <control type="image">
-                    <top>163</top>
-                    <width>73</width>
-                    <height>7</height>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <include content="HubsWindow_Preview_Row">
-                    <param name="top">184</param>
-                    <param name="item_h">98</param>
-                </include>
-                <control type="image">
-                    <top>295</top>
-                    <width>73</width>
-                    <height>7</height>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <include content="HubsWindow_Preview_Row">
-                    <param name="top">315</param>
-                    <param name="item_h">28</param>
-                </include>
-            </control>
-
-            <!-- Combined: one row with the widgets as tabs above it -->
-            <control type="group">
-                <visible>$EXP[Exp_HubsWindow_Preview_Combined]</visible>
-                <control type="grouplist">
-                    <top>161</top>
-                    <height>11</height>
-                    <orientation>horizontal</orientation>
-                    <itemgap>13</itemgap>
-                    <control type="image">
-                        <width>62</width>
-                        <texture colordiffuse="main_fg_90">common/white.png</texture>
-                    </control>
-                    <control type="image">
-                        <width>75</width>
-                        <texture colordiffuse="main_fg_12">common/white.png</texture>
-                    </control>
-                    <control type="image">
-                        <width>56</width>
-                        <texture colordiffuse="main_fg_12">common/white.png</texture>
-                    </control>
-                    <control type="image">
-                        <width>66</width>
-                        <texture colordiffuse="main_fg_12">common/white.png</texture>
-                    </control>
-                </control>
-                <include content="HubsWindow_Preview_Row">
-                    <param name="top">184</param>
-                    <param name="item_h">98</param>
-                </include>
-            </control>
-
-            <!-- Wall: title, the widgets as tabs and a grid below them -->
-            <control type="group">
-                <visible>$EXP[Exp_HubsWindow_Preview_Wall]</visible>
-                <control type="image">
-                    <top>31</top>
-                    <width>176</width>
-                    <height>25</height>
-                    <texture colordiffuse="main_fg_70">common/white.png</texture>
-                </control>
-                <control type="grouplist">
-                    <top>78</top>
-                    <height>11</height>
-                    <orientation>horizontal</orientation>
-                    <itemgap>13</itemgap>
-                    <control type="image">
-                        <width>62</width>
-                        <texture colordiffuse="main_fg_90">common/white.png</texture>
-                    </control>
-                    <control type="image">
-                        <width>75</width>
-                        <texture colordiffuse="main_fg_12">common/white.png</texture>
-                    </control>
-                    <control type="image">
-                        <width>56</width>
-                        <texture colordiffuse="main_fg_12">common/white.png</texture>
-                    </control>
-                    <control type="image">
-                        <width>66</width>
-                        <texture colordiffuse="main_fg_12">common/white.png</texture>
-                    </control>
-                </control>
-                <include content="HubsWindow_Preview_Row">
-                    <param name="top">105</param>
-                    <param name="item_h">98</param>
-                </include>
-                <include content="HubsWindow_Preview_Row">
-                    <param name="top">216</param>
-                    <param name="item_h">98</param>
-                </include>
-                <include content="HubsWindow_Preview_Row">
-                    <param name="top">327</param>
-                    <param name="item_h">16</param>
-                </include>
-            </control>
-        </control>
-    </include>
-
-    <!-- Hubs window (1115) preview: a row of placeholder posters -->
-    <include name="HubsWindow_Preview_Row">
-        <definition>
-            <control type="grouplist">
-                <top>$PARAM[top]</top>
-                <height>$PARAM[item_h]</height>
-                <orientation>horizontal</orientation>
-                <itemgap>13</itemgap>
-                <control type="image">
-                    <width>69</width>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <width>69</width>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <width>69</width>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <width>69</width>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <width>69</width>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <width>69</width>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <width>69</width>
-                    <texture colordiffuse="main_fg_30">common/white.png</texture>
-                </control>
-            </control>
-        </definition>
     </include>
 
     <!-- Hubs window (1115) preview: the options dialog (1170) opened from Power, its tiles following the tile layout -->
@@ -1957,7 +1940,7 @@
         <content>
             <item>
                 <label>$LOCALIZE[33060]</label>
-                <icon>special://skin/extras/icons/power.png</icon>
+                <icon>$VAR[Home_Icon_power]</icon>
                 <property name="static">power</property>
                 <property name="editmenu">menu=power</property>
                 <property name="disabled">$VAR[Label_Hubs_Power_Disabled]</property>
@@ -2043,67 +2026,67 @@
                 <param name="has_label2">true</param>
                 <param name="label2">$VAR[Label_Setting_LiveTV_Style]</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31735]</param>
                 <label>$LOCALIZE[736]</label>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].SquareChannels)</onclick>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9612</param>
                 <param name="groupid">9712</param>
                 <param name="icon">special://skin/extras/icons/search.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31736]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$VAR[Label_Setting_Hub_LiveTV_Search]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableSearch)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableSearch]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9613</param>
                 <param name="groupid">9713</param>
                 <param name="icon">special://skin/extras/icons/livetv.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31737]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[14301]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableChannels)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableChannels]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9614</param>
                 <param name="groupid">9714</param>
                 <param name="icon">special://skin/extras/icons/list-ul.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31738]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[19146]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableGroups)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableGroups]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9615</param>
                 <param name="groupid">9715</param>
                 <param name="icon">special://skin/extras/icons/record-vinyl.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31739]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[19017]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableRecordings)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableRecordings]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_LiveTV]</visible>
+                <onback>9008</onback>
             </include>
         </definition>
     </include>
@@ -2115,72 +2098,447 @@
                 <param name="groupid">9722</param>
                 <param name="icon">special://skin/extras/icons/video-addons.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31740]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[157]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableVideo)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableVideo]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9623</param>
                 <param name="groupid">9723</param>
                 <param name="icon">special://skin/extras/icons/music.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31741]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[249]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableMusic)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableMusic]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9624</param>
                 <param name="groupid">9724</param>
                 <param name="icon">special://skin/extras/icons/pictures.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31742]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[31011]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisablePicture)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisablePicture]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9625</param>
                 <param name="groupid">9725</param>
                 <param name="icon">special://skin/extras/icons/addon.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31743]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[31010]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableProgram)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableProgram]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
             <include content="Settings_ButtonImage">
                 <param name="id">9626</param>
                 <param name="groupid">9726</param>
                 <param name="icon">special://skin/extras/icons/gamepad.png</param>
                 <param name="window">shortcuts</param>
+                <param name="dialog">true</param>
                 <param name="help">$LOCALIZE[31744]</param>
                 <param name="control">radiobutton</param>
                 <param name="label">$LOCALIZE[10821]</param>
                 <param name="getlabel">false</param>
                 <onclick>Skin.ToggleSetting(Hub.$INFO[Container(30000).ListItem.Property(window)].DisableGame)</onclick>
                 <selected>!$EXP[DialogShortcuts_Hub_DisableGame]</selected>
-                <visible>$EXP[Exp_HubsWindow_Item_Enabled]</visible>
-                <visible>$EXP[Exp_HubsWindow_Type_Addons]</visible>
+                <onback>9008</onback>
             </include>
         </definition>
+    </include>
+
+    <!-- Ratings dialog (1137): the ratings menu named by Shortcuts.EditMenu, whose items can only be moved and enabled or disabled.
+         The list passes focus to the focused item's move and enable buttons (22900), which follow it down the list and are painted in its focused layout.
+         The list starts with a fixed item for the line's ends at or status (detail_label, detail_icon), which only enables or disables: it toggles setting,
+         and while setting is on the line shows up to six ratings instead of three.
+         Enabled ratings follow in menu order, then disabled ones, so an enabled rating's list position gives its slot on the line.
+         Above the list, a preview of the ratings line shows the first enabled ratings with dummy values -->
+    <include name="DialogRatings">
+        <definition>
+        <include>DialogRatings_Preview_Data</include>
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Animation_BounceIn_Dialog</include>
+            <include>Dimension_DialogWideMenu</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogWideMenu</param>
+            </include>
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+                <control type="group">
+                    <include>Size_Group_Head</include>
+                    <include content="Part_HeadText">
+                        <param name="label">$INFO[Window(Home).Property(CustomDialogSettingsTitle)]</param>
+                    </include>
+                    <include content="DialogRatings_Preview">
+                        <param name="setting">$PARAM[setting]</param>
+                        <param name="detail_icon">$PARAM[detail_icon]</param>
+                        <param name="preview_label">$PARAM[preview_label]</param>
+                    </include>
+                    <control type="group">
+                        <top>80</top>
+                        <include content="Part_ItemPage">
+                            <param name="id">22001</param>
+                        </include>
+                    </control>
+                    <include>Part_CloseButton</include>
+                </control>
+                <control type="group">
+                    <include>Size_Group_Body</include>
+                    <control type="group">
+                        <top>80</top>
+                        <control type="group">
+                            <include>Size_Grouplist_Pad</include>
+                            <include content="List_Dialog">
+                                <param name="id">22001</param>
+                                <param name="itemlayout_include">DialogRatings_Layout</param>
+                                <param name="altfocus">ControlGroup(22900).HasFocus()</param>
+                                <pagecontrol>61</pagecontrol>
+                                <content>
+                                    <include content="DialogRatings_Detail_Item">
+                                        <param name="setting">$PARAM[setting]</param>
+                                        <param name="detail_label">$PARAM[detail_label]</param>
+                                        <param name="detail_icon">$PARAM[detail_icon]</param>
+                                    </include>
+                                </content>
+                                <content>plugin://script.skinvariables/?info=get_shortcuts_node&amp;edit=true&amp;noblank=true&amp;exclude_key=disabled&amp;exclude_value=True&amp;skin=$VAR[Path_SkinVariables_SkinFolder]$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload),&amp;reload=,]$INFO[Window(Home).Property(Shortcuts.EditMenu),&amp;,]</content>
+                                <content>plugin://script.skinvariables/?info=get_shortcuts_node&amp;edit=true&amp;noblank=true&amp;filter_key=disabled&amp;filter_value=True&amp;skin=$VAR[Path_SkinVariables_SkinFolder]$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload),&amp;reload=,]$INFO[Window(Home).Property(Shortcuts.EditMenu),&amp;,]</content>
+                                <onfocus>SetFocus(22900)</onfocus>
+                                <onright>61</onright>
+                                <onclick>noop</onclick>
+                            </include>
+                            <include>DialogRatings_Buttons</include>
+                        </control>
+                    </control>
+                </control>
+                <control type="group">
+                    <top>80</top>
+                    <include content="Part_Scrollbar">
+                        <param name="id">61</param>
+                        <onleft>22900</onleft>
+                    </include>
+                </control>
+            </control>
+        </control>
+        </definition>
+    </include>
+
+    <!-- Ratings dialog fixed item for the line's ends at or status: listed as disabled while setting is on -->
+    <include name="DialogRatings_Detail_Item">
+        <definition>
+            <item>
+                <label>$PARAM[detail_label]</label>
+                <icon>flags/monochrome/$PARAM[detail_icon]</icon>
+                <property name="static">setting</property>
+                <property name="setting">$PARAM[setting]</property>
+                <visible>!Skin.HasSetting($PARAM[setting])</visible>
+            </item>
+            <item>
+                <label>$PARAM[detail_label]</label>
+                <icon>flags/monochrome/$PARAM[detail_icon]</icon>
+                <property name="static">setting</property>
+                <property name="setting">$PARAM[setting]</property>
+                <property name="disabled">True</property>
+                <visible>Skin.HasSetting($PARAM[setting])</visible>
+            </item>
+        </definition>
+    </include>
+
+    <!-- Ratings dialog preview data: the enabled items of the ratings menu in order (22002) and dummy rating values (7000, read as the C7000 service) -->
+    <include name="DialogRatings_Preview_Data">
+        <include content="Object_Hidden_List">
+            <param name="id">22002</param>
+            <content>plugin://script.skinvariables/?info=get_shortcuts_node&amp;skin=$VAR[Path_SkinVariables_SkinFolder]$INFO[Window(Home).Property(SkinVariables.ShortcutsNode.Reload),&amp;reload=,]$INFO[Window(Home).Property(Shortcuts.EditMenu),&amp;,]</content>
+        </include>
+        <include content="Object_Hidden_List">
+            <param name="id">7000</param>
+            <content>
+                <item>
+                    <label>$LOCALIZE[31202]</label>
+                    <property name="Trakt_Rating">$NUMBER[7.8]</property>
+                    <property name="MetaCritic_Rating">$NUMBER[74]</property>
+                    <property name="Oscar_Wins">$NUMBER[2]</property>
+                    <property name="TMDb_Rating">$NUMBER[7.6]</property>
+                    <property name="RottenTomatoes_UserMeter">$NUMBER[88]</property>
+                    <property name="RottenTomatoes_Rating">$NUMBER[91]</property>
+                    <property name="RottenTomatoes_Image">fresh</property>
+                    <property name="IMDb_Rating">$NUMBER[7.8]</property>
+                    <property name="MDBList_Rating">$NUMBER[80]</property>
+                    <property name="Letterboxd_Rating">$NUMBER[3.9]</property>
+                    <property name="MyAnimeList_Rating">$NUMBER[8.2]</property>
+                    <property name="Rating">$NUMBER[7.5]</property>
+                    <property name="UserRating">$NUMBER[8]</property>
+                    <onclick>noop</onclick>
+                </item>
+            </content>
+        </include>
+    </include>
+
+    <!-- Ratings dialog preview of the ratings line: the first three enabled ratings, then the ends at or status (detail_icon, preview_label).
+         While setting is on the detail is hidden and up to six ratings show -->
+    <include name="DialogRatings_Preview">
+        <definition>
+        <control type="group">
+            <left>constant_dialog_pad</left>
+            <right>constant_dialog_pad</right>
+            <top>110</top>
+            <height>40</height>
+            <control type="grouplist">
+                <include>Info_Meta_Grouplist_Definition</include>
+                <include content="DialogRatings_Preview_Slot">
+                    <param name="slot">0</param>
+                </include>
+                <include content="DialogRatings_Preview_Slot">
+                    <param name="slot">1</param>
+                </include>
+                <include content="DialogRatings_Preview_Slot">
+                    <param name="slot">2</param>
+                </include>
+                <include content="DialogRatings_Preview_Slot">
+                    <param name="slot">3</param>
+                    <param name="visible">Skin.HasSetting($PARAM[setting])</param>
+                </include>
+                <include content="DialogRatings_Preview_Slot">
+                    <param name="slot">4</param>
+                    <param name="visible">Skin.HasSetting($PARAM[setting])</param>
+                </include>
+                <include content="DialogRatings_Preview_Slot">
+                    <param name="slot">5</param>
+                    <param name="visible">Skin.HasSetting($PARAM[setting])</param>
+                </include>
+                <include content="Info_Meta_Object">
+                    <param name="icon">flags/$VAR[Color_Directory]/$PARAM[detail_icon]</param>
+                    <param name="label">$PARAM[preview_label]</param>
+                    <param name="visible">!Skin.HasSetting($PARAM[setting])</param>
+                    <param name="colordiffuse">dialog_fg</param>
+                </include>
+            </control>
+        </control>
+        </definition>
+    </include>
+
+    <!-- One preview slot: the rating at that position of the enabled ratings (22002) -->
+    <include name="DialogRatings_Preview_Slot">
+        <param name="visible">true</param>
+        <definition>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">Trakt_Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">MetaCritic_Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">Oscar_Wins</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">TMDb_Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">RottenTomatoes_UserMeter</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">RottenTomatoes_Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">IMDb_Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">MDBList_Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">Letterboxd_Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">MyAnimeList_Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">Rating</param>
+            </include>
+            <include content="DialogRatings_Preview_Rating">
+                <param name="slot">$PARAM[slot]</param>
+                <param name="visible">$PARAM[visible]</param>
+                <param name="path">UserRating</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- A ratings line item (Info_Meta_Ratings_[path]) shown while it is at that slot of the enabled ratings, with the dummy values -->
+    <include name="DialogRatings_Preview_Rating">
+        <definition>
+            <include content="Info_Meta_Ratings_$PARAM[path]">
+                <param name="visible">[$PARAM[visible]] + String.IsEqual(Container(22002).ListItemAbsolute($PARAM[slot]).Property(path),$PARAM[path])</param>
+                <param name="info">Container(7000).ListItem.Property($PARAM[path])</param>
+                <param name="service">C7000</param>
+                <param name="source">Container(7000).ListItem.Property</param>
+                <param name="source_prefix" />
+                <param name="colordiffuse">dialog_fg</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Ratings dialog slots: a rating is unlisted while it is past the line's three slots after the fixed item (six while the fixed item is disabled).
+         Without rating preferences (strict) only the slots count, so an unlisted rating is shown as disabled and enabling it promotes it to the first slot.
+         Item_ expressions read the list item being laid out, the others the focused item of the list (22001) -->
+    <expression name="DialogRatings_IsStrict_Expression">[!Skin.HasSetting(Ratings.EnablePreferences)]</expression>
+    <expression name="DialogRatings_HasSixSlots_Expression">[String.IsEqual(Container(22001).ListItemAbsolute(0).Property(disabled),True)]</expression>
+    <expression name="DialogRatings_Item_IsUnlisted_Expression">[String.IsEmpty(ListItem.Property(static)) + Integer.IsGreater(ListItem.CurrentItem,4) + ![$EXP[DialogRatings_HasSixSlots_Expression] + !Integer.IsGreater(ListItem.CurrentItem,7)]]</expression>
+    <expression name="DialogRatings_Item_IsDisabled_Expression">[String.IsEqual(ListItem.Property(disabled),True) | [$EXP[DialogRatings_IsStrict_Expression] + $EXP[DialogRatings_Item_IsUnlisted_Expression]]]</expression>
+    <expression name="DialogRatings_IsPromotable_Expression">[$EXP[DialogRatings_IsStrict_Expression] + String.IsEmpty(Container(22001).ListItem.Property(static)) + Integer.IsGreater(Container(22001).CurrentItem,4) + ![$EXP[DialogRatings_HasSixSlots_Expression] + !Integer.IsGreater(Container(22001).CurrentItem,7)]]</expression>
+    <expression name="DialogRatings_IsDisabled_Expression">[String.IsEqual(Container(22001).ListItem.Property(disabled),True) | $EXP[DialogRatings_IsPromotable_Expression]]</expression>
+
+    <variable name="DialogRatings_DisableEnable_Icon">
+        <value condition="!$EXP[DialogRatings_IsDisabled_Expression]">special://skin/extras/icons/circle-check.png</value>
+        <value>special://skin/extras/icons/circle-cancel.png</value>
+    </variable>
+
+    <!-- Ratings dialog list item: unmasked icon and label, turned red while the item is shown as disabled (as in the shortcuts editor)
+         and light blue while rating preferences are on and an enabled rating is unlisted. The focused item also paints its buttons -->
+    <include name="DialogRatings_Layout">
+        <definition>
+            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="group">
+                <left>40</left>
+                <right>40</right>
+                <animation effect="fadediffuse" start="ffffffff" end="FFBF0000" condition="$EXP[DialogRatings_Item_IsDisabled_Expression]">Conditional</animation>
+                <animation effect="fadediffuse" start="ffffffff" end="FF7FC4FF" condition="!$EXP[DialogRatings_IsStrict_Expression] + !String.IsEqual(ListItem.Property(disabled),True) + $EXP[DialogRatings_Item_IsUnlisted_Expression]">Conditional</animation>
+                <include content="Part_List_Icon">
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="diffuse" />
+                </include>
+                <include content="List_Layout_Dialog_Labels">
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                </include>
+            </control>
+            <include condition="$PARAM[selected]">DialogRatings_FakeButtons</include>
+        </definition>
+    </include>
+
+    <include name="DialogRatings_FakeButtons">
+        <control type="group">
+            <right>20</right>
+            <height>72</height>
+            <centertop>50%</centertop>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22901</param>
+                <visible>String.IsEmpty(ListItem.Property(static)) + !$EXP[DialogRatings_Item_IsDisabled_Expression]</visible>
+                <param name="icon">special://skin/extras/icons/circle-arrow-up.png</param>
+                <right>104</right>
+            </include>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22902</param>
+                <visible>String.IsEmpty(ListItem.Property(static)) + !$EXP[DialogRatings_Item_IsDisabled_Expression]</visible>
+                <param name="icon">special://skin/extras/icons/circle-arrow-down.png</param>
+                <right>52</right>
+            </include>
+            <include content="DialogShortcuts_ShortcutList_FakeButton">
+                <param name="id">22905</param>
+                <param name="icon">$VAR[DialogRatings_DisableEnable_Icon]</param>
+                <right>0</right>
+            </include>
+        </control>
+    </include>
+
+    <!-- Move up, move down and enable buttons for the ratings dialog's focused item, slid down to its row. Back closes the dialog.
+         They are faded out so only the copies painted in the focused layout show, which scroll with the list.
+         The fixed item and ratings shown as disabled have only the enable button, so moving onto them focuses that button first; up and down stop at the ends of the list.
+         Enabling a promotable rating moves it to the first slot, enabling it first when it is disabled (the move waits for the toggle so the two writes don't overlap) -->
+    <include name="DialogRatings_Buttons">
+        <control type="group">
+            <include>Animation_ConditionalFade</include>
+            <animation effect="slide" start="0" end="0,80" condition="Container(22001).Position(1)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,160" condition="Container(22001).Position(2)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,240" condition="Container(22001).Position(3)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,320" condition="Container(22001).Position(4)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,400" condition="Container(22001).Position(5)">Conditional</animation>
+            <animation effect="slide" start="0" end="0,480" condition="Container(22001).Position(6)">Conditional</animation>
+            <control type="grouplist" id="22900">
+                <orientation>horizontal</orientation>
+                <itemgap>-20</itemgap>
+                <onup condition="!String.IsEmpty(Container(22001).ListItemNoWrap(-1).Property(static))">SetFocus(22905)</onup>
+                <onup condition="!String.IsEmpty(Container(22001).ListItemNoWrap(-1).Label)">Control.Move(22001,-1)</onup>
+                <ondown condition="[String.IsEqual(Container(22001).ListItemNoWrap(1).Property(disabled),True) | [$EXP[DialogRatings_IsStrict_Expression] + !String.IsEmpty(Container(22001).ListItemNoWrap(1).Label) + Integer.IsGreater(Container(22001).CurrentItem,3) + ![$EXP[DialogRatings_HasSixSlots_Expression] + !Integer.IsGreater(Container(22001).CurrentItem,6)]]]">SetFocus(22905)</ondown>
+                <ondown condition="!String.IsEmpty(Container(22001).ListItemNoWrap(1).Label)">Control.Move(22001,1)</ondown>
+                <onright>61</onright>
+                <height>72</height>
+                <centertop>40</centertop>
+                <align>right</align>
+                <right>20</right>
+                <include content="DialogShortcuts_MoveButton">
+                    <param name="id">22901</param>
+                    <param name="visible">String.IsEmpty(Container(22001).ListItem.Property(static)) + !$EXP[DialogRatings_IsDisabled_Expression]</param>
+                    <param name="move">-1</param>
+                    <param name="target">$INFO[Container(22001).ListItem(-1).Property(item),&amp;&amp;offset::,]</param>
+                    <param name="texture">special://skin/extras/icons/circle-arrow-up.png</param>
+                    <param name="onback">noop</param>
+                </include>
+                <include content="DialogShortcuts_MoveButton">
+                    <param name="id">22902</param>
+                    <param name="visible">String.IsEmpty(Container(22001).ListItem.Property(static)) + !$EXP[DialogRatings_IsDisabled_Expression]</param>
+                    <param name="move">1</param>
+                    <param name="target">$INFO[Container(22001).ListItem(1).Property(item),&amp;&amp;offset::,]</param>
+                    <param name="texture">special://skin/extras/icons/circle-arrow-down.png</param>
+                    <param name="onback">noop</param>
+                </include>
+                <control type="button" id="22905">
+                    <texturenofocus colordiffuse="$VAR[ColorSelected_30]">$VAR[DialogRatings_DisableEnable_Icon]</texturenofocus>
+                    <texturefocus colordiffuse="$VAR[ColorSelected]">$VAR[DialogRatings_DisableEnable_Icon]</texturefocus>
+                    <include content="DialogShortcuts_Toggle_Onclick">
+                        <param name="container">22001</param>
+                        <param name="static">!String.IsEmpty(Container(22001).ListItem.Property(static)) | $EXP[DialogRatings_IsPromotable_Expression]</param>
+                    </include>
+                    <include content="DialogShortcuts_Move_Onclick">
+                        <param name="condition">$EXP[DialogRatings_IsPromotable_Expression] + !String.IsEqual(Container(22001).ListItem.Property(disabled),True)</param>
+                        <param name="move">0</param>
+                        <param name="target">&amp;&amp;offset::0</param>
+                    </include>
+                    <onclick condition="$EXP[DialogRatings_IsPromotable_Expression] + String.IsEqual(Container(22001).ListItem.Property(disabled),True)">RunScript(script.skinvariables,run_executebuiltin=RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_toggle)||sleep=0.5||RunPlugin($INFO[Container(22001).ListItem.Property(url)]&amp;func=do_move&amp;&amp;move::0&amp;&amp;window_prop::url&amp;&amp;offset::0))</onclick>
+                    <width>72</width>
+                    <height>72</height>
+                </control>
+            </control>
+        </control>
     </include>
 
 </includes>

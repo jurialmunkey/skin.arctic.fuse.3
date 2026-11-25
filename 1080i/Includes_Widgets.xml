@@ -157,6 +157,30 @@
         <onclick condition="!String.IsEmpty(ListItem.Property(target))">ActivateWindow($INFO[ListItem.Property(target)],$INFO[ListItem.FolderPath],return)</onclick>
     </include>
 
+    <!-- Hub Play action (non-folder items) and Browse action (folder items) overrides for library type items.
+         Unset leaves the item's own click. Not used by the spotlight. -->
+    <include name="Widget_Action_OnClick">
+        <definition>
+            <include content="Widget_Action_OnClick_Setting">
+                <param name="setting">HomeSwitcher.$PARAM[window].PlayAction</param>
+                <param name="condition">!ListItem.IsFolder + $EXP[Exp_Widget_Action_IsLibraryType]</param>
+            </include>
+            <include content="Widget_Action_OnClick_Setting">
+                <param name="setting">HomeSwitcher.$PARAM[window].BrowseAction</param>
+                <param name="condition">ListItem.IsFolder + $EXP[Exp_Widget_Action_IsLibraryType]</param>
+            </include>
+        </definition>
+    </include>
+    <include name="Widget_Action_OnClick_Setting">
+        <definition>
+            <onclick condition="[$PARAM[condition]] + Skin.String($PARAM[setting],info)">Action(Info)</onclick>
+            <onclick condition="[$PARAM[condition]] + Skin.String($PARAM[setting],context)">Action(ContextMenu)</onclick>
+            <include content="DialogInfo_Widgets_Action">
+                <param name="condition">[$PARAM[condition]] + Skin.String($PARAM[setting],plot)</param>
+            </include>
+        </definition>
+    </include>
+
     <include name="Widget_Categories_Navigation">
         <ondown>$PARAM[id]</ondown>
     </include>
@@ -168,6 +192,16 @@
         <onfocus>ClearProperty(InfoPanel.FullSwitch,Home)</onfocus>
     </include>
 
+    <include name="Widget_Simple_Categories_Navigation">
+        <definition>
+            <include content="Widget_Combined_Categories_Navigation">
+                <param name="id">$PARAM[id]</param>
+                <param name="categoryid">$PARAM[categoryid]</param>
+            </include>
+            <onfocus>SetProperty(InfoPanel.FullSwitch,Full,Home)</onfocus>
+        </definition>
+    </include>
+
     <include name="Widget_Combined_Categories_HiddenButton_OnFocus">
         <definition>
             <!-- Kodi executes onfocus only after the focus animation finishes. -->
@@ -177,10 +211,10 @@
     </include>
 
     <include name="Widget_OnFocus">
-        <onfocus condition="!$EXP[Exp_InfoDialogs] + $PARAM[widget_hideartwork]">SetProperty(Background.HideArtwork,True)</onfocus>
+        <onfocus condition="!$EXP[Exp_InfoDialogs] + $PARAM[widget_hideartwork] + !$EXP[Exp_FlixArt_IsAlways]">SetProperty(Background.HideArtwork,True)</onfocus>
         <onfocus condition="$EXP[Exp_InfoDialogs] + $PARAM[widget_hideartwork]">SetProperty(Background.DialogInfo.HideArtwork,True,Home)</onfocus>
 
-        <onfocus condition="!$EXP[Exp_InfoDialogs] + ![$PARAM[widget_hideartwork]]">ClearProperty(Background.HideArtwork)</onfocus>
+        <onfocus condition="!$EXP[Exp_InfoDialogs] + [![$PARAM[widget_hideartwork]] | $EXP[Exp_FlixArt_IsAlways]]">ClearProperty(Background.HideArtwork)</onfocus>
         <onfocus condition="$EXP[Exp_InfoDialogs] + ![$PARAM[widget_hideartwork]]">ClearProperty(Background.DialogInfo.HideArtwork,Home)</onfocus>
 
         <onfocus condition="!$EXP[Exp_InfoDialogs] + ![$PARAM[widget_showoverlay]]">ClearProperty(Background.ShowOverlay,Home)</onfocus>
@@ -363,16 +397,6 @@
         </definition>
     </include>
 
-    <include name="Widget_Busy_BlankItem_Flyer">
-        <include content="Widget_Busy_BlankItem">
-            <param name="item_w">view_icon_item_w</param>
-            <param name="item_h">view_landscape_item_h</param>
-            <param name="itemlayout_w">view_icon_itemlayout_w</param>
-            <param name="itemlayout_h">view_poster_itemlayout_h</param>
-            <param name="colordiffuse">$PARAM[colordiffuse]</param>
-        </include>
-    </include>
-
     <include name="Widget_Busy_BlankItem_Landscape">
         <include content="Widget_Busy_BlankItem">
             <param name="item_w">view_landscape_item_w</param>
@@ -507,16 +531,6 @@
         </include>
     </include>
 
-    <include name="Widget_Busy_BlankItem_Placard">
-        <include content="Widget_Busy_BlankItem">
-            <param name="item_w">view_placard_item_w</param>
-            <param name="item_h">view_landscape_item_h</param>
-            <param name="itemlayout_w">view_placard_itemlayout_w</param>
-            <param name="itemlayout_h">view_poster_itemlayout_h</param>
-            <param name="colordiffuse">$PARAM[colordiffuse]</param>
-        </include>
-    </include>
-
     <include name="Widget_Busy_BlankItem_Circle">
         <include content="Widget_Busy_BlankItem">
             <param name="item_w">view_poster_item_h</param>
@@ -610,21 +624,16 @@
         </control>
     </include>
     <include name="Widget_Busy_BlankItems__List_Flyer_Row">
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
+        <include>Widget_Busy_BlankItems__List_Poster_Row</include>
     </include>
     <include name="Widget_Busy_BlankItems__List_Landscape_Row">
         <include>Widget_Busy_BlankItem_Landscape</include>
         <include>Widget_Busy_BlankItem_Landscape</include>
         <include>Widget_Busy_BlankItem_Landscape</include>
         <include>Widget_Busy_BlankItem_Landscape</include>
+    </include>
+    <include name="Widget_Busy_BlankItems__List_Weather_Row">
+        <include>Widget_Busy_BlankItems__List_Landscape_Row</include>
     </include>
     <include name="Widget_Busy_BlankItems__List_Poster_Row">
         <include>Widget_Busy_BlankItem_Poster</include>
@@ -701,15 +710,6 @@
         <include>Widget_Busy_BlankItem_Poster</include>
         <include>Widget_Busy_BlankItem_Poster</include>
         <include>Widget_Busy_BlankItem_Poster</include>
-    </include>
-    <include name="Widget_Busy_BlankItems__List_Placard_Row">
-        <include>Widget_Busy_BlankItem_Placard</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
-        <include>Widget_Busy_BlankItem_Flyer</include>
     </include>
     <include name="Widget_Busy_BlankItems__List_Board_Row">
         <include>Widget_Busy_BlankItem_Board</include>
