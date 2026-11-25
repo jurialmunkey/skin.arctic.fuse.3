@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
 
-    <expression name="DialogSelect_Conditional_Buttons_Expression">[[Control.IsEnabled(5) + Control.IsVisible(5)] | [Control.IsEnabled(8) + Control.IsVisible(8)]]</expression>
+    <expression name="DialogSelect_Conditional_Buttons_Expression">[[Control.IsEnabled(5) + Control.IsVisible(5)] | [Control.IsEnabled(6) + Control.IsVisible(6)] | [Control.IsEnabled(7) + Control.IsVisible(7)] | [Control.IsEnabled(8) + Control.IsVisible(8)]]</expression>
 
     <include name="DialogSelect_Standard">
         <include>Part_Dim_Overlay</include>
@@ -84,21 +84,31 @@
             <right>view_pad</right>
             <width>1200</width>
             <include>Animation_SlideIn_Dialog</include>
-            <include content="DialogSelect_OSD_List">
-                <param name="id">3</param>
-                <param name="scrollbar">61</param>
-                <param name="layout">List_Layout_Dialog_SimpleCheckmark</param>
-            </include>
-            <include content="DialogSelect_OSD_List">
-                <param name="id">6</param>
-                <param name="scrollbar">62</param>
-                <param name="layout">List_Layout_Dialog_DetailedCheckmark</param>
-                <param name="detailed">true</param>
-            </include>
+            <control type="group">
+                <include content="OSD_Stream_ListSlide">
+                    <param name="id">3</param>
+                    <param name="condition">Control.IsVisible(3)</param>
+                </include>
+                <include content="OSD_Stream_ListSlide">
+                    <param name="id">6</param>
+                    <param name="condition">Control.IsVisible(6)</param>
+                </include>
+                <include content="DialogSelect_OSD_List">
+                    <param name="id">3</param>
+                    <param name="scrollbar">61</param>
+                    <param name="layout">List_Layout_Dialog_SimpleCheckmark</param>
+                </include>
+                <include content="DialogSelect_OSD_List">
+                    <param name="id">6</param>
+                    <param name="scrollbar">62</param>
+                    <param name="layout">List_Layout_Dialog_DetailedCheckmark</param>
+                    <param name="detailed">true</param>
+                </include>
+                <include>DialogSelect_OSD_Actions</include>
+            </control>
             <include content="DialogSettings_OSD_Spotlight">
                 <param name="id">1</param>
             </include>
-            <include>DialogSelect_OSD_Actions</include>
         </control>
         <include>DialogSelect_ArtworkPreview</include>
     </include>
@@ -136,17 +146,95 @@
     </include>
 
     <include name="DialogSelect_OSD_Actions">
-        <control type="grouplist" id="9000">
+        <control type="group">
             <right>780</right>
             <width>280</width>
             <top>180</top>
             <height>400</height>
-            <orientation>vertical</orientation>
-            <onright>3</onright>
-            <include content="DialogSelect_Standard_Items">
-                <param name="button_include">DialogSelect_OSD_Action</param>
+            <include content="Dialog_OSD_ActionMenu">
+                <param name="stretch">200</param>
+                <param name="available">$EXP[DialogSelect_Conditional_Buttons_Expression]</param>
+                <onright>3</onright>
+                <include content="DialogSelect_Standard_Items">
+                    <param name="button_include">DialogSelect_OSD_Action</param>
+                </include>
             </include>
         </control>
+    </include>
+
+    <include name="Dialog_OSD_ActionMenu">
+        <param name="available">true</param>
+        <definition>
+            <control type="grouplist" id="9000">
+                <width>100%</width>
+                <height>100%</height>
+                <orientation>vertical</orientation>
+                <visible allowhiddenfocus="true">ControlGroup(9000).HasFocus()</visible>
+                <animation effect="fade" start="0" end="100" delay="240" time="1" reversible="false">Visible</animation>
+                <nested />
+            </control>
+            <include content="Dialog_OSD_MenuIcon">
+                <param name="stretch">$PARAM[stretch]</param>
+                <param name="available">$PARAM[available]</param>
+            </include>
+        </definition>
+    </include>
+
+    <include name="Dialog_OSD_MenuIcon">
+        <definition>
+            <control type="group">
+                <right>0</right>
+                <width>80</width>
+                <height>80</height>
+                <visible>$PARAM[available]</visible>
+                <animation effect="fade" start="100" end="0" delay="240" time="1" condition="ControlGroup(9000).HasFocus()" reversible="false">Conditional</animation>
+                <include content="Dialog_OSD_FocusSegment">
+                    <param name="left">0</param>
+                    <param name="width">40</param>
+                    <param name="align">left</param>
+                    <animation effect="slide" start="0,0" end="-$PARAM[stretch],0" delay="0" time="240" tween="cubic" condition="ControlGroup(9000).HasFocus()" reversible="false">Conditional</animation>
+                </include>
+                <!-- A 100 px center strip makes its final zoom percentage equal to the stretch in pixels. -->
+                <include content="Dialog_OSD_FocusSegment">
+                    <param name="left">-60</param>
+                    <param name="width">100</param>
+                    <param name="align">center</param>
+                    <animation effect="zoom" start="0,100" end="$PARAM[stretch],100" center="40,40" delay="0" time="240" tween="cubic" condition="ControlGroup(9000).HasFocus()" reversible="false">Conditional</animation>
+                </include>
+                <include content="Dialog_OSD_FocusSegment">
+                    <param name="left">40</param>
+                    <param name="width">40</param>
+                    <param name="align">right</param>
+                </include>
+                <control type="image">
+                    <right>20</right>
+                    <width>40</width>
+                    <top>20</top>
+                    <height>40</height>
+                    <bordersize>icon_menu_bordersize</bordersize>
+                    <colordiffuse>main_fg_70</colordiffuse>
+                    <texture>special://skin/extras/icons/bars.png</texture>
+                    <visible>!ControlGroup(9000).HasFocus()</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Crop the native focus texture so the two rounded ends keep their shape as the middle expands. -->
+    <include name="Dialog_OSD_FocusSegment">
+        <definition>
+            <control type="image">
+                <left>$PARAM[left]</left>
+                <width>$PARAM[width]</width>
+                <height>80</height>
+                <aspectratio align="$PARAM[align]">scale</aspectratio>
+                <include content="Texture_FocusStyle">
+                    <param name="border">0</param>
+                </include>
+                <visible>ControlGroup(9000).HasFocus()</visible>
+                <nested />
+            </control>
+        </definition>
     </include>
 
     <include name="DialogSelect_OSD_Action">
