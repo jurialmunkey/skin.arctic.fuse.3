@@ -404,6 +404,131 @@
         </definition>
     </include>
 
+    <!-- Viewtype selector: wireframe cards on the left, the focused viewtype drawn large on the right -->
+    <include name="DialogSelect_Viewtype_Panels">
+        <include>Part_Dim_Overlay</include>
+        <control type="group">
+            <include>Dimension_DialogGridMenu</include>
+            <include>Animation_BounceIn_Dialog</include>
+            <include content="Part_Background_Panel">
+                <param name="dialog_size">Dimension_DialogGridMenu</param>
+                <param name="topline">false</param>
+            </include>
+            <control type="group" id="8000">
+                <include>Size_Dialog_Pad</include>
+                <include>DialogSelect_Viewtype_Cards</include>
+                <control type="group">
+                    <include>Size_RightGroup_Grid</include>
+                    <include>Part_Panel</include>
+                    <include>DialogSelect_Viewtype_Preview_Head</include>
+                    <include>DialogSelect_Viewtype_Preview</include>
+                </control>
+            </control>
+        </control>
+    </include>
+
+    <include name="DialogSelect_Viewtype_Cards">
+        <control type="group">
+            <include>Size_LeftGroup_Grid</include>
+            <control type="group">
+                <include>Size_Group_Head</include>
+                <include content="Part_HeadText">
+                    <param name="id">0</param>
+                    <param name="label">$LOCALIZE[31044]</param>
+                    <param name="right">constant_dialog_pad</param>
+                </include>
+                <include content="Part_ItemLine">
+                    <param name="label">$INFO[Container(3).NumItems,, $LOCALIZE[31808]]</param>
+                </include>
+            </control>
+            <control type="group">
+                <include>Size_Group_Body</include>
+                <!-- Two columns of three rows: 260x186.667 cards with a 20 gap -->
+                <include content="DialogCustom_Cards_List">
+                    <param name="id">3</param>
+                    <param name="card_w">280</param>
+                    <param name="card_h">206.667</param>
+                    <param name="itemlayout_include">DialogSelect_Viewtype_Card</param>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <!-- Kodi fills control 1 with the dialog heading, shown as the preview subline -->
+    <include name="DialogSelect_Viewtype_Preview_Head">
+        <control type="group">
+            <include>Size_Group_Head</include>
+            <control type="label" id="1">
+                <visible>false</visible>
+            </control>
+            <include content="Part_HeadText">
+                <param name="id">0</param>
+                <param name="label">$LOCALIZE[1000]</param>
+            </include>
+            <include content="Part_ItemLine">
+                <param name="label">[UPPERCASE]$INFO[Control.GetLabel(1)][/UPPERCASE]</param>
+            </include>
+            <include content="Part_CloseButton">
+                <param name="onleft">3</param>
+                <param name="ondown">3</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- The preview's bottom edge sits where the info text line would be, so the line is left out -->
+    <include name="DialogSelect_Viewtype_Preview">
+        <control type="group">
+            <include>Size_Group_Body</include>
+            <control type="group">
+                <left>40</left>
+                <top>40</top>
+                <width>960</width>
+                <height>540</height>
+                <include content="Wireframe_Preview">
+                    <param name="item">Container(3).ListItem</param>
+                </include>
+            </control>
+            <include content="Part_InfoText">
+                <param name="label">$VAR[Label_Viewtype_Description]</param>
+                <param name="line">false</param>
+                <param name="height">60</param>
+                <param name="centerbottom">50</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- Card: a full width 260x146.25 wireframe with the label floating in the 40 below; the panel sets the cards 20 inside its edges so the selection box isn't cut off -->
+    <include name="DialogSelect_Viewtype_Card">
+        <param name="selected">false</param>
+        <definition>
+            <control type="group">
+                <right>20</right>
+                <bottom>20</bottom>
+                <control type="group">
+                    <height>146.25</height>
+                    <include content="Wireframe_Preview">
+                        <param name="diffuse">diffuse/landscape_w260_h146.png</param>
+                        <param name="size">Quarter</param>
+                    </include>
+                    <include content="Part_List_Current_Check">
+                        <param name="current">ListItem.IsSelected</param>
+                    </include>
+                    <include content="Object_SelectBox" condition="$PARAM[selected]">
+                        <param name="shadow">false</param>
+                    </include>
+                </control>
+                <control type="label">
+                    <top>150</top>
+                    <bottom>0</bottom>
+                    <aligny>center</aligny>
+                    <font>font_hint_bold</font>
+                    <textcolor>dialog_fg_70</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <include name="DialogSelect_GamePreview">
         <control type="image">
             <description>Black out to blend gamewindow mask</description>

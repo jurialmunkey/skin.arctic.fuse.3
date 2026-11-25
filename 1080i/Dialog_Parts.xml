@@ -36,22 +36,25 @@
         </definition>
     </include>
 
-    <!-- Check badge for a static item whose label matches its "current" property -->
+    <!-- Check badge for a static item whose label matches its "current" property, or for the item the current condition picks -->
     <include name="Part_List_Current_Check">
-        <control type="group">
-            <right>10</right>
-            <top>10</top>
-            <width>40</width>
-            <height>40</height>
-            <visible>String.IsEqual(ListItem.Label,ListItem.Property(current))</visible>
-            <control type="image">
-                <texture colordiffuse="$VAR[ColorHighlight]">common/circle.png</texture>
+        <param name="current">String.IsEqual(ListItem.Label,ListItem.Property(current))</param>
+        <definition>
+            <control type="group">
+                <right>10</right>
+                <top>10</top>
+                <width>40</width>
+                <height>40</height>
+                <visible>$PARAM[current]</visible>
+                <control type="image">
+                    <texture colordiffuse="$VAR[ColorHighlight]">common/circle.png</texture>
+                </control>
+                <control type="image">
+                    <bordersize>9</bordersize>
+                    <texture colordiffuse="$VAR[ColorSelected]">indicator/checkmark.png</texture>
+                </control>
             </control>
-            <control type="image">
-                <bordersize>9</bordersize>
-                <texture colordiffuse="$VAR[ColorSelected]">indicator/checkmark.png</texture>
-            </control>
-        </control>
+        </definition>
     </include>
 
     <include name="Part_List_Icon_Padding">
@@ -482,6 +485,7 @@
         <param name="height">40</param>
         <param name="subline">false</param>
         <param name="scroll">false</param>
+        <param name="line">true</param>
         <definition>
             <control type="group">
                 <height>$PARAM[height]</height>
@@ -489,6 +493,7 @@
                 <left>$PARAM[left]</left>
                 <right>$PARAM[right]</right>
                 <control type="image">
+                    <visible>$PARAM[line]</visible>
                     <centertop>-20</centertop>
                     <height>1</height>
                     <left>20</left>
