@@ -1148,6 +1148,24 @@
          Live tv and add-ons hubs have their own popups of their sections. Kodi does not update visibility inside a hidden popup,
          so popup buttons must not depend on the focused hub, or the popup can open on a button that then hides -->
     <include name="DialogShortcuts_Window_Settings_Hubs_Widgets">
+        <include content="DialogShortcuts_Window_Settings_Hubs_Action">
+            <param name="id">9009</param>
+            <param name="groupid">9109</param>
+            <param name="icon">special://skin/extras/icons/play.png</param>
+            <param name="label">$LOCALIZE[31927]</param>
+            <param name="label2">$VAR[Label_HubsWindow_PlayAction]</param>
+            <param name="help">$LOCALIZE[31930]</param>
+            <param name="setting">PlayAction</param>
+        </include>
+        <include content="DialogShortcuts_Window_Settings_Hubs_Action">
+            <param name="id">9010</param>
+            <param name="groupid">9110</param>
+            <param name="icon">special://skin/extras/icons/folder.png</param>
+            <param name="label">$LOCALIZE[31929]</param>
+            <param name="label2">$VAR[Label_HubsWindow_BrowseAction]</param>
+            <param name="help">$LOCALIZE[31931]</param>
+            <param name="setting">BrowseAction</param>
+        </include>
         <include content="Settings_ButtonImage" description="Edit widgets">
             <param name="id">9011</param>
             <param name="groupid">9111</param>
@@ -1164,6 +1182,25 @@
             <onclick>ActivateWindow(1116)</onclick>
             <onback>9008</onback>
         </include>
+    </include>
+
+    <!-- Play action / Browse action of the focused hub in its widgets popup: Default (reset), Information, Context menu or Plot. Read by Widget_Action_OnClick -->
+    <include name="DialogShortcuts_Window_Settings_Hubs_Action">
+        <definition>
+            <include content="Settings_ButtonImage">
+                <param name="id">$PARAM[id]</param>
+                <param name="groupid">$PARAM[groupid]</param>
+                <param name="dialog">true</param>
+                <param name="icon">$PARAM[icon]</param>
+                <param name="has_label2">true</param>
+                <param name="label2">$PARAM[label2]</param>
+                <param name="window">shortcuts</param>
+                <param name="help">$PARAM[help]</param>
+                <label>$PARAM[label]</label>
+                <onclick>RunScript(script.skinvariables,run_dialog=select,heading=$PARAM[label],separator=||,list=$LOCALIZE[571]||$LOCALIZE[19033]||$LOCALIZE[31928]||$LOCALIZE[207],executebuiltin_0=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=,executebuiltin_1=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=info,executebuiltin_2=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=context,executebuiltin_3=route=run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-hubs-action.json&amp;use_rules=True&amp;setting=$PARAM[setting]&amp;value=plot)</onclick>
+                <onback>9008</onback>
+            </include>
+        </definition>
     </include>
 
     <!-- Popup over the hubs window (1115) holding a group of the focused hub's options, shown while it has focus and sized to its visible buttons.

@@ -1256,6 +1256,7 @@
             <onclick>SetProperty(tmdb_id,$PARAM[tmdb_id],$PARAM[window])</onclick>
             <onclick>SetProperty(tmdb_type,$PARAM[tmdb_type],$PARAM[window])</onclick>
             <onclick>SetProperty(dbtype,$PARAM[dbtype],$PARAM[window])</onclick>
+        <param name="condition">true</param>
             <onclick>SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],$PARAM[window])</onclick>
             <onclick>SetProperty(origin_tmdb_type,$VAR[Path_InfoParams_TMDbType],$PARAM[window])</onclick>
             <onclick>SetProperty(origin_season,$VAR[Path_InfoParams_Season],$PARAM[window])</onclick>
@@ -1267,29 +1268,29 @@
     <include name="DialogInfo_Widgets_Action">
         <param name="set_path">true</param>
         <definition>
-            <onclick>SetProperty(trailer,$INFO[Container.ListItem.Trailer],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(trailer,$INFO[Container.ListItem.Trailer],1114)</onclick>
 
 
-            <onclick condition="$PARAM[set_path]">SetProperty(path,$VAR[Path_DialogInfo_Widgets],1114)</onclick>
-            <onclick condition="![$PARAM[set_path]]">ClearProperty(path,1114)</onclick>
+            <onclick condition="$PARAM[condition] + [$PARAM[set_path]]">SetProperty(path,$VAR[Path_DialogInfo_Widgets],1114)</onclick>
+            <onclick condition="$PARAM[condition] + [![$PARAM[set_path]]]">ClearProperty(path,1114)</onclick>
 
-            <onclick>SetProperty(header,$INFO[Container.ListItem.Label]$INFO[Container.ListItem.Year, (,)],1114)</onclick>
-            <onclick>SetProperty(textbox,$ESCINFO[Container.ListItem.Plot,[B][COLOR=dialog_fg_90]$LOCALIZE[31028][/COLOR][/B][CR],],1114)</onclick>
-            <onclick>SetProperty(poster,$VAR[Image_Poster_Container],1114)</onclick>
-            <onclick>SetProperty(landscape,$VAR[Image_LandscapeOnly_Container],1114)</onclick>
-            <onclick>SetProperty(clearlogo,$VAR[Image_Clearlogo_Container],1114)</onclick>
-            <onclick>SetProperty(tmdb_id,$INFO[Container.ListItem.Property(tmdb_id)],1114)</onclick>
-            <onclick>SetProperty(tmdb_type,$INFO[Container.ListItem.Property(tmdb_type)],1114)</onclick>
-            <onclick condition="String.IsEqual(Container.ListItem.DBType,season) | String.IsEqual(Container.ListItem.DBType,episode)">SetProperty(season,$INFO[Container.ListItem.Season],1114)</onclick>
-            <onclick condition="String.IsEqual(Container.ListItem.DBType,episode)">SetProperty(episode,$INFO[Container.ListItem.episode],1114)</onclick>
-            <onclick>SetProperty(dbtype,$INFO[Container.ListItem.dbtype],1114)</onclick>
-            <onclick>SetProperty(filenameandpath,$INFO[Container.ListItem.filenameandpath],1114)</onclick>
-            <onclick>SetProperty(folderpath,$INFO[Container.ListItem.folderpath],1114)</onclick>
-            <onclick>SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],1114)</onclick>
-            <onclick>SetProperty(origin_tmdb_type,$VAR[Path_InfoParams_TMDbType],1114)</onclick>
-            <onclick>SetProperty(origin_season,$VAR[Path_InfoParams_Season],1114)</onclick>
-            <onclick>SetProperty(origin_episode,$VAR[Path_InfoParams_Episode],1114)</onclick>
-            <onclick>ActivateWindow(1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(header,$INFO[Container.ListItem.Label]$INFO[Container.ListItem.Year, (,)],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(textbox,$ESCINFO[Container.ListItem.Plot,[B][COLOR=dialog_fg_90]$LOCALIZE[31028][/COLOR][/B][CR],],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(poster,$VAR[Image_Poster_Container],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(landscape,$VAR[Image_LandscapeOnly_Container],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(clearlogo,$VAR[Image_Clearlogo_Container],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(tmdb_id,$INFO[Container.ListItem.Property(tmdb_id)],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(tmdb_type,$INFO[Container.ListItem.Property(tmdb_type)],1114)</onclick>
+            <onclick condition="$PARAM[condition] + [String.IsEqual(Container.ListItem.DBType,season) | String.IsEqual(Container.ListItem.DBType,episode)]">SetProperty(season,$INFO[Container.ListItem.Season],1114)</onclick>
+            <onclick condition="$PARAM[condition] + [String.IsEqual(Container.ListItem.DBType,episode)]">SetProperty(episode,$INFO[Container.ListItem.episode],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(dbtype,$INFO[Container.ListItem.dbtype],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(filenameandpath,$INFO[Container.ListItem.filenameandpath],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(folderpath,$INFO[Container.ListItem.folderpath],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(origin_tmdb_id,$VAR[Path_InfoParams_TMDbID],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(origin_tmdb_type,$VAR[Path_InfoParams_TMDbType],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(origin_season,$VAR[Path_InfoParams_Season],1114)</onclick>
+            <onclick condition="$PARAM[condition]">SetProperty(origin_episode,$VAR[Path_InfoParams_Episode],1114)</onclick>
+            <onclick condition="$PARAM[condition]">ActivateWindow(1114)</onclick>
         </definition>
     </include>
 
