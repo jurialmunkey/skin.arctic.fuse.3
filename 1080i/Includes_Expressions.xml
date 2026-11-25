@@ -177,18 +177,21 @@
     <!-- Background -->
     <expression name="Exp_FlixArt_IsAlways">[Skin.String(Skin.FlixArt.Visibility,Always)]</expression>
     <expression name="Exp_FlixArt_IsOff">[Skin.String(Skin.FlixArt.Visibility,Off)]</expression>
+    <expression name="Exp_Background_InfoVisible">[$EXP[Exp_InfoDialogs] | Window.IsVisible(1190)]</expression>
 
     <expression name="Exp_BackgroundArtwork_IsHidden">
         [$EXP[Exp_FlixArt_IsOff] |
-        [Skin.String(Skin.FlixArt.Visibility,RowOnly) + !$EXP[Hub_Spotlight_Visible_Expression] + [
-            !String.IsEmpty(Window(Home).Property(InfoPanel.FullSwitch)) | $EXP[Exp_PlainBackgroundWindows] |
-            Window.IsVisible(MyPVRGuide.xml) | [Window.IsVisible(MyPVRChannels.xml) + !Control.IsVisible(502)]
-        ]] |
-        $EXP[Exp_InfoDialogs] | Window.IsVisible(1190) | Window.IsVisible(favouritesbrowser) |
-        Window.IsVisible(weather) | !String.IsEmpty(Window.Property(Background.HideArtwork))]
+        [$EXP[Exp_Background_InfoVisible] + !$EXP[Exp_FlixArt_IsAlways]] |
+        [!$EXP[Exp_Background_InfoVisible] + [
+            [Skin.String(Skin.FlixArt.Visibility,RowOnly) + !$EXP[Hub_Spotlight_Visible_Expression] + [
+                !String.IsEmpty(Window(Home).Property(InfoPanel.FullSwitch)) | $EXP[Exp_PlainBackgroundWindows] |
+                Window.IsVisible(MyPVRGuide.xml) | [Window.IsVisible(MyPVRChannels.xml) + !Control.IsVisible(502)]
+            ]] |
+            Window.IsVisible(favouritesbrowser) | Window.IsVisible(weather) | !String.IsEmpty(Window.Property(Background.HideArtwork))
+        ]]]
     </expression>
 
-    <expression name="Exp_BackgroundArtwork_IsOverlay">[$EXP[Exp_BackgroundArtwork_IsHidden] | [!$EXP[Exp_InfoDialogs] + !String.IsEmpty(Window(Home).Property(Background.ShowOverlay))] | $EXP[Exp_InfoDialogs] | $EXP[Exp_PlainBackgroundWindows]]</expression>
+    <expression name="Exp_BackgroundArtwork_IsOverlay">[$EXP[Exp_BackgroundArtwork_IsHidden] | $EXP[Exp_Background_InfoVisible] | !String.IsEmpty(Window(Home).Property(Background.ShowOverlay)) | $EXP[Exp_PlainBackgroundWindows]]</expression>
 
     <expression name="Exp_BackgroundArtwork_IsSimple">[$EXP[Exp_PlainBackgroundWindows] | [Window.IsMedia + [[Window.IsVisible(DialogBusy.xml) + Integer.IsEqual(Container.NumItems,0)]]]]</expression>
 
