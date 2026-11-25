@@ -1766,6 +1766,28 @@
         </include>
     </include>
 
+    <variable name="DialogInfo_PersonCastMovies">
+        <value condition="String.IsEqual(ListItem.Property(numitems.tmdb.movies.cast),1)">$INFO[ListItem.Property(numitems.tmdb.movies.cast),, $LOCALIZE[20338]]</value>
+        <value>$INFO[ListItem.Property(numitems.tmdb.movies.cast),, $LOCALIZE[342]]</value>
+    </variable>
+
+    <variable name="DialogInfo_PersonCastCredits">
+        <value condition="String.IsEmpty(ListItem.Property(numitems.tmdb.tvshows.cast))">$VAR[DialogInfo_PersonCastMovies]</value>
+        <value condition="String.IsEqual(ListItem.Property(numitems.tmdb.tvshows.cast),1)">$VAR[DialogInfo_PersonCastMovies,, $LOCALIZE[1397] ]$INFO[ListItem.Property(numitems.tmdb.tvshows.cast),, $LOCALIZE[20364]]</value>
+        <value>$VAR[DialogInfo_PersonCastMovies,, $LOCALIZE[1397] ]$INFO[ListItem.Property(numitems.tmdb.tvshows.cast),, $LOCALIZE[20343]]</value>
+    </variable>
+
+    <variable name="DialogInfo_PersonCrewMovies">
+        <value condition="String.IsEqual(ListItem.Property(numitems.tmdb.movies.crew),1)">$INFO[ListItem.Property(numitems.tmdb.movies.crew),, $LOCALIZE[20338]]</value>
+        <value>$INFO[ListItem.Property(numitems.tmdb.movies.crew),, $LOCALIZE[342]]</value>
+    </variable>
+
+    <variable name="DialogInfo_PersonCrewCredits">
+        <value condition="String.IsEmpty(ListItem.Property(numitems.tmdb.tvshows.crew))">$VAR[DialogInfo_PersonCrewMovies]</value>
+        <value condition="String.IsEqual(ListItem.Property(numitems.tmdb.tvshows.crew),1)">$VAR[DialogInfo_PersonCrewMovies,, $LOCALIZE[1397] ]$INFO[ListItem.Property(numitems.tmdb.tvshows.crew),, $LOCALIZE[20364]]</value>
+        <value>$VAR[DialogInfo_PersonCrewMovies,, $LOCALIZE[1397] ]$INFO[ListItem.Property(numitems.tmdb.tvshows.crew),, $LOCALIZE[20343]]</value>
+    </variable>
+
     <include name="DialogInfo_PersonDetails">
         <control type="group">
             <top>20</top>
@@ -1821,15 +1843,17 @@
                     <param name="label">21893</param>
                     <param name="icon">location-dot</param>
                 </include>
-                <include content="DialogInfo_PersonDetail">
-                    <param name="property">numitems.tmdb.movies.cast</param>
-                    <param name="label">31938</param>
-                    <param name="icon">film</param>
+                <include content="Object_InfoCircle">
+                    <param name="icon">special://skin/extras/icons/users.png</param>
+                    <param name="role">$LOCALIZE[206]</param>
+                    <param name="name">$VAR[DialogInfo_PersonCastCredits]</param>
+                    <visible>!String.IsEmpty(ListItem.Property(numitems.tmdb.movies.cast)) | !String.IsEmpty(ListItem.Property(numitems.tmdb.tvshows.cast))</visible>
                 </include>
-                <include content="DialogInfo_PersonDetail">
-                    <param name="property">numitems.tmdb.tvshows.cast</param>
-                    <param name="label">31939</param>
-                    <param name="icon">tv</param>
+                <include content="Object_InfoCircle">
+                    <param name="icon">special://skin/extras/icons/clapperboard.png</param>
+                    <param name="role">$LOCALIZE[31050]</param>
+                    <param name="name">$VAR[DialogInfo_PersonCrewCredits]</param>
+                    <visible>!String.IsEmpty(ListItem.Property(numitems.tmdb.movies.crew)) | !String.IsEmpty(ListItem.Property(numitems.tmdb.tvshows.crew))</visible>
                 </include>
             </control>
         </control>
