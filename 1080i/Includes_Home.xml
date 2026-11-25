@@ -216,8 +216,13 @@
         <animation effect="fade" end="0" start="100" time="200" tween="cubic" easing="out">Hidden</animation>
     </include>
     <include name="Home_Slide_Animation">
-        <animation effect="slide" start="0,-200" end="0" time="400" tween="cubic" easing="out" reversible="false" condition="$EXP[Exp_Hubs_SlideInfo]">Conditional</animation>
-        <animation effect="slide" end="0,-200" start="0" delay="100" time="400" tween="cubic" easing="out" reversible="false" condition="!$EXP[Exp_Hubs_SlideInfo]">Conditional</animation>
+        <param name="start">0,-200</param>
+        <param name="end">0</param>
+        <param name="condition">$EXP[Exp_Hubs_SlideInfo]</param>
+        <definition>
+            <animation effect="slide" start="$PARAM[start]" end="$PARAM[end]" time="400" tween="cubic" easing="out" reversible="false" condition="$PARAM[condition]">Conditional</animation>
+            <animation effect="slide" start="$PARAM[end]" end="$PARAM[start]" delay="100" time="400" tween="cubic" easing="out" reversible="false" condition="![$PARAM[condition]]">Conditional</animation>
+        </definition>
     </include>
     <include name="Home_Info_Animation">
         <animation effect="fade" start="0" end="100" time="400" delay="200" tween="cubic" easing="in">Visible</animation>
