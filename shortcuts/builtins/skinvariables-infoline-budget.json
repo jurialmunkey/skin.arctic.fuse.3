@@ -1,0 +1,39 @@
+{
+    "description": "Reserve the selected cost in each affected line. Exclude the selected item and its exclusive peer, then evict the suffix of local units beyond the remaining room. Each unit carries an idempotent disable action.",
+    "infolabels": {
+        "units": "$VAR[InfoLine_Units_{layout}]"
+    },
+    "regex": {
+        "ordered": {
+            "input": "{units}",
+            "regex": "\\s+",
+            "value": ""
+        },
+        "candidates": {
+            "input": "{ordered}",
+            "regex": "\\b(?:{reserved})=[^|/]+\\|\\|",
+            "value": ""
+        },
+        "overflow": {
+            "input": "{candidates}",
+            "regex": "(?:^|/)(?:[^|/]+\\|\\|){{0,{room}}}",
+            "value": ""
+        },
+        "evictions": {
+            "input": "{overflow}",
+            "regex": "\\b\\w+=",
+            "value": ""
+        }
+    },
+    "actions": [
+        [
+            {
+                "rules": [
+                    "{disable_peer}!="
+                ],
+                "value": "{disable_peer}"
+            }
+        ],
+        "route=run_executebuiltin={evictions}{enable_item}"
+    ]
+}
