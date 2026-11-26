@@ -10,8 +10,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label">$INFO[$PARAM[source]VideoAspect$PARAM[end],,:1]</param>
             </include>
             <include content="Info_Line_Pill_Text">
@@ -21,8 +20,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label">[UPPERCASE]$INFO[$PARAM[source]VideoCodec$PARAM[end]][/UPPERCASE]</param>
             </include>
             <include content="Info_Line_VideoQuality_HDRType">
@@ -32,8 +30,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label"></param>
             </include>
             <include content="Info_Line_Pill_Text">
@@ -43,8 +40,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label">3D</param>
             </include>
             <include content="Info_Line_AudioChannels_Resolution">
@@ -54,8 +50,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label"></param>
             </include>
             <include content="Info_Line_Pill_Text">
@@ -65,8 +60,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label">[UPPERCASE]$INFO[$PARAM[source]AudioCodec$PARAM[end]][/UPPERCASE]</param>
             </include>
             <include content="InfoLine_Stars">
@@ -76,8 +70,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label"></param>
             </include>
         </definition>
@@ -91,8 +84,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label">$INFO[$PARAM[source]Premiered$PARAM[end]]</param>
             </include>
             <include content="$PARAM[item]">
@@ -102,8 +94,7 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label">$INFO[$PARAM[source]Year$PARAM[end]]</param>
             </include>
             <include content="$PARAM[item]">
@@ -113,20 +104,38 @@
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label">$INFO[$PARAM[source]MPAA$PARAM[end]]</param>
             </include>
             <include content="InfoLine_Duration">
-                <param name="visible">[false | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],movie)] | [$PARAM[player] + VideoPlayer.Content(movies)]] + !Skin.HasSetting(InfoLine.movie.DisableDuration)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],episode)] | [$PARAM[player] + VideoPlayer.Content(episodes)]] + !Skin.HasSetting(InfoLine.episode.DisableDuration)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],video)] | [$PARAM[player] + [!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)]]] + !Skin.HasSetting(InfoLine.video.DisableDuration)]] + [true]</param>
+                <param name="visible">[false | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],movie)] | [$PARAM[player] + VideoPlayer.Content(movies)]] + [!Skin.HasSetting(InfoLine.movie.DisableDuration) + !Skin.HasSetting(InfoLine.movie.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.movie.EnableDurationClock)]] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],episode)] | [$PARAM[player] + VideoPlayer.Content(episodes)]] + [!Skin.HasSetting(InfoLine.episode.DisableDuration) + !Skin.HasSetting(InfoLine.episode.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.episode.EnableDurationClock)]] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],video)] | [$PARAM[player] + [!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)]]] + [!Skin.HasSetting(InfoLine.video.DisableDuration) + !Skin.HasSetting(InfoLine.video.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.video.EnableDurationClock)]]] + [true]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="source">$PARAM[source]</param>
                 <param name="end">$PARAM[end]</param>
                 <param name="item">$PARAM[item]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="hours">$PARAM[hours]</param>
-                <param name="minutes">$PARAM[minutes]</param>
+                <param name="duration">$PARAM[duration]</param>
                 <param name="label"></param>
+            </include>
+            <include content="$PARAM[item]">
+                <param name="visible">[false | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],movie)] | [$PARAM[player] + VideoPlayer.Content(movies)]] + Skin.HasSetting(InfoLine.movie.EnableDurationMinutes)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],episode)] | [$PARAM[player] + VideoPlayer.Content(episodes)]] + Skin.HasSetting(InfoLine.episode.EnableDurationMinutes)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],video)] | [$PARAM[player] + [!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)]]] + Skin.HasSetting(InfoLine.video.EnableDurationMinutes)]] + [!String.IsEmpty($PARAM[source]Duration$PARAM[end])]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="source">$PARAM[source]</param>
+                <param name="end">$PARAM[end]</param>
+                <param name="item">$PARAM[item]</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="duration">$PARAM[duration]</param>
+                <param name="label">$INFO[$PARAM[duration]mins),, $LOCALIZE[31073]]</param>
+            </include>
+            <include content="$PARAM[item]">
+                <param name="visible">[false | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],movie)] | [$PARAM[player] + VideoPlayer.Content(movies)]] + Skin.HasSetting(InfoLine.movie.EnableDurationClock)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],episode)] | [$PARAM[player] + VideoPlayer.Content(episodes)]] + Skin.HasSetting(InfoLine.episode.EnableDurationClock)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],video)] | [$PARAM[player] + [!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)]]] + Skin.HasSetting(InfoLine.video.EnableDurationClock)]] + [!String.IsEmpty($PARAM[source]Duration$PARAM[end])]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="source">$PARAM[source]</param>
+                <param name="end">$PARAM[end]</param>
+                <param name="item">$PARAM[item]</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="duration">$PARAM[duration]</param>
+                <param name="label">$INFO[$PARAM[duration]hh:mm)]</param>
             </include>
         </definition>
     </include>
@@ -161,10 +170,16 @@
         <value condition="!Skin.HasSetting(InfoLine.movie.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.movie.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.movie.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_movie_Duration">
-        <value condition="!Skin.HasSetting(InfoLine.movie.DisableDuration)">Duration=Skin.SetBool(InfoLine.movie.DisableDuration)||Duration=Skin.SetBool(InfoLine.movie.DisableDuration)||</value>
+        <value condition="[!Skin.HasSetting(InfoLine.movie.DisableDuration) + !Skin.HasSetting(InfoLine.movie.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.movie.EnableDurationClock)]">Duration=Skin.SetBool(InfoLine.movie.DisableDuration)||Duration=Skin.SetBool(InfoLine.movie.DisableDuration)||</value>
+    </variable>
+    <variable name="InfoLine_Units_movie_DurationMinutes">
+        <value condition="Skin.HasSetting(InfoLine.movie.EnableDurationMinutes)">DurationMinutes=Skin.Reset(InfoLine.movie.EnableDurationMinutes)||</value>
+    </variable>
+    <variable name="InfoLine_Units_movie_DurationClock">
+        <value condition="Skin.HasSetting(InfoLine.movie.EnableDurationClock)">DurationClock=Skin.Reset(InfoLine.movie.EnableDurationClock)||</value>
     </variable>
     <variable name="InfoLine_Units_movie">
-        <value>$VAR[InfoLine_Units_movie_VideoAspect]$VAR[InfoLine_Units_movie_VideoCodec]$VAR[InfoLine_Units_movie_HDR]$VAR[InfoLine_Units_movie_Stereo]$VAR[InfoLine_Units_movie_Audio]$VAR[InfoLine_Units_movie_AudioCodec]$VAR[InfoLine_Units_movie_Stars]$VAR[InfoLine_Units_movie_Premiered]$VAR[InfoLine_Units_movie_Year]$VAR[InfoLine_Units_movie_MPAA]$VAR[InfoLine_Units_movie_Duration]</value>
+        <value>$VAR[InfoLine_Units_movie_VideoAspect]$VAR[InfoLine_Units_movie_VideoCodec]$VAR[InfoLine_Units_movie_HDR]$VAR[InfoLine_Units_movie_Stereo]$VAR[InfoLine_Units_movie_Audio]$VAR[InfoLine_Units_movie_AudioCodec]$VAR[InfoLine_Units_movie_Stars]$VAR[InfoLine_Units_movie_Premiered]$VAR[InfoLine_Units_movie_Year]$VAR[InfoLine_Units_movie_MPAA]$VAR[InfoLine_Units_movie_Duration]$VAR[InfoLine_Units_movie_DurationMinutes]$VAR[InfoLine_Units_movie_DurationClock]</value>
     </variable>
     <include name="InfoLine_Count_movie">
         <item>
@@ -243,12 +258,22 @@
         </item>
         <item>
             <label>1</label>
-            <visible>!Skin.HasSetting(InfoLine.movie.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.movie.DisableDuration) + !Skin.HasSetting(InfoLine.movie.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.movie.EnableDurationClock)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.movie.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.movie.DisableDuration) + !Skin.HasSetting(InfoLine.movie.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.movie.EnableDurationClock)]</visible>
+            <onclick>noop</onclick>
+        </item>
+        <item>
+            <label>1</label>
+            <visible>Skin.HasSetting(InfoLine.movie.EnableDurationMinutes)</visible>
+            <onclick>noop</onclick>
+        </item>
+        <item>
+            <label>1</label>
+            <visible>Skin.HasSetting(InfoLine.movie.EnableDurationClock)</visible>
             <onclick>noop</onclick>
         </item>
     </include>
@@ -364,7 +389,7 @@
             <icon>special://skin/extras/icons/calendar-day.png</icon>
             <property name="disabled">true</property>
             <visible>![[!Skin.HasSetting(InfoLine.movie.DisablePremiered) + !Skin.HasSetting(InfoLine.movie.EnableYear)]]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.movie.DisablePremiered),disable_peer=Skin.Reset(InfoLine.movie.EnableYear))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.movie.EnableYear)||Skin.Reset(InfoLine.movie.DisablePremiered))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[562] [•]</label>
@@ -379,7 +404,7 @@
             <icon>special://skin/extras/icons/year.png</icon>
             <property name="disabled">true</property>
             <visible>![Skin.HasSetting(InfoLine.movie.EnableYear)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.movie.EnableYear),disable_peer=Skin.SetBool(InfoLine.movie.DisablePremiered))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.movie.DisablePremiered)||Skin.SetBool(InfoLine.movie.EnableYear))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
@@ -396,18 +421,52 @@
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.movie.DisableMPAA))</onclick>
         </item>
         <item>
-            <label>$LOCALIZE[180] [••]</label>
+            <label>$LOCALIZE[180] ($LOCALIZE[31074] $LOCALIZE[31073]) [••]</label>
             <icon>special://skin/extras/icons/clock.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.movie.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.movie.DisableDuration) + !Skin.HasSetting(InfoLine.movie.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.movie.EnableDurationClock)]</visible>
+            <onclick>Skin.Reset(InfoLine.movie.EnableDurationMinutes)</onclick>
+            <onclick>Skin.Reset(InfoLine.movie.EnableDurationClock)</onclick>
             <onclick>Skin.SetBool(InfoLine.movie.DisableDuration)</onclick>
         </item>
         <item>
-            <label>$LOCALIZE[180] [••]</label>
+            <label>$LOCALIZE[180] ($LOCALIZE[31074] $LOCALIZE[31073]) [••]</label>
             <icon>special://skin/extras/icons/clock.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.movie.DisableDuration)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=Duration,room=7,enable_item=Skin.Reset(InfoLine.movie.DisableDuration))</onclick>
+            <visible>![[!Skin.HasSetting(InfoLine.movie.DisableDuration) + !Skin.HasSetting(InfoLine.movie.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.movie.EnableDurationClock)]]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=Duration|DurationMinutes|DurationClock,room=7,enable_item=Skin.Reset(InfoLine.movie.EnableDurationMinutes)||Skin.Reset(InfoLine.movie.EnableDurationClock)||Skin.Reset(InfoLine.movie.DisableDuration))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] ($LOCALIZE[31073]) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoLine.movie.EnableDurationMinutes)</visible>
+            <onclick>Skin.SetBool(InfoLine.movie.DisableDuration)</onclick>
+            <onclick>Skin.Reset(InfoLine.movie.EnableDurationClock)</onclick>
+            <onclick>Skin.Reset(InfoLine.movie.EnableDurationMinutes)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] ($LOCALIZE[31073]) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoLine.movie.EnableDurationMinutes)]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=DurationMinutes|Duration|DurationClock,room=8,enable_item=Skin.SetBool(InfoLine.movie.DisableDuration)||Skin.Reset(InfoLine.movie.EnableDurationClock)||Skin.SetBool(InfoLine.movie.EnableDurationMinutes))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] (hh:mm) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoLine.movie.EnableDurationClock)</visible>
+            <onclick>Skin.SetBool(InfoLine.movie.DisableDuration)</onclick>
+            <onclick>Skin.Reset(InfoLine.movie.EnableDurationMinutes)</onclick>
+            <onclick>Skin.Reset(InfoLine.movie.EnableDurationClock)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] (hh:mm) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoLine.movie.EnableDurationClock)]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=DurationClock|Duration|DurationMinutes,room=8,enable_item=Skin.SetBool(InfoLine.movie.DisableDuration)||Skin.Reset(InfoLine.movie.EnableDurationMinutes)||Skin.SetBool(InfoLine.movie.EnableDurationClock))</onclick>
         </item>
     </include>
     <variable name="InfoLine_Units_tvshow_Stars">
@@ -494,7 +553,7 @@
             <icon>special://skin/extras/icons/calendar-day.png</icon>
             <property name="disabled">true</property>
             <visible>![[!Skin.HasSetting(InfoLine.tvshow.DisablePremiered) + !Skin.HasSetting(InfoLine.tvshow.EnableYear)]]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=tvshow,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.tvshow.DisablePremiered),disable_peer=Skin.Reset(InfoLine.tvshow.EnableYear))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=tvshow,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.tvshow.EnableYear)||Skin.Reset(InfoLine.tvshow.DisablePremiered))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[562] [•]</label>
@@ -509,7 +568,7 @@
             <icon>special://skin/extras/icons/year.png</icon>
             <property name="disabled">true</property>
             <visible>![Skin.HasSetting(InfoLine.tvshow.EnableYear)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=tvshow,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.tvshow.EnableYear),disable_peer=Skin.SetBool(InfoLine.tvshow.DisablePremiered))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=tvshow,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.tvshow.DisablePremiered)||Skin.SetBool(InfoLine.tvshow.EnableYear))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
@@ -610,7 +669,7 @@
             <icon>special://skin/extras/icons/calendar-day.png</icon>
             <property name="disabled">true</property>
             <visible>![[!Skin.HasSetting(InfoLine.season.DisablePremiered) + !Skin.HasSetting(InfoLine.season.EnableYear)]]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=season,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.season.DisablePremiered),disable_peer=Skin.Reset(InfoLine.season.EnableYear))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=season,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.season.EnableYear)||Skin.Reset(InfoLine.season.DisablePremiered))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[562] [•]</label>
@@ -625,7 +684,7 @@
             <icon>special://skin/extras/icons/year.png</icon>
             <property name="disabled">true</property>
             <visible>![Skin.HasSetting(InfoLine.season.EnableYear)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=season,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.season.EnableYear),disable_peer=Skin.SetBool(InfoLine.season.DisablePremiered))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=season,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.season.DisablePremiered)||Skin.SetBool(InfoLine.season.EnableYear))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
@@ -726,7 +785,7 @@
             <icon>special://skin/extras/icons/calendar-day.png</icon>
             <property name="disabled">true</property>
             <visible>![[!Skin.HasSetting(InfoLine.set.DisablePremiered) + !Skin.HasSetting(InfoLine.set.EnableYear)]]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=set,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.set.DisablePremiered),disable_peer=Skin.Reset(InfoLine.set.EnableYear))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=set,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.set.EnableYear)||Skin.Reset(InfoLine.set.DisablePremiered))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[562] [•]</label>
@@ -741,7 +800,7 @@
             <icon>special://skin/extras/icons/year.png</icon>
             <property name="disabled">true</property>
             <visible>![Skin.HasSetting(InfoLine.set.EnableYear)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=set,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.set.EnableYear),disable_peer=Skin.SetBool(InfoLine.set.DisablePremiered))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=set,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.set.DisablePremiered)||Skin.SetBool(InfoLine.set.EnableYear))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
@@ -789,10 +848,16 @@
         <value condition="!Skin.HasSetting(InfoLine.episode.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.episode.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.episode.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_episode_Duration">
-        <value condition="!Skin.HasSetting(InfoLine.episode.DisableDuration)">Duration=Skin.SetBool(InfoLine.episode.DisableDuration)||Duration=Skin.SetBool(InfoLine.episode.DisableDuration)||</value>
+        <value condition="[!Skin.HasSetting(InfoLine.episode.DisableDuration) + !Skin.HasSetting(InfoLine.episode.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.episode.EnableDurationClock)]">Duration=Skin.SetBool(InfoLine.episode.DisableDuration)||Duration=Skin.SetBool(InfoLine.episode.DisableDuration)||</value>
+    </variable>
+    <variable name="InfoLine_Units_episode_DurationMinutes">
+        <value condition="Skin.HasSetting(InfoLine.episode.EnableDurationMinutes)">DurationMinutes=Skin.Reset(InfoLine.episode.EnableDurationMinutes)||</value>
+    </variable>
+    <variable name="InfoLine_Units_episode_DurationClock">
+        <value condition="Skin.HasSetting(InfoLine.episode.EnableDurationClock)">DurationClock=Skin.Reset(InfoLine.episode.EnableDurationClock)||</value>
     </variable>
     <variable name="InfoLine_Units_episode">
-        <value>$VAR[InfoLine_Units_episode_VideoAspect]$VAR[InfoLine_Units_episode_VideoCodec]$VAR[InfoLine_Units_episode_HDR]$VAR[InfoLine_Units_episode_Stereo]$VAR[InfoLine_Units_episode_Audio]$VAR[InfoLine_Units_episode_AudioCodec]$VAR[InfoLine_Units_episode_Stars]$VAR[InfoLine_Units_episode_Premiered]$VAR[InfoLine_Units_episode_Year]$VAR[InfoLine_Units_episode_MPAA]$VAR[InfoLine_Units_episode_Duration]</value>
+        <value>$VAR[InfoLine_Units_episode_VideoAspect]$VAR[InfoLine_Units_episode_VideoCodec]$VAR[InfoLine_Units_episode_HDR]$VAR[InfoLine_Units_episode_Stereo]$VAR[InfoLine_Units_episode_Audio]$VAR[InfoLine_Units_episode_AudioCodec]$VAR[InfoLine_Units_episode_Stars]$VAR[InfoLine_Units_episode_Premiered]$VAR[InfoLine_Units_episode_Year]$VAR[InfoLine_Units_episode_MPAA]$VAR[InfoLine_Units_episode_Duration]$VAR[InfoLine_Units_episode_DurationMinutes]$VAR[InfoLine_Units_episode_DurationClock]</value>
     </variable>
     <include name="InfoLine_Count_episode">
         <item>
@@ -871,12 +936,22 @@
         </item>
         <item>
             <label>1</label>
-            <visible>!Skin.HasSetting(InfoLine.episode.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.episode.DisableDuration) + !Skin.HasSetting(InfoLine.episode.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.episode.EnableDurationClock)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.episode.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.episode.DisableDuration) + !Skin.HasSetting(InfoLine.episode.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.episode.EnableDurationClock)]</visible>
+            <onclick>noop</onclick>
+        </item>
+        <item>
+            <label>1</label>
+            <visible>Skin.HasSetting(InfoLine.episode.EnableDurationMinutes)</visible>
+            <onclick>noop</onclick>
+        </item>
+        <item>
+            <label>1</label>
+            <visible>Skin.HasSetting(InfoLine.episode.EnableDurationClock)</visible>
             <onclick>noop</onclick>
         </item>
     </include>
@@ -992,7 +1067,7 @@
             <icon>special://skin/extras/icons/calendar-day.png</icon>
             <property name="disabled">true</property>
             <visible>![[!Skin.HasSetting(InfoLine.episode.DisablePremiered) + !Skin.HasSetting(InfoLine.episode.EnableYear)]]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.episode.DisablePremiered),disable_peer=Skin.Reset(InfoLine.episode.EnableYear))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.episode.EnableYear)||Skin.Reset(InfoLine.episode.DisablePremiered))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[562] [•]</label>
@@ -1007,7 +1082,7 @@
             <icon>special://skin/extras/icons/year.png</icon>
             <property name="disabled">true</property>
             <visible>![Skin.HasSetting(InfoLine.episode.EnableYear)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.episode.EnableYear),disable_peer=Skin.SetBool(InfoLine.episode.DisablePremiered))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.episode.DisablePremiered)||Skin.SetBool(InfoLine.episode.EnableYear))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
@@ -1024,18 +1099,52 @@
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.episode.DisableMPAA))</onclick>
         </item>
         <item>
-            <label>$LOCALIZE[180] [••]</label>
+            <label>$LOCALIZE[180] ($LOCALIZE[31074] $LOCALIZE[31073]) [••]</label>
             <icon>special://skin/extras/icons/clock.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.episode.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.episode.DisableDuration) + !Skin.HasSetting(InfoLine.episode.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.episode.EnableDurationClock)]</visible>
+            <onclick>Skin.Reset(InfoLine.episode.EnableDurationMinutes)</onclick>
+            <onclick>Skin.Reset(InfoLine.episode.EnableDurationClock)</onclick>
             <onclick>Skin.SetBool(InfoLine.episode.DisableDuration)</onclick>
         </item>
         <item>
-            <label>$LOCALIZE[180] [••]</label>
+            <label>$LOCALIZE[180] ($LOCALIZE[31074] $LOCALIZE[31073]) [••]</label>
             <icon>special://skin/extras/icons/clock.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.episode.DisableDuration)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=Duration,room=7,enable_item=Skin.Reset(InfoLine.episode.DisableDuration))</onclick>
+            <visible>![[!Skin.HasSetting(InfoLine.episode.DisableDuration) + !Skin.HasSetting(InfoLine.episode.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.episode.EnableDurationClock)]]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=Duration|DurationMinutes|DurationClock,room=7,enable_item=Skin.Reset(InfoLine.episode.EnableDurationMinutes)||Skin.Reset(InfoLine.episode.EnableDurationClock)||Skin.Reset(InfoLine.episode.DisableDuration))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] ($LOCALIZE[31073]) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoLine.episode.EnableDurationMinutes)</visible>
+            <onclick>Skin.SetBool(InfoLine.episode.DisableDuration)</onclick>
+            <onclick>Skin.Reset(InfoLine.episode.EnableDurationClock)</onclick>
+            <onclick>Skin.Reset(InfoLine.episode.EnableDurationMinutes)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] ($LOCALIZE[31073]) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoLine.episode.EnableDurationMinutes)]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=DurationMinutes|Duration|DurationClock,room=8,enable_item=Skin.SetBool(InfoLine.episode.DisableDuration)||Skin.Reset(InfoLine.episode.EnableDurationClock)||Skin.SetBool(InfoLine.episode.EnableDurationMinutes))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] (hh:mm) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoLine.episode.EnableDurationClock)</visible>
+            <onclick>Skin.SetBool(InfoLine.episode.DisableDuration)</onclick>
+            <onclick>Skin.Reset(InfoLine.episode.EnableDurationMinutes)</onclick>
+            <onclick>Skin.Reset(InfoLine.episode.EnableDurationClock)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] (hh:mm) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoLine.episode.EnableDurationClock)]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=DurationClock|Duration|DurationMinutes,room=8,enable_item=Skin.SetBool(InfoLine.episode.DisableDuration)||Skin.Reset(InfoLine.episode.EnableDurationMinutes)||Skin.SetBool(InfoLine.episode.EnableDurationClock))</onclick>
         </item>
     </include>
     <variable name="InfoLine_Units_video_VideoAspect">
@@ -1069,10 +1178,16 @@
         <value condition="!Skin.HasSetting(InfoLine.video.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.video.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.video.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_video_Duration">
-        <value condition="!Skin.HasSetting(InfoLine.video.DisableDuration)">Duration=Skin.SetBool(InfoLine.video.DisableDuration)||Duration=Skin.SetBool(InfoLine.video.DisableDuration)||</value>
+        <value condition="[!Skin.HasSetting(InfoLine.video.DisableDuration) + !Skin.HasSetting(InfoLine.video.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.video.EnableDurationClock)]">Duration=Skin.SetBool(InfoLine.video.DisableDuration)||Duration=Skin.SetBool(InfoLine.video.DisableDuration)||</value>
+    </variable>
+    <variable name="InfoLine_Units_video_DurationMinutes">
+        <value condition="Skin.HasSetting(InfoLine.video.EnableDurationMinutes)">DurationMinutes=Skin.Reset(InfoLine.video.EnableDurationMinutes)||</value>
+    </variable>
+    <variable name="InfoLine_Units_video_DurationClock">
+        <value condition="Skin.HasSetting(InfoLine.video.EnableDurationClock)">DurationClock=Skin.Reset(InfoLine.video.EnableDurationClock)||</value>
     </variable>
     <variable name="InfoLine_Units_video">
-        <value>$VAR[InfoLine_Units_video_VideoAspect]$VAR[InfoLine_Units_video_VideoCodec]$VAR[InfoLine_Units_video_HDR]$VAR[InfoLine_Units_video_Stereo]$VAR[InfoLine_Units_video_Audio]$VAR[InfoLine_Units_video_AudioCodec]$VAR[InfoLine_Units_video_Stars]$VAR[InfoLine_Units_video_Premiered]$VAR[InfoLine_Units_video_Year]$VAR[InfoLine_Units_video_MPAA]$VAR[InfoLine_Units_video_Duration]</value>
+        <value>$VAR[InfoLine_Units_video_VideoAspect]$VAR[InfoLine_Units_video_VideoCodec]$VAR[InfoLine_Units_video_HDR]$VAR[InfoLine_Units_video_Stereo]$VAR[InfoLine_Units_video_Audio]$VAR[InfoLine_Units_video_AudioCodec]$VAR[InfoLine_Units_video_Stars]$VAR[InfoLine_Units_video_Premiered]$VAR[InfoLine_Units_video_Year]$VAR[InfoLine_Units_video_MPAA]$VAR[InfoLine_Units_video_Duration]$VAR[InfoLine_Units_video_DurationMinutes]$VAR[InfoLine_Units_video_DurationClock]</value>
     </variable>
     <include name="InfoLine_Count_video">
         <item>
@@ -1151,12 +1266,22 @@
         </item>
         <item>
             <label>1</label>
-            <visible>!Skin.HasSetting(InfoLine.video.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.video.DisableDuration) + !Skin.HasSetting(InfoLine.video.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.video.EnableDurationClock)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.video.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.video.DisableDuration) + !Skin.HasSetting(InfoLine.video.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.video.EnableDurationClock)]</visible>
+            <onclick>noop</onclick>
+        </item>
+        <item>
+            <label>1</label>
+            <visible>Skin.HasSetting(InfoLine.video.EnableDurationMinutes)</visible>
+            <onclick>noop</onclick>
+        </item>
+        <item>
+            <label>1</label>
+            <visible>Skin.HasSetting(InfoLine.video.EnableDurationClock)</visible>
             <onclick>noop</onclick>
         </item>
     </include>
@@ -1272,7 +1397,7 @@
             <icon>special://skin/extras/icons/calendar-day.png</icon>
             <property name="disabled">true</property>
             <visible>![[!Skin.HasSetting(InfoLine.video.DisablePremiered) + !Skin.HasSetting(InfoLine.video.EnableYear)]]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.video.DisablePremiered),disable_peer=Skin.Reset(InfoLine.video.EnableYear))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=Premiered|Year,room=7,enable_item=Skin.Reset(InfoLine.video.EnableYear)||Skin.Reset(InfoLine.video.DisablePremiered))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[562] [•]</label>
@@ -1287,7 +1412,7 @@
             <icon>special://skin/extras/icons/year.png</icon>
             <property name="disabled">true</property>
             <visible>![Skin.HasSetting(InfoLine.video.EnableYear)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.video.EnableYear),disable_peer=Skin.SetBool(InfoLine.video.DisablePremiered))</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=Year|Premiered,room=8,enable_item=Skin.SetBool(InfoLine.video.DisablePremiered)||Skin.SetBool(InfoLine.video.EnableYear))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
@@ -1304,18 +1429,52 @@
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.video.DisableMPAA))</onclick>
         </item>
         <item>
-            <label>$LOCALIZE[180] [••]</label>
+            <label>$LOCALIZE[180] ($LOCALIZE[31074] $LOCALIZE[31073]) [••]</label>
             <icon>special://skin/extras/icons/clock.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.video.DisableDuration)</visible>
+            <visible>[!Skin.HasSetting(InfoLine.video.DisableDuration) + !Skin.HasSetting(InfoLine.video.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.video.EnableDurationClock)]</visible>
+            <onclick>Skin.Reset(InfoLine.video.EnableDurationMinutes)</onclick>
+            <onclick>Skin.Reset(InfoLine.video.EnableDurationClock)</onclick>
             <onclick>Skin.SetBool(InfoLine.video.DisableDuration)</onclick>
         </item>
         <item>
-            <label>$LOCALIZE[180] [••]</label>
+            <label>$LOCALIZE[180] ($LOCALIZE[31074] $LOCALIZE[31073]) [••]</label>
             <icon>special://skin/extras/icons/clock.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.video.DisableDuration)]</visible>
-            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=Duration,room=7,enable_item=Skin.Reset(InfoLine.video.DisableDuration))</onclick>
+            <visible>![[!Skin.HasSetting(InfoLine.video.DisableDuration) + !Skin.HasSetting(InfoLine.video.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.video.EnableDurationClock)]]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=Duration|DurationMinutes|DurationClock,room=7,enable_item=Skin.Reset(InfoLine.video.EnableDurationMinutes)||Skin.Reset(InfoLine.video.EnableDurationClock)||Skin.Reset(InfoLine.video.DisableDuration))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] ($LOCALIZE[31073]) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoLine.video.EnableDurationMinutes)</visible>
+            <onclick>Skin.SetBool(InfoLine.video.DisableDuration)</onclick>
+            <onclick>Skin.Reset(InfoLine.video.EnableDurationClock)</onclick>
+            <onclick>Skin.Reset(InfoLine.video.EnableDurationMinutes)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] ($LOCALIZE[31073]) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoLine.video.EnableDurationMinutes)]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=DurationMinutes|Duration|DurationClock,room=8,enable_item=Skin.SetBool(InfoLine.video.DisableDuration)||Skin.Reset(InfoLine.video.EnableDurationClock)||Skin.SetBool(InfoLine.video.EnableDurationMinutes))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] (hh:mm) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoLine.video.EnableDurationClock)</visible>
+            <onclick>Skin.SetBool(InfoLine.video.DisableDuration)</onclick>
+            <onclick>Skin.Reset(InfoLine.video.EnableDurationMinutes)</onclick>
+            <onclick>Skin.Reset(InfoLine.video.EnableDurationClock)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[180] (hh:mm) [•]</label>
+            <icon>special://skin/extras/icons/clock.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoLine.video.EnableDurationClock)]</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=DurationClock|Duration|DurationMinutes,room=8,enable_item=Skin.SetBool(InfoLine.video.DisableDuration)||Skin.Reset(InfoLine.video.EnableDurationMinutes)||Skin.SetBool(InfoLine.video.EnableDurationClock))</onclick>
         </item>
     </include>
     <variable name="InfoLine_Units_Global_VideoAspect">
