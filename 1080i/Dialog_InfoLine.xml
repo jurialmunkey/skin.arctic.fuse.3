@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <include name="InfoLine_Editor">
+        <definition>
+            <include content="Object_Hidden_List">
+                <param name="id">7001</param>
+                <content><include>InfoLine_Count_$PARAM[dbtype]</include></content>
+            </include>
+            <include>InfoLine_Preview_Data</include>
+            <include>Part_Dim_Overlay</include>
+            <control type="group">
+                <include>Animation_BounceIn_Dialog</include>
+                <include>Dimension_DialogStepMenu</include>
+                <include content="Part_Background_Panel">
+                    <param name="dialog_size">Dimension_DialogStepMenu</param>
+                </include>
+                <control type="group">
+                    <include>Size_Dialog_Pad</include>
+                    <control type="group">
+                        <include>Size_Group_Head</include>
+                        <include content="Part_HeadText">
+                            <param name="label">$INFO[Window(Home).Property(CustomDialogSettingsTitle)]</param>
+                        </include>
+                        <control type="group">
+                            <top>80</top>
+                            <include content="Part_ItemLine">
+                                <param name="label">$INFO[Container(7001).NumItems] $LOCALIZE[31939]</param>
+                            </include>
+                        </control>
+                        <include>Part_CloseButton</include>
+                    </control>
+                    <control type="group">
+                        <top>90</top>
+                        <include content="InfoLine_Content">
+                            <param name="left">constant_dialog_pad</param>
+                            <param name="visible">true</param>
+                            <param name="player">false</param>
+                            <param name="dbtype">Window(Home).Property(InfoLine.Type)</param>
+                            <param name="source">Container(7000).ListItem.Property(</param>
+                            <param name="end">)</param>
+                            <param name="stereo">true</param>
+                            <param name="duration">Container(7000).ListItem.Property(Duration_</param>
+                            <param name="colordiffuse">dialog_fg</param>
+                        </include>
+                    </control>
+                    <control type="group">
+                        <include>Size_Group_Body</include>
+                        <control type="group">
+                            <top>80</top>
+                            <control type="group">
+                                <include>Size_Grouplist_Pad</include>
+                                <include content="List_Dialog">
+                                    <param name="id">450</param>
+                                    <param name="itemlayout_include">InfoLine_RowLayout</param>
+                                    <content>
+                                        <include>InfoLine_Rows_$PARAM[dbtype]</include>
+                                    </content>
+                                </include>
+                            </control>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="InfoLine_RowLayout">
+        <definition>
+            <include condition="$PARAM[selected]">Part_List_Highlight</include>
+            <control type="group">
+                <left>40</left>
+                <right>20</right>
+                <animation effect="fadediffuse" start="ffffffff" end="FFBF0000" condition="String.IsEqual(ListItem.Property(disabled),true)">Conditional</animation>
+                <include content="Part_List_Icon">
+                    <param name="item_h">$PARAM[item_h]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="diffuse" />
+                    <param name="bordersize">-20</param>
+                </include>
+                <control type="group">
+                    <right>72</right>
+                    <include content="List_Layout_Dialog_Labels">
+                        <param name="item_h">$PARAM[item_h]</param>
+                        <param name="selected">$PARAM[selected]</param>
+                    </include>
+                </control>
+                <control type="image">
+                    <right>0</right>
+                    <centertop>50%</centertop>
+                    <width>72</width>
+                    <height>72</height>
+                    <include condition="$PARAM[selected]">Color_SelectedImage</include>
+                    <colordiffuse>dialog_fg_90</colordiffuse>
+                    <texture>$VAR[InfoLine_RowIcon]</texture>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <variable name="InfoLine_RowIcon">
+        <value condition="String.IsEqual(ListItem.Property(disabled),true)">special://skin/extras/icons/circle-cancel.png</value>
+        <value>special://skin/extras/icons/circle-check.png</value>
+    </variable>
+
+    <include name="InfoLine_Preview_Data">
+        <include content="Object_Hidden_List">
+            <param name="id">7000</param>
+            <content>
+                <item>
+                    <label>$LOCALIZE[31938]</label>
+                    <property name="VideoResolution">4K</property>
+                    <property name="HdrType">hdr10</property>
+                    <property name="AudioChannels">$NUMBER[6]</property>
+                    <property name="VideoAspect">1.78</property>
+                    <property name="VideoCodec">hevc</property>
+                    <property name="AudioCodec">aac</property>
+                    <property name="Rating">$NUMBER[8]</property>
+                    <property name="Premiered">$INFO[System.Date(dd/mm/yyyy)]</property>
+                    <property name="Year">$INFO[System.Date(yyyy)]</property>
+                    <property name="MPAA">PG</property>
+                    <property name="Duration">$NUMBER[102]</property>
+                    <property name="Duration_h">$NUMBER[1]</property>
+                    <property name="Duration_m">$NUMBER[42]</property>
+                    <property name="Duration_mins">$NUMBER[102]</property>
+                    <property name="Duration_hh:mm">01:42</property>
+                    <onclick>noop</onclick>
+                </item>
+            </content>
+        </include>
+    </include>
+</includes>
