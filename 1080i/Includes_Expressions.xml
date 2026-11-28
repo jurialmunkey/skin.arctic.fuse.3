@@ -273,9 +273,10 @@
     <expression name="Exp_DialogSlider_CentreScale">[$EXP[Exp_DialogSlider_Delay] | $EXP[Exp_DialogSlider_Sharpness] | $EXP[Exp_DialogSlider_VerticalShift]]</expression>
     <expression name="Exp_DialogSlider_LeftScale">[$EXP[Exp_DialogSlider_Adjustment] | $EXP[Exp_DialogSlider_NoiseReduction] | $EXP[Exp_DialogSlider_VolumeAmp] | $EXP[Exp_DialogSlider_ToneMap]]</expression>
     <expression name="Exp_DialogSlider_Ruler">[$EXP[Exp_DialogSlider_CentreScale] | $EXP[Exp_DialogSlider_Zoom] | $EXP[Exp_DialogSlider_LeftScale]]</expression>
-    <!-- Ruler major ticks: every ten steps on the 90px scales, every eight on the 72px scales, including the playback speed ruler (1149) -->
-    <expression name="Exp_DialogSlider_RulerDecimal">[$EXP[Exp_DialogSlider_CentreScale] | $EXP[Exp_DialogSlider_Zoom] | [Window.IsVisible(1149) + Player.TempoEnabled]]</expression>
-    <expression name="Exp_DialogSlider_RulerSpeed">[$EXP[Exp_DialogSlider_LeftScale] | [Window.IsVisible(1149) + !Player.TempoEnabled]]</expression>
+    <!-- Ruler major ticks: every ten steps on the 90px scales, every eight on the 72px scales, including the playback speed ruler (1149).
+         The speed ruler has no heading, so the heading scales are excluded there -->
+    <expression name="Exp_DialogSlider_RulerDecimal">[[!Window.IsVisible(1149) + [$EXP[Exp_DialogSlider_CentreScale] | $EXP[Exp_DialogSlider_Zoom]]] | [Window.IsVisible(1149) + Player.TempoEnabled]]</expression>
+    <expression name="Exp_DialogSlider_RulerSpeed">[[!Window.IsVisible(1149) + $EXP[Exp_DialogSlider_LeftScale]] | [Window.IsVisible(1149) + !Player.TempoEnabled]]</expression>
     <expression name="Exp_OSD_StreamRows">[Window.IsVisible(1146) | Window.IsVisible(1147) | Window.IsVisible(1148)]</expression>
     <expression name="Exp_DialogSelect_Standard">[!Window.IsActive(12015) + String.IsEmpty(Window(Home).Property(SkinViewtypes.DialogIsActive)) + ![Window.IsDialogTopMost(gamevideofilter) | Window.IsDialogTopMost(gamestretchmode) | Window.IsDialogTopMost(gamesaves) | Window.IsDialogTopMost(gamevideorotation) | Window.IsDialogTopMost(ingamesaves)]]</expression>
     <expression name="Exp_OSD_DialogSelect">[Window.IsVisible(fullscreenvideo) + Window.IsVisible(DialogSelect.xml) + $EXP[Exp_DialogSelect_Standard]]</expression>

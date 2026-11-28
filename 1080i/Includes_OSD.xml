@@ -287,21 +287,105 @@
     </include>
 
     <include name="OSD_BackgroundFade_Seekbar">
-        <control type="image">
-            <bottom>0</bottom>
-            <height>256</height>
-            <texture colordiffuse="shadow_full" border="4,0,4,0">common/gradient-v.png</texture>
+        <control type="group">
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
+            <top>50%</top>
+            <bottom>-320</bottom>
+            <include content="OSD_BackgroundFade_Bottom">
+                <param name="height">480</param>
+            </include>
         </control>
-
-        <control type="image">
-            <bottom>0</bottom>
-            <height>768</height>
-            <texture colordiffuse="shadow_full" border="4,0,4,0">common/gradient-v.png</texture>
+        <control type="group">
             <include>Animation_OSD_Fullscreen_Change</include>
             <visible>Window.IsActive(DialogSeekBar.xml) | Window.IsVisible(1152)</visible>
-            <visible>Window.IsActive(videoosd) | Window.IsActive(musicosd) | Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1143) | Window.IsActive(1144) | Window.IsActive(1145) | Window.IsActive(1146) | Window.IsActive(1147) | Window.IsActive(1148) | Window.IsActive(1149) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml) | Window.IsActive(script-jellyfin-skip.xml) | Window.IsActive(DialogSlider.xml)</visible>
+            <visible>Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(1145) | Window.IsVisible(videobookmarks) | Window.IsVisible(pvrosdguide) | Window.IsVisible(pvrosdchannels) | Window.IsVisible(1152) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml) | Window.IsActive(script-jellyfin-skip.xml)</visible>
+            <include content="OSD_BackgroundFade_Bottom">
+                <param name="height">480</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- Top fade behind the process chain, drawn in the seekbar layer so the seekbar sits above it.
+         Sized so the last lane sits at about half dim: two lanes or three with Live TV -->
+    <include name="OSD_BackgroundFade_ProcessInfo">
+        <control type="image">
+            <top>0</top>
+            <include content="Object_Height" condition="VideoPlayer.Content(livetv)">
+                <param name="height">1200</param>
+            </include>
+            <height>960</height>
+            <visible>Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
+            <texture colordiffuse="shadow_back" border="4,0,4,0" flipy="true">common/gradient-v.png</texture>
+            <include content="Animation_Fade_In">
+                <param name="type">Visible</param>
+            </include>
+            <include content="Animation_Fade_Out">
+                <param name="type">Hidden</param>
+            </include>
+        </control>
+    </include>
+
+    <!-- Right side fade behind the OSD layout, or a full dim for the full width subtitles layout. Drawn in the seekbar layer so the seekbar and clock sit above it -->
+    <include name="OSD_BackgroundFade_Settings">
+        <control type="group">
+            <left>0</left>
+            <right>0</right>
+            <visible>$EXP[Exp_OSD_SpotlightList]</visible>
+            <include>Animation_FadeIn</include>
+            <include>Animation_FadeOut</include>
+            <include content="OSD_BackgroundFade_Right">
+                <param name="width">960</param>
+            </include>
+        </control>
+        <control type="group">
+            <left>0</left>
+            <right>0</right>
+            <visible>$EXP[Exp_OSD_SpotlightList] + $EXP[Exp_OSD_DialogSubtitles]</visible>
+            <include>Animation_FadeIn</include>
+            <include>Animation_FadeOut</include>
+            <include content="OSD_BackgroundFade_Right">
+                <param name="width">1280</param>
+            </include>
+        </control>
+    </include>
+
+    <include name="OSD_BackgroundFade_Left">
+        <control type="image">
+            <left>0</left>
+            <width>$PARAM[width]</width>
+            <texture colordiffuse="shadow_full">common/white.png</texture>
+        </control>
+        <control type="image">
+            <left>$PARAM[width]</left>
+            <right>0</right>
+            <texture colordiffuse="shadow_full" border="0,4,0,4" flipx="true">common/gradient-h.png</texture>
+        </control>
+    </include>
+
+    <include name="OSD_BackgroundFade_Right">
+        <control type="image">
+            <right>0</right>
+            <width>$PARAM[width]</width>
+            <texture colordiffuse="shadow_full">common/white.png</texture>
+        </control>
+        <control type="image">
+            <right>$PARAM[width]</right>
+            <left>0</left>
+            <texture colordiffuse="shadow_full" border="0,4,0,4">common/gradient-h.png</texture>
+        </control>
+    </include>
+
+    <include name="OSD_BackgroundFade_Bottom">
+        <control type="image">
+            <bottom>0</bottom>
+            <height>$PARAM[height]</height>
+            <texture colordiffuse="shadow_full">common/white.png</texture>
+        </control>
+        <control type="image">
+            <bottom>$PARAM[height]</bottom>
+            <top>0</top>
+            <texture colordiffuse="shadow_full" border="4,0,4,0">common/gradient-v.png</texture>
         </control>
     </include>
 
