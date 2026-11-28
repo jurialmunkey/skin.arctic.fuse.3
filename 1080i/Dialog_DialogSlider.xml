@@ -3,8 +3,8 @@
     <!-- Sync ruler for DialogSlider. The ruler matches the OSD settings list width, under the spotlight, with its baseline 140 from the top of DialogSlider_Ruler
          on the same line as the OSD header divider. Steps are 9px apart with step 0 at the left end. Minor ticks fall on every second step, major ticks every ten steps (90px scales) or eight (72px scales). -->
 
-    <!-- One step of the ruler, a 140px group centred on its 9px slice. The grouplists overlap the groups so each starts 9px after the last.
-         Groups always stay visible so the grouplist keeps its spacing; each piece has its own condition.
+    <!-- One step of the ruler, a 140px group as tall as the layer and centred on its 9px slice of the baseline. The grouplists overlap the groups so each starts 9px after the last.
+         Every piece is placed from the slice: centred on it, or standing on it by its bottom. Groups always stay visible so the grouplist keeps its spacing; each piece has its own condition.
          Back layer (front false): the minor tick on even steps, the major tick and label where the scale has one, and the fill.
          Front layer (front true): the nib, drawn over the back layer.
          index: the step from 0 to 80. minor: an even step. labelled: a step that is major in some scale, with major its condition -->
@@ -19,9 +19,14 @@
         <definition>
         <control type="group">
             <width>140</width>
+            <height>100%</height>
+            <control type="group">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>9</width>
+            <height>2</height>
             <include content="DialogSlider_RulerStep_Tick" condition="![$PARAM[front]] + $PARAM[minor]">
-                <param name="top">108</param>
-                <param name="height">14</param>
+                <param name="height">10</param>
                 <param name="colordiffuse">main_fg_30</param>
                 <param name="visible">![$PARAM[major]]</param>
             </include>
@@ -38,15 +43,16 @@
             <include content="DialogSlider_RulerStep_Nib" condition="$PARAM[front]">
                 <param name="visible">Integer.IsEqual($PARAM[index],$PARAM[nib])</param>
             </include>
+            </control>
         </control>
         </definition>
     </include>
 
-    <!-- A tick standing on the baseline -->
+    <!-- A tick standing above the baseline -->
     <include name="DialogSlider_RulerStep_Tick">
         <control type="image">
-            <left>69</left>
-            <top>$PARAM[top]</top>
+            <centerleft>50%</centerleft>
+            <bottom>20</bottom>
             <width>2</width>
             <height>$PARAM[height]</height>
             <texture colordiffuse="$PARAM[colordiffuse]">common/white.png</texture>
@@ -57,8 +63,7 @@
     <!-- The major tick and its label where the scale has a major tick at this step. The origin label is brighter -->
     <include name="DialogSlider_RulerStep_Major">
         <include content="DialogSlider_RulerStep_Tick">
-            <param name="top">94</param>
-            <param name="height">28</param>
+            <param name="height">20</param>
             <param name="colordiffuse">main_fg_50</param>
             <param name="visible">$PARAM[major]</param>
         </include>
@@ -76,10 +81,10 @@
 
     <include name="DialogSlider_RulerStep_Label">
         <control type="label">
-            <left>20</left>
-            <top>150</top>
+            <centerleft>50%</centerleft>
+            <bottom>50</bottom>
             <width>100</width>
-            <height>24</height>
+            <height>20</height>
             <align>center</align>
             <aligny>center</aligny>
             <font>font_hint_bold</font>
@@ -89,33 +94,34 @@
         </control>
     </include>
 
-    <!-- The fill from the origin to the nib: the straight slice between the ends, and a rounded cap at each end that meets the neighbouring slice -->
+    <!-- The fill from the origin to the nib: the straight slice spanning the step between the ends, and a rounded cap at each end that runs from its slice edge into the neighbouring slice -->
     <include name="DialogSlider_RulerStep_Fill">
         <include content="DialogSlider_RulerStep_FillBar">
-            <param name="left">66</param>
-            <param name="width">9</param>
             <param name="texture">progress-end</param>
             <param name="visible">Integer.IsGreater($PARAM[index],$PARAM[lower]) + Integer.IsLess($PARAM[index],$PARAM[upper])</param>
+            <left>0</left>
+            <right>0</right>
         </include>
         <include content="DialogSlider_RulerStep_FillBar">
-            <param name="left">66</param>
-            <param name="width">12</param>
             <param name="texture">progress-right</param>
             <param name="visible">Integer.IsEqual($PARAM[index],$PARAM[upper]) + !Integer.IsEqual($PARAM[lower],$PARAM[upper])</param>
+            <left>0</left>
+            <width>12</width>
         </include>
         <include content="DialogSlider_RulerStep_FillBar">
-            <param name="left">63</param>
-            <param name="width">12</param>
             <param name="texture">progress-left</param>
             <param name="visible">Integer.IsEqual($PARAM[index],$PARAM[lower]) + !Integer.IsEqual($PARAM[lower],$PARAM[upper])</param>
+            <right>0</right>
+            <width>12</width>
         </include>
     </include>
 
+    <!-- Nest the horizontal placement within the slice -->
     <include name="DialogSlider_RulerStep_FillBar">
+        <definition>
         <control type="image">
-            <left>$PARAM[left]</left>
-            <top>134</top>
-            <width>$PARAM[width]</width>
+            <nested />
+            <centertop>50%</centertop>
             <height>12</height>
             <include content="Texture_FocusStyle">
                 <param name="directory">progress</param>
@@ -124,21 +130,22 @@
             </include>
             <visible>$PARAM[visible]</visible>
         </control>
+        </definition>
     </include>
 
     <include name="DialogSlider_RulerStep_Nib">
         <control type="group">
             <visible>$PARAM[visible]</visible>
             <control type="image">
-                <left>50</left>
-                <top>120</top>
+                <centerleft>50%</centerleft>
+                <centertop>50%</centertop>
                 <width>40</width>
                 <height>40</height>
                 <texture colordiffuse="main_fg_30">common/circle.png</texture>
             </control>
             <control type="image">
-                <left>56</left>
-                <top>126</top>
+                <centerleft>50%</centerleft>
+                <centertop>50%</centertop>
                 <width>28</width>
                 <height>28</height>
                 <texture colordiffuse="main_fg_100">common/circle.png</texture>
@@ -231,12 +238,12 @@
         <include content="DialogSlider_RulerStep"><param name="index">80</param><param name="minor">true</param><param name="labelled">true</param><param name="major">true</param><param name="front">$PARAM[front]</param></include>
     </include>
 
-    <!-- One layer of the ruler: a grouplist of the steps, each group 140px wide and 9px after the last.
-         It starts 70px left of step 0 and is 860px wide so the groups at either end are not clipped -->
+    <!-- One layer of the ruler: a grouplist of the steps centred on the baseline, each group 140px wide and 9px after the last.
+         It starts 70px left of step 0 and is 860px wide so the groups at either end are not clipped, and 200px tall so the labels above and the nib below are not clipped -->
     <include name="DialogSlider_RulerLayer">
         <control type="grouplist">
             <left>-70</left>
-            <top>0</top>
+            <centertop>50%</centertop>
             <width>860</width>
             <height>200</height>
             <orientation>horizontal</orientation>
@@ -289,12 +296,15 @@
         </include>
     </include>
 
-    <include name="DialogSlider_RulerBaseline">
-        <control type="image">
+    <!-- The ruler baseline, 140 from the top of the ruler area. Nest the parts placed relative to the line -->
+    <include name="DialogSlider_RulerLine">
+        <control type="group">
             <centertop>140</centertop>
             <height>2</height>
-            <texture colordiffuse="main_fg_30">common/white.png</texture>
-            <visible>$PARAM[visible]</visible>
+            <control type="image">
+                <texture colordiffuse="main_fg_12">common/white.png</texture>
+            </control>
+            <nested />
         </control>
     </include>
 
@@ -311,10 +321,8 @@
 
     <include name="DialogSlider_Ruler">
         <include content="DialogSlider_RulerGroup">
+            <include content="DialogSlider_RulerLine">
             <!-- Scales are known from the heading. Other sliders keep just the baseline and Kodi's nib -->
-            <include content="DialogSlider_RulerBaseline">
-                <param name="visible">true</param>
-            </include>
             <include content="DialogSlider_RulerScale">
                 <param name="visible">$EXP[Exp_DialogSlider_Ruler]</param>
             </include>
@@ -325,7 +333,7 @@
             <control type="slider" id="11">
                 <left>-20</left>
                 <right>-20</right>
-                <centertop>140</centertop>
+                <centertop>50%</centertop>
                 <height>40</height>
                 <texturesliderbar colordiffuse="00ffffff">slider/slider_nib_ring.png</texturesliderbar>
                 <textureslidernib colordiffuse="main_fg_100">slider/slider_nib_ring.png</textureslidernib>
@@ -334,6 +342,7 @@
                 <ondown>Close</ondown>
                 <onup>Close</onup>
             </control>
+            </include>
         </include>
     </include>
 
