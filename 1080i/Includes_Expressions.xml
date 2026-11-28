@@ -283,9 +283,12 @@
     <expression name="Exp_OSD_DialogSubtitles">[Window.IsVisible(fullscreenvideo) + Window.IsVisible(DialogSubtitles.xml)]</expression>
     <expression name="Exp_DialogSubtitles_NoResults">Integer.IsEqual(Container(120).NumItems,0)</expression>
     <expression name="Exp_DialogSubtitles_HasPages">Integer.IsGreater(Container(120).NumPages,1)</expression>
-    <expression name="Exp_OSD_SpotlightList">[Window.IsVisible(DialogSettings.xml) | $EXP[Exp_OSD_StreamRows] | $EXP[Exp_OSD_DialogSelect] | $EXP[Exp_OSD_DialogSubtitles]]</expression>
-    <expression name="Exp_StreamRow_HasTags">[!String.IsEmpty(ListItem.Property(codec)) | !String.IsEmpty(ListItem.Property(tags)) | ListItem.Property(IsForced) | ListItem.Property(IsDefault) | ListItem.Property(IsOriginal) | !String.IsEmpty(ListItem.Property(IsImpaired))]</expression>
+    <!-- A spotlight dialog other than the topmost one is open, or one stream dialog is switching to another. A dialog opening is topmost, so it only finds the one it opens over.
+         Switching stream dialogs closes the old one first, so the placeholder buttons mark the switch instead -->
+    <expression name="Exp_OSD_SpotlightBelow">[[Window.IsVisible(DialogSettings.xml) + !Window.IsDialogTopMost(DialogSettings.xml)] | [Window.IsVisible(DialogPlayerProcessInfo.xml) + !Window.IsDialogTopMost(DialogPlayerProcessInfo.xml)] | [Window.IsVisible(1146) + !Window.IsDialogTopMost(1146)] | [Window.IsVisible(1147) + !Window.IsDialogTopMost(1147)] | [Window.IsVisible(1148) + !Window.IsDialogTopMost(1148)] | [$EXP[Exp_OSD_DialogSelect] + !Window.IsDialogTopMost(DialogSelect.xml)] | [$EXP[Exp_OSD_DialogSubtitles] + !Window.IsDialogTopMost(DialogSubtitles.xml)] | !String.IsEmpty(Window(Home).Property(OSD.StreamSwitch))]</expression>
+    <expression name="Exp_OSD_SpotlightList">[Window.IsVisible(DialogSettings.xml) | Window.IsVisible(DialogPlayerProcessInfo.xml) | $EXP[Exp_OSD_StreamRows] | $EXP[Exp_OSD_DialogSelect] | $EXP[Exp_OSD_DialogSubtitles]]</expression>
     <expression name="Exp_StreamRow_IsStream">!String.IsEmpty(ListItem.Property(isfolder))</expression>
+    <expression name="Exp_StreamRow_IsProcess">!String.IsEmpty(ListItem.Property(hint))</expression>
     <expression name="Exp_OSD_HideControls">[Window.IsActive(1140) | Window.IsActive(1141) | Window.IsActive(1142) | Window.IsActive(videobookmarks) | Window.IsActive(pvrosdguide) | Window.IsActive(pvrosdchannels) | Window.IsActive(script-upnext-stillwatching.xml) | Window.IsActive(script-upnext-upnext.xml) | Window.IsActive(script-jellyfin-skip.xml)]</expression>
 
     <!-- ==== -->

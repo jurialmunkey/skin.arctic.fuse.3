@@ -306,26 +306,6 @@
         </control>
     </include>
 
-    <!-- Top fade behind the process chain, drawn in the seekbar layer so the seekbar sits above it.
-         Sized so the last lane sits at about half dim: two lanes or three with Live TV -->
-    <include name="OSD_BackgroundFade_ProcessInfo">
-        <control type="image">
-            <top>0</top>
-            <include content="Object_Height" condition="VideoPlayer.Content(livetv)">
-                <param name="height">1200</param>
-            </include>
-            <height>960</height>
-            <visible>Window.IsVisible(DialogPlayerProcessInfo.xml)</visible>
-            <texture colordiffuse="shadow_back" border="4,0,4,0" flipy="true">common/gradient-v.png</texture>
-            <include content="Animation_Fade_In">
-                <param name="type">Visible</param>
-            </include>
-            <include content="Animation_Fade_Out">
-                <param name="type">Hidden</param>
-            </include>
-        </control>
-    </include>
-
     <!-- Right side fade behind the OSD layout, or a full dim for the full width subtitles layout. Drawn in the seekbar layer so the seekbar and clock sit above it -->
     <include name="OSD_BackgroundFade_Settings">
         <control type="group">
@@ -391,9 +371,16 @@
 
     <include name="OSD_Stream_Row">
         <param name="enabled">true</param>
+        <param name="onleft">noop</param>
+        <param name="onright">noop</param>
+        <param name="scrollbar">61</param>
+        <param name="visible_animation">true</param>
         <definition>
             <visible>!Window.IsVisible(DialogSettings.xml) + !$EXP[Exp_OSD_DialogSelect] + !$EXP[Exp_OSD_DialogSubtitles]</visible>
-            <include>Animation_SlideIn_Dialog</include>
+            <include content="Animation_SlideIn_Dialog">
+                <param name="visible_condition">$PARAM[visible_animation]</param>
+                <param name="windowopen_condition">!$EXP[Exp_OSD_SpotlightBelow]</param>
+            </include>
             <animation effect="fade" start="100" end="0" condition="Integer.IsEqual(Container($PARAM[id]).NumItems,0)">Conditional</animation>
 
             <control type="group">
@@ -421,11 +408,11 @@
                 <width>osd_streamrow_w</width>
                 <top>180</top>
                 <height>400</height>
-                <pagecontrol>61</pagecontrol>
+                <pagecontrol>$PARAM[scrollbar]</pagecontrol>
                 <ondown>$PARAM[buttonid]</ondown>
                 <onup>noop</onup>
-                <onleft>noop</onleft>
-                <onright>noop</onright>
+                <onleft>$PARAM[onleft]</onleft>
+                <onright>$PARAM[onright]</onright>
                 <include content="OSD_Stream_ListSlide">
                     <param name="id">$PARAM[id]</param>
                 </include>
@@ -433,6 +420,7 @@
             </include>
 
             <include content="DialogSettings_OSD_Scrollbar">
+                <param name="id">$PARAM[scrollbar]</param>
                 <top>180</top>
                 <bottom>500</bottom>
                 <centerright>-60</centerright>
@@ -442,16 +430,21 @@
 
     <!-- Kept out of the list's group with no Visible animation, so it stays put when a slider opens and the slider shows the same spotlight in its place -->
     <include name="OSD_Stream_Spotlight">
-        <control type="group">
-            <visible>!Window.IsVisible(DialogSettings.xml) + !$EXP[Exp_OSD_SliderVisible] + !$EXP[Exp_OSD_DialogSelect] + !$EXP[Exp_OSD_DialogSubtitles]</visible>
-            <include content="Animation_SlideIn_Dialog">
-                <param name="visible_condition">false</param>
-            </include>
-            <include content="DialogSettings_OSD_Spotlight">
-                <param name="id">0</param>
-                <param name="label">$PARAM[header]</param>
-            </include>
-        </control>
+        <param name="hint">&#9650;&#9660;  $LOCALIZE[424]</param>
+        <definition>
+            <control type="group">
+                <visible>!Window.IsVisible(DialogSettings.xml) + !$EXP[Exp_OSD_SliderVisible] + !$EXP[Exp_OSD_DialogSelect] + !$EXP[Exp_OSD_DialogSubtitles]</visible>
+                <include content="Animation_SlideIn_Dialog">
+                    <param name="visible_condition">false</param>
+                    <param name="windowopen_condition">!$EXP[Exp_OSD_SpotlightBelow]</param>
+                </include>
+                <include content="DialogSettings_OSD_Spotlight">
+                    <param name="id">0</param>
+                    <param name="label">$PARAM[header]</param>
+                    <param name="hint">$PARAM[hint]</param>
+                </include>
+            </control>
+        </definition>
     </include>
 
     <!-- Short lists sit one 80px row lower for each row under five, so they end just above the spotlight -->
@@ -1102,16 +1095,22 @@
         </control>
     </include>
 
+    <!-- Stands in for a VideoOSD button: closes this dialog and focuses the real button, which opens its own dialog.
+         stream: the button opens a stream dialog, so leaving one stream dialog for another marks the switch and the next opens without animating -->
     <include name="OSD_CustomDialog_FakeButton">
-        <control type="button" id="600$PARAM[id]">
-            <width>80</width>
-            <texturefocus />
-            <texturenofocus />
-            <font />
-            <label />
-            <onfocus>Close</onfocus>
-            <onfocus>SetFocus(600$PARAM[id])</onfocus>
-        </control>
+        <param name="stream">false</param>
+        <definition>
+            <control type="button" id="600$PARAM[id]">
+                <width>80</width>
+                <texturefocus />
+                <texturenofocus />
+                <font />
+                <label />
+                <onfocus condition="$PARAM[stream] + $EXP[Exp_OSD_StreamRows]">SetProperty(OSD.StreamSwitch,true,home)</onfocus>
+                <onfocus>Close</onfocus>
+                <onfocus>SetFocus(600$PARAM[id])</onfocus>
+            </control>
+        </definition>
     </include>
 
     <include name="OSD_CustomDialog_RealButton">
@@ -1244,6 +1243,7 @@
 
                 <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_6]]">
                     <param name="id">6</param>
+                    <param name="stream">true</param>
                 </include>
                 <include content="OSD_CustomDialog_RealButton" condition="$PARAM[button_6]">
                     <param name="id">6</param>
@@ -1258,6 +1258,7 @@
 
                 <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_7]]">
                     <param name="id">7</param>
+                    <param name="stream">true</param>
                 </include>
                 <include content="OSD_CustomDialog_RealButton" condition="$PARAM[button_7]">
                     <param name="id">7</param>
@@ -1272,6 +1273,7 @@
 
                 <include content="OSD_CustomDialog_FakeButton" condition="![$PARAM[button_8]]">
                     <param name="id">8</param>
+                    <param name="stream">true</param>
                 </include>
                 <include content="OSD_CustomDialog_RealButton" condition="$PARAM[button_8]">
                     <param name="id">8</param>

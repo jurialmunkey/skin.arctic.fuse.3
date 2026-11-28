@@ -821,14 +821,9 @@
     </variable>
 
     <!-- Player process info lines. Each value starts from the first available part so the • only sits between parts -->
-    <variable name="Label_PlayerProcess_OutputDetails">
-        <value condition="!String.IsEmpty(Player.Process(videodar))">$INFO[Player.Process(videodar),, $LOCALIZE[31260]]$INFO[Player.Process(videofps), • , $LOCALIZE[31259]]$VAR[Label_PlayerProcess_AmlogicEOTF, • ,]</value>
-        <value condition="!String.IsEmpty(Player.Process(videofps))">$INFO[Player.Process(videofps),, $LOCALIZE[31259]]$VAR[Label_PlayerProcess_AmlogicEOTF, • ,]</value>
-        <value>$VAR[Label_PlayerProcess_AmlogicEOTF]</value>
-    </variable>
     <variable name="Label_PlayerProcess_CPU">
-        <value condition="!String.IsEmpty(System.CpuUsage)">$INFO[System.CpuUsage]$INFO[System.CpuFrequency, • ,]$VAR[Label_System_Temp, • ,]</value>
-        <value condition="!String.IsEmpty(System.CpuFrequency)">$INFO[System.CpuFrequency]$VAR[Label_System_Temp, • ,]</value>
+        <value condition="!String.IsEmpty(System.CpuFrequency)">$INFO[System.CpuFrequency]$INFO[System.CpuUsage, • ,]$VAR[Label_System_Temp, • ,]</value>
+        <value condition="!String.IsEmpty(System.CpuUsage)">$INFO[System.CpuUsage]$VAR[Label_System_Temp, • ,]</value>
         <value>$VAR[Label_System_Temp]</value>
     </variable>
     <variable name="Label_PlayerProcess_Channel">
@@ -844,11 +839,18 @@
         <value condition="!String.IsEmpty(PVR.ActStreamMux)">$INFO[PVR.ActStreamMux,$LOCALIZE[19100] ,]$INFO[PVR.ActStreamEncryptionName, • ,]</value>
         <value>$INFO[PVR.ActStreamEncryptionName]</value>
     </variable>
+    <!-- Player process info: the focused category list names the spotlight -->
+    <variable name="Label_PlayerProcess_Heading">
+        <value condition="Control.HasFocus(6)">$LOCALIZE[292] $LOCALIZE[31940]</value>
+        <value condition="Control.HasFocus(7)">$LOCALIZE[13000] $LOCALIZE[31940]</value>
+        <value condition="Control.HasFocus(8)">$LOCALIZE[31085] $LOCALIZE[31940]</value>
+        <value>$LOCALIZE[291] $LOCALIZE[31940]</value>
+    </variable>
 
-    <!-- Stream row title: slider rows show their name with the value on the right, and window rows keep their case -->
+    <!-- Stream row title: slider rows show their name with the value on the right, and window and process rows keep their case -->
     <variable name="Label_StreamLanguage">
         <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Label2]</value>
-        <value condition="!String.IsEmpty(ListItem.Property(window))">$INFO[ListItem.Label]</value>
+        <value condition="!String.IsEmpty(ListItem.Property(window)) | $EXP[Exp_StreamRow_IsProcess]">$INFO[ListItem.Label]</value>
         <value condition="!String.IsEmpty(ListItem.Label)">$INFO[ListItem.Label,[UPPERCASE],[/UPPERCASE]]</value>
         <value>UNK</value>
     </variable>
@@ -1397,6 +1399,7 @@
 
     <variable name="Label_StreamRow_Detail">
         <value condition="!String.IsEmpty(ListItem.Property(slider))">$INFO[ListItem.Property(detail)]</value>
+        <value condition="$EXP[Exp_StreamRow_IsProcess]">$INFO[ListItem.Property(hint)]$INFO[ListItem.Property(sub), • ,]</value>
         <value>$INFO[ListItem.Label2]</value>
     </variable>
 

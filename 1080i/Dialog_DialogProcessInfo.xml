@@ -1,129 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-    <!-- File or channel on the left, system usage pills on the right -->
-    <include name="DialogProcessInfo_Details">
-        <control type="group">
-            <height>40</height>
-            <control type="label">
-                <right>800</right>
-                <aligny>center</aligny>
-                <haspath>true</haspath>
-                <font>font_tiny</font>
-                <textcolor>main_fg_70</textcolor>
-                <include content="Object_Label" condition="VideoPlayer.Content(livetv)">
-                    <param name="label">$VAR[Label_PlayerProcess_Channel]</param>
-                </include>
-                <label>$INFO[Player.FileNameAndPath]</label>
-            </control>
-            <control type="grouplist">
-                <right>0</right>
-                <width>760</width>
-                <orientation>horizontal</orientation>
-                <align>right</align>
-                <itemgap>20</itemgap>
-                <include content="DialogProcessInfo_Pill">
-                    <param name="label">$LOCALIZE[31258]</param>
-                    <param name="value">$VAR[Label_PlayerProcess_CPU]</param>
-                </include>
-                <include content="DialogProcessInfo_Pill">
-                    <param name="label">$LOCALIZE[31117]</param>
-                    <param name="value">$INFO[System.Memory(used)] / $INFO[System.Memory(total)] • $INFO[System.Memory(used.percent)]</param>
-                </include>
-            </control>
-        </control>
-    </include>
-
-    <include name="DialogProcessInfo_Pill">
-        <include content="Info_Line_Pill_Text">
-            <param name="colordiffuse">main_fg</param>
-            <param name="fill">12</param>
-            <param name="texture">common/dialog.png</param>
-            <param name="border">20</param>
-            <param name="textcolor">main_fg_90</param>
-            <param name="font">font_tiny</param>
-            <param name="textoffsetx">20</param>
-            <param name="textoffsety">0</param>
-            <param name="aligny">center</param>
-            <param name="label">[COLOR=main_fg_50]$PARAM[label][/COLOR]   $PARAM[value]</param>
-            <height>40</height>
-            <width min="80" max="400">auto</width>
-            <shadowcolor>00000000</shadowcolor>
+    <!-- Video, Audio, System and Live TV lists in the stream row style, in one place on the right.
+         Only the focused list shows, and left and right move between them, wrapping at either end -->
+    <include name="DialogProcessInfo_Categories">
+        <include content="DialogProcessInfo_Category">
+            <param name="id">5</param>
+            <param name="items">DialogProcessInfo_Items_Video</param>
+            <param name="onleft">SetFocus($VAR[Action_PlayerProcess_Wrap])</param>
+            <param name="onright">6</param>
+        </include>
+        <include content="DialogProcessInfo_Category">
+            <param name="id">6</param>
+            <param name="items">DialogProcessInfo_Items_Audio</param>
+            <param name="onleft">5</param>
+            <param name="onright">7</param>
+        </include>
+        <include content="DialogProcessInfo_Category">
+            <param name="id">7</param>
+            <param name="items">DialogProcessInfo_Items_System</param>
+            <param name="onleft">6</param>
+            <param name="onright">SetFocus($VAR[Action_PlayerProcess_Wrap])</param>
+        </include>
+        <include content="DialogProcessInfo_Category" condition="VideoPlayer.Content(livetv)">
+            <param name="id">8</param>
+            <param name="items">DialogProcessInfo_Items_LiveTV</param>
+            <param name="onleft">7</param>
+            <param name="onright">5</param>
         </include>
     </include>
 
-    <!-- One lane of the process chain: label on the left, then a horizontal list of nodes -->
-    <include name="DialogProcessInfo_Lane">
-        <param name="onup">noop</param>
-        <param name="ondown">noop</param>
+    <!-- One category list. Hidden lists keep hidden focus so left and right can still reach them, and switch without animating -->
+    <include name="DialogProcessInfo_Category">
+        <param name="onleft">noop</param>
+        <param name="onright">noop</param>
         <definition>
             <control type="group">
-                <top>$PARAM[top]</top>
-                <height>120</height>
-                <control type="label">
-                    <width>80</width>
-                    <aligny>center</aligny>
-                    <font>font_hint_bold</font>
-                    <textcolor>main_fg_50</textcolor>
-                    <label>$PARAM[label]</label>
-                </control>
-                <control type="list" id="$PARAM[id]">
-                    <left>80</left>
-                    <bottom>-40</bottom>
-                    <orientation>horizontal</orientation>
-                    <onup>$PARAM[onup]</onup>
-                    <ondown>$PARAM[ondown]</ondown>
-                    <onclick>RunScript(script.skinvariables,run_dialog=ok,"heading=$INFO[Container($PARAM[id]).ListItem.Label]","message=$INFO[Container($PARAM[id]).ListItem.Label2]$INFO[Container($PARAM[id]).ListItem.Property(sub),[CR],]")</onclick>
-                    <itemlayout width="420" height="120">
-                        <include>Layout_ProcessNode</include>
-                    </itemlayout>
-                    <focusedlayout width="420" height="120">
-                        <include content="Layout_ProcessNode">
-                            <param name="selected">true</param>
-                            <param name="focused">Control.HasFocus($PARAM[id])</param>
-                        </include>
-                    </focusedlayout>
+                <visible allowhiddenfocus="true">Control.HasFocus($PARAM[id])</visible>
+                <include content="OSD_Stream_Row">
+                    <param name="id">$PARAM[id]</param>
+                    <param name="buttonid">noop</param>
+                    <param name="scrollbar">$PARAM[id]1</param>
+                    <param name="visible_animation">false</param>
+                    <param name="onleft">$PARAM[onleft]</param>
+                    <param name="onright">$PARAM[onright]</param>
+                    <onclick>RunScript(script.skinvariables,run_dialog=ok,"heading=$INFO[Container($PARAM[id]).ListItem.Label]","message=$INFO[Container($PARAM[id]).ListItem.Property(hint)]$INFO[Container($PARAM[id]).ListItem.Property(sub),[CR],]")</onclick>
                     <include>$PARAM[items]</include>
-                </control>
+                </include>
             </control>
         </definition>
     </include>
 
-    <include name="DialogProcessInfo_Lanes">
-        <control type="group">
-            <top>60</top>
-            <include content="DialogProcessInfo_Lane">
-                <param name="id">5</param>
-                <param name="top">0</param>
-                <param name="label">$LOCALIZE[291]</param>
-                <param name="items">DialogProcessInfo_Items_Video</param>
-                <param name="ondown">SetFocus(6,$INFO[Container(5).Position])</param>
-            </include>
-            <include content="DialogProcessInfo_Lane">
-                <param name="id">6</param>
-                <param name="top">140</param>
-                <param name="label">$LOCALIZE[292]</param>
-                <param name="items">DialogProcessInfo_Items_Audio</param>
-                <param name="onup">SetFocus(5,$INFO[Container(6).Position])</param>
-                <param name="ondown">SetFocus(7,$INFO[Container(6).Position])</param>
-            </include>
-            <include content="DialogProcessInfo_Lane" condition="VideoPlayer.Content(livetv)">
-                <param name="id">7</param>
-                <param name="top">280</param>
-                <param name="label">$LOCALIZE[31085]</param>
-                <param name="items">DialogProcessInfo_Items_LiveTV</param>
-                <param name="onup">SetFocus(6,$INFO[Container(7).Position])</param>
-            </include>
-        </control>
-    </include>
-
-    <!-- A chain node, hidden while its info is empty or unknown -->
+    <!-- A process row: the value over its hint and detail, with short codec values as tags on the right.
+         Hidden while its info is empty or unknown -->
     <include name="DialogProcessInfo_Node">
         <param name="sub" />
+        <param name="tags" />
         <definition>
             <item>
-                <label>$PARAM[label]</label>
-                <label2>$PARAM[value]</label2>
+                <label>$PARAM[value]</label>
+                <icon>special://skin/extras/icons/$PARAM[icon].png</icon>
+                <property name="hint">$PARAM[hint]</property>
                 <property name="sub">$PARAM[sub]</property>
+                <property name="tags">$PARAM[tags]</property>
                 <visible>!String.IsEmpty($PARAM[info])</visible>
                 <visible>!String.IsEqual($PARAM[info],$LOCALIZE[13205])</visible>
             </item>
@@ -233,28 +171,34 @@
     <include name="DialogProcessInfo_Items_Video">
         <content>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[21870]</param>
+                <param name="hint">$LOCALIZE[21870]</param>
                 <param name="info">VideoPlayer.VideoCodec</param>
+                <param name="icon">film</param>
                 <param name="value">[UPPERCASE]$INFO[VideoPlayer.VideoCodec][/UPPERCASE]</param>
                 <param name="sub">$INFO[VideoPlayer.VideoBitrate,, kb/s]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[31878]</param>
+                <param name="hint">$LOCALIZE[31878]</param>
                 <param name="info">Player.Process(videodecoder)</param>
+                <param name="icon">gears</param>
                 <param name="value">$INFO[Player.Process(videodecoder)]</param>
-                <param name="sub">$VAR[Label_VideoHWDecoder]$VAR[Label_PlayerProcess_AmlogicDisplayMode, • ,]</param>
+                <param name="sub">$VAR[Label_PlayerProcess_AmlogicDisplayMode]</param>
+                <param name="tags">$VAR[Label_VideoHWDecoder,&#x2005;&#x2005;&#x2005;&#x2002;,&#x2000;]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[14101]</param>
+                <param name="hint">$LOCALIZE[14101]</param>
                 <param name="info">Player.Process(pixformat)</param>
+                <param name="icon">palette</param>
                 <param name="value">$INFO[Player.Process(pixformat)]$VAR[Label_PlayerProcess_AmlogicPixFormat, ,]</param>
                 <param name="sub">$INFO[Player.Process(deintmethod),$LOCALIZE[16020] ,]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[31879]</param>
+                <param name="hint">$LOCALIZE[31879]</param>
                 <param name="info">Player.Process(videowidth)</param>
-                <param name="value">$INFO[Player.Process(videowidth),, × ]$INFO[Player.Process(videoheight)]$VAR[Label_VideoHDRCodec, • ,]</param>
-                <param name="sub">$VAR[Label_PlayerProcess_OutputDetails]</param>
+                <param name="icon">expand</param>
+                <param name="value">$INFO[Player.Process(videowidth),, × ]$INFO[Player.Process(videoheight)]</param>
+                <param name="sub">$VAR[Label_PlayerProcess_AmlogicEOTF]</param>
+                <param name="tags">$VAR[Label_VideoHDRCodec,&#x2005;&#x2005;&#x2005;&#x2002;,&#x2000;]$INFO[Player.Process(videodar),&#x2005;&#x2005;&#x2005;&#x2002;, $LOCALIZE[31260]&#x2000;]$INFO[Player.Process(videofps),&#x2005;&#x2005;&#x2005;&#x2002;, $LOCALIZE[31259]&#x2000;]</param>
             </include>
         </content>
     </include>
@@ -262,25 +206,60 @@
     <include name="DialogProcessInfo_Items_Audio">
         <content>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[21870]</param>
+                <param name="hint">$LOCALIZE[21870]</param>
                 <param name="info">VideoPlayer.AudioCodec</param>
+                <param name="icon">volume</param>
                 <param name="value">[UPPERCASE]$INFO[VideoPlayer.AudioCodec][/UPPERCASE]</param>
-                <param name="sub">$VAR[Label_VideoPlayer_AudioChannels]</param>
+                <param name="tags">$VAR[Label_VideoPlayer_AudioChannels,&#x2005;&#x2005;&#x2005;&#x2002;,&#x2000;]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[31878]</param>
+                <param name="hint">$LOCALIZE[31878]</param>
                 <param name="info">Player.Process(audiodecoder)</param>
+                <param name="icon">gears</param>
                 <param name="value">$INFO[Player.Process(audiodecoder)]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[21444]</param>
+                <param name="hint">$LOCALIZE[21444]</param>
                 <param name="info">Player.Process(audiochannels)</param>
+                <param name="icon">soundwave</param>
                 <param name="value">$INFO[Player.Process(audiochannels)]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[31879]</param>
+                <param name="hint">$LOCALIZE[31879]</param>
                 <param name="info">Player.Process(audiosamplerate)</param>
-                <param name="value">$INFO[Player.Process(audiosamplerate),, Hz]$INFO[Player.Process(audiobitspersample), • , bit]</param>
+                <param name="icon">wave-square</param>
+                <param name="value">$INFO[Player.Process(audiosamplerate),, Hz]</param>
+                <param name="tags">$INFO[Player.Process(audiobitspersample),&#x2005;&#x2005;&#x2005;&#x2002;, bit&#x2000;]</param>
+            </include>
+        </content>
+    </include>
+
+    <include name="DialogProcessInfo_Items_System">
+        <content>
+            <include content="DialogProcessInfo_Node">
+                <param name="hint">$LOCALIZE[19029]</param>
+                <param name="info">VideoPlayer.ChannelName</param>
+                <param name="icon">tv</param>
+                <param name="value">$VAR[Label_PlayerProcess_Channel]</param>
+            </include>
+            <include content="DialogProcessInfo_Node">
+                <param name="hint">$INFO[Player.FileNameAndPath]</param>
+                <param name="info">Player.FileNameAndPath</param>
+                <param name="icon">file-video</param>
+                <param name="value">$LOCALIZE[561]</param>
+            </include>
+            <include content="DialogProcessInfo_Node">
+                <param name="hint">$VAR[Label_PlayerProcess_CPU]</param>
+                <param name="info">System.CpuUsage</param>
+                <param name="icon">microchip</param>
+                <param name="value">$LOCALIZE[31258]</param>
+            </include>
+            <include content="DialogProcessInfo_Node">
+                <param name="hint">$INFO[System.Memory(used)] / $INFO[System.Memory(total)]</param>
+                <param name="info">System.Memory(total)</param>
+                <param name="icon">memory</param>
+                <param name="value">$LOCALIZE[31117]</param>
+                <param name="sub">$INFO[System.Memory(used.percent)]</param>
             </include>
         </content>
     </include>
@@ -288,26 +267,30 @@
     <include name="DialogProcessInfo_Items_LiveTV">
         <content>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[19006]</param>
+                <param name="hint">$LOCALIZE[19006]</param>
                 <param name="info">PVR.ActStreamDevice</param>
+                <param name="icon">satellite-dish</param>
                 <param name="value">$INFO[PVR.ActStreamDevice]</param>
                 <param name="sub">$VAR[Label_PlayerProcess_PVRDevice]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[19008]</param>
+                <param name="hint">$LOCALIZE[19008]</param>
                 <param name="info">PVR.ActStreamSignal</param>
+                <param name="icon">signal</param>
                 <param name="value">$INFO[PVR.ActStreamSignal]</param>
                 <param name="sub">$INFO[PVR.ActStreamSNR,$LOCALIZE[19009] ,]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[19010]</param>
+                <param name="hint">$LOCALIZE[19010]</param>
                 <param name="info">PVR.ActStreamBer</param>
+                <param name="icon">triangle-exclamation</param>
                 <param name="value">$INFO[PVR.ActStreamBer]</param>
                 <param name="sub">$INFO[PVR.ActStreamUnc,$LOCALIZE[19011] ,]</param>
             </include>
             <include content="DialogProcessInfo_Node">
-                <param name="label">$LOCALIZE[19099]</param>
+                <param name="hint">$LOCALIZE[19099]</param>
                 <param name="info">PVR.ActStreamServiceName</param>
+                <param name="icon">tower-broadcast</param>
                 <param name="value">$INFO[PVR.ActStreamServiceName]</param>
                 <param name="sub">$VAR[Label_PlayerProcess_PVRService]</param>
             </include>

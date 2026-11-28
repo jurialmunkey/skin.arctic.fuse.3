@@ -174,98 +174,6 @@
         </definition>
     </include>
 
-    <!-- Process chain node: connector from the previous node, then a box with label, label2 and the sub property -->
-    <include name="Layout_ProcessNode">
-        <param name="selected">false</param>
-        <param name="focused">false</param>
-        <definition>
-            <control type="group">
-                <width>60</width>
-                <visible>!Integer.IsEqual(ListItem.CurrentItem,1)</visible>
-                <control type="image">
-                    <right>30</right>
-                    <centertop>50%</centertop>
-                    <height>2</height>
-                    <texture colordiffuse="main_fg_12">common/white.png</texture>
-                </control>
-                <control type="image">
-                    <right>10</right>
-                    <centertop>50%</centertop>
-                    <width>20</width>
-                    <height>20</height>
-                    <animation effect="rotate" end="-90" center="auto" condition="true">Conditional</animation>
-                    <texture colordiffuse="main_fg_12">arrows/arrow-menu-up.png</texture>
-                </control>
-            </control>
-            <control type="group">
-                <left>60</left>
-                <include content="Object_ItemBack">
-                    <param name="colordiffuse">main_fg_12</param>
-                </include>
-
-                <include content="Object_Control" condition="$PARAM[selected]">
-                    <param name="control">image</param>
-                    <include>Texture_Box_Highlight_V</include>
-                    <visible>$PARAM[focused]</visible>
-                </include>
-                <include content="Layout_ProcessNode_Labels">
-                    <param name="visible">![$PARAM[focused]]</param>
-                </include>
-                <include content="Layout_ProcessNode_Labels" condition="$PARAM[selected]">
-                    <param name="visible">$PARAM[focused]</param>
-                    <param name="scroll">true</param>
-                    <param name="color_hint">$VAR[ColorSelected]</param>
-                    <param name="color_value">$VAR[ColorSelected]</param>
-                    <param name="color_sub">$VAR[ColorSelected]</param>
-                </include>
-            </control>
-        </definition>
-    </include>
-
-    <include name="Layout_ProcessNode_Labels">
-        <param name="visible">true</param>
-        <param name="scroll">false</param>
-        <param name="color_hint">main_fg_50</param>
-        <param name="color_value">main_fg_90</param>
-        <param name="color_sub">main_fg_70</param>
-        <definition>
-            <control type="group">
-                <left>20</left>
-                <right>20</right>
-                <visible>$PARAM[visible]</visible>
-                <control type="group">
-                    <animation effect="slide" end="0,10" condition="String.IsEmpty(ListItem.Property(sub))">Conditional</animation>
-                    <control type="label">
-                        <top>20</top>
-                        <height>20</height>
-                        <aligny>center</aligny>
-                        <font>font_hint_bold</font>
-                        <textcolor>$PARAM[color_hint]</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>
-                    <control type="label">
-                        <top>40</top>
-                        <height>40</height>
-                        <aligny>center</aligny>
-                        <font>font_main_bold</font>
-                        <textcolor>$PARAM[color_value]</textcolor>
-                        <scroll>$PARAM[scroll]</scroll>
-                        <label>$INFO[ListItem.Label2]</label>
-                    </control>
-                </control>
-                <control type="label">
-                    <top>80</top>
-                    <height>20</height>
-                    <aligny>center</aligny>
-                    <font>font_tiny</font>
-                    <textcolor>$PARAM[color_sub]</textcolor>
-                    <scroll>$PARAM[scroll]</scroll>
-                    <label>$INFO[ListItem.Property(sub)]</label>
-                </control>
-            </control>
-        </definition>
-    </include>
-
     <include name="Layout_ViewType">
         <param name="selected">false</param>
         <param name="current">ListItem.IsSelected</param>
@@ -2908,33 +2816,37 @@
         </definition>
     </include>
 
+    <!-- Title over detail. Placed beside the tag and value labels in one group, so Kodi pairs them with those right aligned labels and shortens the title or detail only where they meet -->
     <include name="Layout_StreamRow_Text">
         <param name="selected">false</param>
+        <param name="left">0</param>
+        <param name="visible">true</param>
         <definition>
-            <control type="group">
-                <nested />
+            <control type="label">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
                 <!-- Rows without a detail line centre their title -->
-                <control type="group">
-                    <animation effect="slide" end="0,15" condition="[!String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Property(detail))] | [String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Label2)]">Conditional</animation>
-                    <control type="label">
-                        <include condition="$PARAM[selected]">Color_SelectedText</include>
-                        <top>10</top>
-                        <height>30</height>
-                        <aligny>center</aligny>
-                        <font>font_main_bold</font>
-                        <textcolor>main_fg_100</textcolor>
-                        <label>$VAR[Label_StreamLanguage]</label>
-                    </control>
-                </control>
-                <control type="label">
-                    <include condition="$PARAM[selected]">Color_SelectedText</include>
-                    <top>40</top>
-                    <height>30</height>
-                    <aligny>center</aligny>
-                    <font>font_tiny</font>
-                    <textcolor>main_fg_70</textcolor>
-                    <label>$VAR[Label_StreamRow_Detail]</label>
-                </control>
+                <animation effect="slide" end="0,15" condition="[!String.IsEmpty(ListItem.Property(slider)) + String.IsEmpty(ListItem.Property(detail))] | [String.IsEmpty(ListItem.Property(slider)) + !$EXP[Exp_StreamRow_IsProcess] + String.IsEmpty(ListItem.Label2)]">Conditional</animation>
+                <left>$PARAM[left]</left>
+                <right>0</right>
+                <top>10</top>
+                <height>30</height>
+                <aligny>center</aligny>
+                <font>font_main_bold</font>
+                <textcolor>main_fg_100</textcolor>
+                <label>$VAR[Label_StreamLanguage]</label>
+                <visible>$PARAM[visible]</visible>
+            </control>
+            <control type="label">
+                <include condition="$PARAM[selected]">Color_SelectedText</include>
+                <left>$PARAM[left]</left>
+                <right>0</right>
+                <top>40</top>
+                <height>30</height>
+                <aligny>center</aligny>
+                <font>font_tiny</font>
+                <textcolor>main_fg_70</textcolor>
+                <label>$VAR[Label_StreamRow_Detail]</label>
+                <visible>$PARAM[visible]</visible>
             </control>
         </definition>
     </include>
@@ -2993,41 +2905,24 @@
                     <visible>!$EXP[Exp_StreamRow_IsStream]</visible>
                 </control>
 
-                <control type="group">
-                    <left>160</left>
+                <!-- Text, tags and the slider value share one group level. Custom rows have no flag, so their text starts in its space -->
+                <include content="Object_Tags">
+                    <param name="label">$VAR[Label_StreamRow_Tags]</param>
+                    <param name="selected">$PARAM[selected]</param>
+                    <param name="align">right</param>
+                    <left>100</left>
                     <right>40</right>
-
-                    <!-- Custom rows have no flag, so their text slides over into its space -->
-                    <control type="group">
-                        <animation effect="slide" end="-60,0" condition="!$EXP[Exp_StreamRow_IsStream]">Conditional</animation>
-
-                        <include content="Layout_StreamRow_Text">
-                            <param name="selected">$PARAM[selected]</param>
-                            <right>420</right>
-                            <visible>$EXP[Exp_StreamRow_HasTags]</visible>
-                        </include>
-                        <include content="Layout_StreamRow_Text">
-                            <param name="selected">$PARAM[selected]</param>
-                            <right>200</right>
-                            <visible>!$EXP[Exp_StreamRow_HasTags]</visible>
-                        </include>
-                    </control>
-
-                    <include content="Object_Tags">
-                        <param name="label">$VAR[Label_StreamRow_Tags]</param>
+                    <include content="Layout_StreamRow_Text">
                         <param name="selected">$PARAM[selected]</param>
-                        <param name="align">right</param>
-                        <right>0</right>
-                        <width>400</width>
-                        <centertop>50%</centertop>
-                        <height>40</height>
-                        <visible>String.IsEmpty(ListItem.Property(slider))</visible>
+                        <param name="left">60</param>
+                        <param name="visible">$EXP[Exp_StreamRow_IsStream]</param>
                     </include>
-
+                    <include content="Layout_StreamRow_Text">
+                        <param name="selected">$PARAM[selected]</param>
+                        <param name="visible">!$EXP[Exp_StreamRow_IsStream]</param>
+                    </include>
                     <control type="label">
                         <include condition="$PARAM[selected]">Color_SelectedText</include>
-                        <right>0</right>
-                        <width>180</width>
                         <align>right</align>
                         <aligny>center</aligny>
                         <font>font_main_bold</font>
@@ -3035,7 +2930,7 @@
                         <label>$INFO[ListItem.Label]</label>
                         <visible>!String.IsEmpty(ListItem.Property(slider))</visible>
                     </control>
-                </control>
+                </include>
             </control>
         </definition>
     </include>
