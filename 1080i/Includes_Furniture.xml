@@ -82,7 +82,6 @@
                             <top>-5</top>
                             <include condition="!Skin.HasSetting(Footer.DisableStudio) + $PARAM[include_studio]">Furniture_Studio</include>
                             <include condition="!Skin.HasSetting(Footer.DisableNowPlaying)">Furniture_Player</include>
-                            <include condition="Skin.HasSetting(Footer.EnableCodecs)">Furniture_Codecs</include>
                         </control>
                     </control>
                 </control>
@@ -141,7 +140,6 @@
             <itemgap>20</itemgap>
             <include>Furniture_SlidesOver</include>
             <visible>!Player.HasMedia | Skin.HasSetting(Footer.DisableNowPlaying)</visible>
-            <visible>String.IsEmpty(ListItem.VideoCodec) | !Skin.HasSetting(Footer.EnableCodecs)</visible>
             <control type="image">
                 <width>300</width>
                 <height>80</height>
@@ -150,64 +148,6 @@
                 <centertop>50%</centertop>
             </control>
         </control>
-    </include>
-    <include name="Furniture_Codecs">
-        <param name="colordiffuse">white</param>
-        <param name="infolabel_videoresolution">ListItem.VideoResolution</param>
-        <param name="infolabel_videoaspect">ListItem.VideoAspect</param>
-        <param name="infolabel_videocodec">ListItem.VideoCodec</param>
-        <param name="infolabel_audiocodec">ListItem.AudioCodec</param>
-        <param name="infolabel_audiochannels">ListItem.AudioChannels</param>
-        <param name="align">right</param>
-        <param name="itemgap">20</param>
-        <definition>
-            <control type="grouplist">
-                <visible>!String.IsEmpty($PARAM[infolabel_videoresolution])</visible>
-                <orientation>horizontal</orientation>
-                <align>$PARAM[align]</align>
-                <itemgap>$PARAM[itemgap]</itemgap>
-                <control type="image">
-                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_videoresolution],flags/color/resolution/,.png]</texture>
-                    <aspectratio>keep</aspectratio>
-                    <height>48</height>
-                    <width>66</width>
-                    <centertop>50%</centertop>
-                    <visible>!String.IsEmpty($PARAM[infolabel_videoresolution])</visible>
-                </control>
-                <control type="image">
-                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_videoaspect],flags/color/aspectratio/,.png]</texture>
-                    <aspectratio>keep</aspectratio>
-                    <height>48</height>
-                    <width>71</width>
-                    <centertop>50%</centertop>
-                    <visible>!String.IsEmpty($PARAM[infolabel_videoaspect])</visible>
-                </control>
-                <control type="image">
-                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_videocodec],flags/color/source/,.png]</texture>
-                    <aspectratio>keep</aspectratio>
-                    <height>48</height>
-                    <width>71</width>
-                    <centertop>50%</centertop>
-                    <visible>!String.IsEmpty($PARAM[infolabel_videocodec])</visible>
-                </control>
-                <control type="image">
-                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_audiocodec],flags/color/audio/,.png]</texture>
-                    <aspectratio>keep</aspectratio>
-                    <height>48</height>
-                    <width>71</width>
-                    <centertop>50%</centertop>
-                    <visible>!String.IsEmpty($PARAM[infolabel_audiocodec])</visible>
-                </control>
-                <control type="image">
-                    <texture background="true" colordiffuse="$PARAM[colordiffuse]">$INFO[$PARAM[infolabel_audiochannels],flags/color/channels/,.png]</texture>
-                    <aspectratio>keep</aspectratio>
-                    <height>48</height>
-                    <width>71</width>
-                    <centertop>50%</centertop>
-                    <visible>!String.IsEmpty($PARAM[infolabel_audiochannels])</visible>
-                </control>
-            </control>
-        </definition>
     </include>
 
     <include name="Furniture_Footer_Left">
