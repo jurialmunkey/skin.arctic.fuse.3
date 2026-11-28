@@ -6,7 +6,9 @@
                 <param name="id">7001</param>
                 <content><include>InfoLine_Count_$PARAM[dbtype]</include></content>
             </include>
-            <include>InfoLine_Preview_Data</include>
+            <include content="InfoLine_Preview_Data">
+                <param name="dbtype">$PARAM[dbtype]</param>
+            </include>
             <include>Part_Dim_Overlay</include>
             <control type="group">
                 <include>Animation_BounceIn_Dialog</include>
@@ -31,15 +33,9 @@
                     </control>
                     <control type="group">
                         <top>90</top>
-                        <include content="InfoLine_Content">
+                        <include content="Info_Line">
                             <param name="left">constant_dialog_pad</param>
-                            <param name="visible">true</param>
-                            <param name="player">false</param>
-                            <param name="dbtype">Window(Home).Property(InfoLine.Type)</param>
-                            <param name="source">Container(7000).ListItem.Property(</param>
-                            <param name="end">)</param>
-                            <param name="stereo">true</param>
-                            <param name="duration">Container(7000).ListItem.Property(Duration_</param>
+                            <param name="container">Container(7000).</param>
                             <param name="colordiffuse">dialog_fg</param>
                         </include>
                     </control>
@@ -102,30 +98,11 @@
         <value>special://skin/extras/icons/circle-check.png</value>
     </variable>
 
+    <!-- Sample video item for the info line preview: a SkinVariables dummy item, so the preview reads the same infolabels as a real item -->
     <include name="InfoLine_Preview_Data">
         <include content="Object_Hidden_List">
             <param name="id">7000</param>
-            <content>
-                <item>
-                    <label>$LOCALIZE[31938]</label>
-                    <property name="VideoResolution">4K</property>
-                    <property name="HdrType">hdr10</property>
-                    <property name="AudioChannels">$NUMBER[6]</property>
-                    <property name="VideoAspect">1.78</property>
-                    <property name="VideoCodec">hevc</property>
-                    <property name="AudioCodec">aac</property>
-                    <property name="Rating">$NUMBER[8]</property>
-                    <property name="Premiered">$INFO[System.Date(dd/mm/yyyy)]</property>
-                    <property name="Year">$INFO[System.Date(yyyy)]</property>
-                    <property name="MPAA">PG</property>
-                    <property name="Duration">$NUMBER[102]</property>
-                    <property name="Duration_h">$NUMBER[1]</property>
-                    <property name="Duration_m">$NUMBER[42]</property>
-                    <property name="Duration_mins">$NUMBER[102]</property>
-                    <property name="Duration_hh:mm">01:42</property>
-                    <onclick>noop</onclick>
-                </item>
-            </content>
+            <content>plugin://script.skinvariables/?info=get_dummy_item&amp;mediatype=$PARAM[dbtype]&amp;duration=6120&amp;rating=8&amp;premiered=$INFO[System.Date(yyyy-mm-dd)]&amp;year=$INFO[System.Date(yyyy)]&amp;mpaa=PG&amp;video.width=3840&amp;video.height=2160&amp;video.aspect=1.78&amp;video.codec=hevc&amp;video.hdrtype=hdr10&amp;video.stereomode=left_right&amp;audio.channels=6&amp;audio.codec=aac</content>
         </include>
     </include>
 </includes>

@@ -422,20 +422,16 @@
                 <include content="Info_Line_Tags_Grouplist">
                     <param name="font">$PARAM[font]</param>
                     <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                    <param name="source">$PARAM[source]</param>
-                    <param name="end">$PARAM[end]</param>
                     <param name="dbtype">$PARAM[dbtype]</param>
                     <param name="player">$PARAM[player]</param>
-                    <param name="duration">$PARAM[duration]</param>
+                    <param name="source">$PARAM[source]</param>
                 </include>
                 <include content="Info_Line_Tags_Grouplist">
                     <param name="font">$PARAM[font]_lines</param>
                     <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                    <param name="source">$PARAM[source]</param>
-                    <param name="end">$PARAM[end]</param>
                     <param name="dbtype">$PARAM[dbtype]</param>
                     <param name="player">$PARAM[player]</param>
-                    <param name="duration">$PARAM[duration]</param>
+                    <param name="source">$PARAM[source]</param>
                 </include>
             </control>
         </definition>
@@ -451,11 +447,9 @@
                     <param name="item">Info_Line_Tag</param>
                     <param name="font">$PARAM[font]</param>
                     <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                    <param name="source">$PARAM[source]</param>
-                    <param name="end">$PARAM[end]</param>
                     <param name="dbtype">$PARAM[dbtype]</param>
                     <param name="player">$PARAM[player]</param>
-                    <param name="duration">$PARAM[duration]</param>
+                    <param name="source">$PARAM[source]</param>
                 </include>
             </control>
         </definition>
@@ -504,6 +498,48 @@
                 </control>
                 <nested />
             </control>
+        </definition>
+    </include>
+
+    <!-- Colour flag drawn in place of a pill for the Flag info line style. flag: full texture path, empty hides the image -->
+    <include name="Info_Line_Flag">
+        <param name="visible">true</param>
+        <param name="fallback" />
+        <param name="width">71</param>
+        <param name="left">0</param>
+        <definition>
+            <control type="image">
+                <texture background="true" fallback="$PARAM[fallback]">$PARAM[flag]</texture>
+                <aspectratio>keep</aspectratio>
+                <height>48</height>
+                <width>$PARAM[width]</width>
+                <left>$PARAM[left]</left>
+                <centertop>50%</centertop>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Info line badge: the pill include for the Pill and Text styles, otherwise a colour flag -->
+    <include name="Info_Line_Badge">
+        <param name="pill">Info_Line_Pill_Text</param>
+        <param name="fallback" />
+        <param name="flag_width">71</param>
+        <definition>
+            <include content="$PARAM[pill]" condition="Skin.String(InfoTags.Style)">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="source">$PARAM[source]</param>
+                <param name="item">$PARAM[item]</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="label">$PARAM[label]</param>
+            </include>
+            <include content="Info_Line_Flag" condition="!Skin.String(InfoTags.Style)">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="flag">$PARAM[flag]</param>
+                <param name="fallback">$PARAM[fallback]</param>
+                <param name="width">$PARAM[flag_width]</param>
+            </include>
         </definition>
     </include>
 
@@ -641,10 +677,9 @@
                 <param name="visible">$PARAM[visible]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="player">$PARAM[player]</param>
-                <param name="source">$PARAM[container]$PARAM[listitem].</param>
+                <param name="source">$PARAM[container]$PARAM[listitem]</param>
                 <param name="dbtype">$PARAM[container]$PARAM[listitem].DBType</param>
                 <param name="stereo">$PARAM[container]$PARAM[listitem].IsStereoscopic + !String.IsEqual($PARAM[container]$PARAM[listitem].StereoscopicMode,mono)</param>
-                <param name="duration">$PARAM[container]$PARAM[listitem].Duration(</param>
             </include>
         </definition>
     </include>
@@ -667,40 +702,41 @@
                     </control>
 
                     <!-- Info Pill -->
-                    <include content="Info_Line_VideoQuality_Resolution">
+                    <include content="Info_Line_Flag" condition="!Skin.String(InfoTags.Style)">
+                        <param name="flag">$INFO[$PARAM[source].VideoResolution,flags/color/resolution/,.png]</param>
+                        <param name="fallback">flags/color/resolution/nfo.png</param>
+                        <param name="width">66</param>
+                        <param name="left">-10</param>
+                    </include>
+                    <include content="Info_Line_VideoQuality_Resolution" condition="Skin.String(InfoTags.Style)">
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
                         <param name="playable">[$PARAM[player] | String.IsEqual($PARAM[dbtype],movie) | String.IsEqual($PARAM[dbtype],episode) | String.IsEqual($PARAM[dbtype],video)]</param>
-                        <param name="is_8k">[Integer.IsGreater($PARAM[source]VideoResolution$PARAM[end],2160) | String.IsEqual($PARAM[source]VideoResolution$PARAM[end],8K)]</param>
-                        <param name="is_4k">[Integer.IsGreater($PARAM[source]VideoResolution$PARAM[end],1080) | String.IsEqual($PARAM[source]VideoResolution$PARAM[end],4K)]</param>
-                        <param name="is_fd">[Integer.IsGreater($PARAM[source]VideoResolution$PARAM[end],720)]</param>
-                        <param name="is_hd">[Integer.IsEqual($PARAM[source]VideoResolution$PARAM[end],720)]</param>
-                        <param name="is_sd">[!String.IsEmpty($PARAM[source]VideoResolution$PARAM[end])]</param>
+                        <param name="is_8k">[Integer.IsGreater($PARAM[source].VideoResolution,2160) | String.IsEqual($PARAM[source].VideoResolution,8K)]</param>
+                        <param name="is_4k">[Integer.IsGreater($PARAM[source].VideoResolution,1080) | String.IsEqual($PARAM[source].VideoResolution,4K)]</param>
+                        <param name="is_fd">[Integer.IsGreater($PARAM[source].VideoResolution,720)]</param>
+                        <param name="is_hd">[Integer.IsEqual($PARAM[source].VideoResolution,720)]</param>
+                        <param name="is_sd">[!String.IsEmpty($PARAM[source].VideoResolution)]</param>
                     </include>
                     <include content="InfoLine_Badges">
                         <param name="font">font_infotag_bold</param>
-                        <param name="source">$PARAM[source]</param>
-                        <param name="end">$PARAM[end]</param>
                         <param name="dbtype">$PARAM[dbtype]</param>
                         <param name="player">$PARAM[player]</param>
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
                         <param name="stereo">$PARAM[stereo]</param>
-                    </include>
-                    <include content="Info_Line_Labels" condition="!Skin.HasSetting(InfoTags.EnablePills)">
                         <param name="source">$PARAM[source]</param>
-                        <param name="end">$PARAM[end]</param>
+                    </include>
+                    <include content="Info_Line_Labels" condition="!Skin.String(InfoTags.Style,Pill)">
                         <param name="dbtype">$PARAM[dbtype]</param>
                         <param name="player">$PARAM[player]</param>
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                        <param name="duration">$PARAM[duration]</param>
+                        <param name="source">$PARAM[source]</param>
                         <param name="item">Info_Line_Label</param>
                     </include>
-                    <include content="Info_Line_Tags" condition="Skin.HasSetting(InfoTags.EnablePills)">
-                        <param name="source">$PARAM[source]</param>
-                        <param name="end">$PARAM[end]</param>
+                    <include content="Info_Line_Tags" condition="Skin.String(InfoTags.Style,Pill)">
                         <param name="dbtype">$PARAM[dbtype]</param>
                         <param name="player">$PARAM[player]</param>
                         <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                        <param name="duration">$PARAM[duration]</param>
+                        <param name="source">$PARAM[source]</param>
                     </include>
                 </control>
             </control>
@@ -711,15 +747,15 @@
         <definition>
             <include content="Info_Line_StarRating">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="tags">Skin.HasSetting(InfoTags.EnablePills)</param>
-                <param name="rating">$PARAM[source]Rating$PARAM[end]</param>
-                <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[source]Rating$PARAM[end]) + String.IsEmpty($PARAM[source]UserRating$PARAM[end])</param>
+                <param name="tags">Skin.String(InfoTags.Style,Pill)</param>
+                <param name="rating">$PARAM[source].Rating</param>
+                <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[source].Rating) + String.IsEmpty($PARAM[source].UserRating)</param>
             </include>
             <include content="Info_Line_StarRating">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="tags">Skin.HasSetting(InfoTags.EnablePills)</param>
-                <param name="rating">$PARAM[source]UserRating$PARAM[end]</param>
-                <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[source]UserRating$PARAM[end])</param>
+                <param name="tags">Skin.String(InfoTags.Style,Pill)</param>
+                <param name="rating">$PARAM[source].UserRating</param>
+                <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[source].UserRating)</param>
             </include>
         </definition>
     </include>
@@ -729,14 +765,14 @@
             <include content="$PARAM[item]">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[source]Duration$PARAM[end]) + !Integer.IsEqual($PARAM[duration]h),0)</param>
-                <param name="label">$INFO[$PARAM[duration]h),, $LOCALIZE[31074] ]$INFO[$PARAM[duration]m),, $LOCALIZE[31073]]</param>
+                <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[source].Duration) + !Integer.IsEqual($PARAM[source].Duration(h),0)</param>
+                <param name="label">$INFO[$PARAM[source].Duration(h),, $LOCALIZE[31074] ]$INFO[$PARAM[source].Duration(m),, $LOCALIZE[31073]]</param>
             </include>
             <include content="$PARAM[item]">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="font">$PARAM[font]</param>
-                <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[source]Duration$PARAM[end]) + Integer.IsEqual($PARAM[duration]h),0)</param>
-                <param name="label">$INFO[$PARAM[duration]m),, $LOCALIZE[31073]]</param>
+                <param name="visible">$PARAM[visible] + !String.IsEmpty($PARAM[source].Duration) + Integer.IsEqual($PARAM[source].Duration(h),0)</param>
+                <param name="label">$INFO[$PARAM[source].Duration(m),, $LOCALIZE[31073]]</param>
             </include>
         </definition>
     </include>
@@ -897,19 +933,19 @@
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">DV</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[source]HdrType$PARAM[end],dolbyvision)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[source].HdrType,dolbyvision)</param>
                 <param name="width">auto</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">HDR10</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[source]HdrType$PARAM[end],hdr10)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[source].HdrType,hdr10)</param>
                 <param name="width">auto</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">HLG</param>
-                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[source]HdrType$PARAM[end],hlg)</param>
+                <param name="visible">$PARAM[visible] + String.IsEqual($PARAM[source].HdrType,hlg)</param>
                 <param name="width">auto</param>
             </include>
         </definition>
@@ -921,61 +957,55 @@
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">9.1</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],10)</param>
-                <param name="width">60</param>
-            </include>
-            <include content="Info_Line_Pill_Text">
-                <param name="colordiffuse">$PARAM[colordiffuse]</param>
-                <param name="label">8.1</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],9)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,10)</param>
                 <param name="width">60</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">7.1</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],8)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,8)</param>
                 <param name="width">60</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">6.1</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],7)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,7)</param>
                 <param name="width">60</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">5.1</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],6)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,6)</param>
                 <param name="width">60</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">4.1</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],5)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,5)</param>
                 <param name="width">60</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">4.0</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],4)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,4)</param>
                 <param name="width">60</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">2.1</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],3)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,3)</param>
                 <param name="width">60</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">2.0</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],2)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,2)</param>
                 <param name="width">60</param>
             </include>
             <include content="Info_Line_Pill_Text">
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="label">1.0</param>
-                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source]AudioChannels$PARAM[end],1)</param>
+                <param name="visible">$PARAM[visible] + Integer.IsEqual($PARAM[source].AudioChannels,1)</param>
                 <param name="width">60</param>
             </include>
         </definition>
