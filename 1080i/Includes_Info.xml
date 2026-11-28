@@ -392,7 +392,7 @@
             <control type="label">
                 <label fallback="$PARAM[label_fallback]">$PARAM[label]</label>
                 <haspath>$PARAM[haspath]</haspath>
-                <textcolor>$PARAM[colordiffuse]_70</textcolor>
+                <textcolor>$PARAM[colordiffuse]_90</textcolor>
                 <width>auto</width>
                 <font>font_main</font>
                 <visible>$PARAM[visible]</visible>
@@ -402,15 +402,61 @@
 
     <!-- Info line label drawn as a tag for Info_Line_Tags: wrapped in &#x2002; and &#x2000;, which the _lines font draws as the tag ends -->
     <include name="Info_Line_Tag">
+        <param name="left">0</param>
+        <param name="opacity">90</param>
         <definition>
             <control type="label">
                 <label>&#x2002;$PARAM[label]&#x2000;</label>
-                <textcolor>$PARAM[colordiffuse]_90</textcolor>
+                <left>$PARAM[left]</left>
+                <textcolor>$PARAM[colordiffuse]_$PARAM[opacity]</textcolor>
                 <width>auto</width>
                 <aligny>center</aligny>
                 <font>$PARAM[font]</font>
                 <visible>$PARAM[visible]</visible>
             </control>
+        </definition>
+    </include>
+
+    <!-- Single outlined info line tag inside a grouplist. The _lines twin sits in a zero width group, then the text label is pulled back over it by the grouplist itemgap (gap) and its auto width spaces the items after it -->
+    <include name="Info_Line_Tag_Outlined">
+        <param name="font">font_tiny_bold</param>
+        <param name="gap">10</param>
+        <param name="opacity">90</param>
+        <definition>
+            <control type="group">
+                <width>0</width>
+                <visible>$PARAM[visible]</visible>
+                <include content="Info_Line_Tag">
+                    <param name="visible">true</param>
+                    <param name="label">$PARAM[label]</param>
+                    <param name="font">$PARAM[font]_lines</param>
+                    <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                    <param name="opacity">$PARAM[opacity]</param>
+                </include>
+            </control>
+            <include content="Info_Line_Tag">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="font">$PARAM[font]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="opacity">$PARAM[opacity]</param>
+                <param name="left">-$PARAM[gap]</param>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Info line label drawn as a divider and an outlined tag. Used by the MPAA tag in the Flag info line style -->
+    <include name="Info_Line_Label_Tag">
+        <definition>
+            <include content="Info_Line_Divider">
+                <param name="visible">$PARAM[visible]</param>
+            </include>
+            <include content="Info_Line_Tag_Outlined">
+                <param name="visible">$PARAM[visible]</param>
+                <param name="label">$PARAM[label]</param>
+                <param name="font">font_tiny_bold</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+            </include>
         </definition>
     </include>
 
@@ -506,12 +552,13 @@
         <param name="visible">true</param>
         <param name="fallback" />
         <param name="width">71</param>
+        <param name="height">48</param>
         <param name="left">0</param>
         <definition>
             <control type="image">
                 <texture background="true" fallback="$PARAM[fallback]">$PARAM[flag]</texture>
                 <aspectratio>keep</aspectratio>
-                <height>48</height>
+                <height>$PARAM[height]</height>
                 <width>$PARAM[width]</width>
                 <left>$PARAM[left]</left>
                 <centertop>50%</centertop>

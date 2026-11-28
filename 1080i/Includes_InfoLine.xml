@@ -78,6 +78,11 @@
     </include>
     <include name="Info_Line_Labels">
         <definition>
+            <include content="Info_Line_Tag_MPAA" condition="!Skin.String(InfoTags.Style)">
+                <param name="visible">[false | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],movie)] | [$PARAM[player] + VideoPlayer.Content(movies)]] + !Skin.HasSetting(InfoLine.movie.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],tvshow)]] + !Skin.HasSetting(InfoLine.tvshow.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],season)]] + !Skin.HasSetting(InfoLine.season.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],set)]] + !Skin.HasSetting(InfoLine.set.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],episode)] | [$PARAM[player] + VideoPlayer.Content(episodes)]] + !Skin.HasSetting(InfoLine.episode.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],video)] | [$PARAM[player] + [!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)]]] + !Skin.HasSetting(InfoLine.video.DisableMPAA)]] + [!String.IsEmpty($PARAM[source].MPAA)]</param>
+                <param name="colordiffuse">$PARAM[colordiffuse]</param>
+                <param name="source">$PARAM[source]</param>
+            </include>
             <include content="$PARAM[item]">
                 <param name="visible">[false | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],movie)] | [$PARAM[player] + VideoPlayer.Content(movies)]] + [!Skin.HasSetting(InfoLine.movie.DisablePremiered) + !Skin.HasSetting(InfoLine.movie.EnableYear)]] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],tvshow)]] + [!Skin.HasSetting(InfoLine.tvshow.DisablePremiered) + !Skin.HasSetting(InfoLine.tvshow.EnableYear)]] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],season)]] + [!Skin.HasSetting(InfoLine.season.DisablePremiered) + !Skin.HasSetting(InfoLine.season.EnableYear)]] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],set)]] + [!Skin.HasSetting(InfoLine.set.DisablePremiered) + !Skin.HasSetting(InfoLine.set.EnableYear)]] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],episode)] | [$PARAM[player] + VideoPlayer.Content(episodes)]] + [!Skin.HasSetting(InfoLine.episode.DisablePremiered) + !Skin.HasSetting(InfoLine.episode.EnableYear)]] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],video)] | [$PARAM[player] + [!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)]]] + [!Skin.HasSetting(InfoLine.video.DisablePremiered) + !Skin.HasSetting(InfoLine.video.EnableYear)]]] + [!String.IsEmpty($PARAM[source].Premiered)]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
@@ -94,7 +99,7 @@
                 <param name="font">$PARAM[font]</param>
                 <param name="label">$INFO[$PARAM[source].Year]</param>
             </include>
-            <include content="$PARAM[item]">
+            <include content="$PARAM[item]" condition="Skin.String(InfoTags.Style)">
                 <param name="visible">[false | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],movie)] | [$PARAM[player] + VideoPlayer.Content(movies)]] + !Skin.HasSetting(InfoLine.movie.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],tvshow)]] + !Skin.HasSetting(InfoLine.tvshow.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],season)]] + !Skin.HasSetting(InfoLine.season.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],set)]] + !Skin.HasSetting(InfoLine.set.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],episode)] | [$PARAM[player] + VideoPlayer.Content(episodes)]] + !Skin.HasSetting(InfoLine.episode.DisableMPAA)] | [[[!$PARAM[player] + String.IsEqual($PARAM[dbtype],video)] | [$PARAM[player] + [!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes) + !VideoPlayer.Content(livetv)]]] + !Skin.HasSetting(InfoLine.video.DisableMPAA)]] + [!String.IsEmpty($PARAM[source].MPAA)]</param>
                 <param name="colordiffuse">$PARAM[colordiffuse]</param>
                 <param name="source">$PARAM[source]</param>
@@ -144,7 +149,8 @@
         <value condition="Skin.HasSetting(InfoTags.EnableAudioChannels)">Audio=Skin.Reset(InfoTags.EnableAudioChannels)||</value>
     </variable>
     <variable name="InfoLine_Units_movie_AudioCodec">
-        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
+        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec) + !Skin.String(InfoTags.Style)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
+        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec) + Skin.String(InfoTags.Style)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
     </variable>
     <variable name="InfoLine_Units_movie_Stars">
         <value condition="!Skin.HasSetting(InfoLine.movie.DisableStars)">Stars=Skin.SetBool(InfoLine.movie.DisableStars)||Stars=Skin.SetBool(InfoLine.movie.DisableStars)||</value>
@@ -156,7 +162,8 @@
         <value condition="Skin.HasSetting(InfoLine.movie.EnableYear)">Year=Skin.Reset(InfoLine.movie.EnableYear)||</value>
     </variable>
     <variable name="InfoLine_Units_movie_MPAA">
-        <value condition="!Skin.HasSetting(InfoLine.movie.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.movie.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.movie.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.movie.DisableMPAA) + !Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.movie.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.movie.DisableMPAA) + Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.movie.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.movie.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_movie_Duration">
         <value condition="[!Skin.HasSetting(InfoLine.movie.DisableDuration) + !Skin.HasSetting(InfoLine.movie.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.movie.EnableDurationClock)]">Duration=Skin.SetBool(InfoLine.movie.DisableDuration)||Duration=Skin.SetBool(InfoLine.movie.DisableDuration)||</value>
@@ -207,7 +214,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec)</visible>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
@@ -242,7 +249,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.movie.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.movie.DisableMPAA) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
@@ -341,15 +348,29 @@
             <label>$LOCALIZE[21446] [••]</label>
             <icon>special://skin/extras/icons/file-audio.png</icon>
             <property name="disabled">false</property>
-            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec)</visible>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[21446] [••]</label>
             <icon>special://skin/extras/icons/file-audio.png</icon>
             <property name="disabled">true</property>
-            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)]</visible>
+            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=Global_AudioCodec,reserved=AudioCodec,room=7,enable_item=Skin.SetBool(InfoTags.EnableAudioCodec))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[21446] [•]</label>
+            <icon>special://skin/extras/icons/file-audio.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[21446] [•]</label>
+            <icon>special://skin/extras/icons/file-audio.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=Global_AudioCodec,reserved=AudioCodec,room=8,enable_item=Skin.SetBool(InfoTags.EnableAudioCodec))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[33067] [••]</label>
@@ -364,6 +385,20 @@
             <property name="disabled">true</property>
             <visible>![!Skin.HasSetting(InfoLine.movie.DisableStars)]</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=Stars,room=7,enable_item=Skin.Reset(InfoLine.movie.DisableStars))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">false</property>
+            <visible>!Skin.HasSetting(InfoLine.movie.DisableMPAA) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.SetBool(InfoLine.movie.DisableMPAA)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">true</property>
+            <visible>![!Skin.HasSetting(InfoLine.movie.DisableMPAA)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=MPAA,room=8,enable_item=Skin.Reset(InfoLine.movie.DisableMPAA))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20473] [••]</label>
@@ -399,14 +434,14 @@
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.movie.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.movie.DisableMPAA) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.SetBool(InfoLine.movie.DisableMPAA)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.movie.DisableMPAA)]</visible>
+            <visible>![!Skin.HasSetting(InfoLine.movie.DisableMPAA)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=movie,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.movie.DisableMPAA))</onclick>
         </item>
         <item>
@@ -468,7 +503,8 @@
         <value condition="Skin.HasSetting(InfoLine.tvshow.EnableYear)">Year=Skin.Reset(InfoLine.tvshow.EnableYear)||</value>
     </variable>
     <variable name="InfoLine_Units_tvshow_MPAA">
-        <value condition="!Skin.HasSetting(InfoLine.tvshow.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.tvshow.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.tvshow.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.tvshow.DisableMPAA) + !Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.tvshow.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.tvshow.DisableMPAA) + Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.tvshow.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.tvshow.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_tvshow">
         <value>$VAR[InfoLine_Units_tvshow_Stars]$VAR[InfoLine_Units_tvshow_Premiered]$VAR[InfoLine_Units_tvshow_Year]$VAR[InfoLine_Units_tvshow_MPAA]</value>
@@ -510,7 +546,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.tvshow.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.tvshow.DisableMPAA) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
     </include>
@@ -528,6 +564,20 @@
             <property name="disabled">true</property>
             <visible>![!Skin.HasSetting(InfoLine.tvshow.DisableStars)]</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=tvshow,reserved=Stars,room=7,enable_item=Skin.Reset(InfoLine.tvshow.DisableStars))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">false</property>
+            <visible>!Skin.HasSetting(InfoLine.tvshow.DisableMPAA) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.SetBool(InfoLine.tvshow.DisableMPAA)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">true</property>
+            <visible>![!Skin.HasSetting(InfoLine.tvshow.DisableMPAA)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=tvshow,reserved=MPAA,room=8,enable_item=Skin.Reset(InfoLine.tvshow.DisableMPAA))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20473] [••]</label>
@@ -563,14 +613,14 @@
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.tvshow.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.tvshow.DisableMPAA) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.SetBool(InfoLine.tvshow.DisableMPAA)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.tvshow.DisableMPAA)]</visible>
+            <visible>![!Skin.HasSetting(InfoLine.tvshow.DisableMPAA)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=tvshow,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.tvshow.DisableMPAA))</onclick>
         </item>
     </include>
@@ -584,7 +634,8 @@
         <value condition="Skin.HasSetting(InfoLine.season.EnableYear)">Year=Skin.Reset(InfoLine.season.EnableYear)||</value>
     </variable>
     <variable name="InfoLine_Units_season_MPAA">
-        <value condition="!Skin.HasSetting(InfoLine.season.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.season.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.season.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.season.DisableMPAA) + !Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.season.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.season.DisableMPAA) + Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.season.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.season.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_season">
         <value>$VAR[InfoLine_Units_season_Stars]$VAR[InfoLine_Units_season_Premiered]$VAR[InfoLine_Units_season_Year]$VAR[InfoLine_Units_season_MPAA]</value>
@@ -626,7 +677,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.season.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.season.DisableMPAA) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
     </include>
@@ -644,6 +695,20 @@
             <property name="disabled">true</property>
             <visible>![!Skin.HasSetting(InfoLine.season.DisableStars)]</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=season,reserved=Stars,room=7,enable_item=Skin.Reset(InfoLine.season.DisableStars))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">false</property>
+            <visible>!Skin.HasSetting(InfoLine.season.DisableMPAA) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.SetBool(InfoLine.season.DisableMPAA)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">true</property>
+            <visible>![!Skin.HasSetting(InfoLine.season.DisableMPAA)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=season,reserved=MPAA,room=8,enable_item=Skin.Reset(InfoLine.season.DisableMPAA))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20473] [••]</label>
@@ -679,14 +744,14 @@
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.season.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.season.DisableMPAA) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.SetBool(InfoLine.season.DisableMPAA)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.season.DisableMPAA)]</visible>
+            <visible>![!Skin.HasSetting(InfoLine.season.DisableMPAA)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=season,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.season.DisableMPAA))</onclick>
         </item>
     </include>
@@ -700,7 +765,8 @@
         <value condition="Skin.HasSetting(InfoLine.set.EnableYear)">Year=Skin.Reset(InfoLine.set.EnableYear)||</value>
     </variable>
     <variable name="InfoLine_Units_set_MPAA">
-        <value condition="!Skin.HasSetting(InfoLine.set.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.set.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.set.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.set.DisableMPAA) + !Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.set.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.set.DisableMPAA) + Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.set.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.set.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_set">
         <value>$VAR[InfoLine_Units_set_Stars]$VAR[InfoLine_Units_set_Premiered]$VAR[InfoLine_Units_set_Year]$VAR[InfoLine_Units_set_MPAA]</value>
@@ -742,7 +808,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.set.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.set.DisableMPAA) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
     </include>
@@ -760,6 +826,20 @@
             <property name="disabled">true</property>
             <visible>![!Skin.HasSetting(InfoLine.set.DisableStars)]</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=set,reserved=Stars,room=7,enable_item=Skin.Reset(InfoLine.set.DisableStars))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">false</property>
+            <visible>!Skin.HasSetting(InfoLine.set.DisableMPAA) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.SetBool(InfoLine.set.DisableMPAA)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">true</property>
+            <visible>![!Skin.HasSetting(InfoLine.set.DisableMPAA)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=set,reserved=MPAA,room=8,enable_item=Skin.Reset(InfoLine.set.DisableMPAA))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20473] [••]</label>
@@ -795,14 +875,14 @@
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.set.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.set.DisableMPAA) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.SetBool(InfoLine.set.DisableMPAA)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.set.DisableMPAA)]</visible>
+            <visible>![!Skin.HasSetting(InfoLine.set.DisableMPAA)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=set,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.set.DisableMPAA))</onclick>
         </item>
     </include>
@@ -822,7 +902,8 @@
         <value condition="Skin.HasSetting(InfoTags.EnableAudioChannels)">Audio=Skin.Reset(InfoTags.EnableAudioChannels)||</value>
     </variable>
     <variable name="InfoLine_Units_episode_AudioCodec">
-        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
+        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec) + !Skin.String(InfoTags.Style)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
+        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec) + Skin.String(InfoTags.Style)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
     </variable>
     <variable name="InfoLine_Units_episode_Stars">
         <value condition="!Skin.HasSetting(InfoLine.episode.DisableStars)">Stars=Skin.SetBool(InfoLine.episode.DisableStars)||Stars=Skin.SetBool(InfoLine.episode.DisableStars)||</value>
@@ -834,7 +915,8 @@
         <value condition="Skin.HasSetting(InfoLine.episode.EnableYear)">Year=Skin.Reset(InfoLine.episode.EnableYear)||</value>
     </variable>
     <variable name="InfoLine_Units_episode_MPAA">
-        <value condition="!Skin.HasSetting(InfoLine.episode.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.episode.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.episode.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.episode.DisableMPAA) + !Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.episode.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.episode.DisableMPAA) + Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.episode.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.episode.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_episode_Duration">
         <value condition="[!Skin.HasSetting(InfoLine.episode.DisableDuration) + !Skin.HasSetting(InfoLine.episode.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.episode.EnableDurationClock)]">Duration=Skin.SetBool(InfoLine.episode.DisableDuration)||Duration=Skin.SetBool(InfoLine.episode.DisableDuration)||</value>
@@ -885,7 +967,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec)</visible>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
@@ -920,7 +1002,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.episode.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.episode.DisableMPAA) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
@@ -1019,15 +1101,29 @@
             <label>$LOCALIZE[21446] [••]</label>
             <icon>special://skin/extras/icons/file-audio.png</icon>
             <property name="disabled">false</property>
-            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec)</visible>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[21446] [••]</label>
             <icon>special://skin/extras/icons/file-audio.png</icon>
             <property name="disabled">true</property>
-            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)]</visible>
+            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=Global_AudioCodec,reserved=AudioCodec,room=7,enable_item=Skin.SetBool(InfoTags.EnableAudioCodec))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[21446] [•]</label>
+            <icon>special://skin/extras/icons/file-audio.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[21446] [•]</label>
+            <icon>special://skin/extras/icons/file-audio.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=Global_AudioCodec,reserved=AudioCodec,room=8,enable_item=Skin.SetBool(InfoTags.EnableAudioCodec))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[33067] [••]</label>
@@ -1042,6 +1138,20 @@
             <property name="disabled">true</property>
             <visible>![!Skin.HasSetting(InfoLine.episode.DisableStars)]</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=Stars,room=7,enable_item=Skin.Reset(InfoLine.episode.DisableStars))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">false</property>
+            <visible>!Skin.HasSetting(InfoLine.episode.DisableMPAA) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.SetBool(InfoLine.episode.DisableMPAA)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">true</property>
+            <visible>![!Skin.HasSetting(InfoLine.episode.DisableMPAA)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=MPAA,room=8,enable_item=Skin.Reset(InfoLine.episode.DisableMPAA))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20473] [••]</label>
@@ -1077,14 +1187,14 @@
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.episode.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.episode.DisableMPAA) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.SetBool(InfoLine.episode.DisableMPAA)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.episode.DisableMPAA)]</visible>
+            <visible>![!Skin.HasSetting(InfoLine.episode.DisableMPAA)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=episode,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.episode.DisableMPAA))</onclick>
         </item>
         <item>
@@ -1152,7 +1262,8 @@
         <value condition="Skin.HasSetting(InfoTags.EnableAudioChannels)">Audio=Skin.Reset(InfoTags.EnableAudioChannels)||</value>
     </variable>
     <variable name="InfoLine_Units_video_AudioCodec">
-        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
+        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec) + !Skin.String(InfoTags.Style)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
+        <value condition="Skin.HasSetting(InfoTags.EnableAudioCodec) + Skin.String(InfoTags.Style)">AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||AudioCodec=Skin.Reset(InfoTags.EnableAudioCodec)||</value>
     </variable>
     <variable name="InfoLine_Units_video_Stars">
         <value condition="!Skin.HasSetting(InfoLine.video.DisableStars)">Stars=Skin.SetBool(InfoLine.video.DisableStars)||Stars=Skin.SetBool(InfoLine.video.DisableStars)||</value>
@@ -1164,7 +1275,8 @@
         <value condition="Skin.HasSetting(InfoLine.video.EnableYear)">Year=Skin.Reset(InfoLine.video.EnableYear)||</value>
     </variable>
     <variable name="InfoLine_Units_video_MPAA">
-        <value condition="!Skin.HasSetting(InfoLine.video.DisableMPAA)">MPAA=Skin.SetBool(InfoLine.video.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.video.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.video.DisableMPAA) + !Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.video.DisableMPAA)||</value>
+        <value condition="!Skin.HasSetting(InfoLine.video.DisableMPAA) + Skin.String(InfoTags.Style)">MPAA=Skin.SetBool(InfoLine.video.DisableMPAA)||MPAA=Skin.SetBool(InfoLine.video.DisableMPAA)||</value>
     </variable>
     <variable name="InfoLine_Units_video_Duration">
         <value condition="[!Skin.HasSetting(InfoLine.video.DisableDuration) + !Skin.HasSetting(InfoLine.video.EnableDurationMinutes) + !Skin.HasSetting(InfoLine.video.EnableDurationClock)]">Duration=Skin.SetBool(InfoLine.video.DisableDuration)||Duration=Skin.SetBool(InfoLine.video.DisableDuration)||</value>
@@ -1215,7 +1327,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec)</visible>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
@@ -1250,7 +1362,7 @@
         </item>
         <item>
             <label>2</label>
-            <visible>!Skin.HasSetting(InfoLine.video.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.video.DisableMPAA) + [Skin.String(InfoTags.Style)]</visible>
             <onclick>noop</onclick>
         </item>
         <item>
@@ -1349,15 +1461,29 @@
             <label>$LOCALIZE[21446] [••]</label>
             <icon>special://skin/extras/icons/file-audio.png</icon>
             <property name="disabled">false</property>
-            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec)</visible>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[21446] [••]</label>
             <icon>special://skin/extras/icons/file-audio.png</icon>
             <property name="disabled">true</property>
-            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)]</visible>
+            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=Global_AudioCodec,reserved=AudioCodec,room=7,enable_item=Skin.SetBool(InfoTags.EnableAudioCodec))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[21446] [•]</label>
+            <icon>special://skin/extras/icons/file-audio.png</icon>
+            <property name="disabled">false</property>
+            <visible>Skin.HasSetting(InfoTags.EnableAudioCodec) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[21446] [•]</label>
+            <icon>special://skin/extras/icons/file-audio.png</icon>
+            <property name="disabled">true</property>
+            <visible>![Skin.HasSetting(InfoTags.EnableAudioCodec)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=Global_AudioCodec,reserved=AudioCodec,room=8,enable_item=Skin.SetBool(InfoTags.EnableAudioCodec))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[33067] [••]</label>
@@ -1372,6 +1498,20 @@
             <property name="disabled">true</property>
             <visible>![!Skin.HasSetting(InfoLine.video.DisableStars)]</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=Stars,room=7,enable_item=Skin.Reset(InfoLine.video.DisableStars))</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">false</property>
+            <visible>!Skin.HasSetting(InfoLine.video.DisableMPAA) + !Skin.String(InfoTags.Style)</visible>
+            <onclick>Skin.SetBool(InfoLine.video.DisableMPAA)</onclick>
+        </item>
+        <item>
+            <label>$LOCALIZE[20074] [•]</label>
+            <icon>special://skin/extras/icons/certificate.png</icon>
+            <property name="disabled">true</property>
+            <visible>![!Skin.HasSetting(InfoLine.video.DisableMPAA)] + !Skin.String(InfoTags.Style)</visible>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=MPAA,room=8,enable_item=Skin.Reset(InfoLine.video.DisableMPAA))</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20473] [••]</label>
@@ -1407,14 +1547,14 @@
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">false</property>
-            <visible>!Skin.HasSetting(InfoLine.video.DisableMPAA)</visible>
+            <visible>!Skin.HasSetting(InfoLine.video.DisableMPAA) + Skin.String(InfoTags.Style)</visible>
             <onclick>Skin.SetBool(InfoLine.video.DisableMPAA)</onclick>
         </item>
         <item>
             <label>$LOCALIZE[20074] [••]</label>
             <icon>special://skin/extras/icons/certificate.png</icon>
             <property name="disabled">true</property>
-            <visible>![!Skin.HasSetting(InfoLine.video.DisableMPAA)]</visible>
+            <visible>![!Skin.HasSetting(InfoLine.video.DisableMPAA)] + Skin.String(InfoTags.Style)</visible>
             <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=video,reserved=MPAA,room=7,enable_item=Skin.Reset(InfoLine.video.DisableMPAA))</onclick>
         </item>
         <item>
@@ -1484,6 +1624,62 @@
     <variable name="InfoLine_Units_Global_AudioCodec">
         <value>/$VAR[InfoLine_Units_movie]/$VAR[InfoLine_Units_episode]/$VAR[InfoLine_Units_video]</value>
     </variable>
+    <variable name="InfoLine_Units_All">
+        <value>/$VAR[InfoLine_Units_movie]/$VAR[InfoLine_Units_tvshow]/$VAR[InfoLine_Units_season]/$VAR[InfoLine_Units_set]/$VAR[InfoLine_Units_episode]/$VAR[InfoLine_Units_video]</value>
+    </variable>
+    <include name="InfoLine_Reset">
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoTags.EnableVideoCodec)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoTags.EnableHDR)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoTags.EnableVideoAspect)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoTags.Enable3D)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoTags.EnableAudioChannels)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoLine.movie.DisableStars)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoLine.movie.DisablePremiered)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoLine.movie.EnableYear)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoLine.movie.DisableMPAA)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoLine.movie.DisableDuration)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoLine.movie.EnableDurationMinutes)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">Skin.Reset(InfoLine.movie.EnableDurationClock)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),tvshow)">Skin.Reset(InfoLine.tvshow.DisableStars)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),tvshow)">Skin.Reset(InfoLine.tvshow.DisablePremiered)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),tvshow)">Skin.Reset(InfoLine.tvshow.EnableYear)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),tvshow)">Skin.Reset(InfoLine.tvshow.DisableMPAA)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),season)">Skin.Reset(InfoLine.season.DisableStars)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),season)">Skin.Reset(InfoLine.season.DisablePremiered)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),season)">Skin.Reset(InfoLine.season.EnableYear)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),season)">Skin.Reset(InfoLine.season.DisableMPAA)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),set)">Skin.Reset(InfoLine.set.DisableStars)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),set)">Skin.Reset(InfoLine.set.DisablePremiered)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),set)">Skin.Reset(InfoLine.set.EnableYear)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),set)">Skin.Reset(InfoLine.set.DisableMPAA)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoTags.EnableVideoCodec)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoTags.EnableHDR)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoTags.EnableVideoAspect)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoTags.Enable3D)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoTags.EnableAudioChannels)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoLine.episode.DisableStars)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoLine.episode.DisablePremiered)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoLine.episode.EnableYear)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoLine.episode.DisableMPAA)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoLine.episode.DisableDuration)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoLine.episode.EnableDurationMinutes)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),episode)">Skin.Reset(InfoLine.episode.EnableDurationClock)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoTags.EnableVideoCodec)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoTags.EnableHDR)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoTags.EnableVideoAspect)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoTags.Enable3D)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoTags.EnableAudioChannels)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoTags.EnableAudioCodec)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoLine.video.DisableStars)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoLine.video.DisablePremiered)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoLine.video.EnableYear)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoLine.video.DisableMPAA)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoLine.video.DisableDuration)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoLine.video.EnableDurationMinutes)</onclick>
+        <onclick condition="String.IsEqual(Window(Home).Property(InfoLine.Type),video)">Skin.Reset(InfoLine.video.EnableDurationClock)</onclick>
+    </include>
     <include name="InfoLine_SelectType">
         <include content="InfoLine_Editor" condition="String.IsEqual(Window(Home).Property(InfoLine.Type),movie)">
             <param name="dbtype">movie</param>

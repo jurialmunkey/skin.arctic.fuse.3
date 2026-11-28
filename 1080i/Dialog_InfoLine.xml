@@ -9,55 +9,97 @@
             <include content="InfoLine_Preview_Data">
                 <param name="dbtype">$PARAM[dbtype]</param>
             </include>
-            <include>Part_Dim_Overlay</include>
+            <!-- No open animation while the style button reopens the editor -->
+            <include content="Part_Dim_Overlay">
+                <param name="windowopen_condition">!String.IsEqual(Window(Home).Property(InfoLine.Reopen),true)</param>
+            </include>
             <control type="group">
-                <include>Animation_BounceIn_Dialog</include>
-                <include>Dimension_DialogStepMenu</include>
+                <include content="Animation_BounceIn_Dialog">
+                    <param name="windowopen_condition">!String.IsEqual(Window(Home).Property(InfoLine.Reopen),true)</param>
+                </include>
+                <include>Dimension_DialogFullMenu</include>
                 <include content="Part_Background_Panel">
-                    <param name="dialog_size">Dimension_DialogStepMenu</param>
+                    <param name="dialog_size">Dimension_DialogFullMenu</param>
                 </include>
                 <control type="group">
                     <include>Size_Dialog_Pad</include>
                     <control type="group">
-                        <include>Size_Group_Head</include>
-                        <include content="Part_HeadText">
-                            <param name="label">$INFO[Window(Home).Property(CustomDialogSettingsTitle)]</param>
-                        </include>
+                        <include>Size_LeftGroup_Main</include>
                         <control type="group">
-                            <top>80</top>
-                            <include content="Part_ItemLine">
-                                <param name="label">$INFO[Container(7001).NumItems] $LOCALIZE[31939]</param>
+                            <include>Size_Group_Head</include>
+                            <include content="Part_HeadText">
+                                <param name="label">$INFO[Window(Home).Property(CustomDialogSettingsTitle)]</param>
                             </include>
-                        </control>
-                        <include>Part_CloseButton</include>
-                    </control>
-                    <control type="group">
-                        <top>90</top>
-                        <include content="Info_Line">
-                            <param name="left">constant_dialog_pad</param>
-                            <param name="container">Container(7000).</param>
-                            <param name="colordiffuse">dialog_fg</param>
-                        </include>
-                    </control>
-                    <control type="group">
-                        <include>Size_Group_Body</include>
-                        <control type="group">
-                            <top>80</top>
                             <control type="group">
-                                <include>Size_Grouplist_Pad</include>
-                                <include content="List_Dialog">
-                                    <param name="id">450</param>
-                                    <param name="itemlayout_include">InfoLine_RowLayout</param>
-                                    <content>
-                                        <include>InfoLine_Rows_$PARAM[dbtype]</include>
-                                    </content>
+                                <top>80</top>
+                                <include content="Part_ItemLine">
+                                    <param name="label">$INFO[Container(7001).NumItems] $LOCALIZE[31939]</param>
                                 </include>
                             </control>
                         </control>
+                        <control type="group">
+                            <top>90</top>
+                            <include content="Info_Line">
+                                <param name="left">constant_dialog_pad</param>
+                                <param name="container">Container(7000).</param>
+                                <param name="colordiffuse">dialog_fg</param>
+                            </include>
+                        </control>
+                        <control type="group">
+                            <include>Size_Group_Body</include>
+                            <control type="group">
+                                <top>80</top>
+                                <control type="group">
+                                    <include>Size_Grouplist_Pad</include>
+                                    <include content="List_Dialog">
+                                        <param name="id">450</param>
+                                        <param name="itemlayout_include">InfoLine_RowLayout</param>
+                                        <onright>9000</onright>
+                                        <content>
+                                            <include>InfoLine_Rows_$PARAM[dbtype]</include>
+                                        </content>
+                                    </include>
+                                </control>
+                            </control>
+                        </control>
                     </control>
+                    <include content="Part_Button_Grouplist">
+                        <param name="onleft">450</param>
+                        <param name="items">InfoLine_Editor_Buttons</param>
+                    </include>
                 </control>
             </control>
         </definition>
+    </include>
+
+    <!-- Right panel of the info line editor. Info lines pick their style when windows load, so switching style reopens the editor to rebuild its includes -->
+
+    <include name="InfoLine_Editor_Buttons">
+        <include content="Button_Dialog">
+            <param name="id">9001</param>
+            <param name="groupid">9101</param>
+            <param name="icon">special://skin/extras/icons/circle-xmark.png</param>
+            <label>$LOCALIZE[15067]</label>
+            <onclick>Close</onclick>
+        </include>
+        <include content="Button_Dialog">
+            <param name="id">9002</param>
+            <param name="groupid">9102</param>
+            <param name="icon">special://skin/extras/icons/triangle-exclamation.png</param>
+            <label>$LOCALIZE[13007]</label>
+            <include>InfoLine_Reset</include>
+        </include>
+        <include content="Button_Dialog">
+            <param name="id">9003</param>
+            <param name="groupid">9103</param>
+            <param name="icon">special://skin/extras/icons/skinsettings.png</param>
+            <label>$VAR[Label_Setting_InfoTags_Style]</label>
+            <onclick condition="String.IsEmpty(Skin.String(InfoTags.Style))">Skin.SetString(InfoTags.Style,Pill)</onclick>
+            <onclick condition="Skin.String(InfoTags.Style,Pill)">Skin.SetString(InfoTags.Style,Text)</onclick>
+            <onclick condition="Skin.String(InfoTags.Style,Text)">Skin.Reset(InfoTags.Style)</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=special://skin/shortcuts/builtins/skinvariables-infoline-budget.json,use_rules=True,layout=All,reserved=None,room=9,enable_item=)</onclick>
+            <onclick>RunScript(script.skinvariables,run_executebuiltin=Dialog.Close(1162,true)||SetProperty(InfoLine.Reopen,true,Home)||ActivateWindow(1162)||SetFocus(9003)||ClearProperty(InfoLine.Reopen,Home))</onclick>
+        </include>
     </include>
 
     <include name="InfoLine_RowLayout">
